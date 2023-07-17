@@ -2,7 +2,11 @@ module github.com/dkrasnovdev/heritage-api
 
 go 1.20
 
-require github.com/spf13/viper v1.16.0
+require (
+	github.com/go-chi/chi/v5 v5.0.10
+	github.com/go-chi/cors v1.2.1
+	github.com/spf13/viper v1.16.0
+)
 
 require (
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
