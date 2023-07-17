@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  heritage:
+    container_name: graphql
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - 4000:4000
+    environment:
+      HOST: ${HOST}
+      PORT: ${PORT}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      SSL_MODE: ${SSL_MODE}
+      OPENID_CONNECT_USERINFO_ENDPOINT: ${OPENID_CONNECT_USERINFO_ENDPOINT}
