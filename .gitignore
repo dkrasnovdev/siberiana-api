@@ -38,3 +38,4 @@ go.work
 # Environment Variables
 .env
 .env.*
+!.env.example
