@@ -1,4 +1,4 @@
-package resolver
+package resolvers
 
 // This file will be automatically regenerated based on the schema, any resolver implementations
 // will be copied through when generating and any unknown code will be moved to the end.
@@ -9,7 +9,7 @@ import (
 	"fmt"
 
 	"github.com/dkrasnovdev/heritage-api/ent"
-	graphql1 "github.com/dkrasnovdev/heritage-api/internal/graphql"
+	"github.com/dkrasnovdev/heritage-api/internal/gql"
 )
 
 // Node is the resolver for the node field.
@@ -22,7 +22,7 @@ func (r *queryResolver) Nodes(ctx context.Context, ids []int) ([]ent.Noder, erro
 	panic(fmt.Errorf("not implemented: Nodes - nodes"))
 }
 
-// Query returns graphql1.QueryResolver implementation.
-func (r *Resolver) Query() graphql1.QueryResolver { return &queryResolver{r} }
+// Query returns gql.QueryResolver implementation.
+func (r *Resolver) Query() gql.QueryResolver { return &queryResolver{r} }
 
 type queryResolver struct{ *Resolver }

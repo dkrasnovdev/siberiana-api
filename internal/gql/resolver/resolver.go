@@ -3,7 +3,7 @@ package resolver
 import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/dkrasnovdev/heritage-api/ent"
-	gql "github.com/dkrasnovdev/heritage-api/internal/graphql"
+	"github.com/dkrasnovdev/heritage-api/internal/gql"
 )
 
 // Resolver is the resolver root.
