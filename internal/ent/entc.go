@@ -21,8 +21,8 @@ func main() {
 
 	// Create a new entgql extension.
 	gql, err := entgql.NewExtension(
-		// entgql.WithWhereInputs(true), // Enable where inputs in GraphQL schema.
-		// entgql.WithConfigPath(filepath.Join(pwd, "/internal/graphql/gqlgen.yml")), // Set the path to the gqlgen configuration file.
+		entgql.WithWhereInputs(true), // Enable where inputs in GraphQL schema.
+		entgql.WithConfigPath(filepath.Join(pwd, "/internal/graphql/gqlgen.yml")), // Set the path to the gqlgen configuration file.
 		entgql.WithSchemaGenerator(), // Enable schema generation.
 		entgql.WithSchemaPath(filepath.Join(pwd, "/internal/graphql/ent.graphql")), // Set the path to the ent GraphQL schema file.
 	)

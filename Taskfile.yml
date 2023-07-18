@@ -6,7 +6,7 @@ tasks:
       - air
   gen:
     cmds:
-      - go generate
+      - go generate .
   build:
     - go build -o bin/http cmd/http/main.go
   start:

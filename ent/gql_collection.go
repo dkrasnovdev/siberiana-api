@@ -49,6 +49,9 @@ func newArtifactPaginateArgs(rv map[string]any) *artifactPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[whereField].(*ArtifactWhereInput); ok {
+		args.opts = append(args.opts, WithArtifactFilter(v.Filter))
+	}
 	return args
 }
 
@@ -91,6 +94,9 @@ func newCategoryPaginateArgs(rv map[string]any) *categoryPaginateArgs {
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*CategoryWhereInput); ok {
+		args.opts = append(args.opts, WithCategoryFilter(v.Filter))
 	}
 	return args
 }
@@ -135,6 +141,9 @@ func newCollectionPaginateArgs(rv map[string]any) *collectionPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[whereField].(*CollectionWhereInput); ok {
+		args.opts = append(args.opts, WithCollectionFilter(v.Filter))
+	}
 	return args
 }
 
@@ -177,6 +186,9 @@ func newCulturePaginateArgs(rv map[string]any) *culturePaginateArgs {
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*CultureWhereInput); ok {
+		args.opts = append(args.opts, WithCultureFilter(v.Filter))
 	}
 	return args
 }
@@ -221,6 +233,9 @@ func newDistrictPaginateArgs(rv map[string]any) *districtPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[whereField].(*DistrictWhereInput); ok {
+		args.opts = append(args.opts, WithDistrictFilter(v.Filter))
+	}
 	return args
 }
 
@@ -263,6 +278,9 @@ func newHolderPaginateArgs(rv map[string]any) *holderPaginateArgs {
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*HolderWhereInput); ok {
+		args.opts = append(args.opts, WithHolderFilter(v.Filter))
 	}
 	return args
 }
@@ -307,6 +325,9 @@ func newLicensePaginateArgs(rv map[string]any) *licensePaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[whereField].(*LicenseWhereInput); ok {
+		args.opts = append(args.opts, WithLicenseFilter(v.Filter))
+	}
 	return args
 }
 
@@ -349,6 +370,9 @@ func newLocationPaginateArgs(rv map[string]any) *locationPaginateArgs {
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*LocationWhereInput); ok {
+		args.opts = append(args.opts, WithLocationFilter(v.Filter))
 	}
 	return args
 }
@@ -393,6 +417,9 @@ func newMediumPaginateArgs(rv map[string]any) *mediumPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[whereField].(*MediumWhereInput); ok {
+		args.opts = append(args.opts, WithMediumFilter(v.Filter))
+	}
 	return args
 }
 
@@ -435,6 +462,9 @@ func newModelPaginateArgs(rv map[string]any) *modelPaginateArgs {
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*ModelWhereInput); ok {
+		args.opts = append(args.opts, WithModelFilter(v.Filter))
 	}
 	return args
 }
@@ -479,6 +509,9 @@ func newMonumentPaginateArgs(rv map[string]any) *monumentPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[whereField].(*MonumentWhereInput); ok {
+		args.opts = append(args.opts, WithMonumentFilter(v.Filter))
+	}
 	return args
 }
 
@@ -521,6 +554,9 @@ func newOrganizationPaginateArgs(rv map[string]any) *organizationPaginateArgs {
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*OrganizationWhereInput); ok {
+		args.opts = append(args.opts, WithOrganizationFilter(v.Filter))
 	}
 	return args
 }
@@ -565,6 +601,9 @@ func newPersonPaginateArgs(rv map[string]any) *personPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[whereField].(*PersonWhereInput); ok {
+		args.opts = append(args.opts, WithPersonFilter(v.Filter))
+	}
 	return args
 }
 
@@ -607,6 +646,9 @@ func newProjectPaginateArgs(rv map[string]any) *projectPaginateArgs {
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*ProjectWhereInput); ok {
+		args.opts = append(args.opts, WithProjectFilter(v.Filter))
 	}
 	return args
 }
@@ -651,6 +693,9 @@ func newPublicationPaginateArgs(rv map[string]any) *publicationPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[whereField].(*PublicationWhereInput); ok {
+		args.opts = append(args.opts, WithPublicationFilter(v.Filter))
+	}
 	return args
 }
 
@@ -693,6 +738,9 @@ func newRegionPaginateArgs(rv map[string]any) *regionPaginateArgs {
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*RegionWhereInput); ok {
+		args.opts = append(args.opts, WithRegionFilter(v.Filter))
 	}
 	return args
 }
@@ -737,6 +785,9 @@ func newSetPaginateArgs(rv map[string]any) *setPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[whereField].(*SetWhereInput); ok {
+		args.opts = append(args.opts, WithSetFilter(v.Filter))
+	}
 	return args
 }
 
@@ -780,6 +831,9 @@ func newSettlementPaginateArgs(rv map[string]any) *settlementPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[whereField].(*SettlementWhereInput); ok {
+		args.opts = append(args.opts, WithSettlementFilter(v.Filter))
+	}
 	return args
 }
 
@@ -822,6 +876,9 @@ func newTechniquePaginateArgs(rv map[string]any) *techniquePaginateArgs {
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*TechniqueWhereInput); ok {
+		args.opts = append(args.opts, WithTechniqueFilter(v.Filter))
 	}
 	return args
 }
