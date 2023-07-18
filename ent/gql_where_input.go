@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/auditlog"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
@@ -149,6 +150,130 @@ func (i *ArtifactWhereInput) P() (predicate.Artifact, error) {
 		return predicates[0], nil
 	default:
 		return artifact.And(predicates...), nil
+	}
+}
+
+// AuditLogWhereInput represents a where input for filtering AuditLog queries.
+type AuditLogWhereInput struct {
+	Predicates []predicate.AuditLog  `json:"-"`
+	Not        *AuditLogWhereInput   `json:"not,omitempty"`
+	Or         []*AuditLogWhereInput `json:"or,omitempty"`
+	And        []*AuditLogWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *AuditLogWhereInput) AddPredicates(predicates ...predicate.AuditLog) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the AuditLogWhereInput filter on the AuditLogQuery builder.
+func (i *AuditLogWhereInput) Filter(q *AuditLogQuery) (*AuditLogQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyAuditLogWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyAuditLogWhereInput is returned in case the AuditLogWhereInput is empty.
+var ErrEmptyAuditLogWhereInput = errors.New("ent: empty predicate AuditLogWhereInput")
+
+// P returns a predicate for filtering auditlogs.
+// An error is returned if the input is empty or invalid.
+func (i *AuditLogWhereInput) P() (predicate.AuditLog, error) {
+	var predicates []predicate.AuditLog
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, auditlog.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.AuditLog, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, auditlog.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.AuditLog, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, auditlog.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, auditlog.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, auditlog.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, auditlog.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, auditlog.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, auditlog.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, auditlog.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, auditlog.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, auditlog.IDLTE(*i.IDLTE))
+	}
+
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyAuditLogWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return auditlog.And(predicates...), nil
 	}
 }
 

@@ -56,6 +56,52 @@ func newArtifactPaginateArgs(rv map[string]any) *artifactPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (al *AuditLogQuery) CollectFields(ctx context.Context, satisfies ...string) (*AuditLogQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return al, nil
+	}
+	if err := al.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return al, nil
+}
+
+func (al *AuditLogQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	return nil
+}
+
+type auditlogPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []AuditLogPaginateOption
+}
+
+func newAuditLogPaginateArgs(rv map[string]any) *auditlogPaginateArgs {
+	args := &auditlogPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*AuditLogWhereInput); ok {
+		args.opts = append(args.opts, WithAuditLogFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (c *CategoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*CategoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {

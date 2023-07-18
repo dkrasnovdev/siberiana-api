@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/dkrasnovdev/heritage-api/ent"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/auditlog"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
@@ -111,6 +112,33 @@ func (f TraverseArtifact) Traverse(ctx context.Context, q ent.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *ent.ArtifactQuery", q)
+}
+
+// The AuditLogFunc type is an adapter to allow the use of ordinary function as a Querier.
+type AuditLogFunc func(context.Context, *ent.AuditLogQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f AuditLogFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.AuditLogQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.AuditLogQuery", q)
+}
+
+// The TraverseAuditLog type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseAuditLog func(context.Context, *ent.AuditLogQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseAuditLog) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseAuditLog) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.AuditLogQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.AuditLogQuery", q)
 }
 
 // The CategoryFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -604,6 +632,8 @@ func NewQuery(q ent.Query) (Query, error) {
 	switch q := q.(type) {
 	case *ent.ArtifactQuery:
 		return &query[*ent.ArtifactQuery, predicate.Artifact, artifact.OrderOption]{typ: ent.TypeArtifact, tq: q}, nil
+	case *ent.AuditLogQuery:
+		return &query[*ent.AuditLogQuery, predicate.AuditLog, auditlog.OrderOption]{typ: ent.TypeAuditLog, tq: q}, nil
 	case *ent.CategoryQuery:
 		return &query[*ent.CategoryQuery, predicate.Category, category.OrderOption]{typ: ent.TypeCategory, tq: q}, nil
 	case *ent.CollectionQuery:

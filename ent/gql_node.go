@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/schema"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/auditlog"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
@@ -45,6 +46,11 @@ var artifactImplementors = []string{"Artifact", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Artifact) IsNode() {}
+
+var auditlogImplementors = []string{"AuditLog", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*AuditLog) IsNode() {}
 
 var categoryImplementors = []string{"Category", "Node"}
 
@@ -198,6 +204,18 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 		query := c.Artifact.Query().
 			Where(artifact.ID(id))
 		query, err := query.CollectFields(ctx, artifactImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case auditlog.Table:
+		query := c.AuditLog.Query().
+			Where(auditlog.ID(id))
+		query, err := query.CollectFields(ctx, auditlogImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -499,6 +517,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 		query := c.Artifact.Query().
 			Where(artifact.IDIn(ids...))
 		query, err := query.CollectFields(ctx, artifactImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case auditlog.Table:
+		query := c.AuditLog.Query().
+			Where(auditlog.IDIn(ids...))
+		query, err := query.CollectFields(ctx, auditlogImplementors...)
 		if err != nil {
 			return nil, err
 		}

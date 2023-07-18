@@ -9,6 +9,9 @@ import (
 // Artifact is the predicate function for artifact builders.
 type Artifact func(*sql.Selector)
 
+// AuditLog is the predicate function for auditlog builders.
+type AuditLog func(*sql.Selector)
+
 // Category is the predicate function for category builders.
 type Category func(*sql.Selector)
 

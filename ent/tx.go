@@ -14,6 +14,8 @@ type Tx struct {
 	config
 	// Artifact is the client for interacting with the Artifact builders.
 	Artifact *ArtifactClient
+	// AuditLog is the client for interacting with the AuditLog builders.
+	AuditLog *AuditLogClient
 	// Category is the client for interacting with the Category builders.
 	Category *CategoryClient
 	// Collection is the client for interacting with the Collection builders.
@@ -182,6 +184,7 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.Artifact = NewArtifactClient(tx.config)
+	tx.AuditLog = NewAuditLogClient(tx.config)
 	tx.Category = NewCategoryClient(tx.config)
 	tx.Collection = NewCollectionClient(tx.config)
 	tx.Culture = NewCultureClient(tx.config)
