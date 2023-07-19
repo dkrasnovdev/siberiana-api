@@ -9,6 +9,7 @@ require (
 	github.com/go-chi/chi/v5 v5.0.10
 	github.com/go-chi/cors v1.2.1
 	github.com/hashicorp/go-multierror v1.1.1
+	github.com/lib/pq v1.10.9
 	github.com/spf13/viper v1.16.0
 	github.com/vektah/gqlparser/v2 v2.5.8
 	golang.org/x/exp v0.0.0-20230713183714-613f0c0eb8a1
