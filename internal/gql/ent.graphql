@@ -238,6 +238,42 @@ input ArtifactWhereInput {
 }
 type AuditLog implements Node {
   id: ID!
+  table: String
+  refID: Int
+  operation: String
+  changes: [String!]
+  addedIds: [String!]
+  removedIds: [String!]
+  clearedEdges: [String!]
+  blame: String
+  createdAt: Time!
+}
+"""A connection to a list of items."""
+type AuditLogConnection {
+  """A list of edges."""
+  edges: [AuditLogEdge]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+"""An edge in a connection."""
+type AuditLogEdge {
+  """The item at the end of the edge."""
+  node: AuditLog
+  """A cursor for use in pagination."""
+  cursor: Cursor!
+}
+"""Ordering options for AuditLog connections"""
+input AuditLogOrder {
+  """The ordering direction."""
+  direction: OrderDirection! = ASC
+  """The field by which to order AuditLogs."""
+  field: AuditLogOrderField!
+}
+"""Properties by which AuditLog connections can be ordered."""
+enum AuditLogOrderField {
+  CREATED_AT
 }
 """
 AuditLogWhereInput is used for filtering AuditLog objects.
@@ -256,6 +292,74 @@ input AuditLogWhereInput {
   idGTE: ID
   idLT: ID
   idLTE: ID
+  """table field predicates"""
+  table: String
+  tableNEQ: String
+  tableIn: [String!]
+  tableNotIn: [String!]
+  tableGT: String
+  tableGTE: String
+  tableLT: String
+  tableLTE: String
+  tableContains: String
+  tableHasPrefix: String
+  tableHasSuffix: String
+  tableIsNil: Boolean
+  tableNotNil: Boolean
+  tableEqualFold: String
+  tableContainsFold: String
+  """ref_id field predicates"""
+  refID: Int
+  refIDNEQ: Int
+  refIDIn: [Int!]
+  refIDNotIn: [Int!]
+  refIDGT: Int
+  refIDGTE: Int
+  refIDLT: Int
+  refIDLTE: Int
+  refIDIsNil: Boolean
+  refIDNotNil: Boolean
+  """operation field predicates"""
+  operation: String
+  operationNEQ: String
+  operationIn: [String!]
+  operationNotIn: [String!]
+  operationGT: String
+  operationGTE: String
+  operationLT: String
+  operationLTE: String
+  operationContains: String
+  operationHasPrefix: String
+  operationHasSuffix: String
+  operationIsNil: Boolean
+  operationNotNil: Boolean
+  operationEqualFold: String
+  operationContainsFold: String
+  """blame field predicates"""
+  blame: String
+  blameNEQ: String
+  blameIn: [String!]
+  blameNotIn: [String!]
+  blameGT: String
+  blameGTE: String
+  blameLT: String
+  blameLTE: String
+  blameContains: String
+  blameHasPrefix: String
+  blameHasSuffix: String
+  blameIsNil: Boolean
+  blameNotNil: Boolean
+  blameEqualFold: String
+  blameContainsFold: String
+  """created_at field predicates"""
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
 }
 type Category implements Node {
   id: ID!
@@ -2613,6 +2717,25 @@ type Query {
     """Filtering options for Artifacts returned from the connection."""
     where: ArtifactWhereInput
   ): ArtifactConnection!
+  auditLogs(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Ordering options for AuditLogs returned from the connection."""
+    orderBy: [AuditLogOrder!]
+
+    """Filtering options for AuditLogs returned from the connection."""
+    where: AuditLogWhereInput
+  ): AuditLogConnection!
   categories(
     """Returns the elements in the list that come after the specified cursor."""
     after: Cursor

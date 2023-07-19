@@ -4,7 +4,9 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -18,6 +20,100 @@ type AuditLogCreate struct {
 	hooks    []Hook
 }
 
+// SetTable sets the "table" field.
+func (alc *AuditLogCreate) SetTable(s string) *AuditLogCreate {
+	alc.mutation.SetTable(s)
+	return alc
+}
+
+// SetNillableTable sets the "table" field if the given value is not nil.
+func (alc *AuditLogCreate) SetNillableTable(s *string) *AuditLogCreate {
+	if s != nil {
+		alc.SetTable(*s)
+	}
+	return alc
+}
+
+// SetRefID sets the "ref_id" field.
+func (alc *AuditLogCreate) SetRefID(i int) *AuditLogCreate {
+	alc.mutation.SetRefID(i)
+	return alc
+}
+
+// SetNillableRefID sets the "ref_id" field if the given value is not nil.
+func (alc *AuditLogCreate) SetNillableRefID(i *int) *AuditLogCreate {
+	if i != nil {
+		alc.SetRefID(*i)
+	}
+	return alc
+}
+
+// SetOperation sets the "operation" field.
+func (alc *AuditLogCreate) SetOperation(s string) *AuditLogCreate {
+	alc.mutation.SetOperation(s)
+	return alc
+}
+
+// SetNillableOperation sets the "operation" field if the given value is not nil.
+func (alc *AuditLogCreate) SetNillableOperation(s *string) *AuditLogCreate {
+	if s != nil {
+		alc.SetOperation(*s)
+	}
+	return alc
+}
+
+// SetChanges sets the "changes" field.
+func (alc *AuditLogCreate) SetChanges(s []string) *AuditLogCreate {
+	alc.mutation.SetChanges(s)
+	return alc
+}
+
+// SetAddedIds sets the "added_ids" field.
+func (alc *AuditLogCreate) SetAddedIds(s []string) *AuditLogCreate {
+	alc.mutation.SetAddedIds(s)
+	return alc
+}
+
+// SetRemovedIds sets the "removed_ids" field.
+func (alc *AuditLogCreate) SetRemovedIds(s []string) *AuditLogCreate {
+	alc.mutation.SetRemovedIds(s)
+	return alc
+}
+
+// SetClearedEdges sets the "cleared_edges" field.
+func (alc *AuditLogCreate) SetClearedEdges(s []string) *AuditLogCreate {
+	alc.mutation.SetClearedEdges(s)
+	return alc
+}
+
+// SetBlame sets the "blame" field.
+func (alc *AuditLogCreate) SetBlame(s string) *AuditLogCreate {
+	alc.mutation.SetBlame(s)
+	return alc
+}
+
+// SetNillableBlame sets the "blame" field if the given value is not nil.
+func (alc *AuditLogCreate) SetNillableBlame(s *string) *AuditLogCreate {
+	if s != nil {
+		alc.SetBlame(*s)
+	}
+	return alc
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (alc *AuditLogCreate) SetCreatedAt(t time.Time) *AuditLogCreate {
+	alc.mutation.SetCreatedAt(t)
+	return alc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (alc *AuditLogCreate) SetNillableCreatedAt(t *time.Time) *AuditLogCreate {
+	if t != nil {
+		alc.SetCreatedAt(*t)
+	}
+	return alc
+}
+
 // Mutation returns the AuditLogMutation object of the builder.
 func (alc *AuditLogCreate) Mutation() *AuditLogMutation {
 	return alc.mutation
@@ -25,6 +121,7 @@ func (alc *AuditLogCreate) Mutation() *AuditLogMutation {
 
 // Save creates the AuditLog in the database.
 func (alc *AuditLogCreate) Save(ctx context.Context) (*AuditLog, error) {
+	alc.defaults()
 	return withHooks(ctx, alc.sqlSave, alc.mutation, alc.hooks)
 }
 
@@ -50,8 +147,19 @@ func (alc *AuditLogCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (alc *AuditLogCreate) defaults() {
+	if _, ok := alc.mutation.CreatedAt(); !ok {
+		v := auditlog.DefaultCreatedAt()
+		alc.mutation.SetCreatedAt(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (alc *AuditLogCreate) check() error {
+	if _, ok := alc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "AuditLog.created_at"`)}
+	}
 	return nil
 }
 
@@ -78,6 +186,42 @@ func (alc *AuditLogCreate) createSpec() (*AuditLog, *sqlgraph.CreateSpec) {
 		_node = &AuditLog{config: alc.config}
 		_spec = sqlgraph.NewCreateSpec(auditlog.Table, sqlgraph.NewFieldSpec(auditlog.FieldID, field.TypeInt))
 	)
+	if value, ok := alc.mutation.Table(); ok {
+		_spec.SetField(auditlog.FieldTable, field.TypeString, value)
+		_node.Table = value
+	}
+	if value, ok := alc.mutation.RefID(); ok {
+		_spec.SetField(auditlog.FieldRefID, field.TypeInt, value)
+		_node.RefID = value
+	}
+	if value, ok := alc.mutation.Operation(); ok {
+		_spec.SetField(auditlog.FieldOperation, field.TypeString, value)
+		_node.Operation = value
+	}
+	if value, ok := alc.mutation.Changes(); ok {
+		_spec.SetField(auditlog.FieldChanges, field.TypeJSON, value)
+		_node.Changes = value
+	}
+	if value, ok := alc.mutation.AddedIds(); ok {
+		_spec.SetField(auditlog.FieldAddedIds, field.TypeJSON, value)
+		_node.AddedIds = value
+	}
+	if value, ok := alc.mutation.RemovedIds(); ok {
+		_spec.SetField(auditlog.FieldRemovedIds, field.TypeJSON, value)
+		_node.RemovedIds = value
+	}
+	if value, ok := alc.mutation.GetClearedEdges(); ok {
+		_spec.SetField(auditlog.FieldClearedEdges, field.TypeJSON, value)
+		_node.ClearedEdges = value
+	}
+	if value, ok := alc.mutation.Blame(); ok {
+		_spec.SetField(auditlog.FieldBlame, field.TypeString, value)
+		_node.Blame = value
+	}
+	if value, ok := alc.mutation.CreatedAt(); ok {
+		_spec.SetField(auditlog.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
 	return _node, _spec
 }
 
@@ -95,6 +239,7 @@ func (alcb *AuditLogCreateBulk) Save(ctx context.Context) ([]*AuditLog, error) {
 	for i := range alcb.builders {
 		func(i int, root context.Context) {
 			builder := alcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*AuditLogMutation)
 				if !ok {

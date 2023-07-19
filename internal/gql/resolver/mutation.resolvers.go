@@ -11,6 +11,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/internal/gql"
 )
 
+// CreateArtifact is the resolver for the createArtifact field.
 func (r *mutationResolver) CreateArtifact(ctx context.Context, input ent.CreateArtifactInput) (*ent.Artifact, error) {
 	client := ent.FromContext(ctx)
 	return client.Artifact.Create().SetInput(input).Save(ctx)

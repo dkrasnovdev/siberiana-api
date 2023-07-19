@@ -27,6 +27,11 @@ func (r *queryResolver) Artifacts(ctx context.Context, after *entgql.Cursor[int]
 	return r.client.Artifact.Query().Paginate(ctx, after, first, before, last, ent.WithArtifactOrder(orderBy), ent.WithArtifactFilter(where.Filter))
 }
 
+// AuditLogs is the resolver for the auditLogs field.
+func (r *queryResolver) AuditLogs(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.AuditLogOrder, where *ent.AuditLogWhereInput) (*ent.AuditLogConnection, error) {
+	return r.client.AuditLog.Query().Paginate(ctx, after, first, before, last, ent.WithAuditLogOrder(orderBy), ent.WithAuditLogFilter(where.Filter))
+}
+
 // Categories is the resolver for the categories field.
 func (r *queryResolver) Categories(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.CategoryOrder, where *ent.CategoryWhereInput) (*ent.CategoryConnection, error) {
 	return r.client.Category.Query().Paginate(ctx, after, first, before, last, ent.WithCategoryOrder(orderBy), ent.WithCategoryFilter(where.Filter))

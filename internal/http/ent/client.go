@@ -8,6 +8,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/config"
 	"github.com/dkrasnovdev/heritage-api/ent"
 	"github.com/dkrasnovdev/heritage-api/ent/migrate"
+	"github.com/dkrasnovdev/heritage-api/internal/ent/hook"
 
 	_ "github.com/dkrasnovdev/heritage-api/ent/runtime"
 	_ "github.com/lib/pq"
@@ -31,6 +32,8 @@ func NewClient(env config.Config) *ent.Client {
 	); err != nil {
 		log.Fatal("opening ent client", err)
 	}
+
+	client.Artifact.Use(hook.ArtifactLogger(client))
 
 	return client
 }

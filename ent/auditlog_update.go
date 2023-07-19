@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/auditlog"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
@@ -24,6 +25,165 @@ type AuditLogUpdate struct {
 // Where appends a list predicates to the AuditLogUpdate builder.
 func (alu *AuditLogUpdate) Where(ps ...predicate.AuditLog) *AuditLogUpdate {
 	alu.mutation.Where(ps...)
+	return alu
+}
+
+// SetTable sets the "table" field.
+func (alu *AuditLogUpdate) SetTable(s string) *AuditLogUpdate {
+	alu.mutation.SetTable(s)
+	return alu
+}
+
+// SetNillableTable sets the "table" field if the given value is not nil.
+func (alu *AuditLogUpdate) SetNillableTable(s *string) *AuditLogUpdate {
+	if s != nil {
+		alu.SetTable(*s)
+	}
+	return alu
+}
+
+// ClearTable clears the value of the "table" field.
+func (alu *AuditLogUpdate) ClearTable() *AuditLogUpdate {
+	alu.mutation.ClearTable()
+	return alu
+}
+
+// SetRefID sets the "ref_id" field.
+func (alu *AuditLogUpdate) SetRefID(i int) *AuditLogUpdate {
+	alu.mutation.ResetRefID()
+	alu.mutation.SetRefID(i)
+	return alu
+}
+
+// SetNillableRefID sets the "ref_id" field if the given value is not nil.
+func (alu *AuditLogUpdate) SetNillableRefID(i *int) *AuditLogUpdate {
+	if i != nil {
+		alu.SetRefID(*i)
+	}
+	return alu
+}
+
+// AddRefID adds i to the "ref_id" field.
+func (alu *AuditLogUpdate) AddRefID(i int) *AuditLogUpdate {
+	alu.mutation.AddRefID(i)
+	return alu
+}
+
+// ClearRefID clears the value of the "ref_id" field.
+func (alu *AuditLogUpdate) ClearRefID() *AuditLogUpdate {
+	alu.mutation.ClearRefID()
+	return alu
+}
+
+// SetOperation sets the "operation" field.
+func (alu *AuditLogUpdate) SetOperation(s string) *AuditLogUpdate {
+	alu.mutation.SetOperation(s)
+	return alu
+}
+
+// SetNillableOperation sets the "operation" field if the given value is not nil.
+func (alu *AuditLogUpdate) SetNillableOperation(s *string) *AuditLogUpdate {
+	if s != nil {
+		alu.SetOperation(*s)
+	}
+	return alu
+}
+
+// ClearOperation clears the value of the "operation" field.
+func (alu *AuditLogUpdate) ClearOperation() *AuditLogUpdate {
+	alu.mutation.ClearOperation()
+	return alu
+}
+
+// SetChanges sets the "changes" field.
+func (alu *AuditLogUpdate) SetChanges(s []string) *AuditLogUpdate {
+	alu.mutation.SetChanges(s)
+	return alu
+}
+
+// AppendChanges appends s to the "changes" field.
+func (alu *AuditLogUpdate) AppendChanges(s []string) *AuditLogUpdate {
+	alu.mutation.AppendChanges(s)
+	return alu
+}
+
+// ClearChanges clears the value of the "changes" field.
+func (alu *AuditLogUpdate) ClearChanges() *AuditLogUpdate {
+	alu.mutation.ClearChanges()
+	return alu
+}
+
+// SetAddedIds sets the "added_ids" field.
+func (alu *AuditLogUpdate) SetAddedIds(s []string) *AuditLogUpdate {
+	alu.mutation.SetAddedIds(s)
+	return alu
+}
+
+// AppendAddedIds appends s to the "added_ids" field.
+func (alu *AuditLogUpdate) AppendAddedIds(s []string) *AuditLogUpdate {
+	alu.mutation.AppendAddedIds(s)
+	return alu
+}
+
+// ClearAddedIds clears the value of the "added_ids" field.
+func (alu *AuditLogUpdate) ClearAddedIds() *AuditLogUpdate {
+	alu.mutation.ClearAddedIds()
+	return alu
+}
+
+// SetRemovedIds sets the "removed_ids" field.
+func (alu *AuditLogUpdate) SetRemovedIds(s []string) *AuditLogUpdate {
+	alu.mutation.SetRemovedIds(s)
+	return alu
+}
+
+// AppendRemovedIds appends s to the "removed_ids" field.
+func (alu *AuditLogUpdate) AppendRemovedIds(s []string) *AuditLogUpdate {
+	alu.mutation.AppendRemovedIds(s)
+	return alu
+}
+
+// ClearRemovedIds clears the value of the "removed_ids" field.
+func (alu *AuditLogUpdate) ClearRemovedIds() *AuditLogUpdate {
+	alu.mutation.ClearRemovedIds()
+	return alu
+}
+
+// SetClearedEdges sets the "cleared_edges" field.
+func (alu *AuditLogUpdate) SetClearedEdges(s []string) *AuditLogUpdate {
+	alu.mutation.SetClearedEdges(s)
+	return alu
+}
+
+// AppendClearedEdges appends s to the "cleared_edges" field.
+func (alu *AuditLogUpdate) AppendClearedEdges(s []string) *AuditLogUpdate {
+	alu.mutation.AppendClearedEdges(s)
+	return alu
+}
+
+// ClearClearedEdges clears the value of the "cleared_edges" field.
+func (alu *AuditLogUpdate) ClearClearedEdges() *AuditLogUpdate {
+	alu.mutation.ClearClearedEdges()
+	return alu
+}
+
+// SetBlame sets the "blame" field.
+func (alu *AuditLogUpdate) SetBlame(s string) *AuditLogUpdate {
+	alu.mutation.SetBlame(s)
+	return alu
+}
+
+// SetNillableBlame sets the "blame" field if the given value is not nil.
+func (alu *AuditLogUpdate) SetNillableBlame(s *string) *AuditLogUpdate {
+	if s != nil {
+		alu.SetBlame(*s)
+	}
+	return alu
+}
+
+// ClearBlame clears the value of the "blame" field.
+func (alu *AuditLogUpdate) ClearBlame() *AuditLogUpdate {
+	alu.mutation.ClearBlame()
 	return alu
 }
 
@@ -68,6 +228,77 @@ func (alu *AuditLogUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if value, ok := alu.mutation.Table(); ok {
+		_spec.SetField(auditlog.FieldTable, field.TypeString, value)
+	}
+	if alu.mutation.TableCleared() {
+		_spec.ClearField(auditlog.FieldTable, field.TypeString)
+	}
+	if value, ok := alu.mutation.RefID(); ok {
+		_spec.SetField(auditlog.FieldRefID, field.TypeInt, value)
+	}
+	if value, ok := alu.mutation.AddedRefID(); ok {
+		_spec.AddField(auditlog.FieldRefID, field.TypeInt, value)
+	}
+	if alu.mutation.RefIDCleared() {
+		_spec.ClearField(auditlog.FieldRefID, field.TypeInt)
+	}
+	if value, ok := alu.mutation.Operation(); ok {
+		_spec.SetField(auditlog.FieldOperation, field.TypeString, value)
+	}
+	if alu.mutation.OperationCleared() {
+		_spec.ClearField(auditlog.FieldOperation, field.TypeString)
+	}
+	if value, ok := alu.mutation.Changes(); ok {
+		_spec.SetField(auditlog.FieldChanges, field.TypeJSON, value)
+	}
+	if value, ok := alu.mutation.AppendedChanges(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, auditlog.FieldChanges, value)
+		})
+	}
+	if alu.mutation.ChangesCleared() {
+		_spec.ClearField(auditlog.FieldChanges, field.TypeJSON)
+	}
+	if value, ok := alu.mutation.AddedIds(); ok {
+		_spec.SetField(auditlog.FieldAddedIds, field.TypeJSON, value)
+	}
+	if value, ok := alu.mutation.AppendedAddedIds(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, auditlog.FieldAddedIds, value)
+		})
+	}
+	if alu.mutation.AddedIdsCleared() {
+		_spec.ClearField(auditlog.FieldAddedIds, field.TypeJSON)
+	}
+	if value, ok := alu.mutation.RemovedIds(); ok {
+		_spec.SetField(auditlog.FieldRemovedIds, field.TypeJSON, value)
+	}
+	if value, ok := alu.mutation.AppendedRemovedIds(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, auditlog.FieldRemovedIds, value)
+		})
+	}
+	if alu.mutation.RemovedIdsCleared() {
+		_spec.ClearField(auditlog.FieldRemovedIds, field.TypeJSON)
+	}
+	if value, ok := alu.mutation.GetClearedEdges(); ok {
+		_spec.SetField(auditlog.FieldClearedEdges, field.TypeJSON, value)
+	}
+	if value, ok := alu.mutation.AppendedClearedEdges(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, auditlog.FieldClearedEdges, value)
+		})
+	}
+	if alu.mutation.ClearedEdgesCleared() {
+		_spec.ClearField(auditlog.FieldClearedEdges, field.TypeJSON)
+	}
+	if value, ok := alu.mutation.Blame(); ok {
+		_spec.SetField(auditlog.FieldBlame, field.TypeString, value)
+	}
+	if alu.mutation.BlameCleared() {
+		_spec.ClearField(auditlog.FieldBlame, field.TypeString)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, alu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{auditlog.Label}
@@ -86,6 +317,165 @@ type AuditLogUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *AuditLogMutation
+}
+
+// SetTable sets the "table" field.
+func (aluo *AuditLogUpdateOne) SetTable(s string) *AuditLogUpdateOne {
+	aluo.mutation.SetTable(s)
+	return aluo
+}
+
+// SetNillableTable sets the "table" field if the given value is not nil.
+func (aluo *AuditLogUpdateOne) SetNillableTable(s *string) *AuditLogUpdateOne {
+	if s != nil {
+		aluo.SetTable(*s)
+	}
+	return aluo
+}
+
+// ClearTable clears the value of the "table" field.
+func (aluo *AuditLogUpdateOne) ClearTable() *AuditLogUpdateOne {
+	aluo.mutation.ClearTable()
+	return aluo
+}
+
+// SetRefID sets the "ref_id" field.
+func (aluo *AuditLogUpdateOne) SetRefID(i int) *AuditLogUpdateOne {
+	aluo.mutation.ResetRefID()
+	aluo.mutation.SetRefID(i)
+	return aluo
+}
+
+// SetNillableRefID sets the "ref_id" field if the given value is not nil.
+func (aluo *AuditLogUpdateOne) SetNillableRefID(i *int) *AuditLogUpdateOne {
+	if i != nil {
+		aluo.SetRefID(*i)
+	}
+	return aluo
+}
+
+// AddRefID adds i to the "ref_id" field.
+func (aluo *AuditLogUpdateOne) AddRefID(i int) *AuditLogUpdateOne {
+	aluo.mutation.AddRefID(i)
+	return aluo
+}
+
+// ClearRefID clears the value of the "ref_id" field.
+func (aluo *AuditLogUpdateOne) ClearRefID() *AuditLogUpdateOne {
+	aluo.mutation.ClearRefID()
+	return aluo
+}
+
+// SetOperation sets the "operation" field.
+func (aluo *AuditLogUpdateOne) SetOperation(s string) *AuditLogUpdateOne {
+	aluo.mutation.SetOperation(s)
+	return aluo
+}
+
+// SetNillableOperation sets the "operation" field if the given value is not nil.
+func (aluo *AuditLogUpdateOne) SetNillableOperation(s *string) *AuditLogUpdateOne {
+	if s != nil {
+		aluo.SetOperation(*s)
+	}
+	return aluo
+}
+
+// ClearOperation clears the value of the "operation" field.
+func (aluo *AuditLogUpdateOne) ClearOperation() *AuditLogUpdateOne {
+	aluo.mutation.ClearOperation()
+	return aluo
+}
+
+// SetChanges sets the "changes" field.
+func (aluo *AuditLogUpdateOne) SetChanges(s []string) *AuditLogUpdateOne {
+	aluo.mutation.SetChanges(s)
+	return aluo
+}
+
+// AppendChanges appends s to the "changes" field.
+func (aluo *AuditLogUpdateOne) AppendChanges(s []string) *AuditLogUpdateOne {
+	aluo.mutation.AppendChanges(s)
+	return aluo
+}
+
+// ClearChanges clears the value of the "changes" field.
+func (aluo *AuditLogUpdateOne) ClearChanges() *AuditLogUpdateOne {
+	aluo.mutation.ClearChanges()
+	return aluo
+}
+
+// SetAddedIds sets the "added_ids" field.
+func (aluo *AuditLogUpdateOne) SetAddedIds(s []string) *AuditLogUpdateOne {
+	aluo.mutation.SetAddedIds(s)
+	return aluo
+}
+
+// AppendAddedIds appends s to the "added_ids" field.
+func (aluo *AuditLogUpdateOne) AppendAddedIds(s []string) *AuditLogUpdateOne {
+	aluo.mutation.AppendAddedIds(s)
+	return aluo
+}
+
+// ClearAddedIds clears the value of the "added_ids" field.
+func (aluo *AuditLogUpdateOne) ClearAddedIds() *AuditLogUpdateOne {
+	aluo.mutation.ClearAddedIds()
+	return aluo
+}
+
+// SetRemovedIds sets the "removed_ids" field.
+func (aluo *AuditLogUpdateOne) SetRemovedIds(s []string) *AuditLogUpdateOne {
+	aluo.mutation.SetRemovedIds(s)
+	return aluo
+}
+
+// AppendRemovedIds appends s to the "removed_ids" field.
+func (aluo *AuditLogUpdateOne) AppendRemovedIds(s []string) *AuditLogUpdateOne {
+	aluo.mutation.AppendRemovedIds(s)
+	return aluo
+}
+
+// ClearRemovedIds clears the value of the "removed_ids" field.
+func (aluo *AuditLogUpdateOne) ClearRemovedIds() *AuditLogUpdateOne {
+	aluo.mutation.ClearRemovedIds()
+	return aluo
+}
+
+// SetClearedEdges sets the "cleared_edges" field.
+func (aluo *AuditLogUpdateOne) SetClearedEdges(s []string) *AuditLogUpdateOne {
+	aluo.mutation.SetClearedEdges(s)
+	return aluo
+}
+
+// AppendClearedEdges appends s to the "cleared_edges" field.
+func (aluo *AuditLogUpdateOne) AppendClearedEdges(s []string) *AuditLogUpdateOne {
+	aluo.mutation.AppendClearedEdges(s)
+	return aluo
+}
+
+// ClearClearedEdges clears the value of the "cleared_edges" field.
+func (aluo *AuditLogUpdateOne) ClearClearedEdges() *AuditLogUpdateOne {
+	aluo.mutation.ClearClearedEdges()
+	return aluo
+}
+
+// SetBlame sets the "blame" field.
+func (aluo *AuditLogUpdateOne) SetBlame(s string) *AuditLogUpdateOne {
+	aluo.mutation.SetBlame(s)
+	return aluo
+}
+
+// SetNillableBlame sets the "blame" field if the given value is not nil.
+func (aluo *AuditLogUpdateOne) SetNillableBlame(s *string) *AuditLogUpdateOne {
+	if s != nil {
+		aluo.SetBlame(*s)
+	}
+	return aluo
+}
+
+// ClearBlame clears the value of the "blame" field.
+func (aluo *AuditLogUpdateOne) ClearBlame() *AuditLogUpdateOne {
+	aluo.mutation.ClearBlame()
+	return aluo
 }
 
 // Mutation returns the AuditLogMutation object of the builder.
@@ -158,6 +548,77 @@ func (aluo *AuditLogUpdateOne) sqlSave(ctx context.Context) (_node *AuditLog, er
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := aluo.mutation.Table(); ok {
+		_spec.SetField(auditlog.FieldTable, field.TypeString, value)
+	}
+	if aluo.mutation.TableCleared() {
+		_spec.ClearField(auditlog.FieldTable, field.TypeString)
+	}
+	if value, ok := aluo.mutation.RefID(); ok {
+		_spec.SetField(auditlog.FieldRefID, field.TypeInt, value)
+	}
+	if value, ok := aluo.mutation.AddedRefID(); ok {
+		_spec.AddField(auditlog.FieldRefID, field.TypeInt, value)
+	}
+	if aluo.mutation.RefIDCleared() {
+		_spec.ClearField(auditlog.FieldRefID, field.TypeInt)
+	}
+	if value, ok := aluo.mutation.Operation(); ok {
+		_spec.SetField(auditlog.FieldOperation, field.TypeString, value)
+	}
+	if aluo.mutation.OperationCleared() {
+		_spec.ClearField(auditlog.FieldOperation, field.TypeString)
+	}
+	if value, ok := aluo.mutation.Changes(); ok {
+		_spec.SetField(auditlog.FieldChanges, field.TypeJSON, value)
+	}
+	if value, ok := aluo.mutation.AppendedChanges(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, auditlog.FieldChanges, value)
+		})
+	}
+	if aluo.mutation.ChangesCleared() {
+		_spec.ClearField(auditlog.FieldChanges, field.TypeJSON)
+	}
+	if value, ok := aluo.mutation.AddedIds(); ok {
+		_spec.SetField(auditlog.FieldAddedIds, field.TypeJSON, value)
+	}
+	if value, ok := aluo.mutation.AppendedAddedIds(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, auditlog.FieldAddedIds, value)
+		})
+	}
+	if aluo.mutation.AddedIdsCleared() {
+		_spec.ClearField(auditlog.FieldAddedIds, field.TypeJSON)
+	}
+	if value, ok := aluo.mutation.RemovedIds(); ok {
+		_spec.SetField(auditlog.FieldRemovedIds, field.TypeJSON, value)
+	}
+	if value, ok := aluo.mutation.AppendedRemovedIds(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, auditlog.FieldRemovedIds, value)
+		})
+	}
+	if aluo.mutation.RemovedIdsCleared() {
+		_spec.ClearField(auditlog.FieldRemovedIds, field.TypeJSON)
+	}
+	if value, ok := aluo.mutation.GetClearedEdges(); ok {
+		_spec.SetField(auditlog.FieldClearedEdges, field.TypeJSON, value)
+	}
+	if value, ok := aluo.mutation.AppendedClearedEdges(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, auditlog.FieldClearedEdges, value)
+		})
+	}
+	if aluo.mutation.ClearedEdgesCleared() {
+		_spec.ClearField(auditlog.FieldClearedEdges, field.TypeJSON)
+	}
+	if value, ok := aluo.mutation.Blame(); ok {
+		_spec.SetField(auditlog.FieldBlame, field.TypeString, value)
+	}
+	if aluo.mutation.BlameCleared() {
+		_spec.ClearField(auditlog.FieldBlame, field.TypeString)
 	}
 	_node = &AuditLog{config: aluo.config}
 	_spec.Assign = _node.assignValues

@@ -938,6 +938,79 @@ type AuditLogWhereInput struct {
 	IDGTE   *int  `json:"idGTE,omitempty"`
 	IDLT    *int  `json:"idLT,omitempty"`
 	IDLTE   *int  `json:"idLTE,omitempty"`
+
+	// "table" field predicates.
+	Table             *string  `json:"table,omitempty"`
+	TableNEQ          *string  `json:"tableNEQ,omitempty"`
+	TableIn           []string `json:"tableIn,omitempty"`
+	TableNotIn        []string `json:"tableNotIn,omitempty"`
+	TableGT           *string  `json:"tableGT,omitempty"`
+	TableGTE          *string  `json:"tableGTE,omitempty"`
+	TableLT           *string  `json:"tableLT,omitempty"`
+	TableLTE          *string  `json:"tableLTE,omitempty"`
+	TableContains     *string  `json:"tableContains,omitempty"`
+	TableHasPrefix    *string  `json:"tableHasPrefix,omitempty"`
+	TableHasSuffix    *string  `json:"tableHasSuffix,omitempty"`
+	TableIsNil        bool     `json:"tableIsNil,omitempty"`
+	TableNotNil       bool     `json:"tableNotNil,omitempty"`
+	TableEqualFold    *string  `json:"tableEqualFold,omitempty"`
+	TableContainsFold *string  `json:"tableContainsFold,omitempty"`
+
+	// "ref_id" field predicates.
+	RefID       *int  `json:"refID,omitempty"`
+	RefIDNEQ    *int  `json:"refIDNEQ,omitempty"`
+	RefIDIn     []int `json:"refIDIn,omitempty"`
+	RefIDNotIn  []int `json:"refIDNotIn,omitempty"`
+	RefIDGT     *int  `json:"refIDGT,omitempty"`
+	RefIDGTE    *int  `json:"refIDGTE,omitempty"`
+	RefIDLT     *int  `json:"refIDLT,omitempty"`
+	RefIDLTE    *int  `json:"refIDLTE,omitempty"`
+	RefIDIsNil  bool  `json:"refIDIsNil,omitempty"`
+	RefIDNotNil bool  `json:"refIDNotNil,omitempty"`
+
+	// "operation" field predicates.
+	Operation             *string  `json:"operation,omitempty"`
+	OperationNEQ          *string  `json:"operationNEQ,omitempty"`
+	OperationIn           []string `json:"operationIn,omitempty"`
+	OperationNotIn        []string `json:"operationNotIn,omitempty"`
+	OperationGT           *string  `json:"operationGT,omitempty"`
+	OperationGTE          *string  `json:"operationGTE,omitempty"`
+	OperationLT           *string  `json:"operationLT,omitempty"`
+	OperationLTE          *string  `json:"operationLTE,omitempty"`
+	OperationContains     *string  `json:"operationContains,omitempty"`
+	OperationHasPrefix    *string  `json:"operationHasPrefix,omitempty"`
+	OperationHasSuffix    *string  `json:"operationHasSuffix,omitempty"`
+	OperationIsNil        bool     `json:"operationIsNil,omitempty"`
+	OperationNotNil       bool     `json:"operationNotNil,omitempty"`
+	OperationEqualFold    *string  `json:"operationEqualFold,omitempty"`
+	OperationContainsFold *string  `json:"operationContainsFold,omitempty"`
+
+	// "blame" field predicates.
+	Blame             *string  `json:"blame,omitempty"`
+	BlameNEQ          *string  `json:"blameNEQ,omitempty"`
+	BlameIn           []string `json:"blameIn,omitempty"`
+	BlameNotIn        []string `json:"blameNotIn,omitempty"`
+	BlameGT           *string  `json:"blameGT,omitempty"`
+	BlameGTE          *string  `json:"blameGTE,omitempty"`
+	BlameLT           *string  `json:"blameLT,omitempty"`
+	BlameLTE          *string  `json:"blameLTE,omitempty"`
+	BlameContains     *string  `json:"blameContains,omitempty"`
+	BlameHasPrefix    *string  `json:"blameHasPrefix,omitempty"`
+	BlameHasSuffix    *string  `json:"blameHasSuffix,omitempty"`
+	BlameIsNil        bool     `json:"blameIsNil,omitempty"`
+	BlameNotNil       bool     `json:"blameNotNil,omitempty"`
+	BlameEqualFold    *string  `json:"blameEqualFold,omitempty"`
+	BlameContainsFold *string  `json:"blameContainsFold,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt      *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ   *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn    []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT    *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE   *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT    *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE   *time.Time  `json:"createdAtLTE,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -1034,6 +1107,195 @@ func (i *AuditLogWhereInput) P() (predicate.AuditLog, error) {
 	}
 	if i.IDLTE != nil {
 		predicates = append(predicates, auditlog.IDLTE(*i.IDLTE))
+	}
+	if i.Table != nil {
+		predicates = append(predicates, auditlog.TableEQ(*i.Table))
+	}
+	if i.TableNEQ != nil {
+		predicates = append(predicates, auditlog.TableNEQ(*i.TableNEQ))
+	}
+	if len(i.TableIn) > 0 {
+		predicates = append(predicates, auditlog.TableIn(i.TableIn...))
+	}
+	if len(i.TableNotIn) > 0 {
+		predicates = append(predicates, auditlog.TableNotIn(i.TableNotIn...))
+	}
+	if i.TableGT != nil {
+		predicates = append(predicates, auditlog.TableGT(*i.TableGT))
+	}
+	if i.TableGTE != nil {
+		predicates = append(predicates, auditlog.TableGTE(*i.TableGTE))
+	}
+	if i.TableLT != nil {
+		predicates = append(predicates, auditlog.TableLT(*i.TableLT))
+	}
+	if i.TableLTE != nil {
+		predicates = append(predicates, auditlog.TableLTE(*i.TableLTE))
+	}
+	if i.TableContains != nil {
+		predicates = append(predicates, auditlog.TableContains(*i.TableContains))
+	}
+	if i.TableHasPrefix != nil {
+		predicates = append(predicates, auditlog.TableHasPrefix(*i.TableHasPrefix))
+	}
+	if i.TableHasSuffix != nil {
+		predicates = append(predicates, auditlog.TableHasSuffix(*i.TableHasSuffix))
+	}
+	if i.TableIsNil {
+		predicates = append(predicates, auditlog.TableIsNil())
+	}
+	if i.TableNotNil {
+		predicates = append(predicates, auditlog.TableNotNil())
+	}
+	if i.TableEqualFold != nil {
+		predicates = append(predicates, auditlog.TableEqualFold(*i.TableEqualFold))
+	}
+	if i.TableContainsFold != nil {
+		predicates = append(predicates, auditlog.TableContainsFold(*i.TableContainsFold))
+	}
+	if i.RefID != nil {
+		predicates = append(predicates, auditlog.RefIDEQ(*i.RefID))
+	}
+	if i.RefIDNEQ != nil {
+		predicates = append(predicates, auditlog.RefIDNEQ(*i.RefIDNEQ))
+	}
+	if len(i.RefIDIn) > 0 {
+		predicates = append(predicates, auditlog.RefIDIn(i.RefIDIn...))
+	}
+	if len(i.RefIDNotIn) > 0 {
+		predicates = append(predicates, auditlog.RefIDNotIn(i.RefIDNotIn...))
+	}
+	if i.RefIDGT != nil {
+		predicates = append(predicates, auditlog.RefIDGT(*i.RefIDGT))
+	}
+	if i.RefIDGTE != nil {
+		predicates = append(predicates, auditlog.RefIDGTE(*i.RefIDGTE))
+	}
+	if i.RefIDLT != nil {
+		predicates = append(predicates, auditlog.RefIDLT(*i.RefIDLT))
+	}
+	if i.RefIDLTE != nil {
+		predicates = append(predicates, auditlog.RefIDLTE(*i.RefIDLTE))
+	}
+	if i.RefIDIsNil {
+		predicates = append(predicates, auditlog.RefIDIsNil())
+	}
+	if i.RefIDNotNil {
+		predicates = append(predicates, auditlog.RefIDNotNil())
+	}
+	if i.Operation != nil {
+		predicates = append(predicates, auditlog.OperationEQ(*i.Operation))
+	}
+	if i.OperationNEQ != nil {
+		predicates = append(predicates, auditlog.OperationNEQ(*i.OperationNEQ))
+	}
+	if len(i.OperationIn) > 0 {
+		predicates = append(predicates, auditlog.OperationIn(i.OperationIn...))
+	}
+	if len(i.OperationNotIn) > 0 {
+		predicates = append(predicates, auditlog.OperationNotIn(i.OperationNotIn...))
+	}
+	if i.OperationGT != nil {
+		predicates = append(predicates, auditlog.OperationGT(*i.OperationGT))
+	}
+	if i.OperationGTE != nil {
+		predicates = append(predicates, auditlog.OperationGTE(*i.OperationGTE))
+	}
+	if i.OperationLT != nil {
+		predicates = append(predicates, auditlog.OperationLT(*i.OperationLT))
+	}
+	if i.OperationLTE != nil {
+		predicates = append(predicates, auditlog.OperationLTE(*i.OperationLTE))
+	}
+	if i.OperationContains != nil {
+		predicates = append(predicates, auditlog.OperationContains(*i.OperationContains))
+	}
+	if i.OperationHasPrefix != nil {
+		predicates = append(predicates, auditlog.OperationHasPrefix(*i.OperationHasPrefix))
+	}
+	if i.OperationHasSuffix != nil {
+		predicates = append(predicates, auditlog.OperationHasSuffix(*i.OperationHasSuffix))
+	}
+	if i.OperationIsNil {
+		predicates = append(predicates, auditlog.OperationIsNil())
+	}
+	if i.OperationNotNil {
+		predicates = append(predicates, auditlog.OperationNotNil())
+	}
+	if i.OperationEqualFold != nil {
+		predicates = append(predicates, auditlog.OperationEqualFold(*i.OperationEqualFold))
+	}
+	if i.OperationContainsFold != nil {
+		predicates = append(predicates, auditlog.OperationContainsFold(*i.OperationContainsFold))
+	}
+	if i.Blame != nil {
+		predicates = append(predicates, auditlog.BlameEQ(*i.Blame))
+	}
+	if i.BlameNEQ != nil {
+		predicates = append(predicates, auditlog.BlameNEQ(*i.BlameNEQ))
+	}
+	if len(i.BlameIn) > 0 {
+		predicates = append(predicates, auditlog.BlameIn(i.BlameIn...))
+	}
+	if len(i.BlameNotIn) > 0 {
+		predicates = append(predicates, auditlog.BlameNotIn(i.BlameNotIn...))
+	}
+	if i.BlameGT != nil {
+		predicates = append(predicates, auditlog.BlameGT(*i.BlameGT))
+	}
+	if i.BlameGTE != nil {
+		predicates = append(predicates, auditlog.BlameGTE(*i.BlameGTE))
+	}
+	if i.BlameLT != nil {
+		predicates = append(predicates, auditlog.BlameLT(*i.BlameLT))
+	}
+	if i.BlameLTE != nil {
+		predicates = append(predicates, auditlog.BlameLTE(*i.BlameLTE))
+	}
+	if i.BlameContains != nil {
+		predicates = append(predicates, auditlog.BlameContains(*i.BlameContains))
+	}
+	if i.BlameHasPrefix != nil {
+		predicates = append(predicates, auditlog.BlameHasPrefix(*i.BlameHasPrefix))
+	}
+	if i.BlameHasSuffix != nil {
+		predicates = append(predicates, auditlog.BlameHasSuffix(*i.BlameHasSuffix))
+	}
+	if i.BlameIsNil {
+		predicates = append(predicates, auditlog.BlameIsNil())
+	}
+	if i.BlameNotNil {
+		predicates = append(predicates, auditlog.BlameNotNil())
+	}
+	if i.BlameEqualFold != nil {
+		predicates = append(predicates, auditlog.BlameEqualFold(*i.BlameEqualFold))
+	}
+	if i.BlameContainsFold != nil {
+		predicates = append(predicates, auditlog.BlameContainsFold(*i.BlameContainsFold))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, auditlog.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, auditlog.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, auditlog.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, auditlog.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, auditlog.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, auditlog.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, auditlog.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, auditlog.CreatedAtLTE(*i.CreatedAtLTE))
 	}
 
 	switch len(predicates) {

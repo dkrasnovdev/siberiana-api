@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/auditlog"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
@@ -67,6 +68,12 @@ func init() {
 	artifact.DefaultUpdatedAt = artifactDescUpdatedAt.Default.(func() time.Time)
 	// artifact.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	artifact.UpdateDefaultUpdatedAt = artifactDescUpdatedAt.UpdateDefault.(func() time.Time)
+	auditlogFields := schema.AuditLog{}.Fields()
+	_ = auditlogFields
+	// auditlogDescCreatedAt is the schema descriptor for created_at field.
+	auditlogDescCreatedAt := auditlogFields[8].Descriptor()
+	// auditlog.DefaultCreatedAt holds the default value on creation for the created_at field.
+	auditlog.DefaultCreatedAt = auditlogDescCreatedAt.Default.(func() time.Time)
 	categoryMixin := schema.Category{}.Mixin()
 	category.Policy = privacy.NewPolicies(schema.Category{})
 	category.Hooks[0] = func(next ent.Mutator) ent.Mutator {

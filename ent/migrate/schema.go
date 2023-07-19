@@ -82,6 +82,15 @@ var (
 	// AuditLogsColumns holds the columns for the "audit_logs" table.
 	AuditLogsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "table", Type: field.TypeString, Nullable: true},
+		{Name: "ref_id", Type: field.TypeInt, Nullable: true},
+		{Name: "operation", Type: field.TypeString, Nullable: true},
+		{Name: "changes", Type: field.TypeJSON, Nullable: true},
+		{Name: "added_ids", Type: field.TypeJSON, Nullable: true},
+		{Name: "removed_ids", Type: field.TypeJSON, Nullable: true},
+		{Name: "cleared_edges", Type: field.TypeJSON, Nullable: true},
+		{Name: "blame", Type: field.TypeString, Nullable: true},
+		{Name: "created_at", Type: field.TypeTime},
 	}
 	// AuditLogsTable holds the schema information for the "audit_logs" table.
 	AuditLogsTable = &schema.Table{

@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/auditlog"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
@@ -325,6 +326,67 @@ func (al *AuditLogQuery) CollectFields(ctx context.Context, satisfies ...string)
 
 func (al *AuditLogQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(auditlog.Columns))
+		selectedFields = []string{auditlog.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "table":
+			if _, ok := fieldSeen[auditlog.FieldTable]; !ok {
+				selectedFields = append(selectedFields, auditlog.FieldTable)
+				fieldSeen[auditlog.FieldTable] = struct{}{}
+			}
+		case "refID":
+			if _, ok := fieldSeen[auditlog.FieldRefID]; !ok {
+				selectedFields = append(selectedFields, auditlog.FieldRefID)
+				fieldSeen[auditlog.FieldRefID] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[auditlog.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, auditlog.FieldOperation)
+				fieldSeen[auditlog.FieldOperation] = struct{}{}
+			}
+		case "changes":
+			if _, ok := fieldSeen[auditlog.FieldChanges]; !ok {
+				selectedFields = append(selectedFields, auditlog.FieldChanges)
+				fieldSeen[auditlog.FieldChanges] = struct{}{}
+			}
+		case "addedIds":
+			if _, ok := fieldSeen[auditlog.FieldAddedIds]; !ok {
+				selectedFields = append(selectedFields, auditlog.FieldAddedIds)
+				fieldSeen[auditlog.FieldAddedIds] = struct{}{}
+			}
+		case "removedIds":
+			if _, ok := fieldSeen[auditlog.FieldRemovedIds]; !ok {
+				selectedFields = append(selectedFields, auditlog.FieldRemovedIds)
+				fieldSeen[auditlog.FieldRemovedIds] = struct{}{}
+			}
+		case "clearedEdges":
+			if _, ok := fieldSeen[auditlog.FieldClearedEdges]; !ok {
+				selectedFields = append(selectedFields, auditlog.FieldClearedEdges)
+				fieldSeen[auditlog.FieldClearedEdges] = struct{}{}
+			}
+		case "blame":
+			if _, ok := fieldSeen[auditlog.FieldBlame]; !ok {
+				selectedFields = append(selectedFields, auditlog.FieldBlame)
+				fieldSeen[auditlog.FieldBlame] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[auditlog.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, auditlog.FieldCreatedAt)
+				fieldSeen[auditlog.FieldCreatedAt] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		al.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -350,6 +412,34 @@ func newAuditLogPaginateArgs(rv map[string]any) *auditlogPaginateArgs {
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*AuditLogOrder:
+			args.opts = append(args.opts, WithAuditLogOrder(v))
+		case []any:
+			var orders []*AuditLogOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &AuditLogOrder{Field: &AuditLogOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithAuditLogOrder(orders))
+		}
 	}
 	if v, ok := rv[whereField].(*AuditLogWhereInput); ok {
 		args.opts = append(args.opts, WithAuditLogFilter(v.Filter))

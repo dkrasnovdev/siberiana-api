@@ -259,6 +259,18 @@ func (alq *AuditLogQuery) Clone() *AuditLogQuery {
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		Table string `json:"table,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.AuditLog.Query().
+//		GroupBy(auditlog.FieldTable).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (alq *AuditLogQuery) GroupBy(field string, fields ...string) *AuditLogGroupBy {
 	alq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &AuditLogGroupBy{build: alq}
@@ -270,6 +282,16 @@ func (alq *AuditLogQuery) GroupBy(field string, fields ...string) *AuditLogGroup
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		Table string `json:"table,omitempty"`
+//	}
+//
+//	client.AuditLog.Query().
+//		Select(auditlog.FieldTable).
+//		Scan(ctx, &v)
 func (alq *AuditLogQuery) Select(fields ...string) *AuditLogSelect {
 	alq.ctx.Fields = append(alq.ctx.Fields, fields...)
 	sbuild := &AuditLogSelect{AuditLogQuery: alq}
