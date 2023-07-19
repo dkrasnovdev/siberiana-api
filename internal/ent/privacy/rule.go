@@ -18,7 +18,7 @@ func DenyIfNoViewer() privacy.QueryMutationRule {
 	})
 }
 
-// AllowIfAdministrator is a rule that returns allow decision if the viewer is moderator.
+// AllowIfAdministrator is a rule that returns allow decision if the viewer is administrator.
 func AllowIfAdministrator() privacy.QueryMutationRule {
 	return privacy.ContextQueryMutationRule(func(ctx context.Context) error {
 		view := FromContext(ctx)
