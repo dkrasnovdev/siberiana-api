@@ -12,6 +12,7 @@ func NewRouter() *chi.Mux {
 
 	// Add middleware to the router.
 	r.Use(middleware.Logger)         // Log requests.
+	r.Use(Authentication)            // Perform authentication.
 	r.Use(cors.Handler(cors.Options{ // Configure CORS.
 		AllowedOrigins:   []string{"https://*", "http://*"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
