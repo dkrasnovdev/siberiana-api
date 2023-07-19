@@ -6,10 +6,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/technique"
 )
@@ -27,13 +29,138 @@ func (tu *TechniqueUpdate) Where(ps ...predicate.Technique) *TechniqueUpdate {
 	return tu
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (tu *TechniqueUpdate) SetCreatedBy(s string) *TechniqueUpdate {
+	tu.mutation.SetCreatedBy(s)
+	return tu
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (tu *TechniqueUpdate) SetNillableCreatedBy(s *string) *TechniqueUpdate {
+	if s != nil {
+		tu.SetCreatedBy(*s)
+	}
+	return tu
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (tu *TechniqueUpdate) ClearCreatedBy() *TechniqueUpdate {
+	tu.mutation.ClearCreatedBy()
+	return tu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (tu *TechniqueUpdate) SetUpdatedAt(t time.Time) *TechniqueUpdate {
+	tu.mutation.SetUpdatedAt(t)
+	return tu
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (tu *TechniqueUpdate) SetUpdatedBy(s string) *TechniqueUpdate {
+	tu.mutation.SetUpdatedBy(s)
+	return tu
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (tu *TechniqueUpdate) SetNillableUpdatedBy(s *string) *TechniqueUpdate {
+	if s != nil {
+		tu.SetUpdatedBy(*s)
+	}
+	return tu
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (tu *TechniqueUpdate) ClearUpdatedBy() *TechniqueUpdate {
+	tu.mutation.ClearUpdatedBy()
+	return tu
+}
+
+// SetDisplayName sets the "display_name" field.
+func (tu *TechniqueUpdate) SetDisplayName(s string) *TechniqueUpdate {
+	tu.mutation.SetDisplayName(s)
+	return tu
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (tu *TechniqueUpdate) SetNillableDisplayName(s *string) *TechniqueUpdate {
+	if s != nil {
+		tu.SetDisplayName(*s)
+	}
+	return tu
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (tu *TechniqueUpdate) ClearDisplayName() *TechniqueUpdate {
+	tu.mutation.ClearDisplayName()
+	return tu
+}
+
+// SetDescription sets the "description" field.
+func (tu *TechniqueUpdate) SetDescription(s string) *TechniqueUpdate {
+	tu.mutation.SetDescription(s)
+	return tu
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (tu *TechniqueUpdate) SetNillableDescription(s *string) *TechniqueUpdate {
+	if s != nil {
+		tu.SetDescription(*s)
+	}
+	return tu
+}
+
+// ClearDescription clears the value of the "description" field.
+func (tu *TechniqueUpdate) ClearDescription() *TechniqueUpdate {
+	tu.mutation.ClearDescription()
+	return tu
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (tu *TechniqueUpdate) AddArtifactIDs(ids ...int) *TechniqueUpdate {
+	tu.mutation.AddArtifactIDs(ids...)
+	return tu
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (tu *TechniqueUpdate) AddArtifacts(a ...*Artifact) *TechniqueUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return tu.AddArtifactIDs(ids...)
+}
+
 // Mutation returns the TechniqueMutation object of the builder.
 func (tu *TechniqueUpdate) Mutation() *TechniqueMutation {
 	return tu.mutation
 }
 
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (tu *TechniqueUpdate) ClearArtifacts() *TechniqueUpdate {
+	tu.mutation.ClearArtifacts()
+	return tu
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (tu *TechniqueUpdate) RemoveArtifactIDs(ids ...int) *TechniqueUpdate {
+	tu.mutation.RemoveArtifactIDs(ids...)
+	return tu
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (tu *TechniqueUpdate) RemoveArtifacts(a ...*Artifact) *TechniqueUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return tu.RemoveArtifactIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (tu *TechniqueUpdate) Save(ctx context.Context) (int, error) {
+	if err := tu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, tu.sqlSave, tu.mutation, tu.hooks)
 }
 
@@ -59,6 +186,18 @@ func (tu *TechniqueUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (tu *TechniqueUpdate) defaults() error {
+	if _, ok := tu.mutation.UpdatedAt(); !ok {
+		if technique.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized technique.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := technique.UpdateDefaultUpdatedAt()
+		tu.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 func (tu *TechniqueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(technique.Table, technique.Columns, sqlgraph.NewFieldSpec(technique.FieldID, field.TypeInt))
 	if ps := tu.mutation.predicates; len(ps) > 0 {
@@ -67,6 +206,78 @@ func (tu *TechniqueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := tu.mutation.CreatedBy(); ok {
+		_spec.SetField(technique.FieldCreatedBy, field.TypeString, value)
+	}
+	if tu.mutation.CreatedByCleared() {
+		_spec.ClearField(technique.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := tu.mutation.UpdatedAt(); ok {
+		_spec.SetField(technique.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := tu.mutation.UpdatedBy(); ok {
+		_spec.SetField(technique.FieldUpdatedBy, field.TypeString, value)
+	}
+	if tu.mutation.UpdatedByCleared() {
+		_spec.ClearField(technique.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := tu.mutation.DisplayName(); ok {
+		_spec.SetField(technique.FieldDisplayName, field.TypeString, value)
+	}
+	if tu.mutation.DisplayNameCleared() {
+		_spec.ClearField(technique.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := tu.mutation.Description(); ok {
+		_spec.SetField(technique.FieldDescription, field.TypeString, value)
+	}
+	if tu.mutation.DescriptionCleared() {
+		_spec.ClearField(technique.FieldDescription, field.TypeString)
+	}
+	if tu.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   technique.ArtifactsTable,
+			Columns: technique.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !tu.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   technique.ArtifactsTable,
+			Columns: technique.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   technique.ArtifactsTable,
+			Columns: technique.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, tu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -88,9 +299,131 @@ type TechniqueUpdateOne struct {
 	mutation *TechniqueMutation
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (tuo *TechniqueUpdateOne) SetCreatedBy(s string) *TechniqueUpdateOne {
+	tuo.mutation.SetCreatedBy(s)
+	return tuo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (tuo *TechniqueUpdateOne) SetNillableCreatedBy(s *string) *TechniqueUpdateOne {
+	if s != nil {
+		tuo.SetCreatedBy(*s)
+	}
+	return tuo
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (tuo *TechniqueUpdateOne) ClearCreatedBy() *TechniqueUpdateOne {
+	tuo.mutation.ClearCreatedBy()
+	return tuo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (tuo *TechniqueUpdateOne) SetUpdatedAt(t time.Time) *TechniqueUpdateOne {
+	tuo.mutation.SetUpdatedAt(t)
+	return tuo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (tuo *TechniqueUpdateOne) SetUpdatedBy(s string) *TechniqueUpdateOne {
+	tuo.mutation.SetUpdatedBy(s)
+	return tuo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (tuo *TechniqueUpdateOne) SetNillableUpdatedBy(s *string) *TechniqueUpdateOne {
+	if s != nil {
+		tuo.SetUpdatedBy(*s)
+	}
+	return tuo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (tuo *TechniqueUpdateOne) ClearUpdatedBy() *TechniqueUpdateOne {
+	tuo.mutation.ClearUpdatedBy()
+	return tuo
+}
+
+// SetDisplayName sets the "display_name" field.
+func (tuo *TechniqueUpdateOne) SetDisplayName(s string) *TechniqueUpdateOne {
+	tuo.mutation.SetDisplayName(s)
+	return tuo
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (tuo *TechniqueUpdateOne) SetNillableDisplayName(s *string) *TechniqueUpdateOne {
+	if s != nil {
+		tuo.SetDisplayName(*s)
+	}
+	return tuo
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (tuo *TechniqueUpdateOne) ClearDisplayName() *TechniqueUpdateOne {
+	tuo.mutation.ClearDisplayName()
+	return tuo
+}
+
+// SetDescription sets the "description" field.
+func (tuo *TechniqueUpdateOne) SetDescription(s string) *TechniqueUpdateOne {
+	tuo.mutation.SetDescription(s)
+	return tuo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (tuo *TechniqueUpdateOne) SetNillableDescription(s *string) *TechniqueUpdateOne {
+	if s != nil {
+		tuo.SetDescription(*s)
+	}
+	return tuo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (tuo *TechniqueUpdateOne) ClearDescription() *TechniqueUpdateOne {
+	tuo.mutation.ClearDescription()
+	return tuo
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (tuo *TechniqueUpdateOne) AddArtifactIDs(ids ...int) *TechniqueUpdateOne {
+	tuo.mutation.AddArtifactIDs(ids...)
+	return tuo
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (tuo *TechniqueUpdateOne) AddArtifacts(a ...*Artifact) *TechniqueUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return tuo.AddArtifactIDs(ids...)
+}
+
 // Mutation returns the TechniqueMutation object of the builder.
 func (tuo *TechniqueUpdateOne) Mutation() *TechniqueMutation {
 	return tuo.mutation
+}
+
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (tuo *TechniqueUpdateOne) ClearArtifacts() *TechniqueUpdateOne {
+	tuo.mutation.ClearArtifacts()
+	return tuo
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (tuo *TechniqueUpdateOne) RemoveArtifactIDs(ids ...int) *TechniqueUpdateOne {
+	tuo.mutation.RemoveArtifactIDs(ids...)
+	return tuo
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (tuo *TechniqueUpdateOne) RemoveArtifacts(a ...*Artifact) *TechniqueUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return tuo.RemoveArtifactIDs(ids...)
 }
 
 // Where appends a list predicates to the TechniqueUpdate builder.
@@ -108,6 +441,9 @@ func (tuo *TechniqueUpdateOne) Select(field string, fields ...string) *Technique
 
 // Save executes the query and returns the updated Technique entity.
 func (tuo *TechniqueUpdateOne) Save(ctx context.Context) (*Technique, error) {
+	if err := tuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, tuo.sqlSave, tuo.mutation, tuo.hooks)
 }
 
@@ -131,6 +467,18 @@ func (tuo *TechniqueUpdateOne) ExecX(ctx context.Context) {
 	if err := tuo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (tuo *TechniqueUpdateOne) defaults() error {
+	if _, ok := tuo.mutation.UpdatedAt(); !ok {
+		if technique.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized technique.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := technique.UpdateDefaultUpdatedAt()
+		tuo.mutation.SetUpdatedAt(v)
+	}
+	return nil
 }
 
 func (tuo *TechniqueUpdateOne) sqlSave(ctx context.Context) (_node *Technique, err error) {
@@ -158,6 +506,78 @@ func (tuo *TechniqueUpdateOne) sqlSave(ctx context.Context) (_node *Technique, e
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := tuo.mutation.CreatedBy(); ok {
+		_spec.SetField(technique.FieldCreatedBy, field.TypeString, value)
+	}
+	if tuo.mutation.CreatedByCleared() {
+		_spec.ClearField(technique.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := tuo.mutation.UpdatedAt(); ok {
+		_spec.SetField(technique.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := tuo.mutation.UpdatedBy(); ok {
+		_spec.SetField(technique.FieldUpdatedBy, field.TypeString, value)
+	}
+	if tuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(technique.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := tuo.mutation.DisplayName(); ok {
+		_spec.SetField(technique.FieldDisplayName, field.TypeString, value)
+	}
+	if tuo.mutation.DisplayNameCleared() {
+		_spec.ClearField(technique.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := tuo.mutation.Description(); ok {
+		_spec.SetField(technique.FieldDescription, field.TypeString, value)
+	}
+	if tuo.mutation.DescriptionCleared() {
+		_spec.ClearField(technique.FieldDescription, field.TypeString)
+	}
+	if tuo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   technique.ArtifactsTable,
+			Columns: technique.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !tuo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   technique.ArtifactsTable,
+			Columns: technique.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   technique.ArtifactsTable,
+			Columns: technique.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Technique{config: tuo.config}
 	_spec.Assign = _node.assignValues

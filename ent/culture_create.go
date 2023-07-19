@@ -4,10 +4,13 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 )
 
@@ -18,6 +21,105 @@ type CultureCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (cc *CultureCreate) SetCreatedAt(t time.Time) *CultureCreate {
+	cc.mutation.SetCreatedAt(t)
+	return cc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (cc *CultureCreate) SetNillableCreatedAt(t *time.Time) *CultureCreate {
+	if t != nil {
+		cc.SetCreatedAt(*t)
+	}
+	return cc
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (cc *CultureCreate) SetCreatedBy(s string) *CultureCreate {
+	cc.mutation.SetCreatedBy(s)
+	return cc
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (cc *CultureCreate) SetNillableCreatedBy(s *string) *CultureCreate {
+	if s != nil {
+		cc.SetCreatedBy(*s)
+	}
+	return cc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (cc *CultureCreate) SetUpdatedAt(t time.Time) *CultureCreate {
+	cc.mutation.SetUpdatedAt(t)
+	return cc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (cc *CultureCreate) SetNillableUpdatedAt(t *time.Time) *CultureCreate {
+	if t != nil {
+		cc.SetUpdatedAt(*t)
+	}
+	return cc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (cc *CultureCreate) SetUpdatedBy(s string) *CultureCreate {
+	cc.mutation.SetUpdatedBy(s)
+	return cc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (cc *CultureCreate) SetNillableUpdatedBy(s *string) *CultureCreate {
+	if s != nil {
+		cc.SetUpdatedBy(*s)
+	}
+	return cc
+}
+
+// SetDisplayName sets the "display_name" field.
+func (cc *CultureCreate) SetDisplayName(s string) *CultureCreate {
+	cc.mutation.SetDisplayName(s)
+	return cc
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (cc *CultureCreate) SetNillableDisplayName(s *string) *CultureCreate {
+	if s != nil {
+		cc.SetDisplayName(*s)
+	}
+	return cc
+}
+
+// SetDescription sets the "description" field.
+func (cc *CultureCreate) SetDescription(s string) *CultureCreate {
+	cc.mutation.SetDescription(s)
+	return cc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (cc *CultureCreate) SetNillableDescription(s *string) *CultureCreate {
+	if s != nil {
+		cc.SetDescription(*s)
+	}
+	return cc
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (cc *CultureCreate) AddArtifactIDs(ids ...int) *CultureCreate {
+	cc.mutation.AddArtifactIDs(ids...)
+	return cc
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (cc *CultureCreate) AddArtifacts(a ...*Artifact) *CultureCreate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cc.AddArtifactIDs(ids...)
+}
+
 // Mutation returns the CultureMutation object of the builder.
 func (cc *CultureCreate) Mutation() *CultureMutation {
 	return cc.mutation
@@ -25,6 +127,9 @@ func (cc *CultureCreate) Mutation() *CultureMutation {
 
 // Save creates the Culture in the database.
 func (cc *CultureCreate) Save(ctx context.Context) (*Culture, error) {
+	if err := cc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, cc.sqlSave, cc.mutation, cc.hooks)
 }
 
@@ -50,8 +155,33 @@ func (cc *CultureCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (cc *CultureCreate) defaults() error {
+	if _, ok := cc.mutation.CreatedAt(); !ok {
+		if culture.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized culture.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := culture.DefaultCreatedAt()
+		cc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := cc.mutation.UpdatedAt(); !ok {
+		if culture.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized culture.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := culture.DefaultUpdatedAt()
+		cc.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (cc *CultureCreate) check() error {
+	if _, ok := cc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Culture.created_at"`)}
+	}
+	if _, ok := cc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Culture.updated_at"`)}
+	}
 	return nil
 }
 
@@ -78,6 +208,46 @@ func (cc *CultureCreate) createSpec() (*Culture, *sqlgraph.CreateSpec) {
 		_node = &Culture{config: cc.config}
 		_spec = sqlgraph.NewCreateSpec(culture.Table, sqlgraph.NewFieldSpec(culture.FieldID, field.TypeInt))
 	)
+	if value, ok := cc.mutation.CreatedAt(); ok {
+		_spec.SetField(culture.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := cc.mutation.CreatedBy(); ok {
+		_spec.SetField(culture.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := cc.mutation.UpdatedAt(); ok {
+		_spec.SetField(culture.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := cc.mutation.UpdatedBy(); ok {
+		_spec.SetField(culture.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
+	if value, ok := cc.mutation.DisplayName(); ok {
+		_spec.SetField(culture.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
+	}
+	if value, ok := cc.mutation.Description(); ok {
+		_spec.SetField(culture.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if nodes := cc.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   culture.ArtifactsTable,
+			Columns: []string{culture.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -95,6 +265,7 @@ func (ccb *CultureCreateBulk) Save(ctx context.Context) ([]*Culture, error) {
 	for i := range ccb.builders {
 		func(i int, root context.Context) {
 			builder := ccb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*CultureMutation)
 				if !ok {

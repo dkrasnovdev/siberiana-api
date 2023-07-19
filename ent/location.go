@@ -5,18 +5,104 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
+	"github.com/dkrasnovdev/heritage-api/ent/region"
+	"github.com/dkrasnovdev/heritage-api/ent/settlement"
 )
 
 // Location is the model entity for the Location schema.
 type Location struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
+	ID int `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// CreatedBy holds the value of the "created_by" field.
+	CreatedBy string `json:"created_by,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy string `json:"updated_by,omitempty"`
+	// DisplayName holds the value of the "display_name" field.
+	DisplayName string `json:"display_name,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the LocationQuery when eager-loading is set.
+	Edges        LocationEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// LocationEdges holds the relations/edges for other nodes in the graph.
+type LocationEdges struct {
+	// Artifacts holds the value of the artifacts edge.
+	Artifacts []*Artifact `json:"artifacts,omitempty"`
+	// Settlement holds the value of the settlement edge.
+	Settlement *Settlement `json:"settlement,omitempty"`
+	// Region holds the value of the region edge.
+	Region *Region `json:"region,omitempty"`
+	// District holds the value of the district edge.
+	District *District `json:"district,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [4]bool
+	// totalCount holds the count of the edges above.
+	totalCount [4]map[string]int
+
+	namedArtifacts map[string][]*Artifact
+}
+
+// ArtifactsOrErr returns the Artifacts value or an error if the edge
+// was not loaded in eager-loading.
+func (e LocationEdges) ArtifactsOrErr() ([]*Artifact, error) {
+	if e.loadedTypes[0] {
+		return e.Artifacts, nil
+	}
+	return nil, &NotLoadedError{edge: "artifacts"}
+}
+
+// SettlementOrErr returns the Settlement value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e LocationEdges) SettlementOrErr() (*Settlement, error) {
+	if e.loadedTypes[1] {
+		if e.Settlement == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: settlement.Label}
+		}
+		return e.Settlement, nil
+	}
+	return nil, &NotLoadedError{edge: "settlement"}
+}
+
+// RegionOrErr returns the Region value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e LocationEdges) RegionOrErr() (*Region, error) {
+	if e.loadedTypes[2] {
+		if e.Region == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: region.Label}
+		}
+		return e.Region, nil
+	}
+	return nil, &NotLoadedError{edge: "region"}
+}
+
+// DistrictOrErr returns the District value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e LocationEdges) DistrictOrErr() (*District, error) {
+	if e.loadedTypes[3] {
+		if e.District == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: district.Label}
+		}
+		return e.District, nil
+	}
+	return nil, &NotLoadedError{edge: "district"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -26,6 +112,10 @@ func (*Location) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case location.FieldID:
 			values[i] = new(sql.NullInt64)
+		case location.FieldCreatedBy, location.FieldUpdatedBy, location.FieldDisplayName, location.FieldDescription:
+			values[i] = new(sql.NullString)
+		case location.FieldCreatedAt, location.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -47,6 +137,42 @@ func (l *Location) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			l.ID = int(value.Int64)
+		case location.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				l.CreatedAt = value.Time
+			}
+		case location.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				l.CreatedBy = value.String
+			}
+		case location.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				l.UpdatedAt = value.Time
+			}
+		case location.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				l.UpdatedBy = value.String
+			}
+		case location.FieldDisplayName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field display_name", values[i])
+			} else if value.Valid {
+				l.DisplayName = value.String
+			}
+		case location.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				l.Description = value.String
+			}
 		default:
 			l.selectValues.Set(columns[i], values[i])
 		}
@@ -58,6 +184,26 @@ func (l *Location) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (l *Location) Value(name string) (ent.Value, error) {
 	return l.selectValues.Get(name)
+}
+
+// QueryArtifacts queries the "artifacts" edge of the Location entity.
+func (l *Location) QueryArtifacts() *ArtifactQuery {
+	return NewLocationClient(l.config).QueryArtifacts(l)
+}
+
+// QuerySettlement queries the "settlement" edge of the Location entity.
+func (l *Location) QuerySettlement() *SettlementQuery {
+	return NewLocationClient(l.config).QuerySettlement(l)
+}
+
+// QueryRegion queries the "region" edge of the Location entity.
+func (l *Location) QueryRegion() *RegionQuery {
+	return NewLocationClient(l.config).QueryRegion(l)
+}
+
+// QueryDistrict queries the "district" edge of the Location entity.
+func (l *Location) QueryDistrict() *DistrictQuery {
+	return NewLocationClient(l.config).QueryDistrict(l)
 }
 
 // Update returns a builder for updating this Location.
@@ -82,9 +228,50 @@ func (l *Location) Unwrap() *Location {
 func (l *Location) String() string {
 	var builder strings.Builder
 	builder.WriteString("Location(")
-	builder.WriteString(fmt.Sprintf("id=%v", l.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", l.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(l.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("created_by=")
+	builder.WriteString(l.CreatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(l.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_by=")
+	builder.WriteString(l.UpdatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("display_name=")
+	builder.WriteString(l.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(l.Description)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedArtifacts returns the Artifacts named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (l *Location) NamedArtifacts(name string) ([]*Artifact, error) {
+	if l.Edges.namedArtifacts == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := l.Edges.namedArtifacts[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (l *Location) appendNamedArtifacts(name string, edges ...*Artifact) {
+	if l.Edges.namedArtifacts == nil {
+		l.Edges.namedArtifacts = make(map[string][]*Artifact)
+	}
+	if len(edges) == 0 {
+		l.Edges.namedArtifacts[name] = []*Artifact{}
+	} else {
+		l.Edges.namedArtifacts[name] = append(l.Edges.namedArtifacts[name], edges...)
+	}
 }
 
 // Locations is a parsable slice of Location.

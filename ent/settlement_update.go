@@ -6,10 +6,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/settlement"
 )
@@ -27,13 +29,127 @@ func (su *SettlementUpdate) Where(ps ...predicate.Settlement) *SettlementUpdate 
 	return su
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (su *SettlementUpdate) SetCreatedBy(s string) *SettlementUpdate {
+	su.mutation.SetCreatedBy(s)
+	return su
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (su *SettlementUpdate) SetNillableCreatedBy(s *string) *SettlementUpdate {
+	if s != nil {
+		su.SetCreatedBy(*s)
+	}
+	return su
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (su *SettlementUpdate) ClearCreatedBy() *SettlementUpdate {
+	su.mutation.ClearCreatedBy()
+	return su
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (su *SettlementUpdate) SetUpdatedAt(t time.Time) *SettlementUpdate {
+	su.mutation.SetUpdatedAt(t)
+	return su
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (su *SettlementUpdate) SetUpdatedBy(s string) *SettlementUpdate {
+	su.mutation.SetUpdatedBy(s)
+	return su
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (su *SettlementUpdate) SetNillableUpdatedBy(s *string) *SettlementUpdate {
+	if s != nil {
+		su.SetUpdatedBy(*s)
+	}
+	return su
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (su *SettlementUpdate) ClearUpdatedBy() *SettlementUpdate {
+	su.mutation.ClearUpdatedBy()
+	return su
+}
+
+// SetDisplayName sets the "display_name" field.
+func (su *SettlementUpdate) SetDisplayName(s string) *SettlementUpdate {
+	su.mutation.SetDisplayName(s)
+	return su
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (su *SettlementUpdate) SetNillableDisplayName(s *string) *SettlementUpdate {
+	if s != nil {
+		su.SetDisplayName(*s)
+	}
+	return su
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (su *SettlementUpdate) ClearDisplayName() *SettlementUpdate {
+	su.mutation.ClearDisplayName()
+	return su
+}
+
+// SetDescription sets the "description" field.
+func (su *SettlementUpdate) SetDescription(s string) *SettlementUpdate {
+	su.mutation.SetDescription(s)
+	return su
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (su *SettlementUpdate) SetNillableDescription(s *string) *SettlementUpdate {
+	if s != nil {
+		su.SetDescription(*s)
+	}
+	return su
+}
+
+// ClearDescription clears the value of the "description" field.
+func (su *SettlementUpdate) ClearDescription() *SettlementUpdate {
+	su.mutation.ClearDescription()
+	return su
+}
+
+// SetLocationID sets the "location" edge to the Location entity by ID.
+func (su *SettlementUpdate) SetLocationID(id int) *SettlementUpdate {
+	su.mutation.SetLocationID(id)
+	return su
+}
+
+// SetNillableLocationID sets the "location" edge to the Location entity by ID if the given value is not nil.
+func (su *SettlementUpdate) SetNillableLocationID(id *int) *SettlementUpdate {
+	if id != nil {
+		su = su.SetLocationID(*id)
+	}
+	return su
+}
+
+// SetLocation sets the "location" edge to the Location entity.
+func (su *SettlementUpdate) SetLocation(l *Location) *SettlementUpdate {
+	return su.SetLocationID(l.ID)
+}
+
 // Mutation returns the SettlementMutation object of the builder.
 func (su *SettlementUpdate) Mutation() *SettlementMutation {
 	return su.mutation
 }
 
+// ClearLocation clears the "location" edge to the Location entity.
+func (su *SettlementUpdate) ClearLocation() *SettlementUpdate {
+	su.mutation.ClearLocation()
+	return su
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (su *SettlementUpdate) Save(ctx context.Context) (int, error) {
+	if err := su.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, su.sqlSave, su.mutation, su.hooks)
 }
 
@@ -59,6 +175,18 @@ func (su *SettlementUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (su *SettlementUpdate) defaults() error {
+	if _, ok := su.mutation.UpdatedAt(); !ok {
+		if settlement.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized settlement.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := settlement.UpdateDefaultUpdatedAt()
+		su.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 func (su *SettlementUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(settlement.Table, settlement.Columns, sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt))
 	if ps := su.mutation.predicates; len(ps) > 0 {
@@ -67,6 +195,62 @@ func (su *SettlementUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := su.mutation.CreatedBy(); ok {
+		_spec.SetField(settlement.FieldCreatedBy, field.TypeString, value)
+	}
+	if su.mutation.CreatedByCleared() {
+		_spec.ClearField(settlement.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := su.mutation.UpdatedAt(); ok {
+		_spec.SetField(settlement.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := su.mutation.UpdatedBy(); ok {
+		_spec.SetField(settlement.FieldUpdatedBy, field.TypeString, value)
+	}
+	if su.mutation.UpdatedByCleared() {
+		_spec.ClearField(settlement.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := su.mutation.DisplayName(); ok {
+		_spec.SetField(settlement.FieldDisplayName, field.TypeString, value)
+	}
+	if su.mutation.DisplayNameCleared() {
+		_spec.ClearField(settlement.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := su.mutation.Description(); ok {
+		_spec.SetField(settlement.FieldDescription, field.TypeString, value)
+	}
+	if su.mutation.DescriptionCleared() {
+		_spec.ClearField(settlement.FieldDescription, field.TypeString)
+	}
+	if su.mutation.LocationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   settlement.LocationTable,
+			Columns: []string{settlement.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.LocationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   settlement.LocationTable,
+			Columns: []string{settlement.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -88,9 +272,120 @@ type SettlementUpdateOne struct {
 	mutation *SettlementMutation
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (suo *SettlementUpdateOne) SetCreatedBy(s string) *SettlementUpdateOne {
+	suo.mutation.SetCreatedBy(s)
+	return suo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (suo *SettlementUpdateOne) SetNillableCreatedBy(s *string) *SettlementUpdateOne {
+	if s != nil {
+		suo.SetCreatedBy(*s)
+	}
+	return suo
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (suo *SettlementUpdateOne) ClearCreatedBy() *SettlementUpdateOne {
+	suo.mutation.ClearCreatedBy()
+	return suo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (suo *SettlementUpdateOne) SetUpdatedAt(t time.Time) *SettlementUpdateOne {
+	suo.mutation.SetUpdatedAt(t)
+	return suo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (suo *SettlementUpdateOne) SetUpdatedBy(s string) *SettlementUpdateOne {
+	suo.mutation.SetUpdatedBy(s)
+	return suo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (suo *SettlementUpdateOne) SetNillableUpdatedBy(s *string) *SettlementUpdateOne {
+	if s != nil {
+		suo.SetUpdatedBy(*s)
+	}
+	return suo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (suo *SettlementUpdateOne) ClearUpdatedBy() *SettlementUpdateOne {
+	suo.mutation.ClearUpdatedBy()
+	return suo
+}
+
+// SetDisplayName sets the "display_name" field.
+func (suo *SettlementUpdateOne) SetDisplayName(s string) *SettlementUpdateOne {
+	suo.mutation.SetDisplayName(s)
+	return suo
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (suo *SettlementUpdateOne) SetNillableDisplayName(s *string) *SettlementUpdateOne {
+	if s != nil {
+		suo.SetDisplayName(*s)
+	}
+	return suo
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (suo *SettlementUpdateOne) ClearDisplayName() *SettlementUpdateOne {
+	suo.mutation.ClearDisplayName()
+	return suo
+}
+
+// SetDescription sets the "description" field.
+func (suo *SettlementUpdateOne) SetDescription(s string) *SettlementUpdateOne {
+	suo.mutation.SetDescription(s)
+	return suo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (suo *SettlementUpdateOne) SetNillableDescription(s *string) *SettlementUpdateOne {
+	if s != nil {
+		suo.SetDescription(*s)
+	}
+	return suo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (suo *SettlementUpdateOne) ClearDescription() *SettlementUpdateOne {
+	suo.mutation.ClearDescription()
+	return suo
+}
+
+// SetLocationID sets the "location" edge to the Location entity by ID.
+func (suo *SettlementUpdateOne) SetLocationID(id int) *SettlementUpdateOne {
+	suo.mutation.SetLocationID(id)
+	return suo
+}
+
+// SetNillableLocationID sets the "location" edge to the Location entity by ID if the given value is not nil.
+func (suo *SettlementUpdateOne) SetNillableLocationID(id *int) *SettlementUpdateOne {
+	if id != nil {
+		suo = suo.SetLocationID(*id)
+	}
+	return suo
+}
+
+// SetLocation sets the "location" edge to the Location entity.
+func (suo *SettlementUpdateOne) SetLocation(l *Location) *SettlementUpdateOne {
+	return suo.SetLocationID(l.ID)
+}
+
 // Mutation returns the SettlementMutation object of the builder.
 func (suo *SettlementUpdateOne) Mutation() *SettlementMutation {
 	return suo.mutation
+}
+
+// ClearLocation clears the "location" edge to the Location entity.
+func (suo *SettlementUpdateOne) ClearLocation() *SettlementUpdateOne {
+	suo.mutation.ClearLocation()
+	return suo
 }
 
 // Where appends a list predicates to the SettlementUpdate builder.
@@ -108,6 +403,9 @@ func (suo *SettlementUpdateOne) Select(field string, fields ...string) *Settleme
 
 // Save executes the query and returns the updated Settlement entity.
 func (suo *SettlementUpdateOne) Save(ctx context.Context) (*Settlement, error) {
+	if err := suo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, suo.sqlSave, suo.mutation, suo.hooks)
 }
 
@@ -131,6 +429,18 @@ func (suo *SettlementUpdateOne) ExecX(ctx context.Context) {
 	if err := suo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (suo *SettlementUpdateOne) defaults() error {
+	if _, ok := suo.mutation.UpdatedAt(); !ok {
+		if settlement.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized settlement.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := settlement.UpdateDefaultUpdatedAt()
+		suo.mutation.SetUpdatedAt(v)
+	}
+	return nil
 }
 
 func (suo *SettlementUpdateOne) sqlSave(ctx context.Context) (_node *Settlement, err error) {
@@ -158,6 +468,62 @@ func (suo *SettlementUpdateOne) sqlSave(ctx context.Context) (_node *Settlement,
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := suo.mutation.CreatedBy(); ok {
+		_spec.SetField(settlement.FieldCreatedBy, field.TypeString, value)
+	}
+	if suo.mutation.CreatedByCleared() {
+		_spec.ClearField(settlement.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := suo.mutation.UpdatedAt(); ok {
+		_spec.SetField(settlement.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := suo.mutation.UpdatedBy(); ok {
+		_spec.SetField(settlement.FieldUpdatedBy, field.TypeString, value)
+	}
+	if suo.mutation.UpdatedByCleared() {
+		_spec.ClearField(settlement.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := suo.mutation.DisplayName(); ok {
+		_spec.SetField(settlement.FieldDisplayName, field.TypeString, value)
+	}
+	if suo.mutation.DisplayNameCleared() {
+		_spec.ClearField(settlement.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := suo.mutation.Description(); ok {
+		_spec.SetField(settlement.FieldDescription, field.TypeString, value)
+	}
+	if suo.mutation.DescriptionCleared() {
+		_spec.ClearField(settlement.FieldDescription, field.TypeString)
+	}
+	if suo.mutation.LocationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   settlement.LocationTable,
+			Columns: []string{settlement.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.LocationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   settlement.LocationTable,
+			Columns: []string{settlement.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Settlement{config: suo.config}
 	_spec.Assign = _node.assignValues

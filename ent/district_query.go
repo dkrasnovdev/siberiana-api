@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -11,18 +12,21 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
+	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
 
 // DistrictQuery is the builder for querying District entities.
 type DistrictQuery struct {
 	config
-	ctx        *QueryContext
-	order      []district.OrderOption
-	inters     []Interceptor
-	predicates []predicate.District
-	modifiers  []func(*sql.Selector)
-	loadTotal  []func(context.Context, []*District) error
+	ctx          *QueryContext
+	order        []district.OrderOption
+	inters       []Interceptor
+	predicates   []predicate.District
+	withLocation *LocationQuery
+	withFKs      bool
+	modifiers    []func(*sql.Selector)
+	loadTotal    []func(context.Context, []*District) error
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -57,6 +61,28 @@ func (dq *DistrictQuery) Unique(unique bool) *DistrictQuery {
 func (dq *DistrictQuery) Order(o ...district.OrderOption) *DistrictQuery {
 	dq.order = append(dq.order, o...)
 	return dq
+}
+
+// QueryLocation chains the current query on the "location" edge.
+func (dq *DistrictQuery) QueryLocation() *LocationQuery {
+	query := (&LocationClient{config: dq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := dq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := dq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(district.Table, district.FieldID, selector),
+			sqlgraph.To(location.Table, location.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, district.LocationTable, district.LocationColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first District entity from the query.
@@ -246,19 +272,43 @@ func (dq *DistrictQuery) Clone() *DistrictQuery {
 		return nil
 	}
 	return &DistrictQuery{
-		config:     dq.config,
-		ctx:        dq.ctx.Clone(),
-		order:      append([]district.OrderOption{}, dq.order...),
-		inters:     append([]Interceptor{}, dq.inters...),
-		predicates: append([]predicate.District{}, dq.predicates...),
+		config:       dq.config,
+		ctx:          dq.ctx.Clone(),
+		order:        append([]district.OrderOption{}, dq.order...),
+		inters:       append([]Interceptor{}, dq.inters...),
+		predicates:   append([]predicate.District{}, dq.predicates...),
+		withLocation: dq.withLocation.Clone(),
 		// clone intermediate query.
 		sql:  dq.sql.Clone(),
 		path: dq.path,
 	}
 }
 
+// WithLocation tells the query-builder to eager-load the nodes that are connected to
+// the "location" edge. The optional arguments are used to configure the query builder of the edge.
+func (dq *DistrictQuery) WithLocation(opts ...func(*LocationQuery)) *DistrictQuery {
+	query := (&LocationClient{config: dq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	dq.withLocation = query
+	return dq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.District.Query().
+//		GroupBy(district.FieldCreatedAt).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (dq *DistrictQuery) GroupBy(field string, fields ...string) *DistrictGroupBy {
 	dq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &DistrictGroupBy{build: dq}
@@ -270,6 +320,16 @@ func (dq *DistrictQuery) GroupBy(field string, fields ...string) *DistrictGroupB
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//	}
+//
+//	client.District.Query().
+//		Select(district.FieldCreatedAt).
+//		Scan(ctx, &v)
 func (dq *DistrictQuery) Select(fields ...string) *DistrictSelect {
 	dq.ctx.Fields = append(dq.ctx.Fields, fields...)
 	sbuild := &DistrictSelect{DistrictQuery: dq}
@@ -306,20 +366,37 @@ func (dq *DistrictQuery) prepareQuery(ctx context.Context) error {
 		}
 		dq.sql = prev
 	}
+	if district.Policy == nil {
+		return errors.New("ent: uninitialized district.Policy (forgotten import ent/runtime?)")
+	}
+	if err := district.Policy.EvalQuery(ctx, dq); err != nil {
+		return err
+	}
 	return nil
 }
 
 func (dq *DistrictQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*District, error) {
 	var (
-		nodes = []*District{}
-		_spec = dq.querySpec()
+		nodes       = []*District{}
+		withFKs     = dq.withFKs
+		_spec       = dq.querySpec()
+		loadedTypes = [1]bool{
+			dq.withLocation != nil,
+		}
 	)
+	if dq.withLocation != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, district.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*District).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &District{config: dq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(dq.modifiers) > 0 {
@@ -334,12 +411,51 @@ func (dq *DistrictQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Dis
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := dq.withLocation; query != nil {
+		if err := dq.loadLocation(ctx, query, nodes, nil,
+			func(n *District, e *Location) { n.Edges.Location = e }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range dq.loadTotal {
 		if err := dq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (dq *DistrictQuery) loadLocation(ctx context.Context, query *LocationQuery, nodes []*District, init func(*District), assign func(*District, *Location)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*District)
+	for i := range nodes {
+		if nodes[i].location_district == nil {
+			continue
+		}
+		fk := *nodes[i].location_district
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(location.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "location_district" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (dq *DistrictQuery) sqlCount(ctx context.Context) (int, error) {

@@ -6,11 +6,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
+	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
 
@@ -27,13 +29,127 @@ func (du *DistrictUpdate) Where(ps ...predicate.District) *DistrictUpdate {
 	return du
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (du *DistrictUpdate) SetCreatedBy(s string) *DistrictUpdate {
+	du.mutation.SetCreatedBy(s)
+	return du
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (du *DistrictUpdate) SetNillableCreatedBy(s *string) *DistrictUpdate {
+	if s != nil {
+		du.SetCreatedBy(*s)
+	}
+	return du
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (du *DistrictUpdate) ClearCreatedBy() *DistrictUpdate {
+	du.mutation.ClearCreatedBy()
+	return du
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (du *DistrictUpdate) SetUpdatedAt(t time.Time) *DistrictUpdate {
+	du.mutation.SetUpdatedAt(t)
+	return du
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (du *DistrictUpdate) SetUpdatedBy(s string) *DistrictUpdate {
+	du.mutation.SetUpdatedBy(s)
+	return du
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (du *DistrictUpdate) SetNillableUpdatedBy(s *string) *DistrictUpdate {
+	if s != nil {
+		du.SetUpdatedBy(*s)
+	}
+	return du
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (du *DistrictUpdate) ClearUpdatedBy() *DistrictUpdate {
+	du.mutation.ClearUpdatedBy()
+	return du
+}
+
+// SetDisplayName sets the "display_name" field.
+func (du *DistrictUpdate) SetDisplayName(s string) *DistrictUpdate {
+	du.mutation.SetDisplayName(s)
+	return du
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (du *DistrictUpdate) SetNillableDisplayName(s *string) *DistrictUpdate {
+	if s != nil {
+		du.SetDisplayName(*s)
+	}
+	return du
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (du *DistrictUpdate) ClearDisplayName() *DistrictUpdate {
+	du.mutation.ClearDisplayName()
+	return du
+}
+
+// SetDescription sets the "description" field.
+func (du *DistrictUpdate) SetDescription(s string) *DistrictUpdate {
+	du.mutation.SetDescription(s)
+	return du
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (du *DistrictUpdate) SetNillableDescription(s *string) *DistrictUpdate {
+	if s != nil {
+		du.SetDescription(*s)
+	}
+	return du
+}
+
+// ClearDescription clears the value of the "description" field.
+func (du *DistrictUpdate) ClearDescription() *DistrictUpdate {
+	du.mutation.ClearDescription()
+	return du
+}
+
+// SetLocationID sets the "location" edge to the Location entity by ID.
+func (du *DistrictUpdate) SetLocationID(id int) *DistrictUpdate {
+	du.mutation.SetLocationID(id)
+	return du
+}
+
+// SetNillableLocationID sets the "location" edge to the Location entity by ID if the given value is not nil.
+func (du *DistrictUpdate) SetNillableLocationID(id *int) *DistrictUpdate {
+	if id != nil {
+		du = du.SetLocationID(*id)
+	}
+	return du
+}
+
+// SetLocation sets the "location" edge to the Location entity.
+func (du *DistrictUpdate) SetLocation(l *Location) *DistrictUpdate {
+	return du.SetLocationID(l.ID)
+}
+
 // Mutation returns the DistrictMutation object of the builder.
 func (du *DistrictUpdate) Mutation() *DistrictMutation {
 	return du.mutation
 }
 
+// ClearLocation clears the "location" edge to the Location entity.
+func (du *DistrictUpdate) ClearLocation() *DistrictUpdate {
+	du.mutation.ClearLocation()
+	return du
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (du *DistrictUpdate) Save(ctx context.Context) (int, error) {
+	if err := du.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, du.sqlSave, du.mutation, du.hooks)
 }
 
@@ -59,6 +175,18 @@ func (du *DistrictUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (du *DistrictUpdate) defaults() error {
+	if _, ok := du.mutation.UpdatedAt(); !ok {
+		if district.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized district.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := district.UpdateDefaultUpdatedAt()
+		du.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 func (du *DistrictUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(district.Table, district.Columns, sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt))
 	if ps := du.mutation.predicates; len(ps) > 0 {
@@ -67,6 +195,62 @@ func (du *DistrictUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := du.mutation.CreatedBy(); ok {
+		_spec.SetField(district.FieldCreatedBy, field.TypeString, value)
+	}
+	if du.mutation.CreatedByCleared() {
+		_spec.ClearField(district.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := du.mutation.UpdatedAt(); ok {
+		_spec.SetField(district.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := du.mutation.UpdatedBy(); ok {
+		_spec.SetField(district.FieldUpdatedBy, field.TypeString, value)
+	}
+	if du.mutation.UpdatedByCleared() {
+		_spec.ClearField(district.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := du.mutation.DisplayName(); ok {
+		_spec.SetField(district.FieldDisplayName, field.TypeString, value)
+	}
+	if du.mutation.DisplayNameCleared() {
+		_spec.ClearField(district.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := du.mutation.Description(); ok {
+		_spec.SetField(district.FieldDescription, field.TypeString, value)
+	}
+	if du.mutation.DescriptionCleared() {
+		_spec.ClearField(district.FieldDescription, field.TypeString)
+	}
+	if du.mutation.LocationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   district.LocationTable,
+			Columns: []string{district.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := du.mutation.LocationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   district.LocationTable,
+			Columns: []string{district.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, du.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -88,9 +272,120 @@ type DistrictUpdateOne struct {
 	mutation *DistrictMutation
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (duo *DistrictUpdateOne) SetCreatedBy(s string) *DistrictUpdateOne {
+	duo.mutation.SetCreatedBy(s)
+	return duo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (duo *DistrictUpdateOne) SetNillableCreatedBy(s *string) *DistrictUpdateOne {
+	if s != nil {
+		duo.SetCreatedBy(*s)
+	}
+	return duo
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (duo *DistrictUpdateOne) ClearCreatedBy() *DistrictUpdateOne {
+	duo.mutation.ClearCreatedBy()
+	return duo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (duo *DistrictUpdateOne) SetUpdatedAt(t time.Time) *DistrictUpdateOne {
+	duo.mutation.SetUpdatedAt(t)
+	return duo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (duo *DistrictUpdateOne) SetUpdatedBy(s string) *DistrictUpdateOne {
+	duo.mutation.SetUpdatedBy(s)
+	return duo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (duo *DistrictUpdateOne) SetNillableUpdatedBy(s *string) *DistrictUpdateOne {
+	if s != nil {
+		duo.SetUpdatedBy(*s)
+	}
+	return duo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (duo *DistrictUpdateOne) ClearUpdatedBy() *DistrictUpdateOne {
+	duo.mutation.ClearUpdatedBy()
+	return duo
+}
+
+// SetDisplayName sets the "display_name" field.
+func (duo *DistrictUpdateOne) SetDisplayName(s string) *DistrictUpdateOne {
+	duo.mutation.SetDisplayName(s)
+	return duo
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (duo *DistrictUpdateOne) SetNillableDisplayName(s *string) *DistrictUpdateOne {
+	if s != nil {
+		duo.SetDisplayName(*s)
+	}
+	return duo
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (duo *DistrictUpdateOne) ClearDisplayName() *DistrictUpdateOne {
+	duo.mutation.ClearDisplayName()
+	return duo
+}
+
+// SetDescription sets the "description" field.
+func (duo *DistrictUpdateOne) SetDescription(s string) *DistrictUpdateOne {
+	duo.mutation.SetDescription(s)
+	return duo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (duo *DistrictUpdateOne) SetNillableDescription(s *string) *DistrictUpdateOne {
+	if s != nil {
+		duo.SetDescription(*s)
+	}
+	return duo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (duo *DistrictUpdateOne) ClearDescription() *DistrictUpdateOne {
+	duo.mutation.ClearDescription()
+	return duo
+}
+
+// SetLocationID sets the "location" edge to the Location entity by ID.
+func (duo *DistrictUpdateOne) SetLocationID(id int) *DistrictUpdateOne {
+	duo.mutation.SetLocationID(id)
+	return duo
+}
+
+// SetNillableLocationID sets the "location" edge to the Location entity by ID if the given value is not nil.
+func (duo *DistrictUpdateOne) SetNillableLocationID(id *int) *DistrictUpdateOne {
+	if id != nil {
+		duo = duo.SetLocationID(*id)
+	}
+	return duo
+}
+
+// SetLocation sets the "location" edge to the Location entity.
+func (duo *DistrictUpdateOne) SetLocation(l *Location) *DistrictUpdateOne {
+	return duo.SetLocationID(l.ID)
+}
+
 // Mutation returns the DistrictMutation object of the builder.
 func (duo *DistrictUpdateOne) Mutation() *DistrictMutation {
 	return duo.mutation
+}
+
+// ClearLocation clears the "location" edge to the Location entity.
+func (duo *DistrictUpdateOne) ClearLocation() *DistrictUpdateOne {
+	duo.mutation.ClearLocation()
+	return duo
 }
 
 // Where appends a list predicates to the DistrictUpdate builder.
@@ -108,6 +403,9 @@ func (duo *DistrictUpdateOne) Select(field string, fields ...string) *DistrictUp
 
 // Save executes the query and returns the updated District entity.
 func (duo *DistrictUpdateOne) Save(ctx context.Context) (*District, error) {
+	if err := duo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, duo.sqlSave, duo.mutation, duo.hooks)
 }
 
@@ -131,6 +429,18 @@ func (duo *DistrictUpdateOne) ExecX(ctx context.Context) {
 	if err := duo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (duo *DistrictUpdateOne) defaults() error {
+	if _, ok := duo.mutation.UpdatedAt(); !ok {
+		if district.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized district.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := district.UpdateDefaultUpdatedAt()
+		duo.mutation.SetUpdatedAt(v)
+	}
+	return nil
 }
 
 func (duo *DistrictUpdateOne) sqlSave(ctx context.Context) (_node *District, err error) {
@@ -158,6 +468,62 @@ func (duo *DistrictUpdateOne) sqlSave(ctx context.Context) (_node *District, err
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := duo.mutation.CreatedBy(); ok {
+		_spec.SetField(district.FieldCreatedBy, field.TypeString, value)
+	}
+	if duo.mutation.CreatedByCleared() {
+		_spec.ClearField(district.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := duo.mutation.UpdatedAt(); ok {
+		_spec.SetField(district.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := duo.mutation.UpdatedBy(); ok {
+		_spec.SetField(district.FieldUpdatedBy, field.TypeString, value)
+	}
+	if duo.mutation.UpdatedByCleared() {
+		_spec.ClearField(district.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := duo.mutation.DisplayName(); ok {
+		_spec.SetField(district.FieldDisplayName, field.TypeString, value)
+	}
+	if duo.mutation.DisplayNameCleared() {
+		_spec.ClearField(district.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := duo.mutation.Description(); ok {
+		_spec.SetField(district.FieldDescription, field.TypeString, value)
+	}
+	if duo.mutation.DescriptionCleared() {
+		_spec.ClearField(district.FieldDescription, field.TypeString)
+	}
+	if duo.mutation.LocationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   district.LocationTable,
+			Columns: []string{district.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := duo.mutation.LocationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   district.LocationTable,
+			Columns: []string{district.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &District{config: duo.config}
 	_spec.Assign = _node.assignValues

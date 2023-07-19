@@ -4,10 +4,14 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 )
 
@@ -18,6 +22,124 @@ type CollectionCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (cc *CollectionCreate) SetCreatedAt(t time.Time) *CollectionCreate {
+	cc.mutation.SetCreatedAt(t)
+	return cc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (cc *CollectionCreate) SetNillableCreatedAt(t *time.Time) *CollectionCreate {
+	if t != nil {
+		cc.SetCreatedAt(*t)
+	}
+	return cc
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (cc *CollectionCreate) SetCreatedBy(s string) *CollectionCreate {
+	cc.mutation.SetCreatedBy(s)
+	return cc
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (cc *CollectionCreate) SetNillableCreatedBy(s *string) *CollectionCreate {
+	if s != nil {
+		cc.SetCreatedBy(*s)
+	}
+	return cc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (cc *CollectionCreate) SetUpdatedAt(t time.Time) *CollectionCreate {
+	cc.mutation.SetUpdatedAt(t)
+	return cc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (cc *CollectionCreate) SetNillableUpdatedAt(t *time.Time) *CollectionCreate {
+	if t != nil {
+		cc.SetUpdatedAt(*t)
+	}
+	return cc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (cc *CollectionCreate) SetUpdatedBy(s string) *CollectionCreate {
+	cc.mutation.SetUpdatedBy(s)
+	return cc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (cc *CollectionCreate) SetNillableUpdatedBy(s *string) *CollectionCreate {
+	if s != nil {
+		cc.SetUpdatedBy(*s)
+	}
+	return cc
+}
+
+// SetDisplayName sets the "display_name" field.
+func (cc *CollectionCreate) SetDisplayName(s string) *CollectionCreate {
+	cc.mutation.SetDisplayName(s)
+	return cc
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (cc *CollectionCreate) SetNillableDisplayName(s *string) *CollectionCreate {
+	if s != nil {
+		cc.SetDisplayName(*s)
+	}
+	return cc
+}
+
+// SetDescription sets the "description" field.
+func (cc *CollectionCreate) SetDescription(s string) *CollectionCreate {
+	cc.mutation.SetDescription(s)
+	return cc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (cc *CollectionCreate) SetNillableDescription(s *string) *CollectionCreate {
+	if s != nil {
+		cc.SetDescription(*s)
+	}
+	return cc
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (cc *CollectionCreate) AddArtifactIDs(ids ...int) *CollectionCreate {
+	cc.mutation.AddArtifactIDs(ids...)
+	return cc
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (cc *CollectionCreate) AddArtifacts(a ...*Artifact) *CollectionCreate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cc.AddArtifactIDs(ids...)
+}
+
+// SetCategoryID sets the "category" edge to the Category entity by ID.
+func (cc *CollectionCreate) SetCategoryID(id int) *CollectionCreate {
+	cc.mutation.SetCategoryID(id)
+	return cc
+}
+
+// SetNillableCategoryID sets the "category" edge to the Category entity by ID if the given value is not nil.
+func (cc *CollectionCreate) SetNillableCategoryID(id *int) *CollectionCreate {
+	if id != nil {
+		cc = cc.SetCategoryID(*id)
+	}
+	return cc
+}
+
+// SetCategory sets the "category" edge to the Category entity.
+func (cc *CollectionCreate) SetCategory(c *Category) *CollectionCreate {
+	return cc.SetCategoryID(c.ID)
+}
+
 // Mutation returns the CollectionMutation object of the builder.
 func (cc *CollectionCreate) Mutation() *CollectionMutation {
 	return cc.mutation
@@ -25,6 +147,9 @@ func (cc *CollectionCreate) Mutation() *CollectionMutation {
 
 // Save creates the Collection in the database.
 func (cc *CollectionCreate) Save(ctx context.Context) (*Collection, error) {
+	if err := cc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, cc.sqlSave, cc.mutation, cc.hooks)
 }
 
@@ -50,8 +175,33 @@ func (cc *CollectionCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (cc *CollectionCreate) defaults() error {
+	if _, ok := cc.mutation.CreatedAt(); !ok {
+		if collection.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized collection.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := collection.DefaultCreatedAt()
+		cc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := cc.mutation.UpdatedAt(); !ok {
+		if collection.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized collection.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := collection.DefaultUpdatedAt()
+		cc.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (cc *CollectionCreate) check() error {
+	if _, ok := cc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Collection.created_at"`)}
+	}
+	if _, ok := cc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Collection.updated_at"`)}
+	}
 	return nil
 }
 
@@ -78,6 +228,63 @@ func (cc *CollectionCreate) createSpec() (*Collection, *sqlgraph.CreateSpec) {
 		_node = &Collection{config: cc.config}
 		_spec = sqlgraph.NewCreateSpec(collection.Table, sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt))
 	)
+	if value, ok := cc.mutation.CreatedAt(); ok {
+		_spec.SetField(collection.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := cc.mutation.CreatedBy(); ok {
+		_spec.SetField(collection.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := cc.mutation.UpdatedAt(); ok {
+		_spec.SetField(collection.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := cc.mutation.UpdatedBy(); ok {
+		_spec.SetField(collection.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
+	if value, ok := cc.mutation.DisplayName(); ok {
+		_spec.SetField(collection.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
+	}
+	if value, ok := cc.mutation.Description(); ok {
+		_spec.SetField(collection.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if nodes := cc.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.ArtifactsTable,
+			Columns: []string{collection.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.CategoryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   collection.CategoryTable,
+			Columns: []string{collection.CategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(category.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.category_collections = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -95,6 +302,7 @@ func (ccb *CollectionCreateBulk) Save(ctx context.Context) ([]*Collection, error
 	for i := range ccb.builders {
 		func(i int, root context.Context) {
 			builder := ccb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*CollectionMutation)
 				if !ok {

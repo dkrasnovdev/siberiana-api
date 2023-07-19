@@ -4,12 +4,14 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
 )
@@ -17,12 +19,14 @@ import (
 // RegionQuery is the builder for querying Region entities.
 type RegionQuery struct {
 	config
-	ctx        *QueryContext
-	order      []region.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Region
-	modifiers  []func(*sql.Selector)
-	loadTotal  []func(context.Context, []*Region) error
+	ctx          *QueryContext
+	order        []region.OrderOption
+	inters       []Interceptor
+	predicates   []predicate.Region
+	withLocation *LocationQuery
+	withFKs      bool
+	modifiers    []func(*sql.Selector)
+	loadTotal    []func(context.Context, []*Region) error
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -57,6 +61,28 @@ func (rq *RegionQuery) Unique(unique bool) *RegionQuery {
 func (rq *RegionQuery) Order(o ...region.OrderOption) *RegionQuery {
 	rq.order = append(rq.order, o...)
 	return rq
+}
+
+// QueryLocation chains the current query on the "location" edge.
+func (rq *RegionQuery) QueryLocation() *LocationQuery {
+	query := (&LocationClient{config: rq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := rq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := rq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(region.Table, region.FieldID, selector),
+			sqlgraph.To(location.Table, location.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, region.LocationTable, region.LocationColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Region entity from the query.
@@ -246,19 +272,43 @@ func (rq *RegionQuery) Clone() *RegionQuery {
 		return nil
 	}
 	return &RegionQuery{
-		config:     rq.config,
-		ctx:        rq.ctx.Clone(),
-		order:      append([]region.OrderOption{}, rq.order...),
-		inters:     append([]Interceptor{}, rq.inters...),
-		predicates: append([]predicate.Region{}, rq.predicates...),
+		config:       rq.config,
+		ctx:          rq.ctx.Clone(),
+		order:        append([]region.OrderOption{}, rq.order...),
+		inters:       append([]Interceptor{}, rq.inters...),
+		predicates:   append([]predicate.Region{}, rq.predicates...),
+		withLocation: rq.withLocation.Clone(),
 		// clone intermediate query.
 		sql:  rq.sql.Clone(),
 		path: rq.path,
 	}
 }
 
+// WithLocation tells the query-builder to eager-load the nodes that are connected to
+// the "location" edge. The optional arguments are used to configure the query builder of the edge.
+func (rq *RegionQuery) WithLocation(opts ...func(*LocationQuery)) *RegionQuery {
+	query := (&LocationClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	rq.withLocation = query
+	return rq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Region.Query().
+//		GroupBy(region.FieldCreatedAt).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (rq *RegionQuery) GroupBy(field string, fields ...string) *RegionGroupBy {
 	rq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &RegionGroupBy{build: rq}
@@ -270,6 +320,16 @@ func (rq *RegionQuery) GroupBy(field string, fields ...string) *RegionGroupBy {
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//	}
+//
+//	client.Region.Query().
+//		Select(region.FieldCreatedAt).
+//		Scan(ctx, &v)
 func (rq *RegionQuery) Select(fields ...string) *RegionSelect {
 	rq.ctx.Fields = append(rq.ctx.Fields, fields...)
 	sbuild := &RegionSelect{RegionQuery: rq}
@@ -306,20 +366,37 @@ func (rq *RegionQuery) prepareQuery(ctx context.Context) error {
 		}
 		rq.sql = prev
 	}
+	if region.Policy == nil {
+		return errors.New("ent: uninitialized region.Policy (forgotten import ent/runtime?)")
+	}
+	if err := region.Policy.EvalQuery(ctx, rq); err != nil {
+		return err
+	}
 	return nil
 }
 
 func (rq *RegionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Region, error) {
 	var (
-		nodes = []*Region{}
-		_spec = rq.querySpec()
+		nodes       = []*Region{}
+		withFKs     = rq.withFKs
+		_spec       = rq.querySpec()
+		loadedTypes = [1]bool{
+			rq.withLocation != nil,
+		}
 	)
+	if rq.withLocation != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, region.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Region).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Region{config: rq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(rq.modifiers) > 0 {
@@ -334,12 +411,51 @@ func (rq *RegionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Regio
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := rq.withLocation; query != nil {
+		if err := rq.loadLocation(ctx, query, nodes, nil,
+			func(n *Region, e *Location) { n.Edges.Location = e }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range rq.loadTotal {
 		if err := rq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (rq *RegionQuery) loadLocation(ctx context.Context, query *LocationQuery, nodes []*Region, init func(*Region), assign func(*Region, *Location)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Region)
+	for i := range nodes {
+		if nodes[i].location_region == nil {
+			continue
+		}
+		fk := *nodes[i].location_region
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(location.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "location_region" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (rq *RegionQuery) sqlCount(ctx context.Context) (int, error) {

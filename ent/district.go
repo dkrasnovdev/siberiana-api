@@ -5,18 +5,60 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
+	"github.com/dkrasnovdev/heritage-api/ent/location"
 )
 
 // District is the model entity for the District schema.
 type District struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
-	selectValues sql.SelectValues
+	ID int `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// CreatedBy holds the value of the "created_by" field.
+	CreatedBy string `json:"created_by,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy string `json:"updated_by,omitempty"`
+	// DisplayName holds the value of the "display_name" field.
+	DisplayName string `json:"display_name,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the DistrictQuery when eager-loading is set.
+	Edges             DistrictEdges `json:"edges"`
+	location_district *int
+	selectValues      sql.SelectValues
+}
+
+// DistrictEdges holds the relations/edges for other nodes in the graph.
+type DistrictEdges struct {
+	// Location holds the value of the location edge.
+	Location *Location `json:"location,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+	// totalCount holds the count of the edges above.
+	totalCount [1]map[string]int
+}
+
+// LocationOrErr returns the Location value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e DistrictEdges) LocationOrErr() (*Location, error) {
+	if e.loadedTypes[0] {
+		if e.Location == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: location.Label}
+		}
+		return e.Location, nil
+	}
+	return nil, &NotLoadedError{edge: "location"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -25,6 +67,12 @@ func (*District) scanValues(columns []string) ([]any, error) {
 	for i := range columns {
 		switch columns[i] {
 		case district.FieldID:
+			values[i] = new(sql.NullInt64)
+		case district.FieldCreatedBy, district.FieldUpdatedBy, district.FieldDisplayName, district.FieldDescription:
+			values[i] = new(sql.NullString)
+		case district.FieldCreatedAt, district.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
+		case district.ForeignKeys[0]: // location_district
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -47,6 +95,49 @@ func (d *District) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			d.ID = int(value.Int64)
+		case district.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				d.CreatedAt = value.Time
+			}
+		case district.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				d.CreatedBy = value.String
+			}
+		case district.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				d.UpdatedAt = value.Time
+			}
+		case district.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				d.UpdatedBy = value.String
+			}
+		case district.FieldDisplayName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field display_name", values[i])
+			} else if value.Valid {
+				d.DisplayName = value.String
+			}
+		case district.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				d.Description = value.String
+			}
+		case district.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field location_district", value)
+			} else if value.Valid {
+				d.location_district = new(int)
+				*d.location_district = int(value.Int64)
+			}
 		default:
 			d.selectValues.Set(columns[i], values[i])
 		}
@@ -58,6 +149,11 @@ func (d *District) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (d *District) Value(name string) (ent.Value, error) {
 	return d.selectValues.Get(name)
+}
+
+// QueryLocation queries the "location" edge of the District entity.
+func (d *District) QueryLocation() *LocationQuery {
+	return NewDistrictClient(d.config).QueryLocation(d)
 }
 
 // Update returns a builder for updating this District.
@@ -82,7 +178,24 @@ func (d *District) Unwrap() *District {
 func (d *District) String() string {
 	var builder strings.Builder
 	builder.WriteString("District(")
-	builder.WriteString(fmt.Sprintf("id=%v", d.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", d.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(d.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("created_by=")
+	builder.WriteString(d.CreatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(d.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_by=")
+	builder.WriteString(d.UpdatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("display_name=")
+	builder.WriteString(d.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(d.Description)
 	builder.WriteByte(')')
 	return builder.String()
 }

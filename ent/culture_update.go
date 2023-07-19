@@ -6,10 +6,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
@@ -27,13 +29,138 @@ func (cu *CultureUpdate) Where(ps ...predicate.Culture) *CultureUpdate {
 	return cu
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (cu *CultureUpdate) SetCreatedBy(s string) *CultureUpdate {
+	cu.mutation.SetCreatedBy(s)
+	return cu
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (cu *CultureUpdate) SetNillableCreatedBy(s *string) *CultureUpdate {
+	if s != nil {
+		cu.SetCreatedBy(*s)
+	}
+	return cu
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (cu *CultureUpdate) ClearCreatedBy() *CultureUpdate {
+	cu.mutation.ClearCreatedBy()
+	return cu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (cu *CultureUpdate) SetUpdatedAt(t time.Time) *CultureUpdate {
+	cu.mutation.SetUpdatedAt(t)
+	return cu
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (cu *CultureUpdate) SetUpdatedBy(s string) *CultureUpdate {
+	cu.mutation.SetUpdatedBy(s)
+	return cu
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (cu *CultureUpdate) SetNillableUpdatedBy(s *string) *CultureUpdate {
+	if s != nil {
+		cu.SetUpdatedBy(*s)
+	}
+	return cu
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (cu *CultureUpdate) ClearUpdatedBy() *CultureUpdate {
+	cu.mutation.ClearUpdatedBy()
+	return cu
+}
+
+// SetDisplayName sets the "display_name" field.
+func (cu *CultureUpdate) SetDisplayName(s string) *CultureUpdate {
+	cu.mutation.SetDisplayName(s)
+	return cu
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (cu *CultureUpdate) SetNillableDisplayName(s *string) *CultureUpdate {
+	if s != nil {
+		cu.SetDisplayName(*s)
+	}
+	return cu
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (cu *CultureUpdate) ClearDisplayName() *CultureUpdate {
+	cu.mutation.ClearDisplayName()
+	return cu
+}
+
+// SetDescription sets the "description" field.
+func (cu *CultureUpdate) SetDescription(s string) *CultureUpdate {
+	cu.mutation.SetDescription(s)
+	return cu
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (cu *CultureUpdate) SetNillableDescription(s *string) *CultureUpdate {
+	if s != nil {
+		cu.SetDescription(*s)
+	}
+	return cu
+}
+
+// ClearDescription clears the value of the "description" field.
+func (cu *CultureUpdate) ClearDescription() *CultureUpdate {
+	cu.mutation.ClearDescription()
+	return cu
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (cu *CultureUpdate) AddArtifactIDs(ids ...int) *CultureUpdate {
+	cu.mutation.AddArtifactIDs(ids...)
+	return cu
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (cu *CultureUpdate) AddArtifacts(a ...*Artifact) *CultureUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cu.AddArtifactIDs(ids...)
+}
+
 // Mutation returns the CultureMutation object of the builder.
 func (cu *CultureUpdate) Mutation() *CultureMutation {
 	return cu.mutation
 }
 
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (cu *CultureUpdate) ClearArtifacts() *CultureUpdate {
+	cu.mutation.ClearArtifacts()
+	return cu
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (cu *CultureUpdate) RemoveArtifactIDs(ids ...int) *CultureUpdate {
+	cu.mutation.RemoveArtifactIDs(ids...)
+	return cu
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (cu *CultureUpdate) RemoveArtifacts(a ...*Artifact) *CultureUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cu.RemoveArtifactIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (cu *CultureUpdate) Save(ctx context.Context) (int, error) {
+	if err := cu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, cu.sqlSave, cu.mutation, cu.hooks)
 }
 
@@ -59,6 +186,18 @@ func (cu *CultureUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (cu *CultureUpdate) defaults() error {
+	if _, ok := cu.mutation.UpdatedAt(); !ok {
+		if culture.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized culture.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := culture.UpdateDefaultUpdatedAt()
+		cu.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 func (cu *CultureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(culture.Table, culture.Columns, sqlgraph.NewFieldSpec(culture.FieldID, field.TypeInt))
 	if ps := cu.mutation.predicates; len(ps) > 0 {
@@ -67,6 +206,78 @@ func (cu *CultureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := cu.mutation.CreatedBy(); ok {
+		_spec.SetField(culture.FieldCreatedBy, field.TypeString, value)
+	}
+	if cu.mutation.CreatedByCleared() {
+		_spec.ClearField(culture.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := cu.mutation.UpdatedAt(); ok {
+		_spec.SetField(culture.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := cu.mutation.UpdatedBy(); ok {
+		_spec.SetField(culture.FieldUpdatedBy, field.TypeString, value)
+	}
+	if cu.mutation.UpdatedByCleared() {
+		_spec.ClearField(culture.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := cu.mutation.DisplayName(); ok {
+		_spec.SetField(culture.FieldDisplayName, field.TypeString, value)
+	}
+	if cu.mutation.DisplayNameCleared() {
+		_spec.ClearField(culture.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := cu.mutation.Description(); ok {
+		_spec.SetField(culture.FieldDescription, field.TypeString, value)
+	}
+	if cu.mutation.DescriptionCleared() {
+		_spec.ClearField(culture.FieldDescription, field.TypeString)
+	}
+	if cu.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   culture.ArtifactsTable,
+			Columns: []string{culture.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !cu.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   culture.ArtifactsTable,
+			Columns: []string{culture.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   culture.ArtifactsTable,
+			Columns: []string{culture.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, cu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -88,9 +299,131 @@ type CultureUpdateOne struct {
 	mutation *CultureMutation
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (cuo *CultureUpdateOne) SetCreatedBy(s string) *CultureUpdateOne {
+	cuo.mutation.SetCreatedBy(s)
+	return cuo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (cuo *CultureUpdateOne) SetNillableCreatedBy(s *string) *CultureUpdateOne {
+	if s != nil {
+		cuo.SetCreatedBy(*s)
+	}
+	return cuo
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (cuo *CultureUpdateOne) ClearCreatedBy() *CultureUpdateOne {
+	cuo.mutation.ClearCreatedBy()
+	return cuo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (cuo *CultureUpdateOne) SetUpdatedAt(t time.Time) *CultureUpdateOne {
+	cuo.mutation.SetUpdatedAt(t)
+	return cuo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (cuo *CultureUpdateOne) SetUpdatedBy(s string) *CultureUpdateOne {
+	cuo.mutation.SetUpdatedBy(s)
+	return cuo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (cuo *CultureUpdateOne) SetNillableUpdatedBy(s *string) *CultureUpdateOne {
+	if s != nil {
+		cuo.SetUpdatedBy(*s)
+	}
+	return cuo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (cuo *CultureUpdateOne) ClearUpdatedBy() *CultureUpdateOne {
+	cuo.mutation.ClearUpdatedBy()
+	return cuo
+}
+
+// SetDisplayName sets the "display_name" field.
+func (cuo *CultureUpdateOne) SetDisplayName(s string) *CultureUpdateOne {
+	cuo.mutation.SetDisplayName(s)
+	return cuo
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (cuo *CultureUpdateOne) SetNillableDisplayName(s *string) *CultureUpdateOne {
+	if s != nil {
+		cuo.SetDisplayName(*s)
+	}
+	return cuo
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (cuo *CultureUpdateOne) ClearDisplayName() *CultureUpdateOne {
+	cuo.mutation.ClearDisplayName()
+	return cuo
+}
+
+// SetDescription sets the "description" field.
+func (cuo *CultureUpdateOne) SetDescription(s string) *CultureUpdateOne {
+	cuo.mutation.SetDescription(s)
+	return cuo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (cuo *CultureUpdateOne) SetNillableDescription(s *string) *CultureUpdateOne {
+	if s != nil {
+		cuo.SetDescription(*s)
+	}
+	return cuo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (cuo *CultureUpdateOne) ClearDescription() *CultureUpdateOne {
+	cuo.mutation.ClearDescription()
+	return cuo
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (cuo *CultureUpdateOne) AddArtifactIDs(ids ...int) *CultureUpdateOne {
+	cuo.mutation.AddArtifactIDs(ids...)
+	return cuo
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (cuo *CultureUpdateOne) AddArtifacts(a ...*Artifact) *CultureUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cuo.AddArtifactIDs(ids...)
+}
+
 // Mutation returns the CultureMutation object of the builder.
 func (cuo *CultureUpdateOne) Mutation() *CultureMutation {
 	return cuo.mutation
+}
+
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (cuo *CultureUpdateOne) ClearArtifacts() *CultureUpdateOne {
+	cuo.mutation.ClearArtifacts()
+	return cuo
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (cuo *CultureUpdateOne) RemoveArtifactIDs(ids ...int) *CultureUpdateOne {
+	cuo.mutation.RemoveArtifactIDs(ids...)
+	return cuo
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (cuo *CultureUpdateOne) RemoveArtifacts(a ...*Artifact) *CultureUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cuo.RemoveArtifactIDs(ids...)
 }
 
 // Where appends a list predicates to the CultureUpdate builder.
@@ -108,6 +441,9 @@ func (cuo *CultureUpdateOne) Select(field string, fields ...string) *CultureUpda
 
 // Save executes the query and returns the updated Culture entity.
 func (cuo *CultureUpdateOne) Save(ctx context.Context) (*Culture, error) {
+	if err := cuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, cuo.sqlSave, cuo.mutation, cuo.hooks)
 }
 
@@ -131,6 +467,18 @@ func (cuo *CultureUpdateOne) ExecX(ctx context.Context) {
 	if err := cuo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (cuo *CultureUpdateOne) defaults() error {
+	if _, ok := cuo.mutation.UpdatedAt(); !ok {
+		if culture.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized culture.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := culture.UpdateDefaultUpdatedAt()
+		cuo.mutation.SetUpdatedAt(v)
+	}
+	return nil
 }
 
 func (cuo *CultureUpdateOne) sqlSave(ctx context.Context) (_node *Culture, err error) {
@@ -158,6 +506,78 @@ func (cuo *CultureUpdateOne) sqlSave(ctx context.Context) (_node *Culture, err e
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := cuo.mutation.CreatedBy(); ok {
+		_spec.SetField(culture.FieldCreatedBy, field.TypeString, value)
+	}
+	if cuo.mutation.CreatedByCleared() {
+		_spec.ClearField(culture.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := cuo.mutation.UpdatedAt(); ok {
+		_spec.SetField(culture.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := cuo.mutation.UpdatedBy(); ok {
+		_spec.SetField(culture.FieldUpdatedBy, field.TypeString, value)
+	}
+	if cuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(culture.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := cuo.mutation.DisplayName(); ok {
+		_spec.SetField(culture.FieldDisplayName, field.TypeString, value)
+	}
+	if cuo.mutation.DisplayNameCleared() {
+		_spec.ClearField(culture.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := cuo.mutation.Description(); ok {
+		_spec.SetField(culture.FieldDescription, field.TypeString, value)
+	}
+	if cuo.mutation.DescriptionCleared() {
+		_spec.ClearField(culture.FieldDescription, field.TypeString)
+	}
+	if cuo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   culture.ArtifactsTable,
+			Columns: []string{culture.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !cuo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   culture.ArtifactsTable,
+			Columns: []string{culture.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   culture.ArtifactsTable,
+			Columns: []string{culture.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Culture{config: cuo.config}
 	_spec.Assign = _node.assignValues

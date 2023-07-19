@@ -4,11 +4,14 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
+	"github.com/dkrasnovdev/heritage-api/ent/location"
 )
 
 // DistrictCreate is the builder for creating a District entity.
@@ -18,6 +21,109 @@ type DistrictCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (dc *DistrictCreate) SetCreatedAt(t time.Time) *DistrictCreate {
+	dc.mutation.SetCreatedAt(t)
+	return dc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (dc *DistrictCreate) SetNillableCreatedAt(t *time.Time) *DistrictCreate {
+	if t != nil {
+		dc.SetCreatedAt(*t)
+	}
+	return dc
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (dc *DistrictCreate) SetCreatedBy(s string) *DistrictCreate {
+	dc.mutation.SetCreatedBy(s)
+	return dc
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (dc *DistrictCreate) SetNillableCreatedBy(s *string) *DistrictCreate {
+	if s != nil {
+		dc.SetCreatedBy(*s)
+	}
+	return dc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (dc *DistrictCreate) SetUpdatedAt(t time.Time) *DistrictCreate {
+	dc.mutation.SetUpdatedAt(t)
+	return dc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (dc *DistrictCreate) SetNillableUpdatedAt(t *time.Time) *DistrictCreate {
+	if t != nil {
+		dc.SetUpdatedAt(*t)
+	}
+	return dc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (dc *DistrictCreate) SetUpdatedBy(s string) *DistrictCreate {
+	dc.mutation.SetUpdatedBy(s)
+	return dc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (dc *DistrictCreate) SetNillableUpdatedBy(s *string) *DistrictCreate {
+	if s != nil {
+		dc.SetUpdatedBy(*s)
+	}
+	return dc
+}
+
+// SetDisplayName sets the "display_name" field.
+func (dc *DistrictCreate) SetDisplayName(s string) *DistrictCreate {
+	dc.mutation.SetDisplayName(s)
+	return dc
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (dc *DistrictCreate) SetNillableDisplayName(s *string) *DistrictCreate {
+	if s != nil {
+		dc.SetDisplayName(*s)
+	}
+	return dc
+}
+
+// SetDescription sets the "description" field.
+func (dc *DistrictCreate) SetDescription(s string) *DistrictCreate {
+	dc.mutation.SetDescription(s)
+	return dc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (dc *DistrictCreate) SetNillableDescription(s *string) *DistrictCreate {
+	if s != nil {
+		dc.SetDescription(*s)
+	}
+	return dc
+}
+
+// SetLocationID sets the "location" edge to the Location entity by ID.
+func (dc *DistrictCreate) SetLocationID(id int) *DistrictCreate {
+	dc.mutation.SetLocationID(id)
+	return dc
+}
+
+// SetNillableLocationID sets the "location" edge to the Location entity by ID if the given value is not nil.
+func (dc *DistrictCreate) SetNillableLocationID(id *int) *DistrictCreate {
+	if id != nil {
+		dc = dc.SetLocationID(*id)
+	}
+	return dc
+}
+
+// SetLocation sets the "location" edge to the Location entity.
+func (dc *DistrictCreate) SetLocation(l *Location) *DistrictCreate {
+	return dc.SetLocationID(l.ID)
+}
+
 // Mutation returns the DistrictMutation object of the builder.
 func (dc *DistrictCreate) Mutation() *DistrictMutation {
 	return dc.mutation
@@ -25,6 +131,9 @@ func (dc *DistrictCreate) Mutation() *DistrictMutation {
 
 // Save creates the District in the database.
 func (dc *DistrictCreate) Save(ctx context.Context) (*District, error) {
+	if err := dc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, dc.sqlSave, dc.mutation, dc.hooks)
 }
 
@@ -50,8 +159,33 @@ func (dc *DistrictCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (dc *DistrictCreate) defaults() error {
+	if _, ok := dc.mutation.CreatedAt(); !ok {
+		if district.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized district.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := district.DefaultCreatedAt()
+		dc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := dc.mutation.UpdatedAt(); !ok {
+		if district.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized district.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := district.DefaultUpdatedAt()
+		dc.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (dc *DistrictCreate) check() error {
+	if _, ok := dc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "District.created_at"`)}
+	}
+	if _, ok := dc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "District.updated_at"`)}
+	}
 	return nil
 }
 
@@ -78,6 +212,47 @@ func (dc *DistrictCreate) createSpec() (*District, *sqlgraph.CreateSpec) {
 		_node = &District{config: dc.config}
 		_spec = sqlgraph.NewCreateSpec(district.Table, sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt))
 	)
+	if value, ok := dc.mutation.CreatedAt(); ok {
+		_spec.SetField(district.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := dc.mutation.CreatedBy(); ok {
+		_spec.SetField(district.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := dc.mutation.UpdatedAt(); ok {
+		_spec.SetField(district.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := dc.mutation.UpdatedBy(); ok {
+		_spec.SetField(district.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
+	if value, ok := dc.mutation.DisplayName(); ok {
+		_spec.SetField(district.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
+	}
+	if value, ok := dc.mutation.Description(); ok {
+		_spec.SetField(district.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if nodes := dc.mutation.LocationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   district.LocationTable,
+			Columns: []string{district.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.location_district = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -95,6 +270,7 @@ func (dcb *DistrictCreateBulk) Save(ctx context.Context) ([]*District, error) {
 	for i := range dcb.builders {
 		func(i int, root context.Context) {
 			builder := dcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*DistrictMutation)
 				if !ok {

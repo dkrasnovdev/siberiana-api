@@ -6,10 +6,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
@@ -27,13 +30,163 @@ func (cu *CollectionUpdate) Where(ps ...predicate.Collection) *CollectionUpdate 
 	return cu
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (cu *CollectionUpdate) SetCreatedBy(s string) *CollectionUpdate {
+	cu.mutation.SetCreatedBy(s)
+	return cu
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (cu *CollectionUpdate) SetNillableCreatedBy(s *string) *CollectionUpdate {
+	if s != nil {
+		cu.SetCreatedBy(*s)
+	}
+	return cu
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (cu *CollectionUpdate) ClearCreatedBy() *CollectionUpdate {
+	cu.mutation.ClearCreatedBy()
+	return cu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (cu *CollectionUpdate) SetUpdatedAt(t time.Time) *CollectionUpdate {
+	cu.mutation.SetUpdatedAt(t)
+	return cu
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (cu *CollectionUpdate) SetUpdatedBy(s string) *CollectionUpdate {
+	cu.mutation.SetUpdatedBy(s)
+	return cu
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (cu *CollectionUpdate) SetNillableUpdatedBy(s *string) *CollectionUpdate {
+	if s != nil {
+		cu.SetUpdatedBy(*s)
+	}
+	return cu
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (cu *CollectionUpdate) ClearUpdatedBy() *CollectionUpdate {
+	cu.mutation.ClearUpdatedBy()
+	return cu
+}
+
+// SetDisplayName sets the "display_name" field.
+func (cu *CollectionUpdate) SetDisplayName(s string) *CollectionUpdate {
+	cu.mutation.SetDisplayName(s)
+	return cu
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (cu *CollectionUpdate) SetNillableDisplayName(s *string) *CollectionUpdate {
+	if s != nil {
+		cu.SetDisplayName(*s)
+	}
+	return cu
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (cu *CollectionUpdate) ClearDisplayName() *CollectionUpdate {
+	cu.mutation.ClearDisplayName()
+	return cu
+}
+
+// SetDescription sets the "description" field.
+func (cu *CollectionUpdate) SetDescription(s string) *CollectionUpdate {
+	cu.mutation.SetDescription(s)
+	return cu
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (cu *CollectionUpdate) SetNillableDescription(s *string) *CollectionUpdate {
+	if s != nil {
+		cu.SetDescription(*s)
+	}
+	return cu
+}
+
+// ClearDescription clears the value of the "description" field.
+func (cu *CollectionUpdate) ClearDescription() *CollectionUpdate {
+	cu.mutation.ClearDescription()
+	return cu
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (cu *CollectionUpdate) AddArtifactIDs(ids ...int) *CollectionUpdate {
+	cu.mutation.AddArtifactIDs(ids...)
+	return cu
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (cu *CollectionUpdate) AddArtifacts(a ...*Artifact) *CollectionUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cu.AddArtifactIDs(ids...)
+}
+
+// SetCategoryID sets the "category" edge to the Category entity by ID.
+func (cu *CollectionUpdate) SetCategoryID(id int) *CollectionUpdate {
+	cu.mutation.SetCategoryID(id)
+	return cu
+}
+
+// SetNillableCategoryID sets the "category" edge to the Category entity by ID if the given value is not nil.
+func (cu *CollectionUpdate) SetNillableCategoryID(id *int) *CollectionUpdate {
+	if id != nil {
+		cu = cu.SetCategoryID(*id)
+	}
+	return cu
+}
+
+// SetCategory sets the "category" edge to the Category entity.
+func (cu *CollectionUpdate) SetCategory(c *Category) *CollectionUpdate {
+	return cu.SetCategoryID(c.ID)
+}
+
 // Mutation returns the CollectionMutation object of the builder.
 func (cu *CollectionUpdate) Mutation() *CollectionMutation {
 	return cu.mutation
 }
 
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (cu *CollectionUpdate) ClearArtifacts() *CollectionUpdate {
+	cu.mutation.ClearArtifacts()
+	return cu
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (cu *CollectionUpdate) RemoveArtifactIDs(ids ...int) *CollectionUpdate {
+	cu.mutation.RemoveArtifactIDs(ids...)
+	return cu
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (cu *CollectionUpdate) RemoveArtifacts(a ...*Artifact) *CollectionUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cu.RemoveArtifactIDs(ids...)
+}
+
+// ClearCategory clears the "category" edge to the Category entity.
+func (cu *CollectionUpdate) ClearCategory() *CollectionUpdate {
+	cu.mutation.ClearCategory()
+	return cu
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (cu *CollectionUpdate) Save(ctx context.Context) (int, error) {
+	if err := cu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, cu.sqlSave, cu.mutation, cu.hooks)
 }
 
@@ -59,6 +212,18 @@ func (cu *CollectionUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (cu *CollectionUpdate) defaults() error {
+	if _, ok := cu.mutation.UpdatedAt(); !ok {
+		if collection.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized collection.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := collection.UpdateDefaultUpdatedAt()
+		cu.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 func (cu *CollectionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(collection.Table, collection.Columns, sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt))
 	if ps := cu.mutation.predicates; len(ps) > 0 {
@@ -67,6 +232,107 @@ func (cu *CollectionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := cu.mutation.CreatedBy(); ok {
+		_spec.SetField(collection.FieldCreatedBy, field.TypeString, value)
+	}
+	if cu.mutation.CreatedByCleared() {
+		_spec.ClearField(collection.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := cu.mutation.UpdatedAt(); ok {
+		_spec.SetField(collection.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := cu.mutation.UpdatedBy(); ok {
+		_spec.SetField(collection.FieldUpdatedBy, field.TypeString, value)
+	}
+	if cu.mutation.UpdatedByCleared() {
+		_spec.ClearField(collection.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := cu.mutation.DisplayName(); ok {
+		_spec.SetField(collection.FieldDisplayName, field.TypeString, value)
+	}
+	if cu.mutation.DisplayNameCleared() {
+		_spec.ClearField(collection.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := cu.mutation.Description(); ok {
+		_spec.SetField(collection.FieldDescription, field.TypeString, value)
+	}
+	if cu.mutation.DescriptionCleared() {
+		_spec.ClearField(collection.FieldDescription, field.TypeString)
+	}
+	if cu.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.ArtifactsTable,
+			Columns: []string{collection.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !cu.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.ArtifactsTable,
+			Columns: []string{collection.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.ArtifactsTable,
+			Columns: []string{collection.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cu.mutation.CategoryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   collection.CategoryTable,
+			Columns: []string{collection.CategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(category.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.CategoryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   collection.CategoryTable,
+			Columns: []string{collection.CategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(category.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, cu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -88,9 +354,156 @@ type CollectionUpdateOne struct {
 	mutation *CollectionMutation
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (cuo *CollectionUpdateOne) SetCreatedBy(s string) *CollectionUpdateOne {
+	cuo.mutation.SetCreatedBy(s)
+	return cuo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (cuo *CollectionUpdateOne) SetNillableCreatedBy(s *string) *CollectionUpdateOne {
+	if s != nil {
+		cuo.SetCreatedBy(*s)
+	}
+	return cuo
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (cuo *CollectionUpdateOne) ClearCreatedBy() *CollectionUpdateOne {
+	cuo.mutation.ClearCreatedBy()
+	return cuo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (cuo *CollectionUpdateOne) SetUpdatedAt(t time.Time) *CollectionUpdateOne {
+	cuo.mutation.SetUpdatedAt(t)
+	return cuo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (cuo *CollectionUpdateOne) SetUpdatedBy(s string) *CollectionUpdateOne {
+	cuo.mutation.SetUpdatedBy(s)
+	return cuo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (cuo *CollectionUpdateOne) SetNillableUpdatedBy(s *string) *CollectionUpdateOne {
+	if s != nil {
+		cuo.SetUpdatedBy(*s)
+	}
+	return cuo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (cuo *CollectionUpdateOne) ClearUpdatedBy() *CollectionUpdateOne {
+	cuo.mutation.ClearUpdatedBy()
+	return cuo
+}
+
+// SetDisplayName sets the "display_name" field.
+func (cuo *CollectionUpdateOne) SetDisplayName(s string) *CollectionUpdateOne {
+	cuo.mutation.SetDisplayName(s)
+	return cuo
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (cuo *CollectionUpdateOne) SetNillableDisplayName(s *string) *CollectionUpdateOne {
+	if s != nil {
+		cuo.SetDisplayName(*s)
+	}
+	return cuo
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (cuo *CollectionUpdateOne) ClearDisplayName() *CollectionUpdateOne {
+	cuo.mutation.ClearDisplayName()
+	return cuo
+}
+
+// SetDescription sets the "description" field.
+func (cuo *CollectionUpdateOne) SetDescription(s string) *CollectionUpdateOne {
+	cuo.mutation.SetDescription(s)
+	return cuo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (cuo *CollectionUpdateOne) SetNillableDescription(s *string) *CollectionUpdateOne {
+	if s != nil {
+		cuo.SetDescription(*s)
+	}
+	return cuo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (cuo *CollectionUpdateOne) ClearDescription() *CollectionUpdateOne {
+	cuo.mutation.ClearDescription()
+	return cuo
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (cuo *CollectionUpdateOne) AddArtifactIDs(ids ...int) *CollectionUpdateOne {
+	cuo.mutation.AddArtifactIDs(ids...)
+	return cuo
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (cuo *CollectionUpdateOne) AddArtifacts(a ...*Artifact) *CollectionUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cuo.AddArtifactIDs(ids...)
+}
+
+// SetCategoryID sets the "category" edge to the Category entity by ID.
+func (cuo *CollectionUpdateOne) SetCategoryID(id int) *CollectionUpdateOne {
+	cuo.mutation.SetCategoryID(id)
+	return cuo
+}
+
+// SetNillableCategoryID sets the "category" edge to the Category entity by ID if the given value is not nil.
+func (cuo *CollectionUpdateOne) SetNillableCategoryID(id *int) *CollectionUpdateOne {
+	if id != nil {
+		cuo = cuo.SetCategoryID(*id)
+	}
+	return cuo
+}
+
+// SetCategory sets the "category" edge to the Category entity.
+func (cuo *CollectionUpdateOne) SetCategory(c *Category) *CollectionUpdateOne {
+	return cuo.SetCategoryID(c.ID)
+}
+
 // Mutation returns the CollectionMutation object of the builder.
 func (cuo *CollectionUpdateOne) Mutation() *CollectionMutation {
 	return cuo.mutation
+}
+
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (cuo *CollectionUpdateOne) ClearArtifacts() *CollectionUpdateOne {
+	cuo.mutation.ClearArtifacts()
+	return cuo
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (cuo *CollectionUpdateOne) RemoveArtifactIDs(ids ...int) *CollectionUpdateOne {
+	cuo.mutation.RemoveArtifactIDs(ids...)
+	return cuo
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (cuo *CollectionUpdateOne) RemoveArtifacts(a ...*Artifact) *CollectionUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cuo.RemoveArtifactIDs(ids...)
+}
+
+// ClearCategory clears the "category" edge to the Category entity.
+func (cuo *CollectionUpdateOne) ClearCategory() *CollectionUpdateOne {
+	cuo.mutation.ClearCategory()
+	return cuo
 }
 
 // Where appends a list predicates to the CollectionUpdate builder.
@@ -108,6 +521,9 @@ func (cuo *CollectionUpdateOne) Select(field string, fields ...string) *Collecti
 
 // Save executes the query and returns the updated Collection entity.
 func (cuo *CollectionUpdateOne) Save(ctx context.Context) (*Collection, error) {
+	if err := cuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, cuo.sqlSave, cuo.mutation, cuo.hooks)
 }
 
@@ -131,6 +547,18 @@ func (cuo *CollectionUpdateOne) ExecX(ctx context.Context) {
 	if err := cuo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (cuo *CollectionUpdateOne) defaults() error {
+	if _, ok := cuo.mutation.UpdatedAt(); !ok {
+		if collection.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized collection.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := collection.UpdateDefaultUpdatedAt()
+		cuo.mutation.SetUpdatedAt(v)
+	}
+	return nil
 }
 
 func (cuo *CollectionUpdateOne) sqlSave(ctx context.Context) (_node *Collection, err error) {
@@ -158,6 +586,107 @@ func (cuo *CollectionUpdateOne) sqlSave(ctx context.Context) (_node *Collection,
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := cuo.mutation.CreatedBy(); ok {
+		_spec.SetField(collection.FieldCreatedBy, field.TypeString, value)
+	}
+	if cuo.mutation.CreatedByCleared() {
+		_spec.ClearField(collection.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := cuo.mutation.UpdatedAt(); ok {
+		_spec.SetField(collection.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := cuo.mutation.UpdatedBy(); ok {
+		_spec.SetField(collection.FieldUpdatedBy, field.TypeString, value)
+	}
+	if cuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(collection.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := cuo.mutation.DisplayName(); ok {
+		_spec.SetField(collection.FieldDisplayName, field.TypeString, value)
+	}
+	if cuo.mutation.DisplayNameCleared() {
+		_spec.ClearField(collection.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := cuo.mutation.Description(); ok {
+		_spec.SetField(collection.FieldDescription, field.TypeString, value)
+	}
+	if cuo.mutation.DescriptionCleared() {
+		_spec.ClearField(collection.FieldDescription, field.TypeString)
+	}
+	if cuo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.ArtifactsTable,
+			Columns: []string{collection.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !cuo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.ArtifactsTable,
+			Columns: []string{collection.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.ArtifactsTable,
+			Columns: []string{collection.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cuo.mutation.CategoryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   collection.CategoryTable,
+			Columns: []string{collection.CategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(category.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.CategoryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   collection.CategoryTable,
+			Columns: []string{collection.CategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(category.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Collection{config: cuo.config}
 	_spec.Assign = _node.assignValues

@@ -4,12 +4,15 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
@@ -17,12 +20,14 @@ import (
 // CultureQuery is the builder for querying Culture entities.
 type CultureQuery struct {
 	config
-	ctx        *QueryContext
-	order      []culture.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Culture
-	modifiers  []func(*sql.Selector)
-	loadTotal  []func(context.Context, []*Culture) error
+	ctx                *QueryContext
+	order              []culture.OrderOption
+	inters             []Interceptor
+	predicates         []predicate.Culture
+	withArtifacts      *ArtifactQuery
+	modifiers          []func(*sql.Selector)
+	loadTotal          []func(context.Context, []*Culture) error
+	withNamedArtifacts map[string]*ArtifactQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -57,6 +62,28 @@ func (cq *CultureQuery) Unique(unique bool) *CultureQuery {
 func (cq *CultureQuery) Order(o ...culture.OrderOption) *CultureQuery {
 	cq.order = append(cq.order, o...)
 	return cq
+}
+
+// QueryArtifacts chains the current query on the "artifacts" edge.
+func (cq *CultureQuery) QueryArtifacts() *ArtifactQuery {
+	query := (&ArtifactClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(culture.Table, culture.FieldID, selector),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, culture.ArtifactsTable, culture.ArtifactsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Culture entity from the query.
@@ -246,19 +273,43 @@ func (cq *CultureQuery) Clone() *CultureQuery {
 		return nil
 	}
 	return &CultureQuery{
-		config:     cq.config,
-		ctx:        cq.ctx.Clone(),
-		order:      append([]culture.OrderOption{}, cq.order...),
-		inters:     append([]Interceptor{}, cq.inters...),
-		predicates: append([]predicate.Culture{}, cq.predicates...),
+		config:        cq.config,
+		ctx:           cq.ctx.Clone(),
+		order:         append([]culture.OrderOption{}, cq.order...),
+		inters:        append([]Interceptor{}, cq.inters...),
+		predicates:    append([]predicate.Culture{}, cq.predicates...),
+		withArtifacts: cq.withArtifacts.Clone(),
 		// clone intermediate query.
 		sql:  cq.sql.Clone(),
 		path: cq.path,
 	}
 }
 
+// WithArtifacts tells the query-builder to eager-load the nodes that are connected to
+// the "artifacts" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *CultureQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *CultureQuery {
+	query := (&ArtifactClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withArtifacts = query
+	return cq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Culture.Query().
+//		GroupBy(culture.FieldCreatedAt).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (cq *CultureQuery) GroupBy(field string, fields ...string) *CultureGroupBy {
 	cq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &CultureGroupBy{build: cq}
@@ -270,6 +321,16 @@ func (cq *CultureQuery) GroupBy(field string, fields ...string) *CultureGroupBy 
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//	}
+//
+//	client.Culture.Query().
+//		Select(culture.FieldCreatedAt).
+//		Scan(ctx, &v)
 func (cq *CultureQuery) Select(fields ...string) *CultureSelect {
 	cq.ctx.Fields = append(cq.ctx.Fields, fields...)
 	sbuild := &CultureSelect{CultureQuery: cq}
@@ -306,13 +367,22 @@ func (cq *CultureQuery) prepareQuery(ctx context.Context) error {
 		}
 		cq.sql = prev
 	}
+	if culture.Policy == nil {
+		return errors.New("ent: uninitialized culture.Policy (forgotten import ent/runtime?)")
+	}
+	if err := culture.Policy.EvalQuery(ctx, cq); err != nil {
+		return err
+	}
 	return nil
 }
 
 func (cq *CultureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Culture, error) {
 	var (
-		nodes = []*Culture{}
-		_spec = cq.querySpec()
+		nodes       = []*Culture{}
+		_spec       = cq.querySpec()
+		loadedTypes = [1]bool{
+			cq.withArtifacts != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Culture).scanValues(nil, columns)
@@ -320,6 +390,7 @@ func (cq *CultureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cult
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Culture{config: cq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(cq.modifiers) > 0 {
@@ -334,12 +405,58 @@ func (cq *CultureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cult
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := cq.withArtifacts; query != nil {
+		if err := cq.loadArtifacts(ctx, query, nodes,
+			func(n *Culture) { n.Edges.Artifacts = []*Artifact{} },
+			func(n *Culture, e *Artifact) { n.Edges.Artifacts = append(n.Edges.Artifacts, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedArtifacts {
+		if err := cq.loadArtifacts(ctx, query, nodes,
+			func(n *Culture) { n.appendNamedArtifacts(name) },
+			func(n *Culture, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range cq.loadTotal {
 		if err := cq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (cq *CultureQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, nodes []*Culture, init func(*Culture), assign func(*Culture, *Artifact)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Culture)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Artifact(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(culture.ArtifactsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.culture_artifacts
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "culture_artifacts" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "culture_artifacts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
 }
 
 func (cq *CultureQuery) sqlCount(ctx context.Context) (int, error) {
@@ -424,6 +541,20 @@ func (cq *CultureQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedArtifacts tells the query-builder to eager-load the nodes that are connected to the "artifacts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *CultureQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQuery)) *CultureQuery {
+	query := (&ArtifactClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedArtifacts == nil {
+		cq.withNamedArtifacts = make(map[string]*ArtifactQuery)
+	}
+	cq.withNamedArtifacts[name] = query
+	return cq
 }
 
 // CultureGroupBy is the group-by builder for Culture entities.

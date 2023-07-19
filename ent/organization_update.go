@@ -6,10 +6,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
@@ -27,13 +29,127 @@ func (ou *OrganizationUpdate) Where(ps ...predicate.Organization) *OrganizationU
 	return ou
 }
 
+// SetDisplayName sets the "display_name" field.
+func (ou *OrganizationUpdate) SetDisplayName(s string) *OrganizationUpdate {
+	ou.mutation.SetDisplayName(s)
+	return ou
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (ou *OrganizationUpdate) SetNillableDisplayName(s *string) *OrganizationUpdate {
+	if s != nil {
+		ou.SetDisplayName(*s)
+	}
+	return ou
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (ou *OrganizationUpdate) ClearDisplayName() *OrganizationUpdate {
+	ou.mutation.ClearDisplayName()
+	return ou
+}
+
+// SetDescription sets the "description" field.
+func (ou *OrganizationUpdate) SetDescription(s string) *OrganizationUpdate {
+	ou.mutation.SetDescription(s)
+	return ou
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (ou *OrganizationUpdate) SetNillableDescription(s *string) *OrganizationUpdate {
+	if s != nil {
+		ou.SetDescription(*s)
+	}
+	return ou
+}
+
+// ClearDescription clears the value of the "description" field.
+func (ou *OrganizationUpdate) ClearDescription() *OrganizationUpdate {
+	ou.mutation.ClearDescription()
+	return ou
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (ou *OrganizationUpdate) SetCreatedBy(s string) *OrganizationUpdate {
+	ou.mutation.SetCreatedBy(s)
+	return ou
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (ou *OrganizationUpdate) SetNillableCreatedBy(s *string) *OrganizationUpdate {
+	if s != nil {
+		ou.SetCreatedBy(*s)
+	}
+	return ou
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (ou *OrganizationUpdate) ClearCreatedBy() *OrganizationUpdate {
+	ou.mutation.ClearCreatedBy()
+	return ou
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (ou *OrganizationUpdate) SetUpdatedAt(t time.Time) *OrganizationUpdate {
+	ou.mutation.SetUpdatedAt(t)
+	return ou
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (ou *OrganizationUpdate) SetUpdatedBy(s string) *OrganizationUpdate {
+	ou.mutation.SetUpdatedBy(s)
+	return ou
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (ou *OrganizationUpdate) SetNillableUpdatedBy(s *string) *OrganizationUpdate {
+	if s != nil {
+		ou.SetUpdatedBy(*s)
+	}
+	return ou
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (ou *OrganizationUpdate) ClearUpdatedBy() *OrganizationUpdate {
+	ou.mutation.ClearUpdatedBy()
+	return ou
+}
+
+// SetHolderID sets the "holder" edge to the Holder entity by ID.
+func (ou *OrganizationUpdate) SetHolderID(id int) *OrganizationUpdate {
+	ou.mutation.SetHolderID(id)
+	return ou
+}
+
+// SetNillableHolderID sets the "holder" edge to the Holder entity by ID if the given value is not nil.
+func (ou *OrganizationUpdate) SetNillableHolderID(id *int) *OrganizationUpdate {
+	if id != nil {
+		ou = ou.SetHolderID(*id)
+	}
+	return ou
+}
+
+// SetHolder sets the "holder" edge to the Holder entity.
+func (ou *OrganizationUpdate) SetHolder(h *Holder) *OrganizationUpdate {
+	return ou.SetHolderID(h.ID)
+}
+
 // Mutation returns the OrganizationMutation object of the builder.
 func (ou *OrganizationUpdate) Mutation() *OrganizationMutation {
 	return ou.mutation
 }
 
+// ClearHolder clears the "holder" edge to the Holder entity.
+func (ou *OrganizationUpdate) ClearHolder() *OrganizationUpdate {
+	ou.mutation.ClearHolder()
+	return ou
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (ou *OrganizationUpdate) Save(ctx context.Context) (int, error) {
+	if err := ou.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, ou.sqlSave, ou.mutation, ou.hooks)
 }
 
@@ -59,6 +175,18 @@ func (ou *OrganizationUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (ou *OrganizationUpdate) defaults() error {
+	if _, ok := ou.mutation.UpdatedAt(); !ok {
+		if organization.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized organization.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := organization.UpdateDefaultUpdatedAt()
+		ou.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(organization.Table, organization.Columns, sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt))
 	if ps := ou.mutation.predicates; len(ps) > 0 {
@@ -67,6 +195,62 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := ou.mutation.DisplayName(); ok {
+		_spec.SetField(organization.FieldDisplayName, field.TypeString, value)
+	}
+	if ou.mutation.DisplayNameCleared() {
+		_spec.ClearField(organization.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := ou.mutation.Description(); ok {
+		_spec.SetField(organization.FieldDescription, field.TypeString, value)
+	}
+	if ou.mutation.DescriptionCleared() {
+		_spec.ClearField(organization.FieldDescription, field.TypeString)
+	}
+	if value, ok := ou.mutation.CreatedBy(); ok {
+		_spec.SetField(organization.FieldCreatedBy, field.TypeString, value)
+	}
+	if ou.mutation.CreatedByCleared() {
+		_spec.ClearField(organization.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := ou.mutation.UpdatedAt(); ok {
+		_spec.SetField(organization.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := ou.mutation.UpdatedBy(); ok {
+		_spec.SetField(organization.FieldUpdatedBy, field.TypeString, value)
+	}
+	if ou.mutation.UpdatedByCleared() {
+		_spec.ClearField(organization.FieldUpdatedBy, field.TypeString)
+	}
+	if ou.mutation.HolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   organization.HolderTable,
+			Columns: []string{organization.HolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.HolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   organization.HolderTable,
+			Columns: []string{organization.HolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, ou.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -88,9 +272,120 @@ type OrganizationUpdateOne struct {
 	mutation *OrganizationMutation
 }
 
+// SetDisplayName sets the "display_name" field.
+func (ouo *OrganizationUpdateOne) SetDisplayName(s string) *OrganizationUpdateOne {
+	ouo.mutation.SetDisplayName(s)
+	return ouo
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (ouo *OrganizationUpdateOne) SetNillableDisplayName(s *string) *OrganizationUpdateOne {
+	if s != nil {
+		ouo.SetDisplayName(*s)
+	}
+	return ouo
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (ouo *OrganizationUpdateOne) ClearDisplayName() *OrganizationUpdateOne {
+	ouo.mutation.ClearDisplayName()
+	return ouo
+}
+
+// SetDescription sets the "description" field.
+func (ouo *OrganizationUpdateOne) SetDescription(s string) *OrganizationUpdateOne {
+	ouo.mutation.SetDescription(s)
+	return ouo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (ouo *OrganizationUpdateOne) SetNillableDescription(s *string) *OrganizationUpdateOne {
+	if s != nil {
+		ouo.SetDescription(*s)
+	}
+	return ouo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (ouo *OrganizationUpdateOne) ClearDescription() *OrganizationUpdateOne {
+	ouo.mutation.ClearDescription()
+	return ouo
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (ouo *OrganizationUpdateOne) SetCreatedBy(s string) *OrganizationUpdateOne {
+	ouo.mutation.SetCreatedBy(s)
+	return ouo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (ouo *OrganizationUpdateOne) SetNillableCreatedBy(s *string) *OrganizationUpdateOne {
+	if s != nil {
+		ouo.SetCreatedBy(*s)
+	}
+	return ouo
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (ouo *OrganizationUpdateOne) ClearCreatedBy() *OrganizationUpdateOne {
+	ouo.mutation.ClearCreatedBy()
+	return ouo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (ouo *OrganizationUpdateOne) SetUpdatedAt(t time.Time) *OrganizationUpdateOne {
+	ouo.mutation.SetUpdatedAt(t)
+	return ouo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (ouo *OrganizationUpdateOne) SetUpdatedBy(s string) *OrganizationUpdateOne {
+	ouo.mutation.SetUpdatedBy(s)
+	return ouo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (ouo *OrganizationUpdateOne) SetNillableUpdatedBy(s *string) *OrganizationUpdateOne {
+	if s != nil {
+		ouo.SetUpdatedBy(*s)
+	}
+	return ouo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (ouo *OrganizationUpdateOne) ClearUpdatedBy() *OrganizationUpdateOne {
+	ouo.mutation.ClearUpdatedBy()
+	return ouo
+}
+
+// SetHolderID sets the "holder" edge to the Holder entity by ID.
+func (ouo *OrganizationUpdateOne) SetHolderID(id int) *OrganizationUpdateOne {
+	ouo.mutation.SetHolderID(id)
+	return ouo
+}
+
+// SetNillableHolderID sets the "holder" edge to the Holder entity by ID if the given value is not nil.
+func (ouo *OrganizationUpdateOne) SetNillableHolderID(id *int) *OrganizationUpdateOne {
+	if id != nil {
+		ouo = ouo.SetHolderID(*id)
+	}
+	return ouo
+}
+
+// SetHolder sets the "holder" edge to the Holder entity.
+func (ouo *OrganizationUpdateOne) SetHolder(h *Holder) *OrganizationUpdateOne {
+	return ouo.SetHolderID(h.ID)
+}
+
 // Mutation returns the OrganizationMutation object of the builder.
 func (ouo *OrganizationUpdateOne) Mutation() *OrganizationMutation {
 	return ouo.mutation
+}
+
+// ClearHolder clears the "holder" edge to the Holder entity.
+func (ouo *OrganizationUpdateOne) ClearHolder() *OrganizationUpdateOne {
+	ouo.mutation.ClearHolder()
+	return ouo
 }
 
 // Where appends a list predicates to the OrganizationUpdate builder.
@@ -108,6 +403,9 @@ func (ouo *OrganizationUpdateOne) Select(field string, fields ...string) *Organi
 
 // Save executes the query and returns the updated Organization entity.
 func (ouo *OrganizationUpdateOne) Save(ctx context.Context) (*Organization, error) {
+	if err := ouo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, ouo.sqlSave, ouo.mutation, ouo.hooks)
 }
 
@@ -131,6 +429,18 @@ func (ouo *OrganizationUpdateOne) ExecX(ctx context.Context) {
 	if err := ouo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (ouo *OrganizationUpdateOne) defaults() error {
+	if _, ok := ouo.mutation.UpdatedAt(); !ok {
+		if organization.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized organization.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := organization.UpdateDefaultUpdatedAt()
+		ouo.mutation.SetUpdatedAt(v)
+	}
+	return nil
 }
 
 func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organization, err error) {
@@ -158,6 +468,62 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := ouo.mutation.DisplayName(); ok {
+		_spec.SetField(organization.FieldDisplayName, field.TypeString, value)
+	}
+	if ouo.mutation.DisplayNameCleared() {
+		_spec.ClearField(organization.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := ouo.mutation.Description(); ok {
+		_spec.SetField(organization.FieldDescription, field.TypeString, value)
+	}
+	if ouo.mutation.DescriptionCleared() {
+		_spec.ClearField(organization.FieldDescription, field.TypeString)
+	}
+	if value, ok := ouo.mutation.CreatedBy(); ok {
+		_spec.SetField(organization.FieldCreatedBy, field.TypeString, value)
+	}
+	if ouo.mutation.CreatedByCleared() {
+		_spec.ClearField(organization.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := ouo.mutation.UpdatedAt(); ok {
+		_spec.SetField(organization.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := ouo.mutation.UpdatedBy(); ok {
+		_spec.SetField(organization.FieldUpdatedBy, field.TypeString, value)
+	}
+	if ouo.mutation.UpdatedByCleared() {
+		_spec.ClearField(organization.FieldUpdatedBy, field.TypeString)
+	}
+	if ouo.mutation.HolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   organization.HolderTable,
+			Columns: []string{organization.HolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.HolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   organization.HolderTable,
+			Columns: []string{organization.HolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Organization{config: ouo.config}
 	_spec.Assign = _node.assignValues

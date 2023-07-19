@@ -4,12 +4,14 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
@@ -21,6 +23,8 @@ type OrganizationQuery struct {
 	order      []organization.OrderOption
 	inters     []Interceptor
 	predicates []predicate.Organization
+	withHolder *HolderQuery
+	withFKs    bool
 	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*Organization) error
 	// intermediate query (i.e. traversal path).
@@ -57,6 +61,28 @@ func (oq *OrganizationQuery) Unique(unique bool) *OrganizationQuery {
 func (oq *OrganizationQuery) Order(o ...organization.OrderOption) *OrganizationQuery {
 	oq.order = append(oq.order, o...)
 	return oq
+}
+
+// QueryHolder chains the current query on the "holder" edge.
+func (oq *OrganizationQuery) QueryHolder() *HolderQuery {
+	query := (&HolderClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(holder.Table, holder.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, organization.HolderTable, organization.HolderColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Organization entity from the query.
@@ -251,14 +277,38 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		order:      append([]organization.OrderOption{}, oq.order...),
 		inters:     append([]Interceptor{}, oq.inters...),
 		predicates: append([]predicate.Organization{}, oq.predicates...),
+		withHolder: oq.withHolder.Clone(),
 		// clone intermediate query.
 		sql:  oq.sql.Clone(),
 		path: oq.path,
 	}
 }
 
+// WithHolder tells the query-builder to eager-load the nodes that are connected to
+// the "holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithHolder(opts ...func(*HolderQuery)) *OrganizationQuery {
+	query := (&HolderClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withHolder = query
+	return oq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		DisplayName string `json:"display_name,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Organization.Query().
+//		GroupBy(organization.FieldDisplayName).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (oq *OrganizationQuery) GroupBy(field string, fields ...string) *OrganizationGroupBy {
 	oq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &OrganizationGroupBy{build: oq}
@@ -270,6 +320,16 @@ func (oq *OrganizationQuery) GroupBy(field string, fields ...string) *Organizati
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		DisplayName string `json:"display_name,omitempty"`
+//	}
+//
+//	client.Organization.Query().
+//		Select(organization.FieldDisplayName).
+//		Scan(ctx, &v)
 func (oq *OrganizationQuery) Select(fields ...string) *OrganizationSelect {
 	oq.ctx.Fields = append(oq.ctx.Fields, fields...)
 	sbuild := &OrganizationSelect{OrganizationQuery: oq}
@@ -306,20 +366,37 @@ func (oq *OrganizationQuery) prepareQuery(ctx context.Context) error {
 		}
 		oq.sql = prev
 	}
+	if organization.Policy == nil {
+		return errors.New("ent: uninitialized organization.Policy (forgotten import ent/runtime?)")
+	}
+	if err := organization.Policy.EvalQuery(ctx, oq); err != nil {
+		return err
+	}
 	return nil
 }
 
 func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Organization, error) {
 	var (
-		nodes = []*Organization{}
-		_spec = oq.querySpec()
+		nodes       = []*Organization{}
+		withFKs     = oq.withFKs
+		_spec       = oq.querySpec()
+		loadedTypes = [1]bool{
+			oq.withHolder != nil,
+		}
 	)
+	if oq.withHolder != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, organization.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Organization).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Organization{config: oq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(oq.modifiers) > 0 {
@@ -334,12 +411,51 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := oq.withHolder; query != nil {
+		if err := oq.loadHolder(ctx, query, nodes, nil,
+			func(n *Organization, e *Holder) { n.Edges.Holder = e }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range oq.loadTotal {
 		if err := oq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (oq *OrganizationQuery) loadHolder(ctx context.Context, query *HolderQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Holder)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Organization)
+	for i := range nodes {
+		if nodes[i].holder_organization == nil {
+			continue
+		}
+		fk := *nodes[i].holder_organization
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(holder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "holder_organization" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (oq *OrganizationQuery) sqlCount(ctx context.Context) (int, error) {

@@ -3,7 +3,11 @@
 package artifact
 
 import (
+	"time"
+
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -11,14 +15,182 @@ const (
 	Label = "artifact"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldCreatedAt holds the string denoting the created_at field in the database.
+	FieldCreatedAt = "created_at"
+	// FieldCreatedBy holds the string denoting the created_by field in the database.
+	FieldCreatedBy = "created_by"
+	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
+	FieldUpdatedAt = "updated_at"
+	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
+	FieldUpdatedBy = "updated_by"
+	// FieldDisplayName holds the string denoting the display_name field in the database.
+	FieldDisplayName = "display_name"
+	// FieldDescription holds the string denoting the description field in the database.
+	FieldDescription = "description"
+	// FieldPrimaryImageURL holds the string denoting the primary_image_url field in the database.
+	FieldPrimaryImageURL = "primary_image_url"
+	// FieldAdditionalImageUrls holds the string denoting the additional_image_urls field in the database.
+	FieldAdditionalImageUrls = "additional_image_urls"
+	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
+	FieldDeletedAt = "deleted_at"
+	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
+	FieldDeletedBy = "deleted_by"
+	// EdgeAuthors holds the string denoting the authors edge name in mutations.
+	EdgeAuthors = "authors"
+	// EdgeMediums holds the string denoting the mediums edge name in mutations.
+	EdgeMediums = "mediums"
+	// EdgeTechniques holds the string denoting the techniques edge name in mutations.
+	EdgeTechniques = "techniques"
+	// EdgeProjects holds the string denoting the projects edge name in mutations.
+	EdgeProjects = "projects"
+	// EdgePublications holds the string denoting the publications edge name in mutations.
+	EdgePublications = "publications"
+	// EdgeHolders holds the string denoting the holders edge name in mutations.
+	EdgeHolders = "holders"
+	// EdgeCulturalAffiliation holds the string denoting the cultural_affiliation edge name in mutations.
+	EdgeCulturalAffiliation = "cultural_affiliation"
+	// EdgeMonument holds the string denoting the monument edge name in mutations.
+	EdgeMonument = "monument"
+	// EdgeModel holds the string denoting the model edge name in mutations.
+	EdgeModel = "model"
+	// EdgeSet holds the string denoting the set edge name in mutations.
+	EdgeSet = "set"
+	// EdgeLocation holds the string denoting the location edge name in mutations.
+	EdgeLocation = "location"
+	// EdgeCollection holds the string denoting the collection edge name in mutations.
+	EdgeCollection = "collection"
+	// EdgeLicense holds the string denoting the license edge name in mutations.
+	EdgeLicense = "license"
 	// Table holds the table name of the artifact in the database.
 	Table = "artifacts"
+	// AuthorsTable is the table that holds the authors relation/edge. The primary key declared below.
+	AuthorsTable = "person_artifacts"
+	// AuthorsInverseTable is the table name for the Person entity.
+	// It exists in this package in order to avoid circular dependency with the "person" package.
+	AuthorsInverseTable = "persons"
+	// MediumsTable is the table that holds the mediums relation/edge. The primary key declared below.
+	MediumsTable = "medium_artifacts"
+	// MediumsInverseTable is the table name for the Medium entity.
+	// It exists in this package in order to avoid circular dependency with the "medium" package.
+	MediumsInverseTable = "media"
+	// TechniquesTable is the table that holds the techniques relation/edge. The primary key declared below.
+	TechniquesTable = "technique_artifacts"
+	// TechniquesInverseTable is the table name for the Technique entity.
+	// It exists in this package in order to avoid circular dependency with the "technique" package.
+	TechniquesInverseTable = "techniques"
+	// ProjectsTable is the table that holds the projects relation/edge. The primary key declared below.
+	ProjectsTable = "project_artifacts"
+	// ProjectsInverseTable is the table name for the Project entity.
+	// It exists in this package in order to avoid circular dependency with the "project" package.
+	ProjectsInverseTable = "projects"
+	// PublicationsTable is the table that holds the publications relation/edge. The primary key declared below.
+	PublicationsTable = "publication_artifacts"
+	// PublicationsInverseTable is the table name for the Publication entity.
+	// It exists in this package in order to avoid circular dependency with the "publication" package.
+	PublicationsInverseTable = "publications"
+	// HoldersTable is the table that holds the holders relation/edge. The primary key declared below.
+	HoldersTable = "holder_artifacts"
+	// HoldersInverseTable is the table name for the Holder entity.
+	// It exists in this package in order to avoid circular dependency with the "holder" package.
+	HoldersInverseTable = "holders"
+	// CulturalAffiliationTable is the table that holds the cultural_affiliation relation/edge.
+	CulturalAffiliationTable = "artifacts"
+	// CulturalAffiliationInverseTable is the table name for the Culture entity.
+	// It exists in this package in order to avoid circular dependency with the "culture" package.
+	CulturalAffiliationInverseTable = "cultures"
+	// CulturalAffiliationColumn is the table column denoting the cultural_affiliation relation/edge.
+	CulturalAffiliationColumn = "culture_artifacts"
+	// MonumentTable is the table that holds the monument relation/edge.
+	MonumentTable = "artifacts"
+	// MonumentInverseTable is the table name for the Monument entity.
+	// It exists in this package in order to avoid circular dependency with the "monument" package.
+	MonumentInverseTable = "monuments"
+	// MonumentColumn is the table column denoting the monument relation/edge.
+	MonumentColumn = "monument_artifacts"
+	// ModelTable is the table that holds the model relation/edge.
+	ModelTable = "artifacts"
+	// ModelInverseTable is the table name for the Model entity.
+	// It exists in this package in order to avoid circular dependency with the "model" package.
+	ModelInverseTable = "models"
+	// ModelColumn is the table column denoting the model relation/edge.
+	ModelColumn = "model_artifacts"
+	// SetTable is the table that holds the set relation/edge.
+	SetTable = "artifacts"
+	// SetInverseTable is the table name for the Set entity.
+	// It exists in this package in order to avoid circular dependency with the "set" package.
+	SetInverseTable = "sets"
+	// SetColumn is the table column denoting the set relation/edge.
+	SetColumn = "set_artifacts"
+	// LocationTable is the table that holds the location relation/edge.
+	LocationTable = "artifacts"
+	// LocationInverseTable is the table name for the Location entity.
+	// It exists in this package in order to avoid circular dependency with the "location" package.
+	LocationInverseTable = "locations"
+	// LocationColumn is the table column denoting the location relation/edge.
+	LocationColumn = "location_artifacts"
+	// CollectionTable is the table that holds the collection relation/edge.
+	CollectionTable = "artifacts"
+	// CollectionInverseTable is the table name for the Collection entity.
+	// It exists in this package in order to avoid circular dependency with the "collection" package.
+	CollectionInverseTable = "collections"
+	// CollectionColumn is the table column denoting the collection relation/edge.
+	CollectionColumn = "collection_artifacts"
+	// LicenseTable is the table that holds the license relation/edge.
+	LicenseTable = "artifacts"
+	// LicenseInverseTable is the table name for the License entity.
+	// It exists in this package in order to avoid circular dependency with the "license" package.
+	LicenseInverseTable = "licenses"
+	// LicenseColumn is the table column denoting the license relation/edge.
+	LicenseColumn = "license_artifacts"
 )
 
 // Columns holds all SQL columns for artifact fields.
 var Columns = []string{
 	FieldID,
+	FieldCreatedAt,
+	FieldCreatedBy,
+	FieldUpdatedAt,
+	FieldUpdatedBy,
+	FieldDisplayName,
+	FieldDescription,
+	FieldPrimaryImageURL,
+	FieldAdditionalImageUrls,
+	FieldDeletedAt,
+	FieldDeletedBy,
 }
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "artifacts"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"collection_artifacts",
+	"culture_artifacts",
+	"license_artifacts",
+	"location_artifacts",
+	"model_artifacts",
+	"monument_artifacts",
+	"set_artifacts",
+}
+
+var (
+	// AuthorsPrimaryKey and AuthorsColumn2 are the table columns denoting the
+	// primary key for the authors relation (M2M).
+	AuthorsPrimaryKey = []string{"person_id", "artifact_id"}
+	// MediumsPrimaryKey and MediumsColumn2 are the table columns denoting the
+	// primary key for the mediums relation (M2M).
+	MediumsPrimaryKey = []string{"medium_id", "artifact_id"}
+	// TechniquesPrimaryKey and TechniquesColumn2 are the table columns denoting the
+	// primary key for the techniques relation (M2M).
+	TechniquesPrimaryKey = []string{"technique_id", "artifact_id"}
+	// ProjectsPrimaryKey and ProjectsColumn2 are the table columns denoting the
+	// primary key for the projects relation (M2M).
+	ProjectsPrimaryKey = []string{"project_id", "artifact_id"}
+	// PublicationsPrimaryKey and PublicationsColumn2 are the table columns denoting the
+	// primary key for the publications relation (M2M).
+	PublicationsPrimaryKey = []string{"publication_id", "artifact_id"}
+	// HoldersPrimaryKey and HoldersColumn2 are the table columns denoting the
+	// primary key for the holders relation (M2M).
+	HoldersPrimaryKey = []string{"holder_id", "artifact_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -27,8 +199,30 @@ func ValidColumn(column string) bool {
 			return true
 		}
 	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
+			return true
+		}
+	}
 	return false
 }
+
+// Note that the variables below are initialized by the runtime
+// package on the initialization of the application. Therefore,
+// it should be imported in the main as follows:
+//
+//	import _ "github.com/dkrasnovdev/heritage-api/ent/runtime"
+var (
+	Hooks        [3]ent.Hook
+	Interceptors [1]ent.Interceptor
+	Policy       ent.Policy
+	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
+	DefaultCreatedAt func() time.Time
+	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
+	DefaultUpdatedAt func() time.Time
+	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
+	UpdateDefaultUpdatedAt func() time.Time
+)
 
 // OrderOption defines the ordering options for the Artifact queries.
 type OrderOption func(*sql.Selector)
@@ -36,4 +230,273 @@ type OrderOption func(*sql.Selector)
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByCreatedAt orders the results by the created_at field.
+func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
+}
+
+// ByCreatedBy orders the results by the created_by field.
+func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedBy, opts...).ToFunc()
+}
+
+// ByUpdatedAt orders the results by the updated_at field.
+func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
+}
+
+// ByUpdatedBy orders the results by the updated_by field.
+func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
+}
+
+// ByDisplayName orders the results by the display_name field.
+func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDisplayName, opts...).ToFunc()
+}
+
+// ByDescription orders the results by the description field.
+func ByDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByPrimaryImageURL orders the results by the primary_image_url field.
+func ByPrimaryImageURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPrimaryImageURL, opts...).ToFunc()
+}
+
+// ByDeletedAt orders the results by the deleted_at field.
+func ByDeletedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDeletedAt, opts...).ToFunc()
+}
+
+// ByDeletedBy orders the results by the deleted_by field.
+func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
+}
+
+// ByAuthorsCount orders the results by authors count.
+func ByAuthorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAuthorsStep(), opts...)
+	}
+}
+
+// ByAuthors orders the results by authors terms.
+func ByAuthors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAuthorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByMediumsCount orders the results by mediums count.
+func ByMediumsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMediumsStep(), opts...)
+	}
+}
+
+// ByMediums orders the results by mediums terms.
+func ByMediums(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMediumsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByTechniquesCount orders the results by techniques count.
+func ByTechniquesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTechniquesStep(), opts...)
+	}
+}
+
+// ByTechniques orders the results by techniques terms.
+func ByTechniques(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTechniquesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByProjectsCount orders the results by projects count.
+func ByProjectsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProjectsStep(), opts...)
+	}
+}
+
+// ByProjects orders the results by projects terms.
+func ByProjects(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProjectsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByPublicationsCount orders the results by publications count.
+func ByPublicationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPublicationsStep(), opts...)
+	}
+}
+
+// ByPublications orders the results by publications terms.
+func ByPublications(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPublicationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByHoldersCount orders the results by holders count.
+func ByHoldersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newHoldersStep(), opts...)
+	}
+}
+
+// ByHolders orders the results by holders terms.
+func ByHolders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newHoldersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByCulturalAffiliationField orders the results by cultural_affiliation field.
+func ByCulturalAffiliationField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCulturalAffiliationStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByMonumentField orders the results by monument field.
+func ByMonumentField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMonumentStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByModelField orders the results by model field.
+func ByModelField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newModelStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// BySetField orders the results by set field.
+func BySetField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSetStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByLocationField orders the results by location field.
+func ByLocationField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newLocationStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByCollectionField orders the results by collection field.
+func ByCollectionField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCollectionStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByLicenseField orders the results by license field.
+func ByLicenseField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newLicenseStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newAuthorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AuthorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, AuthorsTable, AuthorsPrimaryKey...),
+	)
+}
+func newMediumsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MediumsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, MediumsTable, MediumsPrimaryKey...),
+	)
+}
+func newTechniquesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TechniquesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, TechniquesTable, TechniquesPrimaryKey...),
+	)
+}
+func newProjectsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProjectsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ProjectsTable, ProjectsPrimaryKey...),
+	)
+}
+func newPublicationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PublicationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, PublicationsTable, PublicationsPrimaryKey...),
+	)
+}
+func newHoldersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(HoldersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, HoldersTable, HoldersPrimaryKey...),
+	)
+}
+func newCulturalAffiliationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CulturalAffiliationInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, CulturalAffiliationTable, CulturalAffiliationColumn),
+	)
+}
+func newMonumentStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MonumentInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, MonumentTable, MonumentColumn),
+	)
+}
+func newModelStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ModelInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, ModelTable, ModelColumn),
+	)
+}
+func newSetStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SetInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, SetTable, SetColumn),
+	)
+}
+func newLocationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(LocationInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, LocationTable, LocationColumn),
+	)
+}
+func newCollectionStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CollectionInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, CollectionTable, CollectionColumn),
+	)
+}
+func newLicenseStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(LicenseInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, LicenseTable, LicenseColumn),
+	)
 }

@@ -4,12 +4,16 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
 )
@@ -17,12 +21,16 @@ import (
 // PublicationQuery is the builder for querying Publication entities.
 type PublicationQuery struct {
 	config
-	ctx        *QueryContext
-	order      []publication.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Publication
-	modifiers  []func(*sql.Selector)
-	loadTotal  []func(context.Context, []*Publication) error
+	ctx                *QueryContext
+	order              []publication.OrderOption
+	inters             []Interceptor
+	predicates         []predicate.Publication
+	withArtifacts      *ArtifactQuery
+	withAuthors        *PersonQuery
+	modifiers          []func(*sql.Selector)
+	loadTotal          []func(context.Context, []*Publication) error
+	withNamedArtifacts map[string]*ArtifactQuery
+	withNamedAuthors   map[string]*PersonQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -57,6 +65,50 @@ func (pq *PublicationQuery) Unique(unique bool) *PublicationQuery {
 func (pq *PublicationQuery) Order(o ...publication.OrderOption) *PublicationQuery {
 	pq.order = append(pq.order, o...)
 	return pq
+}
+
+// QueryArtifacts chains the current query on the "artifacts" edge.
+func (pq *PublicationQuery) QueryArtifacts() *ArtifactQuery {
+	query := (&ArtifactClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(publication.Table, publication.FieldID, selector),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, publication.ArtifactsTable, publication.ArtifactsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAuthors chains the current query on the "authors" edge.
+func (pq *PublicationQuery) QueryAuthors() *PersonQuery {
+	query := (&PersonClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(publication.Table, publication.FieldID, selector),
+			sqlgraph.To(person.Table, person.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, publication.AuthorsTable, publication.AuthorsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Publication entity from the query.
@@ -246,19 +298,55 @@ func (pq *PublicationQuery) Clone() *PublicationQuery {
 		return nil
 	}
 	return &PublicationQuery{
-		config:     pq.config,
-		ctx:        pq.ctx.Clone(),
-		order:      append([]publication.OrderOption{}, pq.order...),
-		inters:     append([]Interceptor{}, pq.inters...),
-		predicates: append([]predicate.Publication{}, pq.predicates...),
+		config:        pq.config,
+		ctx:           pq.ctx.Clone(),
+		order:         append([]publication.OrderOption{}, pq.order...),
+		inters:        append([]Interceptor{}, pq.inters...),
+		predicates:    append([]predicate.Publication{}, pq.predicates...),
+		withArtifacts: pq.withArtifacts.Clone(),
+		withAuthors:   pq.withAuthors.Clone(),
 		// clone intermediate query.
 		sql:  pq.sql.Clone(),
 		path: pq.path,
 	}
 }
 
+// WithArtifacts tells the query-builder to eager-load the nodes that are connected to
+// the "artifacts" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *PublicationQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *PublicationQuery {
+	query := (&ArtifactClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withArtifacts = query
+	return pq
+}
+
+// WithAuthors tells the query-builder to eager-load the nodes that are connected to
+// the "authors" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *PublicationQuery) WithAuthors(opts ...func(*PersonQuery)) *PublicationQuery {
+	query := (&PersonClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withAuthors = query
+	return pq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Publication.Query().
+//		GroupBy(publication.FieldCreatedAt).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (pq *PublicationQuery) GroupBy(field string, fields ...string) *PublicationGroupBy {
 	pq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &PublicationGroupBy{build: pq}
@@ -270,6 +358,16 @@ func (pq *PublicationQuery) GroupBy(field string, fields ...string) *Publication
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//	}
+//
+//	client.Publication.Query().
+//		Select(publication.FieldCreatedAt).
+//		Scan(ctx, &v)
 func (pq *PublicationQuery) Select(fields ...string) *PublicationSelect {
 	pq.ctx.Fields = append(pq.ctx.Fields, fields...)
 	sbuild := &PublicationSelect{PublicationQuery: pq}
@@ -306,13 +404,23 @@ func (pq *PublicationQuery) prepareQuery(ctx context.Context) error {
 		}
 		pq.sql = prev
 	}
+	if publication.Policy == nil {
+		return errors.New("ent: uninitialized publication.Policy (forgotten import ent/runtime?)")
+	}
+	if err := publication.Policy.EvalQuery(ctx, pq); err != nil {
+		return err
+	}
 	return nil
 }
 
 func (pq *PublicationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Publication, error) {
 	var (
-		nodes = []*Publication{}
-		_spec = pq.querySpec()
+		nodes       = []*Publication{}
+		_spec       = pq.querySpec()
+		loadedTypes = [2]bool{
+			pq.withArtifacts != nil,
+			pq.withAuthors != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Publication).scanValues(nil, columns)
@@ -320,6 +428,7 @@ func (pq *PublicationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Publication{config: pq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(pq.modifiers) > 0 {
@@ -334,12 +443,163 @@ func (pq *PublicationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := pq.withArtifacts; query != nil {
+		if err := pq.loadArtifacts(ctx, query, nodes,
+			func(n *Publication) { n.Edges.Artifacts = []*Artifact{} },
+			func(n *Publication, e *Artifact) { n.Edges.Artifacts = append(n.Edges.Artifacts, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pq.withAuthors; query != nil {
+		if err := pq.loadAuthors(ctx, query, nodes,
+			func(n *Publication) { n.Edges.Authors = []*Person{} },
+			func(n *Publication, e *Person) { n.Edges.Authors = append(n.Edges.Authors, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pq.withNamedArtifacts {
+		if err := pq.loadArtifacts(ctx, query, nodes,
+			func(n *Publication) { n.appendNamedArtifacts(name) },
+			func(n *Publication, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pq.withNamedAuthors {
+		if err := pq.loadAuthors(ctx, query, nodes,
+			func(n *Publication) { n.appendNamedAuthors(name) },
+			func(n *Publication, e *Person) { n.appendNamedAuthors(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range pq.loadTotal {
 		if err := pq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (pq *PublicationQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, nodes []*Publication, init func(*Publication), assign func(*Publication, *Artifact)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Publication)
+	nids := make(map[int]map[*Publication]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(publication.ArtifactsTable)
+		s.Join(joinT).On(s.C(artifact.FieldID), joinT.C(publication.ArtifactsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(publication.ArtifactsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(publication.ArtifactsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Publication]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Artifact](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "artifacts" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (pq *PublicationQuery) loadAuthors(ctx context.Context, query *PersonQuery, nodes []*Publication, init func(*Publication), assign func(*Publication, *Person)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Publication)
+	nids := make(map[int]map[*Publication]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(publication.AuthorsTable)
+		s.Join(joinT).On(s.C(person.FieldID), joinT.C(publication.AuthorsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(publication.AuthorsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(publication.AuthorsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Publication]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Person](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "authors" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
 }
 
 func (pq *PublicationQuery) sqlCount(ctx context.Context) (int, error) {
@@ -424,6 +684,34 @@ func (pq *PublicationQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedArtifacts tells the query-builder to eager-load the nodes that are connected to the "artifacts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *PublicationQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQuery)) *PublicationQuery {
+	query := (&ArtifactClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedArtifacts == nil {
+		pq.withNamedArtifacts = make(map[string]*ArtifactQuery)
+	}
+	pq.withNamedArtifacts[name] = query
+	return pq
+}
+
+// WithNamedAuthors tells the query-builder to eager-load the nodes that are connected to the "authors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *PublicationQuery) WithNamedAuthors(name string, opts ...func(*PersonQuery)) *PublicationQuery {
+	query := (&PersonClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedAuthors == nil {
+		pq.withNamedAuthors = make(map[string]*PersonQuery)
+	}
+	pq.withNamedAuthors[name] = query
+	return pq
 }
 
 // PublicationGroupBy is the group-by builder for Publication entities.

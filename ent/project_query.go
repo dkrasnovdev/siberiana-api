@@ -4,12 +4,16 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
 )
@@ -17,12 +21,16 @@ import (
 // ProjectQuery is the builder for querying Project entities.
 type ProjectQuery struct {
 	config
-	ctx        *QueryContext
-	order      []project.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Project
-	modifiers  []func(*sql.Selector)
-	loadTotal  []func(context.Context, []*Project) error
+	ctx                *QueryContext
+	order              []project.OrderOption
+	inters             []Interceptor
+	predicates         []predicate.Project
+	withArtifacts      *ArtifactQuery
+	withTeam           *PersonQuery
+	modifiers          []func(*sql.Selector)
+	loadTotal          []func(context.Context, []*Project) error
+	withNamedArtifacts map[string]*ArtifactQuery
+	withNamedTeam      map[string]*PersonQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -57,6 +65,50 @@ func (pq *ProjectQuery) Unique(unique bool) *ProjectQuery {
 func (pq *ProjectQuery) Order(o ...project.OrderOption) *ProjectQuery {
 	pq.order = append(pq.order, o...)
 	return pq
+}
+
+// QueryArtifacts chains the current query on the "artifacts" edge.
+func (pq *ProjectQuery) QueryArtifacts() *ArtifactQuery {
+	query := (&ArtifactClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(project.Table, project.FieldID, selector),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, project.ArtifactsTable, project.ArtifactsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTeam chains the current query on the "team" edge.
+func (pq *ProjectQuery) QueryTeam() *PersonQuery {
+	query := (&PersonClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(project.Table, project.FieldID, selector),
+			sqlgraph.To(person.Table, person.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, project.TeamTable, project.TeamPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Project entity from the query.
@@ -246,19 +298,55 @@ func (pq *ProjectQuery) Clone() *ProjectQuery {
 		return nil
 	}
 	return &ProjectQuery{
-		config:     pq.config,
-		ctx:        pq.ctx.Clone(),
-		order:      append([]project.OrderOption{}, pq.order...),
-		inters:     append([]Interceptor{}, pq.inters...),
-		predicates: append([]predicate.Project{}, pq.predicates...),
+		config:        pq.config,
+		ctx:           pq.ctx.Clone(),
+		order:         append([]project.OrderOption{}, pq.order...),
+		inters:        append([]Interceptor{}, pq.inters...),
+		predicates:    append([]predicate.Project{}, pq.predicates...),
+		withArtifacts: pq.withArtifacts.Clone(),
+		withTeam:      pq.withTeam.Clone(),
 		// clone intermediate query.
 		sql:  pq.sql.Clone(),
 		path: pq.path,
 	}
 }
 
+// WithArtifacts tells the query-builder to eager-load the nodes that are connected to
+// the "artifacts" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProjectQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *ProjectQuery {
+	query := (&ArtifactClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withArtifacts = query
+	return pq
+}
+
+// WithTeam tells the query-builder to eager-load the nodes that are connected to
+// the "team" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProjectQuery) WithTeam(opts ...func(*PersonQuery)) *ProjectQuery {
+	query := (&PersonClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withTeam = query
+	return pq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Project.Query().
+//		GroupBy(project.FieldCreatedAt).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (pq *ProjectQuery) GroupBy(field string, fields ...string) *ProjectGroupBy {
 	pq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &ProjectGroupBy{build: pq}
@@ -270,6 +358,16 @@ func (pq *ProjectQuery) GroupBy(field string, fields ...string) *ProjectGroupBy 
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//	}
+//
+//	client.Project.Query().
+//		Select(project.FieldCreatedAt).
+//		Scan(ctx, &v)
 func (pq *ProjectQuery) Select(fields ...string) *ProjectSelect {
 	pq.ctx.Fields = append(pq.ctx.Fields, fields...)
 	sbuild := &ProjectSelect{ProjectQuery: pq}
@@ -306,13 +404,23 @@ func (pq *ProjectQuery) prepareQuery(ctx context.Context) error {
 		}
 		pq.sql = prev
 	}
+	if project.Policy == nil {
+		return errors.New("ent: uninitialized project.Policy (forgotten import ent/runtime?)")
+	}
+	if err := project.Policy.EvalQuery(ctx, pq); err != nil {
+		return err
+	}
 	return nil
 }
 
 func (pq *ProjectQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Project, error) {
 	var (
-		nodes = []*Project{}
-		_spec = pq.querySpec()
+		nodes       = []*Project{}
+		_spec       = pq.querySpec()
+		loadedTypes = [2]bool{
+			pq.withArtifacts != nil,
+			pq.withTeam != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Project).scanValues(nil, columns)
@@ -320,6 +428,7 @@ func (pq *ProjectQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Proj
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Project{config: pq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(pq.modifiers) > 0 {
@@ -334,12 +443,163 @@ func (pq *ProjectQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Proj
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := pq.withArtifacts; query != nil {
+		if err := pq.loadArtifacts(ctx, query, nodes,
+			func(n *Project) { n.Edges.Artifacts = []*Artifact{} },
+			func(n *Project, e *Artifact) { n.Edges.Artifacts = append(n.Edges.Artifacts, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pq.withTeam; query != nil {
+		if err := pq.loadTeam(ctx, query, nodes,
+			func(n *Project) { n.Edges.Team = []*Person{} },
+			func(n *Project, e *Person) { n.Edges.Team = append(n.Edges.Team, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pq.withNamedArtifacts {
+		if err := pq.loadArtifacts(ctx, query, nodes,
+			func(n *Project) { n.appendNamedArtifacts(name) },
+			func(n *Project, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pq.withNamedTeam {
+		if err := pq.loadTeam(ctx, query, nodes,
+			func(n *Project) { n.appendNamedTeam(name) },
+			func(n *Project, e *Person) { n.appendNamedTeam(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range pq.loadTotal {
 		if err := pq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (pq *ProjectQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, nodes []*Project, init func(*Project), assign func(*Project, *Artifact)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Project)
+	nids := make(map[int]map[*Project]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(project.ArtifactsTable)
+		s.Join(joinT).On(s.C(artifact.FieldID), joinT.C(project.ArtifactsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(project.ArtifactsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(project.ArtifactsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Project]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Artifact](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "artifacts" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (pq *ProjectQuery) loadTeam(ctx context.Context, query *PersonQuery, nodes []*Project, init func(*Project), assign func(*Project, *Person)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Project)
+	nids := make(map[int]map[*Project]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(project.TeamTable)
+		s.Join(joinT).On(s.C(person.FieldID), joinT.C(project.TeamPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(project.TeamPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(project.TeamPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Project]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Person](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "team" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
 }
 
 func (pq *ProjectQuery) sqlCount(ctx context.Context) (int, error) {
@@ -424,6 +684,34 @@ func (pq *ProjectQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedArtifacts tells the query-builder to eager-load the nodes that are connected to the "artifacts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProjectQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQuery)) *ProjectQuery {
+	query := (&ArtifactClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedArtifacts == nil {
+		pq.withNamedArtifacts = make(map[string]*ArtifactQuery)
+	}
+	pq.withNamedArtifacts[name] = query
+	return pq
+}
+
+// WithNamedTeam tells the query-builder to eager-load the nodes that are connected to the "team"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProjectQuery) WithNamedTeam(name string, opts ...func(*PersonQuery)) *ProjectQuery {
+	query := (&PersonClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedTeam == nil {
+		pq.withNamedTeam = make(map[string]*PersonQuery)
+	}
+	pq.withNamedTeam[name] = query
+	return pq
 }
 
 // ProjectGroupBy is the group-by builder for Project entities.

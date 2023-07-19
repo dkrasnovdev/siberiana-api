@@ -6,10 +6,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
@@ -27,13 +29,138 @@ func (lu *LicenseUpdate) Where(ps ...predicate.License) *LicenseUpdate {
 	return lu
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (lu *LicenseUpdate) SetCreatedBy(s string) *LicenseUpdate {
+	lu.mutation.SetCreatedBy(s)
+	return lu
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (lu *LicenseUpdate) SetNillableCreatedBy(s *string) *LicenseUpdate {
+	if s != nil {
+		lu.SetCreatedBy(*s)
+	}
+	return lu
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (lu *LicenseUpdate) ClearCreatedBy() *LicenseUpdate {
+	lu.mutation.ClearCreatedBy()
+	return lu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (lu *LicenseUpdate) SetUpdatedAt(t time.Time) *LicenseUpdate {
+	lu.mutation.SetUpdatedAt(t)
+	return lu
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (lu *LicenseUpdate) SetUpdatedBy(s string) *LicenseUpdate {
+	lu.mutation.SetUpdatedBy(s)
+	return lu
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (lu *LicenseUpdate) SetNillableUpdatedBy(s *string) *LicenseUpdate {
+	if s != nil {
+		lu.SetUpdatedBy(*s)
+	}
+	return lu
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (lu *LicenseUpdate) ClearUpdatedBy() *LicenseUpdate {
+	lu.mutation.ClearUpdatedBy()
+	return lu
+}
+
+// SetDisplayName sets the "display_name" field.
+func (lu *LicenseUpdate) SetDisplayName(s string) *LicenseUpdate {
+	lu.mutation.SetDisplayName(s)
+	return lu
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (lu *LicenseUpdate) SetNillableDisplayName(s *string) *LicenseUpdate {
+	if s != nil {
+		lu.SetDisplayName(*s)
+	}
+	return lu
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (lu *LicenseUpdate) ClearDisplayName() *LicenseUpdate {
+	lu.mutation.ClearDisplayName()
+	return lu
+}
+
+// SetDescription sets the "description" field.
+func (lu *LicenseUpdate) SetDescription(s string) *LicenseUpdate {
+	lu.mutation.SetDescription(s)
+	return lu
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (lu *LicenseUpdate) SetNillableDescription(s *string) *LicenseUpdate {
+	if s != nil {
+		lu.SetDescription(*s)
+	}
+	return lu
+}
+
+// ClearDescription clears the value of the "description" field.
+func (lu *LicenseUpdate) ClearDescription() *LicenseUpdate {
+	lu.mutation.ClearDescription()
+	return lu
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (lu *LicenseUpdate) AddArtifactIDs(ids ...int) *LicenseUpdate {
+	lu.mutation.AddArtifactIDs(ids...)
+	return lu
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (lu *LicenseUpdate) AddArtifacts(a ...*Artifact) *LicenseUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return lu.AddArtifactIDs(ids...)
+}
+
 // Mutation returns the LicenseMutation object of the builder.
 func (lu *LicenseUpdate) Mutation() *LicenseMutation {
 	return lu.mutation
 }
 
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (lu *LicenseUpdate) ClearArtifacts() *LicenseUpdate {
+	lu.mutation.ClearArtifacts()
+	return lu
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (lu *LicenseUpdate) RemoveArtifactIDs(ids ...int) *LicenseUpdate {
+	lu.mutation.RemoveArtifactIDs(ids...)
+	return lu
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (lu *LicenseUpdate) RemoveArtifacts(a ...*Artifact) *LicenseUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return lu.RemoveArtifactIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (lu *LicenseUpdate) Save(ctx context.Context) (int, error) {
+	if err := lu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, lu.sqlSave, lu.mutation, lu.hooks)
 }
 
@@ -59,6 +186,18 @@ func (lu *LicenseUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (lu *LicenseUpdate) defaults() error {
+	if _, ok := lu.mutation.UpdatedAt(); !ok {
+		if license.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized license.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := license.UpdateDefaultUpdatedAt()
+		lu.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 func (lu *LicenseUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(license.Table, license.Columns, sqlgraph.NewFieldSpec(license.FieldID, field.TypeInt))
 	if ps := lu.mutation.predicates; len(ps) > 0 {
@@ -67,6 +206,78 @@ func (lu *LicenseUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := lu.mutation.CreatedBy(); ok {
+		_spec.SetField(license.FieldCreatedBy, field.TypeString, value)
+	}
+	if lu.mutation.CreatedByCleared() {
+		_spec.ClearField(license.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := lu.mutation.UpdatedAt(); ok {
+		_spec.SetField(license.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := lu.mutation.UpdatedBy(); ok {
+		_spec.SetField(license.FieldUpdatedBy, field.TypeString, value)
+	}
+	if lu.mutation.UpdatedByCleared() {
+		_spec.ClearField(license.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := lu.mutation.DisplayName(); ok {
+		_spec.SetField(license.FieldDisplayName, field.TypeString, value)
+	}
+	if lu.mutation.DisplayNameCleared() {
+		_spec.ClearField(license.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := lu.mutation.Description(); ok {
+		_spec.SetField(license.FieldDescription, field.TypeString, value)
+	}
+	if lu.mutation.DescriptionCleared() {
+		_spec.ClearField(license.FieldDescription, field.TypeString)
+	}
+	if lu.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   license.ArtifactsTable,
+			Columns: []string{license.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := lu.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !lu.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   license.ArtifactsTable,
+			Columns: []string{license.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := lu.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   license.ArtifactsTable,
+			Columns: []string{license.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, lu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -88,9 +299,131 @@ type LicenseUpdateOne struct {
 	mutation *LicenseMutation
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (luo *LicenseUpdateOne) SetCreatedBy(s string) *LicenseUpdateOne {
+	luo.mutation.SetCreatedBy(s)
+	return luo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (luo *LicenseUpdateOne) SetNillableCreatedBy(s *string) *LicenseUpdateOne {
+	if s != nil {
+		luo.SetCreatedBy(*s)
+	}
+	return luo
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (luo *LicenseUpdateOne) ClearCreatedBy() *LicenseUpdateOne {
+	luo.mutation.ClearCreatedBy()
+	return luo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (luo *LicenseUpdateOne) SetUpdatedAt(t time.Time) *LicenseUpdateOne {
+	luo.mutation.SetUpdatedAt(t)
+	return luo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (luo *LicenseUpdateOne) SetUpdatedBy(s string) *LicenseUpdateOne {
+	luo.mutation.SetUpdatedBy(s)
+	return luo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (luo *LicenseUpdateOne) SetNillableUpdatedBy(s *string) *LicenseUpdateOne {
+	if s != nil {
+		luo.SetUpdatedBy(*s)
+	}
+	return luo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (luo *LicenseUpdateOne) ClearUpdatedBy() *LicenseUpdateOne {
+	luo.mutation.ClearUpdatedBy()
+	return luo
+}
+
+// SetDisplayName sets the "display_name" field.
+func (luo *LicenseUpdateOne) SetDisplayName(s string) *LicenseUpdateOne {
+	luo.mutation.SetDisplayName(s)
+	return luo
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (luo *LicenseUpdateOne) SetNillableDisplayName(s *string) *LicenseUpdateOne {
+	if s != nil {
+		luo.SetDisplayName(*s)
+	}
+	return luo
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (luo *LicenseUpdateOne) ClearDisplayName() *LicenseUpdateOne {
+	luo.mutation.ClearDisplayName()
+	return luo
+}
+
+// SetDescription sets the "description" field.
+func (luo *LicenseUpdateOne) SetDescription(s string) *LicenseUpdateOne {
+	luo.mutation.SetDescription(s)
+	return luo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (luo *LicenseUpdateOne) SetNillableDescription(s *string) *LicenseUpdateOne {
+	if s != nil {
+		luo.SetDescription(*s)
+	}
+	return luo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (luo *LicenseUpdateOne) ClearDescription() *LicenseUpdateOne {
+	luo.mutation.ClearDescription()
+	return luo
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (luo *LicenseUpdateOne) AddArtifactIDs(ids ...int) *LicenseUpdateOne {
+	luo.mutation.AddArtifactIDs(ids...)
+	return luo
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (luo *LicenseUpdateOne) AddArtifacts(a ...*Artifact) *LicenseUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return luo.AddArtifactIDs(ids...)
+}
+
 // Mutation returns the LicenseMutation object of the builder.
 func (luo *LicenseUpdateOne) Mutation() *LicenseMutation {
 	return luo.mutation
+}
+
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (luo *LicenseUpdateOne) ClearArtifacts() *LicenseUpdateOne {
+	luo.mutation.ClearArtifacts()
+	return luo
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (luo *LicenseUpdateOne) RemoveArtifactIDs(ids ...int) *LicenseUpdateOne {
+	luo.mutation.RemoveArtifactIDs(ids...)
+	return luo
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (luo *LicenseUpdateOne) RemoveArtifacts(a ...*Artifact) *LicenseUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return luo.RemoveArtifactIDs(ids...)
 }
 
 // Where appends a list predicates to the LicenseUpdate builder.
@@ -108,6 +441,9 @@ func (luo *LicenseUpdateOne) Select(field string, fields ...string) *LicenseUpda
 
 // Save executes the query and returns the updated License entity.
 func (luo *LicenseUpdateOne) Save(ctx context.Context) (*License, error) {
+	if err := luo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, luo.sqlSave, luo.mutation, luo.hooks)
 }
 
@@ -131,6 +467,18 @@ func (luo *LicenseUpdateOne) ExecX(ctx context.Context) {
 	if err := luo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (luo *LicenseUpdateOne) defaults() error {
+	if _, ok := luo.mutation.UpdatedAt(); !ok {
+		if license.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized license.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := license.UpdateDefaultUpdatedAt()
+		luo.mutation.SetUpdatedAt(v)
+	}
+	return nil
 }
 
 func (luo *LicenseUpdateOne) sqlSave(ctx context.Context) (_node *License, err error) {
@@ -158,6 +506,78 @@ func (luo *LicenseUpdateOne) sqlSave(ctx context.Context) (_node *License, err e
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := luo.mutation.CreatedBy(); ok {
+		_spec.SetField(license.FieldCreatedBy, field.TypeString, value)
+	}
+	if luo.mutation.CreatedByCleared() {
+		_spec.ClearField(license.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := luo.mutation.UpdatedAt(); ok {
+		_spec.SetField(license.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := luo.mutation.UpdatedBy(); ok {
+		_spec.SetField(license.FieldUpdatedBy, field.TypeString, value)
+	}
+	if luo.mutation.UpdatedByCleared() {
+		_spec.ClearField(license.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := luo.mutation.DisplayName(); ok {
+		_spec.SetField(license.FieldDisplayName, field.TypeString, value)
+	}
+	if luo.mutation.DisplayNameCleared() {
+		_spec.ClearField(license.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := luo.mutation.Description(); ok {
+		_spec.SetField(license.FieldDescription, field.TypeString, value)
+	}
+	if luo.mutation.DescriptionCleared() {
+		_spec.ClearField(license.FieldDescription, field.TypeString)
+	}
+	if luo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   license.ArtifactsTable,
+			Columns: []string{license.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := luo.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !luo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   license.ArtifactsTable,
+			Columns: []string{license.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := luo.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   license.ArtifactsTable,
+			Columns: []string{license.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &License{config: luo.config}
 	_spec.Assign = _node.assignValues

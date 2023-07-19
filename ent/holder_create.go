@@ -4,11 +4,16 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/organization"
+	"github.com/dkrasnovdev/heritage-api/ent/person"
 )
 
 // HolderCreate is the builder for creating a Holder entity.
@@ -18,6 +23,143 @@ type HolderCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (hc *HolderCreate) SetCreatedAt(t time.Time) *HolderCreate {
+	hc.mutation.SetCreatedAt(t)
+	return hc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (hc *HolderCreate) SetNillableCreatedAt(t *time.Time) *HolderCreate {
+	if t != nil {
+		hc.SetCreatedAt(*t)
+	}
+	return hc
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (hc *HolderCreate) SetCreatedBy(s string) *HolderCreate {
+	hc.mutation.SetCreatedBy(s)
+	return hc
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (hc *HolderCreate) SetNillableCreatedBy(s *string) *HolderCreate {
+	if s != nil {
+		hc.SetCreatedBy(*s)
+	}
+	return hc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (hc *HolderCreate) SetUpdatedAt(t time.Time) *HolderCreate {
+	hc.mutation.SetUpdatedAt(t)
+	return hc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (hc *HolderCreate) SetNillableUpdatedAt(t *time.Time) *HolderCreate {
+	if t != nil {
+		hc.SetUpdatedAt(*t)
+	}
+	return hc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (hc *HolderCreate) SetUpdatedBy(s string) *HolderCreate {
+	hc.mutation.SetUpdatedBy(s)
+	return hc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (hc *HolderCreate) SetNillableUpdatedBy(s *string) *HolderCreate {
+	if s != nil {
+		hc.SetUpdatedBy(*s)
+	}
+	return hc
+}
+
+// SetDisplayName sets the "display_name" field.
+func (hc *HolderCreate) SetDisplayName(s string) *HolderCreate {
+	hc.mutation.SetDisplayName(s)
+	return hc
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (hc *HolderCreate) SetNillableDisplayName(s *string) *HolderCreate {
+	if s != nil {
+		hc.SetDisplayName(*s)
+	}
+	return hc
+}
+
+// SetDescription sets the "description" field.
+func (hc *HolderCreate) SetDescription(s string) *HolderCreate {
+	hc.mutation.SetDescription(s)
+	return hc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (hc *HolderCreate) SetNillableDescription(s *string) *HolderCreate {
+	if s != nil {
+		hc.SetDescription(*s)
+	}
+	return hc
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (hc *HolderCreate) AddArtifactIDs(ids ...int) *HolderCreate {
+	hc.mutation.AddArtifactIDs(ids...)
+	return hc
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (hc *HolderCreate) AddArtifacts(a ...*Artifact) *HolderCreate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return hc.AddArtifactIDs(ids...)
+}
+
+// SetPersonID sets the "person" edge to the Person entity by ID.
+func (hc *HolderCreate) SetPersonID(id int) *HolderCreate {
+	hc.mutation.SetPersonID(id)
+	return hc
+}
+
+// SetNillablePersonID sets the "person" edge to the Person entity by ID if the given value is not nil.
+func (hc *HolderCreate) SetNillablePersonID(id *int) *HolderCreate {
+	if id != nil {
+		hc = hc.SetPersonID(*id)
+	}
+	return hc
+}
+
+// SetPerson sets the "person" edge to the Person entity.
+func (hc *HolderCreate) SetPerson(p *Person) *HolderCreate {
+	return hc.SetPersonID(p.ID)
+}
+
+// SetOrganizationID sets the "organization" edge to the Organization entity by ID.
+func (hc *HolderCreate) SetOrganizationID(id int) *HolderCreate {
+	hc.mutation.SetOrganizationID(id)
+	return hc
+}
+
+// SetNillableOrganizationID sets the "organization" edge to the Organization entity by ID if the given value is not nil.
+func (hc *HolderCreate) SetNillableOrganizationID(id *int) *HolderCreate {
+	if id != nil {
+		hc = hc.SetOrganizationID(*id)
+	}
+	return hc
+}
+
+// SetOrganization sets the "organization" edge to the Organization entity.
+func (hc *HolderCreate) SetOrganization(o *Organization) *HolderCreate {
+	return hc.SetOrganizationID(o.ID)
+}
+
 // Mutation returns the HolderMutation object of the builder.
 func (hc *HolderCreate) Mutation() *HolderMutation {
 	return hc.mutation
@@ -25,6 +167,9 @@ func (hc *HolderCreate) Mutation() *HolderMutation {
 
 // Save creates the Holder in the database.
 func (hc *HolderCreate) Save(ctx context.Context) (*Holder, error) {
+	if err := hc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, hc.sqlSave, hc.mutation, hc.hooks)
 }
 
@@ -50,8 +195,33 @@ func (hc *HolderCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (hc *HolderCreate) defaults() error {
+	if _, ok := hc.mutation.CreatedAt(); !ok {
+		if holder.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized holder.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := holder.DefaultCreatedAt()
+		hc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := hc.mutation.UpdatedAt(); !ok {
+		if holder.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized holder.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := holder.DefaultUpdatedAt()
+		hc.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (hc *HolderCreate) check() error {
+	if _, ok := hc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Holder.created_at"`)}
+	}
+	if _, ok := hc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Holder.updated_at"`)}
+	}
 	return nil
 }
 
@@ -78,6 +248,78 @@ func (hc *HolderCreate) createSpec() (*Holder, *sqlgraph.CreateSpec) {
 		_node = &Holder{config: hc.config}
 		_spec = sqlgraph.NewCreateSpec(holder.Table, sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt))
 	)
+	if value, ok := hc.mutation.CreatedAt(); ok {
+		_spec.SetField(holder.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := hc.mutation.CreatedBy(); ok {
+		_spec.SetField(holder.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := hc.mutation.UpdatedAt(); ok {
+		_spec.SetField(holder.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := hc.mutation.UpdatedBy(); ok {
+		_spec.SetField(holder.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
+	if value, ok := hc.mutation.DisplayName(); ok {
+		_spec.SetField(holder.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
+	}
+	if value, ok := hc.mutation.Description(); ok {
+		_spec.SetField(holder.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if nodes := hc.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   holder.ArtifactsTable,
+			Columns: holder.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := hc.mutation.PersonIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   holder.PersonTable,
+			Columns: []string{holder.PersonColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := hc.mutation.OrganizationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   holder.OrganizationTable,
+			Columns: []string{holder.OrganizationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -95,6 +337,7 @@ func (hcb *HolderCreateBulk) Save(ctx context.Context) ([]*Holder, error) {
 	for i := range hcb.builders {
 		func(i int, root context.Context) {
 			builder := hcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*HolderMutation)
 				if !ok {

@@ -4,12 +4,16 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
@@ -17,12 +21,16 @@ import (
 // CollectionQuery is the builder for querying Collection entities.
 type CollectionQuery struct {
 	config
-	ctx        *QueryContext
-	order      []collection.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Collection
-	modifiers  []func(*sql.Selector)
-	loadTotal  []func(context.Context, []*Collection) error
+	ctx                *QueryContext
+	order              []collection.OrderOption
+	inters             []Interceptor
+	predicates         []predicate.Collection
+	withArtifacts      *ArtifactQuery
+	withCategory       *CategoryQuery
+	withFKs            bool
+	modifiers          []func(*sql.Selector)
+	loadTotal          []func(context.Context, []*Collection) error
+	withNamedArtifacts map[string]*ArtifactQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -57,6 +65,50 @@ func (cq *CollectionQuery) Unique(unique bool) *CollectionQuery {
 func (cq *CollectionQuery) Order(o ...collection.OrderOption) *CollectionQuery {
 	cq.order = append(cq.order, o...)
 	return cq
+}
+
+// QueryArtifacts chains the current query on the "artifacts" edge.
+func (cq *CollectionQuery) QueryArtifacts() *ArtifactQuery {
+	query := (&ArtifactClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(collection.Table, collection.FieldID, selector),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, collection.ArtifactsTable, collection.ArtifactsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCategory chains the current query on the "category" edge.
+func (cq *CollectionQuery) QueryCategory() *CategoryQuery {
+	query := (&CategoryClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(collection.Table, collection.FieldID, selector),
+			sqlgraph.To(category.Table, category.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, collection.CategoryTable, collection.CategoryColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Collection entity from the query.
@@ -246,19 +298,55 @@ func (cq *CollectionQuery) Clone() *CollectionQuery {
 		return nil
 	}
 	return &CollectionQuery{
-		config:     cq.config,
-		ctx:        cq.ctx.Clone(),
-		order:      append([]collection.OrderOption{}, cq.order...),
-		inters:     append([]Interceptor{}, cq.inters...),
-		predicates: append([]predicate.Collection{}, cq.predicates...),
+		config:        cq.config,
+		ctx:           cq.ctx.Clone(),
+		order:         append([]collection.OrderOption{}, cq.order...),
+		inters:        append([]Interceptor{}, cq.inters...),
+		predicates:    append([]predicate.Collection{}, cq.predicates...),
+		withArtifacts: cq.withArtifacts.Clone(),
+		withCategory:  cq.withCategory.Clone(),
 		// clone intermediate query.
 		sql:  cq.sql.Clone(),
 		path: cq.path,
 	}
 }
 
+// WithArtifacts tells the query-builder to eager-load the nodes that are connected to
+// the "artifacts" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *CollectionQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *CollectionQuery {
+	query := (&ArtifactClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withArtifacts = query
+	return cq
+}
+
+// WithCategory tells the query-builder to eager-load the nodes that are connected to
+// the "category" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *CollectionQuery) WithCategory(opts ...func(*CategoryQuery)) *CollectionQuery {
+	query := (&CategoryClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withCategory = query
+	return cq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Collection.Query().
+//		GroupBy(collection.FieldCreatedAt).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (cq *CollectionQuery) GroupBy(field string, fields ...string) *CollectionGroupBy {
 	cq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &CollectionGroupBy{build: cq}
@@ -270,6 +358,16 @@ func (cq *CollectionQuery) GroupBy(field string, fields ...string) *CollectionGr
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//	}
+//
+//	client.Collection.Query().
+//		Select(collection.FieldCreatedAt).
+//		Scan(ctx, &v)
 func (cq *CollectionQuery) Select(fields ...string) *CollectionSelect {
 	cq.ctx.Fields = append(cq.ctx.Fields, fields...)
 	sbuild := &CollectionSelect{CollectionQuery: cq}
@@ -306,20 +404,38 @@ func (cq *CollectionQuery) prepareQuery(ctx context.Context) error {
 		}
 		cq.sql = prev
 	}
+	if collection.Policy == nil {
+		return errors.New("ent: uninitialized collection.Policy (forgotten import ent/runtime?)")
+	}
+	if err := collection.Policy.EvalQuery(ctx, cq); err != nil {
+		return err
+	}
 	return nil
 }
 
 func (cq *CollectionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Collection, error) {
 	var (
-		nodes = []*Collection{}
-		_spec = cq.querySpec()
+		nodes       = []*Collection{}
+		withFKs     = cq.withFKs
+		_spec       = cq.querySpec()
+		loadedTypes = [2]bool{
+			cq.withArtifacts != nil,
+			cq.withCategory != nil,
+		}
 	)
+	if cq.withCategory != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, collection.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Collection).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Collection{config: cq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(cq.modifiers) > 0 {
@@ -334,12 +450,96 @@ func (cq *CollectionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*C
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := cq.withArtifacts; query != nil {
+		if err := cq.loadArtifacts(ctx, query, nodes,
+			func(n *Collection) { n.Edges.Artifacts = []*Artifact{} },
+			func(n *Collection, e *Artifact) { n.Edges.Artifacts = append(n.Edges.Artifacts, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := cq.withCategory; query != nil {
+		if err := cq.loadCategory(ctx, query, nodes, nil,
+			func(n *Collection, e *Category) { n.Edges.Category = e }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedArtifacts {
+		if err := cq.loadArtifacts(ctx, query, nodes,
+			func(n *Collection) { n.appendNamedArtifacts(name) },
+			func(n *Collection, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range cq.loadTotal {
 		if err := cq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (cq *CollectionQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, nodes []*Collection, init func(*Collection), assign func(*Collection, *Artifact)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Collection)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Artifact(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(collection.ArtifactsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.collection_artifacts
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "collection_artifacts" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "collection_artifacts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (cq *CollectionQuery) loadCategory(ctx context.Context, query *CategoryQuery, nodes []*Collection, init func(*Collection), assign func(*Collection, *Category)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Collection)
+	for i := range nodes {
+		if nodes[i].category_collections == nil {
+			continue
+		}
+		fk := *nodes[i].category_collections
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(category.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "category_collections" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (cq *CollectionQuery) sqlCount(ctx context.Context) (int, error) {
@@ -424,6 +624,20 @@ func (cq *CollectionQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedArtifacts tells the query-builder to eager-load the nodes that are connected to the "artifacts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *CollectionQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQuery)) *CollectionQuery {
+	query := (&ArtifactClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedArtifacts == nil {
+		cq.withNamedArtifacts = make(map[string]*ArtifactQuery)
+	}
+	cq.withNamedArtifacts[name] = query
+	return cq
 }
 
 // CollectionGroupBy is the group-by builder for Collection entities.

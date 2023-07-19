@@ -4,6 +4,8 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -11,18 +13,21 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
+	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
 
 // CategoryQuery is the builder for querying Category entities.
 type CategoryQuery struct {
 	config
-	ctx        *QueryContext
-	order      []category.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Category
-	modifiers  []func(*sql.Selector)
-	loadTotal  []func(context.Context, []*Category) error
+	ctx                  *QueryContext
+	order                []category.OrderOption
+	inters               []Interceptor
+	predicates           []predicate.Category
+	withCollections      *CollectionQuery
+	modifiers            []func(*sql.Selector)
+	loadTotal            []func(context.Context, []*Category) error
+	withNamedCollections map[string]*CollectionQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -57,6 +62,28 @@ func (cq *CategoryQuery) Unique(unique bool) *CategoryQuery {
 func (cq *CategoryQuery) Order(o ...category.OrderOption) *CategoryQuery {
 	cq.order = append(cq.order, o...)
 	return cq
+}
+
+// QueryCollections chains the current query on the "collections" edge.
+func (cq *CategoryQuery) QueryCollections() *CollectionQuery {
+	query := (&CollectionClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(category.Table, category.FieldID, selector),
+			sqlgraph.To(collection.Table, collection.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, category.CollectionsTable, category.CollectionsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Category entity from the query.
@@ -246,19 +273,43 @@ func (cq *CategoryQuery) Clone() *CategoryQuery {
 		return nil
 	}
 	return &CategoryQuery{
-		config:     cq.config,
-		ctx:        cq.ctx.Clone(),
-		order:      append([]category.OrderOption{}, cq.order...),
-		inters:     append([]Interceptor{}, cq.inters...),
-		predicates: append([]predicate.Category{}, cq.predicates...),
+		config:          cq.config,
+		ctx:             cq.ctx.Clone(),
+		order:           append([]category.OrderOption{}, cq.order...),
+		inters:          append([]Interceptor{}, cq.inters...),
+		predicates:      append([]predicate.Category{}, cq.predicates...),
+		withCollections: cq.withCollections.Clone(),
 		// clone intermediate query.
 		sql:  cq.sql.Clone(),
 		path: cq.path,
 	}
 }
 
+// WithCollections tells the query-builder to eager-load the nodes that are connected to
+// the "collections" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *CategoryQuery) WithCollections(opts ...func(*CollectionQuery)) *CategoryQuery {
+	query := (&CollectionClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withCollections = query
+	return cq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Category.Query().
+//		GroupBy(category.FieldCreatedAt).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (cq *CategoryQuery) GroupBy(field string, fields ...string) *CategoryGroupBy {
 	cq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &CategoryGroupBy{build: cq}
@@ -270,6 +321,16 @@ func (cq *CategoryQuery) GroupBy(field string, fields ...string) *CategoryGroupB
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//	}
+//
+//	client.Category.Query().
+//		Select(category.FieldCreatedAt).
+//		Scan(ctx, &v)
 func (cq *CategoryQuery) Select(fields ...string) *CategorySelect {
 	cq.ctx.Fields = append(cq.ctx.Fields, fields...)
 	sbuild := &CategorySelect{CategoryQuery: cq}
@@ -306,13 +367,22 @@ func (cq *CategoryQuery) prepareQuery(ctx context.Context) error {
 		}
 		cq.sql = prev
 	}
+	if category.Policy == nil {
+		return errors.New("ent: uninitialized category.Policy (forgotten import ent/runtime?)")
+	}
+	if err := category.Policy.EvalQuery(ctx, cq); err != nil {
+		return err
+	}
 	return nil
 }
 
 func (cq *CategoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Category, error) {
 	var (
-		nodes = []*Category{}
-		_spec = cq.querySpec()
+		nodes       = []*Category{}
+		_spec       = cq.querySpec()
+		loadedTypes = [1]bool{
+			cq.withCollections != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Category).scanValues(nil, columns)
@@ -320,6 +390,7 @@ func (cq *CategoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cat
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Category{config: cq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(cq.modifiers) > 0 {
@@ -334,12 +405,58 @@ func (cq *CategoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cat
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := cq.withCollections; query != nil {
+		if err := cq.loadCollections(ctx, query, nodes,
+			func(n *Category) { n.Edges.Collections = []*Collection{} },
+			func(n *Category, e *Collection) { n.Edges.Collections = append(n.Edges.Collections, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedCollections {
+		if err := cq.loadCollections(ctx, query, nodes,
+			func(n *Category) { n.appendNamedCollections(name) },
+			func(n *Category, e *Collection) { n.appendNamedCollections(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range cq.loadTotal {
 		if err := cq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (cq *CategoryQuery) loadCollections(ctx context.Context, query *CollectionQuery, nodes []*Category, init func(*Category), assign func(*Category, *Collection)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Category)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Collection(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(category.CollectionsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.category_collections
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "category_collections" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "category_collections" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
 }
 
 func (cq *CategoryQuery) sqlCount(ctx context.Context) (int, error) {
@@ -424,6 +541,20 @@ func (cq *CategoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedCollections tells the query-builder to eager-load the nodes that are connected to the "collections"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *CategoryQuery) WithNamedCollections(name string, opts ...func(*CollectionQuery)) *CategoryQuery {
+	query := (&CollectionClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedCollections == nil {
+		cq.withNamedCollections = make(map[string]*CollectionQuery)
+	}
+	cq.withNamedCollections[name] = query
+	return cq
 }
 
 // CategoryGroupBy is the group-by builder for Category entities.

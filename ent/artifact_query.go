@@ -4,6 +4,8 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -11,18 +13,51 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/collection"
+	"github.com/dkrasnovdev/heritage-api/ent/culture"
+	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/license"
+	"github.com/dkrasnovdev/heritage-api/ent/location"
+	"github.com/dkrasnovdev/heritage-api/ent/medium"
+	"github.com/dkrasnovdev/heritage-api/ent/model"
+	"github.com/dkrasnovdev/heritage-api/ent/monument"
+	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/heritage-api/ent/project"
+	"github.com/dkrasnovdev/heritage-api/ent/publication"
+	"github.com/dkrasnovdev/heritage-api/ent/set"
+	"github.com/dkrasnovdev/heritage-api/ent/technique"
 )
 
 // ArtifactQuery is the builder for querying Artifact entities.
 type ArtifactQuery struct {
 	config
-	ctx        *QueryContext
-	order      []artifact.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Artifact
-	modifiers  []func(*sql.Selector)
-	loadTotal  []func(context.Context, []*Artifact) error
+	ctx                     *QueryContext
+	order                   []artifact.OrderOption
+	inters                  []Interceptor
+	predicates              []predicate.Artifact
+	withAuthors             *PersonQuery
+	withMediums             *MediumQuery
+	withTechniques          *TechniqueQuery
+	withProjects            *ProjectQuery
+	withPublications        *PublicationQuery
+	withHolders             *HolderQuery
+	withCulturalAffiliation *CultureQuery
+	withMonument            *MonumentQuery
+	withModel               *ModelQuery
+	withSet                 *SetQuery
+	withLocation            *LocationQuery
+	withCollection          *CollectionQuery
+	withLicense             *LicenseQuery
+	withFKs                 bool
+	modifiers               []func(*sql.Selector)
+	loadTotal               []func(context.Context, []*Artifact) error
+	withNamedAuthors        map[string]*PersonQuery
+	withNamedMediums        map[string]*MediumQuery
+	withNamedTechniques     map[string]*TechniqueQuery
+	withNamedProjects       map[string]*ProjectQuery
+	withNamedPublications   map[string]*PublicationQuery
+	withNamedHolders        map[string]*HolderQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -57,6 +92,292 @@ func (aq *ArtifactQuery) Unique(unique bool) *ArtifactQuery {
 func (aq *ArtifactQuery) Order(o ...artifact.OrderOption) *ArtifactQuery {
 	aq.order = append(aq.order, o...)
 	return aq
+}
+
+// QueryAuthors chains the current query on the "authors" edge.
+func (aq *ArtifactQuery) QueryAuthors() *PersonQuery {
+	query := (&PersonClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
+			sqlgraph.To(person.Table, person.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, artifact.AuthorsTable, artifact.AuthorsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMediums chains the current query on the "mediums" edge.
+func (aq *ArtifactQuery) QueryMediums() *MediumQuery {
+	query := (&MediumClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
+			sqlgraph.To(medium.Table, medium.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, artifact.MediumsTable, artifact.MediumsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTechniques chains the current query on the "techniques" edge.
+func (aq *ArtifactQuery) QueryTechniques() *TechniqueQuery {
+	query := (&TechniqueClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
+			sqlgraph.To(technique.Table, technique.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, artifact.TechniquesTable, artifact.TechniquesPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProjects chains the current query on the "projects" edge.
+func (aq *ArtifactQuery) QueryProjects() *ProjectQuery {
+	query := (&ProjectClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
+			sqlgraph.To(project.Table, project.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, artifact.ProjectsTable, artifact.ProjectsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPublications chains the current query on the "publications" edge.
+func (aq *ArtifactQuery) QueryPublications() *PublicationQuery {
+	query := (&PublicationClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
+			sqlgraph.To(publication.Table, publication.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, artifact.PublicationsTable, artifact.PublicationsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryHolders chains the current query on the "holders" edge.
+func (aq *ArtifactQuery) QueryHolders() *HolderQuery {
+	query := (&HolderClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
+			sqlgraph.To(holder.Table, holder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, artifact.HoldersTable, artifact.HoldersPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCulturalAffiliation chains the current query on the "cultural_affiliation" edge.
+func (aq *ArtifactQuery) QueryCulturalAffiliation() *CultureQuery {
+	query := (&CultureClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
+			sqlgraph.To(culture.Table, culture.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.CulturalAffiliationTable, artifact.CulturalAffiliationColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMonument chains the current query on the "monument" edge.
+func (aq *ArtifactQuery) QueryMonument() *MonumentQuery {
+	query := (&MonumentClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
+			sqlgraph.To(monument.Table, monument.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.MonumentTable, artifact.MonumentColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryModel chains the current query on the "model" edge.
+func (aq *ArtifactQuery) QueryModel() *ModelQuery {
+	query := (&ModelClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
+			sqlgraph.To(model.Table, model.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.ModelTable, artifact.ModelColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySet chains the current query on the "set" edge.
+func (aq *ArtifactQuery) QuerySet() *SetQuery {
+	query := (&SetClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
+			sqlgraph.To(set.Table, set.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.SetTable, artifact.SetColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryLocation chains the current query on the "location" edge.
+func (aq *ArtifactQuery) QueryLocation() *LocationQuery {
+	query := (&LocationClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
+			sqlgraph.To(location.Table, location.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.LocationTable, artifact.LocationColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCollection chains the current query on the "collection" edge.
+func (aq *ArtifactQuery) QueryCollection() *CollectionQuery {
+	query := (&CollectionClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
+			sqlgraph.To(collection.Table, collection.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.CollectionTable, artifact.CollectionColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryLicense chains the current query on the "license" edge.
+func (aq *ArtifactQuery) QueryLicense() *LicenseQuery {
+	query := (&LicenseClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
+			sqlgraph.To(license.Table, license.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.LicenseTable, artifact.LicenseColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Artifact entity from the query.
@@ -246,19 +567,187 @@ func (aq *ArtifactQuery) Clone() *ArtifactQuery {
 		return nil
 	}
 	return &ArtifactQuery{
-		config:     aq.config,
-		ctx:        aq.ctx.Clone(),
-		order:      append([]artifact.OrderOption{}, aq.order...),
-		inters:     append([]Interceptor{}, aq.inters...),
-		predicates: append([]predicate.Artifact{}, aq.predicates...),
+		config:                  aq.config,
+		ctx:                     aq.ctx.Clone(),
+		order:                   append([]artifact.OrderOption{}, aq.order...),
+		inters:                  append([]Interceptor{}, aq.inters...),
+		predicates:              append([]predicate.Artifact{}, aq.predicates...),
+		withAuthors:             aq.withAuthors.Clone(),
+		withMediums:             aq.withMediums.Clone(),
+		withTechniques:          aq.withTechniques.Clone(),
+		withProjects:            aq.withProjects.Clone(),
+		withPublications:        aq.withPublications.Clone(),
+		withHolders:             aq.withHolders.Clone(),
+		withCulturalAffiliation: aq.withCulturalAffiliation.Clone(),
+		withMonument:            aq.withMonument.Clone(),
+		withModel:               aq.withModel.Clone(),
+		withSet:                 aq.withSet.Clone(),
+		withLocation:            aq.withLocation.Clone(),
+		withCollection:          aq.withCollection.Clone(),
+		withLicense:             aq.withLicense.Clone(),
 		// clone intermediate query.
 		sql:  aq.sql.Clone(),
 		path: aq.path,
 	}
 }
 
+// WithAuthors tells the query-builder to eager-load the nodes that are connected to
+// the "authors" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithAuthors(opts ...func(*PersonQuery)) *ArtifactQuery {
+	query := (&PersonClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withAuthors = query
+	return aq
+}
+
+// WithMediums tells the query-builder to eager-load the nodes that are connected to
+// the "mediums" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithMediums(opts ...func(*MediumQuery)) *ArtifactQuery {
+	query := (&MediumClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withMediums = query
+	return aq
+}
+
+// WithTechniques tells the query-builder to eager-load the nodes that are connected to
+// the "techniques" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithTechniques(opts ...func(*TechniqueQuery)) *ArtifactQuery {
+	query := (&TechniqueClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withTechniques = query
+	return aq
+}
+
+// WithProjects tells the query-builder to eager-load the nodes that are connected to
+// the "projects" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithProjects(opts ...func(*ProjectQuery)) *ArtifactQuery {
+	query := (&ProjectClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withProjects = query
+	return aq
+}
+
+// WithPublications tells the query-builder to eager-load the nodes that are connected to
+// the "publications" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithPublications(opts ...func(*PublicationQuery)) *ArtifactQuery {
+	query := (&PublicationClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withPublications = query
+	return aq
+}
+
+// WithHolders tells the query-builder to eager-load the nodes that are connected to
+// the "holders" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithHolders(opts ...func(*HolderQuery)) *ArtifactQuery {
+	query := (&HolderClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withHolders = query
+	return aq
+}
+
+// WithCulturalAffiliation tells the query-builder to eager-load the nodes that are connected to
+// the "cultural_affiliation" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithCulturalAffiliation(opts ...func(*CultureQuery)) *ArtifactQuery {
+	query := (&CultureClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withCulturalAffiliation = query
+	return aq
+}
+
+// WithMonument tells the query-builder to eager-load the nodes that are connected to
+// the "monument" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithMonument(opts ...func(*MonumentQuery)) *ArtifactQuery {
+	query := (&MonumentClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withMonument = query
+	return aq
+}
+
+// WithModel tells the query-builder to eager-load the nodes that are connected to
+// the "model" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithModel(opts ...func(*ModelQuery)) *ArtifactQuery {
+	query := (&ModelClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withModel = query
+	return aq
+}
+
+// WithSet tells the query-builder to eager-load the nodes that are connected to
+// the "set" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithSet(opts ...func(*SetQuery)) *ArtifactQuery {
+	query := (&SetClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withSet = query
+	return aq
+}
+
+// WithLocation tells the query-builder to eager-load the nodes that are connected to
+// the "location" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithLocation(opts ...func(*LocationQuery)) *ArtifactQuery {
+	query := (&LocationClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withLocation = query
+	return aq
+}
+
+// WithCollection tells the query-builder to eager-load the nodes that are connected to
+// the "collection" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithCollection(opts ...func(*CollectionQuery)) *ArtifactQuery {
+	query := (&CollectionClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withCollection = query
+	return aq
+}
+
+// WithLicense tells the query-builder to eager-load the nodes that are connected to
+// the "license" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithLicense(opts ...func(*LicenseQuery)) *ArtifactQuery {
+	query := (&LicenseClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withLicense = query
+	return aq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Artifact.Query().
+//		GroupBy(artifact.FieldCreatedAt).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (aq *ArtifactQuery) GroupBy(field string, fields ...string) *ArtifactGroupBy {
 	aq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &ArtifactGroupBy{build: aq}
@@ -270,6 +759,16 @@ func (aq *ArtifactQuery) GroupBy(field string, fields ...string) *ArtifactGroupB
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//	}
+//
+//	client.Artifact.Query().
+//		Select(artifact.FieldCreatedAt).
+//		Scan(ctx, &v)
 func (aq *ArtifactQuery) Select(fields ...string) *ArtifactSelect {
 	aq.ctx.Fields = append(aq.ctx.Fields, fields...)
 	sbuild := &ArtifactSelect{ArtifactQuery: aq}
@@ -306,20 +805,49 @@ func (aq *ArtifactQuery) prepareQuery(ctx context.Context) error {
 		}
 		aq.sql = prev
 	}
+	if artifact.Policy == nil {
+		return errors.New("ent: uninitialized artifact.Policy (forgotten import ent/runtime?)")
+	}
+	if err := artifact.Policy.EvalQuery(ctx, aq); err != nil {
+		return err
+	}
 	return nil
 }
 
 func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Artifact, error) {
 	var (
-		nodes = []*Artifact{}
-		_spec = aq.querySpec()
+		nodes       = []*Artifact{}
+		withFKs     = aq.withFKs
+		_spec       = aq.querySpec()
+		loadedTypes = [13]bool{
+			aq.withAuthors != nil,
+			aq.withMediums != nil,
+			aq.withTechniques != nil,
+			aq.withProjects != nil,
+			aq.withPublications != nil,
+			aq.withHolders != nil,
+			aq.withCulturalAffiliation != nil,
+			aq.withMonument != nil,
+			aq.withModel != nil,
+			aq.withSet != nil,
+			aq.withLocation != nil,
+			aq.withCollection != nil,
+			aq.withLicense != nil,
+		}
 	)
+	if aq.withCulturalAffiliation != nil || aq.withMonument != nil || aq.withModel != nil || aq.withSet != nil || aq.withLocation != nil || aq.withCollection != nil || aq.withLicense != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, artifact.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Artifact).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Artifact{config: aq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(aq.modifiers) > 0 {
@@ -334,12 +862,729 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := aq.withAuthors; query != nil {
+		if err := aq.loadAuthors(ctx, query, nodes,
+			func(n *Artifact) { n.Edges.Authors = []*Person{} },
+			func(n *Artifact, e *Person) { n.Edges.Authors = append(n.Edges.Authors, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withMediums; query != nil {
+		if err := aq.loadMediums(ctx, query, nodes,
+			func(n *Artifact) { n.Edges.Mediums = []*Medium{} },
+			func(n *Artifact, e *Medium) { n.Edges.Mediums = append(n.Edges.Mediums, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withTechniques; query != nil {
+		if err := aq.loadTechniques(ctx, query, nodes,
+			func(n *Artifact) { n.Edges.Techniques = []*Technique{} },
+			func(n *Artifact, e *Technique) { n.Edges.Techniques = append(n.Edges.Techniques, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withProjects; query != nil {
+		if err := aq.loadProjects(ctx, query, nodes,
+			func(n *Artifact) { n.Edges.Projects = []*Project{} },
+			func(n *Artifact, e *Project) { n.Edges.Projects = append(n.Edges.Projects, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withPublications; query != nil {
+		if err := aq.loadPublications(ctx, query, nodes,
+			func(n *Artifact) { n.Edges.Publications = []*Publication{} },
+			func(n *Artifact, e *Publication) { n.Edges.Publications = append(n.Edges.Publications, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withHolders; query != nil {
+		if err := aq.loadHolders(ctx, query, nodes,
+			func(n *Artifact) { n.Edges.Holders = []*Holder{} },
+			func(n *Artifact, e *Holder) { n.Edges.Holders = append(n.Edges.Holders, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withCulturalAffiliation; query != nil {
+		if err := aq.loadCulturalAffiliation(ctx, query, nodes, nil,
+			func(n *Artifact, e *Culture) { n.Edges.CulturalAffiliation = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withMonument; query != nil {
+		if err := aq.loadMonument(ctx, query, nodes, nil,
+			func(n *Artifact, e *Monument) { n.Edges.Monument = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withModel; query != nil {
+		if err := aq.loadModel(ctx, query, nodes, nil,
+			func(n *Artifact, e *Model) { n.Edges.Model = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withSet; query != nil {
+		if err := aq.loadSet(ctx, query, nodes, nil,
+			func(n *Artifact, e *Set) { n.Edges.Set = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withLocation; query != nil {
+		if err := aq.loadLocation(ctx, query, nodes, nil,
+			func(n *Artifact, e *Location) { n.Edges.Location = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withCollection; query != nil {
+		if err := aq.loadCollection(ctx, query, nodes, nil,
+			func(n *Artifact, e *Collection) { n.Edges.Collection = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withLicense; query != nil {
+		if err := aq.loadLicense(ctx, query, nodes, nil,
+			func(n *Artifact, e *License) { n.Edges.License = e }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range aq.withNamedAuthors {
+		if err := aq.loadAuthors(ctx, query, nodes,
+			func(n *Artifact) { n.appendNamedAuthors(name) },
+			func(n *Artifact, e *Person) { n.appendNamedAuthors(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range aq.withNamedMediums {
+		if err := aq.loadMediums(ctx, query, nodes,
+			func(n *Artifact) { n.appendNamedMediums(name) },
+			func(n *Artifact, e *Medium) { n.appendNamedMediums(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range aq.withNamedTechniques {
+		if err := aq.loadTechniques(ctx, query, nodes,
+			func(n *Artifact) { n.appendNamedTechniques(name) },
+			func(n *Artifact, e *Technique) { n.appendNamedTechniques(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range aq.withNamedProjects {
+		if err := aq.loadProjects(ctx, query, nodes,
+			func(n *Artifact) { n.appendNamedProjects(name) },
+			func(n *Artifact, e *Project) { n.appendNamedProjects(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range aq.withNamedPublications {
+		if err := aq.loadPublications(ctx, query, nodes,
+			func(n *Artifact) { n.appendNamedPublications(name) },
+			func(n *Artifact, e *Publication) { n.appendNamedPublications(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range aq.withNamedHolders {
+		if err := aq.loadHolders(ctx, query, nodes,
+			func(n *Artifact) { n.appendNamedHolders(name) },
+			func(n *Artifact, e *Holder) { n.appendNamedHolders(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range aq.loadTotal {
 		if err := aq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (aq *ArtifactQuery) loadAuthors(ctx context.Context, query *PersonQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *Person)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Artifact)
+	nids := make(map[int]map[*Artifact]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(artifact.AuthorsTable)
+		s.Join(joinT).On(s.C(person.FieldID), joinT.C(artifact.AuthorsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(artifact.AuthorsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(artifact.AuthorsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Artifact]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Person](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "authors" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (aq *ArtifactQuery) loadMediums(ctx context.Context, query *MediumQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *Medium)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Artifact)
+	nids := make(map[int]map[*Artifact]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(artifact.MediumsTable)
+		s.Join(joinT).On(s.C(medium.FieldID), joinT.C(artifact.MediumsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(artifact.MediumsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(artifact.MediumsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Artifact]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Medium](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "mediums" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (aq *ArtifactQuery) loadTechniques(ctx context.Context, query *TechniqueQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *Technique)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Artifact)
+	nids := make(map[int]map[*Artifact]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(artifact.TechniquesTable)
+		s.Join(joinT).On(s.C(technique.FieldID), joinT.C(artifact.TechniquesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(artifact.TechniquesPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(artifact.TechniquesPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Artifact]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Technique](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "techniques" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (aq *ArtifactQuery) loadProjects(ctx context.Context, query *ProjectQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *Project)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Artifact)
+	nids := make(map[int]map[*Artifact]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(artifact.ProjectsTable)
+		s.Join(joinT).On(s.C(project.FieldID), joinT.C(artifact.ProjectsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(artifact.ProjectsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(artifact.ProjectsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Artifact]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Project](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "projects" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (aq *ArtifactQuery) loadPublications(ctx context.Context, query *PublicationQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *Publication)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Artifact)
+	nids := make(map[int]map[*Artifact]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(artifact.PublicationsTable)
+		s.Join(joinT).On(s.C(publication.FieldID), joinT.C(artifact.PublicationsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(artifact.PublicationsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(artifact.PublicationsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Artifact]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Publication](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "publications" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (aq *ArtifactQuery) loadHolders(ctx context.Context, query *HolderQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *Holder)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Artifact)
+	nids := make(map[int]map[*Artifact]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(artifact.HoldersTable)
+		s.Join(joinT).On(s.C(holder.FieldID), joinT.C(artifact.HoldersPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(artifact.HoldersPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(artifact.HoldersPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Artifact]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Holder](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "holders" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (aq *ArtifactQuery) loadCulturalAffiliation(ctx context.Context, query *CultureQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *Culture)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Artifact)
+	for i := range nodes {
+		if nodes[i].culture_artifacts == nil {
+			continue
+		}
+		fk := *nodes[i].culture_artifacts
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(culture.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "culture_artifacts" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (aq *ArtifactQuery) loadMonument(ctx context.Context, query *MonumentQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *Monument)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Artifact)
+	for i := range nodes {
+		if nodes[i].monument_artifacts == nil {
+			continue
+		}
+		fk := *nodes[i].monument_artifacts
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(monument.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "monument_artifacts" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (aq *ArtifactQuery) loadModel(ctx context.Context, query *ModelQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *Model)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Artifact)
+	for i := range nodes {
+		if nodes[i].model_artifacts == nil {
+			continue
+		}
+		fk := *nodes[i].model_artifacts
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(model.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "model_artifacts" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (aq *ArtifactQuery) loadSet(ctx context.Context, query *SetQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *Set)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Artifact)
+	for i := range nodes {
+		if nodes[i].set_artifacts == nil {
+			continue
+		}
+		fk := *nodes[i].set_artifacts
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(set.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "set_artifacts" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (aq *ArtifactQuery) loadLocation(ctx context.Context, query *LocationQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *Location)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Artifact)
+	for i := range nodes {
+		if nodes[i].location_artifacts == nil {
+			continue
+		}
+		fk := *nodes[i].location_artifacts
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(location.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "location_artifacts" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (aq *ArtifactQuery) loadCollection(ctx context.Context, query *CollectionQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *Collection)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Artifact)
+	for i := range nodes {
+		if nodes[i].collection_artifacts == nil {
+			continue
+		}
+		fk := *nodes[i].collection_artifacts
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(collection.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "collection_artifacts" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (aq *ArtifactQuery) loadLicense(ctx context.Context, query *LicenseQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *License)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Artifact)
+	for i := range nodes {
+		if nodes[i].license_artifacts == nil {
+			continue
+		}
+		fk := *nodes[i].license_artifacts
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(license.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "license_artifacts" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (aq *ArtifactQuery) sqlCount(ctx context.Context) (int, error) {
@@ -424,6 +1669,90 @@ func (aq *ArtifactQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedAuthors tells the query-builder to eager-load the nodes that are connected to the "authors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithNamedAuthors(name string, opts ...func(*PersonQuery)) *ArtifactQuery {
+	query := (&PersonClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if aq.withNamedAuthors == nil {
+		aq.withNamedAuthors = make(map[string]*PersonQuery)
+	}
+	aq.withNamedAuthors[name] = query
+	return aq
+}
+
+// WithNamedMediums tells the query-builder to eager-load the nodes that are connected to the "mediums"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithNamedMediums(name string, opts ...func(*MediumQuery)) *ArtifactQuery {
+	query := (&MediumClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if aq.withNamedMediums == nil {
+		aq.withNamedMediums = make(map[string]*MediumQuery)
+	}
+	aq.withNamedMediums[name] = query
+	return aq
+}
+
+// WithNamedTechniques tells the query-builder to eager-load the nodes that are connected to the "techniques"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithNamedTechniques(name string, opts ...func(*TechniqueQuery)) *ArtifactQuery {
+	query := (&TechniqueClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if aq.withNamedTechniques == nil {
+		aq.withNamedTechniques = make(map[string]*TechniqueQuery)
+	}
+	aq.withNamedTechniques[name] = query
+	return aq
+}
+
+// WithNamedProjects tells the query-builder to eager-load the nodes that are connected to the "projects"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithNamedProjects(name string, opts ...func(*ProjectQuery)) *ArtifactQuery {
+	query := (&ProjectClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if aq.withNamedProjects == nil {
+		aq.withNamedProjects = make(map[string]*ProjectQuery)
+	}
+	aq.withNamedProjects[name] = query
+	return aq
+}
+
+// WithNamedPublications tells the query-builder to eager-load the nodes that are connected to the "publications"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithNamedPublications(name string, opts ...func(*PublicationQuery)) *ArtifactQuery {
+	query := (&PublicationClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if aq.withNamedPublications == nil {
+		aq.withNamedPublications = make(map[string]*PublicationQuery)
+	}
+	aq.withNamedPublications[name] = query
+	return aq
+}
+
+// WithNamedHolders tells the query-builder to eager-load the nodes that are connected to the "holders"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithNamedHolders(name string, opts ...func(*HolderQuery)) *ArtifactQuery {
+	query := (&HolderClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if aq.withNamedHolders == nil {
+		aq.withNamedHolders = make(map[string]*HolderQuery)
+	}
+	aq.withNamedHolders[name] = query
+	return aq
 }
 
 // ArtifactGroupBy is the group-by builder for Artifact entities.

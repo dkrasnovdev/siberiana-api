@@ -4,11 +4,17 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
+	"github.com/dkrasnovdev/heritage-api/ent/project"
+	"github.com/dkrasnovdev/heritage-api/ent/publication"
 )
 
 // PersonCreate is the builder for creating a Person entity.
@@ -18,6 +24,154 @@ type PersonCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (pc *PersonCreate) SetCreatedAt(t time.Time) *PersonCreate {
+	pc.mutation.SetCreatedAt(t)
+	return pc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (pc *PersonCreate) SetNillableCreatedAt(t *time.Time) *PersonCreate {
+	if t != nil {
+		pc.SetCreatedAt(*t)
+	}
+	return pc
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (pc *PersonCreate) SetCreatedBy(s string) *PersonCreate {
+	pc.mutation.SetCreatedBy(s)
+	return pc
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (pc *PersonCreate) SetNillableCreatedBy(s *string) *PersonCreate {
+	if s != nil {
+		pc.SetCreatedBy(*s)
+	}
+	return pc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (pc *PersonCreate) SetUpdatedAt(t time.Time) *PersonCreate {
+	pc.mutation.SetUpdatedAt(t)
+	return pc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (pc *PersonCreate) SetNillableUpdatedAt(t *time.Time) *PersonCreate {
+	if t != nil {
+		pc.SetUpdatedAt(*t)
+	}
+	return pc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (pc *PersonCreate) SetUpdatedBy(s string) *PersonCreate {
+	pc.mutation.SetUpdatedBy(s)
+	return pc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (pc *PersonCreate) SetNillableUpdatedBy(s *string) *PersonCreate {
+	if s != nil {
+		pc.SetUpdatedBy(*s)
+	}
+	return pc
+}
+
+// SetDisplayName sets the "display_name" field.
+func (pc *PersonCreate) SetDisplayName(s string) *PersonCreate {
+	pc.mutation.SetDisplayName(s)
+	return pc
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (pc *PersonCreate) SetNillableDisplayName(s *string) *PersonCreate {
+	if s != nil {
+		pc.SetDisplayName(*s)
+	}
+	return pc
+}
+
+// SetDescription sets the "description" field.
+func (pc *PersonCreate) SetDescription(s string) *PersonCreate {
+	pc.mutation.SetDescription(s)
+	return pc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (pc *PersonCreate) SetNillableDescription(s *string) *PersonCreate {
+	if s != nil {
+		pc.SetDescription(*s)
+	}
+	return pc
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (pc *PersonCreate) AddArtifactIDs(ids ...int) *PersonCreate {
+	pc.mutation.AddArtifactIDs(ids...)
+	return pc
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (pc *PersonCreate) AddArtifacts(a ...*Artifact) *PersonCreate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return pc.AddArtifactIDs(ids...)
+}
+
+// AddProjectIDs adds the "projects" edge to the Project entity by IDs.
+func (pc *PersonCreate) AddProjectIDs(ids ...int) *PersonCreate {
+	pc.mutation.AddProjectIDs(ids...)
+	return pc
+}
+
+// AddProjects adds the "projects" edges to the Project entity.
+func (pc *PersonCreate) AddProjects(p ...*Project) *PersonCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pc.AddProjectIDs(ids...)
+}
+
+// AddPublicationIDs adds the "publications" edge to the Publication entity by IDs.
+func (pc *PersonCreate) AddPublicationIDs(ids ...int) *PersonCreate {
+	pc.mutation.AddPublicationIDs(ids...)
+	return pc
+}
+
+// AddPublications adds the "publications" edges to the Publication entity.
+func (pc *PersonCreate) AddPublications(p ...*Publication) *PersonCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pc.AddPublicationIDs(ids...)
+}
+
+// SetHolderID sets the "holder" edge to the Holder entity by ID.
+func (pc *PersonCreate) SetHolderID(id int) *PersonCreate {
+	pc.mutation.SetHolderID(id)
+	return pc
+}
+
+// SetNillableHolderID sets the "holder" edge to the Holder entity by ID if the given value is not nil.
+func (pc *PersonCreate) SetNillableHolderID(id *int) *PersonCreate {
+	if id != nil {
+		pc = pc.SetHolderID(*id)
+	}
+	return pc
+}
+
+// SetHolder sets the "holder" edge to the Holder entity.
+func (pc *PersonCreate) SetHolder(h *Holder) *PersonCreate {
+	return pc.SetHolderID(h.ID)
+}
+
 // Mutation returns the PersonMutation object of the builder.
 func (pc *PersonCreate) Mutation() *PersonMutation {
 	return pc.mutation
@@ -25,6 +179,9 @@ func (pc *PersonCreate) Mutation() *PersonMutation {
 
 // Save creates the Person in the database.
 func (pc *PersonCreate) Save(ctx context.Context) (*Person, error) {
+	if err := pc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, pc.sqlSave, pc.mutation, pc.hooks)
 }
 
@@ -50,8 +207,33 @@ func (pc *PersonCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (pc *PersonCreate) defaults() error {
+	if _, ok := pc.mutation.CreatedAt(); !ok {
+		if person.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized person.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := person.DefaultCreatedAt()
+		pc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := pc.mutation.UpdatedAt(); !ok {
+		if person.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized person.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := person.DefaultUpdatedAt()
+		pc.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (pc *PersonCreate) check() error {
+	if _, ok := pc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Person.created_at"`)}
+	}
+	if _, ok := pc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Person.updated_at"`)}
+	}
 	return nil
 }
 
@@ -78,6 +260,95 @@ func (pc *PersonCreate) createSpec() (*Person, *sqlgraph.CreateSpec) {
 		_node = &Person{config: pc.config}
 		_spec = sqlgraph.NewCreateSpec(person.Table, sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt))
 	)
+	if value, ok := pc.mutation.CreatedAt(); ok {
+		_spec.SetField(person.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := pc.mutation.CreatedBy(); ok {
+		_spec.SetField(person.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := pc.mutation.UpdatedAt(); ok {
+		_spec.SetField(person.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := pc.mutation.UpdatedBy(); ok {
+		_spec.SetField(person.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
+	if value, ok := pc.mutation.DisplayName(); ok {
+		_spec.SetField(person.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
+	}
+	if value, ok := pc.mutation.Description(); ok {
+		_spec.SetField(person.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if nodes := pc.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.ArtifactsTable,
+			Columns: person.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.ProjectsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.ProjectsTable,
+			Columns: person.ProjectsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(project.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.PublicationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.PublicationsTable,
+			Columns: person.PublicationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(publication.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.HolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   person.HolderTable,
+			Columns: []string{person.HolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.holder_person = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -95,6 +366,7 @@ func (pcb *PersonCreateBulk) Save(ctx context.Context) ([]*Person, error) {
 	for i := range pcb.builders {
 		func(i int, root context.Context) {
 			builder := pcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*PersonMutation)
 				if !ok {

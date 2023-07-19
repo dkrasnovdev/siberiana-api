@@ -4,10 +4,13 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/set"
 )
 
@@ -18,6 +21,105 @@ type SetCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (sc *SetCreate) SetCreatedAt(t time.Time) *SetCreate {
+	sc.mutation.SetCreatedAt(t)
+	return sc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (sc *SetCreate) SetNillableCreatedAt(t *time.Time) *SetCreate {
+	if t != nil {
+		sc.SetCreatedAt(*t)
+	}
+	return sc
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (sc *SetCreate) SetCreatedBy(s string) *SetCreate {
+	sc.mutation.SetCreatedBy(s)
+	return sc
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (sc *SetCreate) SetNillableCreatedBy(s *string) *SetCreate {
+	if s != nil {
+		sc.SetCreatedBy(*s)
+	}
+	return sc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (sc *SetCreate) SetUpdatedAt(t time.Time) *SetCreate {
+	sc.mutation.SetUpdatedAt(t)
+	return sc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (sc *SetCreate) SetNillableUpdatedAt(t *time.Time) *SetCreate {
+	if t != nil {
+		sc.SetUpdatedAt(*t)
+	}
+	return sc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (sc *SetCreate) SetUpdatedBy(s string) *SetCreate {
+	sc.mutation.SetUpdatedBy(s)
+	return sc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (sc *SetCreate) SetNillableUpdatedBy(s *string) *SetCreate {
+	if s != nil {
+		sc.SetUpdatedBy(*s)
+	}
+	return sc
+}
+
+// SetDisplayName sets the "display_name" field.
+func (sc *SetCreate) SetDisplayName(s string) *SetCreate {
+	sc.mutation.SetDisplayName(s)
+	return sc
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (sc *SetCreate) SetNillableDisplayName(s *string) *SetCreate {
+	if s != nil {
+		sc.SetDisplayName(*s)
+	}
+	return sc
+}
+
+// SetDescription sets the "description" field.
+func (sc *SetCreate) SetDescription(s string) *SetCreate {
+	sc.mutation.SetDescription(s)
+	return sc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (sc *SetCreate) SetNillableDescription(s *string) *SetCreate {
+	if s != nil {
+		sc.SetDescription(*s)
+	}
+	return sc
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (sc *SetCreate) AddArtifactIDs(ids ...int) *SetCreate {
+	sc.mutation.AddArtifactIDs(ids...)
+	return sc
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (sc *SetCreate) AddArtifacts(a ...*Artifact) *SetCreate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return sc.AddArtifactIDs(ids...)
+}
+
 // Mutation returns the SetMutation object of the builder.
 func (sc *SetCreate) Mutation() *SetMutation {
 	return sc.mutation
@@ -25,6 +127,9 @@ func (sc *SetCreate) Mutation() *SetMutation {
 
 // Save creates the Set in the database.
 func (sc *SetCreate) Save(ctx context.Context) (*Set, error) {
+	if err := sc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, sc.sqlSave, sc.mutation, sc.hooks)
 }
 
@@ -50,8 +155,33 @@ func (sc *SetCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (sc *SetCreate) defaults() error {
+	if _, ok := sc.mutation.CreatedAt(); !ok {
+		if set.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized set.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := set.DefaultCreatedAt()
+		sc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := sc.mutation.UpdatedAt(); !ok {
+		if set.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized set.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := set.DefaultUpdatedAt()
+		sc.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (sc *SetCreate) check() error {
+	if _, ok := sc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Set.created_at"`)}
+	}
+	if _, ok := sc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Set.updated_at"`)}
+	}
 	return nil
 }
 
@@ -78,6 +208,46 @@ func (sc *SetCreate) createSpec() (*Set, *sqlgraph.CreateSpec) {
 		_node = &Set{config: sc.config}
 		_spec = sqlgraph.NewCreateSpec(set.Table, sqlgraph.NewFieldSpec(set.FieldID, field.TypeInt))
 	)
+	if value, ok := sc.mutation.CreatedAt(); ok {
+		_spec.SetField(set.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := sc.mutation.CreatedBy(); ok {
+		_spec.SetField(set.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := sc.mutation.UpdatedAt(); ok {
+		_spec.SetField(set.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := sc.mutation.UpdatedBy(); ok {
+		_spec.SetField(set.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
+	if value, ok := sc.mutation.DisplayName(); ok {
+		_spec.SetField(set.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
+	}
+	if value, ok := sc.mutation.Description(); ok {
+		_spec.SetField(set.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if nodes := sc.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   set.ArtifactsTable,
+			Columns: []string{set.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -95,6 +265,7 @@ func (scb *SetCreateBulk) Save(ctx context.Context) ([]*Set, error) {
 	for i := range scb.builders {
 		func(i int, root context.Context) {
 			builder := scb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*SetMutation)
 				if !ok {

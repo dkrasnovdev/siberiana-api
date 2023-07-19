@@ -4,10 +4,13 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 )
 
@@ -18,6 +21,105 @@ type LicenseCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (lc *LicenseCreate) SetCreatedAt(t time.Time) *LicenseCreate {
+	lc.mutation.SetCreatedAt(t)
+	return lc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (lc *LicenseCreate) SetNillableCreatedAt(t *time.Time) *LicenseCreate {
+	if t != nil {
+		lc.SetCreatedAt(*t)
+	}
+	return lc
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (lc *LicenseCreate) SetCreatedBy(s string) *LicenseCreate {
+	lc.mutation.SetCreatedBy(s)
+	return lc
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (lc *LicenseCreate) SetNillableCreatedBy(s *string) *LicenseCreate {
+	if s != nil {
+		lc.SetCreatedBy(*s)
+	}
+	return lc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (lc *LicenseCreate) SetUpdatedAt(t time.Time) *LicenseCreate {
+	lc.mutation.SetUpdatedAt(t)
+	return lc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (lc *LicenseCreate) SetNillableUpdatedAt(t *time.Time) *LicenseCreate {
+	if t != nil {
+		lc.SetUpdatedAt(*t)
+	}
+	return lc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (lc *LicenseCreate) SetUpdatedBy(s string) *LicenseCreate {
+	lc.mutation.SetUpdatedBy(s)
+	return lc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (lc *LicenseCreate) SetNillableUpdatedBy(s *string) *LicenseCreate {
+	if s != nil {
+		lc.SetUpdatedBy(*s)
+	}
+	return lc
+}
+
+// SetDisplayName sets the "display_name" field.
+func (lc *LicenseCreate) SetDisplayName(s string) *LicenseCreate {
+	lc.mutation.SetDisplayName(s)
+	return lc
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (lc *LicenseCreate) SetNillableDisplayName(s *string) *LicenseCreate {
+	if s != nil {
+		lc.SetDisplayName(*s)
+	}
+	return lc
+}
+
+// SetDescription sets the "description" field.
+func (lc *LicenseCreate) SetDescription(s string) *LicenseCreate {
+	lc.mutation.SetDescription(s)
+	return lc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (lc *LicenseCreate) SetNillableDescription(s *string) *LicenseCreate {
+	if s != nil {
+		lc.SetDescription(*s)
+	}
+	return lc
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (lc *LicenseCreate) AddArtifactIDs(ids ...int) *LicenseCreate {
+	lc.mutation.AddArtifactIDs(ids...)
+	return lc
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (lc *LicenseCreate) AddArtifacts(a ...*Artifact) *LicenseCreate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return lc.AddArtifactIDs(ids...)
+}
+
 // Mutation returns the LicenseMutation object of the builder.
 func (lc *LicenseCreate) Mutation() *LicenseMutation {
 	return lc.mutation
@@ -25,6 +127,9 @@ func (lc *LicenseCreate) Mutation() *LicenseMutation {
 
 // Save creates the License in the database.
 func (lc *LicenseCreate) Save(ctx context.Context) (*License, error) {
+	if err := lc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, lc.sqlSave, lc.mutation, lc.hooks)
 }
 
@@ -50,8 +155,33 @@ func (lc *LicenseCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (lc *LicenseCreate) defaults() error {
+	if _, ok := lc.mutation.CreatedAt(); !ok {
+		if license.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized license.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := license.DefaultCreatedAt()
+		lc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := lc.mutation.UpdatedAt(); !ok {
+		if license.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized license.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := license.DefaultUpdatedAt()
+		lc.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (lc *LicenseCreate) check() error {
+	if _, ok := lc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "License.created_at"`)}
+	}
+	if _, ok := lc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "License.updated_at"`)}
+	}
 	return nil
 }
 
@@ -78,6 +208,46 @@ func (lc *LicenseCreate) createSpec() (*License, *sqlgraph.CreateSpec) {
 		_node = &License{config: lc.config}
 		_spec = sqlgraph.NewCreateSpec(license.Table, sqlgraph.NewFieldSpec(license.FieldID, field.TypeInt))
 	)
+	if value, ok := lc.mutation.CreatedAt(); ok {
+		_spec.SetField(license.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := lc.mutation.CreatedBy(); ok {
+		_spec.SetField(license.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := lc.mutation.UpdatedAt(); ok {
+		_spec.SetField(license.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := lc.mutation.UpdatedBy(); ok {
+		_spec.SetField(license.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
+	if value, ok := lc.mutation.DisplayName(); ok {
+		_spec.SetField(license.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
+	}
+	if value, ok := lc.mutation.Description(); ok {
+		_spec.SetField(license.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if nodes := lc.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   license.ArtifactsTable,
+			Columns: []string{license.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -95,6 +265,7 @@ func (lcb *LicenseCreateBulk) Save(ctx context.Context) ([]*License, error) {
 	for i := range lcb.builders {
 		func(i int, root context.Context) {
 			builder := lcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*LicenseMutation)
 				if !ok {

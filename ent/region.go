@@ -5,18 +5,60 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
 )
 
 // Region is the model entity for the Region schema.
 type Region struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
-	selectValues sql.SelectValues
+	ID int `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// CreatedBy holds the value of the "created_by" field.
+	CreatedBy string `json:"created_by,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy string `json:"updated_by,omitempty"`
+	// DisplayName holds the value of the "display_name" field.
+	DisplayName string `json:"display_name,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the RegionQuery when eager-loading is set.
+	Edges           RegionEdges `json:"edges"`
+	location_region *int
+	selectValues    sql.SelectValues
+}
+
+// RegionEdges holds the relations/edges for other nodes in the graph.
+type RegionEdges struct {
+	// Location holds the value of the location edge.
+	Location *Location `json:"location,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+	// totalCount holds the count of the edges above.
+	totalCount [1]map[string]int
+}
+
+// LocationOrErr returns the Location value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e RegionEdges) LocationOrErr() (*Location, error) {
+	if e.loadedTypes[0] {
+		if e.Location == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: location.Label}
+		}
+		return e.Location, nil
+	}
+	return nil, &NotLoadedError{edge: "location"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -25,6 +67,12 @@ func (*Region) scanValues(columns []string) ([]any, error) {
 	for i := range columns {
 		switch columns[i] {
 		case region.FieldID:
+			values[i] = new(sql.NullInt64)
+		case region.FieldCreatedBy, region.FieldUpdatedBy, region.FieldDisplayName, region.FieldDescription:
+			values[i] = new(sql.NullString)
+		case region.FieldCreatedAt, region.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
+		case region.ForeignKeys[0]: // location_region
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -47,6 +95,49 @@ func (r *Region) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			r.ID = int(value.Int64)
+		case region.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				r.CreatedAt = value.Time
+			}
+		case region.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				r.CreatedBy = value.String
+			}
+		case region.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				r.UpdatedAt = value.Time
+			}
+		case region.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				r.UpdatedBy = value.String
+			}
+		case region.FieldDisplayName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field display_name", values[i])
+			} else if value.Valid {
+				r.DisplayName = value.String
+			}
+		case region.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				r.Description = value.String
+			}
+		case region.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field location_region", value)
+			} else if value.Valid {
+				r.location_region = new(int)
+				*r.location_region = int(value.Int64)
+			}
 		default:
 			r.selectValues.Set(columns[i], values[i])
 		}
@@ -58,6 +149,11 @@ func (r *Region) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (r *Region) Value(name string) (ent.Value, error) {
 	return r.selectValues.Get(name)
+}
+
+// QueryLocation queries the "location" edge of the Region entity.
+func (r *Region) QueryLocation() *LocationQuery {
+	return NewRegionClient(r.config).QueryLocation(r)
 }
 
 // Update returns a builder for updating this Region.
@@ -82,7 +178,24 @@ func (r *Region) Unwrap() *Region {
 func (r *Region) String() string {
 	var builder strings.Builder
 	builder.WriteString("Region(")
-	builder.WriteString(fmt.Sprintf("id=%v", r.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", r.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(r.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("created_by=")
+	builder.WriteString(r.CreatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(r.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_by=")
+	builder.WriteString(r.UpdatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("display_name=")
+	builder.WriteString(r.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(r.Description)
 	builder.WriteByte(')')
 	return builder.String()
 }

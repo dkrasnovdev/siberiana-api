@@ -6,12 +6,17 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/heritage-api/ent/region"
+	"github.com/dkrasnovdev/heritage-api/ent/settlement"
 )
 
 // LocationUpdate is the builder for updating Location entities.
@@ -27,13 +32,213 @@ func (lu *LocationUpdate) Where(ps ...predicate.Location) *LocationUpdate {
 	return lu
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (lu *LocationUpdate) SetCreatedBy(s string) *LocationUpdate {
+	lu.mutation.SetCreatedBy(s)
+	return lu
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (lu *LocationUpdate) SetNillableCreatedBy(s *string) *LocationUpdate {
+	if s != nil {
+		lu.SetCreatedBy(*s)
+	}
+	return lu
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (lu *LocationUpdate) ClearCreatedBy() *LocationUpdate {
+	lu.mutation.ClearCreatedBy()
+	return lu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (lu *LocationUpdate) SetUpdatedAt(t time.Time) *LocationUpdate {
+	lu.mutation.SetUpdatedAt(t)
+	return lu
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (lu *LocationUpdate) SetUpdatedBy(s string) *LocationUpdate {
+	lu.mutation.SetUpdatedBy(s)
+	return lu
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (lu *LocationUpdate) SetNillableUpdatedBy(s *string) *LocationUpdate {
+	if s != nil {
+		lu.SetUpdatedBy(*s)
+	}
+	return lu
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (lu *LocationUpdate) ClearUpdatedBy() *LocationUpdate {
+	lu.mutation.ClearUpdatedBy()
+	return lu
+}
+
+// SetDisplayName sets the "display_name" field.
+func (lu *LocationUpdate) SetDisplayName(s string) *LocationUpdate {
+	lu.mutation.SetDisplayName(s)
+	return lu
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (lu *LocationUpdate) SetNillableDisplayName(s *string) *LocationUpdate {
+	if s != nil {
+		lu.SetDisplayName(*s)
+	}
+	return lu
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (lu *LocationUpdate) ClearDisplayName() *LocationUpdate {
+	lu.mutation.ClearDisplayName()
+	return lu
+}
+
+// SetDescription sets the "description" field.
+func (lu *LocationUpdate) SetDescription(s string) *LocationUpdate {
+	lu.mutation.SetDescription(s)
+	return lu
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (lu *LocationUpdate) SetNillableDescription(s *string) *LocationUpdate {
+	if s != nil {
+		lu.SetDescription(*s)
+	}
+	return lu
+}
+
+// ClearDescription clears the value of the "description" field.
+func (lu *LocationUpdate) ClearDescription() *LocationUpdate {
+	lu.mutation.ClearDescription()
+	return lu
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (lu *LocationUpdate) AddArtifactIDs(ids ...int) *LocationUpdate {
+	lu.mutation.AddArtifactIDs(ids...)
+	return lu
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (lu *LocationUpdate) AddArtifacts(a ...*Artifact) *LocationUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return lu.AddArtifactIDs(ids...)
+}
+
+// SetSettlementID sets the "settlement" edge to the Settlement entity by ID.
+func (lu *LocationUpdate) SetSettlementID(id int) *LocationUpdate {
+	lu.mutation.SetSettlementID(id)
+	return lu
+}
+
+// SetNillableSettlementID sets the "settlement" edge to the Settlement entity by ID if the given value is not nil.
+func (lu *LocationUpdate) SetNillableSettlementID(id *int) *LocationUpdate {
+	if id != nil {
+		lu = lu.SetSettlementID(*id)
+	}
+	return lu
+}
+
+// SetSettlement sets the "settlement" edge to the Settlement entity.
+func (lu *LocationUpdate) SetSettlement(s *Settlement) *LocationUpdate {
+	return lu.SetSettlementID(s.ID)
+}
+
+// SetRegionID sets the "region" edge to the Region entity by ID.
+func (lu *LocationUpdate) SetRegionID(id int) *LocationUpdate {
+	lu.mutation.SetRegionID(id)
+	return lu
+}
+
+// SetNillableRegionID sets the "region" edge to the Region entity by ID if the given value is not nil.
+func (lu *LocationUpdate) SetNillableRegionID(id *int) *LocationUpdate {
+	if id != nil {
+		lu = lu.SetRegionID(*id)
+	}
+	return lu
+}
+
+// SetRegion sets the "region" edge to the Region entity.
+func (lu *LocationUpdate) SetRegion(r *Region) *LocationUpdate {
+	return lu.SetRegionID(r.ID)
+}
+
+// SetDistrictID sets the "district" edge to the District entity by ID.
+func (lu *LocationUpdate) SetDistrictID(id int) *LocationUpdate {
+	lu.mutation.SetDistrictID(id)
+	return lu
+}
+
+// SetNillableDistrictID sets the "district" edge to the District entity by ID if the given value is not nil.
+func (lu *LocationUpdate) SetNillableDistrictID(id *int) *LocationUpdate {
+	if id != nil {
+		lu = lu.SetDistrictID(*id)
+	}
+	return lu
+}
+
+// SetDistrict sets the "district" edge to the District entity.
+func (lu *LocationUpdate) SetDistrict(d *District) *LocationUpdate {
+	return lu.SetDistrictID(d.ID)
+}
+
 // Mutation returns the LocationMutation object of the builder.
 func (lu *LocationUpdate) Mutation() *LocationMutation {
 	return lu.mutation
 }
 
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (lu *LocationUpdate) ClearArtifacts() *LocationUpdate {
+	lu.mutation.ClearArtifacts()
+	return lu
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (lu *LocationUpdate) RemoveArtifactIDs(ids ...int) *LocationUpdate {
+	lu.mutation.RemoveArtifactIDs(ids...)
+	return lu
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (lu *LocationUpdate) RemoveArtifacts(a ...*Artifact) *LocationUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return lu.RemoveArtifactIDs(ids...)
+}
+
+// ClearSettlement clears the "settlement" edge to the Settlement entity.
+func (lu *LocationUpdate) ClearSettlement() *LocationUpdate {
+	lu.mutation.ClearSettlement()
+	return lu
+}
+
+// ClearRegion clears the "region" edge to the Region entity.
+func (lu *LocationUpdate) ClearRegion() *LocationUpdate {
+	lu.mutation.ClearRegion()
+	return lu
+}
+
+// ClearDistrict clears the "district" edge to the District entity.
+func (lu *LocationUpdate) ClearDistrict() *LocationUpdate {
+	lu.mutation.ClearDistrict()
+	return lu
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (lu *LocationUpdate) Save(ctx context.Context) (int, error) {
+	if err := lu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, lu.sqlSave, lu.mutation, lu.hooks)
 }
 
@@ -59,6 +264,18 @@ func (lu *LocationUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (lu *LocationUpdate) defaults() error {
+	if _, ok := lu.mutation.UpdatedAt(); !ok {
+		if location.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized location.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := location.UpdateDefaultUpdatedAt()
+		lu.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 func (lu *LocationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(location.Table, location.Columns, sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt))
 	if ps := lu.mutation.predicates; len(ps) > 0 {
@@ -67,6 +284,165 @@ func (lu *LocationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := lu.mutation.CreatedBy(); ok {
+		_spec.SetField(location.FieldCreatedBy, field.TypeString, value)
+	}
+	if lu.mutation.CreatedByCleared() {
+		_spec.ClearField(location.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := lu.mutation.UpdatedAt(); ok {
+		_spec.SetField(location.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := lu.mutation.UpdatedBy(); ok {
+		_spec.SetField(location.FieldUpdatedBy, field.TypeString, value)
+	}
+	if lu.mutation.UpdatedByCleared() {
+		_spec.ClearField(location.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := lu.mutation.DisplayName(); ok {
+		_spec.SetField(location.FieldDisplayName, field.TypeString, value)
+	}
+	if lu.mutation.DisplayNameCleared() {
+		_spec.ClearField(location.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := lu.mutation.Description(); ok {
+		_spec.SetField(location.FieldDescription, field.TypeString, value)
+	}
+	if lu.mutation.DescriptionCleared() {
+		_spec.ClearField(location.FieldDescription, field.TypeString)
+	}
+	if lu.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   location.ArtifactsTable,
+			Columns: []string{location.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := lu.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !lu.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   location.ArtifactsTable,
+			Columns: []string{location.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := lu.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   location.ArtifactsTable,
+			Columns: []string{location.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if lu.mutation.SettlementCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   location.SettlementTable,
+			Columns: []string{location.SettlementColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := lu.mutation.SettlementIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   location.SettlementTable,
+			Columns: []string{location.SettlementColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if lu.mutation.RegionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   location.RegionTable,
+			Columns: []string{location.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := lu.mutation.RegionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   location.RegionTable,
+			Columns: []string{location.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if lu.mutation.DistrictCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   location.DistrictTable,
+			Columns: []string{location.DistrictColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := lu.mutation.DistrictIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   location.DistrictTable,
+			Columns: []string{location.DistrictColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, lu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -88,9 +464,206 @@ type LocationUpdateOne struct {
 	mutation *LocationMutation
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (luo *LocationUpdateOne) SetCreatedBy(s string) *LocationUpdateOne {
+	luo.mutation.SetCreatedBy(s)
+	return luo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (luo *LocationUpdateOne) SetNillableCreatedBy(s *string) *LocationUpdateOne {
+	if s != nil {
+		luo.SetCreatedBy(*s)
+	}
+	return luo
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (luo *LocationUpdateOne) ClearCreatedBy() *LocationUpdateOne {
+	luo.mutation.ClearCreatedBy()
+	return luo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (luo *LocationUpdateOne) SetUpdatedAt(t time.Time) *LocationUpdateOne {
+	luo.mutation.SetUpdatedAt(t)
+	return luo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (luo *LocationUpdateOne) SetUpdatedBy(s string) *LocationUpdateOne {
+	luo.mutation.SetUpdatedBy(s)
+	return luo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (luo *LocationUpdateOne) SetNillableUpdatedBy(s *string) *LocationUpdateOne {
+	if s != nil {
+		luo.SetUpdatedBy(*s)
+	}
+	return luo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (luo *LocationUpdateOne) ClearUpdatedBy() *LocationUpdateOne {
+	luo.mutation.ClearUpdatedBy()
+	return luo
+}
+
+// SetDisplayName sets the "display_name" field.
+func (luo *LocationUpdateOne) SetDisplayName(s string) *LocationUpdateOne {
+	luo.mutation.SetDisplayName(s)
+	return luo
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (luo *LocationUpdateOne) SetNillableDisplayName(s *string) *LocationUpdateOne {
+	if s != nil {
+		luo.SetDisplayName(*s)
+	}
+	return luo
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (luo *LocationUpdateOne) ClearDisplayName() *LocationUpdateOne {
+	luo.mutation.ClearDisplayName()
+	return luo
+}
+
+// SetDescription sets the "description" field.
+func (luo *LocationUpdateOne) SetDescription(s string) *LocationUpdateOne {
+	luo.mutation.SetDescription(s)
+	return luo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (luo *LocationUpdateOne) SetNillableDescription(s *string) *LocationUpdateOne {
+	if s != nil {
+		luo.SetDescription(*s)
+	}
+	return luo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (luo *LocationUpdateOne) ClearDescription() *LocationUpdateOne {
+	luo.mutation.ClearDescription()
+	return luo
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (luo *LocationUpdateOne) AddArtifactIDs(ids ...int) *LocationUpdateOne {
+	luo.mutation.AddArtifactIDs(ids...)
+	return luo
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (luo *LocationUpdateOne) AddArtifacts(a ...*Artifact) *LocationUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return luo.AddArtifactIDs(ids...)
+}
+
+// SetSettlementID sets the "settlement" edge to the Settlement entity by ID.
+func (luo *LocationUpdateOne) SetSettlementID(id int) *LocationUpdateOne {
+	luo.mutation.SetSettlementID(id)
+	return luo
+}
+
+// SetNillableSettlementID sets the "settlement" edge to the Settlement entity by ID if the given value is not nil.
+func (luo *LocationUpdateOne) SetNillableSettlementID(id *int) *LocationUpdateOne {
+	if id != nil {
+		luo = luo.SetSettlementID(*id)
+	}
+	return luo
+}
+
+// SetSettlement sets the "settlement" edge to the Settlement entity.
+func (luo *LocationUpdateOne) SetSettlement(s *Settlement) *LocationUpdateOne {
+	return luo.SetSettlementID(s.ID)
+}
+
+// SetRegionID sets the "region" edge to the Region entity by ID.
+func (luo *LocationUpdateOne) SetRegionID(id int) *LocationUpdateOne {
+	luo.mutation.SetRegionID(id)
+	return luo
+}
+
+// SetNillableRegionID sets the "region" edge to the Region entity by ID if the given value is not nil.
+func (luo *LocationUpdateOne) SetNillableRegionID(id *int) *LocationUpdateOne {
+	if id != nil {
+		luo = luo.SetRegionID(*id)
+	}
+	return luo
+}
+
+// SetRegion sets the "region" edge to the Region entity.
+func (luo *LocationUpdateOne) SetRegion(r *Region) *LocationUpdateOne {
+	return luo.SetRegionID(r.ID)
+}
+
+// SetDistrictID sets the "district" edge to the District entity by ID.
+func (luo *LocationUpdateOne) SetDistrictID(id int) *LocationUpdateOne {
+	luo.mutation.SetDistrictID(id)
+	return luo
+}
+
+// SetNillableDistrictID sets the "district" edge to the District entity by ID if the given value is not nil.
+func (luo *LocationUpdateOne) SetNillableDistrictID(id *int) *LocationUpdateOne {
+	if id != nil {
+		luo = luo.SetDistrictID(*id)
+	}
+	return luo
+}
+
+// SetDistrict sets the "district" edge to the District entity.
+func (luo *LocationUpdateOne) SetDistrict(d *District) *LocationUpdateOne {
+	return luo.SetDistrictID(d.ID)
+}
+
 // Mutation returns the LocationMutation object of the builder.
 func (luo *LocationUpdateOne) Mutation() *LocationMutation {
 	return luo.mutation
+}
+
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (luo *LocationUpdateOne) ClearArtifacts() *LocationUpdateOne {
+	luo.mutation.ClearArtifacts()
+	return luo
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (luo *LocationUpdateOne) RemoveArtifactIDs(ids ...int) *LocationUpdateOne {
+	luo.mutation.RemoveArtifactIDs(ids...)
+	return luo
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (luo *LocationUpdateOne) RemoveArtifacts(a ...*Artifact) *LocationUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return luo.RemoveArtifactIDs(ids...)
+}
+
+// ClearSettlement clears the "settlement" edge to the Settlement entity.
+func (luo *LocationUpdateOne) ClearSettlement() *LocationUpdateOne {
+	luo.mutation.ClearSettlement()
+	return luo
+}
+
+// ClearRegion clears the "region" edge to the Region entity.
+func (luo *LocationUpdateOne) ClearRegion() *LocationUpdateOne {
+	luo.mutation.ClearRegion()
+	return luo
+}
+
+// ClearDistrict clears the "district" edge to the District entity.
+func (luo *LocationUpdateOne) ClearDistrict() *LocationUpdateOne {
+	luo.mutation.ClearDistrict()
+	return luo
 }
 
 // Where appends a list predicates to the LocationUpdate builder.
@@ -108,6 +681,9 @@ func (luo *LocationUpdateOne) Select(field string, fields ...string) *LocationUp
 
 // Save executes the query and returns the updated Location entity.
 func (luo *LocationUpdateOne) Save(ctx context.Context) (*Location, error) {
+	if err := luo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, luo.sqlSave, luo.mutation, luo.hooks)
 }
 
@@ -131,6 +707,18 @@ func (luo *LocationUpdateOne) ExecX(ctx context.Context) {
 	if err := luo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (luo *LocationUpdateOne) defaults() error {
+	if _, ok := luo.mutation.UpdatedAt(); !ok {
+		if location.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized location.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := location.UpdateDefaultUpdatedAt()
+		luo.mutation.SetUpdatedAt(v)
+	}
+	return nil
 }
 
 func (luo *LocationUpdateOne) sqlSave(ctx context.Context) (_node *Location, err error) {
@@ -158,6 +746,165 @@ func (luo *LocationUpdateOne) sqlSave(ctx context.Context) (_node *Location, err
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := luo.mutation.CreatedBy(); ok {
+		_spec.SetField(location.FieldCreatedBy, field.TypeString, value)
+	}
+	if luo.mutation.CreatedByCleared() {
+		_spec.ClearField(location.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := luo.mutation.UpdatedAt(); ok {
+		_spec.SetField(location.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := luo.mutation.UpdatedBy(); ok {
+		_spec.SetField(location.FieldUpdatedBy, field.TypeString, value)
+	}
+	if luo.mutation.UpdatedByCleared() {
+		_spec.ClearField(location.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := luo.mutation.DisplayName(); ok {
+		_spec.SetField(location.FieldDisplayName, field.TypeString, value)
+	}
+	if luo.mutation.DisplayNameCleared() {
+		_spec.ClearField(location.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := luo.mutation.Description(); ok {
+		_spec.SetField(location.FieldDescription, field.TypeString, value)
+	}
+	if luo.mutation.DescriptionCleared() {
+		_spec.ClearField(location.FieldDescription, field.TypeString)
+	}
+	if luo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   location.ArtifactsTable,
+			Columns: []string{location.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := luo.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !luo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   location.ArtifactsTable,
+			Columns: []string{location.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := luo.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   location.ArtifactsTable,
+			Columns: []string{location.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if luo.mutation.SettlementCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   location.SettlementTable,
+			Columns: []string{location.SettlementColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := luo.mutation.SettlementIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   location.SettlementTable,
+			Columns: []string{location.SettlementColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if luo.mutation.RegionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   location.RegionTable,
+			Columns: []string{location.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := luo.mutation.RegionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   location.RegionTable,
+			Columns: []string{location.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if luo.mutation.DistrictCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   location.DistrictTable,
+			Columns: []string{location.DistrictColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := luo.mutation.DistrictIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   location.DistrictTable,
+			Columns: []string{location.DistrictColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Location{config: luo.config}
 	_spec.Assign = _node.assignValues

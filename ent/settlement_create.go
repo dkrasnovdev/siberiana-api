@@ -4,10 +4,13 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/settlement"
 )
 
@@ -18,6 +21,109 @@ type SettlementCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (sc *SettlementCreate) SetCreatedAt(t time.Time) *SettlementCreate {
+	sc.mutation.SetCreatedAt(t)
+	return sc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (sc *SettlementCreate) SetNillableCreatedAt(t *time.Time) *SettlementCreate {
+	if t != nil {
+		sc.SetCreatedAt(*t)
+	}
+	return sc
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (sc *SettlementCreate) SetCreatedBy(s string) *SettlementCreate {
+	sc.mutation.SetCreatedBy(s)
+	return sc
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (sc *SettlementCreate) SetNillableCreatedBy(s *string) *SettlementCreate {
+	if s != nil {
+		sc.SetCreatedBy(*s)
+	}
+	return sc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (sc *SettlementCreate) SetUpdatedAt(t time.Time) *SettlementCreate {
+	sc.mutation.SetUpdatedAt(t)
+	return sc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (sc *SettlementCreate) SetNillableUpdatedAt(t *time.Time) *SettlementCreate {
+	if t != nil {
+		sc.SetUpdatedAt(*t)
+	}
+	return sc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (sc *SettlementCreate) SetUpdatedBy(s string) *SettlementCreate {
+	sc.mutation.SetUpdatedBy(s)
+	return sc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (sc *SettlementCreate) SetNillableUpdatedBy(s *string) *SettlementCreate {
+	if s != nil {
+		sc.SetUpdatedBy(*s)
+	}
+	return sc
+}
+
+// SetDisplayName sets the "display_name" field.
+func (sc *SettlementCreate) SetDisplayName(s string) *SettlementCreate {
+	sc.mutation.SetDisplayName(s)
+	return sc
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (sc *SettlementCreate) SetNillableDisplayName(s *string) *SettlementCreate {
+	if s != nil {
+		sc.SetDisplayName(*s)
+	}
+	return sc
+}
+
+// SetDescription sets the "description" field.
+func (sc *SettlementCreate) SetDescription(s string) *SettlementCreate {
+	sc.mutation.SetDescription(s)
+	return sc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (sc *SettlementCreate) SetNillableDescription(s *string) *SettlementCreate {
+	if s != nil {
+		sc.SetDescription(*s)
+	}
+	return sc
+}
+
+// SetLocationID sets the "location" edge to the Location entity by ID.
+func (sc *SettlementCreate) SetLocationID(id int) *SettlementCreate {
+	sc.mutation.SetLocationID(id)
+	return sc
+}
+
+// SetNillableLocationID sets the "location" edge to the Location entity by ID if the given value is not nil.
+func (sc *SettlementCreate) SetNillableLocationID(id *int) *SettlementCreate {
+	if id != nil {
+		sc = sc.SetLocationID(*id)
+	}
+	return sc
+}
+
+// SetLocation sets the "location" edge to the Location entity.
+func (sc *SettlementCreate) SetLocation(l *Location) *SettlementCreate {
+	return sc.SetLocationID(l.ID)
+}
+
 // Mutation returns the SettlementMutation object of the builder.
 func (sc *SettlementCreate) Mutation() *SettlementMutation {
 	return sc.mutation
@@ -25,6 +131,9 @@ func (sc *SettlementCreate) Mutation() *SettlementMutation {
 
 // Save creates the Settlement in the database.
 func (sc *SettlementCreate) Save(ctx context.Context) (*Settlement, error) {
+	if err := sc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, sc.sqlSave, sc.mutation, sc.hooks)
 }
 
@@ -50,8 +159,33 @@ func (sc *SettlementCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (sc *SettlementCreate) defaults() error {
+	if _, ok := sc.mutation.CreatedAt(); !ok {
+		if settlement.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized settlement.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := settlement.DefaultCreatedAt()
+		sc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := sc.mutation.UpdatedAt(); !ok {
+		if settlement.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized settlement.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := settlement.DefaultUpdatedAt()
+		sc.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (sc *SettlementCreate) check() error {
+	if _, ok := sc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Settlement.created_at"`)}
+	}
+	if _, ok := sc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Settlement.updated_at"`)}
+	}
 	return nil
 }
 
@@ -78,6 +212,47 @@ func (sc *SettlementCreate) createSpec() (*Settlement, *sqlgraph.CreateSpec) {
 		_node = &Settlement{config: sc.config}
 		_spec = sqlgraph.NewCreateSpec(settlement.Table, sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt))
 	)
+	if value, ok := sc.mutation.CreatedAt(); ok {
+		_spec.SetField(settlement.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := sc.mutation.CreatedBy(); ok {
+		_spec.SetField(settlement.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := sc.mutation.UpdatedAt(); ok {
+		_spec.SetField(settlement.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := sc.mutation.UpdatedBy(); ok {
+		_spec.SetField(settlement.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
+	if value, ok := sc.mutation.DisplayName(); ok {
+		_spec.SetField(settlement.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
+	}
+	if value, ok := sc.mutation.Description(); ok {
+		_spec.SetField(settlement.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if nodes := sc.mutation.LocationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   settlement.LocationTable,
+			Columns: []string{settlement.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.location_settlement = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -95,6 +270,7 @@ func (scb *SettlementCreateBulk) Save(ctx context.Context) ([]*Settlement, error
 	for i := range scb.builders {
 		func(i int, root context.Context) {
 			builder := scb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*SettlementMutation)
 				if !ok {

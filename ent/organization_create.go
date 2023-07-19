@@ -4,10 +4,13 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
 )
 
@@ -18,6 +21,109 @@ type OrganizationCreate struct {
 	hooks    []Hook
 }
 
+// SetDisplayName sets the "display_name" field.
+func (oc *OrganizationCreate) SetDisplayName(s string) *OrganizationCreate {
+	oc.mutation.SetDisplayName(s)
+	return oc
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableDisplayName(s *string) *OrganizationCreate {
+	if s != nil {
+		oc.SetDisplayName(*s)
+	}
+	return oc
+}
+
+// SetDescription sets the "description" field.
+func (oc *OrganizationCreate) SetDescription(s string) *OrganizationCreate {
+	oc.mutation.SetDescription(s)
+	return oc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableDescription(s *string) *OrganizationCreate {
+	if s != nil {
+		oc.SetDescription(*s)
+	}
+	return oc
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (oc *OrganizationCreate) SetCreatedAt(t time.Time) *OrganizationCreate {
+	oc.mutation.SetCreatedAt(t)
+	return oc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableCreatedAt(t *time.Time) *OrganizationCreate {
+	if t != nil {
+		oc.SetCreatedAt(*t)
+	}
+	return oc
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (oc *OrganizationCreate) SetCreatedBy(s string) *OrganizationCreate {
+	oc.mutation.SetCreatedBy(s)
+	return oc
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableCreatedBy(s *string) *OrganizationCreate {
+	if s != nil {
+		oc.SetCreatedBy(*s)
+	}
+	return oc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (oc *OrganizationCreate) SetUpdatedAt(t time.Time) *OrganizationCreate {
+	oc.mutation.SetUpdatedAt(t)
+	return oc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableUpdatedAt(t *time.Time) *OrganizationCreate {
+	if t != nil {
+		oc.SetUpdatedAt(*t)
+	}
+	return oc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (oc *OrganizationCreate) SetUpdatedBy(s string) *OrganizationCreate {
+	oc.mutation.SetUpdatedBy(s)
+	return oc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableUpdatedBy(s *string) *OrganizationCreate {
+	if s != nil {
+		oc.SetUpdatedBy(*s)
+	}
+	return oc
+}
+
+// SetHolderID sets the "holder" edge to the Holder entity by ID.
+func (oc *OrganizationCreate) SetHolderID(id int) *OrganizationCreate {
+	oc.mutation.SetHolderID(id)
+	return oc
+}
+
+// SetNillableHolderID sets the "holder" edge to the Holder entity by ID if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableHolderID(id *int) *OrganizationCreate {
+	if id != nil {
+		oc = oc.SetHolderID(*id)
+	}
+	return oc
+}
+
+// SetHolder sets the "holder" edge to the Holder entity.
+func (oc *OrganizationCreate) SetHolder(h *Holder) *OrganizationCreate {
+	return oc.SetHolderID(h.ID)
+}
+
 // Mutation returns the OrganizationMutation object of the builder.
 func (oc *OrganizationCreate) Mutation() *OrganizationMutation {
 	return oc.mutation
@@ -25,6 +131,9 @@ func (oc *OrganizationCreate) Mutation() *OrganizationMutation {
 
 // Save creates the Organization in the database.
 func (oc *OrganizationCreate) Save(ctx context.Context) (*Organization, error) {
+	if err := oc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, oc.sqlSave, oc.mutation, oc.hooks)
 }
 
@@ -50,8 +159,33 @@ func (oc *OrganizationCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (oc *OrganizationCreate) defaults() error {
+	if _, ok := oc.mutation.CreatedAt(); !ok {
+		if organization.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized organization.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := organization.DefaultCreatedAt()
+		oc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := oc.mutation.UpdatedAt(); !ok {
+		if organization.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized organization.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := organization.DefaultUpdatedAt()
+		oc.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (oc *OrganizationCreate) check() error {
+	if _, ok := oc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Organization.created_at"`)}
+	}
+	if _, ok := oc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Organization.updated_at"`)}
+	}
 	return nil
 }
 
@@ -78,6 +212,47 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		_node = &Organization{config: oc.config}
 		_spec = sqlgraph.NewCreateSpec(organization.Table, sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt))
 	)
+	if value, ok := oc.mutation.DisplayName(); ok {
+		_spec.SetField(organization.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
+	}
+	if value, ok := oc.mutation.Description(); ok {
+		_spec.SetField(organization.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if value, ok := oc.mutation.CreatedAt(); ok {
+		_spec.SetField(organization.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := oc.mutation.CreatedBy(); ok {
+		_spec.SetField(organization.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := oc.mutation.UpdatedAt(); ok {
+		_spec.SetField(organization.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := oc.mutation.UpdatedBy(); ok {
+		_spec.SetField(organization.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
+	if nodes := oc.mutation.HolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   organization.HolderTable,
+			Columns: []string{organization.HolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.holder_organization = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -95,6 +270,7 @@ func (ocb *OrganizationCreateBulk) Save(ctx context.Context) ([]*Organization, e
 	for i := range ocb.builders {
 		func(i int, root context.Context) {
 			builder := ocb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*OrganizationMutation)
 				if !ok {

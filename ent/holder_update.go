@@ -6,11 +6,15 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/organization"
+	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
 
@@ -27,13 +31,188 @@ func (hu *HolderUpdate) Where(ps ...predicate.Holder) *HolderUpdate {
 	return hu
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (hu *HolderUpdate) SetCreatedBy(s string) *HolderUpdate {
+	hu.mutation.SetCreatedBy(s)
+	return hu
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (hu *HolderUpdate) SetNillableCreatedBy(s *string) *HolderUpdate {
+	if s != nil {
+		hu.SetCreatedBy(*s)
+	}
+	return hu
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (hu *HolderUpdate) ClearCreatedBy() *HolderUpdate {
+	hu.mutation.ClearCreatedBy()
+	return hu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (hu *HolderUpdate) SetUpdatedAt(t time.Time) *HolderUpdate {
+	hu.mutation.SetUpdatedAt(t)
+	return hu
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (hu *HolderUpdate) SetUpdatedBy(s string) *HolderUpdate {
+	hu.mutation.SetUpdatedBy(s)
+	return hu
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (hu *HolderUpdate) SetNillableUpdatedBy(s *string) *HolderUpdate {
+	if s != nil {
+		hu.SetUpdatedBy(*s)
+	}
+	return hu
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (hu *HolderUpdate) ClearUpdatedBy() *HolderUpdate {
+	hu.mutation.ClearUpdatedBy()
+	return hu
+}
+
+// SetDisplayName sets the "display_name" field.
+func (hu *HolderUpdate) SetDisplayName(s string) *HolderUpdate {
+	hu.mutation.SetDisplayName(s)
+	return hu
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (hu *HolderUpdate) SetNillableDisplayName(s *string) *HolderUpdate {
+	if s != nil {
+		hu.SetDisplayName(*s)
+	}
+	return hu
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (hu *HolderUpdate) ClearDisplayName() *HolderUpdate {
+	hu.mutation.ClearDisplayName()
+	return hu
+}
+
+// SetDescription sets the "description" field.
+func (hu *HolderUpdate) SetDescription(s string) *HolderUpdate {
+	hu.mutation.SetDescription(s)
+	return hu
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (hu *HolderUpdate) SetNillableDescription(s *string) *HolderUpdate {
+	if s != nil {
+		hu.SetDescription(*s)
+	}
+	return hu
+}
+
+// ClearDescription clears the value of the "description" field.
+func (hu *HolderUpdate) ClearDescription() *HolderUpdate {
+	hu.mutation.ClearDescription()
+	return hu
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (hu *HolderUpdate) AddArtifactIDs(ids ...int) *HolderUpdate {
+	hu.mutation.AddArtifactIDs(ids...)
+	return hu
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (hu *HolderUpdate) AddArtifacts(a ...*Artifact) *HolderUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return hu.AddArtifactIDs(ids...)
+}
+
+// SetPersonID sets the "person" edge to the Person entity by ID.
+func (hu *HolderUpdate) SetPersonID(id int) *HolderUpdate {
+	hu.mutation.SetPersonID(id)
+	return hu
+}
+
+// SetNillablePersonID sets the "person" edge to the Person entity by ID if the given value is not nil.
+func (hu *HolderUpdate) SetNillablePersonID(id *int) *HolderUpdate {
+	if id != nil {
+		hu = hu.SetPersonID(*id)
+	}
+	return hu
+}
+
+// SetPerson sets the "person" edge to the Person entity.
+func (hu *HolderUpdate) SetPerson(p *Person) *HolderUpdate {
+	return hu.SetPersonID(p.ID)
+}
+
+// SetOrganizationID sets the "organization" edge to the Organization entity by ID.
+func (hu *HolderUpdate) SetOrganizationID(id int) *HolderUpdate {
+	hu.mutation.SetOrganizationID(id)
+	return hu
+}
+
+// SetNillableOrganizationID sets the "organization" edge to the Organization entity by ID if the given value is not nil.
+func (hu *HolderUpdate) SetNillableOrganizationID(id *int) *HolderUpdate {
+	if id != nil {
+		hu = hu.SetOrganizationID(*id)
+	}
+	return hu
+}
+
+// SetOrganization sets the "organization" edge to the Organization entity.
+func (hu *HolderUpdate) SetOrganization(o *Organization) *HolderUpdate {
+	return hu.SetOrganizationID(o.ID)
+}
+
 // Mutation returns the HolderMutation object of the builder.
 func (hu *HolderUpdate) Mutation() *HolderMutation {
 	return hu.mutation
 }
 
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (hu *HolderUpdate) ClearArtifacts() *HolderUpdate {
+	hu.mutation.ClearArtifacts()
+	return hu
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (hu *HolderUpdate) RemoveArtifactIDs(ids ...int) *HolderUpdate {
+	hu.mutation.RemoveArtifactIDs(ids...)
+	return hu
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (hu *HolderUpdate) RemoveArtifacts(a ...*Artifact) *HolderUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return hu.RemoveArtifactIDs(ids...)
+}
+
+// ClearPerson clears the "person" edge to the Person entity.
+func (hu *HolderUpdate) ClearPerson() *HolderUpdate {
+	hu.mutation.ClearPerson()
+	return hu
+}
+
+// ClearOrganization clears the "organization" edge to the Organization entity.
+func (hu *HolderUpdate) ClearOrganization() *HolderUpdate {
+	hu.mutation.ClearOrganization()
+	return hu
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (hu *HolderUpdate) Save(ctx context.Context) (int, error) {
+	if err := hu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, hu.sqlSave, hu.mutation, hu.hooks)
 }
 
@@ -59,6 +238,18 @@ func (hu *HolderUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (hu *HolderUpdate) defaults() error {
+	if _, ok := hu.mutation.UpdatedAt(); !ok {
+		if holder.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized holder.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := holder.UpdateDefaultUpdatedAt()
+		hu.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 func (hu *HolderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(holder.Table, holder.Columns, sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt))
 	if ps := hu.mutation.predicates; len(ps) > 0 {
@@ -67,6 +258,136 @@ func (hu *HolderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := hu.mutation.CreatedBy(); ok {
+		_spec.SetField(holder.FieldCreatedBy, field.TypeString, value)
+	}
+	if hu.mutation.CreatedByCleared() {
+		_spec.ClearField(holder.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := hu.mutation.UpdatedAt(); ok {
+		_spec.SetField(holder.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := hu.mutation.UpdatedBy(); ok {
+		_spec.SetField(holder.FieldUpdatedBy, field.TypeString, value)
+	}
+	if hu.mutation.UpdatedByCleared() {
+		_spec.ClearField(holder.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := hu.mutation.DisplayName(); ok {
+		_spec.SetField(holder.FieldDisplayName, field.TypeString, value)
+	}
+	if hu.mutation.DisplayNameCleared() {
+		_spec.ClearField(holder.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := hu.mutation.Description(); ok {
+		_spec.SetField(holder.FieldDescription, field.TypeString, value)
+	}
+	if hu.mutation.DescriptionCleared() {
+		_spec.ClearField(holder.FieldDescription, field.TypeString)
+	}
+	if hu.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   holder.ArtifactsTable,
+			Columns: holder.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := hu.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !hu.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   holder.ArtifactsTable,
+			Columns: holder.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := hu.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   holder.ArtifactsTable,
+			Columns: holder.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if hu.mutation.PersonCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   holder.PersonTable,
+			Columns: []string{holder.PersonColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := hu.mutation.PersonIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   holder.PersonTable,
+			Columns: []string{holder.PersonColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if hu.mutation.OrganizationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   holder.OrganizationTable,
+			Columns: []string{holder.OrganizationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := hu.mutation.OrganizationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   holder.OrganizationTable,
+			Columns: []string{holder.OrganizationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, hu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -88,9 +409,181 @@ type HolderUpdateOne struct {
 	mutation *HolderMutation
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (huo *HolderUpdateOne) SetCreatedBy(s string) *HolderUpdateOne {
+	huo.mutation.SetCreatedBy(s)
+	return huo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (huo *HolderUpdateOne) SetNillableCreatedBy(s *string) *HolderUpdateOne {
+	if s != nil {
+		huo.SetCreatedBy(*s)
+	}
+	return huo
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (huo *HolderUpdateOne) ClearCreatedBy() *HolderUpdateOne {
+	huo.mutation.ClearCreatedBy()
+	return huo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (huo *HolderUpdateOne) SetUpdatedAt(t time.Time) *HolderUpdateOne {
+	huo.mutation.SetUpdatedAt(t)
+	return huo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (huo *HolderUpdateOne) SetUpdatedBy(s string) *HolderUpdateOne {
+	huo.mutation.SetUpdatedBy(s)
+	return huo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (huo *HolderUpdateOne) SetNillableUpdatedBy(s *string) *HolderUpdateOne {
+	if s != nil {
+		huo.SetUpdatedBy(*s)
+	}
+	return huo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (huo *HolderUpdateOne) ClearUpdatedBy() *HolderUpdateOne {
+	huo.mutation.ClearUpdatedBy()
+	return huo
+}
+
+// SetDisplayName sets the "display_name" field.
+func (huo *HolderUpdateOne) SetDisplayName(s string) *HolderUpdateOne {
+	huo.mutation.SetDisplayName(s)
+	return huo
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (huo *HolderUpdateOne) SetNillableDisplayName(s *string) *HolderUpdateOne {
+	if s != nil {
+		huo.SetDisplayName(*s)
+	}
+	return huo
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (huo *HolderUpdateOne) ClearDisplayName() *HolderUpdateOne {
+	huo.mutation.ClearDisplayName()
+	return huo
+}
+
+// SetDescription sets the "description" field.
+func (huo *HolderUpdateOne) SetDescription(s string) *HolderUpdateOne {
+	huo.mutation.SetDescription(s)
+	return huo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (huo *HolderUpdateOne) SetNillableDescription(s *string) *HolderUpdateOne {
+	if s != nil {
+		huo.SetDescription(*s)
+	}
+	return huo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (huo *HolderUpdateOne) ClearDescription() *HolderUpdateOne {
+	huo.mutation.ClearDescription()
+	return huo
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (huo *HolderUpdateOne) AddArtifactIDs(ids ...int) *HolderUpdateOne {
+	huo.mutation.AddArtifactIDs(ids...)
+	return huo
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (huo *HolderUpdateOne) AddArtifacts(a ...*Artifact) *HolderUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return huo.AddArtifactIDs(ids...)
+}
+
+// SetPersonID sets the "person" edge to the Person entity by ID.
+func (huo *HolderUpdateOne) SetPersonID(id int) *HolderUpdateOne {
+	huo.mutation.SetPersonID(id)
+	return huo
+}
+
+// SetNillablePersonID sets the "person" edge to the Person entity by ID if the given value is not nil.
+func (huo *HolderUpdateOne) SetNillablePersonID(id *int) *HolderUpdateOne {
+	if id != nil {
+		huo = huo.SetPersonID(*id)
+	}
+	return huo
+}
+
+// SetPerson sets the "person" edge to the Person entity.
+func (huo *HolderUpdateOne) SetPerson(p *Person) *HolderUpdateOne {
+	return huo.SetPersonID(p.ID)
+}
+
+// SetOrganizationID sets the "organization" edge to the Organization entity by ID.
+func (huo *HolderUpdateOne) SetOrganizationID(id int) *HolderUpdateOne {
+	huo.mutation.SetOrganizationID(id)
+	return huo
+}
+
+// SetNillableOrganizationID sets the "organization" edge to the Organization entity by ID if the given value is not nil.
+func (huo *HolderUpdateOne) SetNillableOrganizationID(id *int) *HolderUpdateOne {
+	if id != nil {
+		huo = huo.SetOrganizationID(*id)
+	}
+	return huo
+}
+
+// SetOrganization sets the "organization" edge to the Organization entity.
+func (huo *HolderUpdateOne) SetOrganization(o *Organization) *HolderUpdateOne {
+	return huo.SetOrganizationID(o.ID)
+}
+
 // Mutation returns the HolderMutation object of the builder.
 func (huo *HolderUpdateOne) Mutation() *HolderMutation {
 	return huo.mutation
+}
+
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (huo *HolderUpdateOne) ClearArtifacts() *HolderUpdateOne {
+	huo.mutation.ClearArtifacts()
+	return huo
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (huo *HolderUpdateOne) RemoveArtifactIDs(ids ...int) *HolderUpdateOne {
+	huo.mutation.RemoveArtifactIDs(ids...)
+	return huo
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (huo *HolderUpdateOne) RemoveArtifacts(a ...*Artifact) *HolderUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return huo.RemoveArtifactIDs(ids...)
+}
+
+// ClearPerson clears the "person" edge to the Person entity.
+func (huo *HolderUpdateOne) ClearPerson() *HolderUpdateOne {
+	huo.mutation.ClearPerson()
+	return huo
+}
+
+// ClearOrganization clears the "organization" edge to the Organization entity.
+func (huo *HolderUpdateOne) ClearOrganization() *HolderUpdateOne {
+	huo.mutation.ClearOrganization()
+	return huo
 }
 
 // Where appends a list predicates to the HolderUpdate builder.
@@ -108,6 +601,9 @@ func (huo *HolderUpdateOne) Select(field string, fields ...string) *HolderUpdate
 
 // Save executes the query and returns the updated Holder entity.
 func (huo *HolderUpdateOne) Save(ctx context.Context) (*Holder, error) {
+	if err := huo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, huo.sqlSave, huo.mutation, huo.hooks)
 }
 
@@ -131,6 +627,18 @@ func (huo *HolderUpdateOne) ExecX(ctx context.Context) {
 	if err := huo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (huo *HolderUpdateOne) defaults() error {
+	if _, ok := huo.mutation.UpdatedAt(); !ok {
+		if holder.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized holder.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := holder.UpdateDefaultUpdatedAt()
+		huo.mutation.SetUpdatedAt(v)
+	}
+	return nil
 }
 
 func (huo *HolderUpdateOne) sqlSave(ctx context.Context) (_node *Holder, err error) {
@@ -158,6 +666,136 @@ func (huo *HolderUpdateOne) sqlSave(ctx context.Context) (_node *Holder, err err
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := huo.mutation.CreatedBy(); ok {
+		_spec.SetField(holder.FieldCreatedBy, field.TypeString, value)
+	}
+	if huo.mutation.CreatedByCleared() {
+		_spec.ClearField(holder.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := huo.mutation.UpdatedAt(); ok {
+		_spec.SetField(holder.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := huo.mutation.UpdatedBy(); ok {
+		_spec.SetField(holder.FieldUpdatedBy, field.TypeString, value)
+	}
+	if huo.mutation.UpdatedByCleared() {
+		_spec.ClearField(holder.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := huo.mutation.DisplayName(); ok {
+		_spec.SetField(holder.FieldDisplayName, field.TypeString, value)
+	}
+	if huo.mutation.DisplayNameCleared() {
+		_spec.ClearField(holder.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := huo.mutation.Description(); ok {
+		_spec.SetField(holder.FieldDescription, field.TypeString, value)
+	}
+	if huo.mutation.DescriptionCleared() {
+		_spec.ClearField(holder.FieldDescription, field.TypeString)
+	}
+	if huo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   holder.ArtifactsTable,
+			Columns: holder.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := huo.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !huo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   holder.ArtifactsTable,
+			Columns: holder.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := huo.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   holder.ArtifactsTable,
+			Columns: holder.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if huo.mutation.PersonCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   holder.PersonTable,
+			Columns: []string{holder.PersonColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := huo.mutation.PersonIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   holder.PersonTable,
+			Columns: []string{holder.PersonColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if huo.mutation.OrganizationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   holder.OrganizationTable,
+			Columns: []string{holder.OrganizationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := huo.mutation.OrganizationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   holder.OrganizationTable,
+			Columns: []string{holder.OrganizationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Holder{config: huo.config}
 	_spec.Assign = _node.assignValues

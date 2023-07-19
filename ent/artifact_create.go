@@ -4,11 +4,26 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/collection"
+	"github.com/dkrasnovdev/heritage-api/ent/culture"
+	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/license"
+	"github.com/dkrasnovdev/heritage-api/ent/location"
+	"github.com/dkrasnovdev/heritage-api/ent/medium"
+	"github.com/dkrasnovdev/heritage-api/ent/model"
+	"github.com/dkrasnovdev/heritage-api/ent/monument"
+	"github.com/dkrasnovdev/heritage-api/ent/person"
+	"github.com/dkrasnovdev/heritage-api/ent/project"
+	"github.com/dkrasnovdev/heritage-api/ent/publication"
+	"github.com/dkrasnovdev/heritage-api/ent/set"
+	"github.com/dkrasnovdev/heritage-api/ent/technique"
 )
 
 // ArtifactCreate is the builder for creating a Artifact entity.
@@ -18,6 +33,361 @@ type ArtifactCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (ac *ArtifactCreate) SetCreatedAt(t time.Time) *ArtifactCreate {
+	ac.mutation.SetCreatedAt(t)
+	return ac
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableCreatedAt(t *time.Time) *ArtifactCreate {
+	if t != nil {
+		ac.SetCreatedAt(*t)
+	}
+	return ac
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (ac *ArtifactCreate) SetCreatedBy(s string) *ArtifactCreate {
+	ac.mutation.SetCreatedBy(s)
+	return ac
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableCreatedBy(s *string) *ArtifactCreate {
+	if s != nil {
+		ac.SetCreatedBy(*s)
+	}
+	return ac
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (ac *ArtifactCreate) SetUpdatedAt(t time.Time) *ArtifactCreate {
+	ac.mutation.SetUpdatedAt(t)
+	return ac
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableUpdatedAt(t *time.Time) *ArtifactCreate {
+	if t != nil {
+		ac.SetUpdatedAt(*t)
+	}
+	return ac
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (ac *ArtifactCreate) SetUpdatedBy(s string) *ArtifactCreate {
+	ac.mutation.SetUpdatedBy(s)
+	return ac
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableUpdatedBy(s *string) *ArtifactCreate {
+	if s != nil {
+		ac.SetUpdatedBy(*s)
+	}
+	return ac
+}
+
+// SetDisplayName sets the "display_name" field.
+func (ac *ArtifactCreate) SetDisplayName(s string) *ArtifactCreate {
+	ac.mutation.SetDisplayName(s)
+	return ac
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableDisplayName(s *string) *ArtifactCreate {
+	if s != nil {
+		ac.SetDisplayName(*s)
+	}
+	return ac
+}
+
+// SetDescription sets the "description" field.
+func (ac *ArtifactCreate) SetDescription(s string) *ArtifactCreate {
+	ac.mutation.SetDescription(s)
+	return ac
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableDescription(s *string) *ArtifactCreate {
+	if s != nil {
+		ac.SetDescription(*s)
+	}
+	return ac
+}
+
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (ac *ArtifactCreate) SetPrimaryImageURL(s string) *ArtifactCreate {
+	ac.mutation.SetPrimaryImageURL(s)
+	return ac
+}
+
+// SetNillablePrimaryImageURL sets the "primary_image_url" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillablePrimaryImageURL(s *string) *ArtifactCreate {
+	if s != nil {
+		ac.SetPrimaryImageURL(*s)
+	}
+	return ac
+}
+
+// SetAdditionalImageUrls sets the "additional_image_urls" field.
+func (ac *ArtifactCreate) SetAdditionalImageUrls(s []string) *ArtifactCreate {
+	ac.mutation.SetAdditionalImageUrls(s)
+	return ac
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (ac *ArtifactCreate) SetDeletedAt(t time.Time) *ArtifactCreate {
+	ac.mutation.SetDeletedAt(t)
+	return ac
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableDeletedAt(t *time.Time) *ArtifactCreate {
+	if t != nil {
+		ac.SetDeletedAt(*t)
+	}
+	return ac
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (ac *ArtifactCreate) SetDeletedBy(s string) *ArtifactCreate {
+	ac.mutation.SetDeletedBy(s)
+	return ac
+}
+
+// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableDeletedBy(s *string) *ArtifactCreate {
+	if s != nil {
+		ac.SetDeletedBy(*s)
+	}
+	return ac
+}
+
+// AddAuthorIDs adds the "authors" edge to the Person entity by IDs.
+func (ac *ArtifactCreate) AddAuthorIDs(ids ...int) *ArtifactCreate {
+	ac.mutation.AddAuthorIDs(ids...)
+	return ac
+}
+
+// AddAuthors adds the "authors" edges to the Person entity.
+func (ac *ArtifactCreate) AddAuthors(p ...*Person) *ArtifactCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ac.AddAuthorIDs(ids...)
+}
+
+// AddMediumIDs adds the "mediums" edge to the Medium entity by IDs.
+func (ac *ArtifactCreate) AddMediumIDs(ids ...int) *ArtifactCreate {
+	ac.mutation.AddMediumIDs(ids...)
+	return ac
+}
+
+// AddMediums adds the "mediums" edges to the Medium entity.
+func (ac *ArtifactCreate) AddMediums(m ...*Medium) *ArtifactCreate {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return ac.AddMediumIDs(ids...)
+}
+
+// AddTechniqueIDs adds the "techniques" edge to the Technique entity by IDs.
+func (ac *ArtifactCreate) AddTechniqueIDs(ids ...int) *ArtifactCreate {
+	ac.mutation.AddTechniqueIDs(ids...)
+	return ac
+}
+
+// AddTechniques adds the "techniques" edges to the Technique entity.
+func (ac *ArtifactCreate) AddTechniques(t ...*Technique) *ArtifactCreate {
+	ids := make([]int, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ac.AddTechniqueIDs(ids...)
+}
+
+// AddProjectIDs adds the "projects" edge to the Project entity by IDs.
+func (ac *ArtifactCreate) AddProjectIDs(ids ...int) *ArtifactCreate {
+	ac.mutation.AddProjectIDs(ids...)
+	return ac
+}
+
+// AddProjects adds the "projects" edges to the Project entity.
+func (ac *ArtifactCreate) AddProjects(p ...*Project) *ArtifactCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ac.AddProjectIDs(ids...)
+}
+
+// AddPublicationIDs adds the "publications" edge to the Publication entity by IDs.
+func (ac *ArtifactCreate) AddPublicationIDs(ids ...int) *ArtifactCreate {
+	ac.mutation.AddPublicationIDs(ids...)
+	return ac
+}
+
+// AddPublications adds the "publications" edges to the Publication entity.
+func (ac *ArtifactCreate) AddPublications(p ...*Publication) *ArtifactCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ac.AddPublicationIDs(ids...)
+}
+
+// AddHolderIDs adds the "holders" edge to the Holder entity by IDs.
+func (ac *ArtifactCreate) AddHolderIDs(ids ...int) *ArtifactCreate {
+	ac.mutation.AddHolderIDs(ids...)
+	return ac
+}
+
+// AddHolders adds the "holders" edges to the Holder entity.
+func (ac *ArtifactCreate) AddHolders(h ...*Holder) *ArtifactCreate {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return ac.AddHolderIDs(ids...)
+}
+
+// SetCulturalAffiliationID sets the "cultural_affiliation" edge to the Culture entity by ID.
+func (ac *ArtifactCreate) SetCulturalAffiliationID(id int) *ArtifactCreate {
+	ac.mutation.SetCulturalAffiliationID(id)
+	return ac
+}
+
+// SetNillableCulturalAffiliationID sets the "cultural_affiliation" edge to the Culture entity by ID if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableCulturalAffiliationID(id *int) *ArtifactCreate {
+	if id != nil {
+		ac = ac.SetCulturalAffiliationID(*id)
+	}
+	return ac
+}
+
+// SetCulturalAffiliation sets the "cultural_affiliation" edge to the Culture entity.
+func (ac *ArtifactCreate) SetCulturalAffiliation(c *Culture) *ArtifactCreate {
+	return ac.SetCulturalAffiliationID(c.ID)
+}
+
+// SetMonumentID sets the "monument" edge to the Monument entity by ID.
+func (ac *ArtifactCreate) SetMonumentID(id int) *ArtifactCreate {
+	ac.mutation.SetMonumentID(id)
+	return ac
+}
+
+// SetNillableMonumentID sets the "monument" edge to the Monument entity by ID if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableMonumentID(id *int) *ArtifactCreate {
+	if id != nil {
+		ac = ac.SetMonumentID(*id)
+	}
+	return ac
+}
+
+// SetMonument sets the "monument" edge to the Monument entity.
+func (ac *ArtifactCreate) SetMonument(m *Monument) *ArtifactCreate {
+	return ac.SetMonumentID(m.ID)
+}
+
+// SetModelID sets the "model" edge to the Model entity by ID.
+func (ac *ArtifactCreate) SetModelID(id int) *ArtifactCreate {
+	ac.mutation.SetModelID(id)
+	return ac
+}
+
+// SetNillableModelID sets the "model" edge to the Model entity by ID if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableModelID(id *int) *ArtifactCreate {
+	if id != nil {
+		ac = ac.SetModelID(*id)
+	}
+	return ac
+}
+
+// SetModel sets the "model" edge to the Model entity.
+func (ac *ArtifactCreate) SetModel(m *Model) *ArtifactCreate {
+	return ac.SetModelID(m.ID)
+}
+
+// SetSetID sets the "set" edge to the Set entity by ID.
+func (ac *ArtifactCreate) SetSetID(id int) *ArtifactCreate {
+	ac.mutation.SetSetID(id)
+	return ac
+}
+
+// SetNillableSetID sets the "set" edge to the Set entity by ID if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableSetID(id *int) *ArtifactCreate {
+	if id != nil {
+		ac = ac.SetSetID(*id)
+	}
+	return ac
+}
+
+// SetSet sets the "set" edge to the Set entity.
+func (ac *ArtifactCreate) SetSet(s *Set) *ArtifactCreate {
+	return ac.SetSetID(s.ID)
+}
+
+// SetLocationID sets the "location" edge to the Location entity by ID.
+func (ac *ArtifactCreate) SetLocationID(id int) *ArtifactCreate {
+	ac.mutation.SetLocationID(id)
+	return ac
+}
+
+// SetNillableLocationID sets the "location" edge to the Location entity by ID if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableLocationID(id *int) *ArtifactCreate {
+	if id != nil {
+		ac = ac.SetLocationID(*id)
+	}
+	return ac
+}
+
+// SetLocation sets the "location" edge to the Location entity.
+func (ac *ArtifactCreate) SetLocation(l *Location) *ArtifactCreate {
+	return ac.SetLocationID(l.ID)
+}
+
+// SetCollectionID sets the "collection" edge to the Collection entity by ID.
+func (ac *ArtifactCreate) SetCollectionID(id int) *ArtifactCreate {
+	ac.mutation.SetCollectionID(id)
+	return ac
+}
+
+// SetNillableCollectionID sets the "collection" edge to the Collection entity by ID if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableCollectionID(id *int) *ArtifactCreate {
+	if id != nil {
+		ac = ac.SetCollectionID(*id)
+	}
+	return ac
+}
+
+// SetCollection sets the "collection" edge to the Collection entity.
+func (ac *ArtifactCreate) SetCollection(c *Collection) *ArtifactCreate {
+	return ac.SetCollectionID(c.ID)
+}
+
+// SetLicenseID sets the "license" edge to the License entity by ID.
+func (ac *ArtifactCreate) SetLicenseID(id int) *ArtifactCreate {
+	ac.mutation.SetLicenseID(id)
+	return ac
+}
+
+// SetNillableLicenseID sets the "license" edge to the License entity by ID if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableLicenseID(id *int) *ArtifactCreate {
+	if id != nil {
+		ac = ac.SetLicenseID(*id)
+	}
+	return ac
+}
+
+// SetLicense sets the "license" edge to the License entity.
+func (ac *ArtifactCreate) SetLicense(l *License) *ArtifactCreate {
+	return ac.SetLicenseID(l.ID)
+}
+
 // Mutation returns the ArtifactMutation object of the builder.
 func (ac *ArtifactCreate) Mutation() *ArtifactMutation {
 	return ac.mutation
@@ -25,6 +395,9 @@ func (ac *ArtifactCreate) Mutation() *ArtifactMutation {
 
 // Save creates the Artifact in the database.
 func (ac *ArtifactCreate) Save(ctx context.Context) (*Artifact, error) {
+	if err := ac.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, ac.sqlSave, ac.mutation, ac.hooks)
 }
 
@@ -50,8 +423,33 @@ func (ac *ArtifactCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (ac *ArtifactCreate) defaults() error {
+	if _, ok := ac.mutation.CreatedAt(); !ok {
+		if artifact.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized artifact.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := artifact.DefaultCreatedAt()
+		ac.mutation.SetCreatedAt(v)
+	}
+	if _, ok := ac.mutation.UpdatedAt(); !ok {
+		if artifact.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized artifact.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := artifact.DefaultUpdatedAt()
+		ac.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (ac *ArtifactCreate) check() error {
+	if _, ok := ac.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Artifact.created_at"`)}
+	}
+	if _, ok := ac.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Artifact.updated_at"`)}
+	}
 	return nil
 }
 
@@ -78,6 +476,261 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 		_node = &Artifact{config: ac.config}
 		_spec = sqlgraph.NewCreateSpec(artifact.Table, sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt))
 	)
+	if value, ok := ac.mutation.CreatedAt(); ok {
+		_spec.SetField(artifact.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := ac.mutation.CreatedBy(); ok {
+		_spec.SetField(artifact.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := ac.mutation.UpdatedAt(); ok {
+		_spec.SetField(artifact.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := ac.mutation.UpdatedBy(); ok {
+		_spec.SetField(artifact.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
+	if value, ok := ac.mutation.DisplayName(); ok {
+		_spec.SetField(artifact.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
+	}
+	if value, ok := ac.mutation.Description(); ok {
+		_spec.SetField(artifact.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if value, ok := ac.mutation.PrimaryImageURL(); ok {
+		_spec.SetField(artifact.FieldPrimaryImageURL, field.TypeString, value)
+		_node.PrimaryImageURL = value
+	}
+	if value, ok := ac.mutation.AdditionalImageUrls(); ok {
+		_spec.SetField(artifact.FieldAdditionalImageUrls, field.TypeJSON, value)
+		_node.AdditionalImageUrls = value
+	}
+	if value, ok := ac.mutation.DeletedAt(); ok {
+		_spec.SetField(artifact.FieldDeletedAt, field.TypeTime, value)
+		_node.DeletedAt = value
+	}
+	if value, ok := ac.mutation.DeletedBy(); ok {
+		_spec.SetField(artifact.FieldDeletedBy, field.TypeString, value)
+		_node.DeletedBy = value
+	}
+	if nodes := ac.mutation.AuthorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.AuthorsTable,
+			Columns: artifact.AuthorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.MediumsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.MediumsTable,
+			Columns: artifact.MediumsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(medium.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.TechniquesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.TechniquesTable,
+			Columns: artifact.TechniquesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(technique.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.ProjectsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.ProjectsTable,
+			Columns: artifact.ProjectsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(project.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.PublicationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.PublicationsTable,
+			Columns: artifact.PublicationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(publication.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.HoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.HoldersTable,
+			Columns: artifact.HoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.CulturalAffiliationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.CulturalAffiliationTable,
+			Columns: []string{artifact.CulturalAffiliationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(culture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.culture_artifacts = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.MonumentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.MonumentTable,
+			Columns: []string{artifact.MonumentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(monument.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.monument_artifacts = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.ModelIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.ModelTable,
+			Columns: []string{artifact.ModelColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(model.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.model_artifacts = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.SetIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.SetTable,
+			Columns: []string{artifact.SetColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(set.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.set_artifacts = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.LocationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.LocationTable,
+			Columns: []string{artifact.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.location_artifacts = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.CollectionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.CollectionTable,
+			Columns: []string{artifact.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.collection_artifacts = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.LicenseIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.LicenseTable,
+			Columns: []string{artifact.LicenseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.license_artifacts = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -95,6 +748,7 @@ func (acb *ArtifactCreateBulk) Save(ctx context.Context) ([]*Artifact, error) {
 	for i := range acb.builders {
 		func(i int, root context.Context) {
 			builder := acb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ArtifactMutation)
 				if !ok {

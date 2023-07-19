@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 
+	"entgo.io/contrib/entgql"
 	"github.com/dkrasnovdev/heritage-api/ent"
 	"github.com/dkrasnovdev/heritage-api/internal/gql"
 )
@@ -20,6 +21,101 @@ func (r *queryResolver) Node(ctx context.Context, id int) (ent.Noder, error) {
 // Nodes is the resolver for the nodes field.
 func (r *queryResolver) Nodes(ctx context.Context, ids []int) ([]ent.Noder, error) {
 	panic(fmt.Errorf("not implemented: Nodes - nodes"))
+}
+
+// Artifacts is the resolver for the artifacts field.
+func (r *queryResolver) Artifacts(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtifactOrder, where *ent.ArtifactWhereInput) (*ent.ArtifactConnection, error) {
+	panic(fmt.Errorf("not implemented: Artifacts - artifacts"))
+}
+
+// Categories is the resolver for the categories field.
+func (r *queryResolver) Categories(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.CategoryOrder, where *ent.CategoryWhereInput) (*ent.CategoryConnection, error) {
+	panic(fmt.Errorf("not implemented: Categories - categories"))
+}
+
+// Collections is the resolver for the collections field.
+func (r *queryResolver) Collections(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.CollectionOrder, where *ent.CollectionWhereInput) (*ent.CollectionConnection, error) {
+	panic(fmt.Errorf("not implemented: Collections - collections"))
+}
+
+// Cultures is the resolver for the cultures field.
+func (r *queryResolver) Cultures(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.CultureOrder, where *ent.CultureWhereInput) (*ent.CultureConnection, error) {
+	panic(fmt.Errorf("not implemented: Cultures - cultures"))
+}
+
+// Districts is the resolver for the districts field.
+func (r *queryResolver) Districts(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.DistrictOrder, where *ent.DistrictWhereInput) (*ent.DistrictConnection, error) {
+	panic(fmt.Errorf("not implemented: Districts - districts"))
+}
+
+// Holders is the resolver for the holders field.
+func (r *queryResolver) Holders(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.HolderOrder, where *ent.HolderWhereInput) (*ent.HolderConnection, error) {
+	panic(fmt.Errorf("not implemented: Holders - holders"))
+}
+
+// Licenses is the resolver for the licenses field.
+func (r *queryResolver) Licenses(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.LicenseOrder, where *ent.LicenseWhereInput) (*ent.LicenseConnection, error) {
+	panic(fmt.Errorf("not implemented: Licenses - licenses"))
+}
+
+// Locations is the resolver for the locations field.
+func (r *queryResolver) Locations(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.LocationOrder, where *ent.LocationWhereInput) (*ent.LocationConnection, error) {
+	panic(fmt.Errorf("not implemented: Locations - locations"))
+}
+
+// Media is the resolver for the media field.
+func (r *queryResolver) Media(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.MediumOrder, where *ent.MediumWhereInput) (*ent.MediumConnection, error) {
+	panic(fmt.Errorf("not implemented: Media - media"))
+}
+
+// Models is the resolver for the models field.
+func (r *queryResolver) Models(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ModelOrder, where *ent.ModelWhereInput) (*ent.ModelConnection, error) {
+	panic(fmt.Errorf("not implemented: Models - models"))
+}
+
+// Monuments is the resolver for the monuments field.
+func (r *queryResolver) Monuments(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.MonumentOrder, where *ent.MonumentWhereInput) (*ent.MonumentConnection, error) {
+	panic(fmt.Errorf("not implemented: Monuments - monuments"))
+}
+
+// Organizations is the resolver for the organizations field.
+func (r *queryResolver) Organizations(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.OrganizationOrder, where *ent.OrganizationWhereInput) (*ent.OrganizationConnection, error) {
+	panic(fmt.Errorf("not implemented: Organizations - organizations"))
+}
+
+// Persons is the resolver for the persons field.
+func (r *queryResolver) Persons(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.PersonOrder, where *ent.PersonWhereInput) (*ent.PersonConnection, error) {
+	panic(fmt.Errorf("not implemented: Persons - persons"))
+}
+
+// Projects is the resolver for the projects field.
+func (r *queryResolver) Projects(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ProjectOrder, where *ent.ProjectWhereInput) (*ent.ProjectConnection, error) {
+	panic(fmt.Errorf("not implemented: Projects - projects"))
+}
+
+// Publications is the resolver for the publications field.
+func (r *queryResolver) Publications(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.PublicationOrder, where *ent.PublicationWhereInput) (*ent.PublicationConnection, error) {
+	panic(fmt.Errorf("not implemented: Publications - publications"))
+}
+
+// Regions is the resolver for the regions field.
+func (r *queryResolver) Regions(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.RegionOrder, where *ent.RegionWhereInput) (*ent.RegionConnection, error) {
+	panic(fmt.Errorf("not implemented: Regions - regions"))
+}
+
+// Sets is the resolver for the sets field.
+func (r *queryResolver) Sets(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.SetOrder, where *ent.SetWhereInput) (*ent.SetConnection, error) {
+	panic(fmt.Errorf("not implemented: Sets - sets"))
+}
+
+// Settlements is the resolver for the settlements field.
+func (r *queryResolver) Settlements(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.SettlementOrder, where *ent.SettlementWhereInput) (*ent.SettlementConnection, error) {
+	panic(fmt.Errorf("not implemented: Settlements - settlements"))
+}
+
+// Techniques is the resolver for the techniques field.
+func (r *queryResolver) Techniques(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.TechniqueOrder, where *ent.TechniqueWhereInput) (*ent.TechniqueConnection, error) {
+	panic(fmt.Errorf("not implemented: Techniques - techniques"))
 }
 
 // Query returns gql.QueryResolver implementation.

@@ -4,12 +4,15 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/technique"
 )
@@ -17,12 +20,14 @@ import (
 // TechniqueQuery is the builder for querying Technique entities.
 type TechniqueQuery struct {
 	config
-	ctx        *QueryContext
-	order      []technique.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Technique
-	modifiers  []func(*sql.Selector)
-	loadTotal  []func(context.Context, []*Technique) error
+	ctx                *QueryContext
+	order              []technique.OrderOption
+	inters             []Interceptor
+	predicates         []predicate.Technique
+	withArtifacts      *ArtifactQuery
+	modifiers          []func(*sql.Selector)
+	loadTotal          []func(context.Context, []*Technique) error
+	withNamedArtifacts map[string]*ArtifactQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -57,6 +62,28 @@ func (tq *TechniqueQuery) Unique(unique bool) *TechniqueQuery {
 func (tq *TechniqueQuery) Order(o ...technique.OrderOption) *TechniqueQuery {
 	tq.order = append(tq.order, o...)
 	return tq
+}
+
+// QueryArtifacts chains the current query on the "artifacts" edge.
+func (tq *TechniqueQuery) QueryArtifacts() *ArtifactQuery {
+	query := (&ArtifactClient{config: tq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(technique.Table, technique.FieldID, selector),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, technique.ArtifactsTable, technique.ArtifactsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Technique entity from the query.
@@ -246,19 +273,43 @@ func (tq *TechniqueQuery) Clone() *TechniqueQuery {
 		return nil
 	}
 	return &TechniqueQuery{
-		config:     tq.config,
-		ctx:        tq.ctx.Clone(),
-		order:      append([]technique.OrderOption{}, tq.order...),
-		inters:     append([]Interceptor{}, tq.inters...),
-		predicates: append([]predicate.Technique{}, tq.predicates...),
+		config:        tq.config,
+		ctx:           tq.ctx.Clone(),
+		order:         append([]technique.OrderOption{}, tq.order...),
+		inters:        append([]Interceptor{}, tq.inters...),
+		predicates:    append([]predicate.Technique{}, tq.predicates...),
+		withArtifacts: tq.withArtifacts.Clone(),
 		// clone intermediate query.
 		sql:  tq.sql.Clone(),
 		path: tq.path,
 	}
 }
 
+// WithArtifacts tells the query-builder to eager-load the nodes that are connected to
+// the "artifacts" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TechniqueQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *TechniqueQuery {
+	query := (&ArtifactClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tq.withArtifacts = query
+	return tq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Technique.Query().
+//		GroupBy(technique.FieldCreatedAt).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (tq *TechniqueQuery) GroupBy(field string, fields ...string) *TechniqueGroupBy {
 	tq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &TechniqueGroupBy{build: tq}
@@ -270,6 +321,16 @@ func (tq *TechniqueQuery) GroupBy(field string, fields ...string) *TechniqueGrou
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//	}
+//
+//	client.Technique.Query().
+//		Select(technique.FieldCreatedAt).
+//		Scan(ctx, &v)
 func (tq *TechniqueQuery) Select(fields ...string) *TechniqueSelect {
 	tq.ctx.Fields = append(tq.ctx.Fields, fields...)
 	sbuild := &TechniqueSelect{TechniqueQuery: tq}
@@ -306,13 +367,22 @@ func (tq *TechniqueQuery) prepareQuery(ctx context.Context) error {
 		}
 		tq.sql = prev
 	}
+	if technique.Policy == nil {
+		return errors.New("ent: uninitialized technique.Policy (forgotten import ent/runtime?)")
+	}
+	if err := technique.Policy.EvalQuery(ctx, tq); err != nil {
+		return err
+	}
 	return nil
 }
 
 func (tq *TechniqueQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Technique, error) {
 	var (
-		nodes = []*Technique{}
-		_spec = tq.querySpec()
+		nodes       = []*Technique{}
+		_spec       = tq.querySpec()
+		loadedTypes = [1]bool{
+			tq.withArtifacts != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Technique).scanValues(nil, columns)
@@ -320,6 +390,7 @@ func (tq *TechniqueQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Te
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Technique{config: tq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(tq.modifiers) > 0 {
@@ -334,12 +405,88 @@ func (tq *TechniqueQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Te
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := tq.withArtifacts; query != nil {
+		if err := tq.loadArtifacts(ctx, query, nodes,
+			func(n *Technique) { n.Edges.Artifacts = []*Artifact{} },
+			func(n *Technique, e *Artifact) { n.Edges.Artifacts = append(n.Edges.Artifacts, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range tq.withNamedArtifacts {
+		if err := tq.loadArtifacts(ctx, query, nodes,
+			func(n *Technique) { n.appendNamedArtifacts(name) },
+			func(n *Technique, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range tq.loadTotal {
 		if err := tq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (tq *TechniqueQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, nodes []*Technique, init func(*Technique), assign func(*Technique, *Artifact)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Technique)
+	nids := make(map[int]map[*Technique]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(technique.ArtifactsTable)
+		s.Join(joinT).On(s.C(artifact.FieldID), joinT.C(technique.ArtifactsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(technique.ArtifactsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(technique.ArtifactsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Technique]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Artifact](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "artifacts" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
 }
 
 func (tq *TechniqueQuery) sqlCount(ctx context.Context) (int, error) {
@@ -424,6 +571,20 @@ func (tq *TechniqueQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedArtifacts tells the query-builder to eager-load the nodes that are connected to the "artifacts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (tq *TechniqueQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQuery)) *TechniqueQuery {
+	query := (&ArtifactClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if tq.withNamedArtifacts == nil {
+		tq.withNamedArtifacts = make(map[string]*ArtifactQuery)
+	}
+	tq.withNamedArtifacts[name] = query
+	return tq
 }
 
 // TechniqueGroupBy is the group-by builder for Technique entities.

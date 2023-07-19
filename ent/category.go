@@ -5,6 +5,7 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -13,10 +14,47 @@ import (
 
 // Category is the model entity for the Category schema.
 type Category struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
+	ID int `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// CreatedBy holds the value of the "created_by" field.
+	CreatedBy string `json:"created_by,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy string `json:"updated_by,omitempty"`
+	// DisplayName holds the value of the "display_name" field.
+	DisplayName string `json:"display_name,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the CategoryQuery when eager-loading is set.
+	Edges        CategoryEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// CategoryEdges holds the relations/edges for other nodes in the graph.
+type CategoryEdges struct {
+	// Collections holds the value of the collections edge.
+	Collections []*Collection `json:"collections,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+	// totalCount holds the count of the edges above.
+	totalCount [1]map[string]int
+
+	namedCollections map[string][]*Collection
+}
+
+// CollectionsOrErr returns the Collections value or an error if the edge
+// was not loaded in eager-loading.
+func (e CategoryEdges) CollectionsOrErr() ([]*Collection, error) {
+	if e.loadedTypes[0] {
+		return e.Collections, nil
+	}
+	return nil, &NotLoadedError{edge: "collections"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -26,6 +64,10 @@ func (*Category) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case category.FieldID:
 			values[i] = new(sql.NullInt64)
+		case category.FieldCreatedBy, category.FieldUpdatedBy, category.FieldDisplayName, category.FieldDescription:
+			values[i] = new(sql.NullString)
+		case category.FieldCreatedAt, category.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -47,6 +89,42 @@ func (c *Category) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			c.ID = int(value.Int64)
+		case category.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				c.CreatedAt = value.Time
+			}
+		case category.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				c.CreatedBy = value.String
+			}
+		case category.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				c.UpdatedAt = value.Time
+			}
+		case category.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				c.UpdatedBy = value.String
+			}
+		case category.FieldDisplayName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field display_name", values[i])
+			} else if value.Valid {
+				c.DisplayName = value.String
+			}
+		case category.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				c.Description = value.String
+			}
 		default:
 			c.selectValues.Set(columns[i], values[i])
 		}
@@ -58,6 +136,11 @@ func (c *Category) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (c *Category) Value(name string) (ent.Value, error) {
 	return c.selectValues.Get(name)
+}
+
+// QueryCollections queries the "collections" edge of the Category entity.
+func (c *Category) QueryCollections() *CollectionQuery {
+	return NewCategoryClient(c.config).QueryCollections(c)
 }
 
 // Update returns a builder for updating this Category.
@@ -82,9 +165,50 @@ func (c *Category) Unwrap() *Category {
 func (c *Category) String() string {
 	var builder strings.Builder
 	builder.WriteString("Category(")
-	builder.WriteString(fmt.Sprintf("id=%v", c.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", c.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(c.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("created_by=")
+	builder.WriteString(c.CreatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(c.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_by=")
+	builder.WriteString(c.UpdatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("display_name=")
+	builder.WriteString(c.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(c.Description)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedCollections returns the Collections named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Category) NamedCollections(name string) ([]*Collection, error) {
+	if c.Edges.namedCollections == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedCollections[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Category) appendNamedCollections(name string, edges ...*Collection) {
+	if c.Edges.namedCollections == nil {
+		c.Edges.namedCollections = make(map[string][]*Collection)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedCollections[name] = []*Collection{}
+	} else {
+		c.Edges.namedCollections[name] = append(c.Edges.namedCollections[name], edges...)
+	}
 }
 
 // Categories is a parsable slice of Category.

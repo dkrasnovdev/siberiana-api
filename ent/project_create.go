@@ -4,10 +4,14 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
 )
 
@@ -18,6 +22,120 @@ type ProjectCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (pc *ProjectCreate) SetCreatedAt(t time.Time) *ProjectCreate {
+	pc.mutation.SetCreatedAt(t)
+	return pc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableCreatedAt(t *time.Time) *ProjectCreate {
+	if t != nil {
+		pc.SetCreatedAt(*t)
+	}
+	return pc
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (pc *ProjectCreate) SetCreatedBy(s string) *ProjectCreate {
+	pc.mutation.SetCreatedBy(s)
+	return pc
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableCreatedBy(s *string) *ProjectCreate {
+	if s != nil {
+		pc.SetCreatedBy(*s)
+	}
+	return pc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (pc *ProjectCreate) SetUpdatedAt(t time.Time) *ProjectCreate {
+	pc.mutation.SetUpdatedAt(t)
+	return pc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableUpdatedAt(t *time.Time) *ProjectCreate {
+	if t != nil {
+		pc.SetUpdatedAt(*t)
+	}
+	return pc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (pc *ProjectCreate) SetUpdatedBy(s string) *ProjectCreate {
+	pc.mutation.SetUpdatedBy(s)
+	return pc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableUpdatedBy(s *string) *ProjectCreate {
+	if s != nil {
+		pc.SetUpdatedBy(*s)
+	}
+	return pc
+}
+
+// SetDisplayName sets the "display_name" field.
+func (pc *ProjectCreate) SetDisplayName(s string) *ProjectCreate {
+	pc.mutation.SetDisplayName(s)
+	return pc
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableDisplayName(s *string) *ProjectCreate {
+	if s != nil {
+		pc.SetDisplayName(*s)
+	}
+	return pc
+}
+
+// SetDescription sets the "description" field.
+func (pc *ProjectCreate) SetDescription(s string) *ProjectCreate {
+	pc.mutation.SetDescription(s)
+	return pc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableDescription(s *string) *ProjectCreate {
+	if s != nil {
+		pc.SetDescription(*s)
+	}
+	return pc
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (pc *ProjectCreate) AddArtifactIDs(ids ...int) *ProjectCreate {
+	pc.mutation.AddArtifactIDs(ids...)
+	return pc
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (pc *ProjectCreate) AddArtifacts(a ...*Artifact) *ProjectCreate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return pc.AddArtifactIDs(ids...)
+}
+
+// AddTeamIDs adds the "team" edge to the Person entity by IDs.
+func (pc *ProjectCreate) AddTeamIDs(ids ...int) *ProjectCreate {
+	pc.mutation.AddTeamIDs(ids...)
+	return pc
+}
+
+// AddTeam adds the "team" edges to the Person entity.
+func (pc *ProjectCreate) AddTeam(p ...*Person) *ProjectCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pc.AddTeamIDs(ids...)
+}
+
 // Mutation returns the ProjectMutation object of the builder.
 func (pc *ProjectCreate) Mutation() *ProjectMutation {
 	return pc.mutation
@@ -25,6 +143,9 @@ func (pc *ProjectCreate) Mutation() *ProjectMutation {
 
 // Save creates the Project in the database.
 func (pc *ProjectCreate) Save(ctx context.Context) (*Project, error) {
+	if err := pc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, pc.sqlSave, pc.mutation, pc.hooks)
 }
 
@@ -50,8 +171,33 @@ func (pc *ProjectCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (pc *ProjectCreate) defaults() error {
+	if _, ok := pc.mutation.CreatedAt(); !ok {
+		if project.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized project.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := project.DefaultCreatedAt()
+		pc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := pc.mutation.UpdatedAt(); !ok {
+		if project.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized project.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := project.DefaultUpdatedAt()
+		pc.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (pc *ProjectCreate) check() error {
+	if _, ok := pc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Project.created_at"`)}
+	}
+	if _, ok := pc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Project.updated_at"`)}
+	}
 	return nil
 }
 
@@ -78,6 +224,62 @@ func (pc *ProjectCreate) createSpec() (*Project, *sqlgraph.CreateSpec) {
 		_node = &Project{config: pc.config}
 		_spec = sqlgraph.NewCreateSpec(project.Table, sqlgraph.NewFieldSpec(project.FieldID, field.TypeInt))
 	)
+	if value, ok := pc.mutation.CreatedAt(); ok {
+		_spec.SetField(project.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := pc.mutation.CreatedBy(); ok {
+		_spec.SetField(project.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := pc.mutation.UpdatedAt(); ok {
+		_spec.SetField(project.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := pc.mutation.UpdatedBy(); ok {
+		_spec.SetField(project.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
+	if value, ok := pc.mutation.DisplayName(); ok {
+		_spec.SetField(project.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
+	}
+	if value, ok := pc.mutation.Description(); ok {
+		_spec.SetField(project.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if nodes := pc.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   project.ArtifactsTable,
+			Columns: project.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.TeamIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   project.TeamTable,
+			Columns: project.TeamPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -95,6 +297,7 @@ func (pcb *ProjectCreateBulk) Save(ctx context.Context) ([]*Project, error) {
 	for i := range pcb.builders {
 		func(i int, root context.Context) {
 			builder := pcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ProjectMutation)
 				if !ok {

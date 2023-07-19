@@ -6,12 +6,27 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/collection"
+	"github.com/dkrasnovdev/heritage-api/ent/culture"
+	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/license"
+	"github.com/dkrasnovdev/heritage-api/ent/location"
+	"github.com/dkrasnovdev/heritage-api/ent/medium"
+	"github.com/dkrasnovdev/heritage-api/ent/model"
+	"github.com/dkrasnovdev/heritage-api/ent/monument"
+	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/heritage-api/ent/project"
+	"github.com/dkrasnovdev/heritage-api/ent/publication"
+	"github.com/dkrasnovdev/heritage-api/ent/set"
+	"github.com/dkrasnovdev/heritage-api/ent/technique"
 )
 
 // ArtifactUpdate is the builder for updating Artifact entities.
@@ -27,13 +42,571 @@ func (au *ArtifactUpdate) Where(ps ...predicate.Artifact) *ArtifactUpdate {
 	return au
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (au *ArtifactUpdate) SetCreatedBy(s string) *ArtifactUpdate {
+	au.mutation.SetCreatedBy(s)
+	return au
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableCreatedBy(s *string) *ArtifactUpdate {
+	if s != nil {
+		au.SetCreatedBy(*s)
+	}
+	return au
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (au *ArtifactUpdate) ClearCreatedBy() *ArtifactUpdate {
+	au.mutation.ClearCreatedBy()
+	return au
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (au *ArtifactUpdate) SetUpdatedAt(t time.Time) *ArtifactUpdate {
+	au.mutation.SetUpdatedAt(t)
+	return au
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (au *ArtifactUpdate) SetUpdatedBy(s string) *ArtifactUpdate {
+	au.mutation.SetUpdatedBy(s)
+	return au
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableUpdatedBy(s *string) *ArtifactUpdate {
+	if s != nil {
+		au.SetUpdatedBy(*s)
+	}
+	return au
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (au *ArtifactUpdate) ClearUpdatedBy() *ArtifactUpdate {
+	au.mutation.ClearUpdatedBy()
+	return au
+}
+
+// SetDisplayName sets the "display_name" field.
+func (au *ArtifactUpdate) SetDisplayName(s string) *ArtifactUpdate {
+	au.mutation.SetDisplayName(s)
+	return au
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableDisplayName(s *string) *ArtifactUpdate {
+	if s != nil {
+		au.SetDisplayName(*s)
+	}
+	return au
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (au *ArtifactUpdate) ClearDisplayName() *ArtifactUpdate {
+	au.mutation.ClearDisplayName()
+	return au
+}
+
+// SetDescription sets the "description" field.
+func (au *ArtifactUpdate) SetDescription(s string) *ArtifactUpdate {
+	au.mutation.SetDescription(s)
+	return au
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableDescription(s *string) *ArtifactUpdate {
+	if s != nil {
+		au.SetDescription(*s)
+	}
+	return au
+}
+
+// ClearDescription clears the value of the "description" field.
+func (au *ArtifactUpdate) ClearDescription() *ArtifactUpdate {
+	au.mutation.ClearDescription()
+	return au
+}
+
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (au *ArtifactUpdate) SetPrimaryImageURL(s string) *ArtifactUpdate {
+	au.mutation.SetPrimaryImageURL(s)
+	return au
+}
+
+// SetNillablePrimaryImageURL sets the "primary_image_url" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillablePrimaryImageURL(s *string) *ArtifactUpdate {
+	if s != nil {
+		au.SetPrimaryImageURL(*s)
+	}
+	return au
+}
+
+// ClearPrimaryImageURL clears the value of the "primary_image_url" field.
+func (au *ArtifactUpdate) ClearPrimaryImageURL() *ArtifactUpdate {
+	au.mutation.ClearPrimaryImageURL()
+	return au
+}
+
+// SetAdditionalImageUrls sets the "additional_image_urls" field.
+func (au *ArtifactUpdate) SetAdditionalImageUrls(s []string) *ArtifactUpdate {
+	au.mutation.SetAdditionalImageUrls(s)
+	return au
+}
+
+// AppendAdditionalImageUrls appends s to the "additional_image_urls" field.
+func (au *ArtifactUpdate) AppendAdditionalImageUrls(s []string) *ArtifactUpdate {
+	au.mutation.AppendAdditionalImageUrls(s)
+	return au
+}
+
+// ClearAdditionalImageUrls clears the value of the "additional_image_urls" field.
+func (au *ArtifactUpdate) ClearAdditionalImageUrls() *ArtifactUpdate {
+	au.mutation.ClearAdditionalImageUrls()
+	return au
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (au *ArtifactUpdate) SetDeletedAt(t time.Time) *ArtifactUpdate {
+	au.mutation.SetDeletedAt(t)
+	return au
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableDeletedAt(t *time.Time) *ArtifactUpdate {
+	if t != nil {
+		au.SetDeletedAt(*t)
+	}
+	return au
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (au *ArtifactUpdate) ClearDeletedAt() *ArtifactUpdate {
+	au.mutation.ClearDeletedAt()
+	return au
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (au *ArtifactUpdate) SetDeletedBy(s string) *ArtifactUpdate {
+	au.mutation.SetDeletedBy(s)
+	return au
+}
+
+// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableDeletedBy(s *string) *ArtifactUpdate {
+	if s != nil {
+		au.SetDeletedBy(*s)
+	}
+	return au
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (au *ArtifactUpdate) ClearDeletedBy() *ArtifactUpdate {
+	au.mutation.ClearDeletedBy()
+	return au
+}
+
+// AddAuthorIDs adds the "authors" edge to the Person entity by IDs.
+func (au *ArtifactUpdate) AddAuthorIDs(ids ...int) *ArtifactUpdate {
+	au.mutation.AddAuthorIDs(ids...)
+	return au
+}
+
+// AddAuthors adds the "authors" edges to the Person entity.
+func (au *ArtifactUpdate) AddAuthors(p ...*Person) *ArtifactUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return au.AddAuthorIDs(ids...)
+}
+
+// AddMediumIDs adds the "mediums" edge to the Medium entity by IDs.
+func (au *ArtifactUpdate) AddMediumIDs(ids ...int) *ArtifactUpdate {
+	au.mutation.AddMediumIDs(ids...)
+	return au
+}
+
+// AddMediums adds the "mediums" edges to the Medium entity.
+func (au *ArtifactUpdate) AddMediums(m ...*Medium) *ArtifactUpdate {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return au.AddMediumIDs(ids...)
+}
+
+// AddTechniqueIDs adds the "techniques" edge to the Technique entity by IDs.
+func (au *ArtifactUpdate) AddTechniqueIDs(ids ...int) *ArtifactUpdate {
+	au.mutation.AddTechniqueIDs(ids...)
+	return au
+}
+
+// AddTechniques adds the "techniques" edges to the Technique entity.
+func (au *ArtifactUpdate) AddTechniques(t ...*Technique) *ArtifactUpdate {
+	ids := make([]int, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return au.AddTechniqueIDs(ids...)
+}
+
+// AddProjectIDs adds the "projects" edge to the Project entity by IDs.
+func (au *ArtifactUpdate) AddProjectIDs(ids ...int) *ArtifactUpdate {
+	au.mutation.AddProjectIDs(ids...)
+	return au
+}
+
+// AddProjects adds the "projects" edges to the Project entity.
+func (au *ArtifactUpdate) AddProjects(p ...*Project) *ArtifactUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return au.AddProjectIDs(ids...)
+}
+
+// AddPublicationIDs adds the "publications" edge to the Publication entity by IDs.
+func (au *ArtifactUpdate) AddPublicationIDs(ids ...int) *ArtifactUpdate {
+	au.mutation.AddPublicationIDs(ids...)
+	return au
+}
+
+// AddPublications adds the "publications" edges to the Publication entity.
+func (au *ArtifactUpdate) AddPublications(p ...*Publication) *ArtifactUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return au.AddPublicationIDs(ids...)
+}
+
+// AddHolderIDs adds the "holders" edge to the Holder entity by IDs.
+func (au *ArtifactUpdate) AddHolderIDs(ids ...int) *ArtifactUpdate {
+	au.mutation.AddHolderIDs(ids...)
+	return au
+}
+
+// AddHolders adds the "holders" edges to the Holder entity.
+func (au *ArtifactUpdate) AddHolders(h ...*Holder) *ArtifactUpdate {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return au.AddHolderIDs(ids...)
+}
+
+// SetCulturalAffiliationID sets the "cultural_affiliation" edge to the Culture entity by ID.
+func (au *ArtifactUpdate) SetCulturalAffiliationID(id int) *ArtifactUpdate {
+	au.mutation.SetCulturalAffiliationID(id)
+	return au
+}
+
+// SetNillableCulturalAffiliationID sets the "cultural_affiliation" edge to the Culture entity by ID if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableCulturalAffiliationID(id *int) *ArtifactUpdate {
+	if id != nil {
+		au = au.SetCulturalAffiliationID(*id)
+	}
+	return au
+}
+
+// SetCulturalAffiliation sets the "cultural_affiliation" edge to the Culture entity.
+func (au *ArtifactUpdate) SetCulturalAffiliation(c *Culture) *ArtifactUpdate {
+	return au.SetCulturalAffiliationID(c.ID)
+}
+
+// SetMonumentID sets the "monument" edge to the Monument entity by ID.
+func (au *ArtifactUpdate) SetMonumentID(id int) *ArtifactUpdate {
+	au.mutation.SetMonumentID(id)
+	return au
+}
+
+// SetNillableMonumentID sets the "monument" edge to the Monument entity by ID if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableMonumentID(id *int) *ArtifactUpdate {
+	if id != nil {
+		au = au.SetMonumentID(*id)
+	}
+	return au
+}
+
+// SetMonument sets the "monument" edge to the Monument entity.
+func (au *ArtifactUpdate) SetMonument(m *Monument) *ArtifactUpdate {
+	return au.SetMonumentID(m.ID)
+}
+
+// SetModelID sets the "model" edge to the Model entity by ID.
+func (au *ArtifactUpdate) SetModelID(id int) *ArtifactUpdate {
+	au.mutation.SetModelID(id)
+	return au
+}
+
+// SetNillableModelID sets the "model" edge to the Model entity by ID if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableModelID(id *int) *ArtifactUpdate {
+	if id != nil {
+		au = au.SetModelID(*id)
+	}
+	return au
+}
+
+// SetModel sets the "model" edge to the Model entity.
+func (au *ArtifactUpdate) SetModel(m *Model) *ArtifactUpdate {
+	return au.SetModelID(m.ID)
+}
+
+// SetSetID sets the "set" edge to the Set entity by ID.
+func (au *ArtifactUpdate) SetSetID(id int) *ArtifactUpdate {
+	au.mutation.SetSetID(id)
+	return au
+}
+
+// SetNillableSetID sets the "set" edge to the Set entity by ID if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableSetID(id *int) *ArtifactUpdate {
+	if id != nil {
+		au = au.SetSetID(*id)
+	}
+	return au
+}
+
+// SetSet sets the "set" edge to the Set entity.
+func (au *ArtifactUpdate) SetSet(s *Set) *ArtifactUpdate {
+	return au.SetSetID(s.ID)
+}
+
+// SetLocationID sets the "location" edge to the Location entity by ID.
+func (au *ArtifactUpdate) SetLocationID(id int) *ArtifactUpdate {
+	au.mutation.SetLocationID(id)
+	return au
+}
+
+// SetNillableLocationID sets the "location" edge to the Location entity by ID if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableLocationID(id *int) *ArtifactUpdate {
+	if id != nil {
+		au = au.SetLocationID(*id)
+	}
+	return au
+}
+
+// SetLocation sets the "location" edge to the Location entity.
+func (au *ArtifactUpdate) SetLocation(l *Location) *ArtifactUpdate {
+	return au.SetLocationID(l.ID)
+}
+
+// SetCollectionID sets the "collection" edge to the Collection entity by ID.
+func (au *ArtifactUpdate) SetCollectionID(id int) *ArtifactUpdate {
+	au.mutation.SetCollectionID(id)
+	return au
+}
+
+// SetNillableCollectionID sets the "collection" edge to the Collection entity by ID if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableCollectionID(id *int) *ArtifactUpdate {
+	if id != nil {
+		au = au.SetCollectionID(*id)
+	}
+	return au
+}
+
+// SetCollection sets the "collection" edge to the Collection entity.
+func (au *ArtifactUpdate) SetCollection(c *Collection) *ArtifactUpdate {
+	return au.SetCollectionID(c.ID)
+}
+
+// SetLicenseID sets the "license" edge to the License entity by ID.
+func (au *ArtifactUpdate) SetLicenseID(id int) *ArtifactUpdate {
+	au.mutation.SetLicenseID(id)
+	return au
+}
+
+// SetNillableLicenseID sets the "license" edge to the License entity by ID if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableLicenseID(id *int) *ArtifactUpdate {
+	if id != nil {
+		au = au.SetLicenseID(*id)
+	}
+	return au
+}
+
+// SetLicense sets the "license" edge to the License entity.
+func (au *ArtifactUpdate) SetLicense(l *License) *ArtifactUpdate {
+	return au.SetLicenseID(l.ID)
+}
+
 // Mutation returns the ArtifactMutation object of the builder.
 func (au *ArtifactUpdate) Mutation() *ArtifactMutation {
 	return au.mutation
 }
 
+// ClearAuthors clears all "authors" edges to the Person entity.
+func (au *ArtifactUpdate) ClearAuthors() *ArtifactUpdate {
+	au.mutation.ClearAuthors()
+	return au
+}
+
+// RemoveAuthorIDs removes the "authors" edge to Person entities by IDs.
+func (au *ArtifactUpdate) RemoveAuthorIDs(ids ...int) *ArtifactUpdate {
+	au.mutation.RemoveAuthorIDs(ids...)
+	return au
+}
+
+// RemoveAuthors removes "authors" edges to Person entities.
+func (au *ArtifactUpdate) RemoveAuthors(p ...*Person) *ArtifactUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return au.RemoveAuthorIDs(ids...)
+}
+
+// ClearMediums clears all "mediums" edges to the Medium entity.
+func (au *ArtifactUpdate) ClearMediums() *ArtifactUpdate {
+	au.mutation.ClearMediums()
+	return au
+}
+
+// RemoveMediumIDs removes the "mediums" edge to Medium entities by IDs.
+func (au *ArtifactUpdate) RemoveMediumIDs(ids ...int) *ArtifactUpdate {
+	au.mutation.RemoveMediumIDs(ids...)
+	return au
+}
+
+// RemoveMediums removes "mediums" edges to Medium entities.
+func (au *ArtifactUpdate) RemoveMediums(m ...*Medium) *ArtifactUpdate {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return au.RemoveMediumIDs(ids...)
+}
+
+// ClearTechniques clears all "techniques" edges to the Technique entity.
+func (au *ArtifactUpdate) ClearTechniques() *ArtifactUpdate {
+	au.mutation.ClearTechniques()
+	return au
+}
+
+// RemoveTechniqueIDs removes the "techniques" edge to Technique entities by IDs.
+func (au *ArtifactUpdate) RemoveTechniqueIDs(ids ...int) *ArtifactUpdate {
+	au.mutation.RemoveTechniqueIDs(ids...)
+	return au
+}
+
+// RemoveTechniques removes "techniques" edges to Technique entities.
+func (au *ArtifactUpdate) RemoveTechniques(t ...*Technique) *ArtifactUpdate {
+	ids := make([]int, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return au.RemoveTechniqueIDs(ids...)
+}
+
+// ClearProjects clears all "projects" edges to the Project entity.
+func (au *ArtifactUpdate) ClearProjects() *ArtifactUpdate {
+	au.mutation.ClearProjects()
+	return au
+}
+
+// RemoveProjectIDs removes the "projects" edge to Project entities by IDs.
+func (au *ArtifactUpdate) RemoveProjectIDs(ids ...int) *ArtifactUpdate {
+	au.mutation.RemoveProjectIDs(ids...)
+	return au
+}
+
+// RemoveProjects removes "projects" edges to Project entities.
+func (au *ArtifactUpdate) RemoveProjects(p ...*Project) *ArtifactUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return au.RemoveProjectIDs(ids...)
+}
+
+// ClearPublications clears all "publications" edges to the Publication entity.
+func (au *ArtifactUpdate) ClearPublications() *ArtifactUpdate {
+	au.mutation.ClearPublications()
+	return au
+}
+
+// RemovePublicationIDs removes the "publications" edge to Publication entities by IDs.
+func (au *ArtifactUpdate) RemovePublicationIDs(ids ...int) *ArtifactUpdate {
+	au.mutation.RemovePublicationIDs(ids...)
+	return au
+}
+
+// RemovePublications removes "publications" edges to Publication entities.
+func (au *ArtifactUpdate) RemovePublications(p ...*Publication) *ArtifactUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return au.RemovePublicationIDs(ids...)
+}
+
+// ClearHolders clears all "holders" edges to the Holder entity.
+func (au *ArtifactUpdate) ClearHolders() *ArtifactUpdate {
+	au.mutation.ClearHolders()
+	return au
+}
+
+// RemoveHolderIDs removes the "holders" edge to Holder entities by IDs.
+func (au *ArtifactUpdate) RemoveHolderIDs(ids ...int) *ArtifactUpdate {
+	au.mutation.RemoveHolderIDs(ids...)
+	return au
+}
+
+// RemoveHolders removes "holders" edges to Holder entities.
+func (au *ArtifactUpdate) RemoveHolders(h ...*Holder) *ArtifactUpdate {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return au.RemoveHolderIDs(ids...)
+}
+
+// ClearCulturalAffiliation clears the "cultural_affiliation" edge to the Culture entity.
+func (au *ArtifactUpdate) ClearCulturalAffiliation() *ArtifactUpdate {
+	au.mutation.ClearCulturalAffiliation()
+	return au
+}
+
+// ClearMonument clears the "monument" edge to the Monument entity.
+func (au *ArtifactUpdate) ClearMonument() *ArtifactUpdate {
+	au.mutation.ClearMonument()
+	return au
+}
+
+// ClearModel clears the "model" edge to the Model entity.
+func (au *ArtifactUpdate) ClearModel() *ArtifactUpdate {
+	au.mutation.ClearModel()
+	return au
+}
+
+// ClearSet clears the "set" edge to the Set entity.
+func (au *ArtifactUpdate) ClearSet() *ArtifactUpdate {
+	au.mutation.ClearSet()
+	return au
+}
+
+// ClearLocation clears the "location" edge to the Location entity.
+func (au *ArtifactUpdate) ClearLocation() *ArtifactUpdate {
+	au.mutation.ClearLocation()
+	return au
+}
+
+// ClearCollection clears the "collection" edge to the Collection entity.
+func (au *ArtifactUpdate) ClearCollection() *ArtifactUpdate {
+	au.mutation.ClearCollection()
+	return au
+}
+
+// ClearLicense clears the "license" edge to the License entity.
+func (au *ArtifactUpdate) ClearLicense() *ArtifactUpdate {
+	au.mutation.ClearLicense()
+	return au
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (au *ArtifactUpdate) Save(ctx context.Context) (int, error) {
+	if err := au.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, au.sqlSave, au.mutation, au.hooks)
 }
 
@@ -59,6 +632,18 @@ func (au *ArtifactUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (au *ArtifactUpdate) defaults() error {
+	if _, ok := au.mutation.UpdatedAt(); !ok {
+		if artifact.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized artifact.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := artifact.UpdateDefaultUpdatedAt()
+		au.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(artifact.Table, artifact.Columns, sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt))
 	if ps := au.mutation.predicates; len(ps) > 0 {
@@ -67,6 +652,535 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := au.mutation.CreatedBy(); ok {
+		_spec.SetField(artifact.FieldCreatedBy, field.TypeString, value)
+	}
+	if au.mutation.CreatedByCleared() {
+		_spec.ClearField(artifact.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := au.mutation.UpdatedAt(); ok {
+		_spec.SetField(artifact.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := au.mutation.UpdatedBy(); ok {
+		_spec.SetField(artifact.FieldUpdatedBy, field.TypeString, value)
+	}
+	if au.mutation.UpdatedByCleared() {
+		_spec.ClearField(artifact.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := au.mutation.DisplayName(); ok {
+		_spec.SetField(artifact.FieldDisplayName, field.TypeString, value)
+	}
+	if au.mutation.DisplayNameCleared() {
+		_spec.ClearField(artifact.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := au.mutation.Description(); ok {
+		_spec.SetField(artifact.FieldDescription, field.TypeString, value)
+	}
+	if au.mutation.DescriptionCleared() {
+		_spec.ClearField(artifact.FieldDescription, field.TypeString)
+	}
+	if value, ok := au.mutation.PrimaryImageURL(); ok {
+		_spec.SetField(artifact.FieldPrimaryImageURL, field.TypeString, value)
+	}
+	if au.mutation.PrimaryImageURLCleared() {
+		_spec.ClearField(artifact.FieldPrimaryImageURL, field.TypeString)
+	}
+	if value, ok := au.mutation.AdditionalImageUrls(); ok {
+		_spec.SetField(artifact.FieldAdditionalImageUrls, field.TypeJSON, value)
+	}
+	if value, ok := au.mutation.AppendedAdditionalImageUrls(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, artifact.FieldAdditionalImageUrls, value)
+		})
+	}
+	if au.mutation.AdditionalImageUrlsCleared() {
+		_spec.ClearField(artifact.FieldAdditionalImageUrls, field.TypeJSON)
+	}
+	if value, ok := au.mutation.DeletedAt(); ok {
+		_spec.SetField(artifact.FieldDeletedAt, field.TypeTime, value)
+	}
+	if au.mutation.DeletedAtCleared() {
+		_spec.ClearField(artifact.FieldDeletedAt, field.TypeTime)
+	}
+	if value, ok := au.mutation.DeletedBy(); ok {
+		_spec.SetField(artifact.FieldDeletedBy, field.TypeString, value)
+	}
+	if au.mutation.DeletedByCleared() {
+		_spec.ClearField(artifact.FieldDeletedBy, field.TypeString)
+	}
+	if au.mutation.AuthorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.AuthorsTable,
+			Columns: artifact.AuthorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.RemovedAuthorsIDs(); len(nodes) > 0 && !au.mutation.AuthorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.AuthorsTable,
+			Columns: artifact.AuthorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.AuthorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.AuthorsTable,
+			Columns: artifact.AuthorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.MediumsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.MediumsTable,
+			Columns: artifact.MediumsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(medium.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.RemovedMediumsIDs(); len(nodes) > 0 && !au.mutation.MediumsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.MediumsTable,
+			Columns: artifact.MediumsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(medium.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.MediumsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.MediumsTable,
+			Columns: artifact.MediumsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(medium.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.TechniquesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.TechniquesTable,
+			Columns: artifact.TechniquesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(technique.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.RemovedTechniquesIDs(); len(nodes) > 0 && !au.mutation.TechniquesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.TechniquesTable,
+			Columns: artifact.TechniquesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(technique.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.TechniquesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.TechniquesTable,
+			Columns: artifact.TechniquesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(technique.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.ProjectsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.ProjectsTable,
+			Columns: artifact.ProjectsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(project.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.RemovedProjectsIDs(); len(nodes) > 0 && !au.mutation.ProjectsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.ProjectsTable,
+			Columns: artifact.ProjectsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(project.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.ProjectsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.ProjectsTable,
+			Columns: artifact.ProjectsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(project.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.PublicationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.PublicationsTable,
+			Columns: artifact.PublicationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(publication.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.RemovedPublicationsIDs(); len(nodes) > 0 && !au.mutation.PublicationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.PublicationsTable,
+			Columns: artifact.PublicationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(publication.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.PublicationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.PublicationsTable,
+			Columns: artifact.PublicationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(publication.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.HoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.HoldersTable,
+			Columns: artifact.HoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.RemovedHoldersIDs(); len(nodes) > 0 && !au.mutation.HoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.HoldersTable,
+			Columns: artifact.HoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.HoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.HoldersTable,
+			Columns: artifact.HoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.CulturalAffiliationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.CulturalAffiliationTable,
+			Columns: []string{artifact.CulturalAffiliationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(culture.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.CulturalAffiliationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.CulturalAffiliationTable,
+			Columns: []string{artifact.CulturalAffiliationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(culture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.MonumentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.MonumentTable,
+			Columns: []string{artifact.MonumentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(monument.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.MonumentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.MonumentTable,
+			Columns: []string{artifact.MonumentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(monument.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.ModelCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.ModelTable,
+			Columns: []string{artifact.ModelColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(model.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.ModelIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.ModelTable,
+			Columns: []string{artifact.ModelColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(model.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.SetCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.SetTable,
+			Columns: []string{artifact.SetColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(set.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.SetIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.SetTable,
+			Columns: []string{artifact.SetColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(set.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.LocationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.LocationTable,
+			Columns: []string{artifact.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.LocationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.LocationTable,
+			Columns: []string{artifact.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.CollectionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.CollectionTable,
+			Columns: []string{artifact.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.CollectionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.CollectionTable,
+			Columns: []string{artifact.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.LicenseCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.LicenseTable,
+			Columns: []string{artifact.LicenseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.LicenseIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.LicenseTable,
+			Columns: []string{artifact.LicenseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, au.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -88,9 +1202,564 @@ type ArtifactUpdateOne struct {
 	mutation *ArtifactMutation
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (auo *ArtifactUpdateOne) SetCreatedBy(s string) *ArtifactUpdateOne {
+	auo.mutation.SetCreatedBy(s)
+	return auo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableCreatedBy(s *string) *ArtifactUpdateOne {
+	if s != nil {
+		auo.SetCreatedBy(*s)
+	}
+	return auo
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (auo *ArtifactUpdateOne) ClearCreatedBy() *ArtifactUpdateOne {
+	auo.mutation.ClearCreatedBy()
+	return auo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (auo *ArtifactUpdateOne) SetUpdatedAt(t time.Time) *ArtifactUpdateOne {
+	auo.mutation.SetUpdatedAt(t)
+	return auo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (auo *ArtifactUpdateOne) SetUpdatedBy(s string) *ArtifactUpdateOne {
+	auo.mutation.SetUpdatedBy(s)
+	return auo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableUpdatedBy(s *string) *ArtifactUpdateOne {
+	if s != nil {
+		auo.SetUpdatedBy(*s)
+	}
+	return auo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (auo *ArtifactUpdateOne) ClearUpdatedBy() *ArtifactUpdateOne {
+	auo.mutation.ClearUpdatedBy()
+	return auo
+}
+
+// SetDisplayName sets the "display_name" field.
+func (auo *ArtifactUpdateOne) SetDisplayName(s string) *ArtifactUpdateOne {
+	auo.mutation.SetDisplayName(s)
+	return auo
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableDisplayName(s *string) *ArtifactUpdateOne {
+	if s != nil {
+		auo.SetDisplayName(*s)
+	}
+	return auo
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (auo *ArtifactUpdateOne) ClearDisplayName() *ArtifactUpdateOne {
+	auo.mutation.ClearDisplayName()
+	return auo
+}
+
+// SetDescription sets the "description" field.
+func (auo *ArtifactUpdateOne) SetDescription(s string) *ArtifactUpdateOne {
+	auo.mutation.SetDescription(s)
+	return auo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableDescription(s *string) *ArtifactUpdateOne {
+	if s != nil {
+		auo.SetDescription(*s)
+	}
+	return auo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (auo *ArtifactUpdateOne) ClearDescription() *ArtifactUpdateOne {
+	auo.mutation.ClearDescription()
+	return auo
+}
+
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (auo *ArtifactUpdateOne) SetPrimaryImageURL(s string) *ArtifactUpdateOne {
+	auo.mutation.SetPrimaryImageURL(s)
+	return auo
+}
+
+// SetNillablePrimaryImageURL sets the "primary_image_url" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillablePrimaryImageURL(s *string) *ArtifactUpdateOne {
+	if s != nil {
+		auo.SetPrimaryImageURL(*s)
+	}
+	return auo
+}
+
+// ClearPrimaryImageURL clears the value of the "primary_image_url" field.
+func (auo *ArtifactUpdateOne) ClearPrimaryImageURL() *ArtifactUpdateOne {
+	auo.mutation.ClearPrimaryImageURL()
+	return auo
+}
+
+// SetAdditionalImageUrls sets the "additional_image_urls" field.
+func (auo *ArtifactUpdateOne) SetAdditionalImageUrls(s []string) *ArtifactUpdateOne {
+	auo.mutation.SetAdditionalImageUrls(s)
+	return auo
+}
+
+// AppendAdditionalImageUrls appends s to the "additional_image_urls" field.
+func (auo *ArtifactUpdateOne) AppendAdditionalImageUrls(s []string) *ArtifactUpdateOne {
+	auo.mutation.AppendAdditionalImageUrls(s)
+	return auo
+}
+
+// ClearAdditionalImageUrls clears the value of the "additional_image_urls" field.
+func (auo *ArtifactUpdateOne) ClearAdditionalImageUrls() *ArtifactUpdateOne {
+	auo.mutation.ClearAdditionalImageUrls()
+	return auo
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (auo *ArtifactUpdateOne) SetDeletedAt(t time.Time) *ArtifactUpdateOne {
+	auo.mutation.SetDeletedAt(t)
+	return auo
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableDeletedAt(t *time.Time) *ArtifactUpdateOne {
+	if t != nil {
+		auo.SetDeletedAt(*t)
+	}
+	return auo
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (auo *ArtifactUpdateOne) ClearDeletedAt() *ArtifactUpdateOne {
+	auo.mutation.ClearDeletedAt()
+	return auo
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (auo *ArtifactUpdateOne) SetDeletedBy(s string) *ArtifactUpdateOne {
+	auo.mutation.SetDeletedBy(s)
+	return auo
+}
+
+// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableDeletedBy(s *string) *ArtifactUpdateOne {
+	if s != nil {
+		auo.SetDeletedBy(*s)
+	}
+	return auo
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (auo *ArtifactUpdateOne) ClearDeletedBy() *ArtifactUpdateOne {
+	auo.mutation.ClearDeletedBy()
+	return auo
+}
+
+// AddAuthorIDs adds the "authors" edge to the Person entity by IDs.
+func (auo *ArtifactUpdateOne) AddAuthorIDs(ids ...int) *ArtifactUpdateOne {
+	auo.mutation.AddAuthorIDs(ids...)
+	return auo
+}
+
+// AddAuthors adds the "authors" edges to the Person entity.
+func (auo *ArtifactUpdateOne) AddAuthors(p ...*Person) *ArtifactUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return auo.AddAuthorIDs(ids...)
+}
+
+// AddMediumIDs adds the "mediums" edge to the Medium entity by IDs.
+func (auo *ArtifactUpdateOne) AddMediumIDs(ids ...int) *ArtifactUpdateOne {
+	auo.mutation.AddMediumIDs(ids...)
+	return auo
+}
+
+// AddMediums adds the "mediums" edges to the Medium entity.
+func (auo *ArtifactUpdateOne) AddMediums(m ...*Medium) *ArtifactUpdateOne {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return auo.AddMediumIDs(ids...)
+}
+
+// AddTechniqueIDs adds the "techniques" edge to the Technique entity by IDs.
+func (auo *ArtifactUpdateOne) AddTechniqueIDs(ids ...int) *ArtifactUpdateOne {
+	auo.mutation.AddTechniqueIDs(ids...)
+	return auo
+}
+
+// AddTechniques adds the "techniques" edges to the Technique entity.
+func (auo *ArtifactUpdateOne) AddTechniques(t ...*Technique) *ArtifactUpdateOne {
+	ids := make([]int, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return auo.AddTechniqueIDs(ids...)
+}
+
+// AddProjectIDs adds the "projects" edge to the Project entity by IDs.
+func (auo *ArtifactUpdateOne) AddProjectIDs(ids ...int) *ArtifactUpdateOne {
+	auo.mutation.AddProjectIDs(ids...)
+	return auo
+}
+
+// AddProjects adds the "projects" edges to the Project entity.
+func (auo *ArtifactUpdateOne) AddProjects(p ...*Project) *ArtifactUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return auo.AddProjectIDs(ids...)
+}
+
+// AddPublicationIDs adds the "publications" edge to the Publication entity by IDs.
+func (auo *ArtifactUpdateOne) AddPublicationIDs(ids ...int) *ArtifactUpdateOne {
+	auo.mutation.AddPublicationIDs(ids...)
+	return auo
+}
+
+// AddPublications adds the "publications" edges to the Publication entity.
+func (auo *ArtifactUpdateOne) AddPublications(p ...*Publication) *ArtifactUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return auo.AddPublicationIDs(ids...)
+}
+
+// AddHolderIDs adds the "holders" edge to the Holder entity by IDs.
+func (auo *ArtifactUpdateOne) AddHolderIDs(ids ...int) *ArtifactUpdateOne {
+	auo.mutation.AddHolderIDs(ids...)
+	return auo
+}
+
+// AddHolders adds the "holders" edges to the Holder entity.
+func (auo *ArtifactUpdateOne) AddHolders(h ...*Holder) *ArtifactUpdateOne {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return auo.AddHolderIDs(ids...)
+}
+
+// SetCulturalAffiliationID sets the "cultural_affiliation" edge to the Culture entity by ID.
+func (auo *ArtifactUpdateOne) SetCulturalAffiliationID(id int) *ArtifactUpdateOne {
+	auo.mutation.SetCulturalAffiliationID(id)
+	return auo
+}
+
+// SetNillableCulturalAffiliationID sets the "cultural_affiliation" edge to the Culture entity by ID if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableCulturalAffiliationID(id *int) *ArtifactUpdateOne {
+	if id != nil {
+		auo = auo.SetCulturalAffiliationID(*id)
+	}
+	return auo
+}
+
+// SetCulturalAffiliation sets the "cultural_affiliation" edge to the Culture entity.
+func (auo *ArtifactUpdateOne) SetCulturalAffiliation(c *Culture) *ArtifactUpdateOne {
+	return auo.SetCulturalAffiliationID(c.ID)
+}
+
+// SetMonumentID sets the "monument" edge to the Monument entity by ID.
+func (auo *ArtifactUpdateOne) SetMonumentID(id int) *ArtifactUpdateOne {
+	auo.mutation.SetMonumentID(id)
+	return auo
+}
+
+// SetNillableMonumentID sets the "monument" edge to the Monument entity by ID if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableMonumentID(id *int) *ArtifactUpdateOne {
+	if id != nil {
+		auo = auo.SetMonumentID(*id)
+	}
+	return auo
+}
+
+// SetMonument sets the "monument" edge to the Monument entity.
+func (auo *ArtifactUpdateOne) SetMonument(m *Monument) *ArtifactUpdateOne {
+	return auo.SetMonumentID(m.ID)
+}
+
+// SetModelID sets the "model" edge to the Model entity by ID.
+func (auo *ArtifactUpdateOne) SetModelID(id int) *ArtifactUpdateOne {
+	auo.mutation.SetModelID(id)
+	return auo
+}
+
+// SetNillableModelID sets the "model" edge to the Model entity by ID if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableModelID(id *int) *ArtifactUpdateOne {
+	if id != nil {
+		auo = auo.SetModelID(*id)
+	}
+	return auo
+}
+
+// SetModel sets the "model" edge to the Model entity.
+func (auo *ArtifactUpdateOne) SetModel(m *Model) *ArtifactUpdateOne {
+	return auo.SetModelID(m.ID)
+}
+
+// SetSetID sets the "set" edge to the Set entity by ID.
+func (auo *ArtifactUpdateOne) SetSetID(id int) *ArtifactUpdateOne {
+	auo.mutation.SetSetID(id)
+	return auo
+}
+
+// SetNillableSetID sets the "set" edge to the Set entity by ID if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableSetID(id *int) *ArtifactUpdateOne {
+	if id != nil {
+		auo = auo.SetSetID(*id)
+	}
+	return auo
+}
+
+// SetSet sets the "set" edge to the Set entity.
+func (auo *ArtifactUpdateOne) SetSet(s *Set) *ArtifactUpdateOne {
+	return auo.SetSetID(s.ID)
+}
+
+// SetLocationID sets the "location" edge to the Location entity by ID.
+func (auo *ArtifactUpdateOne) SetLocationID(id int) *ArtifactUpdateOne {
+	auo.mutation.SetLocationID(id)
+	return auo
+}
+
+// SetNillableLocationID sets the "location" edge to the Location entity by ID if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableLocationID(id *int) *ArtifactUpdateOne {
+	if id != nil {
+		auo = auo.SetLocationID(*id)
+	}
+	return auo
+}
+
+// SetLocation sets the "location" edge to the Location entity.
+func (auo *ArtifactUpdateOne) SetLocation(l *Location) *ArtifactUpdateOne {
+	return auo.SetLocationID(l.ID)
+}
+
+// SetCollectionID sets the "collection" edge to the Collection entity by ID.
+func (auo *ArtifactUpdateOne) SetCollectionID(id int) *ArtifactUpdateOne {
+	auo.mutation.SetCollectionID(id)
+	return auo
+}
+
+// SetNillableCollectionID sets the "collection" edge to the Collection entity by ID if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableCollectionID(id *int) *ArtifactUpdateOne {
+	if id != nil {
+		auo = auo.SetCollectionID(*id)
+	}
+	return auo
+}
+
+// SetCollection sets the "collection" edge to the Collection entity.
+func (auo *ArtifactUpdateOne) SetCollection(c *Collection) *ArtifactUpdateOne {
+	return auo.SetCollectionID(c.ID)
+}
+
+// SetLicenseID sets the "license" edge to the License entity by ID.
+func (auo *ArtifactUpdateOne) SetLicenseID(id int) *ArtifactUpdateOne {
+	auo.mutation.SetLicenseID(id)
+	return auo
+}
+
+// SetNillableLicenseID sets the "license" edge to the License entity by ID if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableLicenseID(id *int) *ArtifactUpdateOne {
+	if id != nil {
+		auo = auo.SetLicenseID(*id)
+	}
+	return auo
+}
+
+// SetLicense sets the "license" edge to the License entity.
+func (auo *ArtifactUpdateOne) SetLicense(l *License) *ArtifactUpdateOne {
+	return auo.SetLicenseID(l.ID)
+}
+
 // Mutation returns the ArtifactMutation object of the builder.
 func (auo *ArtifactUpdateOne) Mutation() *ArtifactMutation {
 	return auo.mutation
+}
+
+// ClearAuthors clears all "authors" edges to the Person entity.
+func (auo *ArtifactUpdateOne) ClearAuthors() *ArtifactUpdateOne {
+	auo.mutation.ClearAuthors()
+	return auo
+}
+
+// RemoveAuthorIDs removes the "authors" edge to Person entities by IDs.
+func (auo *ArtifactUpdateOne) RemoveAuthorIDs(ids ...int) *ArtifactUpdateOne {
+	auo.mutation.RemoveAuthorIDs(ids...)
+	return auo
+}
+
+// RemoveAuthors removes "authors" edges to Person entities.
+func (auo *ArtifactUpdateOne) RemoveAuthors(p ...*Person) *ArtifactUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return auo.RemoveAuthorIDs(ids...)
+}
+
+// ClearMediums clears all "mediums" edges to the Medium entity.
+func (auo *ArtifactUpdateOne) ClearMediums() *ArtifactUpdateOne {
+	auo.mutation.ClearMediums()
+	return auo
+}
+
+// RemoveMediumIDs removes the "mediums" edge to Medium entities by IDs.
+func (auo *ArtifactUpdateOne) RemoveMediumIDs(ids ...int) *ArtifactUpdateOne {
+	auo.mutation.RemoveMediumIDs(ids...)
+	return auo
+}
+
+// RemoveMediums removes "mediums" edges to Medium entities.
+func (auo *ArtifactUpdateOne) RemoveMediums(m ...*Medium) *ArtifactUpdateOne {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return auo.RemoveMediumIDs(ids...)
+}
+
+// ClearTechniques clears all "techniques" edges to the Technique entity.
+func (auo *ArtifactUpdateOne) ClearTechniques() *ArtifactUpdateOne {
+	auo.mutation.ClearTechniques()
+	return auo
+}
+
+// RemoveTechniqueIDs removes the "techniques" edge to Technique entities by IDs.
+func (auo *ArtifactUpdateOne) RemoveTechniqueIDs(ids ...int) *ArtifactUpdateOne {
+	auo.mutation.RemoveTechniqueIDs(ids...)
+	return auo
+}
+
+// RemoveTechniques removes "techniques" edges to Technique entities.
+func (auo *ArtifactUpdateOne) RemoveTechniques(t ...*Technique) *ArtifactUpdateOne {
+	ids := make([]int, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return auo.RemoveTechniqueIDs(ids...)
+}
+
+// ClearProjects clears all "projects" edges to the Project entity.
+func (auo *ArtifactUpdateOne) ClearProjects() *ArtifactUpdateOne {
+	auo.mutation.ClearProjects()
+	return auo
+}
+
+// RemoveProjectIDs removes the "projects" edge to Project entities by IDs.
+func (auo *ArtifactUpdateOne) RemoveProjectIDs(ids ...int) *ArtifactUpdateOne {
+	auo.mutation.RemoveProjectIDs(ids...)
+	return auo
+}
+
+// RemoveProjects removes "projects" edges to Project entities.
+func (auo *ArtifactUpdateOne) RemoveProjects(p ...*Project) *ArtifactUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return auo.RemoveProjectIDs(ids...)
+}
+
+// ClearPublications clears all "publications" edges to the Publication entity.
+func (auo *ArtifactUpdateOne) ClearPublications() *ArtifactUpdateOne {
+	auo.mutation.ClearPublications()
+	return auo
+}
+
+// RemovePublicationIDs removes the "publications" edge to Publication entities by IDs.
+func (auo *ArtifactUpdateOne) RemovePublicationIDs(ids ...int) *ArtifactUpdateOne {
+	auo.mutation.RemovePublicationIDs(ids...)
+	return auo
+}
+
+// RemovePublications removes "publications" edges to Publication entities.
+func (auo *ArtifactUpdateOne) RemovePublications(p ...*Publication) *ArtifactUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return auo.RemovePublicationIDs(ids...)
+}
+
+// ClearHolders clears all "holders" edges to the Holder entity.
+func (auo *ArtifactUpdateOne) ClearHolders() *ArtifactUpdateOne {
+	auo.mutation.ClearHolders()
+	return auo
+}
+
+// RemoveHolderIDs removes the "holders" edge to Holder entities by IDs.
+func (auo *ArtifactUpdateOne) RemoveHolderIDs(ids ...int) *ArtifactUpdateOne {
+	auo.mutation.RemoveHolderIDs(ids...)
+	return auo
+}
+
+// RemoveHolders removes "holders" edges to Holder entities.
+func (auo *ArtifactUpdateOne) RemoveHolders(h ...*Holder) *ArtifactUpdateOne {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return auo.RemoveHolderIDs(ids...)
+}
+
+// ClearCulturalAffiliation clears the "cultural_affiliation" edge to the Culture entity.
+func (auo *ArtifactUpdateOne) ClearCulturalAffiliation() *ArtifactUpdateOne {
+	auo.mutation.ClearCulturalAffiliation()
+	return auo
+}
+
+// ClearMonument clears the "monument" edge to the Monument entity.
+func (auo *ArtifactUpdateOne) ClearMonument() *ArtifactUpdateOne {
+	auo.mutation.ClearMonument()
+	return auo
+}
+
+// ClearModel clears the "model" edge to the Model entity.
+func (auo *ArtifactUpdateOne) ClearModel() *ArtifactUpdateOne {
+	auo.mutation.ClearModel()
+	return auo
+}
+
+// ClearSet clears the "set" edge to the Set entity.
+func (auo *ArtifactUpdateOne) ClearSet() *ArtifactUpdateOne {
+	auo.mutation.ClearSet()
+	return auo
+}
+
+// ClearLocation clears the "location" edge to the Location entity.
+func (auo *ArtifactUpdateOne) ClearLocation() *ArtifactUpdateOne {
+	auo.mutation.ClearLocation()
+	return auo
+}
+
+// ClearCollection clears the "collection" edge to the Collection entity.
+func (auo *ArtifactUpdateOne) ClearCollection() *ArtifactUpdateOne {
+	auo.mutation.ClearCollection()
+	return auo
+}
+
+// ClearLicense clears the "license" edge to the License entity.
+func (auo *ArtifactUpdateOne) ClearLicense() *ArtifactUpdateOne {
+	auo.mutation.ClearLicense()
+	return auo
 }
 
 // Where appends a list predicates to the ArtifactUpdate builder.
@@ -108,6 +1777,9 @@ func (auo *ArtifactUpdateOne) Select(field string, fields ...string) *ArtifactUp
 
 // Save executes the query and returns the updated Artifact entity.
 func (auo *ArtifactUpdateOne) Save(ctx context.Context) (*Artifact, error) {
+	if err := auo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, auo.sqlSave, auo.mutation, auo.hooks)
 }
 
@@ -131,6 +1803,18 @@ func (auo *ArtifactUpdateOne) ExecX(ctx context.Context) {
 	if err := auo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (auo *ArtifactUpdateOne) defaults() error {
+	if _, ok := auo.mutation.UpdatedAt(); !ok {
+		if artifact.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized artifact.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := artifact.UpdateDefaultUpdatedAt()
+		auo.mutation.SetUpdatedAt(v)
+	}
+	return nil
 }
 
 func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err error) {
@@ -158,6 +1842,535 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := auo.mutation.CreatedBy(); ok {
+		_spec.SetField(artifact.FieldCreatedBy, field.TypeString, value)
+	}
+	if auo.mutation.CreatedByCleared() {
+		_spec.ClearField(artifact.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := auo.mutation.UpdatedAt(); ok {
+		_spec.SetField(artifact.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := auo.mutation.UpdatedBy(); ok {
+		_spec.SetField(artifact.FieldUpdatedBy, field.TypeString, value)
+	}
+	if auo.mutation.UpdatedByCleared() {
+		_spec.ClearField(artifact.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := auo.mutation.DisplayName(); ok {
+		_spec.SetField(artifact.FieldDisplayName, field.TypeString, value)
+	}
+	if auo.mutation.DisplayNameCleared() {
+		_spec.ClearField(artifact.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := auo.mutation.Description(); ok {
+		_spec.SetField(artifact.FieldDescription, field.TypeString, value)
+	}
+	if auo.mutation.DescriptionCleared() {
+		_spec.ClearField(artifact.FieldDescription, field.TypeString)
+	}
+	if value, ok := auo.mutation.PrimaryImageURL(); ok {
+		_spec.SetField(artifact.FieldPrimaryImageURL, field.TypeString, value)
+	}
+	if auo.mutation.PrimaryImageURLCleared() {
+		_spec.ClearField(artifact.FieldPrimaryImageURL, field.TypeString)
+	}
+	if value, ok := auo.mutation.AdditionalImageUrls(); ok {
+		_spec.SetField(artifact.FieldAdditionalImageUrls, field.TypeJSON, value)
+	}
+	if value, ok := auo.mutation.AppendedAdditionalImageUrls(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, artifact.FieldAdditionalImageUrls, value)
+		})
+	}
+	if auo.mutation.AdditionalImageUrlsCleared() {
+		_spec.ClearField(artifact.FieldAdditionalImageUrls, field.TypeJSON)
+	}
+	if value, ok := auo.mutation.DeletedAt(); ok {
+		_spec.SetField(artifact.FieldDeletedAt, field.TypeTime, value)
+	}
+	if auo.mutation.DeletedAtCleared() {
+		_spec.ClearField(artifact.FieldDeletedAt, field.TypeTime)
+	}
+	if value, ok := auo.mutation.DeletedBy(); ok {
+		_spec.SetField(artifact.FieldDeletedBy, field.TypeString, value)
+	}
+	if auo.mutation.DeletedByCleared() {
+		_spec.ClearField(artifact.FieldDeletedBy, field.TypeString)
+	}
+	if auo.mutation.AuthorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.AuthorsTable,
+			Columns: artifact.AuthorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.RemovedAuthorsIDs(); len(nodes) > 0 && !auo.mutation.AuthorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.AuthorsTable,
+			Columns: artifact.AuthorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.AuthorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.AuthorsTable,
+			Columns: artifact.AuthorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.MediumsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.MediumsTable,
+			Columns: artifact.MediumsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(medium.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.RemovedMediumsIDs(); len(nodes) > 0 && !auo.mutation.MediumsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.MediumsTable,
+			Columns: artifact.MediumsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(medium.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.MediumsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.MediumsTable,
+			Columns: artifact.MediumsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(medium.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.TechniquesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.TechniquesTable,
+			Columns: artifact.TechniquesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(technique.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.RemovedTechniquesIDs(); len(nodes) > 0 && !auo.mutation.TechniquesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.TechniquesTable,
+			Columns: artifact.TechniquesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(technique.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.TechniquesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.TechniquesTable,
+			Columns: artifact.TechniquesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(technique.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.ProjectsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.ProjectsTable,
+			Columns: artifact.ProjectsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(project.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.RemovedProjectsIDs(); len(nodes) > 0 && !auo.mutation.ProjectsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.ProjectsTable,
+			Columns: artifact.ProjectsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(project.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.ProjectsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.ProjectsTable,
+			Columns: artifact.ProjectsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(project.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.PublicationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.PublicationsTable,
+			Columns: artifact.PublicationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(publication.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.RemovedPublicationsIDs(); len(nodes) > 0 && !auo.mutation.PublicationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.PublicationsTable,
+			Columns: artifact.PublicationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(publication.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.PublicationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.PublicationsTable,
+			Columns: artifact.PublicationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(publication.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.HoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.HoldersTable,
+			Columns: artifact.HoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.RemovedHoldersIDs(); len(nodes) > 0 && !auo.mutation.HoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.HoldersTable,
+			Columns: artifact.HoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.HoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.HoldersTable,
+			Columns: artifact.HoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.CulturalAffiliationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.CulturalAffiliationTable,
+			Columns: []string{artifact.CulturalAffiliationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(culture.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.CulturalAffiliationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.CulturalAffiliationTable,
+			Columns: []string{artifact.CulturalAffiliationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(culture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.MonumentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.MonumentTable,
+			Columns: []string{artifact.MonumentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(monument.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.MonumentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.MonumentTable,
+			Columns: []string{artifact.MonumentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(monument.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.ModelCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.ModelTable,
+			Columns: []string{artifact.ModelColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(model.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.ModelIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.ModelTable,
+			Columns: []string{artifact.ModelColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(model.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.SetCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.SetTable,
+			Columns: []string{artifact.SetColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(set.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.SetIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.SetTable,
+			Columns: []string{artifact.SetColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(set.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.LocationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.LocationTable,
+			Columns: []string{artifact.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.LocationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.LocationTable,
+			Columns: []string{artifact.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.CollectionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.CollectionTable,
+			Columns: []string{artifact.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.CollectionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.CollectionTable,
+			Columns: []string{artifact.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.LicenseCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.LicenseTable,
+			Columns: []string{artifact.LicenseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.LicenseIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.LicenseTable,
+			Columns: []string{artifact.LicenseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Artifact{config: auo.config}
 	_spec.Assign = _node.assignValues

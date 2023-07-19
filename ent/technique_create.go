@@ -4,10 +4,13 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/technique"
 )
 
@@ -18,6 +21,105 @@ type TechniqueCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (tc *TechniqueCreate) SetCreatedAt(t time.Time) *TechniqueCreate {
+	tc.mutation.SetCreatedAt(t)
+	return tc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (tc *TechniqueCreate) SetNillableCreatedAt(t *time.Time) *TechniqueCreate {
+	if t != nil {
+		tc.SetCreatedAt(*t)
+	}
+	return tc
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (tc *TechniqueCreate) SetCreatedBy(s string) *TechniqueCreate {
+	tc.mutation.SetCreatedBy(s)
+	return tc
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (tc *TechniqueCreate) SetNillableCreatedBy(s *string) *TechniqueCreate {
+	if s != nil {
+		tc.SetCreatedBy(*s)
+	}
+	return tc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (tc *TechniqueCreate) SetUpdatedAt(t time.Time) *TechniqueCreate {
+	tc.mutation.SetUpdatedAt(t)
+	return tc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (tc *TechniqueCreate) SetNillableUpdatedAt(t *time.Time) *TechniqueCreate {
+	if t != nil {
+		tc.SetUpdatedAt(*t)
+	}
+	return tc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (tc *TechniqueCreate) SetUpdatedBy(s string) *TechniqueCreate {
+	tc.mutation.SetUpdatedBy(s)
+	return tc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (tc *TechniqueCreate) SetNillableUpdatedBy(s *string) *TechniqueCreate {
+	if s != nil {
+		tc.SetUpdatedBy(*s)
+	}
+	return tc
+}
+
+// SetDisplayName sets the "display_name" field.
+func (tc *TechniqueCreate) SetDisplayName(s string) *TechniqueCreate {
+	tc.mutation.SetDisplayName(s)
+	return tc
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (tc *TechniqueCreate) SetNillableDisplayName(s *string) *TechniqueCreate {
+	if s != nil {
+		tc.SetDisplayName(*s)
+	}
+	return tc
+}
+
+// SetDescription sets the "description" field.
+func (tc *TechniqueCreate) SetDescription(s string) *TechniqueCreate {
+	tc.mutation.SetDescription(s)
+	return tc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (tc *TechniqueCreate) SetNillableDescription(s *string) *TechniqueCreate {
+	if s != nil {
+		tc.SetDescription(*s)
+	}
+	return tc
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (tc *TechniqueCreate) AddArtifactIDs(ids ...int) *TechniqueCreate {
+	tc.mutation.AddArtifactIDs(ids...)
+	return tc
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (tc *TechniqueCreate) AddArtifacts(a ...*Artifact) *TechniqueCreate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return tc.AddArtifactIDs(ids...)
+}
+
 // Mutation returns the TechniqueMutation object of the builder.
 func (tc *TechniqueCreate) Mutation() *TechniqueMutation {
 	return tc.mutation
@@ -25,6 +127,9 @@ func (tc *TechniqueCreate) Mutation() *TechniqueMutation {
 
 // Save creates the Technique in the database.
 func (tc *TechniqueCreate) Save(ctx context.Context) (*Technique, error) {
+	if err := tc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, tc.sqlSave, tc.mutation, tc.hooks)
 }
 
@@ -50,8 +155,33 @@ func (tc *TechniqueCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (tc *TechniqueCreate) defaults() error {
+	if _, ok := tc.mutation.CreatedAt(); !ok {
+		if technique.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized technique.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := technique.DefaultCreatedAt()
+		tc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := tc.mutation.UpdatedAt(); !ok {
+		if technique.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized technique.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := technique.DefaultUpdatedAt()
+		tc.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (tc *TechniqueCreate) check() error {
+	if _, ok := tc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Technique.created_at"`)}
+	}
+	if _, ok := tc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Technique.updated_at"`)}
+	}
 	return nil
 }
 
@@ -78,6 +208,46 @@ func (tc *TechniqueCreate) createSpec() (*Technique, *sqlgraph.CreateSpec) {
 		_node = &Technique{config: tc.config}
 		_spec = sqlgraph.NewCreateSpec(technique.Table, sqlgraph.NewFieldSpec(technique.FieldID, field.TypeInt))
 	)
+	if value, ok := tc.mutation.CreatedAt(); ok {
+		_spec.SetField(technique.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := tc.mutation.CreatedBy(); ok {
+		_spec.SetField(technique.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := tc.mutation.UpdatedAt(); ok {
+		_spec.SetField(technique.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := tc.mutation.UpdatedBy(); ok {
+		_spec.SetField(technique.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
+	if value, ok := tc.mutation.DisplayName(); ok {
+		_spec.SetField(technique.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
+	}
+	if value, ok := tc.mutation.Description(); ok {
+		_spec.SetField(technique.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if nodes := tc.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   technique.ArtifactsTable,
+			Columns: technique.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -95,6 +265,7 @@ func (tcb *TechniqueCreateBulk) Save(ctx context.Context) ([]*Technique, error) 
 	for i := range tcb.builders {
 		func(i int, root context.Context) {
 			builder := tcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TechniqueMutation)
 				if !ok {

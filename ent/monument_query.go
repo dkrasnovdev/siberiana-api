@@ -4,12 +4,15 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/monument"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
@@ -17,12 +20,14 @@ import (
 // MonumentQuery is the builder for querying Monument entities.
 type MonumentQuery struct {
 	config
-	ctx        *QueryContext
-	order      []monument.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Monument
-	modifiers  []func(*sql.Selector)
-	loadTotal  []func(context.Context, []*Monument) error
+	ctx                *QueryContext
+	order              []monument.OrderOption
+	inters             []Interceptor
+	predicates         []predicate.Monument
+	withArtifacts      *ArtifactQuery
+	modifiers          []func(*sql.Selector)
+	loadTotal          []func(context.Context, []*Monument) error
+	withNamedArtifacts map[string]*ArtifactQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -57,6 +62,28 @@ func (mq *MonumentQuery) Unique(unique bool) *MonumentQuery {
 func (mq *MonumentQuery) Order(o ...monument.OrderOption) *MonumentQuery {
 	mq.order = append(mq.order, o...)
 	return mq
+}
+
+// QueryArtifacts chains the current query on the "artifacts" edge.
+func (mq *MonumentQuery) QueryArtifacts() *ArtifactQuery {
+	query := (&ArtifactClient{config: mq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := mq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := mq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(monument.Table, monument.FieldID, selector),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, monument.ArtifactsTable, monument.ArtifactsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Monument entity from the query.
@@ -246,19 +273,43 @@ func (mq *MonumentQuery) Clone() *MonumentQuery {
 		return nil
 	}
 	return &MonumentQuery{
-		config:     mq.config,
-		ctx:        mq.ctx.Clone(),
-		order:      append([]monument.OrderOption{}, mq.order...),
-		inters:     append([]Interceptor{}, mq.inters...),
-		predicates: append([]predicate.Monument{}, mq.predicates...),
+		config:        mq.config,
+		ctx:           mq.ctx.Clone(),
+		order:         append([]monument.OrderOption{}, mq.order...),
+		inters:        append([]Interceptor{}, mq.inters...),
+		predicates:    append([]predicate.Monument{}, mq.predicates...),
+		withArtifacts: mq.withArtifacts.Clone(),
 		// clone intermediate query.
 		sql:  mq.sql.Clone(),
 		path: mq.path,
 	}
 }
 
+// WithArtifacts tells the query-builder to eager-load the nodes that are connected to
+// the "artifacts" edge. The optional arguments are used to configure the query builder of the edge.
+func (mq *MonumentQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *MonumentQuery {
+	query := (&ArtifactClient{config: mq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	mq.withArtifacts = query
+	return mq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Monument.Query().
+//		GroupBy(monument.FieldCreatedAt).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (mq *MonumentQuery) GroupBy(field string, fields ...string) *MonumentGroupBy {
 	mq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &MonumentGroupBy{build: mq}
@@ -270,6 +321,16 @@ func (mq *MonumentQuery) GroupBy(field string, fields ...string) *MonumentGroupB
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//	}
+//
+//	client.Monument.Query().
+//		Select(monument.FieldCreatedAt).
+//		Scan(ctx, &v)
 func (mq *MonumentQuery) Select(fields ...string) *MonumentSelect {
 	mq.ctx.Fields = append(mq.ctx.Fields, fields...)
 	sbuild := &MonumentSelect{MonumentQuery: mq}
@@ -306,13 +367,22 @@ func (mq *MonumentQuery) prepareQuery(ctx context.Context) error {
 		}
 		mq.sql = prev
 	}
+	if monument.Policy == nil {
+		return errors.New("ent: uninitialized monument.Policy (forgotten import ent/runtime?)")
+	}
+	if err := monument.Policy.EvalQuery(ctx, mq); err != nil {
+		return err
+	}
 	return nil
 }
 
 func (mq *MonumentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Monument, error) {
 	var (
-		nodes = []*Monument{}
-		_spec = mq.querySpec()
+		nodes       = []*Monument{}
+		_spec       = mq.querySpec()
+		loadedTypes = [1]bool{
+			mq.withArtifacts != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Monument).scanValues(nil, columns)
@@ -320,6 +390,7 @@ func (mq *MonumentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Mon
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Monument{config: mq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(mq.modifiers) > 0 {
@@ -334,12 +405,58 @@ func (mq *MonumentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Mon
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := mq.withArtifacts; query != nil {
+		if err := mq.loadArtifacts(ctx, query, nodes,
+			func(n *Monument) { n.Edges.Artifacts = []*Artifact{} },
+			func(n *Monument, e *Artifact) { n.Edges.Artifacts = append(n.Edges.Artifacts, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range mq.withNamedArtifacts {
+		if err := mq.loadArtifacts(ctx, query, nodes,
+			func(n *Monument) { n.appendNamedArtifacts(name) },
+			func(n *Monument, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range mq.loadTotal {
 		if err := mq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (mq *MonumentQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, nodes []*Monument, init func(*Monument), assign func(*Monument, *Artifact)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Monument)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Artifact(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(monument.ArtifactsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.monument_artifacts
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "monument_artifacts" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "monument_artifacts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
 }
 
 func (mq *MonumentQuery) sqlCount(ctx context.Context) (int, error) {
@@ -424,6 +541,20 @@ func (mq *MonumentQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedArtifacts tells the query-builder to eager-load the nodes that are connected to the "artifacts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (mq *MonumentQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQuery)) *MonumentQuery {
+	query := (&ArtifactClient{config: mq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if mq.withNamedArtifacts == nil {
+		mq.withNamedArtifacts = make(map[string]*ArtifactQuery)
+	}
+	mq.withNamedArtifacts[name] = query
+	return mq
 }
 
 // MonumentGroupBy is the group-by builder for Monument entities.

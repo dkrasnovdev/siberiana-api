@@ -5,6 +5,7 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -13,10 +14,47 @@ import (
 
 // License is the model entity for the License schema.
 type License struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
+	ID int `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// CreatedBy holds the value of the "created_by" field.
+	CreatedBy string `json:"created_by,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy string `json:"updated_by,omitempty"`
+	// DisplayName holds the value of the "display_name" field.
+	DisplayName string `json:"display_name,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the LicenseQuery when eager-loading is set.
+	Edges        LicenseEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// LicenseEdges holds the relations/edges for other nodes in the graph.
+type LicenseEdges struct {
+	// Artifacts holds the value of the artifacts edge.
+	Artifacts []*Artifact `json:"artifacts,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+	// totalCount holds the count of the edges above.
+	totalCount [1]map[string]int
+
+	namedArtifacts map[string][]*Artifact
+}
+
+// ArtifactsOrErr returns the Artifacts value or an error if the edge
+// was not loaded in eager-loading.
+func (e LicenseEdges) ArtifactsOrErr() ([]*Artifact, error) {
+	if e.loadedTypes[0] {
+		return e.Artifacts, nil
+	}
+	return nil, &NotLoadedError{edge: "artifacts"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -26,6 +64,10 @@ func (*License) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case license.FieldID:
 			values[i] = new(sql.NullInt64)
+		case license.FieldCreatedBy, license.FieldUpdatedBy, license.FieldDisplayName, license.FieldDescription:
+			values[i] = new(sql.NullString)
+		case license.FieldCreatedAt, license.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -47,6 +89,42 @@ func (l *License) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			l.ID = int(value.Int64)
+		case license.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				l.CreatedAt = value.Time
+			}
+		case license.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				l.CreatedBy = value.String
+			}
+		case license.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				l.UpdatedAt = value.Time
+			}
+		case license.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				l.UpdatedBy = value.String
+			}
+		case license.FieldDisplayName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field display_name", values[i])
+			} else if value.Valid {
+				l.DisplayName = value.String
+			}
+		case license.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				l.Description = value.String
+			}
 		default:
 			l.selectValues.Set(columns[i], values[i])
 		}
@@ -58,6 +136,11 @@ func (l *License) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (l *License) Value(name string) (ent.Value, error) {
 	return l.selectValues.Get(name)
+}
+
+// QueryArtifacts queries the "artifacts" edge of the License entity.
+func (l *License) QueryArtifacts() *ArtifactQuery {
+	return NewLicenseClient(l.config).QueryArtifacts(l)
 }
 
 // Update returns a builder for updating this License.
@@ -82,9 +165,50 @@ func (l *License) Unwrap() *License {
 func (l *License) String() string {
 	var builder strings.Builder
 	builder.WriteString("License(")
-	builder.WriteString(fmt.Sprintf("id=%v", l.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", l.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(l.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("created_by=")
+	builder.WriteString(l.CreatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(l.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_by=")
+	builder.WriteString(l.UpdatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("display_name=")
+	builder.WriteString(l.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(l.Description)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedArtifacts returns the Artifacts named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (l *License) NamedArtifacts(name string) ([]*Artifact, error) {
+	if l.Edges.namedArtifacts == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := l.Edges.namedArtifacts[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (l *License) appendNamedArtifacts(name string, edges ...*Artifact) {
+	if l.Edges.namedArtifacts == nil {
+		l.Edges.namedArtifacts = make(map[string][]*Artifact)
+	}
+	if len(edges) == 0 {
+		l.Edges.namedArtifacts[name] = []*Artifact{}
+	} else {
+		l.Edges.namedArtifacts[name] = append(l.Edges.namedArtifacts[name], edges...)
+	}
 }
 
 // Licenses is a parsable slice of License.

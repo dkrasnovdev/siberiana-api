@@ -5,6 +5,7 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -13,10 +14,59 @@ import (
 
 // Project is the model entity for the Project schema.
 type Project struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
+	ID int `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// CreatedBy holds the value of the "created_by" field.
+	CreatedBy string `json:"created_by,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy string `json:"updated_by,omitempty"`
+	// DisplayName holds the value of the "display_name" field.
+	DisplayName string `json:"display_name,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the ProjectQuery when eager-loading is set.
+	Edges        ProjectEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// ProjectEdges holds the relations/edges for other nodes in the graph.
+type ProjectEdges struct {
+	// Artifacts holds the value of the artifacts edge.
+	Artifacts []*Artifact `json:"artifacts,omitempty"`
+	// Team holds the value of the team edge.
+	Team []*Person `json:"team,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [2]bool
+	// totalCount holds the count of the edges above.
+	totalCount [2]map[string]int
+
+	namedArtifacts map[string][]*Artifact
+	namedTeam      map[string][]*Person
+}
+
+// ArtifactsOrErr returns the Artifacts value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProjectEdges) ArtifactsOrErr() ([]*Artifact, error) {
+	if e.loadedTypes[0] {
+		return e.Artifacts, nil
+	}
+	return nil, &NotLoadedError{edge: "artifacts"}
+}
+
+// TeamOrErr returns the Team value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProjectEdges) TeamOrErr() ([]*Person, error) {
+	if e.loadedTypes[1] {
+		return e.Team, nil
+	}
+	return nil, &NotLoadedError{edge: "team"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -26,6 +76,10 @@ func (*Project) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case project.FieldID:
 			values[i] = new(sql.NullInt64)
+		case project.FieldCreatedBy, project.FieldUpdatedBy, project.FieldDisplayName, project.FieldDescription:
+			values[i] = new(sql.NullString)
+		case project.FieldCreatedAt, project.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -47,6 +101,42 @@ func (pr *Project) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			pr.ID = int(value.Int64)
+		case project.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				pr.CreatedAt = value.Time
+			}
+		case project.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				pr.CreatedBy = value.String
+			}
+		case project.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				pr.UpdatedAt = value.Time
+			}
+		case project.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				pr.UpdatedBy = value.String
+			}
+		case project.FieldDisplayName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field display_name", values[i])
+			} else if value.Valid {
+				pr.DisplayName = value.String
+			}
+		case project.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				pr.Description = value.String
+			}
 		default:
 			pr.selectValues.Set(columns[i], values[i])
 		}
@@ -58,6 +148,16 @@ func (pr *Project) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (pr *Project) Value(name string) (ent.Value, error) {
 	return pr.selectValues.Get(name)
+}
+
+// QueryArtifacts queries the "artifacts" edge of the Project entity.
+func (pr *Project) QueryArtifacts() *ArtifactQuery {
+	return NewProjectClient(pr.config).QueryArtifacts(pr)
+}
+
+// QueryTeam queries the "team" edge of the Project entity.
+func (pr *Project) QueryTeam() *PersonQuery {
+	return NewProjectClient(pr.config).QueryTeam(pr)
 }
 
 // Update returns a builder for updating this Project.
@@ -82,9 +182,74 @@ func (pr *Project) Unwrap() *Project {
 func (pr *Project) String() string {
 	var builder strings.Builder
 	builder.WriteString("Project(")
-	builder.WriteString(fmt.Sprintf("id=%v", pr.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", pr.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(pr.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("created_by=")
+	builder.WriteString(pr.CreatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(pr.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_by=")
+	builder.WriteString(pr.UpdatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("display_name=")
+	builder.WriteString(pr.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(pr.Description)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedArtifacts returns the Artifacts named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pr *Project) NamedArtifacts(name string) ([]*Artifact, error) {
+	if pr.Edges.namedArtifacts == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pr.Edges.namedArtifacts[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pr *Project) appendNamedArtifacts(name string, edges ...*Artifact) {
+	if pr.Edges.namedArtifacts == nil {
+		pr.Edges.namedArtifacts = make(map[string][]*Artifact)
+	}
+	if len(edges) == 0 {
+		pr.Edges.namedArtifacts[name] = []*Artifact{}
+	} else {
+		pr.Edges.namedArtifacts[name] = append(pr.Edges.namedArtifacts[name], edges...)
+	}
+}
+
+// NamedTeam returns the Team named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pr *Project) NamedTeam(name string) ([]*Person, error) {
+	if pr.Edges.namedTeam == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pr.Edges.namedTeam[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pr *Project) appendNamedTeam(name string, edges ...*Person) {
+	if pr.Edges.namedTeam == nil {
+		pr.Edges.namedTeam = make(map[string][]*Person)
+	}
+	if len(edges) == 0 {
+		pr.Edges.namedTeam[name] = []*Person{}
+	} else {
+		pr.Edges.namedTeam[name] = append(pr.Edges.namedTeam[name], edges...)
+	}
 }
 
 // Projects is a parsable slice of Project.

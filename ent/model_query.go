@@ -4,12 +4,15 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/model"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
@@ -17,12 +20,14 @@ import (
 // ModelQuery is the builder for querying Model entities.
 type ModelQuery struct {
 	config
-	ctx        *QueryContext
-	order      []model.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Model
-	modifiers  []func(*sql.Selector)
-	loadTotal  []func(context.Context, []*Model) error
+	ctx                *QueryContext
+	order              []model.OrderOption
+	inters             []Interceptor
+	predicates         []predicate.Model
+	withArtifacts      *ArtifactQuery
+	modifiers          []func(*sql.Selector)
+	loadTotal          []func(context.Context, []*Model) error
+	withNamedArtifacts map[string]*ArtifactQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -57,6 +62,28 @@ func (mq *ModelQuery) Unique(unique bool) *ModelQuery {
 func (mq *ModelQuery) Order(o ...model.OrderOption) *ModelQuery {
 	mq.order = append(mq.order, o...)
 	return mq
+}
+
+// QueryArtifacts chains the current query on the "artifacts" edge.
+func (mq *ModelQuery) QueryArtifacts() *ArtifactQuery {
+	query := (&ArtifactClient{config: mq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := mq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := mq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(model.Table, model.FieldID, selector),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, model.ArtifactsTable, model.ArtifactsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Model entity from the query.
@@ -246,19 +273,43 @@ func (mq *ModelQuery) Clone() *ModelQuery {
 		return nil
 	}
 	return &ModelQuery{
-		config:     mq.config,
-		ctx:        mq.ctx.Clone(),
-		order:      append([]model.OrderOption{}, mq.order...),
-		inters:     append([]Interceptor{}, mq.inters...),
-		predicates: append([]predicate.Model{}, mq.predicates...),
+		config:        mq.config,
+		ctx:           mq.ctx.Clone(),
+		order:         append([]model.OrderOption{}, mq.order...),
+		inters:        append([]Interceptor{}, mq.inters...),
+		predicates:    append([]predicate.Model{}, mq.predicates...),
+		withArtifacts: mq.withArtifacts.Clone(),
 		// clone intermediate query.
 		sql:  mq.sql.Clone(),
 		path: mq.path,
 	}
 }
 
+// WithArtifacts tells the query-builder to eager-load the nodes that are connected to
+// the "artifacts" edge. The optional arguments are used to configure the query builder of the edge.
+func (mq *ModelQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *ModelQuery {
+	query := (&ArtifactClient{config: mq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	mq.withArtifacts = query
+	return mq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Model.Query().
+//		GroupBy(model.FieldCreatedAt).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (mq *ModelQuery) GroupBy(field string, fields ...string) *ModelGroupBy {
 	mq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &ModelGroupBy{build: mq}
@@ -270,6 +321,16 @@ func (mq *ModelQuery) GroupBy(field string, fields ...string) *ModelGroupBy {
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//	}
+//
+//	client.Model.Query().
+//		Select(model.FieldCreatedAt).
+//		Scan(ctx, &v)
 func (mq *ModelQuery) Select(fields ...string) *ModelSelect {
 	mq.ctx.Fields = append(mq.ctx.Fields, fields...)
 	sbuild := &ModelSelect{ModelQuery: mq}
@@ -306,13 +367,22 @@ func (mq *ModelQuery) prepareQuery(ctx context.Context) error {
 		}
 		mq.sql = prev
 	}
+	if model.Policy == nil {
+		return errors.New("ent: uninitialized model.Policy (forgotten import ent/runtime?)")
+	}
+	if err := model.Policy.EvalQuery(ctx, mq); err != nil {
+		return err
+	}
 	return nil
 }
 
 func (mq *ModelQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Model, error) {
 	var (
-		nodes = []*Model{}
-		_spec = mq.querySpec()
+		nodes       = []*Model{}
+		_spec       = mq.querySpec()
+		loadedTypes = [1]bool{
+			mq.withArtifacts != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Model).scanValues(nil, columns)
@@ -320,6 +390,7 @@ func (mq *ModelQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Model,
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Model{config: mq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(mq.modifiers) > 0 {
@@ -334,12 +405,58 @@ func (mq *ModelQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Model,
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := mq.withArtifacts; query != nil {
+		if err := mq.loadArtifacts(ctx, query, nodes,
+			func(n *Model) { n.Edges.Artifacts = []*Artifact{} },
+			func(n *Model, e *Artifact) { n.Edges.Artifacts = append(n.Edges.Artifacts, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range mq.withNamedArtifacts {
+		if err := mq.loadArtifacts(ctx, query, nodes,
+			func(n *Model) { n.appendNamedArtifacts(name) },
+			func(n *Model, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range mq.loadTotal {
 		if err := mq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (mq *ModelQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, nodes []*Model, init func(*Model), assign func(*Model, *Artifact)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Model)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Artifact(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(model.ArtifactsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.model_artifacts
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "model_artifacts" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "model_artifacts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
 }
 
 func (mq *ModelQuery) sqlCount(ctx context.Context) (int, error) {
@@ -424,6 +541,20 @@ func (mq *ModelQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedArtifacts tells the query-builder to eager-load the nodes that are connected to the "artifacts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (mq *ModelQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQuery)) *ModelQuery {
+	query := (&ArtifactClient{config: mq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if mq.withNamedArtifacts == nil {
+		mq.withNamedArtifacts = make(map[string]*ArtifactQuery)
+	}
+	mq.withNamedArtifacts[name] = query
+	return mq
 }
 
 // ModelGroupBy is the group-by builder for Model entities.

@@ -5,18 +5,60 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/settlement"
 )
 
 // Settlement is the model entity for the Settlement schema.
 type Settlement struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
-	selectValues sql.SelectValues
+	ID int `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// CreatedBy holds the value of the "created_by" field.
+	CreatedBy string `json:"created_by,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy string `json:"updated_by,omitempty"`
+	// DisplayName holds the value of the "display_name" field.
+	DisplayName string `json:"display_name,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the SettlementQuery when eager-loading is set.
+	Edges               SettlementEdges `json:"edges"`
+	location_settlement *int
+	selectValues        sql.SelectValues
+}
+
+// SettlementEdges holds the relations/edges for other nodes in the graph.
+type SettlementEdges struct {
+	// Location holds the value of the location edge.
+	Location *Location `json:"location,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+	// totalCount holds the count of the edges above.
+	totalCount [1]map[string]int
+}
+
+// LocationOrErr returns the Location value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SettlementEdges) LocationOrErr() (*Location, error) {
+	if e.loadedTypes[0] {
+		if e.Location == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: location.Label}
+		}
+		return e.Location, nil
+	}
+	return nil, &NotLoadedError{edge: "location"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -25,6 +67,12 @@ func (*Settlement) scanValues(columns []string) ([]any, error) {
 	for i := range columns {
 		switch columns[i] {
 		case settlement.FieldID:
+			values[i] = new(sql.NullInt64)
+		case settlement.FieldCreatedBy, settlement.FieldUpdatedBy, settlement.FieldDisplayName, settlement.FieldDescription:
+			values[i] = new(sql.NullString)
+		case settlement.FieldCreatedAt, settlement.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
+		case settlement.ForeignKeys[0]: // location_settlement
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -47,6 +95,49 @@ func (s *Settlement) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			s.ID = int(value.Int64)
+		case settlement.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				s.CreatedAt = value.Time
+			}
+		case settlement.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				s.CreatedBy = value.String
+			}
+		case settlement.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				s.UpdatedAt = value.Time
+			}
+		case settlement.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				s.UpdatedBy = value.String
+			}
+		case settlement.FieldDisplayName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field display_name", values[i])
+			} else if value.Valid {
+				s.DisplayName = value.String
+			}
+		case settlement.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				s.Description = value.String
+			}
+		case settlement.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field location_settlement", value)
+			} else if value.Valid {
+				s.location_settlement = new(int)
+				*s.location_settlement = int(value.Int64)
+			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
 		}
@@ -58,6 +149,11 @@ func (s *Settlement) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (s *Settlement) Value(name string) (ent.Value, error) {
 	return s.selectValues.Get(name)
+}
+
+// QueryLocation queries the "location" edge of the Settlement entity.
+func (s *Settlement) QueryLocation() *LocationQuery {
+	return NewSettlementClient(s.config).QueryLocation(s)
 }
 
 // Update returns a builder for updating this Settlement.
@@ -82,7 +178,24 @@ func (s *Settlement) Unwrap() *Settlement {
 func (s *Settlement) String() string {
 	var builder strings.Builder
 	builder.WriteString("Settlement(")
-	builder.WriteString(fmt.Sprintf("id=%v", s.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", s.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(s.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("created_by=")
+	builder.WriteString(s.CreatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(s.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_by=")
+	builder.WriteString(s.UpdatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("display_name=")
+	builder.WriteString(s.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(s.Description)
 	builder.WriteByte(')')
 	return builder.String()
 }

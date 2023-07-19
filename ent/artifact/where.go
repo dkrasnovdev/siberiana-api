@@ -3,7 +3,10 @@
 package artifact
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
 
@@ -50,6 +53,940 @@ func IDLT(id int) predicate.Artifact {
 // IDLTE applies the LTE predicate on the ID field.
 func IDLTE(id int) predicate.Artifact {
 	return predicate.Artifact(sql.FieldLTE(FieldID, id))
+}
+
+// CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
+func CreatedAt(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldCreatedAt, v))
+}
+
+// CreatedBy applies equality check predicate on the "created_by" field. It's identical to CreatedByEQ.
+func CreatedBy(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldCreatedBy, v))
+}
+
+// UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
+func UpdatedAt(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
+// UpdatedBy applies equality check predicate on the "updated_by" field. It's identical to UpdatedByEQ.
+func UpdatedBy(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldUpdatedBy, v))
+}
+
+// DisplayName applies equality check predicate on the "display_name" field. It's identical to DisplayNameEQ.
+func DisplayName(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDisplayName, v))
+}
+
+// Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
+func Description(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDescription, v))
+}
+
+// PrimaryImageURL applies equality check predicate on the "primary_image_url" field. It's identical to PrimaryImageURLEQ.
+func PrimaryImageURL(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldPrimaryImageURL, v))
+}
+
+// DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
+func DeletedAt(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDeletedAt, v))
+}
+
+// DeletedBy applies equality check predicate on the "deleted_by" field. It's identical to DeletedByEQ.
+func DeletedBy(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDeletedBy, v))
+}
+
+// CreatedAtEQ applies the EQ predicate on the "created_at" field.
+func CreatedAtEQ(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldCreatedAt, v))
+}
+
+// CreatedAtNEQ applies the NEQ predicate on the "created_at" field.
+func CreatedAtNEQ(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldCreatedAt, v))
+}
+
+// CreatedAtIn applies the In predicate on the "created_at" field.
+func CreatedAtIn(vs ...time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldCreatedAt, vs...))
+}
+
+// CreatedAtNotIn applies the NotIn predicate on the "created_at" field.
+func CreatedAtNotIn(vs ...time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldCreatedAt, vs...))
+}
+
+// CreatedAtGT applies the GT predicate on the "created_at" field.
+func CreatedAtGT(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldCreatedAt, v))
+}
+
+// CreatedAtGTE applies the GTE predicate on the "created_at" field.
+func CreatedAtGTE(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldCreatedAt, v))
+}
+
+// CreatedAtLT applies the LT predicate on the "created_at" field.
+func CreatedAtLT(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldCreatedAt, v))
+}
+
+// CreatedAtLTE applies the LTE predicate on the "created_at" field.
+func CreatedAtLTE(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldCreatedAt, v))
+}
+
+// CreatedByEQ applies the EQ predicate on the "created_by" field.
+func CreatedByEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldCreatedBy, v))
+}
+
+// CreatedByNEQ applies the NEQ predicate on the "created_by" field.
+func CreatedByNEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldCreatedBy, v))
+}
+
+// CreatedByIn applies the In predicate on the "created_by" field.
+func CreatedByIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldCreatedBy, vs...))
+}
+
+// CreatedByNotIn applies the NotIn predicate on the "created_by" field.
+func CreatedByNotIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldCreatedBy, vs...))
+}
+
+// CreatedByGT applies the GT predicate on the "created_by" field.
+func CreatedByGT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldCreatedBy, v))
+}
+
+// CreatedByGTE applies the GTE predicate on the "created_by" field.
+func CreatedByGTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldCreatedBy, v))
+}
+
+// CreatedByLT applies the LT predicate on the "created_by" field.
+func CreatedByLT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldCreatedBy, v))
+}
+
+// CreatedByLTE applies the LTE predicate on the "created_by" field.
+func CreatedByLTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldCreatedBy, v))
+}
+
+// CreatedByContains applies the Contains predicate on the "created_by" field.
+func CreatedByContains(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContains(FieldCreatedBy, v))
+}
+
+// CreatedByHasPrefix applies the HasPrefix predicate on the "created_by" field.
+func CreatedByHasPrefix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasPrefix(FieldCreatedBy, v))
+}
+
+// CreatedByHasSuffix applies the HasSuffix predicate on the "created_by" field.
+func CreatedByHasSuffix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasSuffix(FieldCreatedBy, v))
+}
+
+// CreatedByIsNil applies the IsNil predicate on the "created_by" field.
+func CreatedByIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldCreatedBy))
+}
+
+// CreatedByNotNil applies the NotNil predicate on the "created_by" field.
+func CreatedByNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldCreatedBy))
+}
+
+// CreatedByEqualFold applies the EqualFold predicate on the "created_by" field.
+func CreatedByEqualFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEqualFold(FieldCreatedBy, v))
+}
+
+// CreatedByContainsFold applies the ContainsFold predicate on the "created_by" field.
+func CreatedByContainsFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContainsFold(FieldCreatedBy, v))
+}
+
+// UpdatedAtEQ applies the EQ predicate on the "updated_at" field.
+func UpdatedAtEQ(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
+// UpdatedAtNEQ applies the NEQ predicate on the "updated_at" field.
+func UpdatedAtNEQ(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldUpdatedAt, v))
+}
+
+// UpdatedAtIn applies the In predicate on the "updated_at" field.
+func UpdatedAtIn(vs ...time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldUpdatedAt, vs...))
+}
+
+// UpdatedAtNotIn applies the NotIn predicate on the "updated_at" field.
+func UpdatedAtNotIn(vs ...time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldUpdatedAt, vs...))
+}
+
+// UpdatedAtGT applies the GT predicate on the "updated_at" field.
+func UpdatedAtGT(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldUpdatedAt, v))
+}
+
+// UpdatedAtGTE applies the GTE predicate on the "updated_at" field.
+func UpdatedAtGTE(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldUpdatedAt, v))
+}
+
+// UpdatedAtLT applies the LT predicate on the "updated_at" field.
+func UpdatedAtLT(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldUpdatedAt, v))
+}
+
+// UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
+func UpdatedAtLTE(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldUpdatedAt, v))
+}
+
+// UpdatedByEQ applies the EQ predicate on the "updated_by" field.
+func UpdatedByEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldUpdatedBy, v))
+}
+
+// UpdatedByNEQ applies the NEQ predicate on the "updated_by" field.
+func UpdatedByNEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldUpdatedBy, v))
+}
+
+// UpdatedByIn applies the In predicate on the "updated_by" field.
+func UpdatedByIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldUpdatedBy, vs...))
+}
+
+// UpdatedByNotIn applies the NotIn predicate on the "updated_by" field.
+func UpdatedByNotIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldUpdatedBy, vs...))
+}
+
+// UpdatedByGT applies the GT predicate on the "updated_by" field.
+func UpdatedByGT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldUpdatedBy, v))
+}
+
+// UpdatedByGTE applies the GTE predicate on the "updated_by" field.
+func UpdatedByGTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldUpdatedBy, v))
+}
+
+// UpdatedByLT applies the LT predicate on the "updated_by" field.
+func UpdatedByLT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldUpdatedBy, v))
+}
+
+// UpdatedByLTE applies the LTE predicate on the "updated_by" field.
+func UpdatedByLTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldUpdatedBy, v))
+}
+
+// UpdatedByContains applies the Contains predicate on the "updated_by" field.
+func UpdatedByContains(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContains(FieldUpdatedBy, v))
+}
+
+// UpdatedByHasPrefix applies the HasPrefix predicate on the "updated_by" field.
+func UpdatedByHasPrefix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasPrefix(FieldUpdatedBy, v))
+}
+
+// UpdatedByHasSuffix applies the HasSuffix predicate on the "updated_by" field.
+func UpdatedByHasSuffix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasSuffix(FieldUpdatedBy, v))
+}
+
+// UpdatedByIsNil applies the IsNil predicate on the "updated_by" field.
+func UpdatedByIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldUpdatedBy))
+}
+
+// UpdatedByNotNil applies the NotNil predicate on the "updated_by" field.
+func UpdatedByNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldUpdatedBy))
+}
+
+// UpdatedByEqualFold applies the EqualFold predicate on the "updated_by" field.
+func UpdatedByEqualFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEqualFold(FieldUpdatedBy, v))
+}
+
+// UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
+func UpdatedByContainsFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContainsFold(FieldUpdatedBy, v))
+}
+
+// DisplayNameEQ applies the EQ predicate on the "display_name" field.
+func DisplayNameEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDisplayName, v))
+}
+
+// DisplayNameNEQ applies the NEQ predicate on the "display_name" field.
+func DisplayNameNEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldDisplayName, v))
+}
+
+// DisplayNameIn applies the In predicate on the "display_name" field.
+func DisplayNameIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldDisplayName, vs...))
+}
+
+// DisplayNameNotIn applies the NotIn predicate on the "display_name" field.
+func DisplayNameNotIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldDisplayName, vs...))
+}
+
+// DisplayNameGT applies the GT predicate on the "display_name" field.
+func DisplayNameGT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldDisplayName, v))
+}
+
+// DisplayNameGTE applies the GTE predicate on the "display_name" field.
+func DisplayNameGTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldDisplayName, v))
+}
+
+// DisplayNameLT applies the LT predicate on the "display_name" field.
+func DisplayNameLT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldDisplayName, v))
+}
+
+// DisplayNameLTE applies the LTE predicate on the "display_name" field.
+func DisplayNameLTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldDisplayName, v))
+}
+
+// DisplayNameContains applies the Contains predicate on the "display_name" field.
+func DisplayNameContains(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContains(FieldDisplayName, v))
+}
+
+// DisplayNameHasPrefix applies the HasPrefix predicate on the "display_name" field.
+func DisplayNameHasPrefix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasPrefix(FieldDisplayName, v))
+}
+
+// DisplayNameHasSuffix applies the HasSuffix predicate on the "display_name" field.
+func DisplayNameHasSuffix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasSuffix(FieldDisplayName, v))
+}
+
+// DisplayNameIsNil applies the IsNil predicate on the "display_name" field.
+func DisplayNameIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldDisplayName))
+}
+
+// DisplayNameNotNil applies the NotNil predicate on the "display_name" field.
+func DisplayNameNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldDisplayName))
+}
+
+// DisplayNameEqualFold applies the EqualFold predicate on the "display_name" field.
+func DisplayNameEqualFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEqualFold(FieldDisplayName, v))
+}
+
+// DisplayNameContainsFold applies the ContainsFold predicate on the "display_name" field.
+func DisplayNameContainsFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContainsFold(FieldDisplayName, v))
+}
+
+// DescriptionEQ applies the EQ predicate on the "description" field.
+func DescriptionEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDescription, v))
+}
+
+// DescriptionNEQ applies the NEQ predicate on the "description" field.
+func DescriptionNEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldDescription, v))
+}
+
+// DescriptionIn applies the In predicate on the "description" field.
+func DescriptionIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldDescription, vs...))
+}
+
+// DescriptionNotIn applies the NotIn predicate on the "description" field.
+func DescriptionNotIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldDescription, vs...))
+}
+
+// DescriptionGT applies the GT predicate on the "description" field.
+func DescriptionGT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldDescription, v))
+}
+
+// DescriptionGTE applies the GTE predicate on the "description" field.
+func DescriptionGTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldDescription, v))
+}
+
+// DescriptionLT applies the LT predicate on the "description" field.
+func DescriptionLT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldDescription, v))
+}
+
+// DescriptionLTE applies the LTE predicate on the "description" field.
+func DescriptionLTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldDescription, v))
+}
+
+// DescriptionContains applies the Contains predicate on the "description" field.
+func DescriptionContains(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContains(FieldDescription, v))
+}
+
+// DescriptionHasPrefix applies the HasPrefix predicate on the "description" field.
+func DescriptionHasPrefix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasPrefix(FieldDescription, v))
+}
+
+// DescriptionHasSuffix applies the HasSuffix predicate on the "description" field.
+func DescriptionHasSuffix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasSuffix(FieldDescription, v))
+}
+
+// DescriptionIsNil applies the IsNil predicate on the "description" field.
+func DescriptionIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldDescription))
+}
+
+// DescriptionNotNil applies the NotNil predicate on the "description" field.
+func DescriptionNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldDescription))
+}
+
+// DescriptionEqualFold applies the EqualFold predicate on the "description" field.
+func DescriptionEqualFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEqualFold(FieldDescription, v))
+}
+
+// DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
+func DescriptionContainsFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContainsFold(FieldDescription, v))
+}
+
+// PrimaryImageURLEQ applies the EQ predicate on the "primary_image_url" field.
+func PrimaryImageURLEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLNEQ applies the NEQ predicate on the "primary_image_url" field.
+func PrimaryImageURLNEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLIn applies the In predicate on the "primary_image_url" field.
+func PrimaryImageURLIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldPrimaryImageURL, vs...))
+}
+
+// PrimaryImageURLNotIn applies the NotIn predicate on the "primary_image_url" field.
+func PrimaryImageURLNotIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldPrimaryImageURL, vs...))
+}
+
+// PrimaryImageURLGT applies the GT predicate on the "primary_image_url" field.
+func PrimaryImageURLGT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLGTE applies the GTE predicate on the "primary_image_url" field.
+func PrimaryImageURLGTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLLT applies the LT predicate on the "primary_image_url" field.
+func PrimaryImageURLLT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLLTE applies the LTE predicate on the "primary_image_url" field.
+func PrimaryImageURLLTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLContains applies the Contains predicate on the "primary_image_url" field.
+func PrimaryImageURLContains(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContains(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLHasPrefix applies the HasPrefix predicate on the "primary_image_url" field.
+func PrimaryImageURLHasPrefix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasPrefix(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLHasSuffix applies the HasSuffix predicate on the "primary_image_url" field.
+func PrimaryImageURLHasSuffix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasSuffix(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLIsNil applies the IsNil predicate on the "primary_image_url" field.
+func PrimaryImageURLIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldPrimaryImageURL))
+}
+
+// PrimaryImageURLNotNil applies the NotNil predicate on the "primary_image_url" field.
+func PrimaryImageURLNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldPrimaryImageURL))
+}
+
+// PrimaryImageURLEqualFold applies the EqualFold predicate on the "primary_image_url" field.
+func PrimaryImageURLEqualFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEqualFold(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLContainsFold applies the ContainsFold predicate on the "primary_image_url" field.
+func PrimaryImageURLContainsFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContainsFold(FieldPrimaryImageURL, v))
+}
+
+// AdditionalImageUrlsIsNil applies the IsNil predicate on the "additional_image_urls" field.
+func AdditionalImageUrlsIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldAdditionalImageUrls))
+}
+
+// AdditionalImageUrlsNotNil applies the NotNil predicate on the "additional_image_urls" field.
+func AdditionalImageUrlsNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldAdditionalImageUrls))
+}
+
+// DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
+func DeletedAtEQ(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDeletedAt, v))
+}
+
+// DeletedAtNEQ applies the NEQ predicate on the "deleted_at" field.
+func DeletedAtNEQ(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldDeletedAt, v))
+}
+
+// DeletedAtIn applies the In predicate on the "deleted_at" field.
+func DeletedAtIn(vs ...time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldDeletedAt, vs...))
+}
+
+// DeletedAtNotIn applies the NotIn predicate on the "deleted_at" field.
+func DeletedAtNotIn(vs ...time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldDeletedAt, vs...))
+}
+
+// DeletedAtGT applies the GT predicate on the "deleted_at" field.
+func DeletedAtGT(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldDeletedAt, v))
+}
+
+// DeletedAtGTE applies the GTE predicate on the "deleted_at" field.
+func DeletedAtGTE(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldDeletedAt, v))
+}
+
+// DeletedAtLT applies the LT predicate on the "deleted_at" field.
+func DeletedAtLT(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldDeletedAt, v))
+}
+
+// DeletedAtLTE applies the LTE predicate on the "deleted_at" field.
+func DeletedAtLTE(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldDeletedAt, v))
+}
+
+// DeletedAtIsNil applies the IsNil predicate on the "deleted_at" field.
+func DeletedAtIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldDeletedAt))
+}
+
+// DeletedAtNotNil applies the NotNil predicate on the "deleted_at" field.
+func DeletedAtNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldDeletedAt))
+}
+
+// DeletedByEQ applies the EQ predicate on the "deleted_by" field.
+func DeletedByEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDeletedBy, v))
+}
+
+// DeletedByNEQ applies the NEQ predicate on the "deleted_by" field.
+func DeletedByNEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldDeletedBy, v))
+}
+
+// DeletedByIn applies the In predicate on the "deleted_by" field.
+func DeletedByIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldDeletedBy, vs...))
+}
+
+// DeletedByNotIn applies the NotIn predicate on the "deleted_by" field.
+func DeletedByNotIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldDeletedBy, vs...))
+}
+
+// DeletedByGT applies the GT predicate on the "deleted_by" field.
+func DeletedByGT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldDeletedBy, v))
+}
+
+// DeletedByGTE applies the GTE predicate on the "deleted_by" field.
+func DeletedByGTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldDeletedBy, v))
+}
+
+// DeletedByLT applies the LT predicate on the "deleted_by" field.
+func DeletedByLT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldDeletedBy, v))
+}
+
+// DeletedByLTE applies the LTE predicate on the "deleted_by" field.
+func DeletedByLTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldDeletedBy, v))
+}
+
+// DeletedByContains applies the Contains predicate on the "deleted_by" field.
+func DeletedByContains(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContains(FieldDeletedBy, v))
+}
+
+// DeletedByHasPrefix applies the HasPrefix predicate on the "deleted_by" field.
+func DeletedByHasPrefix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasPrefix(FieldDeletedBy, v))
+}
+
+// DeletedByHasSuffix applies the HasSuffix predicate on the "deleted_by" field.
+func DeletedByHasSuffix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasSuffix(FieldDeletedBy, v))
+}
+
+// DeletedByIsNil applies the IsNil predicate on the "deleted_by" field.
+func DeletedByIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldDeletedBy))
+}
+
+// DeletedByNotNil applies the NotNil predicate on the "deleted_by" field.
+func DeletedByNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldDeletedBy))
+}
+
+// DeletedByEqualFold applies the EqualFold predicate on the "deleted_by" field.
+func DeletedByEqualFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEqualFold(FieldDeletedBy, v))
+}
+
+// DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
+func DeletedByContainsFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContainsFold(FieldDeletedBy, v))
+}
+
+// HasAuthors applies the HasEdge predicate on the "authors" edge.
+func HasAuthors() predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, AuthorsTable, AuthorsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAuthorsWith applies the HasEdge predicate on the "authors" edge with a given conditions (other predicates).
+func HasAuthorsWith(preds ...predicate.Person) predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := newAuthorsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasMediums applies the HasEdge predicate on the "mediums" edge.
+func HasMediums() predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, MediumsTable, MediumsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMediumsWith applies the HasEdge predicate on the "mediums" edge with a given conditions (other predicates).
+func HasMediumsWith(preds ...predicate.Medium) predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := newMediumsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasTechniques applies the HasEdge predicate on the "techniques" edge.
+func HasTechniques() predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, TechniquesTable, TechniquesPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTechniquesWith applies the HasEdge predicate on the "techniques" edge with a given conditions (other predicates).
+func HasTechniquesWith(preds ...predicate.Technique) predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := newTechniquesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasProjects applies the HasEdge predicate on the "projects" edge.
+func HasProjects() predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ProjectsTable, ProjectsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProjectsWith applies the HasEdge predicate on the "projects" edge with a given conditions (other predicates).
+func HasProjectsWith(preds ...predicate.Project) predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := newProjectsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPublications applies the HasEdge predicate on the "publications" edge.
+func HasPublications() predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, PublicationsTable, PublicationsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPublicationsWith applies the HasEdge predicate on the "publications" edge with a given conditions (other predicates).
+func HasPublicationsWith(preds ...predicate.Publication) predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := newPublicationsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasHolders applies the HasEdge predicate on the "holders" edge.
+func HasHolders() predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, HoldersTable, HoldersPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasHoldersWith applies the HasEdge predicate on the "holders" edge with a given conditions (other predicates).
+func HasHoldersWith(preds ...predicate.Holder) predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := newHoldersStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasCulturalAffiliation applies the HasEdge predicate on the "cultural_affiliation" edge.
+func HasCulturalAffiliation() predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, CulturalAffiliationTable, CulturalAffiliationColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCulturalAffiliationWith applies the HasEdge predicate on the "cultural_affiliation" edge with a given conditions (other predicates).
+func HasCulturalAffiliationWith(preds ...predicate.Culture) predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := newCulturalAffiliationStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasMonument applies the HasEdge predicate on the "monument" edge.
+func HasMonument() predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, MonumentTable, MonumentColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMonumentWith applies the HasEdge predicate on the "monument" edge with a given conditions (other predicates).
+func HasMonumentWith(preds ...predicate.Monument) predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := newMonumentStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasModel applies the HasEdge predicate on the "model" edge.
+func HasModel() predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, ModelTable, ModelColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasModelWith applies the HasEdge predicate on the "model" edge with a given conditions (other predicates).
+func HasModelWith(preds ...predicate.Model) predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := newModelStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSet applies the HasEdge predicate on the "set" edge.
+func HasSet() predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, SetTable, SetColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSetWith applies the HasEdge predicate on the "set" edge with a given conditions (other predicates).
+func HasSetWith(preds ...predicate.Set) predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := newSetStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasLocation applies the HasEdge predicate on the "location" edge.
+func HasLocation() predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, LocationTable, LocationColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasLocationWith applies the HasEdge predicate on the "location" edge with a given conditions (other predicates).
+func HasLocationWith(preds ...predicate.Location) predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := newLocationStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasCollection applies the HasEdge predicate on the "collection" edge.
+func HasCollection() predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, CollectionTable, CollectionColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCollectionWith applies the HasEdge predicate on the "collection" edge with a given conditions (other predicates).
+func HasCollectionWith(preds ...predicate.Collection) predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := newCollectionStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasLicense applies the HasEdge predicate on the "license" edge.
+func HasLicense() predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, LicenseTable, LicenseColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasLicenseWith applies the HasEdge predicate on the "license" edge with a given conditions (other predicates).
+func HasLicenseWith(preds ...predicate.License) predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := newLicenseStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

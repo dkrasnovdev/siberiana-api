@@ -6,12 +6,17 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/heritage-api/ent/project"
+	"github.com/dkrasnovdev/heritage-api/ent/publication"
 )
 
 // PersonUpdate is the builder for updating Person entities.
@@ -27,13 +32,235 @@ func (pu *PersonUpdate) Where(ps ...predicate.Person) *PersonUpdate {
 	return pu
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (pu *PersonUpdate) SetCreatedBy(s string) *PersonUpdate {
+	pu.mutation.SetCreatedBy(s)
+	return pu
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (pu *PersonUpdate) SetNillableCreatedBy(s *string) *PersonUpdate {
+	if s != nil {
+		pu.SetCreatedBy(*s)
+	}
+	return pu
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (pu *PersonUpdate) ClearCreatedBy() *PersonUpdate {
+	pu.mutation.ClearCreatedBy()
+	return pu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (pu *PersonUpdate) SetUpdatedAt(t time.Time) *PersonUpdate {
+	pu.mutation.SetUpdatedAt(t)
+	return pu
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (pu *PersonUpdate) SetUpdatedBy(s string) *PersonUpdate {
+	pu.mutation.SetUpdatedBy(s)
+	return pu
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (pu *PersonUpdate) SetNillableUpdatedBy(s *string) *PersonUpdate {
+	if s != nil {
+		pu.SetUpdatedBy(*s)
+	}
+	return pu
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (pu *PersonUpdate) ClearUpdatedBy() *PersonUpdate {
+	pu.mutation.ClearUpdatedBy()
+	return pu
+}
+
+// SetDisplayName sets the "display_name" field.
+func (pu *PersonUpdate) SetDisplayName(s string) *PersonUpdate {
+	pu.mutation.SetDisplayName(s)
+	return pu
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (pu *PersonUpdate) SetNillableDisplayName(s *string) *PersonUpdate {
+	if s != nil {
+		pu.SetDisplayName(*s)
+	}
+	return pu
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (pu *PersonUpdate) ClearDisplayName() *PersonUpdate {
+	pu.mutation.ClearDisplayName()
+	return pu
+}
+
+// SetDescription sets the "description" field.
+func (pu *PersonUpdate) SetDescription(s string) *PersonUpdate {
+	pu.mutation.SetDescription(s)
+	return pu
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (pu *PersonUpdate) SetNillableDescription(s *string) *PersonUpdate {
+	if s != nil {
+		pu.SetDescription(*s)
+	}
+	return pu
+}
+
+// ClearDescription clears the value of the "description" field.
+func (pu *PersonUpdate) ClearDescription() *PersonUpdate {
+	pu.mutation.ClearDescription()
+	return pu
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (pu *PersonUpdate) AddArtifactIDs(ids ...int) *PersonUpdate {
+	pu.mutation.AddArtifactIDs(ids...)
+	return pu
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (pu *PersonUpdate) AddArtifacts(a ...*Artifact) *PersonUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return pu.AddArtifactIDs(ids...)
+}
+
+// AddProjectIDs adds the "projects" edge to the Project entity by IDs.
+func (pu *PersonUpdate) AddProjectIDs(ids ...int) *PersonUpdate {
+	pu.mutation.AddProjectIDs(ids...)
+	return pu
+}
+
+// AddProjects adds the "projects" edges to the Project entity.
+func (pu *PersonUpdate) AddProjects(p ...*Project) *PersonUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pu.AddProjectIDs(ids...)
+}
+
+// AddPublicationIDs adds the "publications" edge to the Publication entity by IDs.
+func (pu *PersonUpdate) AddPublicationIDs(ids ...int) *PersonUpdate {
+	pu.mutation.AddPublicationIDs(ids...)
+	return pu
+}
+
+// AddPublications adds the "publications" edges to the Publication entity.
+func (pu *PersonUpdate) AddPublications(p ...*Publication) *PersonUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pu.AddPublicationIDs(ids...)
+}
+
+// SetHolderID sets the "holder" edge to the Holder entity by ID.
+func (pu *PersonUpdate) SetHolderID(id int) *PersonUpdate {
+	pu.mutation.SetHolderID(id)
+	return pu
+}
+
+// SetNillableHolderID sets the "holder" edge to the Holder entity by ID if the given value is not nil.
+func (pu *PersonUpdate) SetNillableHolderID(id *int) *PersonUpdate {
+	if id != nil {
+		pu = pu.SetHolderID(*id)
+	}
+	return pu
+}
+
+// SetHolder sets the "holder" edge to the Holder entity.
+func (pu *PersonUpdate) SetHolder(h *Holder) *PersonUpdate {
+	return pu.SetHolderID(h.ID)
+}
+
 // Mutation returns the PersonMutation object of the builder.
 func (pu *PersonUpdate) Mutation() *PersonMutation {
 	return pu.mutation
 }
 
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (pu *PersonUpdate) ClearArtifacts() *PersonUpdate {
+	pu.mutation.ClearArtifacts()
+	return pu
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (pu *PersonUpdate) RemoveArtifactIDs(ids ...int) *PersonUpdate {
+	pu.mutation.RemoveArtifactIDs(ids...)
+	return pu
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (pu *PersonUpdate) RemoveArtifacts(a ...*Artifact) *PersonUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return pu.RemoveArtifactIDs(ids...)
+}
+
+// ClearProjects clears all "projects" edges to the Project entity.
+func (pu *PersonUpdate) ClearProjects() *PersonUpdate {
+	pu.mutation.ClearProjects()
+	return pu
+}
+
+// RemoveProjectIDs removes the "projects" edge to Project entities by IDs.
+func (pu *PersonUpdate) RemoveProjectIDs(ids ...int) *PersonUpdate {
+	pu.mutation.RemoveProjectIDs(ids...)
+	return pu
+}
+
+// RemoveProjects removes "projects" edges to Project entities.
+func (pu *PersonUpdate) RemoveProjects(p ...*Project) *PersonUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pu.RemoveProjectIDs(ids...)
+}
+
+// ClearPublications clears all "publications" edges to the Publication entity.
+func (pu *PersonUpdate) ClearPublications() *PersonUpdate {
+	pu.mutation.ClearPublications()
+	return pu
+}
+
+// RemovePublicationIDs removes the "publications" edge to Publication entities by IDs.
+func (pu *PersonUpdate) RemovePublicationIDs(ids ...int) *PersonUpdate {
+	pu.mutation.RemovePublicationIDs(ids...)
+	return pu
+}
+
+// RemovePublications removes "publications" edges to Publication entities.
+func (pu *PersonUpdate) RemovePublications(p ...*Publication) *PersonUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pu.RemovePublicationIDs(ids...)
+}
+
+// ClearHolder clears the "holder" edge to the Holder entity.
+func (pu *PersonUpdate) ClearHolder() *PersonUpdate {
+	pu.mutation.ClearHolder()
+	return pu
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (pu *PersonUpdate) Save(ctx context.Context) (int, error) {
+	if err := pu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, pu.sqlSave, pu.mutation, pu.hooks)
 }
 
@@ -59,6 +286,18 @@ func (pu *PersonUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (pu *PersonUpdate) defaults() error {
+	if _, ok := pu.mutation.UpdatedAt(); !ok {
+		if person.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized person.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := person.UpdateDefaultUpdatedAt()
+		pu.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 func (pu *PersonUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(person.Table, person.Columns, sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt))
 	if ps := pu.mutation.predicates; len(ps) > 0 {
@@ -67,6 +306,197 @@ func (pu *PersonUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := pu.mutation.CreatedBy(); ok {
+		_spec.SetField(person.FieldCreatedBy, field.TypeString, value)
+	}
+	if pu.mutation.CreatedByCleared() {
+		_spec.ClearField(person.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := pu.mutation.UpdatedAt(); ok {
+		_spec.SetField(person.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := pu.mutation.UpdatedBy(); ok {
+		_spec.SetField(person.FieldUpdatedBy, field.TypeString, value)
+	}
+	if pu.mutation.UpdatedByCleared() {
+		_spec.ClearField(person.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := pu.mutation.DisplayName(); ok {
+		_spec.SetField(person.FieldDisplayName, field.TypeString, value)
+	}
+	if pu.mutation.DisplayNameCleared() {
+		_spec.ClearField(person.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := pu.mutation.Description(); ok {
+		_spec.SetField(person.FieldDescription, field.TypeString, value)
+	}
+	if pu.mutation.DescriptionCleared() {
+		_spec.ClearField(person.FieldDescription, field.TypeString)
+	}
+	if pu.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.ArtifactsTable,
+			Columns: person.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !pu.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.ArtifactsTable,
+			Columns: person.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.ArtifactsTable,
+			Columns: person.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.ProjectsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.ProjectsTable,
+			Columns: person.ProjectsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(project.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedProjectsIDs(); len(nodes) > 0 && !pu.mutation.ProjectsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.ProjectsTable,
+			Columns: person.ProjectsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(project.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.ProjectsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.ProjectsTable,
+			Columns: person.ProjectsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(project.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.PublicationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.PublicationsTable,
+			Columns: person.PublicationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(publication.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedPublicationsIDs(); len(nodes) > 0 && !pu.mutation.PublicationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.PublicationsTable,
+			Columns: person.PublicationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(publication.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.PublicationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.PublicationsTable,
+			Columns: person.PublicationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(publication.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.HolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   person.HolderTable,
+			Columns: []string{person.HolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.HolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   person.HolderTable,
+			Columns: []string{person.HolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, pu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -88,9 +518,228 @@ type PersonUpdateOne struct {
 	mutation *PersonMutation
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (puo *PersonUpdateOne) SetCreatedBy(s string) *PersonUpdateOne {
+	puo.mutation.SetCreatedBy(s)
+	return puo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (puo *PersonUpdateOne) SetNillableCreatedBy(s *string) *PersonUpdateOne {
+	if s != nil {
+		puo.SetCreatedBy(*s)
+	}
+	return puo
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (puo *PersonUpdateOne) ClearCreatedBy() *PersonUpdateOne {
+	puo.mutation.ClearCreatedBy()
+	return puo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (puo *PersonUpdateOne) SetUpdatedAt(t time.Time) *PersonUpdateOne {
+	puo.mutation.SetUpdatedAt(t)
+	return puo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (puo *PersonUpdateOne) SetUpdatedBy(s string) *PersonUpdateOne {
+	puo.mutation.SetUpdatedBy(s)
+	return puo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (puo *PersonUpdateOne) SetNillableUpdatedBy(s *string) *PersonUpdateOne {
+	if s != nil {
+		puo.SetUpdatedBy(*s)
+	}
+	return puo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (puo *PersonUpdateOne) ClearUpdatedBy() *PersonUpdateOne {
+	puo.mutation.ClearUpdatedBy()
+	return puo
+}
+
+// SetDisplayName sets the "display_name" field.
+func (puo *PersonUpdateOne) SetDisplayName(s string) *PersonUpdateOne {
+	puo.mutation.SetDisplayName(s)
+	return puo
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (puo *PersonUpdateOne) SetNillableDisplayName(s *string) *PersonUpdateOne {
+	if s != nil {
+		puo.SetDisplayName(*s)
+	}
+	return puo
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (puo *PersonUpdateOne) ClearDisplayName() *PersonUpdateOne {
+	puo.mutation.ClearDisplayName()
+	return puo
+}
+
+// SetDescription sets the "description" field.
+func (puo *PersonUpdateOne) SetDescription(s string) *PersonUpdateOne {
+	puo.mutation.SetDescription(s)
+	return puo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (puo *PersonUpdateOne) SetNillableDescription(s *string) *PersonUpdateOne {
+	if s != nil {
+		puo.SetDescription(*s)
+	}
+	return puo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (puo *PersonUpdateOne) ClearDescription() *PersonUpdateOne {
+	puo.mutation.ClearDescription()
+	return puo
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (puo *PersonUpdateOne) AddArtifactIDs(ids ...int) *PersonUpdateOne {
+	puo.mutation.AddArtifactIDs(ids...)
+	return puo
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (puo *PersonUpdateOne) AddArtifacts(a ...*Artifact) *PersonUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return puo.AddArtifactIDs(ids...)
+}
+
+// AddProjectIDs adds the "projects" edge to the Project entity by IDs.
+func (puo *PersonUpdateOne) AddProjectIDs(ids ...int) *PersonUpdateOne {
+	puo.mutation.AddProjectIDs(ids...)
+	return puo
+}
+
+// AddProjects adds the "projects" edges to the Project entity.
+func (puo *PersonUpdateOne) AddProjects(p ...*Project) *PersonUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return puo.AddProjectIDs(ids...)
+}
+
+// AddPublicationIDs adds the "publications" edge to the Publication entity by IDs.
+func (puo *PersonUpdateOne) AddPublicationIDs(ids ...int) *PersonUpdateOne {
+	puo.mutation.AddPublicationIDs(ids...)
+	return puo
+}
+
+// AddPublications adds the "publications" edges to the Publication entity.
+func (puo *PersonUpdateOne) AddPublications(p ...*Publication) *PersonUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return puo.AddPublicationIDs(ids...)
+}
+
+// SetHolderID sets the "holder" edge to the Holder entity by ID.
+func (puo *PersonUpdateOne) SetHolderID(id int) *PersonUpdateOne {
+	puo.mutation.SetHolderID(id)
+	return puo
+}
+
+// SetNillableHolderID sets the "holder" edge to the Holder entity by ID if the given value is not nil.
+func (puo *PersonUpdateOne) SetNillableHolderID(id *int) *PersonUpdateOne {
+	if id != nil {
+		puo = puo.SetHolderID(*id)
+	}
+	return puo
+}
+
+// SetHolder sets the "holder" edge to the Holder entity.
+func (puo *PersonUpdateOne) SetHolder(h *Holder) *PersonUpdateOne {
+	return puo.SetHolderID(h.ID)
+}
+
 // Mutation returns the PersonMutation object of the builder.
 func (puo *PersonUpdateOne) Mutation() *PersonMutation {
 	return puo.mutation
+}
+
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (puo *PersonUpdateOne) ClearArtifacts() *PersonUpdateOne {
+	puo.mutation.ClearArtifacts()
+	return puo
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (puo *PersonUpdateOne) RemoveArtifactIDs(ids ...int) *PersonUpdateOne {
+	puo.mutation.RemoveArtifactIDs(ids...)
+	return puo
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (puo *PersonUpdateOne) RemoveArtifacts(a ...*Artifact) *PersonUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return puo.RemoveArtifactIDs(ids...)
+}
+
+// ClearProjects clears all "projects" edges to the Project entity.
+func (puo *PersonUpdateOne) ClearProjects() *PersonUpdateOne {
+	puo.mutation.ClearProjects()
+	return puo
+}
+
+// RemoveProjectIDs removes the "projects" edge to Project entities by IDs.
+func (puo *PersonUpdateOne) RemoveProjectIDs(ids ...int) *PersonUpdateOne {
+	puo.mutation.RemoveProjectIDs(ids...)
+	return puo
+}
+
+// RemoveProjects removes "projects" edges to Project entities.
+func (puo *PersonUpdateOne) RemoveProjects(p ...*Project) *PersonUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return puo.RemoveProjectIDs(ids...)
+}
+
+// ClearPublications clears all "publications" edges to the Publication entity.
+func (puo *PersonUpdateOne) ClearPublications() *PersonUpdateOne {
+	puo.mutation.ClearPublications()
+	return puo
+}
+
+// RemovePublicationIDs removes the "publications" edge to Publication entities by IDs.
+func (puo *PersonUpdateOne) RemovePublicationIDs(ids ...int) *PersonUpdateOne {
+	puo.mutation.RemovePublicationIDs(ids...)
+	return puo
+}
+
+// RemovePublications removes "publications" edges to Publication entities.
+func (puo *PersonUpdateOne) RemovePublications(p ...*Publication) *PersonUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return puo.RemovePublicationIDs(ids...)
+}
+
+// ClearHolder clears the "holder" edge to the Holder entity.
+func (puo *PersonUpdateOne) ClearHolder() *PersonUpdateOne {
+	puo.mutation.ClearHolder()
+	return puo
 }
 
 // Where appends a list predicates to the PersonUpdate builder.
@@ -108,6 +757,9 @@ func (puo *PersonUpdateOne) Select(field string, fields ...string) *PersonUpdate
 
 // Save executes the query and returns the updated Person entity.
 func (puo *PersonUpdateOne) Save(ctx context.Context) (*Person, error) {
+	if err := puo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, puo.sqlSave, puo.mutation, puo.hooks)
 }
 
@@ -131,6 +783,18 @@ func (puo *PersonUpdateOne) ExecX(ctx context.Context) {
 	if err := puo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (puo *PersonUpdateOne) defaults() error {
+	if _, ok := puo.mutation.UpdatedAt(); !ok {
+		if person.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized person.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := person.UpdateDefaultUpdatedAt()
+		puo.mutation.SetUpdatedAt(v)
+	}
+	return nil
 }
 
 func (puo *PersonUpdateOne) sqlSave(ctx context.Context) (_node *Person, err error) {
@@ -158,6 +822,197 @@ func (puo *PersonUpdateOne) sqlSave(ctx context.Context) (_node *Person, err err
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := puo.mutation.CreatedBy(); ok {
+		_spec.SetField(person.FieldCreatedBy, field.TypeString, value)
+	}
+	if puo.mutation.CreatedByCleared() {
+		_spec.ClearField(person.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := puo.mutation.UpdatedAt(); ok {
+		_spec.SetField(person.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := puo.mutation.UpdatedBy(); ok {
+		_spec.SetField(person.FieldUpdatedBy, field.TypeString, value)
+	}
+	if puo.mutation.UpdatedByCleared() {
+		_spec.ClearField(person.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := puo.mutation.DisplayName(); ok {
+		_spec.SetField(person.FieldDisplayName, field.TypeString, value)
+	}
+	if puo.mutation.DisplayNameCleared() {
+		_spec.ClearField(person.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := puo.mutation.Description(); ok {
+		_spec.SetField(person.FieldDescription, field.TypeString, value)
+	}
+	if puo.mutation.DescriptionCleared() {
+		_spec.ClearField(person.FieldDescription, field.TypeString)
+	}
+	if puo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.ArtifactsTable,
+			Columns: person.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !puo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.ArtifactsTable,
+			Columns: person.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.ArtifactsTable,
+			Columns: person.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.ProjectsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.ProjectsTable,
+			Columns: person.ProjectsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(project.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedProjectsIDs(); len(nodes) > 0 && !puo.mutation.ProjectsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.ProjectsTable,
+			Columns: person.ProjectsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(project.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.ProjectsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.ProjectsTable,
+			Columns: person.ProjectsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(project.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.PublicationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.PublicationsTable,
+			Columns: person.PublicationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(publication.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedPublicationsIDs(); len(nodes) > 0 && !puo.mutation.PublicationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.PublicationsTable,
+			Columns: person.PublicationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(publication.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.PublicationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.PublicationsTable,
+			Columns: person.PublicationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(publication.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.HolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   person.HolderTable,
+			Columns: []string{person.HolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.HolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   person.HolderTable,
+			Columns: []string{person.HolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Person{config: puo.config}
 	_spec.Assign = _node.assignValues

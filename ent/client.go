@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/auditlog"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
@@ -446,14 +447,224 @@ func (c *ArtifactClient) GetX(ctx context.Context, id int) *Artifact {
 	return obj
 }
 
+// QueryAuthors queries the authors edge of a Artifact.
+func (c *ArtifactClient) QueryAuthors(a *Artifact) *PersonQuery {
+	query := (&PersonClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, id),
+			sqlgraph.To(person.Table, person.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, artifact.AuthorsTable, artifact.AuthorsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMediums queries the mediums edge of a Artifact.
+func (c *ArtifactClient) QueryMediums(a *Artifact) *MediumQuery {
+	query := (&MediumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, id),
+			sqlgraph.To(medium.Table, medium.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, artifact.MediumsTable, artifact.MediumsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTechniques queries the techniques edge of a Artifact.
+func (c *ArtifactClient) QueryTechniques(a *Artifact) *TechniqueQuery {
+	query := (&TechniqueClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, id),
+			sqlgraph.To(technique.Table, technique.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, artifact.TechniquesTable, artifact.TechniquesPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProjects queries the projects edge of a Artifact.
+func (c *ArtifactClient) QueryProjects(a *Artifact) *ProjectQuery {
+	query := (&ProjectClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, id),
+			sqlgraph.To(project.Table, project.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, artifact.ProjectsTable, artifact.ProjectsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPublications queries the publications edge of a Artifact.
+func (c *ArtifactClient) QueryPublications(a *Artifact) *PublicationQuery {
+	query := (&PublicationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, id),
+			sqlgraph.To(publication.Table, publication.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, artifact.PublicationsTable, artifact.PublicationsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryHolders queries the holders edge of a Artifact.
+func (c *ArtifactClient) QueryHolders(a *Artifact) *HolderQuery {
+	query := (&HolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, id),
+			sqlgraph.To(holder.Table, holder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, artifact.HoldersTable, artifact.HoldersPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCulturalAffiliation queries the cultural_affiliation edge of a Artifact.
+func (c *ArtifactClient) QueryCulturalAffiliation(a *Artifact) *CultureQuery {
+	query := (&CultureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, id),
+			sqlgraph.To(culture.Table, culture.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.CulturalAffiliationTable, artifact.CulturalAffiliationColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMonument queries the monument edge of a Artifact.
+func (c *ArtifactClient) QueryMonument(a *Artifact) *MonumentQuery {
+	query := (&MonumentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, id),
+			sqlgraph.To(monument.Table, monument.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.MonumentTable, artifact.MonumentColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryModel queries the model edge of a Artifact.
+func (c *ArtifactClient) QueryModel(a *Artifact) *ModelQuery {
+	query := (&ModelClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, id),
+			sqlgraph.To(model.Table, model.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.ModelTable, artifact.ModelColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySet queries the set edge of a Artifact.
+func (c *ArtifactClient) QuerySet(a *Artifact) *SetQuery {
+	query := (&SetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, id),
+			sqlgraph.To(set.Table, set.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.SetTable, artifact.SetColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryLocation queries the location edge of a Artifact.
+func (c *ArtifactClient) QueryLocation(a *Artifact) *LocationQuery {
+	query := (&LocationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, id),
+			sqlgraph.To(location.Table, location.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.LocationTable, artifact.LocationColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCollection queries the collection edge of a Artifact.
+func (c *ArtifactClient) QueryCollection(a *Artifact) *CollectionQuery {
+	query := (&CollectionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, id),
+			sqlgraph.To(collection.Table, collection.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.CollectionTable, artifact.CollectionColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryLicense queries the license edge of a Artifact.
+func (c *ArtifactClient) QueryLicense(a *Artifact) *LicenseQuery {
+	query := (&LicenseClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, id),
+			sqlgraph.To(license.Table, license.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.LicenseTable, artifact.LicenseColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ArtifactClient) Hooks() []Hook {
-	return c.hooks.Artifact
+	hooks := c.hooks.Artifact
+	return append(hooks[:len(hooks):len(hooks)], artifact.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
 func (c *ArtifactClient) Interceptors() []Interceptor {
-	return c.inters.Artifact
+	inters := c.inters.Artifact
+	return append(inters[:len(inters):len(inters)], artifact.Interceptors[:]...)
 }
 
 func (c *ArtifactClient) mutate(ctx context.Context, m *ArtifactMutation) (Value, error) {
@@ -682,9 +893,26 @@ func (c *CategoryClient) GetX(ctx context.Context, id int) *Category {
 	return obj
 }
 
+// QueryCollections queries the collections edge of a Category.
+func (c *CategoryClient) QueryCollections(ca *Category) *CollectionQuery {
+	query := (&CollectionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ca.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(category.Table, category.FieldID, id),
+			sqlgraph.To(collection.Table, collection.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, category.CollectionsTable, category.CollectionsColumn),
+		)
+		fromV = sqlgraph.Neighbors(ca.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *CategoryClient) Hooks() []Hook {
-	return c.hooks.Category
+	hooks := c.hooks.Category
+	return append(hooks[:len(hooks):len(hooks)], category.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -800,9 +1028,42 @@ func (c *CollectionClient) GetX(ctx context.Context, id int) *Collection {
 	return obj
 }
 
+// QueryArtifacts queries the artifacts edge of a Collection.
+func (c *CollectionClient) QueryArtifacts(co *Collection) *ArtifactQuery {
+	query := (&ArtifactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(collection.Table, collection.FieldID, id),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, collection.ArtifactsTable, collection.ArtifactsColumn),
+		)
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCategory queries the category edge of a Collection.
+func (c *CollectionClient) QueryCategory(co *Collection) *CategoryQuery {
+	query := (&CategoryClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(collection.Table, collection.FieldID, id),
+			sqlgraph.To(category.Table, category.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, collection.CategoryTable, collection.CategoryColumn),
+		)
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *CollectionClient) Hooks() []Hook {
-	return c.hooks.Collection
+	hooks := c.hooks.Collection
+	return append(hooks[:len(hooks):len(hooks)], collection.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -918,9 +1179,26 @@ func (c *CultureClient) GetX(ctx context.Context, id int) *Culture {
 	return obj
 }
 
+// QueryArtifacts queries the artifacts edge of a Culture.
+func (c *CultureClient) QueryArtifacts(cu *Culture) *ArtifactQuery {
+	query := (&ArtifactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := cu.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(culture.Table, culture.FieldID, id),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, culture.ArtifactsTable, culture.ArtifactsColumn),
+		)
+		fromV = sqlgraph.Neighbors(cu.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *CultureClient) Hooks() []Hook {
-	return c.hooks.Culture
+	hooks := c.hooks.Culture
+	return append(hooks[:len(hooks):len(hooks)], culture.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -1036,9 +1314,26 @@ func (c *DistrictClient) GetX(ctx context.Context, id int) *District {
 	return obj
 }
 
+// QueryLocation queries the location edge of a District.
+func (c *DistrictClient) QueryLocation(d *District) *LocationQuery {
+	query := (&LocationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := d.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(district.Table, district.FieldID, id),
+			sqlgraph.To(location.Table, location.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, district.LocationTable, district.LocationColumn),
+		)
+		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *DistrictClient) Hooks() []Hook {
-	return c.hooks.District
+	hooks := c.hooks.District
+	return append(hooks[:len(hooks):len(hooks)], district.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -1154,9 +1449,58 @@ func (c *HolderClient) GetX(ctx context.Context, id int) *Holder {
 	return obj
 }
 
+// QueryArtifacts queries the artifacts edge of a Holder.
+func (c *HolderClient) QueryArtifacts(h *Holder) *ArtifactQuery {
+	query := (&ArtifactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := h.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(holder.Table, holder.FieldID, id),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, holder.ArtifactsTable, holder.ArtifactsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPerson queries the person edge of a Holder.
+func (c *HolderClient) QueryPerson(h *Holder) *PersonQuery {
+	query := (&PersonClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := h.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(holder.Table, holder.FieldID, id),
+			sqlgraph.To(person.Table, person.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, holder.PersonTable, holder.PersonColumn),
+		)
+		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrganization queries the organization edge of a Holder.
+func (c *HolderClient) QueryOrganization(h *Holder) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := h.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(holder.Table, holder.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, holder.OrganizationTable, holder.OrganizationColumn),
+		)
+		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *HolderClient) Hooks() []Hook {
-	return c.hooks.Holder
+	hooks := c.hooks.Holder
+	return append(hooks[:len(hooks):len(hooks)], holder.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -1272,9 +1616,26 @@ func (c *LicenseClient) GetX(ctx context.Context, id int) *License {
 	return obj
 }
 
+// QueryArtifacts queries the artifacts edge of a License.
+func (c *LicenseClient) QueryArtifacts(l *License) *ArtifactQuery {
+	query := (&ArtifactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := l.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(license.Table, license.FieldID, id),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, license.ArtifactsTable, license.ArtifactsColumn),
+		)
+		fromV = sqlgraph.Neighbors(l.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *LicenseClient) Hooks() []Hook {
-	return c.hooks.License
+	hooks := c.hooks.License
+	return append(hooks[:len(hooks):len(hooks)], license.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -1390,9 +1751,74 @@ func (c *LocationClient) GetX(ctx context.Context, id int) *Location {
 	return obj
 }
 
+// QueryArtifacts queries the artifacts edge of a Location.
+func (c *LocationClient) QueryArtifacts(l *Location) *ArtifactQuery {
+	query := (&ArtifactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := l.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(location.Table, location.FieldID, id),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, location.ArtifactsTable, location.ArtifactsColumn),
+		)
+		fromV = sqlgraph.Neighbors(l.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySettlement queries the settlement edge of a Location.
+func (c *LocationClient) QuerySettlement(l *Location) *SettlementQuery {
+	query := (&SettlementClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := l.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(location.Table, location.FieldID, id),
+			sqlgraph.To(settlement.Table, settlement.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, location.SettlementTable, location.SettlementColumn),
+		)
+		fromV = sqlgraph.Neighbors(l.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRegion queries the region edge of a Location.
+func (c *LocationClient) QueryRegion(l *Location) *RegionQuery {
+	query := (&RegionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := l.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(location.Table, location.FieldID, id),
+			sqlgraph.To(region.Table, region.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, location.RegionTable, location.RegionColumn),
+		)
+		fromV = sqlgraph.Neighbors(l.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDistrict queries the district edge of a Location.
+func (c *LocationClient) QueryDistrict(l *Location) *DistrictQuery {
+	query := (&DistrictClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := l.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(location.Table, location.FieldID, id),
+			sqlgraph.To(district.Table, district.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, location.DistrictTable, location.DistrictColumn),
+		)
+		fromV = sqlgraph.Neighbors(l.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *LocationClient) Hooks() []Hook {
-	return c.hooks.Location
+	hooks := c.hooks.Location
+	return append(hooks[:len(hooks):len(hooks)], location.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -1508,9 +1934,26 @@ func (c *MediumClient) GetX(ctx context.Context, id int) *Medium {
 	return obj
 }
 
+// QueryArtifacts queries the artifacts edge of a Medium.
+func (c *MediumClient) QueryArtifacts(m *Medium) *ArtifactQuery {
+	query := (&ArtifactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(medium.Table, medium.FieldID, id),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, medium.ArtifactsTable, medium.ArtifactsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *MediumClient) Hooks() []Hook {
-	return c.hooks.Medium
+	hooks := c.hooks.Medium
+	return append(hooks[:len(hooks):len(hooks)], medium.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -1626,9 +2069,26 @@ func (c *ModelClient) GetX(ctx context.Context, id int) *Model {
 	return obj
 }
 
+// QueryArtifacts queries the artifacts edge of a Model.
+func (c *ModelClient) QueryArtifacts(m *Model) *ArtifactQuery {
+	query := (&ArtifactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(model.Table, model.FieldID, id),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, model.ArtifactsTable, model.ArtifactsColumn),
+		)
+		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ModelClient) Hooks() []Hook {
-	return c.hooks.Model
+	hooks := c.hooks.Model
+	return append(hooks[:len(hooks):len(hooks)], model.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -1744,9 +2204,26 @@ func (c *MonumentClient) GetX(ctx context.Context, id int) *Monument {
 	return obj
 }
 
+// QueryArtifacts queries the artifacts edge of a Monument.
+func (c *MonumentClient) QueryArtifacts(m *Monument) *ArtifactQuery {
+	query := (&ArtifactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(monument.Table, monument.FieldID, id),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, monument.ArtifactsTable, monument.ArtifactsColumn),
+		)
+		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *MonumentClient) Hooks() []Hook {
-	return c.hooks.Monument
+	hooks := c.hooks.Monument
+	return append(hooks[:len(hooks):len(hooks)], monument.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -1862,9 +2339,26 @@ func (c *OrganizationClient) GetX(ctx context.Context, id int) *Organization {
 	return obj
 }
 
+// QueryHolder queries the holder edge of a Organization.
+func (c *OrganizationClient) QueryHolder(o *Organization) *HolderQuery {
+	query := (&HolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(holder.Table, holder.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, organization.HolderTable, organization.HolderColumn),
+		)
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *OrganizationClient) Hooks() []Hook {
-	return c.hooks.Organization
+	hooks := c.hooks.Organization
+	return append(hooks[:len(hooks):len(hooks)], organization.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -1980,9 +2474,74 @@ func (c *PersonClient) GetX(ctx context.Context, id int) *Person {
 	return obj
 }
 
+// QueryArtifacts queries the artifacts edge of a Person.
+func (c *PersonClient) QueryArtifacts(pe *Person) *ArtifactQuery {
+	query := (&ArtifactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, id),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, person.ArtifactsTable, person.ArtifactsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProjects queries the projects edge of a Person.
+func (c *PersonClient) QueryProjects(pe *Person) *ProjectQuery {
+	query := (&ProjectClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, id),
+			sqlgraph.To(project.Table, project.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, person.ProjectsTable, person.ProjectsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPublications queries the publications edge of a Person.
+func (c *PersonClient) QueryPublications(pe *Person) *PublicationQuery {
+	query := (&PublicationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, id),
+			sqlgraph.To(publication.Table, publication.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, person.PublicationsTable, person.PublicationsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryHolder queries the holder edge of a Person.
+func (c *PersonClient) QueryHolder(pe *Person) *HolderQuery {
+	query := (&HolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, id),
+			sqlgraph.To(holder.Table, holder.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, person.HolderTable, person.HolderColumn),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *PersonClient) Hooks() []Hook {
-	return c.hooks.Person
+	hooks := c.hooks.Person
+	return append(hooks[:len(hooks):len(hooks)], person.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -2098,9 +2657,42 @@ func (c *ProjectClient) GetX(ctx context.Context, id int) *Project {
 	return obj
 }
 
+// QueryArtifacts queries the artifacts edge of a Project.
+func (c *ProjectClient) QueryArtifacts(pr *Project) *ArtifactQuery {
+	query := (&ArtifactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(project.Table, project.FieldID, id),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, project.ArtifactsTable, project.ArtifactsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTeam queries the team edge of a Project.
+func (c *ProjectClient) QueryTeam(pr *Project) *PersonQuery {
+	query := (&PersonClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(project.Table, project.FieldID, id),
+			sqlgraph.To(person.Table, person.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, project.TeamTable, project.TeamPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ProjectClient) Hooks() []Hook {
-	return c.hooks.Project
+	hooks := c.hooks.Project
+	return append(hooks[:len(hooks):len(hooks)], project.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -2216,9 +2808,42 @@ func (c *PublicationClient) GetX(ctx context.Context, id int) *Publication {
 	return obj
 }
 
+// QueryArtifacts queries the artifacts edge of a Publication.
+func (c *PublicationClient) QueryArtifacts(pu *Publication) *ArtifactQuery {
+	query := (&ArtifactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pu.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(publication.Table, publication.FieldID, id),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, publication.ArtifactsTable, publication.ArtifactsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pu.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAuthors queries the authors edge of a Publication.
+func (c *PublicationClient) QueryAuthors(pu *Publication) *PersonQuery {
+	query := (&PersonClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pu.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(publication.Table, publication.FieldID, id),
+			sqlgraph.To(person.Table, person.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, publication.AuthorsTable, publication.AuthorsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pu.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *PublicationClient) Hooks() []Hook {
-	return c.hooks.Publication
+	hooks := c.hooks.Publication
+	return append(hooks[:len(hooks):len(hooks)], publication.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -2334,9 +2959,26 @@ func (c *RegionClient) GetX(ctx context.Context, id int) *Region {
 	return obj
 }
 
+// QueryLocation queries the location edge of a Region.
+func (c *RegionClient) QueryLocation(r *Region) *LocationQuery {
+	query := (&LocationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(region.Table, region.FieldID, id),
+			sqlgraph.To(location.Table, location.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, region.LocationTable, region.LocationColumn),
+		)
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *RegionClient) Hooks() []Hook {
-	return c.hooks.Region
+	hooks := c.hooks.Region
+	return append(hooks[:len(hooks):len(hooks)], region.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -2452,9 +3094,26 @@ func (c *SetClient) GetX(ctx context.Context, id int) *Set {
 	return obj
 }
 
+// QueryArtifacts queries the artifacts edge of a Set.
+func (c *SetClient) QueryArtifacts(s *Set) *ArtifactQuery {
+	query := (&ArtifactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(set.Table, set.FieldID, id),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, set.ArtifactsTable, set.ArtifactsColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *SetClient) Hooks() []Hook {
-	return c.hooks.Set
+	hooks := c.hooks.Set
+	return append(hooks[:len(hooks):len(hooks)], set.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -2570,9 +3229,26 @@ func (c *SettlementClient) GetX(ctx context.Context, id int) *Settlement {
 	return obj
 }
 
+// QueryLocation queries the location edge of a Settlement.
+func (c *SettlementClient) QueryLocation(s *Settlement) *LocationQuery {
+	query := (&LocationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(settlement.Table, settlement.FieldID, id),
+			sqlgraph.To(location.Table, location.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, settlement.LocationTable, settlement.LocationColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *SettlementClient) Hooks() []Hook {
-	return c.hooks.Settlement
+	hooks := c.hooks.Settlement
+	return append(hooks[:len(hooks):len(hooks)], settlement.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -2688,9 +3364,26 @@ func (c *TechniqueClient) GetX(ctx context.Context, id int) *Technique {
 	return obj
 }
 
+// QueryArtifacts queries the artifacts edge of a Technique.
+func (c *TechniqueClient) QueryArtifacts(t *Technique) *ArtifactQuery {
+	query := (&ArtifactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(technique.Table, technique.FieldID, id),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, technique.ArtifactsTable, technique.ArtifactsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *TechniqueClient) Hooks() []Hook {
-	return c.hooks.Technique
+	hooks := c.hooks.Technique
+	return append(hooks[:len(hooks):len(hooks)], technique.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.

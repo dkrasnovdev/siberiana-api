@@ -5,8 +5,28 @@ package ent
 import (
 	"context"
 
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/category"
+	"github.com/dkrasnovdev/heritage-api/ent/collection"
+	"github.com/dkrasnovdev/heritage-api/ent/culture"
+	"github.com/dkrasnovdev/heritage-api/ent/district"
+	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/license"
+	"github.com/dkrasnovdev/heritage-api/ent/location"
+	"github.com/dkrasnovdev/heritage-api/ent/medium"
+	"github.com/dkrasnovdev/heritage-api/ent/model"
+	"github.com/dkrasnovdev/heritage-api/ent/monument"
+	"github.com/dkrasnovdev/heritage-api/ent/organization"
+	"github.com/dkrasnovdev/heritage-api/ent/person"
+	"github.com/dkrasnovdev/heritage-api/ent/project"
+	"github.com/dkrasnovdev/heritage-api/ent/publication"
+	"github.com/dkrasnovdev/heritage-api/ent/region"
+	"github.com/dkrasnovdev/heritage-api/ent/set"
+	"github.com/dkrasnovdev/heritage-api/ent/settlement"
+	"github.com/dkrasnovdev/heritage-api/ent/technique"
 )
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
@@ -23,6 +43,214 @@ func (a *ArtifactQuery) CollectFields(ctx context.Context, satisfies ...string) 
 
 func (a *ArtifactQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(artifact.Columns))
+		selectedFields = []string{artifact.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "authors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PersonClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personImplementors)...); err != nil {
+				return err
+			}
+			a.WithNamedAuthors(alias, func(wq *PersonQuery) {
+				*wq = *query
+			})
+		case "mediums":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&MediumClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, mediumImplementors)...); err != nil {
+				return err
+			}
+			a.WithNamedMediums(alias, func(wq *MediumQuery) {
+				*wq = *query
+			})
+		case "techniques":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TechniqueClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, techniqueImplementors)...); err != nil {
+				return err
+			}
+			a.WithNamedTechniques(alias, func(wq *TechniqueQuery) {
+				*wq = *query
+			})
+		case "projects":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProjectClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, projectImplementors)...); err != nil {
+				return err
+			}
+			a.WithNamedProjects(alias, func(wq *ProjectQuery) {
+				*wq = *query
+			})
+		case "publications":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PublicationClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, publicationImplementors)...); err != nil {
+				return err
+			}
+			a.WithNamedPublications(alias, func(wq *PublicationQuery) {
+				*wq = *query
+			})
+		case "holders":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&HolderClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, holderImplementors)...); err != nil {
+				return err
+			}
+			a.WithNamedHolders(alias, func(wq *HolderQuery) {
+				*wq = *query
+			})
+		case "culturalAffiliation":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CultureClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, cultureImplementors)...); err != nil {
+				return err
+			}
+			a.withCulturalAffiliation = query
+		case "monument":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&MonumentClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, monumentImplementors)...); err != nil {
+				return err
+			}
+			a.withMonument = query
+		case "model":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ModelClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, modelImplementors)...); err != nil {
+				return err
+			}
+			a.withModel = query
+		case "set":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SetClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, setImplementors)...); err != nil {
+				return err
+			}
+			a.withSet = query
+		case "location":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&LocationClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, locationImplementors)...); err != nil {
+				return err
+			}
+			a.withLocation = query
+		case "collection":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CollectionClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, collectionImplementors)...); err != nil {
+				return err
+			}
+			a.withCollection = query
+		case "license":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&LicenseClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, licenseImplementors)...); err != nil {
+				return err
+			}
+			a.withLicense = query
+		case "createdAt":
+			if _, ok := fieldSeen[artifact.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldCreatedAt)
+				fieldSeen[artifact.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[artifact.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldCreatedBy)
+				fieldSeen[artifact.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[artifact.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldUpdatedAt)
+				fieldSeen[artifact.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[artifact.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldUpdatedBy)
+				fieldSeen[artifact.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[artifact.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldDisplayName)
+				fieldSeen[artifact.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[artifact.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldDescription)
+				fieldSeen[artifact.FieldDescription] = struct{}{}
+			}
+		case "primaryImageURL":
+			if _, ok := fieldSeen[artifact.FieldPrimaryImageURL]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldPrimaryImageURL)
+				fieldSeen[artifact.FieldPrimaryImageURL] = struct{}{}
+			}
+		case "additionalImageUrls":
+			if _, ok := fieldSeen[artifact.FieldAdditionalImageUrls]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldAdditionalImageUrls)
+				fieldSeen[artifact.FieldAdditionalImageUrls] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[artifact.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldDeletedAt)
+				fieldSeen[artifact.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[artifact.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldDeletedBy)
+				fieldSeen[artifact.FieldDeletedBy] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		a.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -48,6 +276,34 @@ func newArtifactPaginateArgs(rv map[string]any) *artifactPaginateArgs {
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*ArtifactOrder:
+			args.opts = append(args.opts, WithArtifactOrder(v))
+		case []any:
+			var orders []*ArtifactOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &ArtifactOrder{Field: &ArtifactOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithArtifactOrder(orders))
+		}
 	}
 	if v, ok := rv[whereField].(*ArtifactWhereInput); ok {
 		args.opts = append(args.opts, WithArtifactFilter(v.Filter))
@@ -115,6 +371,64 @@ func (c *CategoryQuery) CollectFields(ctx context.Context, satisfies ...string) 
 
 func (c *CategoryQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(category.Columns))
+		selectedFields = []string{category.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "collections":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CollectionClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, collectionImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedCollections(alias, func(wq *CollectionQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[category.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, category.FieldCreatedAt)
+				fieldSeen[category.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[category.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, category.FieldCreatedBy)
+				fieldSeen[category.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[category.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, category.FieldUpdatedAt)
+				fieldSeen[category.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[category.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, category.FieldUpdatedBy)
+				fieldSeen[category.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[category.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, category.FieldDisplayName)
+				fieldSeen[category.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[category.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, category.FieldDescription)
+				fieldSeen[category.FieldDescription] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		c.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -141,6 +455,34 @@ func newCategoryPaginateArgs(rv map[string]any) *categoryPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*CategoryOrder:
+			args.opts = append(args.opts, WithCategoryOrder(v))
+		case []any:
+			var orders []*CategoryOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &CategoryOrder{Field: &CategoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithCategoryOrder(orders))
+		}
+	}
 	if v, ok := rv[whereField].(*CategoryWhereInput); ok {
 		args.opts = append(args.opts, WithCategoryFilter(v.Filter))
 	}
@@ -161,6 +503,74 @@ func (c *CollectionQuery) CollectFields(ctx context.Context, satisfies ...string
 
 func (c *CollectionQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(collection.Columns))
+		selectedFields = []string{collection.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "artifacts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtifactClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artifactImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
+		case "category":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CategoryClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, categoryImplementors)...); err != nil {
+				return err
+			}
+			c.withCategory = query
+		case "createdAt":
+			if _, ok := fieldSeen[collection.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, collection.FieldCreatedAt)
+				fieldSeen[collection.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[collection.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, collection.FieldCreatedBy)
+				fieldSeen[collection.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[collection.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, collection.FieldUpdatedAt)
+				fieldSeen[collection.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[collection.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, collection.FieldUpdatedBy)
+				fieldSeen[collection.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[collection.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, collection.FieldDisplayName)
+				fieldSeen[collection.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[collection.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, collection.FieldDescription)
+				fieldSeen[collection.FieldDescription] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		c.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -187,6 +597,34 @@ func newCollectionPaginateArgs(rv map[string]any) *collectionPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*CollectionOrder:
+			args.opts = append(args.opts, WithCollectionOrder(v))
+		case []any:
+			var orders []*CollectionOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &CollectionOrder{Field: &CollectionOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithCollectionOrder(orders))
+		}
+	}
 	if v, ok := rv[whereField].(*CollectionWhereInput); ok {
 		args.opts = append(args.opts, WithCollectionFilter(v.Filter))
 	}
@@ -207,6 +645,64 @@ func (c *CultureQuery) CollectFields(ctx context.Context, satisfies ...string) (
 
 func (c *CultureQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(culture.Columns))
+		selectedFields = []string{culture.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "artifacts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtifactClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artifactImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[culture.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, culture.FieldCreatedAt)
+				fieldSeen[culture.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[culture.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, culture.FieldCreatedBy)
+				fieldSeen[culture.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[culture.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, culture.FieldUpdatedAt)
+				fieldSeen[culture.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[culture.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, culture.FieldUpdatedBy)
+				fieldSeen[culture.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[culture.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, culture.FieldDisplayName)
+				fieldSeen[culture.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[culture.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, culture.FieldDescription)
+				fieldSeen[culture.FieldDescription] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		c.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -233,6 +729,34 @@ func newCulturePaginateArgs(rv map[string]any) *culturePaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*CultureOrder:
+			args.opts = append(args.opts, WithCultureOrder(v))
+		case []any:
+			var orders []*CultureOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &CultureOrder{Field: &CultureOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithCultureOrder(orders))
+		}
+	}
 	if v, ok := rv[whereField].(*CultureWhereInput); ok {
 		args.opts = append(args.opts, WithCultureFilter(v.Filter))
 	}
@@ -253,6 +777,62 @@ func (d *DistrictQuery) CollectFields(ctx context.Context, satisfies ...string) 
 
 func (d *DistrictQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(district.Columns))
+		selectedFields = []string{district.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "location":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&LocationClient{config: d.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, locationImplementors)...); err != nil {
+				return err
+			}
+			d.withLocation = query
+		case "createdAt":
+			if _, ok := fieldSeen[district.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, district.FieldCreatedAt)
+				fieldSeen[district.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[district.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, district.FieldCreatedBy)
+				fieldSeen[district.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[district.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, district.FieldUpdatedAt)
+				fieldSeen[district.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[district.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, district.FieldUpdatedBy)
+				fieldSeen[district.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[district.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, district.FieldDisplayName)
+				fieldSeen[district.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[district.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, district.FieldDescription)
+				fieldSeen[district.FieldDescription] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		d.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -279,6 +859,34 @@ func newDistrictPaginateArgs(rv map[string]any) *districtPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*DistrictOrder:
+			args.opts = append(args.opts, WithDistrictOrder(v))
+		case []any:
+			var orders []*DistrictOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &DistrictOrder{Field: &DistrictOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithDistrictOrder(orders))
+		}
+	}
 	if v, ok := rv[whereField].(*DistrictWhereInput); ok {
 		args.opts = append(args.opts, WithDistrictFilter(v.Filter))
 	}
@@ -299,6 +907,84 @@ func (h *HolderQuery) CollectFields(ctx context.Context, satisfies ...string) (*
 
 func (h *HolderQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(holder.Columns))
+		selectedFields = []string{holder.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "artifacts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtifactClient{config: h.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artifactImplementors)...); err != nil {
+				return err
+			}
+			h.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
+		case "person":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PersonClient{config: h.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personImplementors)...); err != nil {
+				return err
+			}
+			h.withPerson = query
+		case "organization":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: h.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			h.withOrganization = query
+		case "createdAt":
+			if _, ok := fieldSeen[holder.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, holder.FieldCreatedAt)
+				fieldSeen[holder.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[holder.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, holder.FieldCreatedBy)
+				fieldSeen[holder.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[holder.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, holder.FieldUpdatedAt)
+				fieldSeen[holder.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[holder.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, holder.FieldUpdatedBy)
+				fieldSeen[holder.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[holder.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, holder.FieldDisplayName)
+				fieldSeen[holder.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[holder.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, holder.FieldDescription)
+				fieldSeen[holder.FieldDescription] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		h.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -325,6 +1011,34 @@ func newHolderPaginateArgs(rv map[string]any) *holderPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*HolderOrder:
+			args.opts = append(args.opts, WithHolderOrder(v))
+		case []any:
+			var orders []*HolderOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &HolderOrder{Field: &HolderOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithHolderOrder(orders))
+		}
+	}
 	if v, ok := rv[whereField].(*HolderWhereInput); ok {
 		args.opts = append(args.opts, WithHolderFilter(v.Filter))
 	}
@@ -345,6 +1059,64 @@ func (l *LicenseQuery) CollectFields(ctx context.Context, satisfies ...string) (
 
 func (l *LicenseQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(license.Columns))
+		selectedFields = []string{license.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "artifacts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtifactClient{config: l.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artifactImplementors)...); err != nil {
+				return err
+			}
+			l.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[license.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, license.FieldCreatedAt)
+				fieldSeen[license.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[license.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, license.FieldCreatedBy)
+				fieldSeen[license.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[license.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, license.FieldUpdatedAt)
+				fieldSeen[license.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[license.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, license.FieldUpdatedBy)
+				fieldSeen[license.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[license.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, license.FieldDisplayName)
+				fieldSeen[license.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[license.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, license.FieldDescription)
+				fieldSeen[license.FieldDescription] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		l.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -371,6 +1143,34 @@ func newLicensePaginateArgs(rv map[string]any) *licensePaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*LicenseOrder:
+			args.opts = append(args.opts, WithLicenseOrder(v))
+		case []any:
+			var orders []*LicenseOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &LicenseOrder{Field: &LicenseOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithLicenseOrder(orders))
+		}
+	}
 	if v, ok := rv[whereField].(*LicenseWhereInput); ok {
 		args.opts = append(args.opts, WithLicenseFilter(v.Filter))
 	}
@@ -391,6 +1191,94 @@ func (l *LocationQuery) CollectFields(ctx context.Context, satisfies ...string) 
 
 func (l *LocationQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(location.Columns))
+		selectedFields = []string{location.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "artifacts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtifactClient{config: l.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artifactImplementors)...); err != nil {
+				return err
+			}
+			l.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
+		case "settlement":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SettlementClient{config: l.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, settlementImplementors)...); err != nil {
+				return err
+			}
+			l.withSettlement = query
+		case "region":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RegionClient{config: l.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, regionImplementors)...); err != nil {
+				return err
+			}
+			l.withRegion = query
+		case "district":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DistrictClient{config: l.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, districtImplementors)...); err != nil {
+				return err
+			}
+			l.withDistrict = query
+		case "createdAt":
+			if _, ok := fieldSeen[location.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, location.FieldCreatedAt)
+				fieldSeen[location.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[location.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, location.FieldCreatedBy)
+				fieldSeen[location.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[location.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, location.FieldUpdatedAt)
+				fieldSeen[location.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[location.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, location.FieldUpdatedBy)
+				fieldSeen[location.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[location.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, location.FieldDisplayName)
+				fieldSeen[location.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[location.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, location.FieldDescription)
+				fieldSeen[location.FieldDescription] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		l.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -417,6 +1305,34 @@ func newLocationPaginateArgs(rv map[string]any) *locationPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*LocationOrder:
+			args.opts = append(args.opts, WithLocationOrder(v))
+		case []any:
+			var orders []*LocationOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &LocationOrder{Field: &LocationOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithLocationOrder(orders))
+		}
+	}
 	if v, ok := rv[whereField].(*LocationWhereInput); ok {
 		args.opts = append(args.opts, WithLocationFilter(v.Filter))
 	}
@@ -437,6 +1353,64 @@ func (m *MediumQuery) CollectFields(ctx context.Context, satisfies ...string) (*
 
 func (m *MediumQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(medium.Columns))
+		selectedFields = []string{medium.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "artifacts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtifactClient{config: m.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artifactImplementors)...); err != nil {
+				return err
+			}
+			m.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[medium.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, medium.FieldCreatedAt)
+				fieldSeen[medium.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[medium.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, medium.FieldCreatedBy)
+				fieldSeen[medium.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[medium.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, medium.FieldUpdatedAt)
+				fieldSeen[medium.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[medium.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, medium.FieldUpdatedBy)
+				fieldSeen[medium.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[medium.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, medium.FieldDisplayName)
+				fieldSeen[medium.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[medium.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, medium.FieldDescription)
+				fieldSeen[medium.FieldDescription] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		m.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -463,6 +1437,34 @@ func newMediumPaginateArgs(rv map[string]any) *mediumPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*MediumOrder:
+			args.opts = append(args.opts, WithMediumOrder(v))
+		case []any:
+			var orders []*MediumOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &MediumOrder{Field: &MediumOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithMediumOrder(orders))
+		}
+	}
 	if v, ok := rv[whereField].(*MediumWhereInput); ok {
 		args.opts = append(args.opts, WithMediumFilter(v.Filter))
 	}
@@ -483,6 +1485,64 @@ func (m *ModelQuery) CollectFields(ctx context.Context, satisfies ...string) (*M
 
 func (m *ModelQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(model.Columns))
+		selectedFields = []string{model.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "artifacts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtifactClient{config: m.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artifactImplementors)...); err != nil {
+				return err
+			}
+			m.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[model.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, model.FieldCreatedAt)
+				fieldSeen[model.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[model.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, model.FieldCreatedBy)
+				fieldSeen[model.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[model.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, model.FieldUpdatedAt)
+				fieldSeen[model.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[model.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, model.FieldUpdatedBy)
+				fieldSeen[model.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[model.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, model.FieldDisplayName)
+				fieldSeen[model.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[model.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, model.FieldDescription)
+				fieldSeen[model.FieldDescription] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		m.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -509,6 +1569,34 @@ func newModelPaginateArgs(rv map[string]any) *modelPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*ModelOrder:
+			args.opts = append(args.opts, WithModelOrder(v))
+		case []any:
+			var orders []*ModelOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &ModelOrder{Field: &ModelOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithModelOrder(orders))
+		}
+	}
 	if v, ok := rv[whereField].(*ModelWhereInput); ok {
 		args.opts = append(args.opts, WithModelFilter(v.Filter))
 	}
@@ -529,6 +1617,64 @@ func (m *MonumentQuery) CollectFields(ctx context.Context, satisfies ...string) 
 
 func (m *MonumentQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(monument.Columns))
+		selectedFields = []string{monument.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "artifacts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtifactClient{config: m.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artifactImplementors)...); err != nil {
+				return err
+			}
+			m.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[monument.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, monument.FieldCreatedAt)
+				fieldSeen[monument.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[monument.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, monument.FieldCreatedBy)
+				fieldSeen[monument.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[monument.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, monument.FieldUpdatedAt)
+				fieldSeen[monument.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[monument.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, monument.FieldUpdatedBy)
+				fieldSeen[monument.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[monument.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, monument.FieldDisplayName)
+				fieldSeen[monument.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[monument.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, monument.FieldDescription)
+				fieldSeen[monument.FieldDescription] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		m.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -555,6 +1701,34 @@ func newMonumentPaginateArgs(rv map[string]any) *monumentPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*MonumentOrder:
+			args.opts = append(args.opts, WithMonumentOrder(v))
+		case []any:
+			var orders []*MonumentOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &MonumentOrder{Field: &MonumentOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithMonumentOrder(orders))
+		}
+	}
 	if v, ok := rv[whereField].(*MonumentWhereInput); ok {
 		args.opts = append(args.opts, WithMonumentFilter(v.Filter))
 	}
@@ -575,6 +1749,62 @@ func (o *OrganizationQuery) CollectFields(ctx context.Context, satisfies ...stri
 
 func (o *OrganizationQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(organization.Columns))
+		selectedFields = []string{organization.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "holder":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&HolderClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, holderImplementors)...); err != nil {
+				return err
+			}
+			o.withHolder = query
+		case "displayName":
+			if _, ok := fieldSeen[organization.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, organization.FieldDisplayName)
+				fieldSeen[organization.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[organization.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, organization.FieldDescription)
+				fieldSeen[organization.FieldDescription] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[organization.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, organization.FieldCreatedAt)
+				fieldSeen[organization.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[organization.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, organization.FieldCreatedBy)
+				fieldSeen[organization.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[organization.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, organization.FieldUpdatedAt)
+				fieldSeen[organization.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[organization.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, organization.FieldUpdatedBy)
+				fieldSeen[organization.FieldUpdatedBy] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		o.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -601,6 +1831,28 @@ func newOrganizationPaginateArgs(rv map[string]any) *organizationPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &OrganizationOrder{Field: &OrganizationOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithOrganizationOrder(order))
+			}
+		case *OrganizationOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithOrganizationOrder(v))
+			}
+		}
+	}
 	if v, ok := rv[whereField].(*OrganizationWhereInput); ok {
 		args.opts = append(args.opts, WithOrganizationFilter(v.Filter))
 	}
@@ -621,6 +1873,98 @@ func (pe *PersonQuery) CollectFields(ctx context.Context, satisfies ...string) (
 
 func (pe *PersonQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(person.Columns))
+		selectedFields = []string{person.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "artifacts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtifactClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artifactImplementors)...); err != nil {
+				return err
+			}
+			pe.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
+		case "projects":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProjectClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, projectImplementors)...); err != nil {
+				return err
+			}
+			pe.WithNamedProjects(alias, func(wq *ProjectQuery) {
+				*wq = *query
+			})
+		case "publications":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PublicationClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, publicationImplementors)...); err != nil {
+				return err
+			}
+			pe.WithNamedPublications(alias, func(wq *PublicationQuery) {
+				*wq = *query
+			})
+		case "holder":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&HolderClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, holderImplementors)...); err != nil {
+				return err
+			}
+			pe.withHolder = query
+		case "createdAt":
+			if _, ok := fieldSeen[person.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, person.FieldCreatedAt)
+				fieldSeen[person.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[person.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, person.FieldCreatedBy)
+				fieldSeen[person.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[person.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, person.FieldUpdatedAt)
+				fieldSeen[person.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[person.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, person.FieldUpdatedBy)
+				fieldSeen[person.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[person.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, person.FieldDisplayName)
+				fieldSeen[person.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[person.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, person.FieldDescription)
+				fieldSeen[person.FieldDescription] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		pe.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -647,6 +1991,34 @@ func newPersonPaginateArgs(rv map[string]any) *personPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*PersonOrder:
+			args.opts = append(args.opts, WithPersonOrder(v))
+		case []any:
+			var orders []*PersonOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &PersonOrder{Field: &PersonOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithPersonOrder(orders))
+		}
+	}
 	if v, ok := rv[whereField].(*PersonWhereInput); ok {
 		args.opts = append(args.opts, WithPersonFilter(v.Filter))
 	}
@@ -667,6 +2039,76 @@ func (pr *ProjectQuery) CollectFields(ctx context.Context, satisfies ...string) 
 
 func (pr *ProjectQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(project.Columns))
+		selectedFields = []string{project.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "artifacts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtifactClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artifactImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
+		case "team":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PersonClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedTeam(alias, func(wq *PersonQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[project.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, project.FieldCreatedAt)
+				fieldSeen[project.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[project.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, project.FieldCreatedBy)
+				fieldSeen[project.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[project.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, project.FieldUpdatedAt)
+				fieldSeen[project.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[project.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, project.FieldUpdatedBy)
+				fieldSeen[project.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[project.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, project.FieldDisplayName)
+				fieldSeen[project.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[project.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, project.FieldDescription)
+				fieldSeen[project.FieldDescription] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		pr.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -693,6 +2135,34 @@ func newProjectPaginateArgs(rv map[string]any) *projectPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*ProjectOrder:
+			args.opts = append(args.opts, WithProjectOrder(v))
+		case []any:
+			var orders []*ProjectOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &ProjectOrder{Field: &ProjectOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithProjectOrder(orders))
+		}
+	}
 	if v, ok := rv[whereField].(*ProjectWhereInput); ok {
 		args.opts = append(args.opts, WithProjectFilter(v.Filter))
 	}
@@ -713,6 +2183,76 @@ func (pu *PublicationQuery) CollectFields(ctx context.Context, satisfies ...stri
 
 func (pu *PublicationQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(publication.Columns))
+		selectedFields = []string{publication.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "artifacts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtifactClient{config: pu.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artifactImplementors)...); err != nil {
+				return err
+			}
+			pu.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
+		case "authors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PersonClient{config: pu.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personImplementors)...); err != nil {
+				return err
+			}
+			pu.WithNamedAuthors(alias, func(wq *PersonQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[publication.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, publication.FieldCreatedAt)
+				fieldSeen[publication.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[publication.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, publication.FieldCreatedBy)
+				fieldSeen[publication.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[publication.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, publication.FieldUpdatedAt)
+				fieldSeen[publication.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[publication.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, publication.FieldUpdatedBy)
+				fieldSeen[publication.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[publication.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, publication.FieldDisplayName)
+				fieldSeen[publication.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[publication.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, publication.FieldDescription)
+				fieldSeen[publication.FieldDescription] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		pu.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -739,6 +2279,34 @@ func newPublicationPaginateArgs(rv map[string]any) *publicationPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*PublicationOrder:
+			args.opts = append(args.opts, WithPublicationOrder(v))
+		case []any:
+			var orders []*PublicationOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &PublicationOrder{Field: &PublicationOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithPublicationOrder(orders))
+		}
+	}
 	if v, ok := rv[whereField].(*PublicationWhereInput); ok {
 		args.opts = append(args.opts, WithPublicationFilter(v.Filter))
 	}
@@ -759,6 +2327,62 @@ func (r *RegionQuery) CollectFields(ctx context.Context, satisfies ...string) (*
 
 func (r *RegionQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(region.Columns))
+		selectedFields = []string{region.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "location":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&LocationClient{config: r.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, locationImplementors)...); err != nil {
+				return err
+			}
+			r.withLocation = query
+		case "createdAt":
+			if _, ok := fieldSeen[region.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, region.FieldCreatedAt)
+				fieldSeen[region.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[region.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, region.FieldCreatedBy)
+				fieldSeen[region.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[region.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, region.FieldUpdatedAt)
+				fieldSeen[region.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[region.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, region.FieldUpdatedBy)
+				fieldSeen[region.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[region.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, region.FieldDisplayName)
+				fieldSeen[region.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[region.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, region.FieldDescription)
+				fieldSeen[region.FieldDescription] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		r.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -785,6 +2409,34 @@ func newRegionPaginateArgs(rv map[string]any) *regionPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*RegionOrder:
+			args.opts = append(args.opts, WithRegionOrder(v))
+		case []any:
+			var orders []*RegionOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &RegionOrder{Field: &RegionOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithRegionOrder(orders))
+		}
+	}
 	if v, ok := rv[whereField].(*RegionWhereInput); ok {
 		args.opts = append(args.opts, WithRegionFilter(v.Filter))
 	}
@@ -805,6 +2457,64 @@ func (s *SetQuery) CollectFields(ctx context.Context, satisfies ...string) (*Set
 
 func (s *SetQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(set.Columns))
+		selectedFields = []string{set.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "artifacts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtifactClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artifactImplementors)...); err != nil {
+				return err
+			}
+			s.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[set.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, set.FieldCreatedAt)
+				fieldSeen[set.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[set.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, set.FieldCreatedBy)
+				fieldSeen[set.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[set.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, set.FieldUpdatedAt)
+				fieldSeen[set.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[set.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, set.FieldUpdatedBy)
+				fieldSeen[set.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[set.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, set.FieldDisplayName)
+				fieldSeen[set.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[set.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, set.FieldDescription)
+				fieldSeen[set.FieldDescription] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		s.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -831,6 +2541,34 @@ func newSetPaginateArgs(rv map[string]any) *setPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*SetOrder:
+			args.opts = append(args.opts, WithSetOrder(v))
+		case []any:
+			var orders []*SetOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &SetOrder{Field: &SetOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithSetOrder(orders))
+		}
+	}
 	if v, ok := rv[whereField].(*SetWhereInput); ok {
 		args.opts = append(args.opts, WithSetFilter(v.Filter))
 	}
@@ -851,6 +2589,62 @@ func (s *SettlementQuery) CollectFields(ctx context.Context, satisfies ...string
 
 func (s *SettlementQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(settlement.Columns))
+		selectedFields = []string{settlement.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "location":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&LocationClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, locationImplementors)...); err != nil {
+				return err
+			}
+			s.withLocation = query
+		case "createdAt":
+			if _, ok := fieldSeen[settlement.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, settlement.FieldCreatedAt)
+				fieldSeen[settlement.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[settlement.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, settlement.FieldCreatedBy)
+				fieldSeen[settlement.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[settlement.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, settlement.FieldUpdatedAt)
+				fieldSeen[settlement.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[settlement.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, settlement.FieldUpdatedBy)
+				fieldSeen[settlement.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[settlement.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, settlement.FieldDisplayName)
+				fieldSeen[settlement.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[settlement.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, settlement.FieldDescription)
+				fieldSeen[settlement.FieldDescription] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		s.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -877,6 +2671,34 @@ func newSettlementPaginateArgs(rv map[string]any) *settlementPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*SettlementOrder:
+			args.opts = append(args.opts, WithSettlementOrder(v))
+		case []any:
+			var orders []*SettlementOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &SettlementOrder{Field: &SettlementOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithSettlementOrder(orders))
+		}
+	}
 	if v, ok := rv[whereField].(*SettlementWhereInput); ok {
 		args.opts = append(args.opts, WithSettlementFilter(v.Filter))
 	}
@@ -897,6 +2719,64 @@ func (t *TechniqueQuery) CollectFields(ctx context.Context, satisfies ...string)
 
 func (t *TechniqueQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(technique.Columns))
+		selectedFields = []string{technique.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "artifacts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtifactClient{config: t.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artifactImplementors)...); err != nil {
+				return err
+			}
+			t.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[technique.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, technique.FieldCreatedAt)
+				fieldSeen[technique.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[technique.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, technique.FieldCreatedBy)
+				fieldSeen[technique.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[technique.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, technique.FieldUpdatedAt)
+				fieldSeen[technique.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[technique.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, technique.FieldUpdatedBy)
+				fieldSeen[technique.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[technique.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, technique.FieldDisplayName)
+				fieldSeen[technique.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[technique.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, technique.FieldDescription)
+				fieldSeen[technique.FieldDescription] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		t.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -922,6 +2802,34 @@ func newTechniquePaginateArgs(rv map[string]any) *techniquePaginateArgs {
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*TechniqueOrder:
+			args.opts = append(args.opts, WithTechniqueOrder(v))
+		case []any:
+			var orders []*TechniqueOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &TechniqueOrder{Field: &TechniqueOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithTechniqueOrder(orders))
+		}
 	}
 	if v, ok := rv[whereField].(*TechniqueWhereInput); ok {
 		args.opts = append(args.opts, WithTechniqueFilter(v.Filter))

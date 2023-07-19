@@ -3,7 +3,11 @@
 package location
 
 import (
+	"time"
+
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -11,13 +15,67 @@ const (
 	Label = "location"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldCreatedAt holds the string denoting the created_at field in the database.
+	FieldCreatedAt = "created_at"
+	// FieldCreatedBy holds the string denoting the created_by field in the database.
+	FieldCreatedBy = "created_by"
+	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
+	FieldUpdatedAt = "updated_at"
+	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
+	FieldUpdatedBy = "updated_by"
+	// FieldDisplayName holds the string denoting the display_name field in the database.
+	FieldDisplayName = "display_name"
+	// FieldDescription holds the string denoting the description field in the database.
+	FieldDescription = "description"
+	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
+	EdgeArtifacts = "artifacts"
+	// EdgeSettlement holds the string denoting the settlement edge name in mutations.
+	EdgeSettlement = "settlement"
+	// EdgeRegion holds the string denoting the region edge name in mutations.
+	EdgeRegion = "region"
+	// EdgeDistrict holds the string denoting the district edge name in mutations.
+	EdgeDistrict = "district"
 	// Table holds the table name of the location in the database.
 	Table = "locations"
+	// ArtifactsTable is the table that holds the artifacts relation/edge.
+	ArtifactsTable = "artifacts"
+	// ArtifactsInverseTable is the table name for the Artifact entity.
+	// It exists in this package in order to avoid circular dependency with the "artifact" package.
+	ArtifactsInverseTable = "artifacts"
+	// ArtifactsColumn is the table column denoting the artifacts relation/edge.
+	ArtifactsColumn = "location_artifacts"
+	// SettlementTable is the table that holds the settlement relation/edge.
+	SettlementTable = "settlements"
+	// SettlementInverseTable is the table name for the Settlement entity.
+	// It exists in this package in order to avoid circular dependency with the "settlement" package.
+	SettlementInverseTable = "settlements"
+	// SettlementColumn is the table column denoting the settlement relation/edge.
+	SettlementColumn = "location_settlement"
+	// RegionTable is the table that holds the region relation/edge.
+	RegionTable = "regions"
+	// RegionInverseTable is the table name for the Region entity.
+	// It exists in this package in order to avoid circular dependency with the "region" package.
+	RegionInverseTable = "regions"
+	// RegionColumn is the table column denoting the region relation/edge.
+	RegionColumn = "location_region"
+	// DistrictTable is the table that holds the district relation/edge.
+	DistrictTable = "districts"
+	// DistrictInverseTable is the table name for the District entity.
+	// It exists in this package in order to avoid circular dependency with the "district" package.
+	DistrictInverseTable = "districts"
+	// DistrictColumn is the table column denoting the district relation/edge.
+	DistrictColumn = "location_district"
 )
 
 // Columns holds all SQL columns for location fields.
 var Columns = []string{
 	FieldID,
+	FieldCreatedAt,
+	FieldCreatedBy,
+	FieldUpdatedAt,
+	FieldUpdatedBy,
+	FieldDisplayName,
+	FieldDescription,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -30,10 +88,119 @@ func ValidColumn(column string) bool {
 	return false
 }
 
+// Note that the variables below are initialized by the runtime
+// package on the initialization of the application. Therefore,
+// it should be imported in the main as follows:
+//
+//	import _ "github.com/dkrasnovdev/heritage-api/ent/runtime"
+var (
+	Hooks  [2]ent.Hook
+	Policy ent.Policy
+	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
+	DefaultCreatedAt func() time.Time
+	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
+	DefaultUpdatedAt func() time.Time
+	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
+	UpdateDefaultUpdatedAt func() time.Time
+)
+
 // OrderOption defines the ordering options for the Location queries.
 type OrderOption func(*sql.Selector)
 
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByCreatedAt orders the results by the created_at field.
+func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
+}
+
+// ByCreatedBy orders the results by the created_by field.
+func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedBy, opts...).ToFunc()
+}
+
+// ByUpdatedAt orders the results by the updated_at field.
+func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
+}
+
+// ByUpdatedBy orders the results by the updated_by field.
+func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
+}
+
+// ByDisplayName orders the results by the display_name field.
+func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDisplayName, opts...).ToFunc()
+}
+
+// ByDescription orders the results by the description field.
+func ByDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByArtifactsCount orders the results by artifacts count.
+func ByArtifactsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newArtifactsStep(), opts...)
+	}
+}
+
+// ByArtifacts orders the results by artifacts terms.
+func ByArtifacts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newArtifactsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// BySettlementField orders the results by settlement field.
+func BySettlementField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSettlementStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByRegionField orders the results by region field.
+func ByRegionField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRegionStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByDistrictField orders the results by district field.
+func ByDistrictField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDistrictStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newArtifactsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ArtifactsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ArtifactsTable, ArtifactsColumn),
+	)
+}
+func newSettlementStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SettlementInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, false, SettlementTable, SettlementColumn),
+	)
+}
+func newRegionStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RegionInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, false, RegionTable, RegionColumn),
+	)
+}
+func newDistrictStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DistrictInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, false, DistrictTable, DistrictColumn),
+	)
 }

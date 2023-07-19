@@ -4,12 +4,15 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
@@ -17,12 +20,14 @@ import (
 // LicenseQuery is the builder for querying License entities.
 type LicenseQuery struct {
 	config
-	ctx        *QueryContext
-	order      []license.OrderOption
-	inters     []Interceptor
-	predicates []predicate.License
-	modifiers  []func(*sql.Selector)
-	loadTotal  []func(context.Context, []*License) error
+	ctx                *QueryContext
+	order              []license.OrderOption
+	inters             []Interceptor
+	predicates         []predicate.License
+	withArtifacts      *ArtifactQuery
+	modifiers          []func(*sql.Selector)
+	loadTotal          []func(context.Context, []*License) error
+	withNamedArtifacts map[string]*ArtifactQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -57,6 +62,28 @@ func (lq *LicenseQuery) Unique(unique bool) *LicenseQuery {
 func (lq *LicenseQuery) Order(o ...license.OrderOption) *LicenseQuery {
 	lq.order = append(lq.order, o...)
 	return lq
+}
+
+// QueryArtifacts chains the current query on the "artifacts" edge.
+func (lq *LicenseQuery) QueryArtifacts() *ArtifactQuery {
+	query := (&ArtifactClient{config: lq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := lq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := lq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(license.Table, license.FieldID, selector),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, license.ArtifactsTable, license.ArtifactsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(lq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first License entity from the query.
@@ -246,19 +273,43 @@ func (lq *LicenseQuery) Clone() *LicenseQuery {
 		return nil
 	}
 	return &LicenseQuery{
-		config:     lq.config,
-		ctx:        lq.ctx.Clone(),
-		order:      append([]license.OrderOption{}, lq.order...),
-		inters:     append([]Interceptor{}, lq.inters...),
-		predicates: append([]predicate.License{}, lq.predicates...),
+		config:        lq.config,
+		ctx:           lq.ctx.Clone(),
+		order:         append([]license.OrderOption{}, lq.order...),
+		inters:        append([]Interceptor{}, lq.inters...),
+		predicates:    append([]predicate.License{}, lq.predicates...),
+		withArtifacts: lq.withArtifacts.Clone(),
 		// clone intermediate query.
 		sql:  lq.sql.Clone(),
 		path: lq.path,
 	}
 }
 
+// WithArtifacts tells the query-builder to eager-load the nodes that are connected to
+// the "artifacts" edge. The optional arguments are used to configure the query builder of the edge.
+func (lq *LicenseQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *LicenseQuery {
+	query := (&ArtifactClient{config: lq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	lq.withArtifacts = query
+	return lq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.License.Query().
+//		GroupBy(license.FieldCreatedAt).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (lq *LicenseQuery) GroupBy(field string, fields ...string) *LicenseGroupBy {
 	lq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &LicenseGroupBy{build: lq}
@@ -270,6 +321,16 @@ func (lq *LicenseQuery) GroupBy(field string, fields ...string) *LicenseGroupBy 
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//	}
+//
+//	client.License.Query().
+//		Select(license.FieldCreatedAt).
+//		Scan(ctx, &v)
 func (lq *LicenseQuery) Select(fields ...string) *LicenseSelect {
 	lq.ctx.Fields = append(lq.ctx.Fields, fields...)
 	sbuild := &LicenseSelect{LicenseQuery: lq}
@@ -306,13 +367,22 @@ func (lq *LicenseQuery) prepareQuery(ctx context.Context) error {
 		}
 		lq.sql = prev
 	}
+	if license.Policy == nil {
+		return errors.New("ent: uninitialized license.Policy (forgotten import ent/runtime?)")
+	}
+	if err := license.Policy.EvalQuery(ctx, lq); err != nil {
+		return err
+	}
 	return nil
 }
 
 func (lq *LicenseQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*License, error) {
 	var (
-		nodes = []*License{}
-		_spec = lq.querySpec()
+		nodes       = []*License{}
+		_spec       = lq.querySpec()
+		loadedTypes = [1]bool{
+			lq.withArtifacts != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*License).scanValues(nil, columns)
@@ -320,6 +390,7 @@ func (lq *LicenseQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Lice
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &License{config: lq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(lq.modifiers) > 0 {
@@ -334,12 +405,58 @@ func (lq *LicenseQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Lice
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := lq.withArtifacts; query != nil {
+		if err := lq.loadArtifacts(ctx, query, nodes,
+			func(n *License) { n.Edges.Artifacts = []*Artifact{} },
+			func(n *License, e *Artifact) { n.Edges.Artifacts = append(n.Edges.Artifacts, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range lq.withNamedArtifacts {
+		if err := lq.loadArtifacts(ctx, query, nodes,
+			func(n *License) { n.appendNamedArtifacts(name) },
+			func(n *License, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range lq.loadTotal {
 		if err := lq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (lq *LicenseQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, nodes []*License, init func(*License), assign func(*License, *Artifact)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*License)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Artifact(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(license.ArtifactsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.license_artifacts
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "license_artifacts" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "license_artifacts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
 }
 
 func (lq *LicenseQuery) sqlCount(ctx context.Context) (int, error) {
@@ -424,6 +541,20 @@ func (lq *LicenseQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedArtifacts tells the query-builder to eager-load the nodes that are connected to the "artifacts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (lq *LicenseQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQuery)) *LicenseQuery {
+	query := (&ArtifactClient{config: lq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if lq.withNamedArtifacts == nil {
+		lq.withNamedArtifacts = make(map[string]*ArtifactQuery)
+	}
+	lq.withNamedArtifacts[name] = query
+	return lq
 }
 
 // LicenseGroupBy is the group-by builder for License entities.

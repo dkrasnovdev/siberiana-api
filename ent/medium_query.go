@@ -4,12 +4,15 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/medium"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
@@ -17,12 +20,14 @@ import (
 // MediumQuery is the builder for querying Medium entities.
 type MediumQuery struct {
 	config
-	ctx        *QueryContext
-	order      []medium.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Medium
-	modifiers  []func(*sql.Selector)
-	loadTotal  []func(context.Context, []*Medium) error
+	ctx                *QueryContext
+	order              []medium.OrderOption
+	inters             []Interceptor
+	predicates         []predicate.Medium
+	withArtifacts      *ArtifactQuery
+	modifiers          []func(*sql.Selector)
+	loadTotal          []func(context.Context, []*Medium) error
+	withNamedArtifacts map[string]*ArtifactQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -57,6 +62,28 @@ func (mq *MediumQuery) Unique(unique bool) *MediumQuery {
 func (mq *MediumQuery) Order(o ...medium.OrderOption) *MediumQuery {
 	mq.order = append(mq.order, o...)
 	return mq
+}
+
+// QueryArtifacts chains the current query on the "artifacts" edge.
+func (mq *MediumQuery) QueryArtifacts() *ArtifactQuery {
+	query := (&ArtifactClient{config: mq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := mq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := mq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(medium.Table, medium.FieldID, selector),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, medium.ArtifactsTable, medium.ArtifactsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Medium entity from the query.
@@ -246,19 +273,43 @@ func (mq *MediumQuery) Clone() *MediumQuery {
 		return nil
 	}
 	return &MediumQuery{
-		config:     mq.config,
-		ctx:        mq.ctx.Clone(),
-		order:      append([]medium.OrderOption{}, mq.order...),
-		inters:     append([]Interceptor{}, mq.inters...),
-		predicates: append([]predicate.Medium{}, mq.predicates...),
+		config:        mq.config,
+		ctx:           mq.ctx.Clone(),
+		order:         append([]medium.OrderOption{}, mq.order...),
+		inters:        append([]Interceptor{}, mq.inters...),
+		predicates:    append([]predicate.Medium{}, mq.predicates...),
+		withArtifacts: mq.withArtifacts.Clone(),
 		// clone intermediate query.
 		sql:  mq.sql.Clone(),
 		path: mq.path,
 	}
 }
 
+// WithArtifacts tells the query-builder to eager-load the nodes that are connected to
+// the "artifacts" edge. The optional arguments are used to configure the query builder of the edge.
+func (mq *MediumQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *MediumQuery {
+	query := (&ArtifactClient{config: mq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	mq.withArtifacts = query
+	return mq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Medium.Query().
+//		GroupBy(medium.FieldCreatedAt).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (mq *MediumQuery) GroupBy(field string, fields ...string) *MediumGroupBy {
 	mq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &MediumGroupBy{build: mq}
@@ -270,6 +321,16 @@ func (mq *MediumQuery) GroupBy(field string, fields ...string) *MediumGroupBy {
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//	}
+//
+//	client.Medium.Query().
+//		Select(medium.FieldCreatedAt).
+//		Scan(ctx, &v)
 func (mq *MediumQuery) Select(fields ...string) *MediumSelect {
 	mq.ctx.Fields = append(mq.ctx.Fields, fields...)
 	sbuild := &MediumSelect{MediumQuery: mq}
@@ -306,13 +367,22 @@ func (mq *MediumQuery) prepareQuery(ctx context.Context) error {
 		}
 		mq.sql = prev
 	}
+	if medium.Policy == nil {
+		return errors.New("ent: uninitialized medium.Policy (forgotten import ent/runtime?)")
+	}
+	if err := medium.Policy.EvalQuery(ctx, mq); err != nil {
+		return err
+	}
 	return nil
 }
 
 func (mq *MediumQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Medium, error) {
 	var (
-		nodes = []*Medium{}
-		_spec = mq.querySpec()
+		nodes       = []*Medium{}
+		_spec       = mq.querySpec()
+		loadedTypes = [1]bool{
+			mq.withArtifacts != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Medium).scanValues(nil, columns)
@@ -320,6 +390,7 @@ func (mq *MediumQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Mediu
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Medium{config: mq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(mq.modifiers) > 0 {
@@ -334,12 +405,88 @@ func (mq *MediumQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Mediu
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := mq.withArtifacts; query != nil {
+		if err := mq.loadArtifacts(ctx, query, nodes,
+			func(n *Medium) { n.Edges.Artifacts = []*Artifact{} },
+			func(n *Medium, e *Artifact) { n.Edges.Artifacts = append(n.Edges.Artifacts, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range mq.withNamedArtifacts {
+		if err := mq.loadArtifacts(ctx, query, nodes,
+			func(n *Medium) { n.appendNamedArtifacts(name) },
+			func(n *Medium, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range mq.loadTotal {
 		if err := mq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (mq *MediumQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, nodes []*Medium, init func(*Medium), assign func(*Medium, *Artifact)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Medium)
+	nids := make(map[int]map[*Medium]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(medium.ArtifactsTable)
+		s.Join(joinT).On(s.C(artifact.FieldID), joinT.C(medium.ArtifactsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(medium.ArtifactsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(medium.ArtifactsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Medium]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Artifact](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "artifacts" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
 }
 
 func (mq *MediumQuery) sqlCount(ctx context.Context) (int, error) {
@@ -424,6 +571,20 @@ func (mq *MediumQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedArtifacts tells the query-builder to eager-load the nodes that are connected to the "artifacts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (mq *MediumQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQuery)) *MediumQuery {
+	query := (&ArtifactClient{config: mq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if mq.withNamedArtifacts == nil {
+		mq.withNamedArtifacts = make(map[string]*ArtifactQuery)
+	}
+	mq.withNamedArtifacts[name] = query
+	return mq
 }
 
 // MediumGroupBy is the group-by builder for Medium entities.

@@ -6,10 +6,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/monument"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
@@ -27,13 +29,138 @@ func (mu *MonumentUpdate) Where(ps ...predicate.Monument) *MonumentUpdate {
 	return mu
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (mu *MonumentUpdate) SetCreatedBy(s string) *MonumentUpdate {
+	mu.mutation.SetCreatedBy(s)
+	return mu
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (mu *MonumentUpdate) SetNillableCreatedBy(s *string) *MonumentUpdate {
+	if s != nil {
+		mu.SetCreatedBy(*s)
+	}
+	return mu
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (mu *MonumentUpdate) ClearCreatedBy() *MonumentUpdate {
+	mu.mutation.ClearCreatedBy()
+	return mu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (mu *MonumentUpdate) SetUpdatedAt(t time.Time) *MonumentUpdate {
+	mu.mutation.SetUpdatedAt(t)
+	return mu
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (mu *MonumentUpdate) SetUpdatedBy(s string) *MonumentUpdate {
+	mu.mutation.SetUpdatedBy(s)
+	return mu
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (mu *MonumentUpdate) SetNillableUpdatedBy(s *string) *MonumentUpdate {
+	if s != nil {
+		mu.SetUpdatedBy(*s)
+	}
+	return mu
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (mu *MonumentUpdate) ClearUpdatedBy() *MonumentUpdate {
+	mu.mutation.ClearUpdatedBy()
+	return mu
+}
+
+// SetDisplayName sets the "display_name" field.
+func (mu *MonumentUpdate) SetDisplayName(s string) *MonumentUpdate {
+	mu.mutation.SetDisplayName(s)
+	return mu
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (mu *MonumentUpdate) SetNillableDisplayName(s *string) *MonumentUpdate {
+	if s != nil {
+		mu.SetDisplayName(*s)
+	}
+	return mu
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (mu *MonumentUpdate) ClearDisplayName() *MonumentUpdate {
+	mu.mutation.ClearDisplayName()
+	return mu
+}
+
+// SetDescription sets the "description" field.
+func (mu *MonumentUpdate) SetDescription(s string) *MonumentUpdate {
+	mu.mutation.SetDescription(s)
+	return mu
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (mu *MonumentUpdate) SetNillableDescription(s *string) *MonumentUpdate {
+	if s != nil {
+		mu.SetDescription(*s)
+	}
+	return mu
+}
+
+// ClearDescription clears the value of the "description" field.
+func (mu *MonumentUpdate) ClearDescription() *MonumentUpdate {
+	mu.mutation.ClearDescription()
+	return mu
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (mu *MonumentUpdate) AddArtifactIDs(ids ...int) *MonumentUpdate {
+	mu.mutation.AddArtifactIDs(ids...)
+	return mu
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (mu *MonumentUpdate) AddArtifacts(a ...*Artifact) *MonumentUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return mu.AddArtifactIDs(ids...)
+}
+
 // Mutation returns the MonumentMutation object of the builder.
 func (mu *MonumentUpdate) Mutation() *MonumentMutation {
 	return mu.mutation
 }
 
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (mu *MonumentUpdate) ClearArtifacts() *MonumentUpdate {
+	mu.mutation.ClearArtifacts()
+	return mu
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (mu *MonumentUpdate) RemoveArtifactIDs(ids ...int) *MonumentUpdate {
+	mu.mutation.RemoveArtifactIDs(ids...)
+	return mu
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (mu *MonumentUpdate) RemoveArtifacts(a ...*Artifact) *MonumentUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return mu.RemoveArtifactIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (mu *MonumentUpdate) Save(ctx context.Context) (int, error) {
+	if err := mu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, mu.sqlSave, mu.mutation, mu.hooks)
 }
 
@@ -59,6 +186,18 @@ func (mu *MonumentUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (mu *MonumentUpdate) defaults() error {
+	if _, ok := mu.mutation.UpdatedAt(); !ok {
+		if monument.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized monument.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := monument.UpdateDefaultUpdatedAt()
+		mu.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 func (mu *MonumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(monument.Table, monument.Columns, sqlgraph.NewFieldSpec(monument.FieldID, field.TypeInt))
 	if ps := mu.mutation.predicates; len(ps) > 0 {
@@ -67,6 +206,78 @@ func (mu *MonumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := mu.mutation.CreatedBy(); ok {
+		_spec.SetField(monument.FieldCreatedBy, field.TypeString, value)
+	}
+	if mu.mutation.CreatedByCleared() {
+		_spec.ClearField(monument.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := mu.mutation.UpdatedAt(); ok {
+		_spec.SetField(monument.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := mu.mutation.UpdatedBy(); ok {
+		_spec.SetField(monument.FieldUpdatedBy, field.TypeString, value)
+	}
+	if mu.mutation.UpdatedByCleared() {
+		_spec.ClearField(monument.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := mu.mutation.DisplayName(); ok {
+		_spec.SetField(monument.FieldDisplayName, field.TypeString, value)
+	}
+	if mu.mutation.DisplayNameCleared() {
+		_spec.ClearField(monument.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := mu.mutation.Description(); ok {
+		_spec.SetField(monument.FieldDescription, field.TypeString, value)
+	}
+	if mu.mutation.DescriptionCleared() {
+		_spec.ClearField(monument.FieldDescription, field.TypeString)
+	}
+	if mu.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   monument.ArtifactsTable,
+			Columns: []string{monument.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mu.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !mu.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   monument.ArtifactsTable,
+			Columns: []string{monument.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mu.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   monument.ArtifactsTable,
+			Columns: []string{monument.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, mu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -88,9 +299,131 @@ type MonumentUpdateOne struct {
 	mutation *MonumentMutation
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (muo *MonumentUpdateOne) SetCreatedBy(s string) *MonumentUpdateOne {
+	muo.mutation.SetCreatedBy(s)
+	return muo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (muo *MonumentUpdateOne) SetNillableCreatedBy(s *string) *MonumentUpdateOne {
+	if s != nil {
+		muo.SetCreatedBy(*s)
+	}
+	return muo
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (muo *MonumentUpdateOne) ClearCreatedBy() *MonumentUpdateOne {
+	muo.mutation.ClearCreatedBy()
+	return muo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (muo *MonumentUpdateOne) SetUpdatedAt(t time.Time) *MonumentUpdateOne {
+	muo.mutation.SetUpdatedAt(t)
+	return muo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (muo *MonumentUpdateOne) SetUpdatedBy(s string) *MonumentUpdateOne {
+	muo.mutation.SetUpdatedBy(s)
+	return muo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (muo *MonumentUpdateOne) SetNillableUpdatedBy(s *string) *MonumentUpdateOne {
+	if s != nil {
+		muo.SetUpdatedBy(*s)
+	}
+	return muo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (muo *MonumentUpdateOne) ClearUpdatedBy() *MonumentUpdateOne {
+	muo.mutation.ClearUpdatedBy()
+	return muo
+}
+
+// SetDisplayName sets the "display_name" field.
+func (muo *MonumentUpdateOne) SetDisplayName(s string) *MonumentUpdateOne {
+	muo.mutation.SetDisplayName(s)
+	return muo
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (muo *MonumentUpdateOne) SetNillableDisplayName(s *string) *MonumentUpdateOne {
+	if s != nil {
+		muo.SetDisplayName(*s)
+	}
+	return muo
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (muo *MonumentUpdateOne) ClearDisplayName() *MonumentUpdateOne {
+	muo.mutation.ClearDisplayName()
+	return muo
+}
+
+// SetDescription sets the "description" field.
+func (muo *MonumentUpdateOne) SetDescription(s string) *MonumentUpdateOne {
+	muo.mutation.SetDescription(s)
+	return muo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (muo *MonumentUpdateOne) SetNillableDescription(s *string) *MonumentUpdateOne {
+	if s != nil {
+		muo.SetDescription(*s)
+	}
+	return muo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (muo *MonumentUpdateOne) ClearDescription() *MonumentUpdateOne {
+	muo.mutation.ClearDescription()
+	return muo
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (muo *MonumentUpdateOne) AddArtifactIDs(ids ...int) *MonumentUpdateOne {
+	muo.mutation.AddArtifactIDs(ids...)
+	return muo
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (muo *MonumentUpdateOne) AddArtifacts(a ...*Artifact) *MonumentUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return muo.AddArtifactIDs(ids...)
+}
+
 // Mutation returns the MonumentMutation object of the builder.
 func (muo *MonumentUpdateOne) Mutation() *MonumentMutation {
 	return muo.mutation
+}
+
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (muo *MonumentUpdateOne) ClearArtifacts() *MonumentUpdateOne {
+	muo.mutation.ClearArtifacts()
+	return muo
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (muo *MonumentUpdateOne) RemoveArtifactIDs(ids ...int) *MonumentUpdateOne {
+	muo.mutation.RemoveArtifactIDs(ids...)
+	return muo
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (muo *MonumentUpdateOne) RemoveArtifacts(a ...*Artifact) *MonumentUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return muo.RemoveArtifactIDs(ids...)
 }
 
 // Where appends a list predicates to the MonumentUpdate builder.
@@ -108,6 +441,9 @@ func (muo *MonumentUpdateOne) Select(field string, fields ...string) *MonumentUp
 
 // Save executes the query and returns the updated Monument entity.
 func (muo *MonumentUpdateOne) Save(ctx context.Context) (*Monument, error) {
+	if err := muo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, muo.sqlSave, muo.mutation, muo.hooks)
 }
 
@@ -131,6 +467,18 @@ func (muo *MonumentUpdateOne) ExecX(ctx context.Context) {
 	if err := muo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (muo *MonumentUpdateOne) defaults() error {
+	if _, ok := muo.mutation.UpdatedAt(); !ok {
+		if monument.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized monument.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := monument.UpdateDefaultUpdatedAt()
+		muo.mutation.SetUpdatedAt(v)
+	}
+	return nil
 }
 
 func (muo *MonumentUpdateOne) sqlSave(ctx context.Context) (_node *Monument, err error) {
@@ -158,6 +506,78 @@ func (muo *MonumentUpdateOne) sqlSave(ctx context.Context) (_node *Monument, err
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := muo.mutation.CreatedBy(); ok {
+		_spec.SetField(monument.FieldCreatedBy, field.TypeString, value)
+	}
+	if muo.mutation.CreatedByCleared() {
+		_spec.ClearField(monument.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := muo.mutation.UpdatedAt(); ok {
+		_spec.SetField(monument.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := muo.mutation.UpdatedBy(); ok {
+		_spec.SetField(monument.FieldUpdatedBy, field.TypeString, value)
+	}
+	if muo.mutation.UpdatedByCleared() {
+		_spec.ClearField(monument.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := muo.mutation.DisplayName(); ok {
+		_spec.SetField(monument.FieldDisplayName, field.TypeString, value)
+	}
+	if muo.mutation.DisplayNameCleared() {
+		_spec.ClearField(monument.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := muo.mutation.Description(); ok {
+		_spec.SetField(monument.FieldDescription, field.TypeString, value)
+	}
+	if muo.mutation.DescriptionCleared() {
+		_spec.ClearField(monument.FieldDescription, field.TypeString)
+	}
+	if muo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   monument.ArtifactsTable,
+			Columns: []string{monument.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := muo.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !muo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   monument.ArtifactsTable,
+			Columns: []string{monument.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := muo.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   monument.ArtifactsTable,
+			Columns: []string{monument.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Monument{config: muo.config}
 	_spec.Assign = _node.assignValues

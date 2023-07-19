@@ -4,12 +4,15 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/set"
 )
@@ -17,12 +20,14 @@ import (
 // SetQuery is the builder for querying Set entities.
 type SetQuery struct {
 	config
-	ctx        *QueryContext
-	order      []set.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Set
-	modifiers  []func(*sql.Selector)
-	loadTotal  []func(context.Context, []*Set) error
+	ctx                *QueryContext
+	order              []set.OrderOption
+	inters             []Interceptor
+	predicates         []predicate.Set
+	withArtifacts      *ArtifactQuery
+	modifiers          []func(*sql.Selector)
+	loadTotal          []func(context.Context, []*Set) error
+	withNamedArtifacts map[string]*ArtifactQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -57,6 +62,28 @@ func (sq *SetQuery) Unique(unique bool) *SetQuery {
 func (sq *SetQuery) Order(o ...set.OrderOption) *SetQuery {
 	sq.order = append(sq.order, o...)
 	return sq
+}
+
+// QueryArtifacts chains the current query on the "artifacts" edge.
+func (sq *SetQuery) QueryArtifacts() *ArtifactQuery {
+	query := (&ArtifactClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(set.Table, set.FieldID, selector),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, set.ArtifactsTable, set.ArtifactsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Set entity from the query.
@@ -246,19 +273,43 @@ func (sq *SetQuery) Clone() *SetQuery {
 		return nil
 	}
 	return &SetQuery{
-		config:     sq.config,
-		ctx:        sq.ctx.Clone(),
-		order:      append([]set.OrderOption{}, sq.order...),
-		inters:     append([]Interceptor{}, sq.inters...),
-		predicates: append([]predicate.Set{}, sq.predicates...),
+		config:        sq.config,
+		ctx:           sq.ctx.Clone(),
+		order:         append([]set.OrderOption{}, sq.order...),
+		inters:        append([]Interceptor{}, sq.inters...),
+		predicates:    append([]predicate.Set{}, sq.predicates...),
+		withArtifacts: sq.withArtifacts.Clone(),
 		// clone intermediate query.
 		sql:  sq.sql.Clone(),
 		path: sq.path,
 	}
 }
 
+// WithArtifacts tells the query-builder to eager-load the nodes that are connected to
+// the "artifacts" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SetQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *SetQuery {
+	query := (&ArtifactClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withArtifacts = query
+	return sq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Set.Query().
+//		GroupBy(set.FieldCreatedAt).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (sq *SetQuery) GroupBy(field string, fields ...string) *SetGroupBy {
 	sq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &SetGroupBy{build: sq}
@@ -270,6 +321,16 @@ func (sq *SetQuery) GroupBy(field string, fields ...string) *SetGroupBy {
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//	}
+//
+//	client.Set.Query().
+//		Select(set.FieldCreatedAt).
+//		Scan(ctx, &v)
 func (sq *SetQuery) Select(fields ...string) *SetSelect {
 	sq.ctx.Fields = append(sq.ctx.Fields, fields...)
 	sbuild := &SetSelect{SetQuery: sq}
@@ -306,13 +367,22 @@ func (sq *SetQuery) prepareQuery(ctx context.Context) error {
 		}
 		sq.sql = prev
 	}
+	if set.Policy == nil {
+		return errors.New("ent: uninitialized set.Policy (forgotten import ent/runtime?)")
+	}
+	if err := set.Policy.EvalQuery(ctx, sq); err != nil {
+		return err
+	}
 	return nil
 }
 
 func (sq *SetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Set, error) {
 	var (
-		nodes = []*Set{}
-		_spec = sq.querySpec()
+		nodes       = []*Set{}
+		_spec       = sq.querySpec()
+		loadedTypes = [1]bool{
+			sq.withArtifacts != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Set).scanValues(nil, columns)
@@ -320,6 +390,7 @@ func (sq *SetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Set, err
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Set{config: sq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(sq.modifiers) > 0 {
@@ -334,12 +405,58 @@ func (sq *SetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Set, err
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := sq.withArtifacts; query != nil {
+		if err := sq.loadArtifacts(ctx, query, nodes,
+			func(n *Set) { n.Edges.Artifacts = []*Artifact{} },
+			func(n *Set, e *Artifact) { n.Edges.Artifacts = append(n.Edges.Artifacts, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range sq.withNamedArtifacts {
+		if err := sq.loadArtifacts(ctx, query, nodes,
+			func(n *Set) { n.appendNamedArtifacts(name) },
+			func(n *Set, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range sq.loadTotal {
 		if err := sq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (sq *SetQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, nodes []*Set, init func(*Set), assign func(*Set, *Artifact)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Set)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Artifact(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(set.ArtifactsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.set_artifacts
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "set_artifacts" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "set_artifacts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
 }
 
 func (sq *SetQuery) sqlCount(ctx context.Context) (int, error) {
@@ -424,6 +541,20 @@ func (sq *SetQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedArtifacts tells the query-builder to eager-load the nodes that are connected to the "artifacts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (sq *SetQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQuery)) *SetQuery {
+	query := (&ArtifactClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if sq.withNamedArtifacts == nil {
+		sq.withNamedArtifacts = make(map[string]*ArtifactQuery)
+	}
+	sq.withNamedArtifacts[name] = query
+	return sq
 }
 
 // SetGroupBy is the group-by builder for Set entities.

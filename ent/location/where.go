@@ -3,7 +3,10 @@
 package location
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
 
@@ -50,6 +53,508 @@ func IDLT(id int) predicate.Location {
 // IDLTE applies the LTE predicate on the ID field.
 func IDLTE(id int) predicate.Location {
 	return predicate.Location(sql.FieldLTE(FieldID, id))
+}
+
+// CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
+func CreatedAt(v time.Time) predicate.Location {
+	return predicate.Location(sql.FieldEQ(FieldCreatedAt, v))
+}
+
+// CreatedBy applies equality check predicate on the "created_by" field. It's identical to CreatedByEQ.
+func CreatedBy(v string) predicate.Location {
+	return predicate.Location(sql.FieldEQ(FieldCreatedBy, v))
+}
+
+// UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
+func UpdatedAt(v time.Time) predicate.Location {
+	return predicate.Location(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
+// UpdatedBy applies equality check predicate on the "updated_by" field. It's identical to UpdatedByEQ.
+func UpdatedBy(v string) predicate.Location {
+	return predicate.Location(sql.FieldEQ(FieldUpdatedBy, v))
+}
+
+// DisplayName applies equality check predicate on the "display_name" field. It's identical to DisplayNameEQ.
+func DisplayName(v string) predicate.Location {
+	return predicate.Location(sql.FieldEQ(FieldDisplayName, v))
+}
+
+// Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
+func Description(v string) predicate.Location {
+	return predicate.Location(sql.FieldEQ(FieldDescription, v))
+}
+
+// CreatedAtEQ applies the EQ predicate on the "created_at" field.
+func CreatedAtEQ(v time.Time) predicate.Location {
+	return predicate.Location(sql.FieldEQ(FieldCreatedAt, v))
+}
+
+// CreatedAtNEQ applies the NEQ predicate on the "created_at" field.
+func CreatedAtNEQ(v time.Time) predicate.Location {
+	return predicate.Location(sql.FieldNEQ(FieldCreatedAt, v))
+}
+
+// CreatedAtIn applies the In predicate on the "created_at" field.
+func CreatedAtIn(vs ...time.Time) predicate.Location {
+	return predicate.Location(sql.FieldIn(FieldCreatedAt, vs...))
+}
+
+// CreatedAtNotIn applies the NotIn predicate on the "created_at" field.
+func CreatedAtNotIn(vs ...time.Time) predicate.Location {
+	return predicate.Location(sql.FieldNotIn(FieldCreatedAt, vs...))
+}
+
+// CreatedAtGT applies the GT predicate on the "created_at" field.
+func CreatedAtGT(v time.Time) predicate.Location {
+	return predicate.Location(sql.FieldGT(FieldCreatedAt, v))
+}
+
+// CreatedAtGTE applies the GTE predicate on the "created_at" field.
+func CreatedAtGTE(v time.Time) predicate.Location {
+	return predicate.Location(sql.FieldGTE(FieldCreatedAt, v))
+}
+
+// CreatedAtLT applies the LT predicate on the "created_at" field.
+func CreatedAtLT(v time.Time) predicate.Location {
+	return predicate.Location(sql.FieldLT(FieldCreatedAt, v))
+}
+
+// CreatedAtLTE applies the LTE predicate on the "created_at" field.
+func CreatedAtLTE(v time.Time) predicate.Location {
+	return predicate.Location(sql.FieldLTE(FieldCreatedAt, v))
+}
+
+// CreatedByEQ applies the EQ predicate on the "created_by" field.
+func CreatedByEQ(v string) predicate.Location {
+	return predicate.Location(sql.FieldEQ(FieldCreatedBy, v))
+}
+
+// CreatedByNEQ applies the NEQ predicate on the "created_by" field.
+func CreatedByNEQ(v string) predicate.Location {
+	return predicate.Location(sql.FieldNEQ(FieldCreatedBy, v))
+}
+
+// CreatedByIn applies the In predicate on the "created_by" field.
+func CreatedByIn(vs ...string) predicate.Location {
+	return predicate.Location(sql.FieldIn(FieldCreatedBy, vs...))
+}
+
+// CreatedByNotIn applies the NotIn predicate on the "created_by" field.
+func CreatedByNotIn(vs ...string) predicate.Location {
+	return predicate.Location(sql.FieldNotIn(FieldCreatedBy, vs...))
+}
+
+// CreatedByGT applies the GT predicate on the "created_by" field.
+func CreatedByGT(v string) predicate.Location {
+	return predicate.Location(sql.FieldGT(FieldCreatedBy, v))
+}
+
+// CreatedByGTE applies the GTE predicate on the "created_by" field.
+func CreatedByGTE(v string) predicate.Location {
+	return predicate.Location(sql.FieldGTE(FieldCreatedBy, v))
+}
+
+// CreatedByLT applies the LT predicate on the "created_by" field.
+func CreatedByLT(v string) predicate.Location {
+	return predicate.Location(sql.FieldLT(FieldCreatedBy, v))
+}
+
+// CreatedByLTE applies the LTE predicate on the "created_by" field.
+func CreatedByLTE(v string) predicate.Location {
+	return predicate.Location(sql.FieldLTE(FieldCreatedBy, v))
+}
+
+// CreatedByContains applies the Contains predicate on the "created_by" field.
+func CreatedByContains(v string) predicate.Location {
+	return predicate.Location(sql.FieldContains(FieldCreatedBy, v))
+}
+
+// CreatedByHasPrefix applies the HasPrefix predicate on the "created_by" field.
+func CreatedByHasPrefix(v string) predicate.Location {
+	return predicate.Location(sql.FieldHasPrefix(FieldCreatedBy, v))
+}
+
+// CreatedByHasSuffix applies the HasSuffix predicate on the "created_by" field.
+func CreatedByHasSuffix(v string) predicate.Location {
+	return predicate.Location(sql.FieldHasSuffix(FieldCreatedBy, v))
+}
+
+// CreatedByIsNil applies the IsNil predicate on the "created_by" field.
+func CreatedByIsNil() predicate.Location {
+	return predicate.Location(sql.FieldIsNull(FieldCreatedBy))
+}
+
+// CreatedByNotNil applies the NotNil predicate on the "created_by" field.
+func CreatedByNotNil() predicate.Location {
+	return predicate.Location(sql.FieldNotNull(FieldCreatedBy))
+}
+
+// CreatedByEqualFold applies the EqualFold predicate on the "created_by" field.
+func CreatedByEqualFold(v string) predicate.Location {
+	return predicate.Location(sql.FieldEqualFold(FieldCreatedBy, v))
+}
+
+// CreatedByContainsFold applies the ContainsFold predicate on the "created_by" field.
+func CreatedByContainsFold(v string) predicate.Location {
+	return predicate.Location(sql.FieldContainsFold(FieldCreatedBy, v))
+}
+
+// UpdatedAtEQ applies the EQ predicate on the "updated_at" field.
+func UpdatedAtEQ(v time.Time) predicate.Location {
+	return predicate.Location(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
+// UpdatedAtNEQ applies the NEQ predicate on the "updated_at" field.
+func UpdatedAtNEQ(v time.Time) predicate.Location {
+	return predicate.Location(sql.FieldNEQ(FieldUpdatedAt, v))
+}
+
+// UpdatedAtIn applies the In predicate on the "updated_at" field.
+func UpdatedAtIn(vs ...time.Time) predicate.Location {
+	return predicate.Location(sql.FieldIn(FieldUpdatedAt, vs...))
+}
+
+// UpdatedAtNotIn applies the NotIn predicate on the "updated_at" field.
+func UpdatedAtNotIn(vs ...time.Time) predicate.Location {
+	return predicate.Location(sql.FieldNotIn(FieldUpdatedAt, vs...))
+}
+
+// UpdatedAtGT applies the GT predicate on the "updated_at" field.
+func UpdatedAtGT(v time.Time) predicate.Location {
+	return predicate.Location(sql.FieldGT(FieldUpdatedAt, v))
+}
+
+// UpdatedAtGTE applies the GTE predicate on the "updated_at" field.
+func UpdatedAtGTE(v time.Time) predicate.Location {
+	return predicate.Location(sql.FieldGTE(FieldUpdatedAt, v))
+}
+
+// UpdatedAtLT applies the LT predicate on the "updated_at" field.
+func UpdatedAtLT(v time.Time) predicate.Location {
+	return predicate.Location(sql.FieldLT(FieldUpdatedAt, v))
+}
+
+// UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
+func UpdatedAtLTE(v time.Time) predicate.Location {
+	return predicate.Location(sql.FieldLTE(FieldUpdatedAt, v))
+}
+
+// UpdatedByEQ applies the EQ predicate on the "updated_by" field.
+func UpdatedByEQ(v string) predicate.Location {
+	return predicate.Location(sql.FieldEQ(FieldUpdatedBy, v))
+}
+
+// UpdatedByNEQ applies the NEQ predicate on the "updated_by" field.
+func UpdatedByNEQ(v string) predicate.Location {
+	return predicate.Location(sql.FieldNEQ(FieldUpdatedBy, v))
+}
+
+// UpdatedByIn applies the In predicate on the "updated_by" field.
+func UpdatedByIn(vs ...string) predicate.Location {
+	return predicate.Location(sql.FieldIn(FieldUpdatedBy, vs...))
+}
+
+// UpdatedByNotIn applies the NotIn predicate on the "updated_by" field.
+func UpdatedByNotIn(vs ...string) predicate.Location {
+	return predicate.Location(sql.FieldNotIn(FieldUpdatedBy, vs...))
+}
+
+// UpdatedByGT applies the GT predicate on the "updated_by" field.
+func UpdatedByGT(v string) predicate.Location {
+	return predicate.Location(sql.FieldGT(FieldUpdatedBy, v))
+}
+
+// UpdatedByGTE applies the GTE predicate on the "updated_by" field.
+func UpdatedByGTE(v string) predicate.Location {
+	return predicate.Location(sql.FieldGTE(FieldUpdatedBy, v))
+}
+
+// UpdatedByLT applies the LT predicate on the "updated_by" field.
+func UpdatedByLT(v string) predicate.Location {
+	return predicate.Location(sql.FieldLT(FieldUpdatedBy, v))
+}
+
+// UpdatedByLTE applies the LTE predicate on the "updated_by" field.
+func UpdatedByLTE(v string) predicate.Location {
+	return predicate.Location(sql.FieldLTE(FieldUpdatedBy, v))
+}
+
+// UpdatedByContains applies the Contains predicate on the "updated_by" field.
+func UpdatedByContains(v string) predicate.Location {
+	return predicate.Location(sql.FieldContains(FieldUpdatedBy, v))
+}
+
+// UpdatedByHasPrefix applies the HasPrefix predicate on the "updated_by" field.
+func UpdatedByHasPrefix(v string) predicate.Location {
+	return predicate.Location(sql.FieldHasPrefix(FieldUpdatedBy, v))
+}
+
+// UpdatedByHasSuffix applies the HasSuffix predicate on the "updated_by" field.
+func UpdatedByHasSuffix(v string) predicate.Location {
+	return predicate.Location(sql.FieldHasSuffix(FieldUpdatedBy, v))
+}
+
+// UpdatedByIsNil applies the IsNil predicate on the "updated_by" field.
+func UpdatedByIsNil() predicate.Location {
+	return predicate.Location(sql.FieldIsNull(FieldUpdatedBy))
+}
+
+// UpdatedByNotNil applies the NotNil predicate on the "updated_by" field.
+func UpdatedByNotNil() predicate.Location {
+	return predicate.Location(sql.FieldNotNull(FieldUpdatedBy))
+}
+
+// UpdatedByEqualFold applies the EqualFold predicate on the "updated_by" field.
+func UpdatedByEqualFold(v string) predicate.Location {
+	return predicate.Location(sql.FieldEqualFold(FieldUpdatedBy, v))
+}
+
+// UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
+func UpdatedByContainsFold(v string) predicate.Location {
+	return predicate.Location(sql.FieldContainsFold(FieldUpdatedBy, v))
+}
+
+// DisplayNameEQ applies the EQ predicate on the "display_name" field.
+func DisplayNameEQ(v string) predicate.Location {
+	return predicate.Location(sql.FieldEQ(FieldDisplayName, v))
+}
+
+// DisplayNameNEQ applies the NEQ predicate on the "display_name" field.
+func DisplayNameNEQ(v string) predicate.Location {
+	return predicate.Location(sql.FieldNEQ(FieldDisplayName, v))
+}
+
+// DisplayNameIn applies the In predicate on the "display_name" field.
+func DisplayNameIn(vs ...string) predicate.Location {
+	return predicate.Location(sql.FieldIn(FieldDisplayName, vs...))
+}
+
+// DisplayNameNotIn applies the NotIn predicate on the "display_name" field.
+func DisplayNameNotIn(vs ...string) predicate.Location {
+	return predicate.Location(sql.FieldNotIn(FieldDisplayName, vs...))
+}
+
+// DisplayNameGT applies the GT predicate on the "display_name" field.
+func DisplayNameGT(v string) predicate.Location {
+	return predicate.Location(sql.FieldGT(FieldDisplayName, v))
+}
+
+// DisplayNameGTE applies the GTE predicate on the "display_name" field.
+func DisplayNameGTE(v string) predicate.Location {
+	return predicate.Location(sql.FieldGTE(FieldDisplayName, v))
+}
+
+// DisplayNameLT applies the LT predicate on the "display_name" field.
+func DisplayNameLT(v string) predicate.Location {
+	return predicate.Location(sql.FieldLT(FieldDisplayName, v))
+}
+
+// DisplayNameLTE applies the LTE predicate on the "display_name" field.
+func DisplayNameLTE(v string) predicate.Location {
+	return predicate.Location(sql.FieldLTE(FieldDisplayName, v))
+}
+
+// DisplayNameContains applies the Contains predicate on the "display_name" field.
+func DisplayNameContains(v string) predicate.Location {
+	return predicate.Location(sql.FieldContains(FieldDisplayName, v))
+}
+
+// DisplayNameHasPrefix applies the HasPrefix predicate on the "display_name" field.
+func DisplayNameHasPrefix(v string) predicate.Location {
+	return predicate.Location(sql.FieldHasPrefix(FieldDisplayName, v))
+}
+
+// DisplayNameHasSuffix applies the HasSuffix predicate on the "display_name" field.
+func DisplayNameHasSuffix(v string) predicate.Location {
+	return predicate.Location(sql.FieldHasSuffix(FieldDisplayName, v))
+}
+
+// DisplayNameIsNil applies the IsNil predicate on the "display_name" field.
+func DisplayNameIsNil() predicate.Location {
+	return predicate.Location(sql.FieldIsNull(FieldDisplayName))
+}
+
+// DisplayNameNotNil applies the NotNil predicate on the "display_name" field.
+func DisplayNameNotNil() predicate.Location {
+	return predicate.Location(sql.FieldNotNull(FieldDisplayName))
+}
+
+// DisplayNameEqualFold applies the EqualFold predicate on the "display_name" field.
+func DisplayNameEqualFold(v string) predicate.Location {
+	return predicate.Location(sql.FieldEqualFold(FieldDisplayName, v))
+}
+
+// DisplayNameContainsFold applies the ContainsFold predicate on the "display_name" field.
+func DisplayNameContainsFold(v string) predicate.Location {
+	return predicate.Location(sql.FieldContainsFold(FieldDisplayName, v))
+}
+
+// DescriptionEQ applies the EQ predicate on the "description" field.
+func DescriptionEQ(v string) predicate.Location {
+	return predicate.Location(sql.FieldEQ(FieldDescription, v))
+}
+
+// DescriptionNEQ applies the NEQ predicate on the "description" field.
+func DescriptionNEQ(v string) predicate.Location {
+	return predicate.Location(sql.FieldNEQ(FieldDescription, v))
+}
+
+// DescriptionIn applies the In predicate on the "description" field.
+func DescriptionIn(vs ...string) predicate.Location {
+	return predicate.Location(sql.FieldIn(FieldDescription, vs...))
+}
+
+// DescriptionNotIn applies the NotIn predicate on the "description" field.
+func DescriptionNotIn(vs ...string) predicate.Location {
+	return predicate.Location(sql.FieldNotIn(FieldDescription, vs...))
+}
+
+// DescriptionGT applies the GT predicate on the "description" field.
+func DescriptionGT(v string) predicate.Location {
+	return predicate.Location(sql.FieldGT(FieldDescription, v))
+}
+
+// DescriptionGTE applies the GTE predicate on the "description" field.
+func DescriptionGTE(v string) predicate.Location {
+	return predicate.Location(sql.FieldGTE(FieldDescription, v))
+}
+
+// DescriptionLT applies the LT predicate on the "description" field.
+func DescriptionLT(v string) predicate.Location {
+	return predicate.Location(sql.FieldLT(FieldDescription, v))
+}
+
+// DescriptionLTE applies the LTE predicate on the "description" field.
+func DescriptionLTE(v string) predicate.Location {
+	return predicate.Location(sql.FieldLTE(FieldDescription, v))
+}
+
+// DescriptionContains applies the Contains predicate on the "description" field.
+func DescriptionContains(v string) predicate.Location {
+	return predicate.Location(sql.FieldContains(FieldDescription, v))
+}
+
+// DescriptionHasPrefix applies the HasPrefix predicate on the "description" field.
+func DescriptionHasPrefix(v string) predicate.Location {
+	return predicate.Location(sql.FieldHasPrefix(FieldDescription, v))
+}
+
+// DescriptionHasSuffix applies the HasSuffix predicate on the "description" field.
+func DescriptionHasSuffix(v string) predicate.Location {
+	return predicate.Location(sql.FieldHasSuffix(FieldDescription, v))
+}
+
+// DescriptionIsNil applies the IsNil predicate on the "description" field.
+func DescriptionIsNil() predicate.Location {
+	return predicate.Location(sql.FieldIsNull(FieldDescription))
+}
+
+// DescriptionNotNil applies the NotNil predicate on the "description" field.
+func DescriptionNotNil() predicate.Location {
+	return predicate.Location(sql.FieldNotNull(FieldDescription))
+}
+
+// DescriptionEqualFold applies the EqualFold predicate on the "description" field.
+func DescriptionEqualFold(v string) predicate.Location {
+	return predicate.Location(sql.FieldEqualFold(FieldDescription, v))
+}
+
+// DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
+func DescriptionContainsFold(v string) predicate.Location {
+	return predicate.Location(sql.FieldContainsFold(FieldDescription, v))
+}
+
+// HasArtifacts applies the HasEdge predicate on the "artifacts" edge.
+func HasArtifacts() predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ArtifactsTable, ArtifactsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasArtifactsWith applies the HasEdge predicate on the "artifacts" edge with a given conditions (other predicates).
+func HasArtifactsWith(preds ...predicate.Artifact) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		step := newArtifactsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSettlement applies the HasEdge predicate on the "settlement" edge.
+func HasSettlement() predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, SettlementTable, SettlementColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSettlementWith applies the HasEdge predicate on the "settlement" edge with a given conditions (other predicates).
+func HasSettlementWith(preds ...predicate.Settlement) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		step := newSettlementStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasRegion applies the HasEdge predicate on the "region" edge.
+func HasRegion() predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, RegionTable, RegionColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRegionWith applies the HasEdge predicate on the "region" edge with a given conditions (other predicates).
+func HasRegionWith(preds ...predicate.Region) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		step := newRegionStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDistrict applies the HasEdge predicate on the "district" edge.
+func HasDistrict() predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, DistrictTable, DistrictColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDistrictWith applies the HasEdge predicate on the "district" edge with a given conditions (other predicates).
+func HasDistrictWith(preds ...predicate.District) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		step := newDistrictStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

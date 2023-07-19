@@ -4,10 +4,13 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
 )
 
@@ -18,6 +21,109 @@ type RegionCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (rc *RegionCreate) SetCreatedAt(t time.Time) *RegionCreate {
+	rc.mutation.SetCreatedAt(t)
+	return rc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (rc *RegionCreate) SetNillableCreatedAt(t *time.Time) *RegionCreate {
+	if t != nil {
+		rc.SetCreatedAt(*t)
+	}
+	return rc
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (rc *RegionCreate) SetCreatedBy(s string) *RegionCreate {
+	rc.mutation.SetCreatedBy(s)
+	return rc
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (rc *RegionCreate) SetNillableCreatedBy(s *string) *RegionCreate {
+	if s != nil {
+		rc.SetCreatedBy(*s)
+	}
+	return rc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (rc *RegionCreate) SetUpdatedAt(t time.Time) *RegionCreate {
+	rc.mutation.SetUpdatedAt(t)
+	return rc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (rc *RegionCreate) SetNillableUpdatedAt(t *time.Time) *RegionCreate {
+	if t != nil {
+		rc.SetUpdatedAt(*t)
+	}
+	return rc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (rc *RegionCreate) SetUpdatedBy(s string) *RegionCreate {
+	rc.mutation.SetUpdatedBy(s)
+	return rc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (rc *RegionCreate) SetNillableUpdatedBy(s *string) *RegionCreate {
+	if s != nil {
+		rc.SetUpdatedBy(*s)
+	}
+	return rc
+}
+
+// SetDisplayName sets the "display_name" field.
+func (rc *RegionCreate) SetDisplayName(s string) *RegionCreate {
+	rc.mutation.SetDisplayName(s)
+	return rc
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (rc *RegionCreate) SetNillableDisplayName(s *string) *RegionCreate {
+	if s != nil {
+		rc.SetDisplayName(*s)
+	}
+	return rc
+}
+
+// SetDescription sets the "description" field.
+func (rc *RegionCreate) SetDescription(s string) *RegionCreate {
+	rc.mutation.SetDescription(s)
+	return rc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (rc *RegionCreate) SetNillableDescription(s *string) *RegionCreate {
+	if s != nil {
+		rc.SetDescription(*s)
+	}
+	return rc
+}
+
+// SetLocationID sets the "location" edge to the Location entity by ID.
+func (rc *RegionCreate) SetLocationID(id int) *RegionCreate {
+	rc.mutation.SetLocationID(id)
+	return rc
+}
+
+// SetNillableLocationID sets the "location" edge to the Location entity by ID if the given value is not nil.
+func (rc *RegionCreate) SetNillableLocationID(id *int) *RegionCreate {
+	if id != nil {
+		rc = rc.SetLocationID(*id)
+	}
+	return rc
+}
+
+// SetLocation sets the "location" edge to the Location entity.
+func (rc *RegionCreate) SetLocation(l *Location) *RegionCreate {
+	return rc.SetLocationID(l.ID)
+}
+
 // Mutation returns the RegionMutation object of the builder.
 func (rc *RegionCreate) Mutation() *RegionMutation {
 	return rc.mutation
@@ -25,6 +131,9 @@ func (rc *RegionCreate) Mutation() *RegionMutation {
 
 // Save creates the Region in the database.
 func (rc *RegionCreate) Save(ctx context.Context) (*Region, error) {
+	if err := rc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, rc.sqlSave, rc.mutation, rc.hooks)
 }
 
@@ -50,8 +159,33 @@ func (rc *RegionCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (rc *RegionCreate) defaults() error {
+	if _, ok := rc.mutation.CreatedAt(); !ok {
+		if region.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized region.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := region.DefaultCreatedAt()
+		rc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := rc.mutation.UpdatedAt(); !ok {
+		if region.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized region.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := region.DefaultUpdatedAt()
+		rc.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (rc *RegionCreate) check() error {
+	if _, ok := rc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Region.created_at"`)}
+	}
+	if _, ok := rc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Region.updated_at"`)}
+	}
 	return nil
 }
 
@@ -78,6 +212,47 @@ func (rc *RegionCreate) createSpec() (*Region, *sqlgraph.CreateSpec) {
 		_node = &Region{config: rc.config}
 		_spec = sqlgraph.NewCreateSpec(region.Table, sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt))
 	)
+	if value, ok := rc.mutation.CreatedAt(); ok {
+		_spec.SetField(region.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := rc.mutation.CreatedBy(); ok {
+		_spec.SetField(region.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := rc.mutation.UpdatedAt(); ok {
+		_spec.SetField(region.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := rc.mutation.UpdatedBy(); ok {
+		_spec.SetField(region.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
+	if value, ok := rc.mutation.DisplayName(); ok {
+		_spec.SetField(region.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
+	}
+	if value, ok := rc.mutation.Description(); ok {
+		_spec.SetField(region.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if nodes := rc.mutation.LocationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   region.LocationTable,
+			Columns: []string{region.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.location_region = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -95,6 +270,7 @@ func (rcb *RegionCreateBulk) Save(ctx context.Context) ([]*Region, error) {
 	for i := range rcb.builders {
 		func(i int, root context.Context) {
 			builder := rcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*RegionMutation)
 				if !ok {
