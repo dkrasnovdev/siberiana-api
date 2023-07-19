@@ -33,6 +33,7 @@ func main() {
 
 	// Create a new ent client using the loaded configuration.
 	client := ent.NewClient(config)
+	defer client.Close()
 
 	// Create a new GraphQL server using the ent client.
 	gql := ent.NewGraphQLServer(client)

@@ -9,6 +9,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent"
 	"github.com/dkrasnovdev/heritage-api/ent/migrate"
 
+	_ "github.com/dkrasnovdev/heritage-api/ent/runtime"
 	_ "github.com/lib/pq"
 )
 
@@ -22,7 +23,6 @@ func NewClient(env config.Config) *ent.Client {
 	if err != nil {
 		log.Fatalf("failed opening connection to postgres: %v", err)
 	}
-	defer client.Close()
 
 	// Apply schema migrations to the database.
 	if err := client.Schema.Create(
