@@ -22,7 +22,7 @@ func (r *queryResolver) Nodes(ctx context.Context, ids []int) ([]ent.Noder, erro
 	panic(fmt.Errorf("not implemented: Nodes - nodes"))
 }
 
-// Query returns graphql1.QueryResolver implementation.
+// Query returns gql.QueryResolver implementation.
 func (r *Resolver) Query() gql.QueryResolver { return &queryResolver{r} }
 
 type queryResolver struct{ *Resolver }
