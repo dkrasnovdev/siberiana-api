@@ -39,6 +39,7 @@ type Config struct {
 }
 
 type ResolverRoot interface {
+	Mutation() MutationResolver
 	Query() QueryResolver
 }
 
@@ -314,6 +315,47 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	Mutation struct {
+		CreateArtifact     func(childComplexity int, input ent.CreateArtifactInput) int
+		CreateCategory     func(childComplexity int, input ent.CreateCategoryInput) int
+		CreateCollection   func(childComplexity int, input ent.CreateCollectionInput) int
+		CreateCulture      func(childComplexity int, input ent.CreateCultureInput) int
+		CreateDistrict     func(childComplexity int, input ent.CreateDistrictInput) int
+		CreateHolder       func(childComplexity int, input ent.CreateHolderInput) int
+		CreateLicense      func(childComplexity int, input ent.CreateLicenseInput) int
+		CreateLocation     func(childComplexity int, input ent.CreateLocationInput) int
+		CreateMedium       func(childComplexity int, input ent.CreateMediumInput) int
+		CreateModel        func(childComplexity int, input ent.CreateModelInput) int
+		CreateMonument     func(childComplexity int, input ent.CreateMonumentInput) int
+		CreateOrganization func(childComplexity int, input ent.CreateOrganizationInput) int
+		CreatePerson       func(childComplexity int, input ent.CreatePersonInput) int
+		CreateProject      func(childComplexity int, input ent.CreateProjectInput) int
+		CreatePublication  func(childComplexity int, input ent.CreatePublicationInput) int
+		CreateRegion       func(childComplexity int, input ent.CreateRegionInput) int
+		CreateSet          func(childComplexity int, input ent.CreateSetInput) int
+		CreateSettlement   func(childComplexity int, input ent.CreateSettlementInput) int
+		CreateTechnique    func(childComplexity int, input ent.CreateTechniqueInput) int
+		UpdateArtifact     func(childComplexity int, id int, input ent.UpdateArtifactInput) int
+		UpdateCategory     func(childComplexity int, id int, input ent.UpdateCategoryInput) int
+		UpdateCollection   func(childComplexity int, id int, input ent.UpdateCollectionInput) int
+		UpdateCulture      func(childComplexity int, id int, input ent.UpdateCultureInput) int
+		UpdateDistrict     func(childComplexity int, id int, input ent.UpdateDistrictInput) int
+		UpdateHolder       func(childComplexity int, id int, input ent.UpdateHolderInput) int
+		UpdateLicense      func(childComplexity int, id int, input ent.UpdateLicenseInput) int
+		UpdateLocation     func(childComplexity int, id int, input ent.UpdateLocationInput) int
+		UpdateMedium       func(childComplexity int, id int, input ent.UpdateMediumInput) int
+		UpdateModel        func(childComplexity int, id int, input ent.UpdateModelInput) int
+		UpdateMonument     func(childComplexity int, id int, input ent.UpdateMonumentInput) int
+		UpdateOrganization func(childComplexity int, id int, input ent.UpdateOrganizationInput) int
+		UpdatePerson       func(childComplexity int, id int, input ent.UpdatePersonInput) int
+		UpdateProject      func(childComplexity int, id int, input ent.UpdateProjectInput) int
+		UpdatePublication  func(childComplexity int, id int, input ent.UpdatePublicationInput) int
+		UpdateRegion       func(childComplexity int, id int, input ent.UpdateRegionInput) int
+		UpdateSet          func(childComplexity int, id int, input ent.UpdateSetInput) int
+		UpdateSettlement   func(childComplexity int, id int, input ent.UpdateSettlementInput) int
+		UpdateTechnique    func(childComplexity int, id int, input ent.UpdateTechniqueInput) int
+	}
+
 	Organization struct {
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
@@ -527,6 +569,46 @@ type ComplexityRoot struct {
 	}
 }
 
+type MutationResolver interface {
+	CreateArtifact(ctx context.Context, input ent.CreateArtifactInput) (*ent.Artifact, error)
+	UpdateArtifact(ctx context.Context, id int, input ent.UpdateArtifactInput) (*ent.Artifact, error)
+	CreateCategory(ctx context.Context, input ent.CreateCategoryInput) (*ent.Category, error)
+	UpdateCategory(ctx context.Context, id int, input ent.UpdateCategoryInput) (*ent.Category, error)
+	CreateCollection(ctx context.Context, input ent.CreateCollectionInput) (*ent.Collection, error)
+	UpdateCollection(ctx context.Context, id int, input ent.UpdateCollectionInput) (*ent.Collection, error)
+	CreateCulture(ctx context.Context, input ent.CreateCultureInput) (*ent.Culture, error)
+	UpdateCulture(ctx context.Context, id int, input ent.UpdateCultureInput) (*ent.Culture, error)
+	CreateDistrict(ctx context.Context, input ent.CreateDistrictInput) (*ent.District, error)
+	UpdateDistrict(ctx context.Context, id int, input ent.UpdateDistrictInput) (*ent.District, error)
+	CreateHolder(ctx context.Context, input ent.CreateHolderInput) (*ent.Holder, error)
+	UpdateHolder(ctx context.Context, id int, input ent.UpdateHolderInput) (*ent.Holder, error)
+	CreateLicense(ctx context.Context, input ent.CreateLicenseInput) (*ent.License, error)
+	UpdateLicense(ctx context.Context, id int, input ent.UpdateLicenseInput) (*ent.License, error)
+	CreateLocation(ctx context.Context, input ent.CreateLocationInput) (*ent.Location, error)
+	UpdateLocation(ctx context.Context, id int, input ent.UpdateLocationInput) (*ent.Location, error)
+	CreateMedium(ctx context.Context, input ent.CreateMediumInput) (*ent.Medium, error)
+	UpdateMedium(ctx context.Context, id int, input ent.UpdateMediumInput) (*ent.Medium, error)
+	CreateModel(ctx context.Context, input ent.CreateModelInput) (*ent.Model, error)
+	UpdateModel(ctx context.Context, id int, input ent.UpdateModelInput) (*ent.Model, error)
+	CreateMonument(ctx context.Context, input ent.CreateMonumentInput) (*ent.Monument, error)
+	UpdateMonument(ctx context.Context, id int, input ent.UpdateMonumentInput) (*ent.Monument, error)
+	CreateOrganization(ctx context.Context, input ent.CreateOrganizationInput) (*ent.Organization, error)
+	UpdateOrganization(ctx context.Context, id int, input ent.UpdateOrganizationInput) (*ent.Organization, error)
+	CreatePerson(ctx context.Context, input ent.CreatePersonInput) (*ent.Person, error)
+	UpdatePerson(ctx context.Context, id int, input ent.UpdatePersonInput) (*ent.Person, error)
+	CreateProject(ctx context.Context, input ent.CreateProjectInput) (*ent.Project, error)
+	UpdateProject(ctx context.Context, id int, input ent.UpdateProjectInput) (*ent.Project, error)
+	CreatePublication(ctx context.Context, input ent.CreatePublicationInput) (*ent.Publication, error)
+	UpdatePublication(ctx context.Context, id int, input ent.UpdatePublicationInput) (*ent.Publication, error)
+	CreateRegion(ctx context.Context, input ent.CreateRegionInput) (*ent.Region, error)
+	UpdateRegion(ctx context.Context, id int, input ent.UpdateRegionInput) (*ent.Region, error)
+	CreateSet(ctx context.Context, input ent.CreateSetInput) (*ent.Set, error)
+	UpdateSet(ctx context.Context, id int, input ent.UpdateSetInput) (*ent.Set, error)
+	CreateSettlement(ctx context.Context, input ent.CreateSettlementInput) (*ent.Settlement, error)
+	UpdateSettlement(ctx context.Context, id int, input ent.UpdateSettlementInput) (*ent.Settlement, error)
+	CreateTechnique(ctx context.Context, input ent.CreateTechniqueInput) (*ent.Technique, error)
+	UpdateTechnique(ctx context.Context, id int, input ent.UpdateTechniqueInput) (*ent.Technique, error)
+}
 type QueryResolver interface {
 	Node(ctx context.Context, id int) (ent.Noder, error)
 	Nodes(ctx context.Context, ids []int) ([]ent.Noder, error)
@@ -1728,6 +1810,462 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.MonumentEdge.Node(childComplexity), true
 
+	case "Mutation.createArtifact":
+		if e.complexity.Mutation.CreateArtifact == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createArtifact_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateArtifact(childComplexity, args["input"].(ent.CreateArtifactInput)), true
+
+	case "Mutation.createCategory":
+		if e.complexity.Mutation.CreateCategory == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createCategory_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateCategory(childComplexity, args["input"].(ent.CreateCategoryInput)), true
+
+	case "Mutation.createCollection":
+		if e.complexity.Mutation.CreateCollection == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createCollection_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateCollection(childComplexity, args["input"].(ent.CreateCollectionInput)), true
+
+	case "Mutation.createCulture":
+		if e.complexity.Mutation.CreateCulture == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createCulture_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateCulture(childComplexity, args["input"].(ent.CreateCultureInput)), true
+
+	case "Mutation.createDistrict":
+		if e.complexity.Mutation.CreateDistrict == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createDistrict_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateDistrict(childComplexity, args["input"].(ent.CreateDistrictInput)), true
+
+	case "Mutation.createHolder":
+		if e.complexity.Mutation.CreateHolder == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createHolder_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateHolder(childComplexity, args["input"].(ent.CreateHolderInput)), true
+
+	case "Mutation.createLicense":
+		if e.complexity.Mutation.CreateLicense == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createLicense_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateLicense(childComplexity, args["input"].(ent.CreateLicenseInput)), true
+
+	case "Mutation.createLocation":
+		if e.complexity.Mutation.CreateLocation == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createLocation_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateLocation(childComplexity, args["input"].(ent.CreateLocationInput)), true
+
+	case "Mutation.createMedium":
+		if e.complexity.Mutation.CreateMedium == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createMedium_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateMedium(childComplexity, args["input"].(ent.CreateMediumInput)), true
+
+	case "Mutation.createModel":
+		if e.complexity.Mutation.CreateModel == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createModel_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateModel(childComplexity, args["input"].(ent.CreateModelInput)), true
+
+	case "Mutation.createMonument":
+		if e.complexity.Mutation.CreateMonument == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createMonument_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateMonument(childComplexity, args["input"].(ent.CreateMonumentInput)), true
+
+	case "Mutation.createOrganization":
+		if e.complexity.Mutation.CreateOrganization == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createOrganization_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateOrganization(childComplexity, args["input"].(ent.CreateOrganizationInput)), true
+
+	case "Mutation.createPerson":
+		if e.complexity.Mutation.CreatePerson == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createPerson_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreatePerson(childComplexity, args["input"].(ent.CreatePersonInput)), true
+
+	case "Mutation.createProject":
+		if e.complexity.Mutation.CreateProject == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createProject_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateProject(childComplexity, args["input"].(ent.CreateProjectInput)), true
+
+	case "Mutation.createPublication":
+		if e.complexity.Mutation.CreatePublication == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createPublication_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreatePublication(childComplexity, args["input"].(ent.CreatePublicationInput)), true
+
+	case "Mutation.createRegion":
+		if e.complexity.Mutation.CreateRegion == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createRegion_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateRegion(childComplexity, args["input"].(ent.CreateRegionInput)), true
+
+	case "Mutation.createSet":
+		if e.complexity.Mutation.CreateSet == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createSet_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateSet(childComplexity, args["input"].(ent.CreateSetInput)), true
+
+	case "Mutation.createSettlement":
+		if e.complexity.Mutation.CreateSettlement == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createSettlement_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateSettlement(childComplexity, args["input"].(ent.CreateSettlementInput)), true
+
+	case "Mutation.createTechnique":
+		if e.complexity.Mutation.CreateTechnique == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createTechnique_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateTechnique(childComplexity, args["input"].(ent.CreateTechniqueInput)), true
+
+	case "Mutation.updateArtifact":
+		if e.complexity.Mutation.UpdateArtifact == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateArtifact_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateArtifact(childComplexity, args["id"].(int), args["input"].(ent.UpdateArtifactInput)), true
+
+	case "Mutation.updateCategory":
+		if e.complexity.Mutation.UpdateCategory == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateCategory_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateCategory(childComplexity, args["id"].(int), args["input"].(ent.UpdateCategoryInput)), true
+
+	case "Mutation.updateCollection":
+		if e.complexity.Mutation.UpdateCollection == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateCollection_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateCollection(childComplexity, args["id"].(int), args["input"].(ent.UpdateCollectionInput)), true
+
+	case "Mutation.updateCulture":
+		if e.complexity.Mutation.UpdateCulture == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateCulture_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateCulture(childComplexity, args["id"].(int), args["input"].(ent.UpdateCultureInput)), true
+
+	case "Mutation.updateDistrict":
+		if e.complexity.Mutation.UpdateDistrict == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateDistrict_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateDistrict(childComplexity, args["id"].(int), args["input"].(ent.UpdateDistrictInput)), true
+
+	case "Mutation.updateHolder":
+		if e.complexity.Mutation.UpdateHolder == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateHolder_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateHolder(childComplexity, args["id"].(int), args["input"].(ent.UpdateHolderInput)), true
+
+	case "Mutation.updateLicense":
+		if e.complexity.Mutation.UpdateLicense == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateLicense_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateLicense(childComplexity, args["id"].(int), args["input"].(ent.UpdateLicenseInput)), true
+
+	case "Mutation.updateLocation":
+		if e.complexity.Mutation.UpdateLocation == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateLocation_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateLocation(childComplexity, args["id"].(int), args["input"].(ent.UpdateLocationInput)), true
+
+	case "Mutation.updateMedium":
+		if e.complexity.Mutation.UpdateMedium == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateMedium_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateMedium(childComplexity, args["id"].(int), args["input"].(ent.UpdateMediumInput)), true
+
+	case "Mutation.updateModel":
+		if e.complexity.Mutation.UpdateModel == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateModel_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateModel(childComplexity, args["id"].(int), args["input"].(ent.UpdateModelInput)), true
+
+	case "Mutation.updateMonument":
+		if e.complexity.Mutation.UpdateMonument == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateMonument_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateMonument(childComplexity, args["id"].(int), args["input"].(ent.UpdateMonumentInput)), true
+
+	case "Mutation.updateOrganization":
+		if e.complexity.Mutation.UpdateOrganization == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateOrganization_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateOrganization(childComplexity, args["id"].(int), args["input"].(ent.UpdateOrganizationInput)), true
+
+	case "Mutation.updatePerson":
+		if e.complexity.Mutation.UpdatePerson == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updatePerson_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdatePerson(childComplexity, args["id"].(int), args["input"].(ent.UpdatePersonInput)), true
+
+	case "Mutation.updateProject":
+		if e.complexity.Mutation.UpdateProject == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateProject_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateProject(childComplexity, args["id"].(int), args["input"].(ent.UpdateProjectInput)), true
+
+	case "Mutation.updatePublication":
+		if e.complexity.Mutation.UpdatePublication == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updatePublication_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdatePublication(childComplexity, args["id"].(int), args["input"].(ent.UpdatePublicationInput)), true
+
+	case "Mutation.updateRegion":
+		if e.complexity.Mutation.UpdateRegion == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateRegion_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateRegion(childComplexity, args["id"].(int), args["input"].(ent.UpdateRegionInput)), true
+
+	case "Mutation.updateSet":
+		if e.complexity.Mutation.UpdateSet == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateSet_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateSet(childComplexity, args["id"].(int), args["input"].(ent.UpdateSetInput)), true
+
+	case "Mutation.updateSettlement":
+		if e.complexity.Mutation.UpdateSettlement == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateSettlement_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateSettlement(childComplexity, args["id"].(int), args["input"].(ent.UpdateSettlementInput)), true
+
+	case "Mutation.updateTechnique":
+		if e.complexity.Mutation.UpdateTechnique == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateTechnique_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateTechnique(childComplexity, args["id"].(int), args["input"].(ent.UpdateTechniqueInput)), true
+
 	case "Organization.createdAt":
 		if e.complexity.Organization.CreatedAt == nil {
 			break
@@ -2890,6 +3428,21 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 
 			return &response
 		}
+	case ast.Mutation:
+		return func(ctx context.Context) *graphql.Response {
+			if !first {
+				return nil
+			}
+			first = false
+			ctx = graphql.WithUnmarshalerMap(ctx, inputUnmarshalMap)
+			data := ec._Mutation(ctx, rc.Operation.SelectionSet)
+			var buf bytes.Buffer
+			data.MarshalGQL(&buf)
+
+			return &graphql.Response{
+				Data: buf.Bytes(),
+			}
+		}
 
 	default:
 		return graphql.OneShot(graphql.ErrorResponse(ctx, "unsupported GraphQL operation"))
@@ -2937,7 +3490,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 	return introspection.WrapTypeFromDef(parsedSchema, parsedSchema.Types[name]), nil
 }
 
-//go:embed "ent.graphql"
+//go:embed "mutation.graphql" "ent.graphql"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -2949,6 +3502,7 @@ func sourceData(filename string) string {
 }
 
 var sources = []*ast.Source{
+	{Name: "mutation.graphql", Input: sourceData("mutation.graphql"), BuiltIn: false},
 	{Name: "ent.graphql", Input: sourceData("ent.graphql"), BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
@@ -2956,6 +3510,747 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 // endregion ************************** generated!.gotpl **************************
 
 // region    ***************************** args.gotpl *****************************
+
+func (ec *executionContext) field_Mutation_createArtifact_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateArtifactInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateArtifactInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateArtifactInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createCategory_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateCategoryInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateCategoryInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateCategoryInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createCollection_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateCollectionInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateCollectionInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateCollectionInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createCulture_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateCultureInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateCultureInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateCultureInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createDistrict_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateDistrictInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateDistrictInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateDistrictInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createHolder_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateHolderInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateHolderInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateHolderInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createLicense_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateLicenseInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateLicenseInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateLicenseInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createLocation_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateLocationInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateLocationInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateLocationInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createMedium_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateMediumInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateMediumInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateMediumInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createModel_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateModelInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateModelInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateModelInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createMonument_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateMonumentInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateMonumentInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateMonumentInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createOrganization_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateOrganizationInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateOrganizationInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateOrganizationInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createPerson_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreatePersonInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreatePersonInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreatePersonInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createProject_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateProjectInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateProjectInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateProjectInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createPublication_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreatePublicationInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreatePublicationInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreatePublicationInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createRegion_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateRegionInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateRegionInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateRegionInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createSet_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateSetInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateSetInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateSetInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createSettlement_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateSettlementInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateSettlementInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateSettlementInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createTechnique_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateTechniqueInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateTechniqueInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateTechniqueInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateArtifact_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateArtifactInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateArtifactInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateArtifactInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateCategory_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateCategoryInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateCategoryInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateCategoryInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateCollection_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateCollectionInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateCollectionInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateCollectionInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateCulture_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateCultureInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateCultureInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateCultureInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateDistrict_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateDistrictInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateDistrictInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateDistrictInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateHolder_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateHolderInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateHolderInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateHolderInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateLicense_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateLicenseInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateLicenseInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateLicenseInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateLocation_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateLocationInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateLocationInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateLocationInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateMedium_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateMediumInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateMediumInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateMediumInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateModel_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateModelInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateModelInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateModelInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateMonument_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateMonumentInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateMonumentInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateMonumentInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateOrganization_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateOrganizationInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateOrganizationInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateOrganizationInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updatePerson_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdatePersonInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdatePersonInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdatePersonInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateProject_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateProjectInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateProjectInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateProjectInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updatePublication_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdatePublicationInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdatePublicationInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdatePublicationInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateRegion_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateRegionInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateRegionInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateRegionInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateSet_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateSetInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateSetInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateSetInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateSettlement_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateSettlementInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateSettlementInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateSettlementInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateTechnique_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateTechniqueInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateTechniqueInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateTechniqueInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
 
 func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
@@ -12415,6 +13710,2888 @@ func (ec *executionContext) fieldContext_MonumentEdge_cursor(ctx context.Context
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Cursor does not have child fields")
 		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createArtifact(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createArtifact(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateArtifact(rctx, fc.Args["input"].(ent.CreateArtifactInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Artifact)
+	fc.Result = res
+	return ec.marshalNArtifact2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtifact(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createArtifact(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Artifact_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Artifact_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Artifact_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Artifact_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Artifact_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Artifact_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Artifact_description(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
+			case "additionalImageUrls":
+				return ec.fieldContext_Artifact_additionalImageUrls(ctx, field)
+			case "deletedAt":
+				return ec.fieldContext_Artifact_deletedAt(ctx, field)
+			case "deletedBy":
+				return ec.fieldContext_Artifact_deletedBy(ctx, field)
+			case "authors":
+				return ec.fieldContext_Artifact_authors(ctx, field)
+			case "mediums":
+				return ec.fieldContext_Artifact_mediums(ctx, field)
+			case "techniques":
+				return ec.fieldContext_Artifact_techniques(ctx, field)
+			case "projects":
+				return ec.fieldContext_Artifact_projects(ctx, field)
+			case "publications":
+				return ec.fieldContext_Artifact_publications(ctx, field)
+			case "holders":
+				return ec.fieldContext_Artifact_holders(ctx, field)
+			case "culturalAffiliation":
+				return ec.fieldContext_Artifact_culturalAffiliation(ctx, field)
+			case "monument":
+				return ec.fieldContext_Artifact_monument(ctx, field)
+			case "model":
+				return ec.fieldContext_Artifact_model(ctx, field)
+			case "set":
+				return ec.fieldContext_Artifact_set(ctx, field)
+			case "location":
+				return ec.fieldContext_Artifact_location(ctx, field)
+			case "collection":
+				return ec.fieldContext_Artifact_collection(ctx, field)
+			case "license":
+				return ec.fieldContext_Artifact_license(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Artifact", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createArtifact_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateArtifact(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateArtifact(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateArtifact(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateArtifactInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Artifact)
+	fc.Result = res
+	return ec.marshalNArtifact2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtifact(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateArtifact(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Artifact_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Artifact_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Artifact_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Artifact_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Artifact_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Artifact_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Artifact_description(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
+			case "additionalImageUrls":
+				return ec.fieldContext_Artifact_additionalImageUrls(ctx, field)
+			case "deletedAt":
+				return ec.fieldContext_Artifact_deletedAt(ctx, field)
+			case "deletedBy":
+				return ec.fieldContext_Artifact_deletedBy(ctx, field)
+			case "authors":
+				return ec.fieldContext_Artifact_authors(ctx, field)
+			case "mediums":
+				return ec.fieldContext_Artifact_mediums(ctx, field)
+			case "techniques":
+				return ec.fieldContext_Artifact_techniques(ctx, field)
+			case "projects":
+				return ec.fieldContext_Artifact_projects(ctx, field)
+			case "publications":
+				return ec.fieldContext_Artifact_publications(ctx, field)
+			case "holders":
+				return ec.fieldContext_Artifact_holders(ctx, field)
+			case "culturalAffiliation":
+				return ec.fieldContext_Artifact_culturalAffiliation(ctx, field)
+			case "monument":
+				return ec.fieldContext_Artifact_monument(ctx, field)
+			case "model":
+				return ec.fieldContext_Artifact_model(ctx, field)
+			case "set":
+				return ec.fieldContext_Artifact_set(ctx, field)
+			case "location":
+				return ec.fieldContext_Artifact_location(ctx, field)
+			case "collection":
+				return ec.fieldContext_Artifact_collection(ctx, field)
+			case "license":
+				return ec.fieldContext_Artifact_license(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Artifact", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateArtifact_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createCategory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createCategory(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateCategory(rctx, fc.Args["input"].(ent.CreateCategoryInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Category)
+	fc.Result = res
+	return ec.marshalNCategory2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCategory(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createCategory(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Category_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Category_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Category_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Category_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Category_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Category_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Category_description(ctx, field)
+			case "collections":
+				return ec.fieldContext_Category_collections(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Category", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createCategory_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateCategory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateCategory(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateCategory(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateCategoryInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Category)
+	fc.Result = res
+	return ec.marshalNCategory2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCategory(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateCategory(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Category_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Category_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Category_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Category_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Category_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Category_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Category_description(ctx, field)
+			case "collections":
+				return ec.fieldContext_Category_collections(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Category", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateCategory_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createCollection(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createCollection(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateCollection(rctx, fc.Args["input"].(ent.CreateCollectionInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Collection)
+	fc.Result = res
+	return ec.marshalNCollection2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCollection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createCollection(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Collection_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Collection_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Collection_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Collection_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Collection_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Collection_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Collection_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Collection_artifacts(ctx, field)
+			case "category":
+				return ec.fieldContext_Collection_category(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Collection", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createCollection_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateCollection(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateCollection(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateCollection(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateCollectionInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Collection)
+	fc.Result = res
+	return ec.marshalNCollection2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCollection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateCollection(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Collection_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Collection_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Collection_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Collection_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Collection_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Collection_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Collection_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Collection_artifacts(ctx, field)
+			case "category":
+				return ec.fieldContext_Collection_category(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Collection", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateCollection_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createCulture(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createCulture(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateCulture(rctx, fc.Args["input"].(ent.CreateCultureInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Culture)
+	fc.Result = res
+	return ec.marshalNCulture2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCulture(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createCulture(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Culture_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Culture_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Culture_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Culture_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Culture_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Culture_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Culture_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Culture_artifacts(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Culture", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createCulture_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateCulture(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateCulture(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateCulture(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateCultureInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Culture)
+	fc.Result = res
+	return ec.marshalNCulture2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCulture(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateCulture(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Culture_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Culture_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Culture_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Culture_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Culture_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Culture_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Culture_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Culture_artifacts(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Culture", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateCulture_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createDistrict(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createDistrict(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateDistrict(rctx, fc.Args["input"].(ent.CreateDistrictInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.District)
+	fc.Result = res
+	return ec.marshalNDistrict2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐDistrict(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createDistrict(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_District_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_District_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_District_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_District_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_District_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_District_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_District_description(ctx, field)
+			case "location":
+				return ec.fieldContext_District_location(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type District", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createDistrict_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateDistrict(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateDistrict(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateDistrict(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateDistrictInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.District)
+	fc.Result = res
+	return ec.marshalNDistrict2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐDistrict(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateDistrict(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_District_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_District_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_District_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_District_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_District_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_District_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_District_description(ctx, field)
+			case "location":
+				return ec.fieldContext_District_location(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type District", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateDistrict_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createHolder(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createHolder(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateHolder(rctx, fc.Args["input"].(ent.CreateHolderInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Holder)
+	fc.Result = res
+	return ec.marshalNHolder2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolder(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createHolder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Holder_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Holder_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Holder_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Holder_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Holder_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Holder_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Holder_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Holder_artifacts(ctx, field)
+			case "person":
+				return ec.fieldContext_Holder_person(ctx, field)
+			case "organization":
+				return ec.fieldContext_Holder_organization(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Holder", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createHolder_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateHolder(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateHolder(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateHolder(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateHolderInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Holder)
+	fc.Result = res
+	return ec.marshalNHolder2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolder(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateHolder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Holder_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Holder_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Holder_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Holder_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Holder_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Holder_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Holder_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Holder_artifacts(ctx, field)
+			case "person":
+				return ec.fieldContext_Holder_person(ctx, field)
+			case "organization":
+				return ec.fieldContext_Holder_organization(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Holder", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateHolder_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createLicense(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createLicense(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateLicense(rctx, fc.Args["input"].(ent.CreateLicenseInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.License)
+	fc.Result = res
+	return ec.marshalNLicense2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLicense(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createLicense(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_License_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_License_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_License_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_License_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_License_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_License_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_License_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_License_artifacts(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type License", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createLicense_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateLicense(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateLicense(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateLicense(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateLicenseInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.License)
+	fc.Result = res
+	return ec.marshalNLicense2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLicense(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateLicense(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_License_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_License_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_License_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_License_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_License_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_License_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_License_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_License_artifacts(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type License", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateLicense_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createLocation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createLocation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateLocation(rctx, fc.Args["input"].(ent.CreateLocationInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Location)
+	fc.Result = res
+	return ec.marshalNLocation2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLocation(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createLocation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Location_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Location_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Location_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Location_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Location_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Location_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Location_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Location_artifacts(ctx, field)
+			case "settlement":
+				return ec.fieldContext_Location_settlement(ctx, field)
+			case "region":
+				return ec.fieldContext_Location_region(ctx, field)
+			case "district":
+				return ec.fieldContext_Location_district(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Location", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createLocation_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateLocation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateLocation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateLocation(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateLocationInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Location)
+	fc.Result = res
+	return ec.marshalNLocation2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLocation(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateLocation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Location_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Location_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Location_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Location_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Location_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Location_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Location_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Location_artifacts(ctx, field)
+			case "settlement":
+				return ec.fieldContext_Location_settlement(ctx, field)
+			case "region":
+				return ec.fieldContext_Location_region(ctx, field)
+			case "district":
+				return ec.fieldContext_Location_district(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Location", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateLocation_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createMedium(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createMedium(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateMedium(rctx, fc.Args["input"].(ent.CreateMediumInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Medium)
+	fc.Result = res
+	return ec.marshalNMedium2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐMedium(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createMedium(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Medium_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Medium_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Medium_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Medium_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Medium_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Medium_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Medium_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Medium_artifacts(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Medium", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createMedium_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateMedium(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateMedium(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateMedium(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateMediumInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Medium)
+	fc.Result = res
+	return ec.marshalNMedium2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐMedium(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateMedium(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Medium_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Medium_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Medium_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Medium_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Medium_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Medium_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Medium_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Medium_artifacts(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Medium", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateMedium_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createModel(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createModel(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateModel(rctx, fc.Args["input"].(ent.CreateModelInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Model)
+	fc.Result = res
+	return ec.marshalNModel2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐModel(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createModel(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Model_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Model_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Model_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Model_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Model_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Model_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Model_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Model_artifacts(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Model", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createModel_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateModel(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateModel(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateModel(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateModelInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Model)
+	fc.Result = res
+	return ec.marshalNModel2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐModel(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateModel(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Model_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Model_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Model_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Model_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Model_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Model_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Model_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Model_artifacts(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Model", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateModel_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createMonument(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createMonument(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateMonument(rctx, fc.Args["input"].(ent.CreateMonumentInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Monument)
+	fc.Result = res
+	return ec.marshalNMonument2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐMonument(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createMonument(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Monument_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Monument_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Monument_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Monument_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Monument_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Monument_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Monument_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Monument_artifacts(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Monument", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createMonument_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateMonument(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateMonument(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateMonument(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateMonumentInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Monument)
+	fc.Result = res
+	return ec.marshalNMonument2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐMonument(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateMonument(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Monument_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Monument_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Monument_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Monument_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Monument_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Monument_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Monument_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Monument_artifacts(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Monument", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateMonument_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createOrganization(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createOrganization(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateOrganization(rctx, fc.Args["input"].(ent.CreateOrganizationInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Organization)
+	fc.Result = res
+	return ec.marshalNOrganization2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐOrganization(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createOrganization(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Organization_id(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Organization_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Organization_description(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Organization_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Organization_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Organization_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Organization_updatedBy(ctx, field)
+			case "holder":
+				return ec.fieldContext_Organization_holder(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Organization", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createOrganization_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateOrganization(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateOrganization(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateOrganization(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateOrganizationInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Organization)
+	fc.Result = res
+	return ec.marshalNOrganization2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐOrganization(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateOrganization(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Organization_id(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Organization_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Organization_description(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Organization_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Organization_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Organization_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Organization_updatedBy(ctx, field)
+			case "holder":
+				return ec.fieldContext_Organization_holder(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Organization", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateOrganization_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createPerson(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createPerson(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreatePerson(rctx, fc.Args["input"].(ent.CreatePersonInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Person)
+	fc.Result = res
+	return ec.marshalNPerson2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPerson(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createPerson(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Person_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Person_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Person_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Person_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Person_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Person_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Person_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Person_artifacts(ctx, field)
+			case "projects":
+				return ec.fieldContext_Person_projects(ctx, field)
+			case "publications":
+				return ec.fieldContext_Person_publications(ctx, field)
+			case "holder":
+				return ec.fieldContext_Person_holder(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createPerson_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updatePerson(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updatePerson(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdatePerson(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdatePersonInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Person)
+	fc.Result = res
+	return ec.marshalNPerson2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPerson(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updatePerson(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Person_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Person_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Person_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Person_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Person_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Person_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Person_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Person_artifacts(ctx, field)
+			case "projects":
+				return ec.fieldContext_Person_projects(ctx, field)
+			case "publications":
+				return ec.fieldContext_Person_publications(ctx, field)
+			case "holder":
+				return ec.fieldContext_Person_holder(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updatePerson_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createProject(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createProject(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateProject(rctx, fc.Args["input"].(ent.CreateProjectInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Project)
+	fc.Result = res
+	return ec.marshalNProject2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProject(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createProject(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Project_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Project_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Project_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Project_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Project_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Project_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Project_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Project_artifacts(ctx, field)
+			case "team":
+				return ec.fieldContext_Project_team(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Project", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createProject_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateProject(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateProject(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateProject(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateProjectInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Project)
+	fc.Result = res
+	return ec.marshalNProject2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProject(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateProject(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Project_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Project_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Project_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Project_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Project_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Project_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Project_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Project_artifacts(ctx, field)
+			case "team":
+				return ec.fieldContext_Project_team(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Project", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateProject_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createPublication(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createPublication(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreatePublication(rctx, fc.Args["input"].(ent.CreatePublicationInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Publication)
+	fc.Result = res
+	return ec.marshalNPublication2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPublication(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createPublication(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Publication_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Publication_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Publication_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Publication_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Publication_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Publication_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Publication_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Publication_artifacts(ctx, field)
+			case "authors":
+				return ec.fieldContext_Publication_authors(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Publication", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createPublication_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updatePublication(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updatePublication(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdatePublication(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdatePublicationInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Publication)
+	fc.Result = res
+	return ec.marshalNPublication2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPublication(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updatePublication(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Publication_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Publication_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Publication_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Publication_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Publication_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Publication_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Publication_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Publication_artifacts(ctx, field)
+			case "authors":
+				return ec.fieldContext_Publication_authors(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Publication", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updatePublication_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createRegion(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createRegion(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateRegion(rctx, fc.Args["input"].(ent.CreateRegionInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Region)
+	fc.Result = res
+	return ec.marshalNRegion2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐRegion(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createRegion(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Region_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Region_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Region_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Region_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Region_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Region_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Region_description(ctx, field)
+			case "location":
+				return ec.fieldContext_Region_location(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Region", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createRegion_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateRegion(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateRegion(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateRegion(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateRegionInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Region)
+	fc.Result = res
+	return ec.marshalNRegion2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐRegion(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateRegion(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Region_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Region_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Region_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Region_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Region_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Region_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Region_description(ctx, field)
+			case "location":
+				return ec.fieldContext_Region_location(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Region", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateRegion_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createSet(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createSet(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateSet(rctx, fc.Args["input"].(ent.CreateSetInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Set)
+	fc.Result = res
+	return ec.marshalNSet2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐSet(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createSet(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Set_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Set_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Set_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Set_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Set_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Set_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Set_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Set_artifacts(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Set", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createSet_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateSet(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateSet(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateSet(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateSetInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Set)
+	fc.Result = res
+	return ec.marshalNSet2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐSet(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateSet(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Set_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Set_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Set_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Set_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Set_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Set_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Set_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Set_artifacts(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Set", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateSet_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createSettlement(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createSettlement(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateSettlement(rctx, fc.Args["input"].(ent.CreateSettlementInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Settlement)
+	fc.Result = res
+	return ec.marshalNSettlement2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐSettlement(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createSettlement(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Settlement_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Settlement_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Settlement_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Settlement_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Settlement_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Settlement_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Settlement_description(ctx, field)
+			case "location":
+				return ec.fieldContext_Settlement_location(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Settlement", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createSettlement_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateSettlement(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateSettlement(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateSettlement(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateSettlementInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Settlement)
+	fc.Result = res
+	return ec.marshalNSettlement2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐSettlement(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateSettlement(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Settlement_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Settlement_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Settlement_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Settlement_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Settlement_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Settlement_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Settlement_description(ctx, field)
+			case "location":
+				return ec.fieldContext_Settlement_location(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Settlement", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateSettlement_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createTechnique(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createTechnique(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateTechnique(rctx, fc.Args["input"].(ent.CreateTechniqueInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Technique)
+	fc.Result = res
+	return ec.marshalNTechnique2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐTechnique(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createTechnique(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Technique_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Technique_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Technique_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Technique_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Technique_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Technique_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Technique_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Technique_artifacts(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Technique", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createTechnique_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateTechnique(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateTechnique(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateTechnique(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateTechniqueInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Technique)
+	fc.Result = res
+	return ec.marshalNTechnique2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐTechnique(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateTechnique(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Technique_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Technique_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Technique_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Technique_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Technique_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Technique_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Technique_description(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Technique_artifacts(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Technique", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateTechnique_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -45907,6 +50084,314 @@ func (ec *executionContext) _MonumentEdge(ctx context.Context, sel ast.Selection
 	return out
 }
 
+var mutationImplementors = []string{"Mutation"}
+
+func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, mutationImplementors)
+	ctx = graphql.WithFieldContext(ctx, &graphql.FieldContext{
+		Object: "Mutation",
+	})
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		innerCtx := graphql.WithRootFieldContext(ctx, &graphql.RootFieldContext{
+			Object: field.Name,
+			Field:  field,
+		})
+
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Mutation")
+		case "createArtifact":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createArtifact(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateArtifact":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateArtifact(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createCategory":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createCategory(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateCategory":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateCategory(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createCollection":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createCollection(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateCollection":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateCollection(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createCulture":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createCulture(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateCulture":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateCulture(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createDistrict":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createDistrict(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateDistrict":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateDistrict(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createHolder":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createHolder(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateHolder":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateHolder(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createLicense":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createLicense(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateLicense":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateLicense(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createLocation":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createLocation(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateLocation":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateLocation(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createMedium":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createMedium(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateMedium":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateMedium(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createModel":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createModel(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateModel":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateModel(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createMonument":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createMonument(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateMonument":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateMonument(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createOrganization":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createOrganization(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateOrganization":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateOrganization(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createPerson":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createPerson(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatePerson":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updatePerson(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createProject":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createProject(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateProject":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateProject(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createPublication":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createPublication(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatePublication":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updatePublication(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createRegion":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createRegion(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateRegion":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateRegion(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createSet":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createSet(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateSet":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateSet(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createSettlement":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createSettlement(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateSettlement":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateSettlement(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createTechnique":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createTechnique(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateTechnique":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateTechnique(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var organizationImplementors = []string{"Organization", "Node"}
 
 func (ec *executionContext) _Organization(ctx context.Context, sel ast.SelectionSet, obj *ent.Organization) graphql.Marshaler {
@@ -48371,6 +52856,10 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) marshalNArtifact2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtifact(ctx context.Context, sel ast.SelectionSet, v ent.Artifact) graphql.Marshaler {
+	return ec._Artifact(ctx, sel, &v)
+}
+
 func (ec *executionContext) marshalNArtifact2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtifact(ctx context.Context, sel ast.SelectionSet, v *ent.Artifact) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -48441,6 +52930,20 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
+func (ec *executionContext) marshalNCategory2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCategory(ctx context.Context, sel ast.SelectionSet, v ent.Category) graphql.Marshaler {
+	return ec._Category(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNCategory2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCategory(ctx context.Context, sel ast.SelectionSet, v *ent.Category) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Category(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNCategoryConnection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCategoryConnection(ctx context.Context, sel ast.SelectionSet, v ent.CategoryConnection) graphql.Marshaler {
 	return ec._CategoryConnection(ctx, sel, &v)
 }
@@ -48479,6 +52982,10 @@ func (ec *executionContext) marshalNCategoryOrderField2ᚖgithubᚗcomᚋdkrasno
 func (ec *executionContext) unmarshalNCategoryWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCategoryWhereInput(ctx context.Context, v interface{}) (*ent.CategoryWhereInput, error) {
 	res, err := ec.unmarshalInputCategoryWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNCollection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCollection(ctx context.Context, sel ast.SelectionSet, v ent.Collection) graphql.Marshaler {
+	return ec._Collection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNCollection2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCollection(ctx context.Context, sel ast.SelectionSet, v *ent.Collection) graphql.Marshaler {
@@ -48531,6 +53038,115 @@ func (ec *executionContext) unmarshalNCollectionWhereInput2ᚖgithubᚗcomᚋdkr
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) unmarshalNCreateArtifactInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateArtifactInput(ctx context.Context, v interface{}) (ent.CreateArtifactInput, error) {
+	res, err := ec.unmarshalInputCreateArtifactInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateCategoryInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateCategoryInput(ctx context.Context, v interface{}) (ent.CreateCategoryInput, error) {
+	res, err := ec.unmarshalInputCreateCategoryInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateCollectionInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateCollectionInput(ctx context.Context, v interface{}) (ent.CreateCollectionInput, error) {
+	res, err := ec.unmarshalInputCreateCollectionInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateCultureInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateCultureInput(ctx context.Context, v interface{}) (ent.CreateCultureInput, error) {
+	res, err := ec.unmarshalInputCreateCultureInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateDistrictInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateDistrictInput(ctx context.Context, v interface{}) (ent.CreateDistrictInput, error) {
+	res, err := ec.unmarshalInputCreateDistrictInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateHolderInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateHolderInput(ctx context.Context, v interface{}) (ent.CreateHolderInput, error) {
+	res, err := ec.unmarshalInputCreateHolderInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateLicenseInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateLicenseInput(ctx context.Context, v interface{}) (ent.CreateLicenseInput, error) {
+	res, err := ec.unmarshalInputCreateLicenseInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateLocationInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateLocationInput(ctx context.Context, v interface{}) (ent.CreateLocationInput, error) {
+	res, err := ec.unmarshalInputCreateLocationInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateMediumInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateMediumInput(ctx context.Context, v interface{}) (ent.CreateMediumInput, error) {
+	res, err := ec.unmarshalInputCreateMediumInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateModelInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateModelInput(ctx context.Context, v interface{}) (ent.CreateModelInput, error) {
+	res, err := ec.unmarshalInputCreateModelInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateMonumentInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateMonumentInput(ctx context.Context, v interface{}) (ent.CreateMonumentInput, error) {
+	res, err := ec.unmarshalInputCreateMonumentInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateOrganizationInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateOrganizationInput(ctx context.Context, v interface{}) (ent.CreateOrganizationInput, error) {
+	res, err := ec.unmarshalInputCreateOrganizationInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreatePersonInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreatePersonInput(ctx context.Context, v interface{}) (ent.CreatePersonInput, error) {
+	res, err := ec.unmarshalInputCreatePersonInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateProjectInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateProjectInput(ctx context.Context, v interface{}) (ent.CreateProjectInput, error) {
+	res, err := ec.unmarshalInputCreateProjectInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreatePublicationInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreatePublicationInput(ctx context.Context, v interface{}) (ent.CreatePublicationInput, error) {
+	res, err := ec.unmarshalInputCreatePublicationInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateRegionInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateRegionInput(ctx context.Context, v interface{}) (ent.CreateRegionInput, error) {
+	res, err := ec.unmarshalInputCreateRegionInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateSetInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateSetInput(ctx context.Context, v interface{}) (ent.CreateSetInput, error) {
+	res, err := ec.unmarshalInputCreateSetInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateSettlementInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateSettlementInput(ctx context.Context, v interface{}) (ent.CreateSettlementInput, error) {
+	res, err := ec.unmarshalInputCreateSettlementInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateTechniqueInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateTechniqueInput(ctx context.Context, v interface{}) (ent.CreateTechniqueInput, error) {
+	res, err := ec.unmarshalInputCreateTechniqueInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNCulture2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCulture(ctx context.Context, sel ast.SelectionSet, v ent.Culture) graphql.Marshaler {
+	return ec._Culture(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNCulture2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCulture(ctx context.Context, sel ast.SelectionSet, v *ent.Culture) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Culture(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNCultureConnection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCultureConnection(ctx context.Context, sel ast.SelectionSet, v ent.CultureConnection) graphql.Marshaler {
 	return ec._CultureConnection(ctx, sel, &v)
 }
@@ -48581,6 +53197,20 @@ func (ec *executionContext) marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCurso
 	return v
 }
 
+func (ec *executionContext) marshalNDistrict2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐDistrict(ctx context.Context, sel ast.SelectionSet, v ent.District) graphql.Marshaler {
+	return ec._District(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNDistrict2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐDistrict(ctx context.Context, sel ast.SelectionSet, v *ent.District) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._District(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNDistrictConnection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐDistrictConnection(ctx context.Context, sel ast.SelectionSet, v ent.DistrictConnection) graphql.Marshaler {
 	return ec._DistrictConnection(ctx, sel, &v)
 }
@@ -48619,6 +53249,10 @@ func (ec *executionContext) marshalNDistrictOrderField2ᚖgithubᚗcomᚋdkrasno
 func (ec *executionContext) unmarshalNDistrictWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐDistrictWhereInput(ctx context.Context, v interface{}) (*ent.DistrictWhereInput, error) {
 	res, err := ec.unmarshalInputDistrictWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNHolder2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolder(ctx context.Context, sel ast.SelectionSet, v ent.Holder) graphql.Marshaler {
+	return ec._Holder(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNHolder2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolder(ctx context.Context, sel ast.SelectionSet, v *ent.Holder) graphql.Marshaler {
@@ -48733,6 +53367,20 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
+func (ec *executionContext) marshalNLicense2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLicense(ctx context.Context, sel ast.SelectionSet, v ent.License) graphql.Marshaler {
+	return ec._License(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNLicense2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLicense(ctx context.Context, sel ast.SelectionSet, v *ent.License) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._License(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNLicenseConnection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLicenseConnection(ctx context.Context, sel ast.SelectionSet, v ent.LicenseConnection) graphql.Marshaler {
 	return ec._LicenseConnection(ctx, sel, &v)
 }
@@ -48773,6 +53421,20 @@ func (ec *executionContext) unmarshalNLicenseWhereInput2ᚖgithubᚗcomᚋdkrasn
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalNLocation2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLocation(ctx context.Context, sel ast.SelectionSet, v ent.Location) graphql.Marshaler {
+	return ec._Location(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNLocation2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLocation(ctx context.Context, sel ast.SelectionSet, v *ent.Location) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Location(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNLocationConnection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLocationConnection(ctx context.Context, sel ast.SelectionSet, v ent.LocationConnection) graphql.Marshaler {
 	return ec._LocationConnection(ctx, sel, &v)
 }
@@ -48811,6 +53473,10 @@ func (ec *executionContext) marshalNLocationOrderField2ᚖgithubᚗcomᚋdkrasno
 func (ec *executionContext) unmarshalNLocationWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLocationWhereInput(ctx context.Context, v interface{}) (*ent.LocationWhereInput, error) {
 	res, err := ec.unmarshalInputLocationWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNMedium2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐMedium(ctx context.Context, sel ast.SelectionSet, v ent.Medium) graphql.Marshaler {
+	return ec._Medium(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNMedium2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐMedium(ctx context.Context, sel ast.SelectionSet, v *ent.Medium) graphql.Marshaler {
@@ -48863,6 +53529,20 @@ func (ec *executionContext) unmarshalNMediumWhereInput2ᚖgithubᚗcomᚋdkrasno
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalNModel2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐModel(ctx context.Context, sel ast.SelectionSet, v ent.Model) graphql.Marshaler {
+	return ec._Model(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNModel2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐModel(ctx context.Context, sel ast.SelectionSet, v *ent.Model) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Model(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNModelConnection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐModelConnection(ctx context.Context, sel ast.SelectionSet, v ent.ModelConnection) graphql.Marshaler {
 	return ec._ModelConnection(ctx, sel, &v)
 }
@@ -48901,6 +53581,20 @@ func (ec *executionContext) marshalNModelOrderField2ᚖgithubᚗcomᚋdkrasnovde
 func (ec *executionContext) unmarshalNModelWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐModelWhereInput(ctx context.Context, v interface{}) (*ent.ModelWhereInput, error) {
 	res, err := ec.unmarshalInputModelWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNMonument2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐMonument(ctx context.Context, sel ast.SelectionSet, v ent.Monument) graphql.Marshaler {
+	return ec._Monument(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNMonument2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐMonument(ctx context.Context, sel ast.SelectionSet, v *ent.Monument) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Monument(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNMonumentConnection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐMonumentConnection(ctx context.Context, sel ast.SelectionSet, v ent.MonumentConnection) graphql.Marshaler {
@@ -48991,6 +53685,20 @@ func (ec *executionContext) marshalNOrderDirection2entgoᚗioᚋcontribᚋentgql
 	return v
 }
 
+func (ec *executionContext) marshalNOrganization2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐOrganization(ctx context.Context, sel ast.SelectionSet, v ent.Organization) graphql.Marshaler {
+	return ec._Organization(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNOrganization2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐOrganization(ctx context.Context, sel ast.SelectionSet, v *ent.Organization) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Organization(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNOrganizationConnection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐOrganizationConnection(ctx context.Context, sel ast.SelectionSet, v ent.OrganizationConnection) graphql.Marshaler {
 	return ec._OrganizationConnection(ctx, sel, &v)
 }
@@ -49028,6 +53736,10 @@ func (ec *executionContext) unmarshalNOrganizationWhereInput2ᚖgithubᚗcomᚋd
 
 func (ec *executionContext) marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v entgql.PageInfo[int]) graphql.Marshaler {
 	return ec._PageInfo(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNPerson2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPerson(ctx context.Context, sel ast.SelectionSet, v ent.Person) graphql.Marshaler {
+	return ec._Person(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNPerson2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPerson(ctx context.Context, sel ast.SelectionSet, v *ent.Person) graphql.Marshaler {
@@ -49080,6 +53792,10 @@ func (ec *executionContext) unmarshalNPersonWhereInput2ᚖgithubᚗcomᚋdkrasno
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalNProject2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProject(ctx context.Context, sel ast.SelectionSet, v ent.Project) graphql.Marshaler {
+	return ec._Project(ctx, sel, &v)
+}
+
 func (ec *executionContext) marshalNProject2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProject(ctx context.Context, sel ast.SelectionSet, v *ent.Project) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -49128,6 +53844,10 @@ func (ec *executionContext) marshalNProjectOrderField2ᚖgithubᚗcomᚋdkrasnov
 func (ec *executionContext) unmarshalNProjectWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProjectWhereInput(ctx context.Context, v interface{}) (*ent.ProjectWhereInput, error) {
 	res, err := ec.unmarshalInputProjectWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNPublication2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPublication(ctx context.Context, sel ast.SelectionSet, v ent.Publication) graphql.Marshaler {
+	return ec._Publication(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNPublication2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPublication(ctx context.Context, sel ast.SelectionSet, v *ent.Publication) graphql.Marshaler {
@@ -49180,6 +53900,20 @@ func (ec *executionContext) unmarshalNPublicationWhereInput2ᚖgithubᚗcomᚋdk
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalNRegion2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐRegion(ctx context.Context, sel ast.SelectionSet, v ent.Region) graphql.Marshaler {
+	return ec._Region(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNRegion2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐRegion(ctx context.Context, sel ast.SelectionSet, v *ent.Region) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Region(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNRegionConnection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐRegionConnection(ctx context.Context, sel ast.SelectionSet, v ent.RegionConnection) graphql.Marshaler {
 	return ec._RegionConnection(ctx, sel, &v)
 }
@@ -49220,6 +53954,20 @@ func (ec *executionContext) unmarshalNRegionWhereInput2ᚖgithubᚗcomᚋdkrasno
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalNSet2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐSet(ctx context.Context, sel ast.SelectionSet, v ent.Set) graphql.Marshaler {
+	return ec._Set(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNSet2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐSet(ctx context.Context, sel ast.SelectionSet, v *ent.Set) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Set(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNSetConnection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐSetConnection(ctx context.Context, sel ast.SelectionSet, v ent.SetConnection) graphql.Marshaler {
 	return ec._SetConnection(ctx, sel, &v)
 }
@@ -49258,6 +54006,20 @@ func (ec *executionContext) marshalNSetOrderField2ᚖgithubᚗcomᚋdkrasnovdev�
 func (ec *executionContext) unmarshalNSetWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐSetWhereInput(ctx context.Context, v interface{}) (*ent.SetWhereInput, error) {
 	res, err := ec.unmarshalInputSetWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNSettlement2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐSettlement(ctx context.Context, sel ast.SelectionSet, v ent.Settlement) graphql.Marshaler {
+	return ec._Settlement(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNSettlement2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐSettlement(ctx context.Context, sel ast.SelectionSet, v *ent.Settlement) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Settlement(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNSettlementConnection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐSettlementConnection(ctx context.Context, sel ast.SelectionSet, v ent.SettlementConnection) graphql.Marshaler {
@@ -49313,6 +54075,10 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) marshalNTechnique2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐTechnique(ctx context.Context, sel ast.SelectionSet, v ent.Technique) graphql.Marshaler {
+	return ec._Technique(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTechnique2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐTechnique(ctx context.Context, sel ast.SelectionSet, v *ent.Technique) graphql.Marshaler {
@@ -49378,6 +54144,101 @@ func (ec *executionContext) marshalNTime2timeᚐTime(ctx context.Context, sel as
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalNUpdateArtifactInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateArtifactInput(ctx context.Context, v interface{}) (ent.UpdateArtifactInput, error) {
+	res, err := ec.unmarshalInputUpdateArtifactInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateCategoryInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateCategoryInput(ctx context.Context, v interface{}) (ent.UpdateCategoryInput, error) {
+	res, err := ec.unmarshalInputUpdateCategoryInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateCollectionInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateCollectionInput(ctx context.Context, v interface{}) (ent.UpdateCollectionInput, error) {
+	res, err := ec.unmarshalInputUpdateCollectionInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateCultureInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateCultureInput(ctx context.Context, v interface{}) (ent.UpdateCultureInput, error) {
+	res, err := ec.unmarshalInputUpdateCultureInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateDistrictInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateDistrictInput(ctx context.Context, v interface{}) (ent.UpdateDistrictInput, error) {
+	res, err := ec.unmarshalInputUpdateDistrictInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateHolderInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateHolderInput(ctx context.Context, v interface{}) (ent.UpdateHolderInput, error) {
+	res, err := ec.unmarshalInputUpdateHolderInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateLicenseInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateLicenseInput(ctx context.Context, v interface{}) (ent.UpdateLicenseInput, error) {
+	res, err := ec.unmarshalInputUpdateLicenseInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateLocationInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateLocationInput(ctx context.Context, v interface{}) (ent.UpdateLocationInput, error) {
+	res, err := ec.unmarshalInputUpdateLocationInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateMediumInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateMediumInput(ctx context.Context, v interface{}) (ent.UpdateMediumInput, error) {
+	res, err := ec.unmarshalInputUpdateMediumInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateModelInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateModelInput(ctx context.Context, v interface{}) (ent.UpdateModelInput, error) {
+	res, err := ec.unmarshalInputUpdateModelInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateMonumentInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateMonumentInput(ctx context.Context, v interface{}) (ent.UpdateMonumentInput, error) {
+	res, err := ec.unmarshalInputUpdateMonumentInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateOrganizationInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateOrganizationInput(ctx context.Context, v interface{}) (ent.UpdateOrganizationInput, error) {
+	res, err := ec.unmarshalInputUpdateOrganizationInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdatePersonInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdatePersonInput(ctx context.Context, v interface{}) (ent.UpdatePersonInput, error) {
+	res, err := ec.unmarshalInputUpdatePersonInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateProjectInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateProjectInput(ctx context.Context, v interface{}) (ent.UpdateProjectInput, error) {
+	res, err := ec.unmarshalInputUpdateProjectInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdatePublicationInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdatePublicationInput(ctx context.Context, v interface{}) (ent.UpdatePublicationInput, error) {
+	res, err := ec.unmarshalInputUpdatePublicationInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateRegionInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateRegionInput(ctx context.Context, v interface{}) (ent.UpdateRegionInput, error) {
+	res, err := ec.unmarshalInputUpdateRegionInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateSetInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateSetInput(ctx context.Context, v interface{}) (ent.UpdateSetInput, error) {
+	res, err := ec.unmarshalInputUpdateSetInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateSettlementInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateSettlementInput(ctx context.Context, v interface{}) (ent.UpdateSettlementInput, error) {
+	res, err := ec.unmarshalInputUpdateSettlementInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateTechniqueInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateTechniqueInput(ctx context.Context, v interface{}) (ent.UpdateTechniqueInput, error) {
+	res, err := ec.unmarshalInputUpdateTechniqueInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {

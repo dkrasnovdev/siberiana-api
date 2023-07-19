@@ -1,0 +1,59 @@
+type Mutation {
+  # Artifact
+  createArtifact(input: CreateArtifactInput!): Artifact!
+  updateArtifact(id: ID!, input: UpdateArtifactInput!): Artifact!
+  # Category
+  createCategory(input: CreateCategoryInput!): Category!
+  updateCategory(id: ID!, input: UpdateCategoryInput!): Category!
+  # Collection
+  createCollection(input: CreateCollectionInput!): Collection!
+  updateCollection(id: ID!, input: UpdateCollectionInput!): Collection!
+  # Culture
+  createCulture(input: CreateCultureInput!): Culture!
+  updateCulture(id: ID!, input: UpdateCultureInput!): Culture!
+  # District
+  createDistrict(input: CreateDistrictInput!): District!
+  updateDistrict(id: ID!, input: UpdateDistrictInput!): District!
+  # Holder
+  createHolder(input: CreateHolderInput!): Holder!
+  updateHolder(id: ID!, input: UpdateHolderInput!): Holder!
+  # License
+  createLicense(input: CreateLicenseInput!): License!
+  updateLicense(id: ID!, input: UpdateLicenseInput!): License!
+  # Location
+  createLocation(input: CreateLocationInput!): Location!
+  updateLocation(id: ID!, input: UpdateLocationInput!): Location!
+  # Medium
+  createMedium(input: CreateMediumInput!): Medium!
+  updateMedium(id: ID!, input: UpdateMediumInput!): Medium!
+  # Model
+  createModel(input: CreateModelInput!): Model!
+  updateModel(id: ID!, input: UpdateModelInput!): Model!
+  # Monument
+  createMonument(input: CreateMonumentInput!): Monument!
+  updateMonument(id: ID!, input: UpdateMonumentInput!): Monument!
+  # Organization
+  createOrganization(input: CreateOrganizationInput!): Organization!
+  updateOrganization(id: ID!, input: UpdateOrganizationInput!): Organization!
+  # Person
+  createPerson(input: CreatePersonInput!): Person!
+  updatePerson(id: ID!, input: UpdatePersonInput!): Person!
+  # Project
+  createProject(input: CreateProjectInput!): Project!
+  updateProject(id: ID!, input: UpdateProjectInput!): Project!
+  # Publication
+  createPublication(input: CreatePublicationInput!): Publication!
+  updatePublication(id: ID!, input: UpdatePublicationInput!): Publication!
+  # Region
+  createRegion(input: CreateRegionInput!): Region!
+  updateRegion(id: ID!, input: UpdateRegionInput!): Region!
+  # Set
+  createSet(input: CreateSetInput!): Set!
+  updateSet(id: ID!, input: UpdateSetInput!): Set!
+  # Settlement
+  createSettlement(input: CreateSettlementInput!): Settlement!
+  updateSettlement(id: ID!, input: UpdateSettlementInput!): Settlement!
+  # Technique
+  createTechnique(input: CreateTechniqueInput!): Technique!
+  updateTechnique(id: ID!, input: UpdateTechniqueInput!): Technique!
+}
