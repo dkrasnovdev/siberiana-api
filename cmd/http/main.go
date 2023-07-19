@@ -41,7 +41,7 @@ func main() {
 	r.Mount("/graphql", gql)
 
 	// Mount the Apollo Sandbox on the "/" route of the chi router.
-	r.Mount("/", playground.ApolloSandboxHandler("Heritage GraphQL API | Apollo Sandbox", "/graphql"))
+	r.Mount("/", playground.ApolloSandboxHandler("Heritage GraphQL API", "/graphql"))
 
 	// Start the HTTP server and listen for incoming requests on port 4000.
 	server := &http.Server{Addr: ":4000", Handler: r}
