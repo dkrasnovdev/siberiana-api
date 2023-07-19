@@ -18,12 +18,12 @@ type UserViewer struct {
 
 // Viewer interface provides methods for accessing user information and roles.
 type Viewer interface {
-	GetUser() UserViewer
-	GetSub() string
+	GetUser() UserViewer // GetUser returns the user information.
+	GetSub() string      // GetSub returns the sub of the user.
 	GetPreferredUsername() string
-	IsAdministrator() bool
-	IsModerator() bool
-	IsResearcher() bool
+	IsAdministrator() bool // IsAdministrator checks if the user has the "administartor" role.
+	IsModerator() bool     // IsModerator checks if the user has the "moderator" role.
+	IsResearcher() bool    // IsResearcher checks if the user has the "researcher" role.
 }
 
 // GetUser returns the user information.
@@ -41,7 +41,7 @@ func (u UserViewer) GetPreferredUsername() string {
 	return u.PreferredUsername
 }
 
-// IsResearcher checks if the user has the "administartor" role.
+// IsAdministrator checks if the user has the "administartor" role.
 func (u UserViewer) IsAdministrator() bool {
 	return slices.Contains(u.Roles, "administartor")
 }
