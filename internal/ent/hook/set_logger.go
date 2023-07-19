@@ -10,11 +10,11 @@ import (
 	"github.com/dkrasnovdev/heritage-api/pkg/transform"
 )
 
-// ArtifactLogger is a hook that logs changes to an Artifact entity.
-func ArtifactLogger(client *ent.Client) ent.Hook {
-	// Register the ArtifactFunc hook.
+// SetLogger is a hook that logs changes to an Set entity.
+func SetLogger(client *ent.Client) ent.Hook {
+	// Register the SetFunc hook.
 	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.ArtifactFunc(func(ctx context.Context, m *ent.ArtifactMutation) (ent.Value, error) {
+		return hook.SetFunc(func(ctx context.Context, m *ent.SetMutation) (ent.Value, error) {
 			// Track changes to field values.
 			changes := make(map[string]ent.Value)
 			for _, key := range m.Fields() {
@@ -61,7 +61,7 @@ func ArtifactLogger(client *ent.Client) ent.Hook {
 				return value, nil
 			}
 
-			// Retrieve the Artifact ID.
+			// Retrieve the Set ID.
 			refID, _ := m.ID()
 
 			// Retrieve the Viewer from the context.

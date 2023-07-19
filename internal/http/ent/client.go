@@ -14,6 +14,8 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// NewClient creates a new ent client and applies schema migrations to the database.
+// It sets up hooks for various entity types to log changes to the respective entities.
 func NewClient(env config.Config) *ent.Client {
 	// Create the PostgreSQL connection string.
 	psql := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
@@ -33,7 +35,26 @@ func NewClient(env config.Config) *ent.Client {
 		log.Fatal("opening ent client", err)
 	}
 
+	// Attach hooks for various entity types to log changes.
 	client.Artifact.Use(hook.ArtifactLogger(client))
+	client.Category.Use(hook.CategoryLogger(client))
+	client.Collection.Use(hook.CollectionLogger(client))
+	client.Culture.Use(hook.CultureLogger(client))
+	client.District.Use(hook.DistrictLogger(client))
+	client.Holder.Use(hook.HolderLogger(client))
+	client.License.Use(hook.LicenseLogger(client))
+	client.Location.Use(hook.LocationLogger(client))
+	client.Medium.Use(hook.MediumLogger(client))
+	client.Model.Use(hook.ModelLogger(client))
+	client.Monument.Use(hook.MonumentLogger(client))
+	client.Organization.Use(hook.OrganizationLogger(client))
+	client.Person.Use(hook.PersonLogger(client))
+	client.Project.Use(hook.ProjectLogger(client))
+	client.Publication.Use(hook.PublicationLogger(client))
+	client.Region.Use(hook.RegionLogger(client))
+	client.Set.Use(hook.SetLogger(client))
+	client.Settlement.Use(hook.SettlementLogger(client))
+	client.Technique.Use(hook.TechniqueLogger(client))
 
 	return client
 }
