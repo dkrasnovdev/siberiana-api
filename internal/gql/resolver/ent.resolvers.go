@@ -24,7 +24,7 @@ func (r *queryResolver) Nodes(ctx context.Context, ids []int) ([]ent.Noder, erro
 
 // Artifacts is the resolver for the artifacts field.
 func (r *queryResolver) Artifacts(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtifactOrder, where *ent.ArtifactWhereInput) (*ent.ArtifactConnection, error) {
-	return r.client.Debug().Artifact.Query().Paginate(ctx, after, first, before, last, ent.WithArtifactOrder(orderBy), ent.WithArtifactFilter(where.Filter))
+	return r.client.Artifact.Query().Paginate(ctx, after, first, before, last, ent.WithArtifactOrder(orderBy), ent.WithArtifactFilter(where.Filter))
 }
 
 // Categories is the resolver for the categories field.
