@@ -6,7 +6,7 @@ import (
 	"github.com/go-chi/cors"
 )
 
-func Router() *chi.Mux {
+func NewRouter() *chi.Mux {
 	// Create a new Chi router.
 	r := chi.NewRouter()
 

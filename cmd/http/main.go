@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	r := chi.Router()
+	r := chi.NewRouter()
 	// Start the HTTP server and listen for incoming requests on port 4000.
 	log.Println("listening on :4000")
 	if err := http.ListenAndServe(":4000", r); err != nil {
