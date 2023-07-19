@@ -284,24 +284,24 @@ func ChangesNotNil() predicate.AuditLog {
 	return predicate.AuditLog(sql.FieldNotNull(FieldChanges))
 }
 
-// AddedIdsIsNil applies the IsNil predicate on the "added_ids" field.
-func AddedIdsIsNil() predicate.AuditLog {
-	return predicate.AuditLog(sql.FieldIsNull(FieldAddedIds))
+// AddedEdgesIsNil applies the IsNil predicate on the "added_edges" field.
+func AddedEdgesIsNil() predicate.AuditLog {
+	return predicate.AuditLog(sql.FieldIsNull(FieldAddedEdges))
 }
 
-// AddedIdsNotNil applies the NotNil predicate on the "added_ids" field.
-func AddedIdsNotNil() predicate.AuditLog {
-	return predicate.AuditLog(sql.FieldNotNull(FieldAddedIds))
+// AddedEdgesNotNil applies the NotNil predicate on the "added_edges" field.
+func AddedEdgesNotNil() predicate.AuditLog {
+	return predicate.AuditLog(sql.FieldNotNull(FieldAddedEdges))
 }
 
-// RemovedIdsIsNil applies the IsNil predicate on the "removed_ids" field.
-func RemovedIdsIsNil() predicate.AuditLog {
-	return predicate.AuditLog(sql.FieldIsNull(FieldRemovedIds))
+// RemovedEdgesIsNil applies the IsNil predicate on the "removed_edges" field.
+func RemovedEdgesIsNil() predicate.AuditLog {
+	return predicate.AuditLog(sql.FieldIsNull(FieldRemovedEdges))
 }
 
-// RemovedIdsNotNil applies the NotNil predicate on the "removed_ids" field.
-func RemovedIdsNotNil() predicate.AuditLog {
-	return predicate.AuditLog(sql.FieldNotNull(FieldRemovedIds))
+// RemovedEdgesNotNil applies the NotNil predicate on the "removed_edges" field.
+func RemovedEdgesNotNil() predicate.AuditLog {
+	return predicate.AuditLog(sql.FieldNotNull(FieldRemovedEdges))
 }
 
 // ClearedEdgesIsNil applies the IsNil predicate on the "cleared_edges" field.

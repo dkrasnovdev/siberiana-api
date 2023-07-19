@@ -31,15 +31,15 @@ func ArtifactLogger(client *ent.Client) ent.Hook {
 			}
 
 			// Track IDs of added edges.
-			addedIDs := make(map[string]ent.Value)
+			addedEdges := make(map[string]ent.Value)
 			for _, key := range m.AddedEdges() {
-				addedIDs[key] = m.AddedIDs(key)
+				addedEdges[key] = m.AddedIDs(key)
 			}
 
 			// Track IDs of removed edges.
-			removedIDs := make(map[string]ent.Value)
+			removedEdges := make(map[string]ent.Value)
 			for _, key := range m.RemovedEdges() {
-				removedIDs[key] = m.RemovedIDs(key)
+				removedEdges[key] = m.RemovedIDs(key)
 			}
 
 			// Execute the mutation.
@@ -72,8 +72,8 @@ func ArtifactLogger(client *ent.Client) ent.Hook {
 					SetTable(m.Type()).
 					SetOperation(m.Op().String()).
 					SetChanges(transform.KeyValue(changes)).
-					SetAddedIds(transform.KeyValue(addedIDs)).
-					SetRemovedIds(transform.KeyValue(removedIDs)).
+					SetAddedEdges(transform.KeyValue(addedEdges)).
+					SetRemovedEdges(transform.KeyValue(removedEdges)).
 					SetClearedEdges(m.ClearedEdges()).
 					SetBlame(usr).
 					Exec(ctx)

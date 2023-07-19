@@ -30,8 +30,8 @@ func (AuditLog) Fields() []ent.Field {
 		field.Int("ref_id").Optional(),
 		field.String("operation").Optional(),
 		field.JSON("changes", []string{}).Optional(),
-		field.JSON("added_ids", []string{}).Optional(),
-		field.JSON("removed_ids", []string{}).Optional(),
+		field.JSON("added_edges", []string{}).Optional(),
+		field.JSON("removed_edges", []string{}).Optional(),
 		field.JSON("cleared_edges", []string{}).Optional(),
 		field.String("blame").Optional(),
 		field.Time("created_at").

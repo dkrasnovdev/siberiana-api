@@ -242,8 +242,8 @@ type AuditLog implements Node {
   refID: Int
   operation: String
   changes: [String!]
-  addedIds: [String!]
-  removedIds: [String!]
+  addedEdges: [String!]
+  removedEdges: [String!]
   clearedEdges: [String!]
   blame: String
   createdAt: Time!

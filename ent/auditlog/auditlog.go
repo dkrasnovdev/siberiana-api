@@ -21,10 +21,10 @@ const (
 	FieldOperation = "operation"
 	// FieldChanges holds the string denoting the changes field in the database.
 	FieldChanges = "changes"
-	// FieldAddedIds holds the string denoting the added_ids field in the database.
-	FieldAddedIds = "added_ids"
-	// FieldRemovedIds holds the string denoting the removed_ids field in the database.
-	FieldRemovedIds = "removed_ids"
+	// FieldAddedEdges holds the string denoting the added_edges field in the database.
+	FieldAddedEdges = "added_edges"
+	// FieldRemovedEdges holds the string denoting the removed_edges field in the database.
+	FieldRemovedEdges = "removed_edges"
 	// FieldClearedEdges holds the string denoting the cleared_edges field in the database.
 	FieldClearedEdges = "cleared_edges"
 	// FieldBlame holds the string denoting the blame field in the database.
@@ -42,8 +42,8 @@ var Columns = []string{
 	FieldRefID,
 	FieldOperation,
 	FieldChanges,
-	FieldAddedIds,
-	FieldRemovedIds,
+	FieldAddedEdges,
+	FieldRemovedEdges,
 	FieldClearedEdges,
 	FieldBlame,
 	FieldCreatedAt,

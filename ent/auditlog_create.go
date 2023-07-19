@@ -68,15 +68,15 @@ func (alc *AuditLogCreate) SetChanges(s []string) *AuditLogCreate {
 	return alc
 }
 
-// SetAddedIds sets the "added_ids" field.
-func (alc *AuditLogCreate) SetAddedIds(s []string) *AuditLogCreate {
-	alc.mutation.SetAddedIds(s)
+// SetAddedEdges sets the "added_edges" field.
+func (alc *AuditLogCreate) SetAddedEdges(s []string) *AuditLogCreate {
+	alc.mutation.SetAddedEdges(s)
 	return alc
 }
 
-// SetRemovedIds sets the "removed_ids" field.
-func (alc *AuditLogCreate) SetRemovedIds(s []string) *AuditLogCreate {
-	alc.mutation.SetRemovedIds(s)
+// SetRemovedEdges sets the "removed_edges" field.
+func (alc *AuditLogCreate) SetRemovedEdges(s []string) *AuditLogCreate {
+	alc.mutation.SetRemovedEdges(s)
 	return alc
 }
 
@@ -202,13 +202,13 @@ func (alc *AuditLogCreate) createSpec() (*AuditLog, *sqlgraph.CreateSpec) {
 		_spec.SetField(auditlog.FieldChanges, field.TypeJSON, value)
 		_node.Changes = value
 	}
-	if value, ok := alc.mutation.AddedIds(); ok {
-		_spec.SetField(auditlog.FieldAddedIds, field.TypeJSON, value)
-		_node.AddedIds = value
+	if value, ok := alc.mutation.GetAddedEdges(); ok {
+		_spec.SetField(auditlog.FieldAddedEdges, field.TypeJSON, value)
+		_node.AddedEdges = value
 	}
-	if value, ok := alc.mutation.RemovedIds(); ok {
-		_spec.SetField(auditlog.FieldRemovedIds, field.TypeJSON, value)
-		_node.RemovedIds = value
+	if value, ok := alc.mutation.GetRemovedEdges(); ok {
+		_spec.SetField(auditlog.FieldRemovedEdges, field.TypeJSON, value)
+		_node.RemovedEdges = value
 	}
 	if value, ok := alc.mutation.GetClearedEdges(); ok {
 		_spec.SetField(auditlog.FieldClearedEdges, field.TypeJSON, value)

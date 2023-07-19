@@ -86,7 +86,7 @@ type ComplexityRoot struct {
 	}
 
 	AuditLog struct {
-		AddedIds     func(childComplexity int) int
+		AddedEdges   func(childComplexity int) int
 		Blame        func(childComplexity int) int
 		Changes      func(childComplexity int) int
 		ClearedEdges func(childComplexity int) int
@@ -94,7 +94,7 @@ type ComplexityRoot struct {
 		ID           func(childComplexity int) int
 		Operation    func(childComplexity int) int
 		RefID        func(childComplexity int) int
-		RemovedIds   func(childComplexity int) int
+		RemovedEdges func(childComplexity int) int
 		Table        func(childComplexity int) int
 	}
 
@@ -873,12 +873,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ArtifactEdge.Node(childComplexity), true
 
-	case "AuditLog.addedIds":
-		if e.complexity.AuditLog.AddedIds == nil {
+	case "AuditLog.addedEdges":
+		if e.complexity.AuditLog.AddedEdges == nil {
 			break
 		}
 
-		return e.complexity.AuditLog.AddedIds(childComplexity), true
+		return e.complexity.AuditLog.AddedEdges(childComplexity), true
 
 	case "AuditLog.blame":
 		if e.complexity.AuditLog.Blame == nil {
@@ -929,12 +929,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.AuditLog.RefID(childComplexity), true
 
-	case "AuditLog.removedIds":
-		if e.complexity.AuditLog.RemovedIds == nil {
+	case "AuditLog.removedEdges":
+		if e.complexity.AuditLog.RemovedEdges == nil {
 			break
 		}
 
-		return e.complexity.AuditLog.RemovedIds(childComplexity), true
+		return e.complexity.AuditLog.RemovedEdges(childComplexity), true
 
 	case "AuditLog.table":
 		if e.complexity.AuditLog.Table == nil {
@@ -7405,8 +7405,8 @@ func (ec *executionContext) fieldContext_AuditLog_changes(ctx context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _AuditLog_addedIds(ctx context.Context, field graphql.CollectedField, obj *ent.AuditLog) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_AuditLog_addedIds(ctx, field)
+func (ec *executionContext) _AuditLog_addedEdges(ctx context.Context, field graphql.CollectedField, obj *ent.AuditLog) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AuditLog_addedEdges(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -7419,7 +7419,7 @@ func (ec *executionContext) _AuditLog_addedIds(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.AddedIds, nil
+		return obj.AddedEdges, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -7433,7 +7433,7 @@ func (ec *executionContext) _AuditLog_addedIds(ctx context.Context, field graphq
 	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_AuditLog_addedIds(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_AuditLog_addedEdges(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "AuditLog",
 		Field:      field,
@@ -7446,8 +7446,8 @@ func (ec *executionContext) fieldContext_AuditLog_addedIds(ctx context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _AuditLog_removedIds(ctx context.Context, field graphql.CollectedField, obj *ent.AuditLog) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_AuditLog_removedIds(ctx, field)
+func (ec *executionContext) _AuditLog_removedEdges(ctx context.Context, field graphql.CollectedField, obj *ent.AuditLog) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AuditLog_removedEdges(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -7460,7 +7460,7 @@ func (ec *executionContext) _AuditLog_removedIds(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.RemovedIds, nil
+		return obj.RemovedEdges, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -7474,7 +7474,7 @@ func (ec *executionContext) _AuditLog_removedIds(ctx context.Context, field grap
 	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_AuditLog_removedIds(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_AuditLog_removedEdges(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "AuditLog",
 		Field:      field,
@@ -7804,10 +7804,10 @@ func (ec *executionContext) fieldContext_AuditLogEdge_node(ctx context.Context, 
 				return ec.fieldContext_AuditLog_operation(ctx, field)
 			case "changes":
 				return ec.fieldContext_AuditLog_changes(ctx, field)
-			case "addedIds":
-				return ec.fieldContext_AuditLog_addedIds(ctx, field)
-			case "removedIds":
-				return ec.fieldContext_AuditLog_removedIds(ctx, field)
+			case "addedEdges":
+				return ec.fieldContext_AuditLog_addedEdges(ctx, field)
+			case "removedEdges":
+				return ec.fieldContext_AuditLog_removedEdges(ctx, field)
 			case "clearedEdges":
 				return ec.fieldContext_AuditLog_clearedEdges(ctx, field)
 			case "blame":
@@ -49590,10 +49590,10 @@ func (ec *executionContext) _AuditLog(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._AuditLog_operation(ctx, field, obj)
 		case "changes":
 			out.Values[i] = ec._AuditLog_changes(ctx, field, obj)
-		case "addedIds":
-			out.Values[i] = ec._AuditLog_addedIds(ctx, field, obj)
-		case "removedIds":
-			out.Values[i] = ec._AuditLog_removedIds(ctx, field, obj)
+		case "addedEdges":
+			out.Values[i] = ec._AuditLog_addedEdges(ctx, field, obj)
+		case "removedEdges":
+			out.Values[i] = ec._AuditLog_removedEdges(ctx, field, obj)
 		case "clearedEdges":
 			out.Values[i] = ec._AuditLog_clearedEdges(ctx, field, obj)
 		case "blame":

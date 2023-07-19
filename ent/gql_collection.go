@@ -353,15 +353,15 @@ func (al *AuditLogQuery) collectField(ctx context.Context, opCtx *graphql.Operat
 				selectedFields = append(selectedFields, auditlog.FieldChanges)
 				fieldSeen[auditlog.FieldChanges] = struct{}{}
 			}
-		case "addedIds":
-			if _, ok := fieldSeen[auditlog.FieldAddedIds]; !ok {
-				selectedFields = append(selectedFields, auditlog.FieldAddedIds)
-				fieldSeen[auditlog.FieldAddedIds] = struct{}{}
+		case "addedEdges":
+			if _, ok := fieldSeen[auditlog.FieldAddedEdges]; !ok {
+				selectedFields = append(selectedFields, auditlog.FieldAddedEdges)
+				fieldSeen[auditlog.FieldAddedEdges] = struct{}{}
 			}
-		case "removedIds":
-			if _, ok := fieldSeen[auditlog.FieldRemovedIds]; !ok {
-				selectedFields = append(selectedFields, auditlog.FieldRemovedIds)
-				fieldSeen[auditlog.FieldRemovedIds] = struct{}{}
+		case "removedEdges":
+			if _, ok := fieldSeen[auditlog.FieldRemovedEdges]; !ok {
+				selectedFields = append(selectedFields, auditlog.FieldRemovedEdges)
+				fieldSeen[auditlog.FieldRemovedEdges] = struct{}{}
 			}
 		case "clearedEdges":
 			if _, ok := fieldSeen[auditlog.FieldClearedEdges]; !ok {

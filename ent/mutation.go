@@ -1982,10 +1982,10 @@ type AuditLogMutation struct {
 	operation           *string
 	changes             *[]string
 	appendchanges       []string
-	added_ids           *[]string
-	appendadded_ids     []string
-	removed_ids         *[]string
-	appendremoved_ids   []string
+	added_edges         *[]string
+	appendadded_edges   []string
+	removed_edges       *[]string
+	appendremoved_edges []string
 	cleared_edges       *[]string
 	appendcleared_edges []string
 	blame               *string
@@ -2327,134 +2327,134 @@ func (m *AuditLogMutation) ResetChanges() {
 	delete(m.clearedFields, auditlog.FieldChanges)
 }
 
-// SetAddedIds sets the "added_ids" field.
-func (m *AuditLogMutation) SetAddedIds(s []string) {
-	m.added_ids = &s
-	m.appendadded_ids = nil
+// SetAddedEdges sets the "added_edges" field.
+func (m *AuditLogMutation) SetAddedEdges(s []string) {
+	m.added_edges = &s
+	m.appendadded_edges = nil
 }
 
-// AddedIds returns the value of the "added_ids" field in the mutation.
-func (m *AuditLogMutation) AddedIds() (r []string, exists bool) {
-	v := m.added_ids
+// GetAddedEdges returns the value of the "added_edges" field in the mutation.
+func (m *AuditLogMutation) GetAddedEdges() (r []string, exists bool) {
+	v := m.added_edges
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldAddedIds returns the old "added_ids" field's value of the AuditLog entity.
+// OldAddedEdges returns the old "added_edges" field's value of the AuditLog entity.
 // If the AuditLog object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AuditLogMutation) OldAddedIds(ctx context.Context) (v []string, err error) {
+func (m *AuditLogMutation) OldAddedEdges(ctx context.Context) (v []string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAddedIds is only allowed on UpdateOne operations")
+		return v, errors.New("OldAddedEdges is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAddedIds requires an ID field in the mutation")
+		return v, errors.New("OldAddedEdges requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAddedIds: %w", err)
+		return v, fmt.Errorf("querying old value for OldAddedEdges: %w", err)
 	}
-	return oldValue.AddedIds, nil
+	return oldValue.AddedEdges, nil
 }
 
-// AppendAddedIds adds s to the "added_ids" field.
-func (m *AuditLogMutation) AppendAddedIds(s []string) {
-	m.appendadded_ids = append(m.appendadded_ids, s...)
+// AppendAddedEdges adds s to the "added_edges" field.
+func (m *AuditLogMutation) AppendAddedEdges(s []string) {
+	m.appendadded_edges = append(m.appendadded_edges, s...)
 }
 
-// AppendedAddedIds returns the list of values that were appended to the "added_ids" field in this mutation.
-func (m *AuditLogMutation) AppendedAddedIds() ([]string, bool) {
-	if len(m.appendadded_ids) == 0 {
+// AppendedAddedEdges returns the list of values that were appended to the "added_edges" field in this mutation.
+func (m *AuditLogMutation) AppendedAddedEdges() ([]string, bool) {
+	if len(m.appendadded_edges) == 0 {
 		return nil, false
 	}
-	return m.appendadded_ids, true
+	return m.appendadded_edges, true
 }
 
-// ClearAddedIds clears the value of the "added_ids" field.
-func (m *AuditLogMutation) ClearAddedIds() {
-	m.added_ids = nil
-	m.appendadded_ids = nil
-	m.clearedFields[auditlog.FieldAddedIds] = struct{}{}
+// ClearAddedEdges clears the value of the "added_edges" field.
+func (m *AuditLogMutation) ClearAddedEdges() {
+	m.added_edges = nil
+	m.appendadded_edges = nil
+	m.clearedFields[auditlog.FieldAddedEdges] = struct{}{}
 }
 
-// AddedIdsCleared returns if the "added_ids" field was cleared in this mutation.
-func (m *AuditLogMutation) AddedIdsCleared() bool {
-	_, ok := m.clearedFields[auditlog.FieldAddedIds]
+// AddedEdgesCleared returns if the "added_edges" field was cleared in this mutation.
+func (m *AuditLogMutation) AddedEdgesCleared() bool {
+	_, ok := m.clearedFields[auditlog.FieldAddedEdges]
 	return ok
 }
 
-// ResetAddedIds resets all changes to the "added_ids" field.
-func (m *AuditLogMutation) ResetAddedIds() {
-	m.added_ids = nil
-	m.appendadded_ids = nil
-	delete(m.clearedFields, auditlog.FieldAddedIds)
+// ResetAddedEdges resets all changes to the "added_edges" field.
+func (m *AuditLogMutation) ResetAddedEdges() {
+	m.added_edges = nil
+	m.appendadded_edges = nil
+	delete(m.clearedFields, auditlog.FieldAddedEdges)
 }
 
-// SetRemovedIds sets the "removed_ids" field.
-func (m *AuditLogMutation) SetRemovedIds(s []string) {
-	m.removed_ids = &s
-	m.appendremoved_ids = nil
+// SetRemovedEdges sets the "removed_edges" field.
+func (m *AuditLogMutation) SetRemovedEdges(s []string) {
+	m.removed_edges = &s
+	m.appendremoved_edges = nil
 }
 
-// RemovedIds returns the value of the "removed_ids" field in the mutation.
-func (m *AuditLogMutation) RemovedIds() (r []string, exists bool) {
-	v := m.removed_ids
+// GetRemovedEdges returns the value of the "removed_edges" field in the mutation.
+func (m *AuditLogMutation) GetRemovedEdges() (r []string, exists bool) {
+	v := m.removed_edges
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldRemovedIds returns the old "removed_ids" field's value of the AuditLog entity.
+// OldRemovedEdges returns the old "removed_edges" field's value of the AuditLog entity.
 // If the AuditLog object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AuditLogMutation) OldRemovedIds(ctx context.Context) (v []string, err error) {
+func (m *AuditLogMutation) OldRemovedEdges(ctx context.Context) (v []string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldRemovedIds is only allowed on UpdateOne operations")
+		return v, errors.New("OldRemovedEdges is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldRemovedIds requires an ID field in the mutation")
+		return v, errors.New("OldRemovedEdges requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldRemovedIds: %w", err)
+		return v, fmt.Errorf("querying old value for OldRemovedEdges: %w", err)
 	}
-	return oldValue.RemovedIds, nil
+	return oldValue.RemovedEdges, nil
 }
 
-// AppendRemovedIds adds s to the "removed_ids" field.
-func (m *AuditLogMutation) AppendRemovedIds(s []string) {
-	m.appendremoved_ids = append(m.appendremoved_ids, s...)
+// AppendRemovedEdges adds s to the "removed_edges" field.
+func (m *AuditLogMutation) AppendRemovedEdges(s []string) {
+	m.appendremoved_edges = append(m.appendremoved_edges, s...)
 }
 
-// AppendedRemovedIds returns the list of values that were appended to the "removed_ids" field in this mutation.
-func (m *AuditLogMutation) AppendedRemovedIds() ([]string, bool) {
-	if len(m.appendremoved_ids) == 0 {
+// AppendedRemovedEdges returns the list of values that were appended to the "removed_edges" field in this mutation.
+func (m *AuditLogMutation) AppendedRemovedEdges() ([]string, bool) {
+	if len(m.appendremoved_edges) == 0 {
 		return nil, false
 	}
-	return m.appendremoved_ids, true
+	return m.appendremoved_edges, true
 }
 
-// ClearRemovedIds clears the value of the "removed_ids" field.
-func (m *AuditLogMutation) ClearRemovedIds() {
-	m.removed_ids = nil
-	m.appendremoved_ids = nil
-	m.clearedFields[auditlog.FieldRemovedIds] = struct{}{}
+// ClearRemovedEdges clears the value of the "removed_edges" field.
+func (m *AuditLogMutation) ClearRemovedEdges() {
+	m.removed_edges = nil
+	m.appendremoved_edges = nil
+	m.clearedFields[auditlog.FieldRemovedEdges] = struct{}{}
 }
 
-// RemovedIdsCleared returns if the "removed_ids" field was cleared in this mutation.
-func (m *AuditLogMutation) RemovedIdsCleared() bool {
-	_, ok := m.clearedFields[auditlog.FieldRemovedIds]
+// RemovedEdgesCleared returns if the "removed_edges" field was cleared in this mutation.
+func (m *AuditLogMutation) RemovedEdgesCleared() bool {
+	_, ok := m.clearedFields[auditlog.FieldRemovedEdges]
 	return ok
 }
 
-// ResetRemovedIds resets all changes to the "removed_ids" field.
-func (m *AuditLogMutation) ResetRemovedIds() {
-	m.removed_ids = nil
-	m.appendremoved_ids = nil
-	delete(m.clearedFields, auditlog.FieldRemovedIds)
+// ResetRemovedEdges resets all changes to the "removed_edges" field.
+func (m *AuditLogMutation) ResetRemovedEdges() {
+	m.removed_edges = nil
+	m.appendremoved_edges = nil
+	delete(m.clearedFields, auditlog.FieldRemovedEdges)
 }
 
 // SetClearedEdges sets the "cleared_edges" field.
@@ -2654,11 +2654,11 @@ func (m *AuditLogMutation) Fields() []string {
 	if m.changes != nil {
 		fields = append(fields, auditlog.FieldChanges)
 	}
-	if m.added_ids != nil {
-		fields = append(fields, auditlog.FieldAddedIds)
+	if m.added_edges != nil {
+		fields = append(fields, auditlog.FieldAddedEdges)
 	}
-	if m.removed_ids != nil {
-		fields = append(fields, auditlog.FieldRemovedIds)
+	if m.removed_edges != nil {
+		fields = append(fields, auditlog.FieldRemovedEdges)
 	}
 	if m.cleared_edges != nil {
 		fields = append(fields, auditlog.FieldClearedEdges)
@@ -2685,10 +2685,10 @@ func (m *AuditLogMutation) Field(name string) (ent.Value, bool) {
 		return m.Operation()
 	case auditlog.FieldChanges:
 		return m.Changes()
-	case auditlog.FieldAddedIds:
-		return m.AddedIds()
-	case auditlog.FieldRemovedIds:
-		return m.RemovedIds()
+	case auditlog.FieldAddedEdges:
+		return m.GetAddedEdges()
+	case auditlog.FieldRemovedEdges:
+		return m.GetRemovedEdges()
 	case auditlog.FieldClearedEdges:
 		return m.GetClearedEdges()
 	case auditlog.FieldBlame:
@@ -2712,10 +2712,10 @@ func (m *AuditLogMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldOperation(ctx)
 	case auditlog.FieldChanges:
 		return m.OldChanges(ctx)
-	case auditlog.FieldAddedIds:
-		return m.OldAddedIds(ctx)
-	case auditlog.FieldRemovedIds:
-		return m.OldRemovedIds(ctx)
+	case auditlog.FieldAddedEdges:
+		return m.OldAddedEdges(ctx)
+	case auditlog.FieldRemovedEdges:
+		return m.OldRemovedEdges(ctx)
 	case auditlog.FieldClearedEdges:
 		return m.OldClearedEdges(ctx)
 	case auditlog.FieldBlame:
@@ -2759,19 +2759,19 @@ func (m *AuditLogMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetChanges(v)
 		return nil
-	case auditlog.FieldAddedIds:
+	case auditlog.FieldAddedEdges:
 		v, ok := value.([]string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetAddedIds(v)
+		m.SetAddedEdges(v)
 		return nil
-	case auditlog.FieldRemovedIds:
+	case auditlog.FieldRemovedEdges:
 		v, ok := value.([]string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetRemovedIds(v)
+		m.SetRemovedEdges(v)
 		return nil
 	case auditlog.FieldClearedEdges:
 		v, ok := value.([]string)
@@ -2851,11 +2851,11 @@ func (m *AuditLogMutation) ClearedFields() []string {
 	if m.FieldCleared(auditlog.FieldChanges) {
 		fields = append(fields, auditlog.FieldChanges)
 	}
-	if m.FieldCleared(auditlog.FieldAddedIds) {
-		fields = append(fields, auditlog.FieldAddedIds)
+	if m.FieldCleared(auditlog.FieldAddedEdges) {
+		fields = append(fields, auditlog.FieldAddedEdges)
 	}
-	if m.FieldCleared(auditlog.FieldRemovedIds) {
-		fields = append(fields, auditlog.FieldRemovedIds)
+	if m.FieldCleared(auditlog.FieldRemovedEdges) {
+		fields = append(fields, auditlog.FieldRemovedEdges)
 	}
 	if m.FieldCleared(auditlog.FieldClearedEdges) {
 		fields = append(fields, auditlog.FieldClearedEdges)
@@ -2889,11 +2889,11 @@ func (m *AuditLogMutation) ClearField(name string) error {
 	case auditlog.FieldChanges:
 		m.ClearChanges()
 		return nil
-	case auditlog.FieldAddedIds:
-		m.ClearAddedIds()
+	case auditlog.FieldAddedEdges:
+		m.ClearAddedEdges()
 		return nil
-	case auditlog.FieldRemovedIds:
-		m.ClearRemovedIds()
+	case auditlog.FieldRemovedEdges:
+		m.ClearRemovedEdges()
 		return nil
 	case auditlog.FieldClearedEdges:
 		m.ClearClearedEdges()
@@ -2921,11 +2921,11 @@ func (m *AuditLogMutation) ResetField(name string) error {
 	case auditlog.FieldChanges:
 		m.ResetChanges()
 		return nil
-	case auditlog.FieldAddedIds:
-		m.ResetAddedIds()
+	case auditlog.FieldAddedEdges:
+		m.ResetAddedEdges()
 		return nil
-	case auditlog.FieldRemovedIds:
-		m.ResetRemovedIds()
+	case auditlog.FieldRemovedEdges:
+		m.ResetRemovedEdges()
 		return nil
 	case auditlog.FieldClearedEdges:
 		m.ResetClearedEdges()

@@ -113,39 +113,39 @@ func (alu *AuditLogUpdate) ClearChanges() *AuditLogUpdate {
 	return alu
 }
 
-// SetAddedIds sets the "added_ids" field.
-func (alu *AuditLogUpdate) SetAddedIds(s []string) *AuditLogUpdate {
-	alu.mutation.SetAddedIds(s)
+// SetAddedEdges sets the "added_edges" field.
+func (alu *AuditLogUpdate) SetAddedEdges(s []string) *AuditLogUpdate {
+	alu.mutation.SetAddedEdges(s)
 	return alu
 }
 
-// AppendAddedIds appends s to the "added_ids" field.
-func (alu *AuditLogUpdate) AppendAddedIds(s []string) *AuditLogUpdate {
-	alu.mutation.AppendAddedIds(s)
+// AppendAddedEdges appends s to the "added_edges" field.
+func (alu *AuditLogUpdate) AppendAddedEdges(s []string) *AuditLogUpdate {
+	alu.mutation.AppendAddedEdges(s)
 	return alu
 }
 
-// ClearAddedIds clears the value of the "added_ids" field.
-func (alu *AuditLogUpdate) ClearAddedIds() *AuditLogUpdate {
-	alu.mutation.ClearAddedIds()
+// ClearAddedEdges clears the value of the "added_edges" field.
+func (alu *AuditLogUpdate) ClearAddedEdges() *AuditLogUpdate {
+	alu.mutation.ClearAddedEdges()
 	return alu
 }
 
-// SetRemovedIds sets the "removed_ids" field.
-func (alu *AuditLogUpdate) SetRemovedIds(s []string) *AuditLogUpdate {
-	alu.mutation.SetRemovedIds(s)
+// SetRemovedEdges sets the "removed_edges" field.
+func (alu *AuditLogUpdate) SetRemovedEdges(s []string) *AuditLogUpdate {
+	alu.mutation.SetRemovedEdges(s)
 	return alu
 }
 
-// AppendRemovedIds appends s to the "removed_ids" field.
-func (alu *AuditLogUpdate) AppendRemovedIds(s []string) *AuditLogUpdate {
-	alu.mutation.AppendRemovedIds(s)
+// AppendRemovedEdges appends s to the "removed_edges" field.
+func (alu *AuditLogUpdate) AppendRemovedEdges(s []string) *AuditLogUpdate {
+	alu.mutation.AppendRemovedEdges(s)
 	return alu
 }
 
-// ClearRemovedIds clears the value of the "removed_ids" field.
-func (alu *AuditLogUpdate) ClearRemovedIds() *AuditLogUpdate {
-	alu.mutation.ClearRemovedIds()
+// ClearRemovedEdges clears the value of the "removed_edges" field.
+func (alu *AuditLogUpdate) ClearRemovedEdges() *AuditLogUpdate {
+	alu.mutation.ClearRemovedEdges()
 	return alu
 }
 
@@ -260,27 +260,27 @@ func (alu *AuditLogUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if alu.mutation.ChangesCleared() {
 		_spec.ClearField(auditlog.FieldChanges, field.TypeJSON)
 	}
-	if value, ok := alu.mutation.AddedIds(); ok {
-		_spec.SetField(auditlog.FieldAddedIds, field.TypeJSON, value)
+	if value, ok := alu.mutation.GetAddedEdges(); ok {
+		_spec.SetField(auditlog.FieldAddedEdges, field.TypeJSON, value)
 	}
-	if value, ok := alu.mutation.AppendedAddedIds(); ok {
+	if value, ok := alu.mutation.AppendedAddedEdges(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, auditlog.FieldAddedIds, value)
+			sqljson.Append(u, auditlog.FieldAddedEdges, value)
 		})
 	}
-	if alu.mutation.AddedIdsCleared() {
-		_spec.ClearField(auditlog.FieldAddedIds, field.TypeJSON)
+	if alu.mutation.AddedEdgesCleared() {
+		_spec.ClearField(auditlog.FieldAddedEdges, field.TypeJSON)
 	}
-	if value, ok := alu.mutation.RemovedIds(); ok {
-		_spec.SetField(auditlog.FieldRemovedIds, field.TypeJSON, value)
+	if value, ok := alu.mutation.GetRemovedEdges(); ok {
+		_spec.SetField(auditlog.FieldRemovedEdges, field.TypeJSON, value)
 	}
-	if value, ok := alu.mutation.AppendedRemovedIds(); ok {
+	if value, ok := alu.mutation.AppendedRemovedEdges(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, auditlog.FieldRemovedIds, value)
+			sqljson.Append(u, auditlog.FieldRemovedEdges, value)
 		})
 	}
-	if alu.mutation.RemovedIdsCleared() {
-		_spec.ClearField(auditlog.FieldRemovedIds, field.TypeJSON)
+	if alu.mutation.RemovedEdgesCleared() {
+		_spec.ClearField(auditlog.FieldRemovedEdges, field.TypeJSON)
 	}
 	if value, ok := alu.mutation.GetClearedEdges(); ok {
 		_spec.SetField(auditlog.FieldClearedEdges, field.TypeJSON, value)
@@ -404,39 +404,39 @@ func (aluo *AuditLogUpdateOne) ClearChanges() *AuditLogUpdateOne {
 	return aluo
 }
 
-// SetAddedIds sets the "added_ids" field.
-func (aluo *AuditLogUpdateOne) SetAddedIds(s []string) *AuditLogUpdateOne {
-	aluo.mutation.SetAddedIds(s)
+// SetAddedEdges sets the "added_edges" field.
+func (aluo *AuditLogUpdateOne) SetAddedEdges(s []string) *AuditLogUpdateOne {
+	aluo.mutation.SetAddedEdges(s)
 	return aluo
 }
 
-// AppendAddedIds appends s to the "added_ids" field.
-func (aluo *AuditLogUpdateOne) AppendAddedIds(s []string) *AuditLogUpdateOne {
-	aluo.mutation.AppendAddedIds(s)
+// AppendAddedEdges appends s to the "added_edges" field.
+func (aluo *AuditLogUpdateOne) AppendAddedEdges(s []string) *AuditLogUpdateOne {
+	aluo.mutation.AppendAddedEdges(s)
 	return aluo
 }
 
-// ClearAddedIds clears the value of the "added_ids" field.
-func (aluo *AuditLogUpdateOne) ClearAddedIds() *AuditLogUpdateOne {
-	aluo.mutation.ClearAddedIds()
+// ClearAddedEdges clears the value of the "added_edges" field.
+func (aluo *AuditLogUpdateOne) ClearAddedEdges() *AuditLogUpdateOne {
+	aluo.mutation.ClearAddedEdges()
 	return aluo
 }
 
-// SetRemovedIds sets the "removed_ids" field.
-func (aluo *AuditLogUpdateOne) SetRemovedIds(s []string) *AuditLogUpdateOne {
-	aluo.mutation.SetRemovedIds(s)
+// SetRemovedEdges sets the "removed_edges" field.
+func (aluo *AuditLogUpdateOne) SetRemovedEdges(s []string) *AuditLogUpdateOne {
+	aluo.mutation.SetRemovedEdges(s)
 	return aluo
 }
 
-// AppendRemovedIds appends s to the "removed_ids" field.
-func (aluo *AuditLogUpdateOne) AppendRemovedIds(s []string) *AuditLogUpdateOne {
-	aluo.mutation.AppendRemovedIds(s)
+// AppendRemovedEdges appends s to the "removed_edges" field.
+func (aluo *AuditLogUpdateOne) AppendRemovedEdges(s []string) *AuditLogUpdateOne {
+	aluo.mutation.AppendRemovedEdges(s)
 	return aluo
 }
 
-// ClearRemovedIds clears the value of the "removed_ids" field.
-func (aluo *AuditLogUpdateOne) ClearRemovedIds() *AuditLogUpdateOne {
-	aluo.mutation.ClearRemovedIds()
+// ClearRemovedEdges clears the value of the "removed_edges" field.
+func (aluo *AuditLogUpdateOne) ClearRemovedEdges() *AuditLogUpdateOne {
+	aluo.mutation.ClearRemovedEdges()
 	return aluo
 }
 
@@ -581,27 +581,27 @@ func (aluo *AuditLogUpdateOne) sqlSave(ctx context.Context) (_node *AuditLog, er
 	if aluo.mutation.ChangesCleared() {
 		_spec.ClearField(auditlog.FieldChanges, field.TypeJSON)
 	}
-	if value, ok := aluo.mutation.AddedIds(); ok {
-		_spec.SetField(auditlog.FieldAddedIds, field.TypeJSON, value)
+	if value, ok := aluo.mutation.GetAddedEdges(); ok {
+		_spec.SetField(auditlog.FieldAddedEdges, field.TypeJSON, value)
 	}
-	if value, ok := aluo.mutation.AppendedAddedIds(); ok {
+	if value, ok := aluo.mutation.AppendedAddedEdges(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, auditlog.FieldAddedIds, value)
+			sqljson.Append(u, auditlog.FieldAddedEdges, value)
 		})
 	}
-	if aluo.mutation.AddedIdsCleared() {
-		_spec.ClearField(auditlog.FieldAddedIds, field.TypeJSON)
+	if aluo.mutation.AddedEdgesCleared() {
+		_spec.ClearField(auditlog.FieldAddedEdges, field.TypeJSON)
 	}
-	if value, ok := aluo.mutation.RemovedIds(); ok {
-		_spec.SetField(auditlog.FieldRemovedIds, field.TypeJSON, value)
+	if value, ok := aluo.mutation.GetRemovedEdges(); ok {
+		_spec.SetField(auditlog.FieldRemovedEdges, field.TypeJSON, value)
 	}
-	if value, ok := aluo.mutation.AppendedRemovedIds(); ok {
+	if value, ok := aluo.mutation.AppendedRemovedEdges(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, auditlog.FieldRemovedIds, value)
+			sqljson.Append(u, auditlog.FieldRemovedEdges, value)
 		})
 	}
-	if aluo.mutation.RemovedIdsCleared() {
-		_spec.ClearField(auditlog.FieldRemovedIds, field.TypeJSON)
+	if aluo.mutation.RemovedEdgesCleared() {
+		_spec.ClearField(auditlog.FieldRemovedEdges, field.TypeJSON)
 	}
 	if value, ok := aluo.mutation.GetClearedEdges(); ok {
 		_spec.SetField(auditlog.FieldClearedEdges, field.TypeJSON, value)

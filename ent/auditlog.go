@@ -26,10 +26,10 @@ type AuditLog struct {
 	Operation string `json:"operation,omitempty"`
 	// Changes holds the value of the "changes" field.
 	Changes []string `json:"changes,omitempty"`
-	// AddedIds holds the value of the "added_ids" field.
-	AddedIds []string `json:"added_ids,omitempty"`
-	// RemovedIds holds the value of the "removed_ids" field.
-	RemovedIds []string `json:"removed_ids,omitempty"`
+	// AddedEdges holds the value of the "added_edges" field.
+	AddedEdges []string `json:"added_edges,omitempty"`
+	// RemovedEdges holds the value of the "removed_edges" field.
+	RemovedEdges []string `json:"removed_edges,omitempty"`
 	// ClearedEdges holds the value of the "cleared_edges" field.
 	ClearedEdges []string `json:"cleared_edges,omitempty"`
 	// Blame holds the value of the "blame" field.
@@ -44,7 +44,7 @@ func (*AuditLog) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case auditlog.FieldChanges, auditlog.FieldAddedIds, auditlog.FieldRemovedIds, auditlog.FieldClearedEdges:
+		case auditlog.FieldChanges, auditlog.FieldAddedEdges, auditlog.FieldRemovedEdges, auditlog.FieldClearedEdges:
 			values[i] = new([]byte)
 		case auditlog.FieldID, auditlog.FieldRefID:
 			values[i] = new(sql.NullInt64)
@@ -99,20 +99,20 @@ func (al *AuditLog) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field changes: %w", err)
 				}
 			}
-		case auditlog.FieldAddedIds:
+		case auditlog.FieldAddedEdges:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field added_ids", values[i])
+				return fmt.Errorf("unexpected type %T for field added_edges", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &al.AddedIds); err != nil {
-					return fmt.Errorf("unmarshal field added_ids: %w", err)
+				if err := json.Unmarshal(*value, &al.AddedEdges); err != nil {
+					return fmt.Errorf("unmarshal field added_edges: %w", err)
 				}
 			}
-		case auditlog.FieldRemovedIds:
+		case auditlog.FieldRemovedEdges:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field removed_ids", values[i])
+				return fmt.Errorf("unexpected type %T for field removed_edges", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &al.RemovedIds); err != nil {
-					return fmt.Errorf("unmarshal field removed_ids: %w", err)
+				if err := json.Unmarshal(*value, &al.RemovedEdges); err != nil {
+					return fmt.Errorf("unmarshal field removed_edges: %w", err)
 				}
 			}
 		case auditlog.FieldClearedEdges:
@@ -183,11 +183,11 @@ func (al *AuditLog) String() string {
 	builder.WriteString("changes=")
 	builder.WriteString(fmt.Sprintf("%v", al.Changes))
 	builder.WriteString(", ")
-	builder.WriteString("added_ids=")
-	builder.WriteString(fmt.Sprintf("%v", al.AddedIds))
+	builder.WriteString("added_edges=")
+	builder.WriteString(fmt.Sprintf("%v", al.AddedEdges))
 	builder.WriteString(", ")
-	builder.WriteString("removed_ids=")
-	builder.WriteString(fmt.Sprintf("%v", al.RemovedIds))
+	builder.WriteString("removed_edges=")
+	builder.WriteString(fmt.Sprintf("%v", al.RemovedEdges))
 	builder.WriteString(", ")
 	builder.WriteString("cleared_edges=")
 	builder.WriteString(fmt.Sprintf("%v", al.ClearedEdges))
