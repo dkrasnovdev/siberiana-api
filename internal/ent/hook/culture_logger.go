@@ -18,8 +18,8 @@ func CultureLogger(client *ent.Client) ent.Hook {
 			// Track changes to field values.
 			changes := make(map[string]ent.Value)
 			for _, key := range m.Fields() {
-				// Skip tracking 'updated_at' field.
-				if key == "updated_at" {
+				// Skip tracking 'updated_at' and 'updated_by' fields.
+				if key == "updated_at" || key == "updated_by" {
 					continue
 				}
 				nextValue, exists := m.Field(key)
