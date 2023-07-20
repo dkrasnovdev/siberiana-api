@@ -10,11 +10,13 @@ import (
 	"github.com/dkrasnovdev/heritage-api/pkg/transform"
 )
 
-// SetLogger is a hook that logs changes to an Set entity.
+// SetLogger is a hook that logs changes to a Set entity.
 func SetLogger(client *ent.Client) ent.Hook {
 	// Register the SetFunc hook.
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.SetFunc(func(ctx context.Context, m *ent.SetMutation) (ent.Value, error) {
+			var blame string
+
 			// Track changes to field values.
 			changes := make(map[string]ent.Value)
 			for _, key := range m.Fields() {
@@ -67,15 +69,12 @@ func SetLogger(client *ent.Client) ent.Hook {
 			// Retrieve the Viewer from the context.
 			v := privacy.FromContext(ctx)
 
-			// Check if the Viewer is present in the context.
-			// If the Viewer is not found, it means that the user information is missing or not properly authenticated.
+			// Determine the blame (responsible user).
 			if v == nil {
-				// Return an error indicating that the Viewer is not available or the user is not authenticated.
-				return nil, fmt.Errorf("viewer not found in the context or user not authenticated")
+				blame = "appctl" // Default to "appctl" if the Viewer is not present in the context.
+			} else {
+				blame = v.GetPreferredUsername() // Get the preferred username from the Viewer.
 			}
-
-			// Get the preferred username from the privacy policy.
-			usr := v.GetPreferredUsername()
 
 			// Create an audit log entry for the mutation.
 			defer func() {
@@ -88,7 +87,7 @@ func SetLogger(client *ent.Client) ent.Hook {
 					SetAddedEdges(transform.KeyValue(addedEdges)).
 					SetRemovedEdges(transform.KeyValue(removedEdges)).
 					SetClearedEdges(m.ClearedEdges()).
-					SetBlame(usr).
+					SetBlame(blame).
 					Exec(ctx)
 			}()
 
