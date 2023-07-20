@@ -8,6 +8,36 @@ import (
 )
 
 var (
+	// ArtsColumns holds the columns for the "arts" table.
+	ArtsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+	}
+	// ArtsTable holds the schema information for the "arts" table.
+	ArtsTable = &schema.Table{
+		Name:       "arts",
+		Columns:    ArtsColumns,
+		PrimaryKey: []*schema.Column{ArtsColumns[0]},
+	}
+	// ArtGenresColumns holds the columns for the "art_genres" table.
+	ArtGenresColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+	}
+	// ArtGenresTable holds the schema information for the "art_genres" table.
+	ArtGenresTable = &schema.Table{
+		Name:       "art_genres",
+		Columns:    ArtGenresColumns,
+		PrimaryKey: []*schema.Column{ArtGenresColumns[0]},
+	}
+	// ArtStylesColumns holds the columns for the "art_styles" table.
+	ArtStylesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+	}
+	// ArtStylesTable holds the schema information for the "art_styles" table.
+	ArtStylesTable = &schema.Table{
+		Name:       "art_styles",
+		Columns:    ArtStylesColumns,
+		PrimaryKey: []*schema.Column{ArtStylesColumns[0]},
+	}
 	// ArtifactsColumns holds the columns for the "artifacts" table.
 	ArtifactsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -97,6 +127,26 @@ var (
 		Name:       "audit_logs",
 		Columns:    AuditLogsColumns,
 		PrimaryKey: []*schema.Column{AuditLogsColumns[0]},
+	}
+	// BooksColumns holds the columns for the "books" table.
+	BooksColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+	}
+	// BooksTable holds the schema information for the "books" table.
+	BooksTable = &schema.Table{
+		Name:       "books",
+		Columns:    BooksColumns,
+		PrimaryKey: []*schema.Column{BooksColumns[0]},
+	}
+	// BookGenresColumns holds the columns for the "book_genres" table.
+	BookGenresColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+	}
+	// BookGenresTable holds the schema information for the "book_genres" table.
+	BookGenresTable = &schema.Table{
+		Name:       "book_genres",
+		Columns:    BookGenresColumns,
+		PrimaryKey: []*schema.Column{BookGenresColumns[0]},
 	}
 	// CategoriesColumns holds the columns for the "categories" table.
 	CategoriesColumns = []*schema.Column{
@@ -195,6 +245,26 @@ var (
 		Name:       "holders",
 		Columns:    HoldersColumns,
 		PrimaryKey: []*schema.Column{HoldersColumns[0]},
+	}
+	// KeywordsColumns holds the columns for the "keywords" table.
+	KeywordsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+	}
+	// KeywordsTable holds the schema information for the "keywords" table.
+	KeywordsTable = &schema.Table{
+		Name:       "keywords",
+		Columns:    KeywordsColumns,
+		PrimaryKey: []*schema.Column{KeywordsColumns[0]},
+	}
+	// LibrariesColumns holds the columns for the "libraries" table.
+	LibrariesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+	}
+	// LibrariesTable holds the schema information for the "libraries" table.
+	LibrariesTable = &schema.Table{
+		Name:       "libraries",
+		Columns:    LibrariesColumns,
+		PrimaryKey: []*schema.Column{LibrariesColumns[0]},
 	}
 	// LicensesColumns holds the columns for the "licenses" table.
 	LicensesColumns = []*schema.Column{
@@ -357,6 +427,16 @@ var (
 		Name:       "publications",
 		Columns:    PublicationsColumns,
 		PrimaryKey: []*schema.Column{PublicationsColumns[0]},
+	}
+	// PublishersColumns holds the columns for the "publishers" table.
+	PublishersColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+	}
+	// PublishersTable holds the schema information for the "publishers" table.
+	PublishersTable = &schema.Table{
+		Name:       "publishers",
+		Columns:    PublishersColumns,
+		PrimaryKey: []*schema.Column{PublishersColumns[0]},
 	}
 	// RegionsColumns holds the columns for the "regions" table.
 	RegionsColumns = []*schema.Column{
@@ -642,13 +722,20 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		ArtsTable,
+		ArtGenresTable,
+		ArtStylesTable,
 		ArtifactsTable,
 		AuditLogsTable,
+		BooksTable,
+		BookGenresTable,
 		CategoriesTable,
 		CollectionsTable,
 		CulturesTable,
 		DistrictsTable,
 		HoldersTable,
+		KeywordsTable,
+		LibrariesTable,
 		LicensesTable,
 		LocationsTable,
 		MediaTable,
@@ -658,6 +745,7 @@ var (
 		PersonsTable,
 		ProjectsTable,
 		PublicationsTable,
+		PublishersTable,
 		RegionsTable,
 		SetsTable,
 		SettlementsTable,

@@ -15,12 +15,19 @@ resolver:
 # provided package. If they match it will use them, otherwise it will generate new.
 autobind:
   - github.com/dkrasnovdev/heritage-api/ent
+  - github.com/dkrasnovdev/heritage-api/ent/art
+  - github.com/dkrasnovdev/heritage-api/ent/artgenre
+  - github.com/dkrasnovdev/heritage-api/ent/artstyle
   - github.com/dkrasnovdev/heritage-api/ent/artifact
+  - github.com/dkrasnovdev/heritage-api/ent/book
+  - github.com/dkrasnovdev/heritage-api/ent/bookgenre
   - github.com/dkrasnovdev/heritage-api/ent/category
   - github.com/dkrasnovdev/heritage-api/ent/collection
   - github.com/dkrasnovdev/heritage-api/ent/culture
   - github.com/dkrasnovdev/heritage-api/ent/district
   - github.com/dkrasnovdev/heritage-api/ent/holder
+  - github.com/dkrasnovdev/heritage-api/ent/keyword
+  - github.com/dkrasnovdev/heritage-api/ent/library
   - github.com/dkrasnovdev/heritage-api/ent/license
   - github.com/dkrasnovdev/heritage-api/ent/location
   - github.com/dkrasnovdev/heritage-api/ent/medium
@@ -30,6 +37,7 @@ autobind:
   - github.com/dkrasnovdev/heritage-api/ent/person
   - github.com/dkrasnovdev/heritage-api/ent/project
   - github.com/dkrasnovdev/heritage-api/ent/publication
+  - github.com/dkrasnovdev/heritage-api/ent/publisher
   - github.com/dkrasnovdev/heritage-api/ent/region
   - github.com/dkrasnovdev/heritage-api/ent/set
   - github.com/dkrasnovdev/heritage-api/ent/settlement

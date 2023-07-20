@@ -14,13 +14,20 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/dkrasnovdev/heritage-api/ent/art"
+	"github.com/dkrasnovdev/heritage-api/ent/artgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/artstyle"
 	"github.com/dkrasnovdev/heritage-api/ent/auditlog"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
+	"github.com/dkrasnovdev/heritage-api/ent/bookgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/keyword"
+	"github.com/dkrasnovdev/heritage-api/ent/library"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/medium"
@@ -30,6 +37,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
+	"github.com/dkrasnovdev/heritage-api/ent/publisher"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
 	"github.com/dkrasnovdev/heritage-api/ent/set"
 	"github.com/dkrasnovdev/heritage-api/ent/settlement"
@@ -41,10 +49,20 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
+	// Art is the client for interacting with the Art builders.
+	Art *ArtClient
+	// ArtGenre is the client for interacting with the ArtGenre builders.
+	ArtGenre *ArtGenreClient
+	// ArtStyle is the client for interacting with the ArtStyle builders.
+	ArtStyle *ArtStyleClient
 	// Artifact is the client for interacting with the Artifact builders.
 	Artifact *ArtifactClient
 	// AuditLog is the client for interacting with the AuditLog builders.
 	AuditLog *AuditLogClient
+	// Book is the client for interacting with the Book builders.
+	Book *BookClient
+	// BookGenre is the client for interacting with the BookGenre builders.
+	BookGenre *BookGenreClient
 	// Category is the client for interacting with the Category builders.
 	Category *CategoryClient
 	// Collection is the client for interacting with the Collection builders.
@@ -55,6 +73,10 @@ type Client struct {
 	District *DistrictClient
 	// Holder is the client for interacting with the Holder builders.
 	Holder *HolderClient
+	// Keyword is the client for interacting with the Keyword builders.
+	Keyword *KeywordClient
+	// Library is the client for interacting with the Library builders.
+	Library *LibraryClient
 	// License is the client for interacting with the License builders.
 	License *LicenseClient
 	// Location is the client for interacting with the Location builders.
@@ -73,6 +95,8 @@ type Client struct {
 	Project *ProjectClient
 	// Publication is the client for interacting with the Publication builders.
 	Publication *PublicationClient
+	// Publisher is the client for interacting with the Publisher builders.
+	Publisher *PublisherClient
 	// Region is the client for interacting with the Region builders.
 	Region *RegionClient
 	// Set is the client for interacting with the Set builders.
@@ -96,13 +120,20 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
+	c.Art = NewArtClient(c.config)
+	c.ArtGenre = NewArtGenreClient(c.config)
+	c.ArtStyle = NewArtStyleClient(c.config)
 	c.Artifact = NewArtifactClient(c.config)
 	c.AuditLog = NewAuditLogClient(c.config)
+	c.Book = NewBookClient(c.config)
+	c.BookGenre = NewBookGenreClient(c.config)
 	c.Category = NewCategoryClient(c.config)
 	c.Collection = NewCollectionClient(c.config)
 	c.Culture = NewCultureClient(c.config)
 	c.District = NewDistrictClient(c.config)
 	c.Holder = NewHolderClient(c.config)
+	c.Keyword = NewKeywordClient(c.config)
+	c.Library = NewLibraryClient(c.config)
 	c.License = NewLicenseClient(c.config)
 	c.Location = NewLocationClient(c.config)
 	c.Medium = NewMediumClient(c.config)
@@ -112,6 +143,7 @@ func (c *Client) init() {
 	c.Person = NewPersonClient(c.config)
 	c.Project = NewProjectClient(c.config)
 	c.Publication = NewPublicationClient(c.config)
+	c.Publisher = NewPublisherClient(c.config)
 	c.Region = NewRegionClient(c.config)
 	c.Set = NewSetClient(c.config)
 	c.Settlement = NewSettlementClient(c.config)
@@ -198,13 +230,20 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	return &Tx{
 		ctx:          ctx,
 		config:       cfg,
+		Art:          NewArtClient(cfg),
+		ArtGenre:     NewArtGenreClient(cfg),
+		ArtStyle:     NewArtStyleClient(cfg),
 		Artifact:     NewArtifactClient(cfg),
 		AuditLog:     NewAuditLogClient(cfg),
+		Book:         NewBookClient(cfg),
+		BookGenre:    NewBookGenreClient(cfg),
 		Category:     NewCategoryClient(cfg),
 		Collection:   NewCollectionClient(cfg),
 		Culture:      NewCultureClient(cfg),
 		District:     NewDistrictClient(cfg),
 		Holder:       NewHolderClient(cfg),
+		Keyword:      NewKeywordClient(cfg),
+		Library:      NewLibraryClient(cfg),
 		License:      NewLicenseClient(cfg),
 		Location:     NewLocationClient(cfg),
 		Medium:       NewMediumClient(cfg),
@@ -214,6 +253,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Person:       NewPersonClient(cfg),
 		Project:      NewProjectClient(cfg),
 		Publication:  NewPublicationClient(cfg),
+		Publisher:    NewPublisherClient(cfg),
 		Region:       NewRegionClient(cfg),
 		Set:          NewSetClient(cfg),
 		Settlement:   NewSettlementClient(cfg),
@@ -237,13 +277,20 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	return &Tx{
 		ctx:          ctx,
 		config:       cfg,
+		Art:          NewArtClient(cfg),
+		ArtGenre:     NewArtGenreClient(cfg),
+		ArtStyle:     NewArtStyleClient(cfg),
 		Artifact:     NewArtifactClient(cfg),
 		AuditLog:     NewAuditLogClient(cfg),
+		Book:         NewBookClient(cfg),
+		BookGenre:    NewBookGenreClient(cfg),
 		Category:     NewCategoryClient(cfg),
 		Collection:   NewCollectionClient(cfg),
 		Culture:      NewCultureClient(cfg),
 		District:     NewDistrictClient(cfg),
 		Holder:       NewHolderClient(cfg),
+		Keyword:      NewKeywordClient(cfg),
+		Library:      NewLibraryClient(cfg),
 		License:      NewLicenseClient(cfg),
 		Location:     NewLocationClient(cfg),
 		Medium:       NewMediumClient(cfg),
@@ -253,6 +300,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Person:       NewPersonClient(cfg),
 		Project:      NewProjectClient(cfg),
 		Publication:  NewPublicationClient(cfg),
+		Publisher:    NewPublisherClient(cfg),
 		Region:       NewRegionClient(cfg),
 		Set:          NewSetClient(cfg),
 		Settlement:   NewSettlementClient(cfg),
@@ -263,7 +311,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		Artifact.
+//		Art.
 //		Query().
 //		Count(ctx)
 func (c *Client) Debug() *Client {
@@ -286,9 +334,11 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.Artifact, c.AuditLog, c.Category, c.Collection, c.Culture, c.District,
-		c.Holder, c.License, c.Location, c.Medium, c.Model, c.Monument, c.Organization,
-		c.Person, c.Project, c.Publication, c.Region, c.Set, c.Settlement, c.Technique,
+		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
+		c.Category, c.Collection, c.Culture, c.District, c.Holder, c.Keyword,
+		c.Library, c.License, c.Location, c.Medium, c.Model, c.Monument,
+		c.Organization, c.Person, c.Project, c.Publication, c.Publisher, c.Region,
+		c.Set, c.Settlement, c.Technique,
 	} {
 		n.Use(hooks...)
 	}
@@ -298,9 +348,11 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.Artifact, c.AuditLog, c.Category, c.Collection, c.Culture, c.District,
-		c.Holder, c.License, c.Location, c.Medium, c.Model, c.Monument, c.Organization,
-		c.Person, c.Project, c.Publication, c.Region, c.Set, c.Settlement, c.Technique,
+		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
+		c.Category, c.Collection, c.Culture, c.District, c.Holder, c.Keyword,
+		c.Library, c.License, c.Location, c.Medium, c.Model, c.Monument,
+		c.Organization, c.Person, c.Project, c.Publication, c.Publisher, c.Region,
+		c.Set, c.Settlement, c.Technique,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -309,10 +361,20 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 // Mutate implements the ent.Mutator interface.
 func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
+	case *ArtMutation:
+		return c.Art.mutate(ctx, m)
+	case *ArtGenreMutation:
+		return c.ArtGenre.mutate(ctx, m)
+	case *ArtStyleMutation:
+		return c.ArtStyle.mutate(ctx, m)
 	case *ArtifactMutation:
 		return c.Artifact.mutate(ctx, m)
 	case *AuditLogMutation:
 		return c.AuditLog.mutate(ctx, m)
+	case *BookMutation:
+		return c.Book.mutate(ctx, m)
+	case *BookGenreMutation:
+		return c.BookGenre.mutate(ctx, m)
 	case *CategoryMutation:
 		return c.Category.mutate(ctx, m)
 	case *CollectionMutation:
@@ -323,6 +385,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.District.mutate(ctx, m)
 	case *HolderMutation:
 		return c.Holder.mutate(ctx, m)
+	case *KeywordMutation:
+		return c.Keyword.mutate(ctx, m)
+	case *LibraryMutation:
+		return c.Library.mutate(ctx, m)
 	case *LicenseMutation:
 		return c.License.mutate(ctx, m)
 	case *LocationMutation:
@@ -341,6 +407,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Project.mutate(ctx, m)
 	case *PublicationMutation:
 		return c.Publication.mutate(ctx, m)
+	case *PublisherMutation:
+		return c.Publisher.mutate(ctx, m)
 	case *RegionMutation:
 		return c.Region.mutate(ctx, m)
 	case *SetMutation:
@@ -351,6 +419,360 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Technique.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
+	}
+}
+
+// ArtClient is a client for the Art schema.
+type ArtClient struct {
+	config
+}
+
+// NewArtClient returns a client for the Art from the given config.
+func NewArtClient(c config) *ArtClient {
+	return &ArtClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `art.Hooks(f(g(h())))`.
+func (c *ArtClient) Use(hooks ...Hook) {
+	c.hooks.Art = append(c.hooks.Art, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `art.Intercept(f(g(h())))`.
+func (c *ArtClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Art = append(c.inters.Art, interceptors...)
+}
+
+// Create returns a builder for creating a Art entity.
+func (c *ArtClient) Create() *ArtCreate {
+	mutation := newArtMutation(c.config, OpCreate)
+	return &ArtCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Art entities.
+func (c *ArtClient) CreateBulk(builders ...*ArtCreate) *ArtCreateBulk {
+	return &ArtCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Art.
+func (c *ArtClient) Update() *ArtUpdate {
+	mutation := newArtMutation(c.config, OpUpdate)
+	return &ArtUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ArtClient) UpdateOne(a *Art) *ArtUpdateOne {
+	mutation := newArtMutation(c.config, OpUpdateOne, withArt(a))
+	return &ArtUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ArtClient) UpdateOneID(id int) *ArtUpdateOne {
+	mutation := newArtMutation(c.config, OpUpdateOne, withArtID(id))
+	return &ArtUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Art.
+func (c *ArtClient) Delete() *ArtDelete {
+	mutation := newArtMutation(c.config, OpDelete)
+	return &ArtDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ArtClient) DeleteOne(a *Art) *ArtDeleteOne {
+	return c.DeleteOneID(a.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ArtClient) DeleteOneID(id int) *ArtDeleteOne {
+	builder := c.Delete().Where(art.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ArtDeleteOne{builder}
+}
+
+// Query returns a query builder for Art.
+func (c *ArtClient) Query() *ArtQuery {
+	return &ArtQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeArt},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Art entity by its id.
+func (c *ArtClient) Get(ctx context.Context, id int) (*Art, error) {
+	return c.Query().Where(art.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ArtClient) GetX(ctx context.Context, id int) *Art {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ArtClient) Hooks() []Hook {
+	return c.hooks.Art
+}
+
+// Interceptors returns the client interceptors.
+func (c *ArtClient) Interceptors() []Interceptor {
+	return c.inters.Art
+}
+
+func (c *ArtClient) mutate(ctx context.Context, m *ArtMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ArtCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ArtUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ArtUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ArtDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Art mutation op: %q", m.Op())
+	}
+}
+
+// ArtGenreClient is a client for the ArtGenre schema.
+type ArtGenreClient struct {
+	config
+}
+
+// NewArtGenreClient returns a client for the ArtGenre from the given config.
+func NewArtGenreClient(c config) *ArtGenreClient {
+	return &ArtGenreClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `artgenre.Hooks(f(g(h())))`.
+func (c *ArtGenreClient) Use(hooks ...Hook) {
+	c.hooks.ArtGenre = append(c.hooks.ArtGenre, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `artgenre.Intercept(f(g(h())))`.
+func (c *ArtGenreClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ArtGenre = append(c.inters.ArtGenre, interceptors...)
+}
+
+// Create returns a builder for creating a ArtGenre entity.
+func (c *ArtGenreClient) Create() *ArtGenreCreate {
+	mutation := newArtGenreMutation(c.config, OpCreate)
+	return &ArtGenreCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ArtGenre entities.
+func (c *ArtGenreClient) CreateBulk(builders ...*ArtGenreCreate) *ArtGenreCreateBulk {
+	return &ArtGenreCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ArtGenre.
+func (c *ArtGenreClient) Update() *ArtGenreUpdate {
+	mutation := newArtGenreMutation(c.config, OpUpdate)
+	return &ArtGenreUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ArtGenreClient) UpdateOne(ag *ArtGenre) *ArtGenreUpdateOne {
+	mutation := newArtGenreMutation(c.config, OpUpdateOne, withArtGenre(ag))
+	return &ArtGenreUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ArtGenreClient) UpdateOneID(id int) *ArtGenreUpdateOne {
+	mutation := newArtGenreMutation(c.config, OpUpdateOne, withArtGenreID(id))
+	return &ArtGenreUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ArtGenre.
+func (c *ArtGenreClient) Delete() *ArtGenreDelete {
+	mutation := newArtGenreMutation(c.config, OpDelete)
+	return &ArtGenreDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ArtGenreClient) DeleteOne(ag *ArtGenre) *ArtGenreDeleteOne {
+	return c.DeleteOneID(ag.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ArtGenreClient) DeleteOneID(id int) *ArtGenreDeleteOne {
+	builder := c.Delete().Where(artgenre.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ArtGenreDeleteOne{builder}
+}
+
+// Query returns a query builder for ArtGenre.
+func (c *ArtGenreClient) Query() *ArtGenreQuery {
+	return &ArtGenreQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeArtGenre},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ArtGenre entity by its id.
+func (c *ArtGenreClient) Get(ctx context.Context, id int) (*ArtGenre, error) {
+	return c.Query().Where(artgenre.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ArtGenreClient) GetX(ctx context.Context, id int) *ArtGenre {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ArtGenreClient) Hooks() []Hook {
+	return c.hooks.ArtGenre
+}
+
+// Interceptors returns the client interceptors.
+func (c *ArtGenreClient) Interceptors() []Interceptor {
+	return c.inters.ArtGenre
+}
+
+func (c *ArtGenreClient) mutate(ctx context.Context, m *ArtGenreMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ArtGenreCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ArtGenreUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ArtGenreUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ArtGenreDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown ArtGenre mutation op: %q", m.Op())
+	}
+}
+
+// ArtStyleClient is a client for the ArtStyle schema.
+type ArtStyleClient struct {
+	config
+}
+
+// NewArtStyleClient returns a client for the ArtStyle from the given config.
+func NewArtStyleClient(c config) *ArtStyleClient {
+	return &ArtStyleClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `artstyle.Hooks(f(g(h())))`.
+func (c *ArtStyleClient) Use(hooks ...Hook) {
+	c.hooks.ArtStyle = append(c.hooks.ArtStyle, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `artstyle.Intercept(f(g(h())))`.
+func (c *ArtStyleClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ArtStyle = append(c.inters.ArtStyle, interceptors...)
+}
+
+// Create returns a builder for creating a ArtStyle entity.
+func (c *ArtStyleClient) Create() *ArtStyleCreate {
+	mutation := newArtStyleMutation(c.config, OpCreate)
+	return &ArtStyleCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ArtStyle entities.
+func (c *ArtStyleClient) CreateBulk(builders ...*ArtStyleCreate) *ArtStyleCreateBulk {
+	return &ArtStyleCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ArtStyle.
+func (c *ArtStyleClient) Update() *ArtStyleUpdate {
+	mutation := newArtStyleMutation(c.config, OpUpdate)
+	return &ArtStyleUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ArtStyleClient) UpdateOne(as *ArtStyle) *ArtStyleUpdateOne {
+	mutation := newArtStyleMutation(c.config, OpUpdateOne, withArtStyle(as))
+	return &ArtStyleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ArtStyleClient) UpdateOneID(id int) *ArtStyleUpdateOne {
+	mutation := newArtStyleMutation(c.config, OpUpdateOne, withArtStyleID(id))
+	return &ArtStyleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ArtStyle.
+func (c *ArtStyleClient) Delete() *ArtStyleDelete {
+	mutation := newArtStyleMutation(c.config, OpDelete)
+	return &ArtStyleDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ArtStyleClient) DeleteOne(as *ArtStyle) *ArtStyleDeleteOne {
+	return c.DeleteOneID(as.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ArtStyleClient) DeleteOneID(id int) *ArtStyleDeleteOne {
+	builder := c.Delete().Where(artstyle.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ArtStyleDeleteOne{builder}
+}
+
+// Query returns a query builder for ArtStyle.
+func (c *ArtStyleClient) Query() *ArtStyleQuery {
+	return &ArtStyleQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeArtStyle},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ArtStyle entity by its id.
+func (c *ArtStyleClient) Get(ctx context.Context, id int) (*ArtStyle, error) {
+	return c.Query().Where(artstyle.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ArtStyleClient) GetX(ctx context.Context, id int) *ArtStyle {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ArtStyleClient) Hooks() []Hook {
+	return c.hooks.ArtStyle
+}
+
+// Interceptors returns the client interceptors.
+func (c *ArtStyleClient) Interceptors() []Interceptor {
+	return c.inters.ArtStyle
+}
+
+func (c *ArtStyleClient) mutate(ctx context.Context, m *ArtStyleMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ArtStyleCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ArtStyleUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ArtStyleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ArtStyleDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown ArtStyle mutation op: %q", m.Op())
 	}
 }
 
@@ -798,6 +1220,242 @@ func (c *AuditLogClient) mutate(ctx context.Context, m *AuditLogMutation) (Value
 		return (&AuditLogDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown AuditLog mutation op: %q", m.Op())
+	}
+}
+
+// BookClient is a client for the Book schema.
+type BookClient struct {
+	config
+}
+
+// NewBookClient returns a client for the Book from the given config.
+func NewBookClient(c config) *BookClient {
+	return &BookClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `book.Hooks(f(g(h())))`.
+func (c *BookClient) Use(hooks ...Hook) {
+	c.hooks.Book = append(c.hooks.Book, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `book.Intercept(f(g(h())))`.
+func (c *BookClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Book = append(c.inters.Book, interceptors...)
+}
+
+// Create returns a builder for creating a Book entity.
+func (c *BookClient) Create() *BookCreate {
+	mutation := newBookMutation(c.config, OpCreate)
+	return &BookCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Book entities.
+func (c *BookClient) CreateBulk(builders ...*BookCreate) *BookCreateBulk {
+	return &BookCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Book.
+func (c *BookClient) Update() *BookUpdate {
+	mutation := newBookMutation(c.config, OpUpdate)
+	return &BookUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *BookClient) UpdateOne(b *Book) *BookUpdateOne {
+	mutation := newBookMutation(c.config, OpUpdateOne, withBook(b))
+	return &BookUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *BookClient) UpdateOneID(id int) *BookUpdateOne {
+	mutation := newBookMutation(c.config, OpUpdateOne, withBookID(id))
+	return &BookUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Book.
+func (c *BookClient) Delete() *BookDelete {
+	mutation := newBookMutation(c.config, OpDelete)
+	return &BookDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *BookClient) DeleteOne(b *Book) *BookDeleteOne {
+	return c.DeleteOneID(b.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *BookClient) DeleteOneID(id int) *BookDeleteOne {
+	builder := c.Delete().Where(book.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &BookDeleteOne{builder}
+}
+
+// Query returns a query builder for Book.
+func (c *BookClient) Query() *BookQuery {
+	return &BookQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeBook},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Book entity by its id.
+func (c *BookClient) Get(ctx context.Context, id int) (*Book, error) {
+	return c.Query().Where(book.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *BookClient) GetX(ctx context.Context, id int) *Book {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *BookClient) Hooks() []Hook {
+	return c.hooks.Book
+}
+
+// Interceptors returns the client interceptors.
+func (c *BookClient) Interceptors() []Interceptor {
+	return c.inters.Book
+}
+
+func (c *BookClient) mutate(ctx context.Context, m *BookMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&BookCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&BookUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&BookUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&BookDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Book mutation op: %q", m.Op())
+	}
+}
+
+// BookGenreClient is a client for the BookGenre schema.
+type BookGenreClient struct {
+	config
+}
+
+// NewBookGenreClient returns a client for the BookGenre from the given config.
+func NewBookGenreClient(c config) *BookGenreClient {
+	return &BookGenreClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `bookgenre.Hooks(f(g(h())))`.
+func (c *BookGenreClient) Use(hooks ...Hook) {
+	c.hooks.BookGenre = append(c.hooks.BookGenre, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `bookgenre.Intercept(f(g(h())))`.
+func (c *BookGenreClient) Intercept(interceptors ...Interceptor) {
+	c.inters.BookGenre = append(c.inters.BookGenre, interceptors...)
+}
+
+// Create returns a builder for creating a BookGenre entity.
+func (c *BookGenreClient) Create() *BookGenreCreate {
+	mutation := newBookGenreMutation(c.config, OpCreate)
+	return &BookGenreCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of BookGenre entities.
+func (c *BookGenreClient) CreateBulk(builders ...*BookGenreCreate) *BookGenreCreateBulk {
+	return &BookGenreCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for BookGenre.
+func (c *BookGenreClient) Update() *BookGenreUpdate {
+	mutation := newBookGenreMutation(c.config, OpUpdate)
+	return &BookGenreUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *BookGenreClient) UpdateOne(bg *BookGenre) *BookGenreUpdateOne {
+	mutation := newBookGenreMutation(c.config, OpUpdateOne, withBookGenre(bg))
+	return &BookGenreUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *BookGenreClient) UpdateOneID(id int) *BookGenreUpdateOne {
+	mutation := newBookGenreMutation(c.config, OpUpdateOne, withBookGenreID(id))
+	return &BookGenreUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for BookGenre.
+func (c *BookGenreClient) Delete() *BookGenreDelete {
+	mutation := newBookGenreMutation(c.config, OpDelete)
+	return &BookGenreDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *BookGenreClient) DeleteOne(bg *BookGenre) *BookGenreDeleteOne {
+	return c.DeleteOneID(bg.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *BookGenreClient) DeleteOneID(id int) *BookGenreDeleteOne {
+	builder := c.Delete().Where(bookgenre.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &BookGenreDeleteOne{builder}
+}
+
+// Query returns a query builder for BookGenre.
+func (c *BookGenreClient) Query() *BookGenreQuery {
+	return &BookGenreQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeBookGenre},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a BookGenre entity by its id.
+func (c *BookGenreClient) Get(ctx context.Context, id int) (*BookGenre, error) {
+	return c.Query().Where(bookgenre.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *BookGenreClient) GetX(ctx context.Context, id int) *BookGenre {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *BookGenreClient) Hooks() []Hook {
+	return c.hooks.BookGenre
+}
+
+// Interceptors returns the client interceptors.
+func (c *BookGenreClient) Interceptors() []Interceptor {
+	return c.inters.BookGenre
+}
+
+func (c *BookGenreClient) mutate(ctx context.Context, m *BookGenreMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&BookGenreCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&BookGenreUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&BookGenreUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&BookGenreDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown BookGenre mutation op: %q", m.Op())
 	}
 }
 
@@ -1521,6 +2179,242 @@ func (c *HolderClient) mutate(ctx context.Context, m *HolderMutation) (Value, er
 		return (&HolderDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Holder mutation op: %q", m.Op())
+	}
+}
+
+// KeywordClient is a client for the Keyword schema.
+type KeywordClient struct {
+	config
+}
+
+// NewKeywordClient returns a client for the Keyword from the given config.
+func NewKeywordClient(c config) *KeywordClient {
+	return &KeywordClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `keyword.Hooks(f(g(h())))`.
+func (c *KeywordClient) Use(hooks ...Hook) {
+	c.hooks.Keyword = append(c.hooks.Keyword, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `keyword.Intercept(f(g(h())))`.
+func (c *KeywordClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Keyword = append(c.inters.Keyword, interceptors...)
+}
+
+// Create returns a builder for creating a Keyword entity.
+func (c *KeywordClient) Create() *KeywordCreate {
+	mutation := newKeywordMutation(c.config, OpCreate)
+	return &KeywordCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Keyword entities.
+func (c *KeywordClient) CreateBulk(builders ...*KeywordCreate) *KeywordCreateBulk {
+	return &KeywordCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Keyword.
+func (c *KeywordClient) Update() *KeywordUpdate {
+	mutation := newKeywordMutation(c.config, OpUpdate)
+	return &KeywordUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *KeywordClient) UpdateOne(k *Keyword) *KeywordUpdateOne {
+	mutation := newKeywordMutation(c.config, OpUpdateOne, withKeyword(k))
+	return &KeywordUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *KeywordClient) UpdateOneID(id int) *KeywordUpdateOne {
+	mutation := newKeywordMutation(c.config, OpUpdateOne, withKeywordID(id))
+	return &KeywordUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Keyword.
+func (c *KeywordClient) Delete() *KeywordDelete {
+	mutation := newKeywordMutation(c.config, OpDelete)
+	return &KeywordDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *KeywordClient) DeleteOne(k *Keyword) *KeywordDeleteOne {
+	return c.DeleteOneID(k.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *KeywordClient) DeleteOneID(id int) *KeywordDeleteOne {
+	builder := c.Delete().Where(keyword.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &KeywordDeleteOne{builder}
+}
+
+// Query returns a query builder for Keyword.
+func (c *KeywordClient) Query() *KeywordQuery {
+	return &KeywordQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeKeyword},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Keyword entity by its id.
+func (c *KeywordClient) Get(ctx context.Context, id int) (*Keyword, error) {
+	return c.Query().Where(keyword.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *KeywordClient) GetX(ctx context.Context, id int) *Keyword {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *KeywordClient) Hooks() []Hook {
+	return c.hooks.Keyword
+}
+
+// Interceptors returns the client interceptors.
+func (c *KeywordClient) Interceptors() []Interceptor {
+	return c.inters.Keyword
+}
+
+func (c *KeywordClient) mutate(ctx context.Context, m *KeywordMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&KeywordCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&KeywordUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&KeywordUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&KeywordDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Keyword mutation op: %q", m.Op())
+	}
+}
+
+// LibraryClient is a client for the Library schema.
+type LibraryClient struct {
+	config
+}
+
+// NewLibraryClient returns a client for the Library from the given config.
+func NewLibraryClient(c config) *LibraryClient {
+	return &LibraryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `library.Hooks(f(g(h())))`.
+func (c *LibraryClient) Use(hooks ...Hook) {
+	c.hooks.Library = append(c.hooks.Library, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `library.Intercept(f(g(h())))`.
+func (c *LibraryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Library = append(c.inters.Library, interceptors...)
+}
+
+// Create returns a builder for creating a Library entity.
+func (c *LibraryClient) Create() *LibraryCreate {
+	mutation := newLibraryMutation(c.config, OpCreate)
+	return &LibraryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Library entities.
+func (c *LibraryClient) CreateBulk(builders ...*LibraryCreate) *LibraryCreateBulk {
+	return &LibraryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Library.
+func (c *LibraryClient) Update() *LibraryUpdate {
+	mutation := newLibraryMutation(c.config, OpUpdate)
+	return &LibraryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *LibraryClient) UpdateOne(l *Library) *LibraryUpdateOne {
+	mutation := newLibraryMutation(c.config, OpUpdateOne, withLibrary(l))
+	return &LibraryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *LibraryClient) UpdateOneID(id int) *LibraryUpdateOne {
+	mutation := newLibraryMutation(c.config, OpUpdateOne, withLibraryID(id))
+	return &LibraryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Library.
+func (c *LibraryClient) Delete() *LibraryDelete {
+	mutation := newLibraryMutation(c.config, OpDelete)
+	return &LibraryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *LibraryClient) DeleteOne(l *Library) *LibraryDeleteOne {
+	return c.DeleteOneID(l.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *LibraryClient) DeleteOneID(id int) *LibraryDeleteOne {
+	builder := c.Delete().Where(library.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &LibraryDeleteOne{builder}
+}
+
+// Query returns a query builder for Library.
+func (c *LibraryClient) Query() *LibraryQuery {
+	return &LibraryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeLibrary},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Library entity by its id.
+func (c *LibraryClient) Get(ctx context.Context, id int) (*Library, error) {
+	return c.Query().Where(library.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *LibraryClient) GetX(ctx context.Context, id int) *Library {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *LibraryClient) Hooks() []Hook {
+	return c.hooks.Library
+}
+
+// Interceptors returns the client interceptors.
+func (c *LibraryClient) Interceptors() []Interceptor {
+	return c.inters.Library
+}
+
+func (c *LibraryClient) mutate(ctx context.Context, m *LibraryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&LibraryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&LibraryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&LibraryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&LibraryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Library mutation op: %q", m.Op())
 	}
 }
 
@@ -2867,6 +3761,124 @@ func (c *PublicationClient) mutate(ctx context.Context, m *PublicationMutation) 
 	}
 }
 
+// PublisherClient is a client for the Publisher schema.
+type PublisherClient struct {
+	config
+}
+
+// NewPublisherClient returns a client for the Publisher from the given config.
+func NewPublisherClient(c config) *PublisherClient {
+	return &PublisherClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `publisher.Hooks(f(g(h())))`.
+func (c *PublisherClient) Use(hooks ...Hook) {
+	c.hooks.Publisher = append(c.hooks.Publisher, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `publisher.Intercept(f(g(h())))`.
+func (c *PublisherClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Publisher = append(c.inters.Publisher, interceptors...)
+}
+
+// Create returns a builder for creating a Publisher entity.
+func (c *PublisherClient) Create() *PublisherCreate {
+	mutation := newPublisherMutation(c.config, OpCreate)
+	return &PublisherCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Publisher entities.
+func (c *PublisherClient) CreateBulk(builders ...*PublisherCreate) *PublisherCreateBulk {
+	return &PublisherCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Publisher.
+func (c *PublisherClient) Update() *PublisherUpdate {
+	mutation := newPublisherMutation(c.config, OpUpdate)
+	return &PublisherUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *PublisherClient) UpdateOne(pu *Publisher) *PublisherUpdateOne {
+	mutation := newPublisherMutation(c.config, OpUpdateOne, withPublisher(pu))
+	return &PublisherUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *PublisherClient) UpdateOneID(id int) *PublisherUpdateOne {
+	mutation := newPublisherMutation(c.config, OpUpdateOne, withPublisherID(id))
+	return &PublisherUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Publisher.
+func (c *PublisherClient) Delete() *PublisherDelete {
+	mutation := newPublisherMutation(c.config, OpDelete)
+	return &PublisherDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *PublisherClient) DeleteOne(pu *Publisher) *PublisherDeleteOne {
+	return c.DeleteOneID(pu.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *PublisherClient) DeleteOneID(id int) *PublisherDeleteOne {
+	builder := c.Delete().Where(publisher.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &PublisherDeleteOne{builder}
+}
+
+// Query returns a query builder for Publisher.
+func (c *PublisherClient) Query() *PublisherQuery {
+	return &PublisherQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypePublisher},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Publisher entity by its id.
+func (c *PublisherClient) Get(ctx context.Context, id int) (*Publisher, error) {
+	return c.Query().Where(publisher.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *PublisherClient) GetX(ctx context.Context, id int) *Publisher {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *PublisherClient) Hooks() []Hook {
+	return c.hooks.Publisher
+}
+
+// Interceptors returns the client interceptors.
+func (c *PublisherClient) Interceptors() []Interceptor {
+	return c.inters.Publisher
+}
+
+func (c *PublisherClient) mutate(ctx context.Context, m *PublisherMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&PublisherCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&PublisherUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&PublisherUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&PublisherDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Publisher mutation op: %q", m.Op())
+	}
+}
+
 // RegionClient is a client for the Region schema.
 type RegionClient struct {
 	config
@@ -3410,13 +4422,15 @@ func (c *TechniqueClient) mutate(ctx context.Context, m *TechniqueMutation) (Val
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Artifact, AuditLog, Category, Collection, Culture, District, Holder, License,
-		Location, Medium, Model, Monument, Organization, Person, Project, Publication,
+		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
+		Collection, Culture, District, Holder, Keyword, Library, License, Location,
+		Medium, Model, Monument, Organization, Person, Project, Publication, Publisher,
 		Region, Set, Settlement, Technique []ent.Hook
 	}
 	inters struct {
-		Artifact, AuditLog, Category, Collection, Culture, District, Holder, License,
-		Location, Medium, Model, Monument, Organization, Person, Project, Publication,
+		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
+		Collection, Culture, District, Holder, Keyword, Library, License, Location,
+		Medium, Model, Monument, Organization, Person, Project, Publication, Publisher,
 		Region, Set, Settlement, Technique []ent.Interceptor
 	}
 )

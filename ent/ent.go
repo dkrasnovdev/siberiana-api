@@ -12,13 +12,20 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/dkrasnovdev/heritage-api/ent/art"
+	"github.com/dkrasnovdev/heritage-api/ent/artgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/artstyle"
 	"github.com/dkrasnovdev/heritage-api/ent/auditlog"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
+	"github.com/dkrasnovdev/heritage-api/ent/bookgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/keyword"
+	"github.com/dkrasnovdev/heritage-api/ent/library"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/medium"
@@ -28,6 +35,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
+	"github.com/dkrasnovdev/heritage-api/ent/publisher"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
 	"github.com/dkrasnovdev/heritage-api/ent/set"
 	"github.com/dkrasnovdev/heritage-api/ent/settlement"
@@ -92,13 +100,20 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
+			art.Table:          art.ValidColumn,
+			artgenre.Table:     artgenre.ValidColumn,
+			artstyle.Table:     artstyle.ValidColumn,
 			artifact.Table:     artifact.ValidColumn,
 			auditlog.Table:     auditlog.ValidColumn,
+			book.Table:         book.ValidColumn,
+			bookgenre.Table:    bookgenre.ValidColumn,
 			category.Table:     category.ValidColumn,
 			collection.Table:   collection.ValidColumn,
 			culture.Table:      culture.ValidColumn,
 			district.Table:     district.ValidColumn,
 			holder.Table:       holder.ValidColumn,
+			keyword.Table:      keyword.ValidColumn,
+			library.Table:      library.ValidColumn,
 			license.Table:      license.ValidColumn,
 			location.Table:     location.ValidColumn,
 			medium.Table:       medium.ValidColumn,
@@ -108,6 +123,7 @@ func checkColumn(table, column string) error {
 			person.Table:       person.ValidColumn,
 			project.Table:      project.ValidColumn,
 			publication.Table:  publication.ValidColumn,
+			publisher.Table:    publisher.ValidColumn,
 			region.Table:       region.ValidColumn,
 			set.Table:          set.ValidColumn,
 			settlement.Table:   settlement.ValidColumn,

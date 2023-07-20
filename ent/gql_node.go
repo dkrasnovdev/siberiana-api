@@ -13,13 +13,20 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/schema"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/dkrasnovdev/heritage-api/ent/art"
+	"github.com/dkrasnovdev/heritage-api/ent/artgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/artstyle"
 	"github.com/dkrasnovdev/heritage-api/ent/auditlog"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
+	"github.com/dkrasnovdev/heritage-api/ent/bookgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/keyword"
+	"github.com/dkrasnovdev/heritage-api/ent/library"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/medium"
@@ -29,6 +36,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
+	"github.com/dkrasnovdev/heritage-api/ent/publisher"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
 	"github.com/dkrasnovdev/heritage-api/ent/set"
 	"github.com/dkrasnovdev/heritage-api/ent/settlement"
@@ -42,6 +50,21 @@ type Noder interface {
 	IsNode()
 }
 
+var artImplementors = []string{"Art", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Art) IsNode() {}
+
+var artgenreImplementors = []string{"ArtGenre", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ArtGenre) IsNode() {}
+
+var artstyleImplementors = []string{"ArtStyle", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ArtStyle) IsNode() {}
+
 var artifactImplementors = []string{"Artifact", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
@@ -51,6 +74,16 @@ var auditlogImplementors = []string{"AuditLog", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*AuditLog) IsNode() {}
+
+var bookImplementors = []string{"Book", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Book) IsNode() {}
+
+var bookgenreImplementors = []string{"BookGenre", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*BookGenre) IsNode() {}
 
 var categoryImplementors = []string{"Category", "Node"}
 
@@ -76,6 +109,16 @@ var holderImplementors = []string{"Holder", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Holder) IsNode() {}
+
+var keywordImplementors = []string{"Keyword", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Keyword) IsNode() {}
+
+var libraryImplementors = []string{"Library", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Library) IsNode() {}
 
 var licenseImplementors = []string{"License", "Node"}
 
@@ -121,6 +164,11 @@ var publicationImplementors = []string{"Publication", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Publication) IsNode() {}
+
+var publisherImplementors = []string{"Publisher", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Publisher) IsNode() {}
 
 var regionImplementors = []string{"Region", "Node"}
 
@@ -200,6 +248,42 @@ func (c *Client) Noder(ctx context.Context, id int, opts ...NodeOption) (_ Noder
 
 func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error) {
 	switch table {
+	case art.Table:
+		query := c.Art.Query().
+			Where(art.ID(id))
+		query, err := query.CollectFields(ctx, artImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case artgenre.Table:
+		query := c.ArtGenre.Query().
+			Where(artgenre.ID(id))
+		query, err := query.CollectFields(ctx, artgenreImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case artstyle.Table:
+		query := c.ArtStyle.Query().
+			Where(artstyle.ID(id))
+		query, err := query.CollectFields(ctx, artstyleImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
 	case artifact.Table:
 		query := c.Artifact.Query().
 			Where(artifact.ID(id))
@@ -216,6 +300,30 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 		query := c.AuditLog.Query().
 			Where(auditlog.ID(id))
 		query, err := query.CollectFields(ctx, auditlogImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case book.Table:
+		query := c.Book.Query().
+			Where(book.ID(id))
+		query, err := query.CollectFields(ctx, bookImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case bookgenre.Table:
+		query := c.BookGenre.Query().
+			Where(bookgenre.ID(id))
+		query, err := query.CollectFields(ctx, bookgenreImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -276,6 +384,30 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 		query := c.Holder.Query().
 			Where(holder.ID(id))
 		query, err := query.CollectFields(ctx, holderImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case keyword.Table:
+		query := c.Keyword.Query().
+			Where(keyword.ID(id))
+		query, err := query.CollectFields(ctx, keywordImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case library.Table:
+		query := c.Library.Query().
+			Where(library.ID(id))
+		query, err := query.CollectFields(ctx, libraryImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -384,6 +516,18 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 		query := c.Publication.Query().
 			Where(publication.ID(id))
 		query, err := query.CollectFields(ctx, publicationImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case publisher.Table:
+		query := c.Publisher.Query().
+			Where(publisher.ID(id))
+		query, err := query.CollectFields(ctx, publisherImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -513,6 +657,54 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 		idmap[id] = append(idmap[id], &noders[i])
 	}
 	switch table {
+	case art.Table:
+		query := c.Art.Query().
+			Where(art.IDIn(ids...))
+		query, err := query.CollectFields(ctx, artImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case artgenre.Table:
+		query := c.ArtGenre.Query().
+			Where(artgenre.IDIn(ids...))
+		query, err := query.CollectFields(ctx, artgenreImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case artstyle.Table:
+		query := c.ArtStyle.Query().
+			Where(artstyle.IDIn(ids...))
+		query, err := query.CollectFields(ctx, artstyleImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
 	case artifact.Table:
 		query := c.Artifact.Query().
 			Where(artifact.IDIn(ids...))
@@ -533,6 +725,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 		query := c.AuditLog.Query().
 			Where(auditlog.IDIn(ids...))
 		query, err := query.CollectFields(ctx, auditlogImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case book.Table:
+		query := c.Book.Query().
+			Where(book.IDIn(ids...))
+		query, err := query.CollectFields(ctx, bookImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case bookgenre.Table:
+		query := c.BookGenre.Query().
+			Where(bookgenre.IDIn(ids...))
+		query, err := query.CollectFields(ctx, bookgenreImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -613,6 +837,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 		query := c.Holder.Query().
 			Where(holder.IDIn(ids...))
 		query, err := query.CollectFields(ctx, holderImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case keyword.Table:
+		query := c.Keyword.Query().
+			Where(keyword.IDIn(ids...))
+		query, err := query.CollectFields(ctx, keywordImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case library.Table:
+		query := c.Library.Query().
+			Where(library.IDIn(ids...))
+		query, err := query.CollectFields(ctx, libraryImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -757,6 +1013,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 		query := c.Publication.Query().
 			Where(publication.IDIn(ids...))
 		query, err := query.CollectFields(ctx, publicationImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case publisher.Table:
+		query := c.Publisher.Query().
+			Where(publisher.IDIn(ids...))
+		query, err := query.CollectFields(ctx, publisherImplementors...)
 		if err != nil {
 			return nil, err
 		}

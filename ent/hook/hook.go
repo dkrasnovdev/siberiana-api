@@ -9,6 +9,42 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent"
 )
 
+// The ArtFunc type is an adapter to allow the use of ordinary
+// function as Art mutator.
+type ArtFunc func(context.Context, *ent.ArtMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ArtFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ArtMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ArtMutation", m)
+}
+
+// The ArtGenreFunc type is an adapter to allow the use of ordinary
+// function as ArtGenre mutator.
+type ArtGenreFunc func(context.Context, *ent.ArtGenreMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ArtGenreFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ArtGenreMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ArtGenreMutation", m)
+}
+
+// The ArtStyleFunc type is an adapter to allow the use of ordinary
+// function as ArtStyle mutator.
+type ArtStyleFunc func(context.Context, *ent.ArtStyleMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ArtStyleFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ArtStyleMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ArtStyleMutation", m)
+}
+
 // The ArtifactFunc type is an adapter to allow the use of ordinary
 // function as Artifact mutator.
 type ArtifactFunc func(context.Context, *ent.ArtifactMutation) (ent.Value, error)
@@ -31,6 +67,30 @@ func (f AuditLogFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AuditLogMutation", m)
+}
+
+// The BookFunc type is an adapter to allow the use of ordinary
+// function as Book mutator.
+type BookFunc func(context.Context, *ent.BookMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f BookFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.BookMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.BookMutation", m)
+}
+
+// The BookGenreFunc type is an adapter to allow the use of ordinary
+// function as BookGenre mutator.
+type BookGenreFunc func(context.Context, *ent.BookGenreMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f BookGenreFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.BookGenreMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.BookGenreMutation", m)
 }
 
 // The CategoryFunc type is an adapter to allow the use of ordinary
@@ -91,6 +151,30 @@ func (f HolderFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, erro
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.HolderMutation", m)
+}
+
+// The KeywordFunc type is an adapter to allow the use of ordinary
+// function as Keyword mutator.
+type KeywordFunc func(context.Context, *ent.KeywordMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f KeywordFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.KeywordMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.KeywordMutation", m)
+}
+
+// The LibraryFunc type is an adapter to allow the use of ordinary
+// function as Library mutator.
+type LibraryFunc func(context.Context, *ent.LibraryMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f LibraryFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.LibraryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.LibraryMutation", m)
 }
 
 // The LicenseFunc type is an adapter to allow the use of ordinary
@@ -199,6 +283,18 @@ func (f PublicationFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value,
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PublicationMutation", m)
+}
+
+// The PublisherFunc type is an adapter to allow the use of ordinary
+// function as Publisher mutator.
+type PublisherFunc func(context.Context, *ent.PublisherMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PublisherFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.PublisherMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PublisherMutation", m)
 }
 
 // The RegionFunc type is an adapter to allow the use of ordinary

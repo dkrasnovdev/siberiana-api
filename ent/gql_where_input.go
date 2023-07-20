@@ -7,13 +7,20 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/dkrasnovdev/heritage-api/ent/art"
+	"github.com/dkrasnovdev/heritage-api/ent/artgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/artstyle"
 	"github.com/dkrasnovdev/heritage-api/ent/auditlog"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
+	"github.com/dkrasnovdev/heritage-api/ent/bookgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/keyword"
+	"github.com/dkrasnovdev/heritage-api/ent/library"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/medium"
@@ -24,11 +31,384 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
+	"github.com/dkrasnovdev/heritage-api/ent/publisher"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
 	"github.com/dkrasnovdev/heritage-api/ent/set"
 	"github.com/dkrasnovdev/heritage-api/ent/settlement"
 	"github.com/dkrasnovdev/heritage-api/ent/technique"
 )
+
+// ArtWhereInput represents a where input for filtering Art queries.
+type ArtWhereInput struct {
+	Predicates []predicate.Art  `json:"-"`
+	Not        *ArtWhereInput   `json:"not,omitempty"`
+	Or         []*ArtWhereInput `json:"or,omitempty"`
+	And        []*ArtWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *ArtWhereInput) AddPredicates(predicates ...predicate.Art) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the ArtWhereInput filter on the ArtQuery builder.
+func (i *ArtWhereInput) Filter(q *ArtQuery) (*ArtQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyArtWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyArtWhereInput is returned in case the ArtWhereInput is empty.
+var ErrEmptyArtWhereInput = errors.New("ent: empty predicate ArtWhereInput")
+
+// P returns a predicate for filtering arts.
+// An error is returned if the input is empty or invalid.
+func (i *ArtWhereInput) P() (predicate.Art, error) {
+	var predicates []predicate.Art
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, art.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.Art, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, art.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.Art, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, art.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, art.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, art.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, art.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, art.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, art.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, art.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, art.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, art.IDLTE(*i.IDLTE))
+	}
+
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyArtWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return art.And(predicates...), nil
+	}
+}
+
+// ArtGenreWhereInput represents a where input for filtering ArtGenre queries.
+type ArtGenreWhereInput struct {
+	Predicates []predicate.ArtGenre  `json:"-"`
+	Not        *ArtGenreWhereInput   `json:"not,omitempty"`
+	Or         []*ArtGenreWhereInput `json:"or,omitempty"`
+	And        []*ArtGenreWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *ArtGenreWhereInput) AddPredicates(predicates ...predicate.ArtGenre) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the ArtGenreWhereInput filter on the ArtGenreQuery builder.
+func (i *ArtGenreWhereInput) Filter(q *ArtGenreQuery) (*ArtGenreQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyArtGenreWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyArtGenreWhereInput is returned in case the ArtGenreWhereInput is empty.
+var ErrEmptyArtGenreWhereInput = errors.New("ent: empty predicate ArtGenreWhereInput")
+
+// P returns a predicate for filtering artgenres.
+// An error is returned if the input is empty or invalid.
+func (i *ArtGenreWhereInput) P() (predicate.ArtGenre, error) {
+	var predicates []predicate.ArtGenre
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, artgenre.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.ArtGenre, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, artgenre.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.ArtGenre, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, artgenre.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, artgenre.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, artgenre.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, artgenre.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, artgenre.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, artgenre.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, artgenre.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, artgenre.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, artgenre.IDLTE(*i.IDLTE))
+	}
+
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyArtGenreWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return artgenre.And(predicates...), nil
+	}
+}
+
+// ArtStyleWhereInput represents a where input for filtering ArtStyle queries.
+type ArtStyleWhereInput struct {
+	Predicates []predicate.ArtStyle  `json:"-"`
+	Not        *ArtStyleWhereInput   `json:"not,omitempty"`
+	Or         []*ArtStyleWhereInput `json:"or,omitempty"`
+	And        []*ArtStyleWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *ArtStyleWhereInput) AddPredicates(predicates ...predicate.ArtStyle) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the ArtStyleWhereInput filter on the ArtStyleQuery builder.
+func (i *ArtStyleWhereInput) Filter(q *ArtStyleQuery) (*ArtStyleQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyArtStyleWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyArtStyleWhereInput is returned in case the ArtStyleWhereInput is empty.
+var ErrEmptyArtStyleWhereInput = errors.New("ent: empty predicate ArtStyleWhereInput")
+
+// P returns a predicate for filtering artstyles.
+// An error is returned if the input is empty or invalid.
+func (i *ArtStyleWhereInput) P() (predicate.ArtStyle, error) {
+	var predicates []predicate.ArtStyle
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, artstyle.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.ArtStyle, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, artstyle.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.ArtStyle, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, artstyle.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, artstyle.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, artstyle.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, artstyle.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, artstyle.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, artstyle.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, artstyle.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, artstyle.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, artstyle.IDLTE(*i.IDLTE))
+	}
+
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyArtStyleWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return artstyle.And(predicates...), nil
+	}
+}
 
 // ArtifactWhereInput represents a where input for filtering Artifact queries.
 type ArtifactWhereInput struct {
@@ -1305,6 +1685,254 @@ func (i *AuditLogWhereInput) P() (predicate.AuditLog, error) {
 		return predicates[0], nil
 	default:
 		return auditlog.And(predicates...), nil
+	}
+}
+
+// BookWhereInput represents a where input for filtering Book queries.
+type BookWhereInput struct {
+	Predicates []predicate.Book  `json:"-"`
+	Not        *BookWhereInput   `json:"not,omitempty"`
+	Or         []*BookWhereInput `json:"or,omitempty"`
+	And        []*BookWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *BookWhereInput) AddPredicates(predicates ...predicate.Book) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the BookWhereInput filter on the BookQuery builder.
+func (i *BookWhereInput) Filter(q *BookQuery) (*BookQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyBookWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyBookWhereInput is returned in case the BookWhereInput is empty.
+var ErrEmptyBookWhereInput = errors.New("ent: empty predicate BookWhereInput")
+
+// P returns a predicate for filtering books.
+// An error is returned if the input is empty or invalid.
+func (i *BookWhereInput) P() (predicate.Book, error) {
+	var predicates []predicate.Book
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, book.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.Book, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, book.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.Book, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, book.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, book.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, book.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, book.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, book.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, book.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, book.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, book.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, book.IDLTE(*i.IDLTE))
+	}
+
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyBookWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return book.And(predicates...), nil
+	}
+}
+
+// BookGenreWhereInput represents a where input for filtering BookGenre queries.
+type BookGenreWhereInput struct {
+	Predicates []predicate.BookGenre  `json:"-"`
+	Not        *BookGenreWhereInput   `json:"not,omitempty"`
+	Or         []*BookGenreWhereInput `json:"or,omitempty"`
+	And        []*BookGenreWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *BookGenreWhereInput) AddPredicates(predicates ...predicate.BookGenre) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the BookGenreWhereInput filter on the BookGenreQuery builder.
+func (i *BookGenreWhereInput) Filter(q *BookGenreQuery) (*BookGenreQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyBookGenreWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyBookGenreWhereInput is returned in case the BookGenreWhereInput is empty.
+var ErrEmptyBookGenreWhereInput = errors.New("ent: empty predicate BookGenreWhereInput")
+
+// P returns a predicate for filtering bookgenres.
+// An error is returned if the input is empty or invalid.
+func (i *BookGenreWhereInput) P() (predicate.BookGenre, error) {
+	var predicates []predicate.BookGenre
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, bookgenre.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.BookGenre, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, bookgenre.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.BookGenre, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, bookgenre.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, bookgenre.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, bookgenre.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, bookgenre.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, bookgenre.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, bookgenre.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, bookgenre.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, bookgenre.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, bookgenre.IDLTE(*i.IDLTE))
+	}
+
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyBookGenreWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return bookgenre.And(predicates...), nil
 	}
 }
 
@@ -3681,6 +4309,254 @@ func (i *HolderWhereInput) P() (predicate.Holder, error) {
 		return predicates[0], nil
 	default:
 		return holder.And(predicates...), nil
+	}
+}
+
+// KeywordWhereInput represents a where input for filtering Keyword queries.
+type KeywordWhereInput struct {
+	Predicates []predicate.Keyword  `json:"-"`
+	Not        *KeywordWhereInput   `json:"not,omitempty"`
+	Or         []*KeywordWhereInput `json:"or,omitempty"`
+	And        []*KeywordWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *KeywordWhereInput) AddPredicates(predicates ...predicate.Keyword) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the KeywordWhereInput filter on the KeywordQuery builder.
+func (i *KeywordWhereInput) Filter(q *KeywordQuery) (*KeywordQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyKeywordWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyKeywordWhereInput is returned in case the KeywordWhereInput is empty.
+var ErrEmptyKeywordWhereInput = errors.New("ent: empty predicate KeywordWhereInput")
+
+// P returns a predicate for filtering keywords.
+// An error is returned if the input is empty or invalid.
+func (i *KeywordWhereInput) P() (predicate.Keyword, error) {
+	var predicates []predicate.Keyword
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, keyword.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.Keyword, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, keyword.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.Keyword, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, keyword.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, keyword.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, keyword.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, keyword.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, keyword.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, keyword.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, keyword.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, keyword.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, keyword.IDLTE(*i.IDLTE))
+	}
+
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyKeywordWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return keyword.And(predicates...), nil
+	}
+}
+
+// LibraryWhereInput represents a where input for filtering Library queries.
+type LibraryWhereInput struct {
+	Predicates []predicate.Library  `json:"-"`
+	Not        *LibraryWhereInput   `json:"not,omitempty"`
+	Or         []*LibraryWhereInput `json:"or,omitempty"`
+	And        []*LibraryWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *LibraryWhereInput) AddPredicates(predicates ...predicate.Library) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the LibraryWhereInput filter on the LibraryQuery builder.
+func (i *LibraryWhereInput) Filter(q *LibraryQuery) (*LibraryQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyLibraryWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyLibraryWhereInput is returned in case the LibraryWhereInput is empty.
+var ErrEmptyLibraryWhereInput = errors.New("ent: empty predicate LibraryWhereInput")
+
+// P returns a predicate for filtering libraries.
+// An error is returned if the input is empty or invalid.
+func (i *LibraryWhereInput) P() (predicate.Library, error) {
+	var predicates []predicate.Library
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, library.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.Library, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, library.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.Library, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, library.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, library.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, library.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, library.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, library.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, library.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, library.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, library.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, library.IDLTE(*i.IDLTE))
+	}
+
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyLibraryWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return library.And(predicates...), nil
 	}
 }
 
@@ -8015,6 +8891,130 @@ func (i *PublicationWhereInput) P() (predicate.Publication, error) {
 		return predicates[0], nil
 	default:
 		return publication.And(predicates...), nil
+	}
+}
+
+// PublisherWhereInput represents a where input for filtering Publisher queries.
+type PublisherWhereInput struct {
+	Predicates []predicate.Publisher  `json:"-"`
+	Not        *PublisherWhereInput   `json:"not,omitempty"`
+	Or         []*PublisherWhereInput `json:"or,omitempty"`
+	And        []*PublisherWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *PublisherWhereInput) AddPredicates(predicates ...predicate.Publisher) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the PublisherWhereInput filter on the PublisherQuery builder.
+func (i *PublisherWhereInput) Filter(q *PublisherQuery) (*PublisherQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyPublisherWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyPublisherWhereInput is returned in case the PublisherWhereInput is empty.
+var ErrEmptyPublisherWhereInput = errors.New("ent: empty predicate PublisherWhereInput")
+
+// P returns a predicate for filtering publishers.
+// An error is returned if the input is empty or invalid.
+func (i *PublisherWhereInput) P() (predicate.Publisher, error) {
+	var predicates []predicate.Publisher
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, publisher.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.Publisher, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, publisher.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.Publisher, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, publisher.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, publisher.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, publisher.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, publisher.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, publisher.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, publisher.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, publisher.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, publisher.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, publisher.IDLTE(*i.IDLTE))
+	}
+
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyPublisherWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return publisher.And(predicates...), nil
 	}
 }
 

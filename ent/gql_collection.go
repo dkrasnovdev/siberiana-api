@@ -31,6 +31,144 @@ import (
 )
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (a *ArtQuery) CollectFields(ctx context.Context, satisfies ...string) (*ArtQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return a, nil
+	}
+	if err := a.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return a, nil
+}
+
+func (a *ArtQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	return nil
+}
+
+type artPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ArtPaginateOption
+}
+
+func newArtPaginateArgs(rv map[string]any) *artPaginateArgs {
+	args := &artPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*ArtWhereInput); ok {
+		args.opts = append(args.opts, WithArtFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (ag *ArtGenreQuery) CollectFields(ctx context.Context, satisfies ...string) (*ArtGenreQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return ag, nil
+	}
+	if err := ag.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return ag, nil
+}
+
+func (ag *ArtGenreQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	return nil
+}
+
+type artgenrePaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ArtGenrePaginateOption
+}
+
+func newArtGenrePaginateArgs(rv map[string]any) *artgenrePaginateArgs {
+	args := &artgenrePaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*ArtGenreWhereInput); ok {
+		args.opts = append(args.opts, WithArtGenreFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (as *ArtStyleQuery) CollectFields(ctx context.Context, satisfies ...string) (*ArtStyleQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return as, nil
+	}
+	if err := as.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return as, nil
+}
+
+func (as *ArtStyleQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	return nil
+}
+
+type artstylePaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ArtStylePaginateOption
+}
+
+func newArtStylePaginateArgs(rv map[string]any) *artstylePaginateArgs {
+	args := &artstylePaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*ArtStyleWhereInput); ok {
+		args.opts = append(args.opts, WithArtStyleFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (a *ArtifactQuery) CollectFields(ctx context.Context, satisfies ...string) (*ArtifactQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -443,6 +581,98 @@ func newAuditLogPaginateArgs(rv map[string]any) *auditlogPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*AuditLogWhereInput); ok {
 		args.opts = append(args.opts, WithAuditLogFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (b *BookQuery) CollectFields(ctx context.Context, satisfies ...string) (*BookQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return b, nil
+	}
+	if err := b.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return b, nil
+}
+
+func (b *BookQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	return nil
+}
+
+type bookPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []BookPaginateOption
+}
+
+func newBookPaginateArgs(rv map[string]any) *bookPaginateArgs {
+	args := &bookPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*BookWhereInput); ok {
+		args.opts = append(args.opts, WithBookFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (bg *BookGenreQuery) CollectFields(ctx context.Context, satisfies ...string) (*BookGenreQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return bg, nil
+	}
+	if err := bg.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return bg, nil
+}
+
+func (bg *BookGenreQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	return nil
+}
+
+type bookgenrePaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []BookGenrePaginateOption
+}
+
+func newBookGenrePaginateArgs(rv map[string]any) *bookgenrePaginateArgs {
+	args := &bookgenrePaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*BookGenreWhereInput); ok {
+		args.opts = append(args.opts, WithBookGenreFilter(v.Filter))
 	}
 	return args
 }
@@ -1131,6 +1361,98 @@ func newHolderPaginateArgs(rv map[string]any) *holderPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*HolderWhereInput); ok {
 		args.opts = append(args.opts, WithHolderFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (k *KeywordQuery) CollectFields(ctx context.Context, satisfies ...string) (*KeywordQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return k, nil
+	}
+	if err := k.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return k, nil
+}
+
+func (k *KeywordQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	return nil
+}
+
+type keywordPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []KeywordPaginateOption
+}
+
+func newKeywordPaginateArgs(rv map[string]any) *keywordPaginateArgs {
+	args := &keywordPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*KeywordWhereInput); ok {
+		args.opts = append(args.opts, WithKeywordFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (l *LibraryQuery) CollectFields(ctx context.Context, satisfies ...string) (*LibraryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return l, nil
+	}
+	if err := l.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return l, nil
+}
+
+func (l *LibraryQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	return nil
+}
+
+type libraryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []LibraryPaginateOption
+}
+
+func newLibraryPaginateArgs(rv map[string]any) *libraryPaginateArgs {
+	args := &libraryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*LibraryWhereInput); ok {
+		args.opts = append(args.opts, WithLibraryFilter(v.Filter))
 	}
 	return args
 }
@@ -2399,6 +2721,52 @@ func newPublicationPaginateArgs(rv map[string]any) *publicationPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*PublicationWhereInput); ok {
 		args.opts = append(args.opts, WithPublicationFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (pu *PublisherQuery) CollectFields(ctx context.Context, satisfies ...string) (*PublisherQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return pu, nil
+	}
+	if err := pu.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return pu, nil
+}
+
+func (pu *PublisherQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	return nil
+}
+
+type publisherPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []PublisherPaginateOption
+}
+
+func newPublisherPaginateArgs(rv map[string]any) *publisherPaginateArgs {
+	args := &publisherPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*PublisherWhereInput); ok {
+		args.opts = append(args.opts, WithPublisherFilter(v.Filter))
 	}
 	return args
 }

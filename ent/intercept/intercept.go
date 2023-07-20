@@ -8,13 +8,20 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/dkrasnovdev/heritage-api/ent"
+	"github.com/dkrasnovdev/heritage-api/ent/art"
+	"github.com/dkrasnovdev/heritage-api/ent/artgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/artstyle"
 	"github.com/dkrasnovdev/heritage-api/ent/auditlog"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
+	"github.com/dkrasnovdev/heritage-api/ent/bookgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/keyword"
+	"github.com/dkrasnovdev/heritage-api/ent/library"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/medium"
@@ -25,6 +32,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
+	"github.com/dkrasnovdev/heritage-api/ent/publisher"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
 	"github.com/dkrasnovdev/heritage-api/ent/set"
 	"github.com/dkrasnovdev/heritage-api/ent/settlement"
@@ -87,6 +95,87 @@ func (f TraverseFunc) Traverse(ctx context.Context, q ent.Query) error {
 	return f(ctx, query)
 }
 
+// The ArtFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ArtFunc func(context.Context, *ent.ArtQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f ArtFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.ArtQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.ArtQuery", q)
+}
+
+// The TraverseArt type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseArt func(context.Context, *ent.ArtQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseArt) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseArt) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.ArtQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.ArtQuery", q)
+}
+
+// The ArtGenreFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ArtGenreFunc func(context.Context, *ent.ArtGenreQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f ArtGenreFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.ArtGenreQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.ArtGenreQuery", q)
+}
+
+// The TraverseArtGenre type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseArtGenre func(context.Context, *ent.ArtGenreQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseArtGenre) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseArtGenre) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.ArtGenreQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.ArtGenreQuery", q)
+}
+
+// The ArtStyleFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ArtStyleFunc func(context.Context, *ent.ArtStyleQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f ArtStyleFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.ArtStyleQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.ArtStyleQuery", q)
+}
+
+// The TraverseArtStyle type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseArtStyle func(context.Context, *ent.ArtStyleQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseArtStyle) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseArtStyle) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.ArtStyleQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.ArtStyleQuery", q)
+}
+
 // The ArtifactFunc type is an adapter to allow the use of ordinary function as a Querier.
 type ArtifactFunc func(context.Context, *ent.ArtifactQuery) (ent.Value, error)
 
@@ -139,6 +228,60 @@ func (f TraverseAuditLog) Traverse(ctx context.Context, q ent.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *ent.AuditLogQuery", q)
+}
+
+// The BookFunc type is an adapter to allow the use of ordinary function as a Querier.
+type BookFunc func(context.Context, *ent.BookQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f BookFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.BookQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.BookQuery", q)
+}
+
+// The TraverseBook type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseBook func(context.Context, *ent.BookQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseBook) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseBook) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.BookQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.BookQuery", q)
+}
+
+// The BookGenreFunc type is an adapter to allow the use of ordinary function as a Querier.
+type BookGenreFunc func(context.Context, *ent.BookGenreQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f BookGenreFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.BookGenreQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.BookGenreQuery", q)
+}
+
+// The TraverseBookGenre type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseBookGenre func(context.Context, *ent.BookGenreQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseBookGenre) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseBookGenre) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.BookGenreQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.BookGenreQuery", q)
 }
 
 // The CategoryFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -274,6 +417,60 @@ func (f TraverseHolder) Traverse(ctx context.Context, q ent.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *ent.HolderQuery", q)
+}
+
+// The KeywordFunc type is an adapter to allow the use of ordinary function as a Querier.
+type KeywordFunc func(context.Context, *ent.KeywordQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f KeywordFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.KeywordQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.KeywordQuery", q)
+}
+
+// The TraverseKeyword type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseKeyword func(context.Context, *ent.KeywordQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseKeyword) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseKeyword) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.KeywordQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.KeywordQuery", q)
+}
+
+// The LibraryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type LibraryFunc func(context.Context, *ent.LibraryQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f LibraryFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.LibraryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.LibraryQuery", q)
+}
+
+// The TraverseLibrary type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseLibrary func(context.Context, *ent.LibraryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseLibrary) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseLibrary) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.LibraryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.LibraryQuery", q)
 }
 
 // The LicenseFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -519,6 +716,33 @@ func (f TraversePublication) Traverse(ctx context.Context, q ent.Query) error {
 	return fmt.Errorf("unexpected query type %T. expect *ent.PublicationQuery", q)
 }
 
+// The PublisherFunc type is an adapter to allow the use of ordinary function as a Querier.
+type PublisherFunc func(context.Context, *ent.PublisherQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f PublisherFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.PublisherQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.PublisherQuery", q)
+}
+
+// The TraversePublisher type is an adapter to allow the use of ordinary function as Traverser.
+type TraversePublisher func(context.Context, *ent.PublisherQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraversePublisher) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraversePublisher) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.PublisherQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.PublisherQuery", q)
+}
+
 // The RegionFunc type is an adapter to allow the use of ordinary function as a Querier.
 type RegionFunc func(context.Context, *ent.RegionQuery) (ent.Value, error)
 
@@ -630,10 +854,20 @@ func (f TraverseTechnique) Traverse(ctx context.Context, q ent.Query) error {
 // NewQuery returns the generic Query interface for the given typed query.
 func NewQuery(q ent.Query) (Query, error) {
 	switch q := q.(type) {
+	case *ent.ArtQuery:
+		return &query[*ent.ArtQuery, predicate.Art, art.OrderOption]{typ: ent.TypeArt, tq: q}, nil
+	case *ent.ArtGenreQuery:
+		return &query[*ent.ArtGenreQuery, predicate.ArtGenre, artgenre.OrderOption]{typ: ent.TypeArtGenre, tq: q}, nil
+	case *ent.ArtStyleQuery:
+		return &query[*ent.ArtStyleQuery, predicate.ArtStyle, artstyle.OrderOption]{typ: ent.TypeArtStyle, tq: q}, nil
 	case *ent.ArtifactQuery:
 		return &query[*ent.ArtifactQuery, predicate.Artifact, artifact.OrderOption]{typ: ent.TypeArtifact, tq: q}, nil
 	case *ent.AuditLogQuery:
 		return &query[*ent.AuditLogQuery, predicate.AuditLog, auditlog.OrderOption]{typ: ent.TypeAuditLog, tq: q}, nil
+	case *ent.BookQuery:
+		return &query[*ent.BookQuery, predicate.Book, book.OrderOption]{typ: ent.TypeBook, tq: q}, nil
+	case *ent.BookGenreQuery:
+		return &query[*ent.BookGenreQuery, predicate.BookGenre, bookgenre.OrderOption]{typ: ent.TypeBookGenre, tq: q}, nil
 	case *ent.CategoryQuery:
 		return &query[*ent.CategoryQuery, predicate.Category, category.OrderOption]{typ: ent.TypeCategory, tq: q}, nil
 	case *ent.CollectionQuery:
@@ -644,6 +878,10 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.DistrictQuery, predicate.District, district.OrderOption]{typ: ent.TypeDistrict, tq: q}, nil
 	case *ent.HolderQuery:
 		return &query[*ent.HolderQuery, predicate.Holder, holder.OrderOption]{typ: ent.TypeHolder, tq: q}, nil
+	case *ent.KeywordQuery:
+		return &query[*ent.KeywordQuery, predicate.Keyword, keyword.OrderOption]{typ: ent.TypeKeyword, tq: q}, nil
+	case *ent.LibraryQuery:
+		return &query[*ent.LibraryQuery, predicate.Library, library.OrderOption]{typ: ent.TypeLibrary, tq: q}, nil
 	case *ent.LicenseQuery:
 		return &query[*ent.LicenseQuery, predicate.License, license.OrderOption]{typ: ent.TypeLicense, tq: q}, nil
 	case *ent.LocationQuery:
@@ -662,6 +900,8 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.ProjectQuery, predicate.Project, project.OrderOption]{typ: ent.TypeProject, tq: q}, nil
 	case *ent.PublicationQuery:
 		return &query[*ent.PublicationQuery, predicate.Publication, publication.OrderOption]{typ: ent.TypePublication, tq: q}, nil
+	case *ent.PublisherQuery:
+		return &query[*ent.PublisherQuery, predicate.Publisher, publisher.OrderOption]{typ: ent.TypePublisher, tq: q}, nil
 	case *ent.RegionQuery:
 		return &query[*ent.RegionQuery, predicate.Region, region.OrderOption]{typ: ent.TypeRegion, tq: q}, nil
 	case *ent.SetQuery:

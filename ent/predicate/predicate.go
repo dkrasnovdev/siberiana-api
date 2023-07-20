@@ -6,11 +6,26 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// Art is the predicate function for art builders.
+type Art func(*sql.Selector)
+
+// ArtGenre is the predicate function for artgenre builders.
+type ArtGenre func(*sql.Selector)
+
+// ArtStyle is the predicate function for artstyle builders.
+type ArtStyle func(*sql.Selector)
+
 // Artifact is the predicate function for artifact builders.
 type Artifact func(*sql.Selector)
 
 // AuditLog is the predicate function for auditlog builders.
 type AuditLog func(*sql.Selector)
+
+// Book is the predicate function for book builders.
+type Book func(*sql.Selector)
+
+// BookGenre is the predicate function for bookgenre builders.
+type BookGenre func(*sql.Selector)
 
 // Category is the predicate function for category builders.
 type Category func(*sql.Selector)
@@ -26,6 +41,12 @@ type District func(*sql.Selector)
 
 // Holder is the predicate function for holder builders.
 type Holder func(*sql.Selector)
+
+// Keyword is the predicate function for keyword builders.
+type Keyword func(*sql.Selector)
+
+// Library is the predicate function for library builders.
+type Library func(*sql.Selector)
 
 // License is the predicate function for license builders.
 type License func(*sql.Selector)
@@ -53,6 +74,9 @@ type Project func(*sql.Selector)
 
 // Publication is the predicate function for publication builders.
 type Publication func(*sql.Selector)
+
+// Publisher is the predicate function for publisher builders.
+type Publisher func(*sql.Selector)
 
 // Region is the predicate function for region builders.
 type Region func(*sql.Selector)

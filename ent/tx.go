@@ -12,10 +12,20 @@ import (
 // Tx is a transactional client that is created by calling Client.Tx().
 type Tx struct {
 	config
+	// Art is the client for interacting with the Art builders.
+	Art *ArtClient
+	// ArtGenre is the client for interacting with the ArtGenre builders.
+	ArtGenre *ArtGenreClient
+	// ArtStyle is the client for interacting with the ArtStyle builders.
+	ArtStyle *ArtStyleClient
 	// Artifact is the client for interacting with the Artifact builders.
 	Artifact *ArtifactClient
 	// AuditLog is the client for interacting with the AuditLog builders.
 	AuditLog *AuditLogClient
+	// Book is the client for interacting with the Book builders.
+	Book *BookClient
+	// BookGenre is the client for interacting with the BookGenre builders.
+	BookGenre *BookGenreClient
 	// Category is the client for interacting with the Category builders.
 	Category *CategoryClient
 	// Collection is the client for interacting with the Collection builders.
@@ -26,6 +36,10 @@ type Tx struct {
 	District *DistrictClient
 	// Holder is the client for interacting with the Holder builders.
 	Holder *HolderClient
+	// Keyword is the client for interacting with the Keyword builders.
+	Keyword *KeywordClient
+	// Library is the client for interacting with the Library builders.
+	Library *LibraryClient
 	// License is the client for interacting with the License builders.
 	License *LicenseClient
 	// Location is the client for interacting with the Location builders.
@@ -44,6 +58,8 @@ type Tx struct {
 	Project *ProjectClient
 	// Publication is the client for interacting with the Publication builders.
 	Publication *PublicationClient
+	// Publisher is the client for interacting with the Publisher builders.
+	Publisher *PublisherClient
 	// Region is the client for interacting with the Region builders.
 	Region *RegionClient
 	// Set is the client for interacting with the Set builders.
@@ -183,13 +199,20 @@ func (tx *Tx) Client() *Client {
 }
 
 func (tx *Tx) init() {
+	tx.Art = NewArtClient(tx.config)
+	tx.ArtGenre = NewArtGenreClient(tx.config)
+	tx.ArtStyle = NewArtStyleClient(tx.config)
 	tx.Artifact = NewArtifactClient(tx.config)
 	tx.AuditLog = NewAuditLogClient(tx.config)
+	tx.Book = NewBookClient(tx.config)
+	tx.BookGenre = NewBookGenreClient(tx.config)
 	tx.Category = NewCategoryClient(tx.config)
 	tx.Collection = NewCollectionClient(tx.config)
 	tx.Culture = NewCultureClient(tx.config)
 	tx.District = NewDistrictClient(tx.config)
 	tx.Holder = NewHolderClient(tx.config)
+	tx.Keyword = NewKeywordClient(tx.config)
+	tx.Library = NewLibraryClient(tx.config)
 	tx.License = NewLicenseClient(tx.config)
 	tx.Location = NewLocationClient(tx.config)
 	tx.Medium = NewMediumClient(tx.config)
@@ -199,6 +222,7 @@ func (tx *Tx) init() {
 	tx.Person = NewPersonClient(tx.config)
 	tx.Project = NewProjectClient(tx.config)
 	tx.Publication = NewPublicationClient(tx.config)
+	tx.Publisher = NewPublisherClient(tx.config)
 	tx.Region = NewRegionClient(tx.config)
 	tx.Set = NewSetClient(tx.config)
 	tx.Settlement = NewSettlementClient(tx.config)
@@ -212,7 +236,7 @@ func (tx *Tx) init() {
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
-// applies a query, for example: Artifact.QueryXXX(), the query will be executed
+// applies a query, for example: Art.QueryXXX(), the query will be executed
 // through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.

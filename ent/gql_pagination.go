@@ -14,13 +14,20 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/errcode"
+	"github.com/dkrasnovdev/heritage-api/ent/art"
+	"github.com/dkrasnovdev/heritage-api/ent/artgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/artstyle"
 	"github.com/dkrasnovdev/heritage-api/ent/auditlog"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
+	"github.com/dkrasnovdev/heritage-api/ent/bookgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/keyword"
+	"github.com/dkrasnovdev/heritage-api/ent/library"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/medium"
@@ -30,6 +37,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
+	"github.com/dkrasnovdev/heritage-api/ent/publisher"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
 	"github.com/dkrasnovdev/heritage-api/ent/set"
 	"github.com/dkrasnovdev/heritage-api/ent/settlement"
@@ -115,6 +123,750 @@ func paginateLimit(first, last *int) int {
 		limit = *last + 1
 	}
 	return limit
+}
+
+// ArtEdge is the edge representation of Art.
+type ArtEdge struct {
+	Node   *Art   `json:"node"`
+	Cursor Cursor `json:"cursor"`
+}
+
+// ArtConnection is the connection containing edges to Art.
+type ArtConnection struct {
+	Edges      []*ArtEdge `json:"edges"`
+	PageInfo   PageInfo   `json:"pageInfo"`
+	TotalCount int        `json:"totalCount"`
+}
+
+func (c *ArtConnection) build(nodes []*Art, pager *artPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *Art
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Art {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Art {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*ArtEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &ArtEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// ArtPaginateOption enables pagination customization.
+type ArtPaginateOption func(*artPager) error
+
+// WithArtOrder configures pagination ordering.
+func WithArtOrder(order *ArtOrder) ArtPaginateOption {
+	if order == nil {
+		order = DefaultArtOrder
+	}
+	o := *order
+	return func(pager *artPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultArtOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithArtFilter configures pagination filter.
+func WithArtFilter(filter func(*ArtQuery) (*ArtQuery, error)) ArtPaginateOption {
+	return func(pager *artPager) error {
+		if filter == nil {
+			return errors.New("ArtQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type artPager struct {
+	reverse bool
+	order   *ArtOrder
+	filter  func(*ArtQuery) (*ArtQuery, error)
+}
+
+func newArtPager(opts []ArtPaginateOption, reverse bool) (*artPager, error) {
+	pager := &artPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultArtOrder
+	}
+	return pager, nil
+}
+
+func (p *artPager) applyFilter(query *ArtQuery) (*ArtQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *artPager) toCursor(a *Art) Cursor {
+	return p.order.Field.toCursor(a)
+}
+
+func (p *artPager) applyCursors(query *ArtQuery, after, before *Cursor) (*ArtQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultArtOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *artPager) applyOrder(query *ArtQuery) *ArtQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultArtOrder.Field {
+		query = query.Order(DefaultArtOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *artPager) orderExpr(query *ArtQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultArtOrder.Field {
+			b.Comma().Ident(DefaultArtOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Art.
+func (a *ArtQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...ArtPaginateOption,
+) (*ArtConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newArtPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if a, err = pager.applyFilter(a); err != nil {
+		return nil, err
+	}
+	conn := &ArtConnection{Edges: []*ArtEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := a.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if a, err = pager.applyCursors(a, after, before); err != nil {
+		return nil, err
+	}
+	if limit := paginateLimit(first, last); limit != 0 {
+		a.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := a.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	a = pager.applyOrder(a)
+	nodes, err := a.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// ArtOrderField defines the ordering field of Art.
+type ArtOrderField struct {
+	// Value extracts the ordering value from the given Art.
+	Value    func(*Art) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) art.OrderOption
+	toCursor func(*Art) Cursor
+}
+
+// ArtOrder defines the ordering of Art.
+type ArtOrder struct {
+	Direction OrderDirection `json:"direction"`
+	Field     *ArtOrderField `json:"field"`
+}
+
+// DefaultArtOrder is the default ordering of Art.
+var DefaultArtOrder = &ArtOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &ArtOrderField{
+		Value: func(a *Art) (ent.Value, error) {
+			return a.ID, nil
+		},
+		column: art.FieldID,
+		toTerm: art.ByID,
+		toCursor: func(a *Art) Cursor {
+			return Cursor{ID: a.ID}
+		},
+	},
+}
+
+// ToEdge converts Art into ArtEdge.
+func (a *Art) ToEdge(order *ArtOrder) *ArtEdge {
+	if order == nil {
+		order = DefaultArtOrder
+	}
+	return &ArtEdge{
+		Node:   a,
+		Cursor: order.Field.toCursor(a),
+	}
+}
+
+// ArtGenreEdge is the edge representation of ArtGenre.
+type ArtGenreEdge struct {
+	Node   *ArtGenre `json:"node"`
+	Cursor Cursor    `json:"cursor"`
+}
+
+// ArtGenreConnection is the connection containing edges to ArtGenre.
+type ArtGenreConnection struct {
+	Edges      []*ArtGenreEdge `json:"edges"`
+	PageInfo   PageInfo        `json:"pageInfo"`
+	TotalCount int             `json:"totalCount"`
+}
+
+func (c *ArtGenreConnection) build(nodes []*ArtGenre, pager *artgenrePager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *ArtGenre
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *ArtGenre {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *ArtGenre {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*ArtGenreEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &ArtGenreEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// ArtGenrePaginateOption enables pagination customization.
+type ArtGenrePaginateOption func(*artgenrePager) error
+
+// WithArtGenreOrder configures pagination ordering.
+func WithArtGenreOrder(order *ArtGenreOrder) ArtGenrePaginateOption {
+	if order == nil {
+		order = DefaultArtGenreOrder
+	}
+	o := *order
+	return func(pager *artgenrePager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultArtGenreOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithArtGenreFilter configures pagination filter.
+func WithArtGenreFilter(filter func(*ArtGenreQuery) (*ArtGenreQuery, error)) ArtGenrePaginateOption {
+	return func(pager *artgenrePager) error {
+		if filter == nil {
+			return errors.New("ArtGenreQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type artgenrePager struct {
+	reverse bool
+	order   *ArtGenreOrder
+	filter  func(*ArtGenreQuery) (*ArtGenreQuery, error)
+}
+
+func newArtGenrePager(opts []ArtGenrePaginateOption, reverse bool) (*artgenrePager, error) {
+	pager := &artgenrePager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultArtGenreOrder
+	}
+	return pager, nil
+}
+
+func (p *artgenrePager) applyFilter(query *ArtGenreQuery) (*ArtGenreQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *artgenrePager) toCursor(ag *ArtGenre) Cursor {
+	return p.order.Field.toCursor(ag)
+}
+
+func (p *artgenrePager) applyCursors(query *ArtGenreQuery, after, before *Cursor) (*ArtGenreQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultArtGenreOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *artgenrePager) applyOrder(query *ArtGenreQuery) *ArtGenreQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultArtGenreOrder.Field {
+		query = query.Order(DefaultArtGenreOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *artgenrePager) orderExpr(query *ArtGenreQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultArtGenreOrder.Field {
+			b.Comma().Ident(DefaultArtGenreOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to ArtGenre.
+func (ag *ArtGenreQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...ArtGenrePaginateOption,
+) (*ArtGenreConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newArtGenrePager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if ag, err = pager.applyFilter(ag); err != nil {
+		return nil, err
+	}
+	conn := &ArtGenreConnection{Edges: []*ArtGenreEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := ag.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if ag, err = pager.applyCursors(ag, after, before); err != nil {
+		return nil, err
+	}
+	if limit := paginateLimit(first, last); limit != 0 {
+		ag.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := ag.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	ag = pager.applyOrder(ag)
+	nodes, err := ag.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// ArtGenreOrderField defines the ordering field of ArtGenre.
+type ArtGenreOrderField struct {
+	// Value extracts the ordering value from the given ArtGenre.
+	Value    func(*ArtGenre) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) artgenre.OrderOption
+	toCursor func(*ArtGenre) Cursor
+}
+
+// ArtGenreOrder defines the ordering of ArtGenre.
+type ArtGenreOrder struct {
+	Direction OrderDirection      `json:"direction"`
+	Field     *ArtGenreOrderField `json:"field"`
+}
+
+// DefaultArtGenreOrder is the default ordering of ArtGenre.
+var DefaultArtGenreOrder = &ArtGenreOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &ArtGenreOrderField{
+		Value: func(ag *ArtGenre) (ent.Value, error) {
+			return ag.ID, nil
+		},
+		column: artgenre.FieldID,
+		toTerm: artgenre.ByID,
+		toCursor: func(ag *ArtGenre) Cursor {
+			return Cursor{ID: ag.ID}
+		},
+	},
+}
+
+// ToEdge converts ArtGenre into ArtGenreEdge.
+func (ag *ArtGenre) ToEdge(order *ArtGenreOrder) *ArtGenreEdge {
+	if order == nil {
+		order = DefaultArtGenreOrder
+	}
+	return &ArtGenreEdge{
+		Node:   ag,
+		Cursor: order.Field.toCursor(ag),
+	}
+}
+
+// ArtStyleEdge is the edge representation of ArtStyle.
+type ArtStyleEdge struct {
+	Node   *ArtStyle `json:"node"`
+	Cursor Cursor    `json:"cursor"`
+}
+
+// ArtStyleConnection is the connection containing edges to ArtStyle.
+type ArtStyleConnection struct {
+	Edges      []*ArtStyleEdge `json:"edges"`
+	PageInfo   PageInfo        `json:"pageInfo"`
+	TotalCount int             `json:"totalCount"`
+}
+
+func (c *ArtStyleConnection) build(nodes []*ArtStyle, pager *artstylePager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *ArtStyle
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *ArtStyle {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *ArtStyle {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*ArtStyleEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &ArtStyleEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// ArtStylePaginateOption enables pagination customization.
+type ArtStylePaginateOption func(*artstylePager) error
+
+// WithArtStyleOrder configures pagination ordering.
+func WithArtStyleOrder(order *ArtStyleOrder) ArtStylePaginateOption {
+	if order == nil {
+		order = DefaultArtStyleOrder
+	}
+	o := *order
+	return func(pager *artstylePager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultArtStyleOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithArtStyleFilter configures pagination filter.
+func WithArtStyleFilter(filter func(*ArtStyleQuery) (*ArtStyleQuery, error)) ArtStylePaginateOption {
+	return func(pager *artstylePager) error {
+		if filter == nil {
+			return errors.New("ArtStyleQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type artstylePager struct {
+	reverse bool
+	order   *ArtStyleOrder
+	filter  func(*ArtStyleQuery) (*ArtStyleQuery, error)
+}
+
+func newArtStylePager(opts []ArtStylePaginateOption, reverse bool) (*artstylePager, error) {
+	pager := &artstylePager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultArtStyleOrder
+	}
+	return pager, nil
+}
+
+func (p *artstylePager) applyFilter(query *ArtStyleQuery) (*ArtStyleQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *artstylePager) toCursor(as *ArtStyle) Cursor {
+	return p.order.Field.toCursor(as)
+}
+
+func (p *artstylePager) applyCursors(query *ArtStyleQuery, after, before *Cursor) (*ArtStyleQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultArtStyleOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *artstylePager) applyOrder(query *ArtStyleQuery) *ArtStyleQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultArtStyleOrder.Field {
+		query = query.Order(DefaultArtStyleOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *artstylePager) orderExpr(query *ArtStyleQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultArtStyleOrder.Field {
+			b.Comma().Ident(DefaultArtStyleOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to ArtStyle.
+func (as *ArtStyleQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...ArtStylePaginateOption,
+) (*ArtStyleConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newArtStylePager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if as, err = pager.applyFilter(as); err != nil {
+		return nil, err
+	}
+	conn := &ArtStyleConnection{Edges: []*ArtStyleEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := as.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if as, err = pager.applyCursors(as, after, before); err != nil {
+		return nil, err
+	}
+	if limit := paginateLimit(first, last); limit != 0 {
+		as.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := as.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	as = pager.applyOrder(as)
+	nodes, err := as.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// ArtStyleOrderField defines the ordering field of ArtStyle.
+type ArtStyleOrderField struct {
+	// Value extracts the ordering value from the given ArtStyle.
+	Value    func(*ArtStyle) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) artstyle.OrderOption
+	toCursor func(*ArtStyle) Cursor
+}
+
+// ArtStyleOrder defines the ordering of ArtStyle.
+type ArtStyleOrder struct {
+	Direction OrderDirection      `json:"direction"`
+	Field     *ArtStyleOrderField `json:"field"`
+}
+
+// DefaultArtStyleOrder is the default ordering of ArtStyle.
+var DefaultArtStyleOrder = &ArtStyleOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &ArtStyleOrderField{
+		Value: func(as *ArtStyle) (ent.Value, error) {
+			return as.ID, nil
+		},
+		column: artstyle.FieldID,
+		toTerm: artstyle.ByID,
+		toCursor: func(as *ArtStyle) Cursor {
+			return Cursor{ID: as.ID}
+		},
+	},
+}
+
+// ToEdge converts ArtStyle into ArtStyleEdge.
+func (as *ArtStyle) ToEdge(order *ArtStyleOrder) *ArtStyleEdge {
+	if order == nil {
+		order = DefaultArtStyleOrder
+	}
+	return &ArtStyleEdge{
+		Node:   as,
+		Cursor: order.Field.toCursor(as),
+	}
 }
 
 // ArtifactEdge is the edge representation of Artifact.
@@ -794,6 +1546,502 @@ func (al *AuditLog) ToEdge(order *AuditLogOrder) *AuditLogEdge {
 	return &AuditLogEdge{
 		Node:   al,
 		Cursor: order.Field.toCursor(al),
+	}
+}
+
+// BookEdge is the edge representation of Book.
+type BookEdge struct {
+	Node   *Book  `json:"node"`
+	Cursor Cursor `json:"cursor"`
+}
+
+// BookConnection is the connection containing edges to Book.
+type BookConnection struct {
+	Edges      []*BookEdge `json:"edges"`
+	PageInfo   PageInfo    `json:"pageInfo"`
+	TotalCount int         `json:"totalCount"`
+}
+
+func (c *BookConnection) build(nodes []*Book, pager *bookPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *Book
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Book {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Book {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*BookEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &BookEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// BookPaginateOption enables pagination customization.
+type BookPaginateOption func(*bookPager) error
+
+// WithBookOrder configures pagination ordering.
+func WithBookOrder(order *BookOrder) BookPaginateOption {
+	if order == nil {
+		order = DefaultBookOrder
+	}
+	o := *order
+	return func(pager *bookPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultBookOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithBookFilter configures pagination filter.
+func WithBookFilter(filter func(*BookQuery) (*BookQuery, error)) BookPaginateOption {
+	return func(pager *bookPager) error {
+		if filter == nil {
+			return errors.New("BookQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type bookPager struct {
+	reverse bool
+	order   *BookOrder
+	filter  func(*BookQuery) (*BookQuery, error)
+}
+
+func newBookPager(opts []BookPaginateOption, reverse bool) (*bookPager, error) {
+	pager := &bookPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultBookOrder
+	}
+	return pager, nil
+}
+
+func (p *bookPager) applyFilter(query *BookQuery) (*BookQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *bookPager) toCursor(b *Book) Cursor {
+	return p.order.Field.toCursor(b)
+}
+
+func (p *bookPager) applyCursors(query *BookQuery, after, before *Cursor) (*BookQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultBookOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *bookPager) applyOrder(query *BookQuery) *BookQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultBookOrder.Field {
+		query = query.Order(DefaultBookOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *bookPager) orderExpr(query *BookQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultBookOrder.Field {
+			b.Comma().Ident(DefaultBookOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Book.
+func (b *BookQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...BookPaginateOption,
+) (*BookConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newBookPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if b, err = pager.applyFilter(b); err != nil {
+		return nil, err
+	}
+	conn := &BookConnection{Edges: []*BookEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := b.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if b, err = pager.applyCursors(b, after, before); err != nil {
+		return nil, err
+	}
+	if limit := paginateLimit(first, last); limit != 0 {
+		b.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := b.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	b = pager.applyOrder(b)
+	nodes, err := b.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// BookOrderField defines the ordering field of Book.
+type BookOrderField struct {
+	// Value extracts the ordering value from the given Book.
+	Value    func(*Book) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) book.OrderOption
+	toCursor func(*Book) Cursor
+}
+
+// BookOrder defines the ordering of Book.
+type BookOrder struct {
+	Direction OrderDirection  `json:"direction"`
+	Field     *BookOrderField `json:"field"`
+}
+
+// DefaultBookOrder is the default ordering of Book.
+var DefaultBookOrder = &BookOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &BookOrderField{
+		Value: func(b *Book) (ent.Value, error) {
+			return b.ID, nil
+		},
+		column: book.FieldID,
+		toTerm: book.ByID,
+		toCursor: func(b *Book) Cursor {
+			return Cursor{ID: b.ID}
+		},
+	},
+}
+
+// ToEdge converts Book into BookEdge.
+func (b *Book) ToEdge(order *BookOrder) *BookEdge {
+	if order == nil {
+		order = DefaultBookOrder
+	}
+	return &BookEdge{
+		Node:   b,
+		Cursor: order.Field.toCursor(b),
+	}
+}
+
+// BookGenreEdge is the edge representation of BookGenre.
+type BookGenreEdge struct {
+	Node   *BookGenre `json:"node"`
+	Cursor Cursor     `json:"cursor"`
+}
+
+// BookGenreConnection is the connection containing edges to BookGenre.
+type BookGenreConnection struct {
+	Edges      []*BookGenreEdge `json:"edges"`
+	PageInfo   PageInfo         `json:"pageInfo"`
+	TotalCount int              `json:"totalCount"`
+}
+
+func (c *BookGenreConnection) build(nodes []*BookGenre, pager *bookgenrePager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *BookGenre
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *BookGenre {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *BookGenre {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*BookGenreEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &BookGenreEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// BookGenrePaginateOption enables pagination customization.
+type BookGenrePaginateOption func(*bookgenrePager) error
+
+// WithBookGenreOrder configures pagination ordering.
+func WithBookGenreOrder(order *BookGenreOrder) BookGenrePaginateOption {
+	if order == nil {
+		order = DefaultBookGenreOrder
+	}
+	o := *order
+	return func(pager *bookgenrePager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultBookGenreOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithBookGenreFilter configures pagination filter.
+func WithBookGenreFilter(filter func(*BookGenreQuery) (*BookGenreQuery, error)) BookGenrePaginateOption {
+	return func(pager *bookgenrePager) error {
+		if filter == nil {
+			return errors.New("BookGenreQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type bookgenrePager struct {
+	reverse bool
+	order   *BookGenreOrder
+	filter  func(*BookGenreQuery) (*BookGenreQuery, error)
+}
+
+func newBookGenrePager(opts []BookGenrePaginateOption, reverse bool) (*bookgenrePager, error) {
+	pager := &bookgenrePager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultBookGenreOrder
+	}
+	return pager, nil
+}
+
+func (p *bookgenrePager) applyFilter(query *BookGenreQuery) (*BookGenreQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *bookgenrePager) toCursor(bg *BookGenre) Cursor {
+	return p.order.Field.toCursor(bg)
+}
+
+func (p *bookgenrePager) applyCursors(query *BookGenreQuery, after, before *Cursor) (*BookGenreQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultBookGenreOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *bookgenrePager) applyOrder(query *BookGenreQuery) *BookGenreQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultBookGenreOrder.Field {
+		query = query.Order(DefaultBookGenreOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *bookgenrePager) orderExpr(query *BookGenreQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultBookGenreOrder.Field {
+			b.Comma().Ident(DefaultBookGenreOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to BookGenre.
+func (bg *BookGenreQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...BookGenrePaginateOption,
+) (*BookGenreConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newBookGenrePager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if bg, err = pager.applyFilter(bg); err != nil {
+		return nil, err
+	}
+	conn := &BookGenreConnection{Edges: []*BookGenreEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := bg.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if bg, err = pager.applyCursors(bg, after, before); err != nil {
+		return nil, err
+	}
+	if limit := paginateLimit(first, last); limit != 0 {
+		bg.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := bg.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	bg = pager.applyOrder(bg)
+	nodes, err := bg.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// BookGenreOrderField defines the ordering field of BookGenre.
+type BookGenreOrderField struct {
+	// Value extracts the ordering value from the given BookGenre.
+	Value    func(*BookGenre) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) bookgenre.OrderOption
+	toCursor func(*BookGenre) Cursor
+}
+
+// BookGenreOrder defines the ordering of BookGenre.
+type BookGenreOrder struct {
+	Direction OrderDirection       `json:"direction"`
+	Field     *BookGenreOrderField `json:"field"`
+}
+
+// DefaultBookGenreOrder is the default ordering of BookGenre.
+var DefaultBookGenreOrder = &BookGenreOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &BookGenreOrderField{
+		Value: func(bg *BookGenre) (ent.Value, error) {
+			return bg.ID, nil
+		},
+		column: bookgenre.FieldID,
+		toTerm: bookgenre.ByID,
+		toCursor: func(bg *BookGenre) Cursor {
+			return Cursor{ID: bg.ID}
+		},
+	},
+}
+
+// ToEdge converts BookGenre into BookGenreEdge.
+func (bg *BookGenre) ToEdge(order *BookGenreOrder) *BookGenreEdge {
+	if order == nil {
+		order = DefaultBookGenreOrder
+	}
+	return &BookGenreEdge{
+		Node:   bg,
+		Cursor: order.Field.toCursor(bg),
 	}
 }
 
@@ -2539,6 +3787,502 @@ func (h *Holder) ToEdge(order *HolderOrder) *HolderEdge {
 	return &HolderEdge{
 		Node:   h,
 		Cursor: order.Field.toCursor(h),
+	}
+}
+
+// KeywordEdge is the edge representation of Keyword.
+type KeywordEdge struct {
+	Node   *Keyword `json:"node"`
+	Cursor Cursor   `json:"cursor"`
+}
+
+// KeywordConnection is the connection containing edges to Keyword.
+type KeywordConnection struct {
+	Edges      []*KeywordEdge `json:"edges"`
+	PageInfo   PageInfo       `json:"pageInfo"`
+	TotalCount int            `json:"totalCount"`
+}
+
+func (c *KeywordConnection) build(nodes []*Keyword, pager *keywordPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *Keyword
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Keyword {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Keyword {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*KeywordEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &KeywordEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// KeywordPaginateOption enables pagination customization.
+type KeywordPaginateOption func(*keywordPager) error
+
+// WithKeywordOrder configures pagination ordering.
+func WithKeywordOrder(order *KeywordOrder) KeywordPaginateOption {
+	if order == nil {
+		order = DefaultKeywordOrder
+	}
+	o := *order
+	return func(pager *keywordPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultKeywordOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithKeywordFilter configures pagination filter.
+func WithKeywordFilter(filter func(*KeywordQuery) (*KeywordQuery, error)) KeywordPaginateOption {
+	return func(pager *keywordPager) error {
+		if filter == nil {
+			return errors.New("KeywordQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type keywordPager struct {
+	reverse bool
+	order   *KeywordOrder
+	filter  func(*KeywordQuery) (*KeywordQuery, error)
+}
+
+func newKeywordPager(opts []KeywordPaginateOption, reverse bool) (*keywordPager, error) {
+	pager := &keywordPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultKeywordOrder
+	}
+	return pager, nil
+}
+
+func (p *keywordPager) applyFilter(query *KeywordQuery) (*KeywordQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *keywordPager) toCursor(k *Keyword) Cursor {
+	return p.order.Field.toCursor(k)
+}
+
+func (p *keywordPager) applyCursors(query *KeywordQuery, after, before *Cursor) (*KeywordQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultKeywordOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *keywordPager) applyOrder(query *KeywordQuery) *KeywordQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultKeywordOrder.Field {
+		query = query.Order(DefaultKeywordOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *keywordPager) orderExpr(query *KeywordQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultKeywordOrder.Field {
+			b.Comma().Ident(DefaultKeywordOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Keyword.
+func (k *KeywordQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...KeywordPaginateOption,
+) (*KeywordConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newKeywordPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if k, err = pager.applyFilter(k); err != nil {
+		return nil, err
+	}
+	conn := &KeywordConnection{Edges: []*KeywordEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := k.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if k, err = pager.applyCursors(k, after, before); err != nil {
+		return nil, err
+	}
+	if limit := paginateLimit(first, last); limit != 0 {
+		k.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := k.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	k = pager.applyOrder(k)
+	nodes, err := k.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// KeywordOrderField defines the ordering field of Keyword.
+type KeywordOrderField struct {
+	// Value extracts the ordering value from the given Keyword.
+	Value    func(*Keyword) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) keyword.OrderOption
+	toCursor func(*Keyword) Cursor
+}
+
+// KeywordOrder defines the ordering of Keyword.
+type KeywordOrder struct {
+	Direction OrderDirection     `json:"direction"`
+	Field     *KeywordOrderField `json:"field"`
+}
+
+// DefaultKeywordOrder is the default ordering of Keyword.
+var DefaultKeywordOrder = &KeywordOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &KeywordOrderField{
+		Value: func(k *Keyword) (ent.Value, error) {
+			return k.ID, nil
+		},
+		column: keyword.FieldID,
+		toTerm: keyword.ByID,
+		toCursor: func(k *Keyword) Cursor {
+			return Cursor{ID: k.ID}
+		},
+	},
+}
+
+// ToEdge converts Keyword into KeywordEdge.
+func (k *Keyword) ToEdge(order *KeywordOrder) *KeywordEdge {
+	if order == nil {
+		order = DefaultKeywordOrder
+	}
+	return &KeywordEdge{
+		Node:   k,
+		Cursor: order.Field.toCursor(k),
+	}
+}
+
+// LibraryEdge is the edge representation of Library.
+type LibraryEdge struct {
+	Node   *Library `json:"node"`
+	Cursor Cursor   `json:"cursor"`
+}
+
+// LibraryConnection is the connection containing edges to Library.
+type LibraryConnection struct {
+	Edges      []*LibraryEdge `json:"edges"`
+	PageInfo   PageInfo       `json:"pageInfo"`
+	TotalCount int            `json:"totalCount"`
+}
+
+func (c *LibraryConnection) build(nodes []*Library, pager *libraryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *Library
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Library {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Library {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*LibraryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &LibraryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// LibraryPaginateOption enables pagination customization.
+type LibraryPaginateOption func(*libraryPager) error
+
+// WithLibraryOrder configures pagination ordering.
+func WithLibraryOrder(order *LibraryOrder) LibraryPaginateOption {
+	if order == nil {
+		order = DefaultLibraryOrder
+	}
+	o := *order
+	return func(pager *libraryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultLibraryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithLibraryFilter configures pagination filter.
+func WithLibraryFilter(filter func(*LibraryQuery) (*LibraryQuery, error)) LibraryPaginateOption {
+	return func(pager *libraryPager) error {
+		if filter == nil {
+			return errors.New("LibraryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type libraryPager struct {
+	reverse bool
+	order   *LibraryOrder
+	filter  func(*LibraryQuery) (*LibraryQuery, error)
+}
+
+func newLibraryPager(opts []LibraryPaginateOption, reverse bool) (*libraryPager, error) {
+	pager := &libraryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultLibraryOrder
+	}
+	return pager, nil
+}
+
+func (p *libraryPager) applyFilter(query *LibraryQuery) (*LibraryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *libraryPager) toCursor(l *Library) Cursor {
+	return p.order.Field.toCursor(l)
+}
+
+func (p *libraryPager) applyCursors(query *LibraryQuery, after, before *Cursor) (*LibraryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultLibraryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *libraryPager) applyOrder(query *LibraryQuery) *LibraryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultLibraryOrder.Field {
+		query = query.Order(DefaultLibraryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *libraryPager) orderExpr(query *LibraryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultLibraryOrder.Field {
+			b.Comma().Ident(DefaultLibraryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Library.
+func (l *LibraryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...LibraryPaginateOption,
+) (*LibraryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newLibraryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if l, err = pager.applyFilter(l); err != nil {
+		return nil, err
+	}
+	conn := &LibraryConnection{Edges: []*LibraryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := l.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if l, err = pager.applyCursors(l, after, before); err != nil {
+		return nil, err
+	}
+	if limit := paginateLimit(first, last); limit != 0 {
+		l.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := l.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	l = pager.applyOrder(l)
+	nodes, err := l.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// LibraryOrderField defines the ordering field of Library.
+type LibraryOrderField struct {
+	// Value extracts the ordering value from the given Library.
+	Value    func(*Library) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) library.OrderOption
+	toCursor func(*Library) Cursor
+}
+
+// LibraryOrder defines the ordering of Library.
+type LibraryOrder struct {
+	Direction OrderDirection     `json:"direction"`
+	Field     *LibraryOrderField `json:"field"`
+}
+
+// DefaultLibraryOrder is the default ordering of Library.
+var DefaultLibraryOrder = &LibraryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &LibraryOrderField{
+		Value: func(l *Library) (ent.Value, error) {
+			return l.ID, nil
+		},
+		column: library.FieldID,
+		toTerm: library.ByID,
+		toCursor: func(l *Library) Cursor {
+			return Cursor{ID: l.ID}
+		},
+	},
+}
+
+// ToEdge converts Library into LibraryEdge.
+func (l *Library) ToEdge(order *LibraryOrder) *LibraryEdge {
+	if order == nil {
+		order = DefaultLibraryOrder
+	}
+	return &LibraryEdge{
+		Node:   l,
+		Cursor: order.Field.toCursor(l),
 	}
 }
 
@@ -5642,6 +7386,254 @@ func (pu *Publication) ToEdge(order *PublicationOrder) *PublicationEdge {
 		order = DefaultPublicationOrder
 	}
 	return &PublicationEdge{
+		Node:   pu,
+		Cursor: order.Field.toCursor(pu),
+	}
+}
+
+// PublisherEdge is the edge representation of Publisher.
+type PublisherEdge struct {
+	Node   *Publisher `json:"node"`
+	Cursor Cursor     `json:"cursor"`
+}
+
+// PublisherConnection is the connection containing edges to Publisher.
+type PublisherConnection struct {
+	Edges      []*PublisherEdge `json:"edges"`
+	PageInfo   PageInfo         `json:"pageInfo"`
+	TotalCount int              `json:"totalCount"`
+}
+
+func (c *PublisherConnection) build(nodes []*Publisher, pager *publisherPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *Publisher
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Publisher {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Publisher {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*PublisherEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &PublisherEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// PublisherPaginateOption enables pagination customization.
+type PublisherPaginateOption func(*publisherPager) error
+
+// WithPublisherOrder configures pagination ordering.
+func WithPublisherOrder(order *PublisherOrder) PublisherPaginateOption {
+	if order == nil {
+		order = DefaultPublisherOrder
+	}
+	o := *order
+	return func(pager *publisherPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultPublisherOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithPublisherFilter configures pagination filter.
+func WithPublisherFilter(filter func(*PublisherQuery) (*PublisherQuery, error)) PublisherPaginateOption {
+	return func(pager *publisherPager) error {
+		if filter == nil {
+			return errors.New("PublisherQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type publisherPager struct {
+	reverse bool
+	order   *PublisherOrder
+	filter  func(*PublisherQuery) (*PublisherQuery, error)
+}
+
+func newPublisherPager(opts []PublisherPaginateOption, reverse bool) (*publisherPager, error) {
+	pager := &publisherPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultPublisherOrder
+	}
+	return pager, nil
+}
+
+func (p *publisherPager) applyFilter(query *PublisherQuery) (*PublisherQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *publisherPager) toCursor(pu *Publisher) Cursor {
+	return p.order.Field.toCursor(pu)
+}
+
+func (p *publisherPager) applyCursors(query *PublisherQuery, after, before *Cursor) (*PublisherQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultPublisherOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *publisherPager) applyOrder(query *PublisherQuery) *PublisherQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultPublisherOrder.Field {
+		query = query.Order(DefaultPublisherOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *publisherPager) orderExpr(query *PublisherQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultPublisherOrder.Field {
+			b.Comma().Ident(DefaultPublisherOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Publisher.
+func (pu *PublisherQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...PublisherPaginateOption,
+) (*PublisherConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newPublisherPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if pu, err = pager.applyFilter(pu); err != nil {
+		return nil, err
+	}
+	conn := &PublisherConnection{Edges: []*PublisherEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := pu.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if pu, err = pager.applyCursors(pu, after, before); err != nil {
+		return nil, err
+	}
+	if limit := paginateLimit(first, last); limit != 0 {
+		pu.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := pu.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	pu = pager.applyOrder(pu)
+	nodes, err := pu.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// PublisherOrderField defines the ordering field of Publisher.
+type PublisherOrderField struct {
+	// Value extracts the ordering value from the given Publisher.
+	Value    func(*Publisher) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) publisher.OrderOption
+	toCursor func(*Publisher) Cursor
+}
+
+// PublisherOrder defines the ordering of Publisher.
+type PublisherOrder struct {
+	Direction OrderDirection       `json:"direction"`
+	Field     *PublisherOrderField `json:"field"`
+}
+
+// DefaultPublisherOrder is the default ordering of Publisher.
+var DefaultPublisherOrder = &PublisherOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &PublisherOrderField{
+		Value: func(pu *Publisher) (ent.Value, error) {
+			return pu.ID, nil
+		},
+		column: publisher.FieldID,
+		toTerm: publisher.ByID,
+		toCursor: func(pu *Publisher) Cursor {
+			return Cursor{ID: pu.ID}
+		},
+	},
+}
+
+// ToEdge converts Publisher into PublisherEdge.
+func (pu *Publisher) ToEdge(order *PublisherOrder) *PublisherEdge {
+	if order == nil {
+		order = DefaultPublisherOrder
+	}
+	return &PublisherEdge{
 		Node:   pu,
 		Cursor: order.Field.toCursor(pu),
 	}
