@@ -36,6 +36,9 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
 	"github.com/dkrasnovdev/heritage-api/ent/publisher"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
@@ -93,6 +96,12 @@ type Client struct {
 	Person *PersonClient
 	// Project is the client for interacting with the Project builders.
 	Project *ProjectClient
+	// ProtectedArea is the client for interacting with the ProtectedArea builders.
+	ProtectedArea *ProtectedAreaClient
+	// ProtectedAreaCategory is the client for interacting with the ProtectedAreaCategory builders.
+	ProtectedAreaCategory *ProtectedAreaCategoryClient
+	// ProtectedAreaPicture is the client for interacting with the ProtectedAreaPicture builders.
+	ProtectedAreaPicture *ProtectedAreaPictureClient
 	// Publication is the client for interacting with the Publication builders.
 	Publication *PublicationClient
 	// Publisher is the client for interacting with the Publisher builders.
@@ -142,6 +151,9 @@ func (c *Client) init() {
 	c.Organization = NewOrganizationClient(c.config)
 	c.Person = NewPersonClient(c.config)
 	c.Project = NewProjectClient(c.config)
+	c.ProtectedArea = NewProtectedAreaClient(c.config)
+	c.ProtectedAreaCategory = NewProtectedAreaCategoryClient(c.config)
+	c.ProtectedAreaPicture = NewProtectedAreaPictureClient(c.config)
 	c.Publication = NewPublicationClient(c.config)
 	c.Publisher = NewPublisherClient(c.config)
 	c.Region = NewRegionClient(c.config)
@@ -228,36 +240,39 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:          ctx,
-		config:       cfg,
-		Art:          NewArtClient(cfg),
-		ArtGenre:     NewArtGenreClient(cfg),
-		ArtStyle:     NewArtStyleClient(cfg),
-		Artifact:     NewArtifactClient(cfg),
-		AuditLog:     NewAuditLogClient(cfg),
-		Book:         NewBookClient(cfg),
-		BookGenre:    NewBookGenreClient(cfg),
-		Category:     NewCategoryClient(cfg),
-		Collection:   NewCollectionClient(cfg),
-		Culture:      NewCultureClient(cfg),
-		District:     NewDistrictClient(cfg),
-		Holder:       NewHolderClient(cfg),
-		Keyword:      NewKeywordClient(cfg),
-		Library:      NewLibraryClient(cfg),
-		License:      NewLicenseClient(cfg),
-		Location:     NewLocationClient(cfg),
-		Medium:       NewMediumClient(cfg),
-		Model:        NewModelClient(cfg),
-		Monument:     NewMonumentClient(cfg),
-		Organization: NewOrganizationClient(cfg),
-		Person:       NewPersonClient(cfg),
-		Project:      NewProjectClient(cfg),
-		Publication:  NewPublicationClient(cfg),
-		Publisher:    NewPublisherClient(cfg),
-		Region:       NewRegionClient(cfg),
-		Set:          NewSetClient(cfg),
-		Settlement:   NewSettlementClient(cfg),
-		Technique:    NewTechniqueClient(cfg),
+		ctx:                   ctx,
+		config:                cfg,
+		Art:                   NewArtClient(cfg),
+		ArtGenre:              NewArtGenreClient(cfg),
+		ArtStyle:              NewArtStyleClient(cfg),
+		Artifact:              NewArtifactClient(cfg),
+		AuditLog:              NewAuditLogClient(cfg),
+		Book:                  NewBookClient(cfg),
+		BookGenre:             NewBookGenreClient(cfg),
+		Category:              NewCategoryClient(cfg),
+		Collection:            NewCollectionClient(cfg),
+		Culture:               NewCultureClient(cfg),
+		District:              NewDistrictClient(cfg),
+		Holder:                NewHolderClient(cfg),
+		Keyword:               NewKeywordClient(cfg),
+		Library:               NewLibraryClient(cfg),
+		License:               NewLicenseClient(cfg),
+		Location:              NewLocationClient(cfg),
+		Medium:                NewMediumClient(cfg),
+		Model:                 NewModelClient(cfg),
+		Monument:              NewMonumentClient(cfg),
+		Organization:          NewOrganizationClient(cfg),
+		Person:                NewPersonClient(cfg),
+		Project:               NewProjectClient(cfg),
+		ProtectedArea:         NewProtectedAreaClient(cfg),
+		ProtectedAreaCategory: NewProtectedAreaCategoryClient(cfg),
+		ProtectedAreaPicture:  NewProtectedAreaPictureClient(cfg),
+		Publication:           NewPublicationClient(cfg),
+		Publisher:             NewPublisherClient(cfg),
+		Region:                NewRegionClient(cfg),
+		Set:                   NewSetClient(cfg),
+		Settlement:            NewSettlementClient(cfg),
+		Technique:             NewTechniqueClient(cfg),
 	}, nil
 }
 
@@ -275,36 +290,39 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:          ctx,
-		config:       cfg,
-		Art:          NewArtClient(cfg),
-		ArtGenre:     NewArtGenreClient(cfg),
-		ArtStyle:     NewArtStyleClient(cfg),
-		Artifact:     NewArtifactClient(cfg),
-		AuditLog:     NewAuditLogClient(cfg),
-		Book:         NewBookClient(cfg),
-		BookGenre:    NewBookGenreClient(cfg),
-		Category:     NewCategoryClient(cfg),
-		Collection:   NewCollectionClient(cfg),
-		Culture:      NewCultureClient(cfg),
-		District:     NewDistrictClient(cfg),
-		Holder:       NewHolderClient(cfg),
-		Keyword:      NewKeywordClient(cfg),
-		Library:      NewLibraryClient(cfg),
-		License:      NewLicenseClient(cfg),
-		Location:     NewLocationClient(cfg),
-		Medium:       NewMediumClient(cfg),
-		Model:        NewModelClient(cfg),
-		Monument:     NewMonumentClient(cfg),
-		Organization: NewOrganizationClient(cfg),
-		Person:       NewPersonClient(cfg),
-		Project:      NewProjectClient(cfg),
-		Publication:  NewPublicationClient(cfg),
-		Publisher:    NewPublisherClient(cfg),
-		Region:       NewRegionClient(cfg),
-		Set:          NewSetClient(cfg),
-		Settlement:   NewSettlementClient(cfg),
-		Technique:    NewTechniqueClient(cfg),
+		ctx:                   ctx,
+		config:                cfg,
+		Art:                   NewArtClient(cfg),
+		ArtGenre:              NewArtGenreClient(cfg),
+		ArtStyle:              NewArtStyleClient(cfg),
+		Artifact:              NewArtifactClient(cfg),
+		AuditLog:              NewAuditLogClient(cfg),
+		Book:                  NewBookClient(cfg),
+		BookGenre:             NewBookGenreClient(cfg),
+		Category:              NewCategoryClient(cfg),
+		Collection:            NewCollectionClient(cfg),
+		Culture:               NewCultureClient(cfg),
+		District:              NewDistrictClient(cfg),
+		Holder:                NewHolderClient(cfg),
+		Keyword:               NewKeywordClient(cfg),
+		Library:               NewLibraryClient(cfg),
+		License:               NewLicenseClient(cfg),
+		Location:              NewLocationClient(cfg),
+		Medium:                NewMediumClient(cfg),
+		Model:                 NewModelClient(cfg),
+		Monument:              NewMonumentClient(cfg),
+		Organization:          NewOrganizationClient(cfg),
+		Person:                NewPersonClient(cfg),
+		Project:               NewProjectClient(cfg),
+		ProtectedArea:         NewProtectedAreaClient(cfg),
+		ProtectedAreaCategory: NewProtectedAreaCategoryClient(cfg),
+		ProtectedAreaPicture:  NewProtectedAreaPictureClient(cfg),
+		Publication:           NewPublicationClient(cfg),
+		Publisher:             NewPublisherClient(cfg),
+		Region:                NewRegionClient(cfg),
+		Set:                   NewSetClient(cfg),
+		Settlement:            NewSettlementClient(cfg),
+		Technique:             NewTechniqueClient(cfg),
 	}, nil
 }
 
@@ -337,8 +355,9 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
 		c.Category, c.Collection, c.Culture, c.District, c.Holder, c.Keyword,
 		c.Library, c.License, c.Location, c.Medium, c.Model, c.Monument,
-		c.Organization, c.Person, c.Project, c.Publication, c.Publisher, c.Region,
-		c.Set, c.Settlement, c.Technique,
+		c.Organization, c.Person, c.Project, c.ProtectedArea, c.ProtectedAreaCategory,
+		c.ProtectedAreaPicture, c.Publication, c.Publisher, c.Region, c.Set,
+		c.Settlement, c.Technique,
 	} {
 		n.Use(hooks...)
 	}
@@ -351,8 +370,9 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
 		c.Category, c.Collection, c.Culture, c.District, c.Holder, c.Keyword,
 		c.Library, c.License, c.Location, c.Medium, c.Model, c.Monument,
-		c.Organization, c.Person, c.Project, c.Publication, c.Publisher, c.Region,
-		c.Set, c.Settlement, c.Technique,
+		c.Organization, c.Person, c.Project, c.ProtectedArea, c.ProtectedAreaCategory,
+		c.ProtectedAreaPicture, c.Publication, c.Publisher, c.Region, c.Set,
+		c.Settlement, c.Technique,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -405,6 +425,12 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Person.mutate(ctx, m)
 	case *ProjectMutation:
 		return c.Project.mutate(ctx, m)
+	case *ProtectedAreaMutation:
+		return c.ProtectedArea.mutate(ctx, m)
+	case *ProtectedAreaCategoryMutation:
+		return c.ProtectedAreaCategory.mutate(ctx, m)
+	case *ProtectedAreaPictureMutation:
+		return c.ProtectedAreaPicture.mutate(ctx, m)
 	case *PublicationMutation:
 		return c.Publication.mutate(ctx, m)
 	case *PublisherMutation:
@@ -3610,6 +3636,360 @@ func (c *ProjectClient) mutate(ctx context.Context, m *ProjectMutation) (Value, 
 	}
 }
 
+// ProtectedAreaClient is a client for the ProtectedArea schema.
+type ProtectedAreaClient struct {
+	config
+}
+
+// NewProtectedAreaClient returns a client for the ProtectedArea from the given config.
+func NewProtectedAreaClient(c config) *ProtectedAreaClient {
+	return &ProtectedAreaClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `protectedarea.Hooks(f(g(h())))`.
+func (c *ProtectedAreaClient) Use(hooks ...Hook) {
+	c.hooks.ProtectedArea = append(c.hooks.ProtectedArea, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `protectedarea.Intercept(f(g(h())))`.
+func (c *ProtectedAreaClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ProtectedArea = append(c.inters.ProtectedArea, interceptors...)
+}
+
+// Create returns a builder for creating a ProtectedArea entity.
+func (c *ProtectedAreaClient) Create() *ProtectedAreaCreate {
+	mutation := newProtectedAreaMutation(c.config, OpCreate)
+	return &ProtectedAreaCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ProtectedArea entities.
+func (c *ProtectedAreaClient) CreateBulk(builders ...*ProtectedAreaCreate) *ProtectedAreaCreateBulk {
+	return &ProtectedAreaCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ProtectedArea.
+func (c *ProtectedAreaClient) Update() *ProtectedAreaUpdate {
+	mutation := newProtectedAreaMutation(c.config, OpUpdate)
+	return &ProtectedAreaUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ProtectedAreaClient) UpdateOne(pa *ProtectedArea) *ProtectedAreaUpdateOne {
+	mutation := newProtectedAreaMutation(c.config, OpUpdateOne, withProtectedArea(pa))
+	return &ProtectedAreaUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ProtectedAreaClient) UpdateOneID(id int) *ProtectedAreaUpdateOne {
+	mutation := newProtectedAreaMutation(c.config, OpUpdateOne, withProtectedAreaID(id))
+	return &ProtectedAreaUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ProtectedArea.
+func (c *ProtectedAreaClient) Delete() *ProtectedAreaDelete {
+	mutation := newProtectedAreaMutation(c.config, OpDelete)
+	return &ProtectedAreaDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ProtectedAreaClient) DeleteOne(pa *ProtectedArea) *ProtectedAreaDeleteOne {
+	return c.DeleteOneID(pa.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ProtectedAreaClient) DeleteOneID(id int) *ProtectedAreaDeleteOne {
+	builder := c.Delete().Where(protectedarea.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ProtectedAreaDeleteOne{builder}
+}
+
+// Query returns a query builder for ProtectedArea.
+func (c *ProtectedAreaClient) Query() *ProtectedAreaQuery {
+	return &ProtectedAreaQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeProtectedArea},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ProtectedArea entity by its id.
+func (c *ProtectedAreaClient) Get(ctx context.Context, id int) (*ProtectedArea, error) {
+	return c.Query().Where(protectedarea.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ProtectedAreaClient) GetX(ctx context.Context, id int) *ProtectedArea {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ProtectedAreaClient) Hooks() []Hook {
+	return c.hooks.ProtectedArea
+}
+
+// Interceptors returns the client interceptors.
+func (c *ProtectedAreaClient) Interceptors() []Interceptor {
+	return c.inters.ProtectedArea
+}
+
+func (c *ProtectedAreaClient) mutate(ctx context.Context, m *ProtectedAreaMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ProtectedAreaCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ProtectedAreaUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ProtectedAreaUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ProtectedAreaDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown ProtectedArea mutation op: %q", m.Op())
+	}
+}
+
+// ProtectedAreaCategoryClient is a client for the ProtectedAreaCategory schema.
+type ProtectedAreaCategoryClient struct {
+	config
+}
+
+// NewProtectedAreaCategoryClient returns a client for the ProtectedAreaCategory from the given config.
+func NewProtectedAreaCategoryClient(c config) *ProtectedAreaCategoryClient {
+	return &ProtectedAreaCategoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `protectedareacategory.Hooks(f(g(h())))`.
+func (c *ProtectedAreaCategoryClient) Use(hooks ...Hook) {
+	c.hooks.ProtectedAreaCategory = append(c.hooks.ProtectedAreaCategory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `protectedareacategory.Intercept(f(g(h())))`.
+func (c *ProtectedAreaCategoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ProtectedAreaCategory = append(c.inters.ProtectedAreaCategory, interceptors...)
+}
+
+// Create returns a builder for creating a ProtectedAreaCategory entity.
+func (c *ProtectedAreaCategoryClient) Create() *ProtectedAreaCategoryCreate {
+	mutation := newProtectedAreaCategoryMutation(c.config, OpCreate)
+	return &ProtectedAreaCategoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ProtectedAreaCategory entities.
+func (c *ProtectedAreaCategoryClient) CreateBulk(builders ...*ProtectedAreaCategoryCreate) *ProtectedAreaCategoryCreateBulk {
+	return &ProtectedAreaCategoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ProtectedAreaCategory.
+func (c *ProtectedAreaCategoryClient) Update() *ProtectedAreaCategoryUpdate {
+	mutation := newProtectedAreaCategoryMutation(c.config, OpUpdate)
+	return &ProtectedAreaCategoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ProtectedAreaCategoryClient) UpdateOne(pac *ProtectedAreaCategory) *ProtectedAreaCategoryUpdateOne {
+	mutation := newProtectedAreaCategoryMutation(c.config, OpUpdateOne, withProtectedAreaCategory(pac))
+	return &ProtectedAreaCategoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ProtectedAreaCategoryClient) UpdateOneID(id int) *ProtectedAreaCategoryUpdateOne {
+	mutation := newProtectedAreaCategoryMutation(c.config, OpUpdateOne, withProtectedAreaCategoryID(id))
+	return &ProtectedAreaCategoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ProtectedAreaCategory.
+func (c *ProtectedAreaCategoryClient) Delete() *ProtectedAreaCategoryDelete {
+	mutation := newProtectedAreaCategoryMutation(c.config, OpDelete)
+	return &ProtectedAreaCategoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ProtectedAreaCategoryClient) DeleteOne(pac *ProtectedAreaCategory) *ProtectedAreaCategoryDeleteOne {
+	return c.DeleteOneID(pac.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ProtectedAreaCategoryClient) DeleteOneID(id int) *ProtectedAreaCategoryDeleteOne {
+	builder := c.Delete().Where(protectedareacategory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ProtectedAreaCategoryDeleteOne{builder}
+}
+
+// Query returns a query builder for ProtectedAreaCategory.
+func (c *ProtectedAreaCategoryClient) Query() *ProtectedAreaCategoryQuery {
+	return &ProtectedAreaCategoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeProtectedAreaCategory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ProtectedAreaCategory entity by its id.
+func (c *ProtectedAreaCategoryClient) Get(ctx context.Context, id int) (*ProtectedAreaCategory, error) {
+	return c.Query().Where(protectedareacategory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ProtectedAreaCategoryClient) GetX(ctx context.Context, id int) *ProtectedAreaCategory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ProtectedAreaCategoryClient) Hooks() []Hook {
+	return c.hooks.ProtectedAreaCategory
+}
+
+// Interceptors returns the client interceptors.
+func (c *ProtectedAreaCategoryClient) Interceptors() []Interceptor {
+	return c.inters.ProtectedAreaCategory
+}
+
+func (c *ProtectedAreaCategoryClient) mutate(ctx context.Context, m *ProtectedAreaCategoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ProtectedAreaCategoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ProtectedAreaCategoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ProtectedAreaCategoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ProtectedAreaCategoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown ProtectedAreaCategory mutation op: %q", m.Op())
+	}
+}
+
+// ProtectedAreaPictureClient is a client for the ProtectedAreaPicture schema.
+type ProtectedAreaPictureClient struct {
+	config
+}
+
+// NewProtectedAreaPictureClient returns a client for the ProtectedAreaPicture from the given config.
+func NewProtectedAreaPictureClient(c config) *ProtectedAreaPictureClient {
+	return &ProtectedAreaPictureClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `protectedareapicture.Hooks(f(g(h())))`.
+func (c *ProtectedAreaPictureClient) Use(hooks ...Hook) {
+	c.hooks.ProtectedAreaPicture = append(c.hooks.ProtectedAreaPicture, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `protectedareapicture.Intercept(f(g(h())))`.
+func (c *ProtectedAreaPictureClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ProtectedAreaPicture = append(c.inters.ProtectedAreaPicture, interceptors...)
+}
+
+// Create returns a builder for creating a ProtectedAreaPicture entity.
+func (c *ProtectedAreaPictureClient) Create() *ProtectedAreaPictureCreate {
+	mutation := newProtectedAreaPictureMutation(c.config, OpCreate)
+	return &ProtectedAreaPictureCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ProtectedAreaPicture entities.
+func (c *ProtectedAreaPictureClient) CreateBulk(builders ...*ProtectedAreaPictureCreate) *ProtectedAreaPictureCreateBulk {
+	return &ProtectedAreaPictureCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ProtectedAreaPicture.
+func (c *ProtectedAreaPictureClient) Update() *ProtectedAreaPictureUpdate {
+	mutation := newProtectedAreaPictureMutation(c.config, OpUpdate)
+	return &ProtectedAreaPictureUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ProtectedAreaPictureClient) UpdateOne(pap *ProtectedAreaPicture) *ProtectedAreaPictureUpdateOne {
+	mutation := newProtectedAreaPictureMutation(c.config, OpUpdateOne, withProtectedAreaPicture(pap))
+	return &ProtectedAreaPictureUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ProtectedAreaPictureClient) UpdateOneID(id int) *ProtectedAreaPictureUpdateOne {
+	mutation := newProtectedAreaPictureMutation(c.config, OpUpdateOne, withProtectedAreaPictureID(id))
+	return &ProtectedAreaPictureUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ProtectedAreaPicture.
+func (c *ProtectedAreaPictureClient) Delete() *ProtectedAreaPictureDelete {
+	mutation := newProtectedAreaPictureMutation(c.config, OpDelete)
+	return &ProtectedAreaPictureDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ProtectedAreaPictureClient) DeleteOne(pap *ProtectedAreaPicture) *ProtectedAreaPictureDeleteOne {
+	return c.DeleteOneID(pap.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ProtectedAreaPictureClient) DeleteOneID(id int) *ProtectedAreaPictureDeleteOne {
+	builder := c.Delete().Where(protectedareapicture.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ProtectedAreaPictureDeleteOne{builder}
+}
+
+// Query returns a query builder for ProtectedAreaPicture.
+func (c *ProtectedAreaPictureClient) Query() *ProtectedAreaPictureQuery {
+	return &ProtectedAreaPictureQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeProtectedAreaPicture},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ProtectedAreaPicture entity by its id.
+func (c *ProtectedAreaPictureClient) Get(ctx context.Context, id int) (*ProtectedAreaPicture, error) {
+	return c.Query().Where(protectedareapicture.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ProtectedAreaPictureClient) GetX(ctx context.Context, id int) *ProtectedAreaPicture {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ProtectedAreaPictureClient) Hooks() []Hook {
+	return c.hooks.ProtectedAreaPicture
+}
+
+// Interceptors returns the client interceptors.
+func (c *ProtectedAreaPictureClient) Interceptors() []Interceptor {
+	return c.inters.ProtectedAreaPicture
+}
+
+func (c *ProtectedAreaPictureClient) mutate(ctx context.Context, m *ProtectedAreaPictureMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ProtectedAreaPictureCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ProtectedAreaPictureUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ProtectedAreaPictureUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ProtectedAreaPictureDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown ProtectedAreaPicture mutation op: %q", m.Op())
+	}
+}
+
 // PublicationClient is a client for the Publication schema.
 type PublicationClient struct {
 	config
@@ -4424,13 +4804,15 @@ type (
 	hooks struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
 		Collection, Culture, District, Holder, Keyword, Library, License, Location,
-		Medium, Model, Monument, Organization, Person, Project, Publication, Publisher,
-		Region, Set, Settlement, Technique []ent.Hook
+		Medium, Model, Monument, Organization, Person, Project, ProtectedArea,
+		ProtectedAreaCategory, ProtectedAreaPicture, Publication, Publisher, Region,
+		Set, Settlement, Technique []ent.Hook
 	}
 	inters struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
 		Collection, Culture, District, Holder, Keyword, Library, License, Location,
-		Medium, Model, Monument, Organization, Person, Project, Publication, Publisher,
-		Region, Set, Settlement, Technique []ent.Interceptor
+		Medium, Model, Monument, Organization, Person, Project, ProtectedArea,
+		ProtectedAreaCategory, ProtectedAreaPicture, Publication, Publisher, Region,
+		Set, Settlement, Technique []ent.Interceptor
 	}
 )

@@ -412,6 +412,36 @@ var (
 		Columns:    ProjectsColumns,
 		PrimaryKey: []*schema.Column{ProjectsColumns[0]},
 	}
+	// ProtectedAreasColumns holds the columns for the "protected_areas" table.
+	ProtectedAreasColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+	}
+	// ProtectedAreasTable holds the schema information for the "protected_areas" table.
+	ProtectedAreasTable = &schema.Table{
+		Name:       "protected_areas",
+		Columns:    ProtectedAreasColumns,
+		PrimaryKey: []*schema.Column{ProtectedAreasColumns[0]},
+	}
+	// ProtectedAreaCategoriesColumns holds the columns for the "protected_area_categories" table.
+	ProtectedAreaCategoriesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+	}
+	// ProtectedAreaCategoriesTable holds the schema information for the "protected_area_categories" table.
+	ProtectedAreaCategoriesTable = &schema.Table{
+		Name:       "protected_area_categories",
+		Columns:    ProtectedAreaCategoriesColumns,
+		PrimaryKey: []*schema.Column{ProtectedAreaCategoriesColumns[0]},
+	}
+	// ProtectedAreaPicturesColumns holds the columns for the "protected_area_pictures" table.
+	ProtectedAreaPicturesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+	}
+	// ProtectedAreaPicturesTable holds the schema information for the "protected_area_pictures" table.
+	ProtectedAreaPicturesTable = &schema.Table{
+		Name:       "protected_area_pictures",
+		Columns:    ProtectedAreaPicturesColumns,
+		PrimaryKey: []*schema.Column{ProtectedAreaPicturesColumns[0]},
+	}
 	// PublicationsColumns holds the columns for the "publications" table.
 	PublicationsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -744,6 +774,9 @@ var (
 		OrganizationsTable,
 		PersonsTable,
 		ProjectsTable,
+		ProtectedAreasTable,
+		ProtectedAreaCategoriesTable,
+		ProtectedAreaPicturesTable,
 		PublicationsTable,
 		PublishersTable,
 		RegionsTable,

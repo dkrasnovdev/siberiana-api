@@ -72,6 +72,15 @@ type Person func(*sql.Selector)
 // Project is the predicate function for project builders.
 type Project func(*sql.Selector)
 
+// ProtectedArea is the predicate function for protectedarea builders.
+type ProtectedArea func(*sql.Selector)
+
+// ProtectedAreaCategory is the predicate function for protectedareacategory builders.
+type ProtectedAreaCategory func(*sql.Selector)
+
+// ProtectedAreaPicture is the predicate function for protectedareapicture builders.
+type ProtectedAreaPicture func(*sql.Selector)
+
 // Publication is the predicate function for publication builders.
 type Publication func(*sql.Selector)
 

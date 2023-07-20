@@ -30,6 +30,9 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
 	"github.com/dkrasnovdev/heritage-api/ent/publisher"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
@@ -8407,6 +8410,378 @@ func (i *ProjectWhereInput) P() (predicate.Project, error) {
 		return predicates[0], nil
 	default:
 		return project.And(predicates...), nil
+	}
+}
+
+// ProtectedAreaWhereInput represents a where input for filtering ProtectedArea queries.
+type ProtectedAreaWhereInput struct {
+	Predicates []predicate.ProtectedArea  `json:"-"`
+	Not        *ProtectedAreaWhereInput   `json:"not,omitempty"`
+	Or         []*ProtectedAreaWhereInput `json:"or,omitempty"`
+	And        []*ProtectedAreaWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *ProtectedAreaWhereInput) AddPredicates(predicates ...predicate.ProtectedArea) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the ProtectedAreaWhereInput filter on the ProtectedAreaQuery builder.
+func (i *ProtectedAreaWhereInput) Filter(q *ProtectedAreaQuery) (*ProtectedAreaQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyProtectedAreaWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyProtectedAreaWhereInput is returned in case the ProtectedAreaWhereInput is empty.
+var ErrEmptyProtectedAreaWhereInput = errors.New("ent: empty predicate ProtectedAreaWhereInput")
+
+// P returns a predicate for filtering protectedareas.
+// An error is returned if the input is empty or invalid.
+func (i *ProtectedAreaWhereInput) P() (predicate.ProtectedArea, error) {
+	var predicates []predicate.ProtectedArea
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, protectedarea.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.ProtectedArea, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, protectedarea.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.ProtectedArea, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, protectedarea.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, protectedarea.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, protectedarea.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, protectedarea.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, protectedarea.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, protectedarea.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, protectedarea.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, protectedarea.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, protectedarea.IDLTE(*i.IDLTE))
+	}
+
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyProtectedAreaWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return protectedarea.And(predicates...), nil
+	}
+}
+
+// ProtectedAreaCategoryWhereInput represents a where input for filtering ProtectedAreaCategory queries.
+type ProtectedAreaCategoryWhereInput struct {
+	Predicates []predicate.ProtectedAreaCategory  `json:"-"`
+	Not        *ProtectedAreaCategoryWhereInput   `json:"not,omitempty"`
+	Or         []*ProtectedAreaCategoryWhereInput `json:"or,omitempty"`
+	And        []*ProtectedAreaCategoryWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *ProtectedAreaCategoryWhereInput) AddPredicates(predicates ...predicate.ProtectedAreaCategory) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the ProtectedAreaCategoryWhereInput filter on the ProtectedAreaCategoryQuery builder.
+func (i *ProtectedAreaCategoryWhereInput) Filter(q *ProtectedAreaCategoryQuery) (*ProtectedAreaCategoryQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyProtectedAreaCategoryWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyProtectedAreaCategoryWhereInput is returned in case the ProtectedAreaCategoryWhereInput is empty.
+var ErrEmptyProtectedAreaCategoryWhereInput = errors.New("ent: empty predicate ProtectedAreaCategoryWhereInput")
+
+// P returns a predicate for filtering protectedareacategories.
+// An error is returned if the input is empty or invalid.
+func (i *ProtectedAreaCategoryWhereInput) P() (predicate.ProtectedAreaCategory, error) {
+	var predicates []predicate.ProtectedAreaCategory
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, protectedareacategory.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.ProtectedAreaCategory, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, protectedareacategory.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.ProtectedAreaCategory, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, protectedareacategory.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, protectedareacategory.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, protectedareacategory.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, protectedareacategory.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, protectedareacategory.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, protectedareacategory.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, protectedareacategory.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, protectedareacategory.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, protectedareacategory.IDLTE(*i.IDLTE))
+	}
+
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyProtectedAreaCategoryWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return protectedareacategory.And(predicates...), nil
+	}
+}
+
+// ProtectedAreaPictureWhereInput represents a where input for filtering ProtectedAreaPicture queries.
+type ProtectedAreaPictureWhereInput struct {
+	Predicates []predicate.ProtectedAreaPicture  `json:"-"`
+	Not        *ProtectedAreaPictureWhereInput   `json:"not,omitempty"`
+	Or         []*ProtectedAreaPictureWhereInput `json:"or,omitempty"`
+	And        []*ProtectedAreaPictureWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *ProtectedAreaPictureWhereInput) AddPredicates(predicates ...predicate.ProtectedAreaPicture) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the ProtectedAreaPictureWhereInput filter on the ProtectedAreaPictureQuery builder.
+func (i *ProtectedAreaPictureWhereInput) Filter(q *ProtectedAreaPictureQuery) (*ProtectedAreaPictureQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyProtectedAreaPictureWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyProtectedAreaPictureWhereInput is returned in case the ProtectedAreaPictureWhereInput is empty.
+var ErrEmptyProtectedAreaPictureWhereInput = errors.New("ent: empty predicate ProtectedAreaPictureWhereInput")
+
+// P returns a predicate for filtering protectedareapictures.
+// An error is returned if the input is empty or invalid.
+func (i *ProtectedAreaPictureWhereInput) P() (predicate.ProtectedAreaPicture, error) {
+	var predicates []predicate.ProtectedAreaPicture
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, protectedareapicture.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.ProtectedAreaPicture, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, protectedareapicture.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.ProtectedAreaPicture, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, protectedareapicture.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, protectedareapicture.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, protectedareapicture.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, protectedareapicture.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, protectedareapicture.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, protectedareapicture.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, protectedareapicture.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, protectedareapicture.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, protectedareapicture.IDLTE(*i.IDLTE))
+	}
+
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyProtectedAreaPictureWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return protectedareapicture.And(predicates...), nil
 	}
 }
 

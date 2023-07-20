@@ -36,6 +36,9 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
 	"github.com/dkrasnovdev/heritage-api/ent/publisher"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
@@ -7039,6 +7042,750 @@ func (pr *Project) ToEdge(order *ProjectOrder) *ProjectEdge {
 	return &ProjectEdge{
 		Node:   pr,
 		Cursor: order.Field.toCursor(pr),
+	}
+}
+
+// ProtectedAreaEdge is the edge representation of ProtectedArea.
+type ProtectedAreaEdge struct {
+	Node   *ProtectedArea `json:"node"`
+	Cursor Cursor         `json:"cursor"`
+}
+
+// ProtectedAreaConnection is the connection containing edges to ProtectedArea.
+type ProtectedAreaConnection struct {
+	Edges      []*ProtectedAreaEdge `json:"edges"`
+	PageInfo   PageInfo             `json:"pageInfo"`
+	TotalCount int                  `json:"totalCount"`
+}
+
+func (c *ProtectedAreaConnection) build(nodes []*ProtectedArea, pager *protectedareaPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *ProtectedArea
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *ProtectedArea {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *ProtectedArea {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*ProtectedAreaEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &ProtectedAreaEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// ProtectedAreaPaginateOption enables pagination customization.
+type ProtectedAreaPaginateOption func(*protectedareaPager) error
+
+// WithProtectedAreaOrder configures pagination ordering.
+func WithProtectedAreaOrder(order *ProtectedAreaOrder) ProtectedAreaPaginateOption {
+	if order == nil {
+		order = DefaultProtectedAreaOrder
+	}
+	o := *order
+	return func(pager *protectedareaPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultProtectedAreaOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithProtectedAreaFilter configures pagination filter.
+func WithProtectedAreaFilter(filter func(*ProtectedAreaQuery) (*ProtectedAreaQuery, error)) ProtectedAreaPaginateOption {
+	return func(pager *protectedareaPager) error {
+		if filter == nil {
+			return errors.New("ProtectedAreaQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type protectedareaPager struct {
+	reverse bool
+	order   *ProtectedAreaOrder
+	filter  func(*ProtectedAreaQuery) (*ProtectedAreaQuery, error)
+}
+
+func newProtectedAreaPager(opts []ProtectedAreaPaginateOption, reverse bool) (*protectedareaPager, error) {
+	pager := &protectedareaPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultProtectedAreaOrder
+	}
+	return pager, nil
+}
+
+func (p *protectedareaPager) applyFilter(query *ProtectedAreaQuery) (*ProtectedAreaQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *protectedareaPager) toCursor(pa *ProtectedArea) Cursor {
+	return p.order.Field.toCursor(pa)
+}
+
+func (p *protectedareaPager) applyCursors(query *ProtectedAreaQuery, after, before *Cursor) (*ProtectedAreaQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultProtectedAreaOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *protectedareaPager) applyOrder(query *ProtectedAreaQuery) *ProtectedAreaQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultProtectedAreaOrder.Field {
+		query = query.Order(DefaultProtectedAreaOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *protectedareaPager) orderExpr(query *ProtectedAreaQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultProtectedAreaOrder.Field {
+			b.Comma().Ident(DefaultProtectedAreaOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to ProtectedArea.
+func (pa *ProtectedAreaQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...ProtectedAreaPaginateOption,
+) (*ProtectedAreaConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newProtectedAreaPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if pa, err = pager.applyFilter(pa); err != nil {
+		return nil, err
+	}
+	conn := &ProtectedAreaConnection{Edges: []*ProtectedAreaEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := pa.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if pa, err = pager.applyCursors(pa, after, before); err != nil {
+		return nil, err
+	}
+	if limit := paginateLimit(first, last); limit != 0 {
+		pa.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := pa.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	pa = pager.applyOrder(pa)
+	nodes, err := pa.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// ProtectedAreaOrderField defines the ordering field of ProtectedArea.
+type ProtectedAreaOrderField struct {
+	// Value extracts the ordering value from the given ProtectedArea.
+	Value    func(*ProtectedArea) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) protectedarea.OrderOption
+	toCursor func(*ProtectedArea) Cursor
+}
+
+// ProtectedAreaOrder defines the ordering of ProtectedArea.
+type ProtectedAreaOrder struct {
+	Direction OrderDirection           `json:"direction"`
+	Field     *ProtectedAreaOrderField `json:"field"`
+}
+
+// DefaultProtectedAreaOrder is the default ordering of ProtectedArea.
+var DefaultProtectedAreaOrder = &ProtectedAreaOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &ProtectedAreaOrderField{
+		Value: func(pa *ProtectedArea) (ent.Value, error) {
+			return pa.ID, nil
+		},
+		column: protectedarea.FieldID,
+		toTerm: protectedarea.ByID,
+		toCursor: func(pa *ProtectedArea) Cursor {
+			return Cursor{ID: pa.ID}
+		},
+	},
+}
+
+// ToEdge converts ProtectedArea into ProtectedAreaEdge.
+func (pa *ProtectedArea) ToEdge(order *ProtectedAreaOrder) *ProtectedAreaEdge {
+	if order == nil {
+		order = DefaultProtectedAreaOrder
+	}
+	return &ProtectedAreaEdge{
+		Node:   pa,
+		Cursor: order.Field.toCursor(pa),
+	}
+}
+
+// ProtectedAreaCategoryEdge is the edge representation of ProtectedAreaCategory.
+type ProtectedAreaCategoryEdge struct {
+	Node   *ProtectedAreaCategory `json:"node"`
+	Cursor Cursor                 `json:"cursor"`
+}
+
+// ProtectedAreaCategoryConnection is the connection containing edges to ProtectedAreaCategory.
+type ProtectedAreaCategoryConnection struct {
+	Edges      []*ProtectedAreaCategoryEdge `json:"edges"`
+	PageInfo   PageInfo                     `json:"pageInfo"`
+	TotalCount int                          `json:"totalCount"`
+}
+
+func (c *ProtectedAreaCategoryConnection) build(nodes []*ProtectedAreaCategory, pager *protectedareacategoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *ProtectedAreaCategory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *ProtectedAreaCategory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *ProtectedAreaCategory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*ProtectedAreaCategoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &ProtectedAreaCategoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// ProtectedAreaCategoryPaginateOption enables pagination customization.
+type ProtectedAreaCategoryPaginateOption func(*protectedareacategoryPager) error
+
+// WithProtectedAreaCategoryOrder configures pagination ordering.
+func WithProtectedAreaCategoryOrder(order *ProtectedAreaCategoryOrder) ProtectedAreaCategoryPaginateOption {
+	if order == nil {
+		order = DefaultProtectedAreaCategoryOrder
+	}
+	o := *order
+	return func(pager *protectedareacategoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultProtectedAreaCategoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithProtectedAreaCategoryFilter configures pagination filter.
+func WithProtectedAreaCategoryFilter(filter func(*ProtectedAreaCategoryQuery) (*ProtectedAreaCategoryQuery, error)) ProtectedAreaCategoryPaginateOption {
+	return func(pager *protectedareacategoryPager) error {
+		if filter == nil {
+			return errors.New("ProtectedAreaCategoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type protectedareacategoryPager struct {
+	reverse bool
+	order   *ProtectedAreaCategoryOrder
+	filter  func(*ProtectedAreaCategoryQuery) (*ProtectedAreaCategoryQuery, error)
+}
+
+func newProtectedAreaCategoryPager(opts []ProtectedAreaCategoryPaginateOption, reverse bool) (*protectedareacategoryPager, error) {
+	pager := &protectedareacategoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultProtectedAreaCategoryOrder
+	}
+	return pager, nil
+}
+
+func (p *protectedareacategoryPager) applyFilter(query *ProtectedAreaCategoryQuery) (*ProtectedAreaCategoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *protectedareacategoryPager) toCursor(pac *ProtectedAreaCategory) Cursor {
+	return p.order.Field.toCursor(pac)
+}
+
+func (p *protectedareacategoryPager) applyCursors(query *ProtectedAreaCategoryQuery, after, before *Cursor) (*ProtectedAreaCategoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultProtectedAreaCategoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *protectedareacategoryPager) applyOrder(query *ProtectedAreaCategoryQuery) *ProtectedAreaCategoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultProtectedAreaCategoryOrder.Field {
+		query = query.Order(DefaultProtectedAreaCategoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *protectedareacategoryPager) orderExpr(query *ProtectedAreaCategoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultProtectedAreaCategoryOrder.Field {
+			b.Comma().Ident(DefaultProtectedAreaCategoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to ProtectedAreaCategory.
+func (pac *ProtectedAreaCategoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...ProtectedAreaCategoryPaginateOption,
+) (*ProtectedAreaCategoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newProtectedAreaCategoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if pac, err = pager.applyFilter(pac); err != nil {
+		return nil, err
+	}
+	conn := &ProtectedAreaCategoryConnection{Edges: []*ProtectedAreaCategoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := pac.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if pac, err = pager.applyCursors(pac, after, before); err != nil {
+		return nil, err
+	}
+	if limit := paginateLimit(first, last); limit != 0 {
+		pac.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := pac.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	pac = pager.applyOrder(pac)
+	nodes, err := pac.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// ProtectedAreaCategoryOrderField defines the ordering field of ProtectedAreaCategory.
+type ProtectedAreaCategoryOrderField struct {
+	// Value extracts the ordering value from the given ProtectedAreaCategory.
+	Value    func(*ProtectedAreaCategory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) protectedareacategory.OrderOption
+	toCursor func(*ProtectedAreaCategory) Cursor
+}
+
+// ProtectedAreaCategoryOrder defines the ordering of ProtectedAreaCategory.
+type ProtectedAreaCategoryOrder struct {
+	Direction OrderDirection                   `json:"direction"`
+	Field     *ProtectedAreaCategoryOrderField `json:"field"`
+}
+
+// DefaultProtectedAreaCategoryOrder is the default ordering of ProtectedAreaCategory.
+var DefaultProtectedAreaCategoryOrder = &ProtectedAreaCategoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &ProtectedAreaCategoryOrderField{
+		Value: func(pac *ProtectedAreaCategory) (ent.Value, error) {
+			return pac.ID, nil
+		},
+		column: protectedareacategory.FieldID,
+		toTerm: protectedareacategory.ByID,
+		toCursor: func(pac *ProtectedAreaCategory) Cursor {
+			return Cursor{ID: pac.ID}
+		},
+	},
+}
+
+// ToEdge converts ProtectedAreaCategory into ProtectedAreaCategoryEdge.
+func (pac *ProtectedAreaCategory) ToEdge(order *ProtectedAreaCategoryOrder) *ProtectedAreaCategoryEdge {
+	if order == nil {
+		order = DefaultProtectedAreaCategoryOrder
+	}
+	return &ProtectedAreaCategoryEdge{
+		Node:   pac,
+		Cursor: order.Field.toCursor(pac),
+	}
+}
+
+// ProtectedAreaPictureEdge is the edge representation of ProtectedAreaPicture.
+type ProtectedAreaPictureEdge struct {
+	Node   *ProtectedAreaPicture `json:"node"`
+	Cursor Cursor                `json:"cursor"`
+}
+
+// ProtectedAreaPictureConnection is the connection containing edges to ProtectedAreaPicture.
+type ProtectedAreaPictureConnection struct {
+	Edges      []*ProtectedAreaPictureEdge `json:"edges"`
+	PageInfo   PageInfo                    `json:"pageInfo"`
+	TotalCount int                         `json:"totalCount"`
+}
+
+func (c *ProtectedAreaPictureConnection) build(nodes []*ProtectedAreaPicture, pager *protectedareapicturePager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *ProtectedAreaPicture
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *ProtectedAreaPicture {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *ProtectedAreaPicture {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*ProtectedAreaPictureEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &ProtectedAreaPictureEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// ProtectedAreaPicturePaginateOption enables pagination customization.
+type ProtectedAreaPicturePaginateOption func(*protectedareapicturePager) error
+
+// WithProtectedAreaPictureOrder configures pagination ordering.
+func WithProtectedAreaPictureOrder(order *ProtectedAreaPictureOrder) ProtectedAreaPicturePaginateOption {
+	if order == nil {
+		order = DefaultProtectedAreaPictureOrder
+	}
+	o := *order
+	return func(pager *protectedareapicturePager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultProtectedAreaPictureOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithProtectedAreaPictureFilter configures pagination filter.
+func WithProtectedAreaPictureFilter(filter func(*ProtectedAreaPictureQuery) (*ProtectedAreaPictureQuery, error)) ProtectedAreaPicturePaginateOption {
+	return func(pager *protectedareapicturePager) error {
+		if filter == nil {
+			return errors.New("ProtectedAreaPictureQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type protectedareapicturePager struct {
+	reverse bool
+	order   *ProtectedAreaPictureOrder
+	filter  func(*ProtectedAreaPictureQuery) (*ProtectedAreaPictureQuery, error)
+}
+
+func newProtectedAreaPicturePager(opts []ProtectedAreaPicturePaginateOption, reverse bool) (*protectedareapicturePager, error) {
+	pager := &protectedareapicturePager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultProtectedAreaPictureOrder
+	}
+	return pager, nil
+}
+
+func (p *protectedareapicturePager) applyFilter(query *ProtectedAreaPictureQuery) (*ProtectedAreaPictureQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *protectedareapicturePager) toCursor(pap *ProtectedAreaPicture) Cursor {
+	return p.order.Field.toCursor(pap)
+}
+
+func (p *protectedareapicturePager) applyCursors(query *ProtectedAreaPictureQuery, after, before *Cursor) (*ProtectedAreaPictureQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultProtectedAreaPictureOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *protectedareapicturePager) applyOrder(query *ProtectedAreaPictureQuery) *ProtectedAreaPictureQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultProtectedAreaPictureOrder.Field {
+		query = query.Order(DefaultProtectedAreaPictureOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *protectedareapicturePager) orderExpr(query *ProtectedAreaPictureQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultProtectedAreaPictureOrder.Field {
+			b.Comma().Ident(DefaultProtectedAreaPictureOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to ProtectedAreaPicture.
+func (pap *ProtectedAreaPictureQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...ProtectedAreaPicturePaginateOption,
+) (*ProtectedAreaPictureConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newProtectedAreaPicturePager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if pap, err = pager.applyFilter(pap); err != nil {
+		return nil, err
+	}
+	conn := &ProtectedAreaPictureConnection{Edges: []*ProtectedAreaPictureEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := pap.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if pap, err = pager.applyCursors(pap, after, before); err != nil {
+		return nil, err
+	}
+	if limit := paginateLimit(first, last); limit != 0 {
+		pap.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := pap.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	pap = pager.applyOrder(pap)
+	nodes, err := pap.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// ProtectedAreaPictureOrderField defines the ordering field of ProtectedAreaPicture.
+type ProtectedAreaPictureOrderField struct {
+	// Value extracts the ordering value from the given ProtectedAreaPicture.
+	Value    func(*ProtectedAreaPicture) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) protectedareapicture.OrderOption
+	toCursor func(*ProtectedAreaPicture) Cursor
+}
+
+// ProtectedAreaPictureOrder defines the ordering of ProtectedAreaPicture.
+type ProtectedAreaPictureOrder struct {
+	Direction OrderDirection                  `json:"direction"`
+	Field     *ProtectedAreaPictureOrderField `json:"field"`
+}
+
+// DefaultProtectedAreaPictureOrder is the default ordering of ProtectedAreaPicture.
+var DefaultProtectedAreaPictureOrder = &ProtectedAreaPictureOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &ProtectedAreaPictureOrderField{
+		Value: func(pap *ProtectedAreaPicture) (ent.Value, error) {
+			return pap.ID, nil
+		},
+		column: protectedareapicture.FieldID,
+		toTerm: protectedareapicture.ByID,
+		toCursor: func(pap *ProtectedAreaPicture) Cursor {
+			return Cursor{ID: pap.ID}
+		},
+	},
+}
+
+// ToEdge converts ProtectedAreaPicture into ProtectedAreaPictureEdge.
+func (pap *ProtectedAreaPicture) ToEdge(order *ProtectedAreaPictureOrder) *ProtectedAreaPictureEdge {
+	if order == nil {
+		order = DefaultProtectedAreaPictureOrder
+	}
+	return &ProtectedAreaPictureEdge{
+		Node:   pap,
+		Cursor: order.Field.toCursor(pap),
 	}
 }
 

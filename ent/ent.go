@@ -34,6 +34,9 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
 	"github.com/dkrasnovdev/heritage-api/ent/publisher"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
@@ -100,34 +103,37 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			art.Table:          art.ValidColumn,
-			artgenre.Table:     artgenre.ValidColumn,
-			artstyle.Table:     artstyle.ValidColumn,
-			artifact.Table:     artifact.ValidColumn,
-			auditlog.Table:     auditlog.ValidColumn,
-			book.Table:         book.ValidColumn,
-			bookgenre.Table:    bookgenre.ValidColumn,
-			category.Table:     category.ValidColumn,
-			collection.Table:   collection.ValidColumn,
-			culture.Table:      culture.ValidColumn,
-			district.Table:     district.ValidColumn,
-			holder.Table:       holder.ValidColumn,
-			keyword.Table:      keyword.ValidColumn,
-			library.Table:      library.ValidColumn,
-			license.Table:      license.ValidColumn,
-			location.Table:     location.ValidColumn,
-			medium.Table:       medium.ValidColumn,
-			model.Table:        model.ValidColumn,
-			monument.Table:     monument.ValidColumn,
-			organization.Table: organization.ValidColumn,
-			person.Table:       person.ValidColumn,
-			project.Table:      project.ValidColumn,
-			publication.Table:  publication.ValidColumn,
-			publisher.Table:    publisher.ValidColumn,
-			region.Table:       region.ValidColumn,
-			set.Table:          set.ValidColumn,
-			settlement.Table:   settlement.ValidColumn,
-			technique.Table:    technique.ValidColumn,
+			art.Table:                   art.ValidColumn,
+			artgenre.Table:              artgenre.ValidColumn,
+			artstyle.Table:              artstyle.ValidColumn,
+			artifact.Table:              artifact.ValidColumn,
+			auditlog.Table:              auditlog.ValidColumn,
+			book.Table:                  book.ValidColumn,
+			bookgenre.Table:             bookgenre.ValidColumn,
+			category.Table:              category.ValidColumn,
+			collection.Table:            collection.ValidColumn,
+			culture.Table:               culture.ValidColumn,
+			district.Table:              district.ValidColumn,
+			holder.Table:                holder.ValidColumn,
+			keyword.Table:               keyword.ValidColumn,
+			library.Table:               library.ValidColumn,
+			license.Table:               license.ValidColumn,
+			location.Table:              location.ValidColumn,
+			medium.Table:                medium.ValidColumn,
+			model.Table:                 model.ValidColumn,
+			monument.Table:              monument.ValidColumn,
+			organization.Table:          organization.ValidColumn,
+			person.Table:                person.ValidColumn,
+			project.Table:               project.ValidColumn,
+			protectedarea.Table:         protectedarea.ValidColumn,
+			protectedareacategory.Table: protectedareacategory.ValidColumn,
+			protectedareapicture.Table:  protectedareapicture.ValidColumn,
+			publication.Table:           publication.ValidColumn,
+			publisher.Table:             publisher.ValidColumn,
+			region.Table:                region.ValidColumn,
+			set.Table:                   set.ValidColumn,
+			settlement.Table:            settlement.ValidColumn,
+			technique.Table:             technique.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

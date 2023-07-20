@@ -2582,6 +2582,144 @@ func newProjectPaginateArgs(rv map[string]any) *projectPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (pa *ProtectedAreaQuery) CollectFields(ctx context.Context, satisfies ...string) (*ProtectedAreaQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return pa, nil
+	}
+	if err := pa.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return pa, nil
+}
+
+func (pa *ProtectedAreaQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	return nil
+}
+
+type protectedareaPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ProtectedAreaPaginateOption
+}
+
+func newProtectedAreaPaginateArgs(rv map[string]any) *protectedareaPaginateArgs {
+	args := &protectedareaPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*ProtectedAreaWhereInput); ok {
+		args.opts = append(args.opts, WithProtectedAreaFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (pac *ProtectedAreaCategoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ProtectedAreaCategoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return pac, nil
+	}
+	if err := pac.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return pac, nil
+}
+
+func (pac *ProtectedAreaCategoryQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	return nil
+}
+
+type protectedareacategoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ProtectedAreaCategoryPaginateOption
+}
+
+func newProtectedAreaCategoryPaginateArgs(rv map[string]any) *protectedareacategoryPaginateArgs {
+	args := &protectedareacategoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*ProtectedAreaCategoryWhereInput); ok {
+		args.opts = append(args.opts, WithProtectedAreaCategoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (pap *ProtectedAreaPictureQuery) CollectFields(ctx context.Context, satisfies ...string) (*ProtectedAreaPictureQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return pap, nil
+	}
+	if err := pap.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return pap, nil
+}
+
+func (pap *ProtectedAreaPictureQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	return nil
+}
+
+type protectedareapicturePaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ProtectedAreaPicturePaginateOption
+}
+
+func newProtectedAreaPicturePaginateArgs(rv map[string]any) *protectedareapicturePaginateArgs {
+	args := &protectedareapicturePaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*ProtectedAreaPictureWhereInput); ok {
+		args.opts = append(args.opts, WithProtectedAreaPictureFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (pu *PublicationQuery) CollectFields(ctx context.Context, satisfies ...string) (*PublicationQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {

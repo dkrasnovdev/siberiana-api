@@ -31,6 +31,9 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
 	"github.com/dkrasnovdev/heritage-api/ent/publisher"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
@@ -689,6 +692,87 @@ func (f TraverseProject) Traverse(ctx context.Context, q ent.Query) error {
 	return fmt.Errorf("unexpected query type %T. expect *ent.ProjectQuery", q)
 }
 
+// The ProtectedAreaFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ProtectedAreaFunc func(context.Context, *ent.ProtectedAreaQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f ProtectedAreaFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.ProtectedAreaQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.ProtectedAreaQuery", q)
+}
+
+// The TraverseProtectedArea type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseProtectedArea func(context.Context, *ent.ProtectedAreaQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseProtectedArea) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseProtectedArea) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.ProtectedAreaQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.ProtectedAreaQuery", q)
+}
+
+// The ProtectedAreaCategoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ProtectedAreaCategoryFunc func(context.Context, *ent.ProtectedAreaCategoryQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f ProtectedAreaCategoryFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.ProtectedAreaCategoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.ProtectedAreaCategoryQuery", q)
+}
+
+// The TraverseProtectedAreaCategory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseProtectedAreaCategory func(context.Context, *ent.ProtectedAreaCategoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseProtectedAreaCategory) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseProtectedAreaCategory) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.ProtectedAreaCategoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.ProtectedAreaCategoryQuery", q)
+}
+
+// The ProtectedAreaPictureFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ProtectedAreaPictureFunc func(context.Context, *ent.ProtectedAreaPictureQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f ProtectedAreaPictureFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.ProtectedAreaPictureQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.ProtectedAreaPictureQuery", q)
+}
+
+// The TraverseProtectedAreaPicture type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseProtectedAreaPicture func(context.Context, *ent.ProtectedAreaPictureQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseProtectedAreaPicture) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseProtectedAreaPicture) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.ProtectedAreaPictureQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.ProtectedAreaPictureQuery", q)
+}
+
 // The PublicationFunc type is an adapter to allow the use of ordinary function as a Querier.
 type PublicationFunc func(context.Context, *ent.PublicationQuery) (ent.Value, error)
 
@@ -898,6 +982,12 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.PersonQuery, predicate.Person, person.OrderOption]{typ: ent.TypePerson, tq: q}, nil
 	case *ent.ProjectQuery:
 		return &query[*ent.ProjectQuery, predicate.Project, project.OrderOption]{typ: ent.TypeProject, tq: q}, nil
+	case *ent.ProtectedAreaQuery:
+		return &query[*ent.ProtectedAreaQuery, predicate.ProtectedArea, protectedarea.OrderOption]{typ: ent.TypeProtectedArea, tq: q}, nil
+	case *ent.ProtectedAreaCategoryQuery:
+		return &query[*ent.ProtectedAreaCategoryQuery, predicate.ProtectedAreaCategory, protectedareacategory.OrderOption]{typ: ent.TypeProtectedAreaCategory, tq: q}, nil
+	case *ent.ProtectedAreaPictureQuery:
+		return &query[*ent.ProtectedAreaPictureQuery, predicate.ProtectedAreaPicture, protectedareapicture.OrderOption]{typ: ent.TypeProtectedAreaPicture, tq: q}, nil
 	case *ent.PublicationQuery:
 		return &query[*ent.PublicationQuery, predicate.Publication, publication.OrderOption]{typ: ent.TypePublication, tq: q}, nil
 	case *ent.PublisherQuery:

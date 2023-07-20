@@ -35,6 +35,9 @@ autobind:
   - github.com/dkrasnovdev/heritage-api/ent/monument
   - github.com/dkrasnovdev/heritage-api/ent/organization
   - github.com/dkrasnovdev/heritage-api/ent/person
+  - github.com/dkrasnovdev/heritage-api/ent/protectedarea
+  - github.com/dkrasnovdev/heritage-api/ent/protectedareacategory
+  - github.com/dkrasnovdev/heritage-api/ent/protectedareapicture
   - github.com/dkrasnovdev/heritage-api/ent/project
   - github.com/dkrasnovdev/heritage-api/ent/publication
   - github.com/dkrasnovdev/heritage-api/ent/publisher

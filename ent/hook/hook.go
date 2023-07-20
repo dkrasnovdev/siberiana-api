@@ -273,6 +273,42 @@ func (f ProjectFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, err
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProjectMutation", m)
 }
 
+// The ProtectedAreaFunc type is an adapter to allow the use of ordinary
+// function as ProtectedArea mutator.
+type ProtectedAreaFunc func(context.Context, *ent.ProtectedAreaMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ProtectedAreaFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ProtectedAreaMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProtectedAreaMutation", m)
+}
+
+// The ProtectedAreaCategoryFunc type is an adapter to allow the use of ordinary
+// function as ProtectedAreaCategory mutator.
+type ProtectedAreaCategoryFunc func(context.Context, *ent.ProtectedAreaCategoryMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ProtectedAreaCategoryFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ProtectedAreaCategoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProtectedAreaCategoryMutation", m)
+}
+
+// The ProtectedAreaPictureFunc type is an adapter to allow the use of ordinary
+// function as ProtectedAreaPicture mutator.
+type ProtectedAreaPictureFunc func(context.Context, *ent.ProtectedAreaPictureMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ProtectedAreaPictureFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ProtectedAreaPictureMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProtectedAreaPictureMutation", m)
+}
+
 // The PublicationFunc type is an adapter to allow the use of ordinary
 // function as Publication mutator.
 type PublicationFunc func(context.Context, *ent.PublicationMutation) (ent.Value, error)

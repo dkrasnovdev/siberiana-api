@@ -43,34 +43,37 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeArt          = "Art"
-	TypeArtGenre     = "ArtGenre"
-	TypeArtStyle     = "ArtStyle"
-	TypeArtifact     = "Artifact"
-	TypeAuditLog     = "AuditLog"
-	TypeBook         = "Book"
-	TypeBookGenre    = "BookGenre"
-	TypeCategory     = "Category"
-	TypeCollection   = "Collection"
-	TypeCulture      = "Culture"
-	TypeDistrict     = "District"
-	TypeHolder       = "Holder"
-	TypeKeyword      = "Keyword"
-	TypeLibrary      = "Library"
-	TypeLicense      = "License"
-	TypeLocation     = "Location"
-	TypeMedium       = "Medium"
-	TypeModel        = "Model"
-	TypeMonument     = "Monument"
-	TypeOrganization = "Organization"
-	TypePerson       = "Person"
-	TypeProject      = "Project"
-	TypePublication  = "Publication"
-	TypePublisher    = "Publisher"
-	TypeRegion       = "Region"
-	TypeSet          = "Set"
-	TypeSettlement   = "Settlement"
-	TypeTechnique    = "Technique"
+	TypeArt                   = "Art"
+	TypeArtGenre              = "ArtGenre"
+	TypeArtStyle              = "ArtStyle"
+	TypeArtifact              = "Artifact"
+	TypeAuditLog              = "AuditLog"
+	TypeBook                  = "Book"
+	TypeBookGenre             = "BookGenre"
+	TypeCategory              = "Category"
+	TypeCollection            = "Collection"
+	TypeCulture               = "Culture"
+	TypeDistrict              = "District"
+	TypeHolder                = "Holder"
+	TypeKeyword               = "Keyword"
+	TypeLibrary               = "Library"
+	TypeLicense               = "License"
+	TypeLocation              = "Location"
+	TypeMedium                = "Medium"
+	TypeModel                 = "Model"
+	TypeMonument              = "Monument"
+	TypeOrganization          = "Organization"
+	TypePerson                = "Person"
+	TypeProject               = "Project"
+	TypeProtectedArea         = "ProtectedArea"
+	TypeProtectedAreaCategory = "ProtectedAreaCategory"
+	TypeProtectedAreaPicture  = "ProtectedAreaPicture"
+	TypePublication           = "Publication"
+	TypePublisher             = "Publisher"
+	TypeRegion                = "Region"
+	TypeSet                   = "Set"
+	TypeSettlement            = "Settlement"
+	TypeTechnique             = "Technique"
 )
 
 // ArtMutation represents an operation that mutates the Art nodes in the graph.
@@ -15436,6 +15439,798 @@ func (m *ProjectMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown Project edge %s", name)
+}
+
+// ProtectedAreaMutation represents an operation that mutates the ProtectedArea nodes in the graph.
+type ProtectedAreaMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*ProtectedArea, error)
+	predicates    []predicate.ProtectedArea
+}
+
+var _ ent.Mutation = (*ProtectedAreaMutation)(nil)
+
+// protectedareaOption allows management of the mutation configuration using functional options.
+type protectedareaOption func(*ProtectedAreaMutation)
+
+// newProtectedAreaMutation creates new mutation for the ProtectedArea entity.
+func newProtectedAreaMutation(c config, op Op, opts ...protectedareaOption) *ProtectedAreaMutation {
+	m := &ProtectedAreaMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeProtectedArea,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withProtectedAreaID sets the ID field of the mutation.
+func withProtectedAreaID(id int) protectedareaOption {
+	return func(m *ProtectedAreaMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ProtectedArea
+		)
+		m.oldValue = func(ctx context.Context) (*ProtectedArea, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ProtectedArea.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withProtectedArea sets the old ProtectedArea of the mutation.
+func withProtectedArea(node *ProtectedArea) protectedareaOption {
+	return func(m *ProtectedAreaMutation) {
+		m.oldValue = func(context.Context) (*ProtectedArea, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ProtectedAreaMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ProtectedAreaMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ProtectedAreaMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ProtectedAreaMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ProtectedArea.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// Where appends a list predicates to the ProtectedAreaMutation builder.
+func (m *ProtectedAreaMutation) Where(ps ...predicate.ProtectedArea) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ProtectedAreaMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ProtectedAreaMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.ProtectedArea, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ProtectedAreaMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ProtectedAreaMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (ProtectedArea).
+func (m *ProtectedAreaMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ProtectedAreaMutation) Fields() []string {
+	fields := make([]string, 0, 0)
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ProtectedAreaMutation) Field(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ProtectedAreaMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	return nil, fmt.Errorf("unknown ProtectedArea field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ProtectedAreaMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown ProtectedArea field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ProtectedAreaMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ProtectedAreaMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ProtectedAreaMutation) AddField(name string, value ent.Value) error {
+	return fmt.Errorf("unknown ProtectedArea numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ProtectedAreaMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ProtectedAreaMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ProtectedAreaMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown ProtectedArea nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ProtectedAreaMutation) ResetField(name string) error {
+	return fmt.Errorf("unknown ProtectedArea field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ProtectedAreaMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ProtectedAreaMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ProtectedAreaMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ProtectedAreaMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ProtectedAreaMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ProtectedAreaMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ProtectedAreaMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ProtectedArea unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ProtectedAreaMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ProtectedArea edge %s", name)
+}
+
+// ProtectedAreaCategoryMutation represents an operation that mutates the ProtectedAreaCategory nodes in the graph.
+type ProtectedAreaCategoryMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*ProtectedAreaCategory, error)
+	predicates    []predicate.ProtectedAreaCategory
+}
+
+var _ ent.Mutation = (*ProtectedAreaCategoryMutation)(nil)
+
+// protectedareacategoryOption allows management of the mutation configuration using functional options.
+type protectedareacategoryOption func(*ProtectedAreaCategoryMutation)
+
+// newProtectedAreaCategoryMutation creates new mutation for the ProtectedAreaCategory entity.
+func newProtectedAreaCategoryMutation(c config, op Op, opts ...protectedareacategoryOption) *ProtectedAreaCategoryMutation {
+	m := &ProtectedAreaCategoryMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeProtectedAreaCategory,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withProtectedAreaCategoryID sets the ID field of the mutation.
+func withProtectedAreaCategoryID(id int) protectedareacategoryOption {
+	return func(m *ProtectedAreaCategoryMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ProtectedAreaCategory
+		)
+		m.oldValue = func(ctx context.Context) (*ProtectedAreaCategory, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ProtectedAreaCategory.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withProtectedAreaCategory sets the old ProtectedAreaCategory of the mutation.
+func withProtectedAreaCategory(node *ProtectedAreaCategory) protectedareacategoryOption {
+	return func(m *ProtectedAreaCategoryMutation) {
+		m.oldValue = func(context.Context) (*ProtectedAreaCategory, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ProtectedAreaCategoryMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ProtectedAreaCategoryMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ProtectedAreaCategoryMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ProtectedAreaCategoryMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ProtectedAreaCategory.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// Where appends a list predicates to the ProtectedAreaCategoryMutation builder.
+func (m *ProtectedAreaCategoryMutation) Where(ps ...predicate.ProtectedAreaCategory) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ProtectedAreaCategoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ProtectedAreaCategoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.ProtectedAreaCategory, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ProtectedAreaCategoryMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ProtectedAreaCategoryMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (ProtectedAreaCategory).
+func (m *ProtectedAreaCategoryMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ProtectedAreaCategoryMutation) Fields() []string {
+	fields := make([]string, 0, 0)
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ProtectedAreaCategoryMutation) Field(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ProtectedAreaCategoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	return nil, fmt.Errorf("unknown ProtectedAreaCategory field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ProtectedAreaCategoryMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown ProtectedAreaCategory field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ProtectedAreaCategoryMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ProtectedAreaCategoryMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ProtectedAreaCategoryMutation) AddField(name string, value ent.Value) error {
+	return fmt.Errorf("unknown ProtectedAreaCategory numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ProtectedAreaCategoryMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ProtectedAreaCategoryMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ProtectedAreaCategoryMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown ProtectedAreaCategory nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ProtectedAreaCategoryMutation) ResetField(name string) error {
+	return fmt.Errorf("unknown ProtectedAreaCategory field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ProtectedAreaCategoryMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ProtectedAreaCategoryMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ProtectedAreaCategoryMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ProtectedAreaCategoryMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ProtectedAreaCategoryMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ProtectedAreaCategoryMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ProtectedAreaCategoryMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ProtectedAreaCategory unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ProtectedAreaCategoryMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ProtectedAreaCategory edge %s", name)
+}
+
+// ProtectedAreaPictureMutation represents an operation that mutates the ProtectedAreaPicture nodes in the graph.
+type ProtectedAreaPictureMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*ProtectedAreaPicture, error)
+	predicates    []predicate.ProtectedAreaPicture
+}
+
+var _ ent.Mutation = (*ProtectedAreaPictureMutation)(nil)
+
+// protectedareapictureOption allows management of the mutation configuration using functional options.
+type protectedareapictureOption func(*ProtectedAreaPictureMutation)
+
+// newProtectedAreaPictureMutation creates new mutation for the ProtectedAreaPicture entity.
+func newProtectedAreaPictureMutation(c config, op Op, opts ...protectedareapictureOption) *ProtectedAreaPictureMutation {
+	m := &ProtectedAreaPictureMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeProtectedAreaPicture,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withProtectedAreaPictureID sets the ID field of the mutation.
+func withProtectedAreaPictureID(id int) protectedareapictureOption {
+	return func(m *ProtectedAreaPictureMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ProtectedAreaPicture
+		)
+		m.oldValue = func(ctx context.Context) (*ProtectedAreaPicture, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ProtectedAreaPicture.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withProtectedAreaPicture sets the old ProtectedAreaPicture of the mutation.
+func withProtectedAreaPicture(node *ProtectedAreaPicture) protectedareapictureOption {
+	return func(m *ProtectedAreaPictureMutation) {
+		m.oldValue = func(context.Context) (*ProtectedAreaPicture, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ProtectedAreaPictureMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ProtectedAreaPictureMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ProtectedAreaPictureMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ProtectedAreaPictureMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ProtectedAreaPicture.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// Where appends a list predicates to the ProtectedAreaPictureMutation builder.
+func (m *ProtectedAreaPictureMutation) Where(ps ...predicate.ProtectedAreaPicture) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ProtectedAreaPictureMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ProtectedAreaPictureMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.ProtectedAreaPicture, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ProtectedAreaPictureMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ProtectedAreaPictureMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (ProtectedAreaPicture).
+func (m *ProtectedAreaPictureMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ProtectedAreaPictureMutation) Fields() []string {
+	fields := make([]string, 0, 0)
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ProtectedAreaPictureMutation) Field(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ProtectedAreaPictureMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	return nil, fmt.Errorf("unknown ProtectedAreaPicture field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ProtectedAreaPictureMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown ProtectedAreaPicture field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ProtectedAreaPictureMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ProtectedAreaPictureMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ProtectedAreaPictureMutation) AddField(name string, value ent.Value) error {
+	return fmt.Errorf("unknown ProtectedAreaPicture numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ProtectedAreaPictureMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ProtectedAreaPictureMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ProtectedAreaPictureMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown ProtectedAreaPicture nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ProtectedAreaPictureMutation) ResetField(name string) error {
+	return fmt.Errorf("unknown ProtectedAreaPicture field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ProtectedAreaPictureMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ProtectedAreaPictureMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ProtectedAreaPictureMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ProtectedAreaPictureMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ProtectedAreaPictureMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ProtectedAreaPictureMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ProtectedAreaPictureMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ProtectedAreaPicture unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ProtectedAreaPictureMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ProtectedAreaPicture edge %s", name)
 }
 
 // PublicationMutation represents an operation that mutates the Publication nodes in the graph.

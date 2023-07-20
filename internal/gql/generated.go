@@ -481,6 +481,18 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	ProtectedArea struct {
+		ID func(childComplexity int) int
+	}
+
+	ProtectedAreaCategory struct {
+		ID func(childComplexity int) int
+	}
+
+	ProtectedAreaPicture struct {
+		ID func(childComplexity int) int
+	}
+
 	Publication struct {
 		Artifacts   func(childComplexity int) int
 		Authors     func(childComplexity int) int
@@ -2796,6 +2808,27 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ProjectEdge.Node(childComplexity), true
 
+	case "ProtectedArea.id":
+		if e.complexity.ProtectedArea.ID == nil {
+			break
+		}
+
+		return e.complexity.ProtectedArea.ID(childComplexity), true
+
+	case "ProtectedAreaCategory.id":
+		if e.complexity.ProtectedAreaCategory.ID == nil {
+			break
+		}
+
+		return e.complexity.ProtectedAreaCategory.ID(childComplexity), true
+
+	case "ProtectedAreaPicture.id":
+		if e.complexity.ProtectedAreaPicture.ID == nil {
+			break
+		}
+
+		return e.complexity.ProtectedAreaPicture.ID(childComplexity), true
+
 	case "Publication.artifacts":
 		if e.complexity.Publication.Artifacts == nil {
 			break
@@ -3593,6 +3626,9 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputPersonWhereInput,
 		ec.unmarshalInputProjectOrder,
 		ec.unmarshalInputProjectWhereInput,
+		ec.unmarshalInputProtectedAreaCategoryWhereInput,
+		ec.unmarshalInputProtectedAreaPictureWhereInput,
+		ec.unmarshalInputProtectedAreaWhereInput,
 		ec.unmarshalInputPublicationOrder,
 		ec.unmarshalInputPublicationWhereInput,
 		ec.unmarshalInputPublisherWhereInput,
@@ -20117,6 +20153,138 @@ func (ec *executionContext) fieldContext_ProjectEdge_cursor(ctx context.Context,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Cursor does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProtectedArea_id(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedArea) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProtectedArea_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNID2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProtectedArea_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProtectedArea",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProtectedAreaCategory_id(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaCategory) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProtectedAreaCategory_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNID2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProtectedAreaCategory_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProtectedAreaCategory",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProtectedAreaPicture_id(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaPicture) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProtectedAreaPicture_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNID2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProtectedAreaPicture_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProtectedAreaPicture",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
 		},
 	}
 	return fc, nil
@@ -42844,6 +43012,363 @@ func (ec *executionContext) unmarshalInputProjectWhereInput(ctx context.Context,
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputProtectedAreaCategoryWhereInput(ctx context.Context, obj interface{}) (ent.ProtectedAreaCategoryWhereInput, error) {
+	var it ent.ProtectedAreaCategoryWhereInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "not":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
+			data, err := ec.unmarshalOProtectedAreaCategoryWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaCategoryWhereInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Not = data
+		case "and":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
+			data, err := ec.unmarshalOProtectedAreaCategoryWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaCategoryWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.And = data
+		case "or":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
+			data, err := ec.unmarshalOProtectedAreaCategoryWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaCategoryWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Or = data
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "idNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNEQ = data
+		case "idIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDIn = data
+		case "idNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNotIn = data
+		case "idGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGT"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDGT = data
+		case "idGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGTE"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDGTE = data
+		case "idLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLT"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDLT = data
+		case "idLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLTE"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDLTE = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputProtectedAreaPictureWhereInput(ctx context.Context, obj interface{}) (ent.ProtectedAreaPictureWhereInput, error) {
+	var it ent.ProtectedAreaPictureWhereInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "not":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
+			data, err := ec.unmarshalOProtectedAreaPictureWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPictureWhereInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Not = data
+		case "and":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
+			data, err := ec.unmarshalOProtectedAreaPictureWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPictureWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.And = data
+		case "or":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
+			data, err := ec.unmarshalOProtectedAreaPictureWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPictureWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Or = data
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "idNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNEQ = data
+		case "idIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDIn = data
+		case "idNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNotIn = data
+		case "idGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGT"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDGT = data
+		case "idGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGTE"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDGTE = data
+		case "idLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLT"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDLT = data
+		case "idLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLTE"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDLTE = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputProtectedAreaWhereInput(ctx context.Context, obj interface{}) (ent.ProtectedAreaWhereInput, error) {
+	var it ent.ProtectedAreaWhereInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "not":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
+			data, err := ec.unmarshalOProtectedAreaWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaWhereInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Not = data
+		case "and":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
+			data, err := ec.unmarshalOProtectedAreaWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.And = data
+		case "or":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
+			data, err := ec.unmarshalOProtectedAreaWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Or = data
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "idNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNEQ = data
+		case "idIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDIn = data
+		case "idNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNotIn = data
+		case "idGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGT"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDGT = data
+		case "idGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGTE"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDGTE = data
+		case "idLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLT"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDLT = data
+		case "idLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLTE"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDLTE = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputPublicationOrder(ctx context.Context, obj interface{}) (ent.PublicationOrder, error) {
 	var it ent.PublicationOrder
 	asMap := map[string]interface{}{}
@@ -50386,6 +50911,21 @@ func (ec *executionContext) _Node(ctx context.Context, sel ast.SelectionSet, obj
 			return graphql.Null
 		}
 		return ec._Project(ctx, sel, obj)
+	case *ent.ProtectedArea:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._ProtectedArea(ctx, sel, obj)
+	case *ent.ProtectedAreaCategory:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._ProtectedAreaCategory(ctx, sel, obj)
+	case *ent.ProtectedAreaPicture:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._ProtectedAreaPicture(ctx, sel, obj)
 	case *ent.Publication:
 		if obj == nil {
 			return graphql.Null
@@ -54413,6 +54953,123 @@ func (ec *executionContext) _ProjectEdge(ctx context.Context, sel ast.SelectionS
 	return out
 }
 
+var protectedAreaImplementors = []string{"ProtectedArea", "Node"}
+
+func (ec *executionContext) _ProtectedArea(ctx context.Context, sel ast.SelectionSet, obj *ent.ProtectedArea) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, protectedAreaImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ProtectedArea")
+		case "id":
+			out.Values[i] = ec._ProtectedArea_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var protectedAreaCategoryImplementors = []string{"ProtectedAreaCategory", "Node"}
+
+func (ec *executionContext) _ProtectedAreaCategory(ctx context.Context, sel ast.SelectionSet, obj *ent.ProtectedAreaCategory) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, protectedAreaCategoryImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ProtectedAreaCategory")
+		case "id":
+			out.Values[i] = ec._ProtectedAreaCategory_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var protectedAreaPictureImplementors = []string{"ProtectedAreaPicture", "Node"}
+
+func (ec *executionContext) _ProtectedAreaPicture(ctx context.Context, sel ast.SelectionSet, obj *ent.ProtectedAreaPicture) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, protectedAreaPictureImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ProtectedAreaPicture")
+		case "id":
+			out.Values[i] = ec._ProtectedAreaPicture_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var publicationImplementors = []string{"Publication", "Node"}
 
 func (ec *executionContext) _Publication(ctx context.Context, sel ast.SelectionSet, obj *ent.Publication) graphql.Marshaler {
@@ -57287,6 +57944,21 @@ func (ec *executionContext) unmarshalNProjectWhereInput2ᚖgithubᚗcomᚋdkrasn
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) unmarshalNProtectedAreaCategoryWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaCategoryWhereInput(ctx context.Context, v interface{}) (*ent.ProtectedAreaCategoryWhereInput, error) {
+	res, err := ec.unmarshalInputProtectedAreaCategoryWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNProtectedAreaPictureWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPictureWhereInput(ctx context.Context, v interface{}) (*ent.ProtectedAreaPictureWhereInput, error) {
+	res, err := ec.unmarshalInputProtectedAreaPictureWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNProtectedAreaWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaWhereInput(ctx context.Context, v interface{}) (*ent.ProtectedAreaWhereInput, error) {
+	res, err := ec.unmarshalInputProtectedAreaWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) marshalNPublication2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPublication(ctx context.Context, sel ast.SelectionSet, v ent.Publication) graphql.Marshaler {
 	return ec._Publication(ctx, sel, &v)
 }
@@ -60115,6 +60787,90 @@ func (ec *executionContext) unmarshalOProjectWhereInput2ᚖgithubᚗcomᚋdkrasn
 		return nil, nil
 	}
 	res, err := ec.unmarshalInputProjectWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOProtectedAreaCategoryWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaCategoryWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.ProtectedAreaCategoryWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*ent.ProtectedAreaCategoryWhereInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNProtectedAreaCategoryWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaCategoryWhereInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOProtectedAreaCategoryWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaCategoryWhereInput(ctx context.Context, v interface{}) (*ent.ProtectedAreaCategoryWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputProtectedAreaCategoryWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOProtectedAreaPictureWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPictureWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.ProtectedAreaPictureWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*ent.ProtectedAreaPictureWhereInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNProtectedAreaPictureWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPictureWhereInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOProtectedAreaPictureWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPictureWhereInput(ctx context.Context, v interface{}) (*ent.ProtectedAreaPictureWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputProtectedAreaPictureWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOProtectedAreaWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.ProtectedAreaWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*ent.ProtectedAreaWhereInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNProtectedAreaWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaWhereInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOProtectedAreaWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaWhereInput(ctx context.Context, v interface{}) (*ent.ProtectedAreaWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputProtectedAreaWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 

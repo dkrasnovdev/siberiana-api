@@ -35,6 +35,9 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
 	"github.com/dkrasnovdev/heritage-api/ent/publisher"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
@@ -159,6 +162,21 @@ var projectImplementors = []string{"Project", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Project) IsNode() {}
+
+var protectedareaImplementors = []string{"ProtectedArea", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ProtectedArea) IsNode() {}
+
+var protectedareacategoryImplementors = []string{"ProtectedAreaCategory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ProtectedAreaCategory) IsNode() {}
+
+var protectedareapictureImplementors = []string{"ProtectedAreaPicture", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ProtectedAreaPicture) IsNode() {}
 
 var publicationImplementors = []string{"Publication", "Node"}
 
@@ -504,6 +522,42 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 		query := c.Project.Query().
 			Where(project.ID(id))
 		query, err := query.CollectFields(ctx, projectImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case protectedarea.Table:
+		query := c.ProtectedArea.Query().
+			Where(protectedarea.ID(id))
+		query, err := query.CollectFields(ctx, protectedareaImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case protectedareacategory.Table:
+		query := c.ProtectedAreaCategory.Query().
+			Where(protectedareacategory.ID(id))
+		query, err := query.CollectFields(ctx, protectedareacategoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case protectedareapicture.Table:
+		query := c.ProtectedAreaPicture.Query().
+			Where(protectedareapicture.ID(id))
+		query, err := query.CollectFields(ctx, protectedareapictureImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -997,6 +1051,54 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 		query := c.Project.Query().
 			Where(project.IDIn(ids...))
 		query, err := query.CollectFields(ctx, projectImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case protectedarea.Table:
+		query := c.ProtectedArea.Query().
+			Where(protectedarea.IDIn(ids...))
+		query, err := query.CollectFields(ctx, protectedareaImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case protectedareacategory.Table:
+		query := c.ProtectedAreaCategory.Query().
+			Where(protectedareacategory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, protectedareacategoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case protectedareapicture.Table:
+		query := c.ProtectedAreaPicture.Query().
+			Where(protectedareapicture.IDIn(ids...))
+		query, err := query.CollectFields(ctx, protectedareapictureImplementors...)
 		if err != nil {
 			return nil, err
 		}
