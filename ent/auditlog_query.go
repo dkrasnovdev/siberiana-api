@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -327,6 +328,12 @@ func (alq *AuditLogQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		alq.sql = prev
+	}
+	if auditlog.Policy == nil {
+		return errors.New("ent: uninitialized auditlog.Policy (forgotten import ent/runtime?)")
+	}
+	if err := auditlog.Policy.EvalQuery(ctx, alq); err != nil {
+		return err
 	}
 	return nil
 }

@@ -7,11 +7,25 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/privacy"
+	rule "github.com/dkrasnovdev/heritage-api/internal/ent/privacy"
 )
 
 // AuditLog holds the schema definition for the AuditLog entity.
 type AuditLog struct {
 	ent.Schema
+}
+
+// Privacy policy of the AuditLog.
+func (AuditLog) Policy() ent.Policy {
+	return privacy.Policy{
+		Query: privacy.QueryPolicy{
+			rule.DenyIfNoViewer(),
+			rule.AllowIfAdministrator(),
+			privacy.AlwaysDenyRule(),
+		},
+		Mutation: privacy.MutationPolicy{},
+	}
 }
 
 // Annotations of the AuditLog.

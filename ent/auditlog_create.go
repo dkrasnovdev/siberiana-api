@@ -121,7 +121,9 @@ func (alc *AuditLogCreate) Mutation() *AuditLogMutation {
 
 // Save creates the AuditLog in the database.
 func (alc *AuditLogCreate) Save(ctx context.Context) (*AuditLog, error) {
-	alc.defaults()
+	if err := alc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, alc.sqlSave, alc.mutation, alc.hooks)
 }
 
@@ -148,11 +150,15 @@ func (alc *AuditLogCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (alc *AuditLogCreate) defaults() {
+func (alc *AuditLogCreate) defaults() error {
 	if _, ok := alc.mutation.CreatedAt(); !ok {
+		if auditlog.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized auditlog.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
 		v := auditlog.DefaultCreatedAt()
 		alc.mutation.SetCreatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

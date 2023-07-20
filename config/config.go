@@ -9,13 +9,13 @@ import (
 
 // Config represents the application configuration.
 type Config struct {
-	HOST                             string `mapstructure:"HOST"`
-	PORT                             string `mapstructure:"PORT"`
-	POSTGRES_DB                      string `mapstructure:"POSTGRES_DB"`
-	POSTGRES_USER                    string `mapstructure:"POSTGRES_USER"`
-	POSTGRES_PASSWORD                string `mapstructure:"POSTGRES_PASSWORD"`
-	SSL_MODE                         string `mapstructure:"SSL_MODE"`
-	OPENID_CONNECT_USERINFO_ENDPOINT string `mapstructure:"OPENID_CONNECT_USERINFO_ENDPOINT"`
+	HOST                   string `mapstructure:"HOST"`
+	PORT                   string `mapstructure:"PORT"`
+	POSTGRES_DB            string `mapstructure:"POSTGRES_DB"`
+	POSTGRES_USER          string `mapstructure:"POSTGRES_USER"`
+	POSTGRES_PASSWORD      string `mapstructure:"POSTGRES_PASSWORD"`
+	SSL_MODE               string `mapstructure:"SSL_MODE"`
+	OIDC_USERINFO_ENDPOINT string `mapstructure:"OIDC_USERINFO_ENDPOINT"`
 }
 
 // LoadConfig loads the application configuration from environment variables or a configuration file.
@@ -25,13 +25,13 @@ func LoadConfig() (config Config, err error) {
 	if env == "production" {
 		// Load configuration from environment variables in production environment.
 		return Config{
-			HOST:                             os.Getenv("HOST"),
-			PORT:                             os.Getenv("PORT"),
-			POSTGRES_DB:                      os.Getenv("POSTGRES_DB"),
-			POSTGRES_USER:                    os.Getenv("POSTGRES_USER"),
-			POSTGRES_PASSWORD:                os.Getenv("POSTGRES_PASSWORD"),
-			SSL_MODE:                         os.Getenv("SSL_MODE"),
-			OPENID_CONNECT_USERINFO_ENDPOINT: os.Getenv("OPENID_CONNECT_USERINFO_ENDPOINT"),
+			HOST:                   os.Getenv("HOST"),
+			PORT:                   os.Getenv("PORT"),
+			POSTGRES_DB:            os.Getenv("POSTGRES_DB"),
+			POSTGRES_USER:          os.Getenv("POSTGRES_USER"),
+			POSTGRES_PASSWORD:      os.Getenv("POSTGRES_PASSWORD"),
+			SSL_MODE:               os.Getenv("SSL_MODE"),
+			OIDC_USERINFO_ENDPOINT: os.Getenv("OIDC_USERINFO_ENDPOINT"),
 		}, nil
 	}
 
@@ -73,8 +73,8 @@ func LoadConfig() (config Config, err error) {
 		err = errors.New("SSL_MODE is required")
 	}
 
-	if config.OPENID_CONNECT_USERINFO_ENDPOINT == "" {
-		err = errors.New("OPENID_CONNECT_USERINFO_ENDPOINT is required")
+	if config.OIDC_USERINFO_ENDPOINT == "" {
+		err = errors.New("OIDC_USERINFO_ENDPOINT is required")
 	}
 
 	return
