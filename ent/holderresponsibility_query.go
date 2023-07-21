@@ -297,6 +297,18 @@ func (hrq *HolderResponsibilityQuery) WithHolder(opts ...func(*HolderQuery)) *Ho
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.HolderResponsibility.Query().
+//		GroupBy(holderresponsibility.FieldCreatedAt).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (hrq *HolderResponsibilityQuery) GroupBy(field string, fields ...string) *HolderResponsibilityGroupBy {
 	hrq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &HolderResponsibilityGroupBy{build: hrq}
@@ -308,6 +320,16 @@ func (hrq *HolderResponsibilityQuery) GroupBy(field string, fields ...string) *H
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//	}
+//
+//	client.HolderResponsibility.Query().
+//		Select(holderresponsibility.FieldCreatedAt).
+//		Scan(ctx, &v)
 func (hrq *HolderResponsibilityQuery) Select(fields ...string) *HolderResponsibilitySelect {
 	hrq.ctx.Fields = append(hrq.ctx.Fields, fields...)
 	sbuild := &HolderResponsibilitySelect{HolderResponsibilityQuery: hrq}

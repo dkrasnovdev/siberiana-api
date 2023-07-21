@@ -75,6 +75,7 @@ func (Person) Edges() []ent.Edge {
 		edge.To("artifacts", Artifact.Type),
 		edge.To("projects", Project.Type),
 		edge.To("publications", Publication.Type),
+		edge.To("person_roles", PersonRole.Type),
 		edge.From("holder", Holder.Type).Ref("person").Unique(),
 	}
 }

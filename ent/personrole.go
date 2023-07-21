@@ -10,11 +10,11 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
+	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 )
 
-// HolderResponsibility is the model entity for the HolderResponsibility schema.
-type HolderResponsibility struct {
+// PersonRole is the model entity for the PersonRole schema.
+type PersonRole struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
@@ -33,45 +33,45 @@ type HolderResponsibility struct {
 	// ExternalLinks holds the value of the "external_links" field.
 	ExternalLinks []string `json:"external_links,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
-	// The values are being populated by the HolderResponsibilityQuery when eager-loading is set.
-	Edges        HolderResponsibilityEdges `json:"edges"`
+	// The values are being populated by the PersonRoleQuery when eager-loading is set.
+	Edges        PersonRoleEdges `json:"edges"`
 	selectValues sql.SelectValues
 }
 
-// HolderResponsibilityEdges holds the relations/edges for other nodes in the graph.
-type HolderResponsibilityEdges struct {
-	// Holder holds the value of the holder edge.
-	Holder []*Holder `json:"holder,omitempty"`
+// PersonRoleEdges holds the relations/edges for other nodes in the graph.
+type PersonRoleEdges struct {
+	// Person holds the value of the person edge.
+	Person []*Person `json:"person,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 	// totalCount holds the count of the edges above.
 	totalCount [1]map[string]int
 
-	namedHolder map[string][]*Holder
+	namedPerson map[string][]*Person
 }
 
-// HolderOrErr returns the Holder value or an error if the edge
+// PersonOrErr returns the Person value or an error if the edge
 // was not loaded in eager-loading.
-func (e HolderResponsibilityEdges) HolderOrErr() ([]*Holder, error) {
+func (e PersonRoleEdges) PersonOrErr() ([]*Person, error) {
 	if e.loadedTypes[0] {
-		return e.Holder, nil
+		return e.Person, nil
 	}
-	return nil, &NotLoadedError{edge: "holder"}
+	return nil, &NotLoadedError{edge: "person"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*HolderResponsibility) scanValues(columns []string) ([]any, error) {
+func (*PersonRole) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case holderresponsibility.FieldExternalLinks:
+		case personrole.FieldExternalLinks:
 			values[i] = new([]byte)
-		case holderresponsibility.FieldID:
+		case personrole.FieldID:
 			values[i] = new(sql.NullInt64)
-		case holderresponsibility.FieldCreatedBy, holderresponsibility.FieldUpdatedBy, holderresponsibility.FieldDisplayName, holderresponsibility.FieldDescription:
+		case personrole.FieldCreatedBy, personrole.FieldUpdatedBy, personrole.FieldDisplayName, personrole.FieldDescription:
 			values[i] = new(sql.NullString)
-		case holderresponsibility.FieldCreatedAt, holderresponsibility.FieldUpdatedAt:
+		case personrole.FieldCreatedAt, personrole.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -81,151 +81,151 @@ func (*HolderResponsibility) scanValues(columns []string) ([]any, error) {
 }
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
-// to the HolderResponsibility fields.
-func (hr *HolderResponsibility) assignValues(columns []string, values []any) error {
+// to the PersonRole fields.
+func (pr *PersonRole) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
 	for i := range columns {
 		switch columns[i] {
-		case holderresponsibility.FieldID:
+		case personrole.FieldID:
 			value, ok := values[i].(*sql.NullInt64)
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			hr.ID = int(value.Int64)
-		case holderresponsibility.FieldCreatedAt:
+			pr.ID = int(value.Int64)
+		case personrole.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				hr.CreatedAt = value.Time
+				pr.CreatedAt = value.Time
 			}
-		case holderresponsibility.FieldCreatedBy:
+		case personrole.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				hr.CreatedBy = value.String
+				pr.CreatedBy = value.String
 			}
-		case holderresponsibility.FieldUpdatedAt:
+		case personrole.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				hr.UpdatedAt = value.Time
+				pr.UpdatedAt = value.Time
 			}
-		case holderresponsibility.FieldUpdatedBy:
+		case personrole.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				hr.UpdatedBy = value.String
+				pr.UpdatedBy = value.String
 			}
-		case holderresponsibility.FieldDisplayName:
+		case personrole.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
 			} else if value.Valid {
-				hr.DisplayName = value.String
+				pr.DisplayName = value.String
 			}
-		case holderresponsibility.FieldDescription:
+		case personrole.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				hr.Description = value.String
+				pr.Description = value.String
 			}
-		case holderresponsibility.FieldExternalLinks:
+		case personrole.FieldExternalLinks:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field external_links", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &hr.ExternalLinks); err != nil {
+				if err := json.Unmarshal(*value, &pr.ExternalLinks); err != nil {
 					return fmt.Errorf("unmarshal field external_links: %w", err)
 				}
 			}
 		default:
-			hr.selectValues.Set(columns[i], values[i])
+			pr.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
 }
 
-// Value returns the ent.Value that was dynamically selected and assigned to the HolderResponsibility.
+// Value returns the ent.Value that was dynamically selected and assigned to the PersonRole.
 // This includes values selected through modifiers, order, etc.
-func (hr *HolderResponsibility) Value(name string) (ent.Value, error) {
-	return hr.selectValues.Get(name)
+func (pr *PersonRole) Value(name string) (ent.Value, error) {
+	return pr.selectValues.Get(name)
 }
 
-// QueryHolder queries the "holder" edge of the HolderResponsibility entity.
-func (hr *HolderResponsibility) QueryHolder() *HolderQuery {
-	return NewHolderResponsibilityClient(hr.config).QueryHolder(hr)
+// QueryPerson queries the "person" edge of the PersonRole entity.
+func (pr *PersonRole) QueryPerson() *PersonQuery {
+	return NewPersonRoleClient(pr.config).QueryPerson(pr)
 }
 
-// Update returns a builder for updating this HolderResponsibility.
-// Note that you need to call HolderResponsibility.Unwrap() before calling this method if this HolderResponsibility
+// Update returns a builder for updating this PersonRole.
+// Note that you need to call PersonRole.Unwrap() before calling this method if this PersonRole
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (hr *HolderResponsibility) Update() *HolderResponsibilityUpdateOne {
-	return NewHolderResponsibilityClient(hr.config).UpdateOne(hr)
+func (pr *PersonRole) Update() *PersonRoleUpdateOne {
+	return NewPersonRoleClient(pr.config).UpdateOne(pr)
 }
 
-// Unwrap unwraps the HolderResponsibility entity that was returned from a transaction after it was closed,
+// Unwrap unwraps the PersonRole entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (hr *HolderResponsibility) Unwrap() *HolderResponsibility {
-	_tx, ok := hr.config.driver.(*txDriver)
+func (pr *PersonRole) Unwrap() *PersonRole {
+	_tx, ok := pr.config.driver.(*txDriver)
 	if !ok {
-		panic("ent: HolderResponsibility is not a transactional entity")
+		panic("ent: PersonRole is not a transactional entity")
 	}
-	hr.config.driver = _tx.drv
-	return hr
+	pr.config.driver = _tx.drv
+	return pr
 }
 
 // String implements the fmt.Stringer.
-func (hr *HolderResponsibility) String() string {
+func (pr *PersonRole) String() string {
 	var builder strings.Builder
-	builder.WriteString("HolderResponsibility(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", hr.ID))
+	builder.WriteString("PersonRole(")
+	builder.WriteString(fmt.Sprintf("id=%v, ", pr.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(hr.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(pr.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(hr.CreatedBy)
+	builder.WriteString(pr.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(hr.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(pr.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(hr.UpdatedBy)
+	builder.WriteString(pr.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
-	builder.WriteString(hr.DisplayName)
+	builder.WriteString(pr.DisplayName)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(hr.Description)
+	builder.WriteString(pr.Description)
 	builder.WriteString(", ")
 	builder.WriteString("external_links=")
-	builder.WriteString(fmt.Sprintf("%v", hr.ExternalLinks))
+	builder.WriteString(fmt.Sprintf("%v", pr.ExternalLinks))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// NamedHolder returns the Holder named value or an error if the edge was not
+// NamedPerson returns the Person named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (hr *HolderResponsibility) NamedHolder(name string) ([]*Holder, error) {
-	if hr.Edges.namedHolder == nil {
+func (pr *PersonRole) NamedPerson(name string) ([]*Person, error) {
+	if pr.Edges.namedPerson == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := hr.Edges.namedHolder[name]
+	nodes, ok := pr.Edges.namedPerson[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (hr *HolderResponsibility) appendNamedHolder(name string, edges ...*Holder) {
-	if hr.Edges.namedHolder == nil {
-		hr.Edges.namedHolder = make(map[string][]*Holder)
+func (pr *PersonRole) appendNamedPerson(name string, edges ...*Person) {
+	if pr.Edges.namedPerson == nil {
+		pr.Edges.namedPerson = make(map[string][]*Person)
 	}
 	if len(edges) == 0 {
-		hr.Edges.namedHolder[name] = []*Holder{}
+		pr.Edges.namedPerson[name] = []*Person{}
 	} else {
-		hr.Edges.namedHolder[name] = append(hr.Edges.namedHolder[name], edges...)
+		pr.Edges.namedPerson[name] = append(pr.Edges.namedPerson[name], edges...)
 	}
 }
 
-// HolderResponsibilities is a parsable slice of HolderResponsibility.
-type HolderResponsibilities []*HolderResponsibility
+// PersonRoles is a parsable slice of PersonRole.
+type PersonRoles []*PersonRole

@@ -368,12 +368,36 @@ func (pe *Person) Publications(ctx context.Context) (result []*Publication, err 
 	return result, err
 }
 
+func (pe *Person) PersonRoles(ctx context.Context) (result []*PersonRole, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pe.NamedPersonRoles(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pe.Edges.PersonRolesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pe.QueryPersonRoles().All(ctx)
+	}
+	return result, err
+}
+
 func (pe *Person) Holder(ctx context.Context) (*Holder, error) {
 	result, err := pe.Edges.HolderOrErr()
 	if IsNotLoaded(err) {
 		result, err = pe.QueryHolder().Only(ctx)
 	}
 	return result, MaskNotFound(err)
+}
+
+func (pr *PersonRole) Person(ctx context.Context) (result []*Person, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pr.NamedPerson(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pr.Edges.PersonOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pr.QueryPerson().All(ctx)
+	}
+	return result, err
 }
 
 func (pr *Project) Artifacts(ctx context.Context) (result []*Artifact, err error) {

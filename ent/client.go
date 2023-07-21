@@ -36,6 +36,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/monument"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
+	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
@@ -97,6 +98,8 @@ type Client struct {
 	Organization *OrganizationClient
 	// Person is the client for interacting with the Person builders.
 	Person *PersonClient
+	// PersonRole is the client for interacting with the PersonRole builders.
+	PersonRole *PersonRoleClient
 	// Project is the client for interacting with the Project builders.
 	Project *ProjectClient
 	// ProtectedArea is the client for interacting with the ProtectedArea builders.
@@ -154,6 +157,7 @@ func (c *Client) init() {
 	c.Monument = NewMonumentClient(c.config)
 	c.Organization = NewOrganizationClient(c.config)
 	c.Person = NewPersonClient(c.config)
+	c.PersonRole = NewPersonRoleClient(c.config)
 	c.Project = NewProjectClient(c.config)
 	c.ProtectedArea = NewProtectedAreaClient(c.config)
 	c.ProtectedAreaCategory = NewProtectedAreaCategoryClient(c.config)
@@ -268,6 +272,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Monument:              NewMonumentClient(cfg),
 		Organization:          NewOrganizationClient(cfg),
 		Person:                NewPersonClient(cfg),
+		PersonRole:            NewPersonRoleClient(cfg),
 		Project:               NewProjectClient(cfg),
 		ProtectedArea:         NewProtectedAreaClient(cfg),
 		ProtectedAreaCategory: NewProtectedAreaCategoryClient(cfg),
@@ -319,6 +324,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Monument:              NewMonumentClient(cfg),
 		Organization:          NewOrganizationClient(cfg),
 		Person:                NewPersonClient(cfg),
+		PersonRole:            NewPersonRoleClient(cfg),
 		Project:               NewProjectClient(cfg),
 		ProtectedArea:         NewProtectedAreaClient(cfg),
 		ProtectedAreaCategory: NewProtectedAreaCategoryClient(cfg),
@@ -361,9 +367,9 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
 		c.Category, c.Collection, c.Culture, c.District, c.Holder,
 		c.HolderResponsibility, c.Keyword, c.Library, c.License, c.Location, c.Medium,
-		c.Model, c.Monument, c.Organization, c.Person, c.Project, c.ProtectedArea,
-		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Publication, c.Publisher,
-		c.Region, c.Set, c.Settlement, c.Technique,
+		c.Model, c.Monument, c.Organization, c.Person, c.PersonRole, c.Project,
+		c.ProtectedArea, c.ProtectedAreaCategory, c.ProtectedAreaPicture,
+		c.Publication, c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
 	} {
 		n.Use(hooks...)
 	}
@@ -376,9 +382,9 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
 		c.Category, c.Collection, c.Culture, c.District, c.Holder,
 		c.HolderResponsibility, c.Keyword, c.Library, c.License, c.Location, c.Medium,
-		c.Model, c.Monument, c.Organization, c.Person, c.Project, c.ProtectedArea,
-		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Publication, c.Publisher,
-		c.Region, c.Set, c.Settlement, c.Technique,
+		c.Model, c.Monument, c.Organization, c.Person, c.PersonRole, c.Project,
+		c.ProtectedArea, c.ProtectedAreaCategory, c.ProtectedAreaPicture,
+		c.Publication, c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -431,6 +437,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Organization.mutate(ctx, m)
 	case *PersonMutation:
 		return c.Person.mutate(ctx, m)
+	case *PersonRoleMutation:
+		return c.PersonRole.mutate(ctx, m)
 	case *ProjectMutation:
 		return c.Project.mutate(ctx, m)
 	case *ProtectedAreaMutation:
@@ -2343,7 +2351,8 @@ func (c *HolderResponsibilityClient) QueryHolder(hr *HolderResponsibility) *Hold
 
 // Hooks returns the client hooks.
 func (c *HolderResponsibilityClient) Hooks() []Hook {
-	return c.hooks.HolderResponsibility
+	hooks := c.hooks.HolderResponsibility
+	return append(hooks[:len(hooks):len(hooks)], holderresponsibility.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -3601,6 +3610,22 @@ func (c *PersonClient) QueryPublications(pe *Person) *PublicationQuery {
 	return query
 }
 
+// QueryPersonRoles queries the person_roles edge of a Person.
+func (c *PersonClient) QueryPersonRoles(pe *Person) *PersonRoleQuery {
+	query := (&PersonRoleClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, id),
+			sqlgraph.To(personrole.Table, personrole.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, person.PersonRolesTable, person.PersonRolesPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryHolder queries the holder edge of a Person.
 func (c *PersonClient) QueryHolder(pe *Person) *HolderQuery {
 	query := (&HolderClient{config: c.config}).Query()
@@ -3640,6 +3665,141 @@ func (c *PersonClient) mutate(ctx context.Context, m *PersonMutation) (Value, er
 		return (&PersonDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Person mutation op: %q", m.Op())
+	}
+}
+
+// PersonRoleClient is a client for the PersonRole schema.
+type PersonRoleClient struct {
+	config
+}
+
+// NewPersonRoleClient returns a client for the PersonRole from the given config.
+func NewPersonRoleClient(c config) *PersonRoleClient {
+	return &PersonRoleClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `personrole.Hooks(f(g(h())))`.
+func (c *PersonRoleClient) Use(hooks ...Hook) {
+	c.hooks.PersonRole = append(c.hooks.PersonRole, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `personrole.Intercept(f(g(h())))`.
+func (c *PersonRoleClient) Intercept(interceptors ...Interceptor) {
+	c.inters.PersonRole = append(c.inters.PersonRole, interceptors...)
+}
+
+// Create returns a builder for creating a PersonRole entity.
+func (c *PersonRoleClient) Create() *PersonRoleCreate {
+	mutation := newPersonRoleMutation(c.config, OpCreate)
+	return &PersonRoleCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of PersonRole entities.
+func (c *PersonRoleClient) CreateBulk(builders ...*PersonRoleCreate) *PersonRoleCreateBulk {
+	return &PersonRoleCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for PersonRole.
+func (c *PersonRoleClient) Update() *PersonRoleUpdate {
+	mutation := newPersonRoleMutation(c.config, OpUpdate)
+	return &PersonRoleUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *PersonRoleClient) UpdateOne(pr *PersonRole) *PersonRoleUpdateOne {
+	mutation := newPersonRoleMutation(c.config, OpUpdateOne, withPersonRole(pr))
+	return &PersonRoleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *PersonRoleClient) UpdateOneID(id int) *PersonRoleUpdateOne {
+	mutation := newPersonRoleMutation(c.config, OpUpdateOne, withPersonRoleID(id))
+	return &PersonRoleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for PersonRole.
+func (c *PersonRoleClient) Delete() *PersonRoleDelete {
+	mutation := newPersonRoleMutation(c.config, OpDelete)
+	return &PersonRoleDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *PersonRoleClient) DeleteOne(pr *PersonRole) *PersonRoleDeleteOne {
+	return c.DeleteOneID(pr.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *PersonRoleClient) DeleteOneID(id int) *PersonRoleDeleteOne {
+	builder := c.Delete().Where(personrole.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &PersonRoleDeleteOne{builder}
+}
+
+// Query returns a query builder for PersonRole.
+func (c *PersonRoleClient) Query() *PersonRoleQuery {
+	return &PersonRoleQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypePersonRole},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a PersonRole entity by its id.
+func (c *PersonRoleClient) Get(ctx context.Context, id int) (*PersonRole, error) {
+	return c.Query().Where(personrole.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *PersonRoleClient) GetX(ctx context.Context, id int) *PersonRole {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryPerson queries the person edge of a PersonRole.
+func (c *PersonRoleClient) QueryPerson(pr *PersonRole) *PersonQuery {
+	query := (&PersonClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(personrole.Table, personrole.FieldID, id),
+			sqlgraph.To(person.Table, person.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, personrole.PersonTable, personrole.PersonPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *PersonRoleClient) Hooks() []Hook {
+	hooks := c.hooks.PersonRole
+	return append(hooks[:len(hooks):len(hooks)], personrole.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *PersonRoleClient) Interceptors() []Interceptor {
+	return c.inters.PersonRole
+}
+
+func (c *PersonRoleClient) mutate(ctx context.Context, m *PersonRoleMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&PersonRoleCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&PersonRoleUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&PersonRoleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&PersonRoleDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown PersonRole mutation op: %q", m.Op())
 	}
 }
 
@@ -4962,15 +5122,15 @@ type (
 	hooks struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
 		Collection, Culture, District, Holder, HolderResponsibility, Keyword, Library,
-		License, Location, Medium, Model, Monument, Organization, Person, Project,
-		ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Publication,
-		Publisher, Region, Set, Settlement, Technique []ent.Hook
+		License, Location, Medium, Model, Monument, Organization, Person, PersonRole,
+		Project, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture,
+		Publication, Publisher, Region, Set, Settlement, Technique []ent.Hook
 	}
 	inters struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
 		Collection, Culture, District, Holder, HolderResponsibility, Keyword, Library,
-		License, Location, Medium, Model, Monument, Organization, Person, Project,
-		ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Publication,
-		Publisher, Region, Set, Settlement, Technique []ent.Interceptor
+		License, Location, Medium, Model, Monument, Organization, Person, PersonRole,
+		Project, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture,
+		Publication, Publisher, Region, Set, Settlement, Technique []ent.Interceptor
 	}
 )

@@ -72,6 +72,9 @@ type Organization func(*sql.Selector)
 // Person is the predicate function for person builders.
 type Person func(*sql.Selector)
 
+// PersonRole is the predicate function for personrole builders.
+type PersonRole func(*sql.Selector)
+
 // Project is the predicate function for project builders.
 type Project func(*sql.Selector)
 

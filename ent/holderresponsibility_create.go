@@ -4,7 +4,9 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -17,6 +19,96 @@ type HolderResponsibilityCreate struct {
 	config
 	mutation *HolderResponsibilityMutation
 	hooks    []Hook
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (hrc *HolderResponsibilityCreate) SetCreatedAt(t time.Time) *HolderResponsibilityCreate {
+	hrc.mutation.SetCreatedAt(t)
+	return hrc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (hrc *HolderResponsibilityCreate) SetNillableCreatedAt(t *time.Time) *HolderResponsibilityCreate {
+	if t != nil {
+		hrc.SetCreatedAt(*t)
+	}
+	return hrc
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (hrc *HolderResponsibilityCreate) SetCreatedBy(s string) *HolderResponsibilityCreate {
+	hrc.mutation.SetCreatedBy(s)
+	return hrc
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (hrc *HolderResponsibilityCreate) SetNillableCreatedBy(s *string) *HolderResponsibilityCreate {
+	if s != nil {
+		hrc.SetCreatedBy(*s)
+	}
+	return hrc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (hrc *HolderResponsibilityCreate) SetUpdatedAt(t time.Time) *HolderResponsibilityCreate {
+	hrc.mutation.SetUpdatedAt(t)
+	return hrc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (hrc *HolderResponsibilityCreate) SetNillableUpdatedAt(t *time.Time) *HolderResponsibilityCreate {
+	if t != nil {
+		hrc.SetUpdatedAt(*t)
+	}
+	return hrc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (hrc *HolderResponsibilityCreate) SetUpdatedBy(s string) *HolderResponsibilityCreate {
+	hrc.mutation.SetUpdatedBy(s)
+	return hrc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (hrc *HolderResponsibilityCreate) SetNillableUpdatedBy(s *string) *HolderResponsibilityCreate {
+	if s != nil {
+		hrc.SetUpdatedBy(*s)
+	}
+	return hrc
+}
+
+// SetDisplayName sets the "display_name" field.
+func (hrc *HolderResponsibilityCreate) SetDisplayName(s string) *HolderResponsibilityCreate {
+	hrc.mutation.SetDisplayName(s)
+	return hrc
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (hrc *HolderResponsibilityCreate) SetNillableDisplayName(s *string) *HolderResponsibilityCreate {
+	if s != nil {
+		hrc.SetDisplayName(*s)
+	}
+	return hrc
+}
+
+// SetDescription sets the "description" field.
+func (hrc *HolderResponsibilityCreate) SetDescription(s string) *HolderResponsibilityCreate {
+	hrc.mutation.SetDescription(s)
+	return hrc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (hrc *HolderResponsibilityCreate) SetNillableDescription(s *string) *HolderResponsibilityCreate {
+	if s != nil {
+		hrc.SetDescription(*s)
+	}
+	return hrc
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (hrc *HolderResponsibilityCreate) SetExternalLinks(s []string) *HolderResponsibilityCreate {
+	hrc.mutation.SetExternalLinks(s)
+	return hrc
 }
 
 // AddHolderIDs adds the "holder" edge to the Holder entity by IDs.
@@ -41,6 +133,9 @@ func (hrc *HolderResponsibilityCreate) Mutation() *HolderResponsibilityMutation 
 
 // Save creates the HolderResponsibility in the database.
 func (hrc *HolderResponsibilityCreate) Save(ctx context.Context) (*HolderResponsibility, error) {
+	if err := hrc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, hrc.sqlSave, hrc.mutation, hrc.hooks)
 }
 
@@ -66,8 +161,33 @@ func (hrc *HolderResponsibilityCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (hrc *HolderResponsibilityCreate) defaults() error {
+	if _, ok := hrc.mutation.CreatedAt(); !ok {
+		if holderresponsibility.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized holderresponsibility.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := holderresponsibility.DefaultCreatedAt()
+		hrc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := hrc.mutation.UpdatedAt(); !ok {
+		if holderresponsibility.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized holderresponsibility.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := holderresponsibility.DefaultUpdatedAt()
+		hrc.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (hrc *HolderResponsibilityCreate) check() error {
+	if _, ok := hrc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "HolderResponsibility.created_at"`)}
+	}
+	if _, ok := hrc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "HolderResponsibility.updated_at"`)}
+	}
 	return nil
 }
 
@@ -94,6 +214,34 @@ func (hrc *HolderResponsibilityCreate) createSpec() (*HolderResponsibility, *sql
 		_node = &HolderResponsibility{config: hrc.config}
 		_spec = sqlgraph.NewCreateSpec(holderresponsibility.Table, sqlgraph.NewFieldSpec(holderresponsibility.FieldID, field.TypeInt))
 	)
+	if value, ok := hrc.mutation.CreatedAt(); ok {
+		_spec.SetField(holderresponsibility.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := hrc.mutation.CreatedBy(); ok {
+		_spec.SetField(holderresponsibility.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := hrc.mutation.UpdatedAt(); ok {
+		_spec.SetField(holderresponsibility.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := hrc.mutation.UpdatedBy(); ok {
+		_spec.SetField(holderresponsibility.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
+	if value, ok := hrc.mutation.DisplayName(); ok {
+		_spec.SetField(holderresponsibility.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
+	}
+	if value, ok := hrc.mutation.Description(); ok {
+		_spec.SetField(holderresponsibility.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if value, ok := hrc.mutation.ExternalLinks(); ok {
+		_spec.SetField(holderresponsibility.FieldExternalLinks, field.TypeJSON, value)
+		_node.ExternalLinks = value
+	}
 	if nodes := hrc.mutation.HolderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -127,6 +275,7 @@ func (hrcb *HolderResponsibilityCreateBulk) Save(ctx context.Context) ([]*Holder
 	for i := range hrcb.builders {
 		func(i int, root context.Context) {
 			builder := hrcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*HolderResponsibilityMutation)
 				if !ok {

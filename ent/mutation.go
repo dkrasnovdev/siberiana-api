@@ -26,6 +26,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/monument"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
+	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
@@ -66,6 +67,7 @@ const (
 	TypeMonument              = "Monument"
 	TypeOrganization          = "Organization"
 	TypePerson                = "Person"
+	TypePersonRole            = "PersonRole"
 	TypeProject               = "Project"
 	TypeProtectedArea         = "ProtectedArea"
 	TypeProtectedAreaCategory = "ProtectedAreaCategory"
@@ -8829,16 +8831,24 @@ func (m *HolderMutation) ResetEdge(name string) error {
 // HolderResponsibilityMutation represents an operation that mutates the HolderResponsibility nodes in the graph.
 type HolderResponsibilityMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	clearedFields map[string]struct{}
-	holder        map[int]struct{}
-	removedholder map[int]struct{}
-	clearedholder bool
-	done          bool
-	oldValue      func(context.Context) (*HolderResponsibility, error)
-	predicates    []predicate.HolderResponsibility
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	holder               map[int]struct{}
+	removedholder        map[int]struct{}
+	clearedholder        bool
+	done                 bool
+	oldValue             func(context.Context) (*HolderResponsibility, error)
+	predicates           []predicate.HolderResponsibility
 }
 
 var _ ent.Mutation = (*HolderResponsibilityMutation)(nil)
@@ -8939,6 +8949,339 @@ func (m *HolderResponsibilityMutation) IDs(ctx context.Context) ([]int, error) {
 	}
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (m *HolderResponsibilityMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *HolderResponsibilityMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the HolderResponsibility entity.
+// If the HolderResponsibility object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *HolderResponsibilityMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *HolderResponsibilityMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *HolderResponsibilityMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *HolderResponsibilityMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the HolderResponsibility entity.
+// If the HolderResponsibility object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *HolderResponsibilityMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *HolderResponsibilityMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[holderresponsibility.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *HolderResponsibilityMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[holderresponsibility.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *HolderResponsibilityMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, holderresponsibility.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *HolderResponsibilityMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *HolderResponsibilityMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the HolderResponsibility entity.
+// If the HolderResponsibility object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *HolderResponsibilityMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *HolderResponsibilityMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *HolderResponsibilityMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *HolderResponsibilityMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the HolderResponsibility entity.
+// If the HolderResponsibility object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *HolderResponsibilityMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *HolderResponsibilityMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[holderresponsibility.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *HolderResponsibilityMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[holderresponsibility.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *HolderResponsibilityMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, holderresponsibility.FieldUpdatedBy)
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *HolderResponsibilityMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *HolderResponsibilityMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the HolderResponsibility entity.
+// If the HolderResponsibility object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *HolderResponsibilityMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (m *HolderResponsibilityMutation) ClearDisplayName() {
+	m.display_name = nil
+	m.clearedFields[holderresponsibility.FieldDisplayName] = struct{}{}
+}
+
+// DisplayNameCleared returns if the "display_name" field was cleared in this mutation.
+func (m *HolderResponsibilityMutation) DisplayNameCleared() bool {
+	_, ok := m.clearedFields[holderresponsibility.FieldDisplayName]
+	return ok
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *HolderResponsibilityMutation) ResetDisplayName() {
+	m.display_name = nil
+	delete(m.clearedFields, holderresponsibility.FieldDisplayName)
+}
+
+// SetDescription sets the "description" field.
+func (m *HolderResponsibilityMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *HolderResponsibilityMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the HolderResponsibility entity.
+// If the HolderResponsibility object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *HolderResponsibilityMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *HolderResponsibilityMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[holderresponsibility.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *HolderResponsibilityMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[holderresponsibility.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *HolderResponsibilityMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, holderresponsibility.FieldDescription)
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (m *HolderResponsibilityMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
+}
+
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *HolderResponsibilityMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalLinks returns the old "external_links" field's value of the HolderResponsibility entity.
+// If the HolderResponsibility object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *HolderResponsibilityMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
+	}
+	return oldValue.ExternalLinks, nil
+}
+
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *HolderResponsibilityMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
+}
+
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *HolderResponsibilityMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *HolderResponsibilityMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[holderresponsibility.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *HolderResponsibilityMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[holderresponsibility.FieldExternalLinks]
+	return ok
+}
+
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *HolderResponsibilityMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, holderresponsibility.FieldExternalLinks)
+}
+
 // AddHolderIDs adds the "holder" edge to the Holder entity by ids.
 func (m *HolderResponsibilityMutation) AddHolderIDs(ids ...int) {
 	if m.holder == nil {
@@ -9027,7 +9370,28 @@ func (m *HolderResponsibilityMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *HolderResponsibilityMutation) Fields() []string {
-	fields := make([]string, 0, 0)
+	fields := make([]string, 0, 7)
+	if m.created_at != nil {
+		fields = append(fields, holderresponsibility.FieldCreatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, holderresponsibility.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, holderresponsibility.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, holderresponsibility.FieldUpdatedBy)
+	}
+	if m.display_name != nil {
+		fields = append(fields, holderresponsibility.FieldDisplayName)
+	}
+	if m.description != nil {
+		fields = append(fields, holderresponsibility.FieldDescription)
+	}
+	if m.external_links != nil {
+		fields = append(fields, holderresponsibility.FieldExternalLinks)
+	}
 	return fields
 }
 
@@ -9035,6 +9399,22 @@ func (m *HolderResponsibilityMutation) Fields() []string {
 // return value indicates that this field was not set, or was not defined in the
 // schema.
 func (m *HolderResponsibilityMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case holderresponsibility.FieldCreatedAt:
+		return m.CreatedAt()
+	case holderresponsibility.FieldCreatedBy:
+		return m.CreatedBy()
+	case holderresponsibility.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case holderresponsibility.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case holderresponsibility.FieldDisplayName:
+		return m.DisplayName()
+	case holderresponsibility.FieldDescription:
+		return m.Description()
+	case holderresponsibility.FieldExternalLinks:
+		return m.ExternalLinks()
+	}
 	return nil, false
 }
 
@@ -9042,6 +9422,22 @@ func (m *HolderResponsibilityMutation) Field(name string) (ent.Value, bool) {
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
 func (m *HolderResponsibilityMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case holderresponsibility.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case holderresponsibility.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case holderresponsibility.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case holderresponsibility.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case holderresponsibility.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case holderresponsibility.FieldDescription:
+		return m.OldDescription(ctx)
+	case holderresponsibility.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
+	}
 	return nil, fmt.Errorf("unknown HolderResponsibility field %s", name)
 }
 
@@ -9050,6 +9446,55 @@ func (m *HolderResponsibilityMutation) OldField(ctx context.Context, name string
 // type.
 func (m *HolderResponsibilityMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case holderresponsibility.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case holderresponsibility.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case holderresponsibility.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case holderresponsibility.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case holderresponsibility.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case holderresponsibility.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case holderresponsibility.FieldExternalLinks:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalLinks(v)
+		return nil
 	}
 	return fmt.Errorf("unknown HolderResponsibility field %s", name)
 }
@@ -9071,13 +9516,31 @@ func (m *HolderResponsibilityMutation) AddedField(name string) (ent.Value, bool)
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
 func (m *HolderResponsibilityMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown HolderResponsibility numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *HolderResponsibilityMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(holderresponsibility.FieldCreatedBy) {
+		fields = append(fields, holderresponsibility.FieldCreatedBy)
+	}
+	if m.FieldCleared(holderresponsibility.FieldUpdatedBy) {
+		fields = append(fields, holderresponsibility.FieldUpdatedBy)
+	}
+	if m.FieldCleared(holderresponsibility.FieldDisplayName) {
+		fields = append(fields, holderresponsibility.FieldDisplayName)
+	}
+	if m.FieldCleared(holderresponsibility.FieldDescription) {
+		fields = append(fields, holderresponsibility.FieldDescription)
+	}
+	if m.FieldCleared(holderresponsibility.FieldExternalLinks) {
+		fields = append(fields, holderresponsibility.FieldExternalLinks)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -9090,12 +9553,52 @@ func (m *HolderResponsibilityMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *HolderResponsibilityMutation) ClearField(name string) error {
+	switch name {
+	case holderresponsibility.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case holderresponsibility.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case holderresponsibility.FieldDisplayName:
+		m.ClearDisplayName()
+		return nil
+	case holderresponsibility.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case holderresponsibility.FieldExternalLinks:
+		m.ClearExternalLinks()
+		return nil
+	}
 	return fmt.Errorf("unknown HolderResponsibility nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
 func (m *HolderResponsibilityMutation) ResetField(name string) error {
+	switch name {
+	case holderresponsibility.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case holderresponsibility.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case holderresponsibility.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case holderresponsibility.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case holderresponsibility.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case holderresponsibility.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case holderresponsibility.FieldExternalLinks:
+		m.ResetExternalLinks()
+		return nil
+	}
 	return fmt.Errorf("unknown HolderResponsibility field %s", name)
 }
 
@@ -15464,6 +15967,9 @@ type PersonMutation struct {
 	publications                 map[int]struct{}
 	removedpublications          map[int]struct{}
 	clearedpublications          bool
+	person_roles                 map[int]struct{}
+	removedperson_roles          map[int]struct{}
+	clearedperson_roles          bool
 	holder                       *int
 	clearedholder                bool
 	done                         bool
@@ -16638,6 +17144,60 @@ func (m *PersonMutation) ResetPublications() {
 	m.removedpublications = nil
 }
 
+// AddPersonRoleIDs adds the "person_roles" edge to the PersonRole entity by ids.
+func (m *PersonMutation) AddPersonRoleIDs(ids ...int) {
+	if m.person_roles == nil {
+		m.person_roles = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.person_roles[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPersonRoles clears the "person_roles" edge to the PersonRole entity.
+func (m *PersonMutation) ClearPersonRoles() {
+	m.clearedperson_roles = true
+}
+
+// PersonRolesCleared reports if the "person_roles" edge to the PersonRole entity was cleared.
+func (m *PersonMutation) PersonRolesCleared() bool {
+	return m.clearedperson_roles
+}
+
+// RemovePersonRoleIDs removes the "person_roles" edge to the PersonRole entity by IDs.
+func (m *PersonMutation) RemovePersonRoleIDs(ids ...int) {
+	if m.removedperson_roles == nil {
+		m.removedperson_roles = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.person_roles, ids[i])
+		m.removedperson_roles[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPersonRoles returns the removed IDs of the "person_roles" edge to the PersonRole entity.
+func (m *PersonMutation) RemovedPersonRolesIDs() (ids []int) {
+	for id := range m.removedperson_roles {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PersonRolesIDs returns the "person_roles" edge IDs in the mutation.
+func (m *PersonMutation) PersonRolesIDs() (ids []int) {
+	for id := range m.person_roles {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPersonRoles resets all changes to the "person_roles" edge.
+func (m *PersonMutation) ResetPersonRoles() {
+	m.person_roles = nil
+	m.clearedperson_roles = false
+	m.removedperson_roles = nil
+}
+
 // SetHolderID sets the "holder" edge to the Holder entity by id.
 func (m *PersonMutation) SetHolderID(id int) {
 	m.holder = &id
@@ -17192,7 +17752,7 @@ func (m *PersonMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *PersonMutation) AddedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.artifacts != nil {
 		edges = append(edges, person.EdgeArtifacts)
 	}
@@ -17201,6 +17761,9 @@ func (m *PersonMutation) AddedEdges() []string {
 	}
 	if m.publications != nil {
 		edges = append(edges, person.EdgePublications)
+	}
+	if m.person_roles != nil {
+		edges = append(edges, person.EdgePersonRoles)
 	}
 	if m.holder != nil {
 		edges = append(edges, person.EdgeHolder)
@@ -17230,6 +17793,12 @@ func (m *PersonMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case person.EdgePersonRoles:
+		ids := make([]ent.Value, 0, len(m.person_roles))
+		for id := range m.person_roles {
+			ids = append(ids, id)
+		}
+		return ids
 	case person.EdgeHolder:
 		if id := m.holder; id != nil {
 			return []ent.Value{*id}
@@ -17240,7 +17809,7 @@ func (m *PersonMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *PersonMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.removedartifacts != nil {
 		edges = append(edges, person.EdgeArtifacts)
 	}
@@ -17249,6 +17818,9 @@ func (m *PersonMutation) RemovedEdges() []string {
 	}
 	if m.removedpublications != nil {
 		edges = append(edges, person.EdgePublications)
+	}
+	if m.removedperson_roles != nil {
+		edges = append(edges, person.EdgePersonRoles)
 	}
 	return edges
 }
@@ -17275,13 +17847,19 @@ func (m *PersonMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case person.EdgePersonRoles:
+		ids := make([]ent.Value, 0, len(m.removedperson_roles))
+		for id := range m.removedperson_roles {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *PersonMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.clearedartifacts {
 		edges = append(edges, person.EdgeArtifacts)
 	}
@@ -17290,6 +17868,9 @@ func (m *PersonMutation) ClearedEdges() []string {
 	}
 	if m.clearedpublications {
 		edges = append(edges, person.EdgePublications)
+	}
+	if m.clearedperson_roles {
+		edges = append(edges, person.EdgePersonRoles)
 	}
 	if m.clearedholder {
 		edges = append(edges, person.EdgeHolder)
@@ -17307,6 +17888,8 @@ func (m *PersonMutation) EdgeCleared(name string) bool {
 		return m.clearedprojects
 	case person.EdgePublications:
 		return m.clearedpublications
+	case person.EdgePersonRoles:
+		return m.clearedperson_roles
 	case person.EdgeHolder:
 		return m.clearedholder
 	}
@@ -17337,11 +17920,872 @@ func (m *PersonMutation) ResetEdge(name string) error {
 	case person.EdgePublications:
 		m.ResetPublications()
 		return nil
+	case person.EdgePersonRoles:
+		m.ResetPersonRoles()
+		return nil
 	case person.EdgeHolder:
 		m.ResetHolder()
 		return nil
 	}
 	return fmt.Errorf("unknown Person edge %s", name)
+}
+
+// PersonRoleMutation represents an operation that mutates the PersonRole nodes in the graph.
+type PersonRoleMutation struct {
+	config
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	person               map[int]struct{}
+	removedperson        map[int]struct{}
+	clearedperson        bool
+	done                 bool
+	oldValue             func(context.Context) (*PersonRole, error)
+	predicates           []predicate.PersonRole
+}
+
+var _ ent.Mutation = (*PersonRoleMutation)(nil)
+
+// personroleOption allows management of the mutation configuration using functional options.
+type personroleOption func(*PersonRoleMutation)
+
+// newPersonRoleMutation creates new mutation for the PersonRole entity.
+func newPersonRoleMutation(c config, op Op, opts ...personroleOption) *PersonRoleMutation {
+	m := &PersonRoleMutation{
+		config:        c,
+		op:            op,
+		typ:           TypePersonRole,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withPersonRoleID sets the ID field of the mutation.
+func withPersonRoleID(id int) personroleOption {
+	return func(m *PersonRoleMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *PersonRole
+		)
+		m.oldValue = func(ctx context.Context) (*PersonRole, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().PersonRole.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withPersonRole sets the old PersonRole of the mutation.
+func withPersonRole(node *PersonRole) personroleOption {
+	return func(m *PersonRoleMutation) {
+		m.oldValue = func(context.Context) (*PersonRole, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m PersonRoleMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m PersonRoleMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *PersonRoleMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *PersonRoleMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().PersonRole.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *PersonRoleMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *PersonRoleMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the PersonRole entity.
+// If the PersonRole object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonRoleMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *PersonRoleMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *PersonRoleMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *PersonRoleMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the PersonRole entity.
+// If the PersonRole object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonRoleMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *PersonRoleMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[personrole.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *PersonRoleMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[personrole.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *PersonRoleMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, personrole.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *PersonRoleMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *PersonRoleMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the PersonRole entity.
+// If the PersonRole object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonRoleMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *PersonRoleMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *PersonRoleMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *PersonRoleMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the PersonRole entity.
+// If the PersonRole object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonRoleMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *PersonRoleMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[personrole.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *PersonRoleMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[personrole.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *PersonRoleMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, personrole.FieldUpdatedBy)
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *PersonRoleMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *PersonRoleMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the PersonRole entity.
+// If the PersonRole object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonRoleMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (m *PersonRoleMutation) ClearDisplayName() {
+	m.display_name = nil
+	m.clearedFields[personrole.FieldDisplayName] = struct{}{}
+}
+
+// DisplayNameCleared returns if the "display_name" field was cleared in this mutation.
+func (m *PersonRoleMutation) DisplayNameCleared() bool {
+	_, ok := m.clearedFields[personrole.FieldDisplayName]
+	return ok
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *PersonRoleMutation) ResetDisplayName() {
+	m.display_name = nil
+	delete(m.clearedFields, personrole.FieldDisplayName)
+}
+
+// SetDescription sets the "description" field.
+func (m *PersonRoleMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *PersonRoleMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the PersonRole entity.
+// If the PersonRole object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonRoleMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *PersonRoleMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[personrole.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *PersonRoleMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[personrole.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *PersonRoleMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, personrole.FieldDescription)
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (m *PersonRoleMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
+}
+
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *PersonRoleMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalLinks returns the old "external_links" field's value of the PersonRole entity.
+// If the PersonRole object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonRoleMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
+	}
+	return oldValue.ExternalLinks, nil
+}
+
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *PersonRoleMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
+}
+
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *PersonRoleMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *PersonRoleMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[personrole.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *PersonRoleMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[personrole.FieldExternalLinks]
+	return ok
+}
+
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *PersonRoleMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, personrole.FieldExternalLinks)
+}
+
+// AddPersonIDs adds the "person" edge to the Person entity by ids.
+func (m *PersonRoleMutation) AddPersonIDs(ids ...int) {
+	if m.person == nil {
+		m.person = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.person[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPerson clears the "person" edge to the Person entity.
+func (m *PersonRoleMutation) ClearPerson() {
+	m.clearedperson = true
+}
+
+// PersonCleared reports if the "person" edge to the Person entity was cleared.
+func (m *PersonRoleMutation) PersonCleared() bool {
+	return m.clearedperson
+}
+
+// RemovePersonIDs removes the "person" edge to the Person entity by IDs.
+func (m *PersonRoleMutation) RemovePersonIDs(ids ...int) {
+	if m.removedperson == nil {
+		m.removedperson = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.person, ids[i])
+		m.removedperson[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPerson returns the removed IDs of the "person" edge to the Person entity.
+func (m *PersonRoleMutation) RemovedPersonIDs() (ids []int) {
+	for id := range m.removedperson {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PersonIDs returns the "person" edge IDs in the mutation.
+func (m *PersonRoleMutation) PersonIDs() (ids []int) {
+	for id := range m.person {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPerson resets all changes to the "person" edge.
+func (m *PersonRoleMutation) ResetPerson() {
+	m.person = nil
+	m.clearedperson = false
+	m.removedperson = nil
+}
+
+// Where appends a list predicates to the PersonRoleMutation builder.
+func (m *PersonRoleMutation) Where(ps ...predicate.PersonRole) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the PersonRoleMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *PersonRoleMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.PersonRole, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *PersonRoleMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *PersonRoleMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (PersonRole).
+func (m *PersonRoleMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *PersonRoleMutation) Fields() []string {
+	fields := make([]string, 0, 7)
+	if m.created_at != nil {
+		fields = append(fields, personrole.FieldCreatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, personrole.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, personrole.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, personrole.FieldUpdatedBy)
+	}
+	if m.display_name != nil {
+		fields = append(fields, personrole.FieldDisplayName)
+	}
+	if m.description != nil {
+		fields = append(fields, personrole.FieldDescription)
+	}
+	if m.external_links != nil {
+		fields = append(fields, personrole.FieldExternalLinks)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *PersonRoleMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case personrole.FieldCreatedAt:
+		return m.CreatedAt()
+	case personrole.FieldCreatedBy:
+		return m.CreatedBy()
+	case personrole.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case personrole.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case personrole.FieldDisplayName:
+		return m.DisplayName()
+	case personrole.FieldDescription:
+		return m.Description()
+	case personrole.FieldExternalLinks:
+		return m.ExternalLinks()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *PersonRoleMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case personrole.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case personrole.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case personrole.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case personrole.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case personrole.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case personrole.FieldDescription:
+		return m.OldDescription(ctx)
+	case personrole.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
+	}
+	return nil, fmt.Errorf("unknown PersonRole field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PersonRoleMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case personrole.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case personrole.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case personrole.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case personrole.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case personrole.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case personrole.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case personrole.FieldExternalLinks:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalLinks(v)
+		return nil
+	}
+	return fmt.Errorf("unknown PersonRole field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *PersonRoleMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *PersonRoleMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PersonRoleMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown PersonRole numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *PersonRoleMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(personrole.FieldCreatedBy) {
+		fields = append(fields, personrole.FieldCreatedBy)
+	}
+	if m.FieldCleared(personrole.FieldUpdatedBy) {
+		fields = append(fields, personrole.FieldUpdatedBy)
+	}
+	if m.FieldCleared(personrole.FieldDisplayName) {
+		fields = append(fields, personrole.FieldDisplayName)
+	}
+	if m.FieldCleared(personrole.FieldDescription) {
+		fields = append(fields, personrole.FieldDescription)
+	}
+	if m.FieldCleared(personrole.FieldExternalLinks) {
+		fields = append(fields, personrole.FieldExternalLinks)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *PersonRoleMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *PersonRoleMutation) ClearField(name string) error {
+	switch name {
+	case personrole.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case personrole.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case personrole.FieldDisplayName:
+		m.ClearDisplayName()
+		return nil
+	case personrole.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case personrole.FieldExternalLinks:
+		m.ClearExternalLinks()
+		return nil
+	}
+	return fmt.Errorf("unknown PersonRole nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *PersonRoleMutation) ResetField(name string) error {
+	switch name {
+	case personrole.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case personrole.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case personrole.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case personrole.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case personrole.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case personrole.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case personrole.FieldExternalLinks:
+		m.ResetExternalLinks()
+		return nil
+	}
+	return fmt.Errorf("unknown PersonRole field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *PersonRoleMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.person != nil {
+		edges = append(edges, personrole.EdgePerson)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *PersonRoleMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case personrole.EdgePerson:
+		ids := make([]ent.Value, 0, len(m.person))
+		for id := range m.person {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *PersonRoleMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.removedperson != nil {
+		edges = append(edges, personrole.EdgePerson)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *PersonRoleMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case personrole.EdgePerson:
+		ids := make([]ent.Value, 0, len(m.removedperson))
+		for id := range m.removedperson {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *PersonRoleMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedperson {
+		edges = append(edges, personrole.EdgePerson)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *PersonRoleMutation) EdgeCleared(name string) bool {
+	switch name {
+	case personrole.EdgePerson:
+		return m.clearedperson
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *PersonRoleMutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown PersonRole unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *PersonRoleMutation) ResetEdge(name string) error {
+	switch name {
+	case personrole.EdgePerson:
+		m.ResetPerson()
+		return nil
+	}
+	return fmt.Errorf("unknown PersonRole edge %s", name)
 }
 
 // ProjectMutation represents an operation that mutates the Project nodes in the graph.

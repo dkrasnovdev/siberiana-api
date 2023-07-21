@@ -36,6 +36,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/monument"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
+	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
@@ -4001,6 +4002,71 @@ func (hr *HolderResponsibilityQuery) Paginate(
 	return conn, nil
 }
 
+var (
+	// HolderResponsibilityOrderFieldCreatedAt orders HolderResponsibility by created_at.
+	HolderResponsibilityOrderFieldCreatedAt = &HolderResponsibilityOrderField{
+		Value: func(hr *HolderResponsibility) (ent.Value, error) {
+			return hr.CreatedAt, nil
+		},
+		column: holderresponsibility.FieldCreatedAt,
+		toTerm: holderresponsibility.ByCreatedAt,
+		toCursor: func(hr *HolderResponsibility) Cursor {
+			return Cursor{
+				ID:    hr.ID,
+				Value: hr.CreatedAt,
+			}
+		},
+	}
+	// HolderResponsibilityOrderFieldUpdatedAt orders HolderResponsibility by updated_at.
+	HolderResponsibilityOrderFieldUpdatedAt = &HolderResponsibilityOrderField{
+		Value: func(hr *HolderResponsibility) (ent.Value, error) {
+			return hr.UpdatedAt, nil
+		},
+		column: holderresponsibility.FieldUpdatedAt,
+		toTerm: holderresponsibility.ByUpdatedAt,
+		toCursor: func(hr *HolderResponsibility) Cursor {
+			return Cursor{
+				ID:    hr.ID,
+				Value: hr.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f HolderResponsibilityOrderField) String() string {
+	var str string
+	switch f.column {
+	case HolderResponsibilityOrderFieldCreatedAt.column:
+		str = "CREATED_AT"
+	case HolderResponsibilityOrderFieldUpdatedAt.column:
+		str = "UPDATED_AT"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f HolderResponsibilityOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *HolderResponsibilityOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("HolderResponsibilityOrderField %T must be a string", v)
+	}
+	switch str {
+	case "CREATED_AT":
+		*f = *HolderResponsibilityOrderFieldCreatedAt
+	case "UPDATED_AT":
+		*f = *HolderResponsibilityOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid HolderResponsibilityOrderField", str)
+	}
+	return nil
+}
+
 // HolderResponsibilityOrderField defines the ordering field of HolderResponsibility.
 type HolderResponsibilityOrderField struct {
 	// Value extracts the ordering value from the given HolderResponsibility.
@@ -6942,6 +7008,319 @@ func (pe *Person) ToEdge(order *PersonOrder) *PersonEdge {
 	return &PersonEdge{
 		Node:   pe,
 		Cursor: order.Field.toCursor(pe),
+	}
+}
+
+// PersonRoleEdge is the edge representation of PersonRole.
+type PersonRoleEdge struct {
+	Node   *PersonRole `json:"node"`
+	Cursor Cursor      `json:"cursor"`
+}
+
+// PersonRoleConnection is the connection containing edges to PersonRole.
+type PersonRoleConnection struct {
+	Edges      []*PersonRoleEdge `json:"edges"`
+	PageInfo   PageInfo          `json:"pageInfo"`
+	TotalCount int               `json:"totalCount"`
+}
+
+func (c *PersonRoleConnection) build(nodes []*PersonRole, pager *personrolePager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *PersonRole
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *PersonRole {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *PersonRole {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*PersonRoleEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &PersonRoleEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// PersonRolePaginateOption enables pagination customization.
+type PersonRolePaginateOption func(*personrolePager) error
+
+// WithPersonRoleOrder configures pagination ordering.
+func WithPersonRoleOrder(order *PersonRoleOrder) PersonRolePaginateOption {
+	if order == nil {
+		order = DefaultPersonRoleOrder
+	}
+	o := *order
+	return func(pager *personrolePager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultPersonRoleOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithPersonRoleFilter configures pagination filter.
+func WithPersonRoleFilter(filter func(*PersonRoleQuery) (*PersonRoleQuery, error)) PersonRolePaginateOption {
+	return func(pager *personrolePager) error {
+		if filter == nil {
+			return errors.New("PersonRoleQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type personrolePager struct {
+	reverse bool
+	order   *PersonRoleOrder
+	filter  func(*PersonRoleQuery) (*PersonRoleQuery, error)
+}
+
+func newPersonRolePager(opts []PersonRolePaginateOption, reverse bool) (*personrolePager, error) {
+	pager := &personrolePager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultPersonRoleOrder
+	}
+	return pager, nil
+}
+
+func (p *personrolePager) applyFilter(query *PersonRoleQuery) (*PersonRoleQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *personrolePager) toCursor(pr *PersonRole) Cursor {
+	return p.order.Field.toCursor(pr)
+}
+
+func (p *personrolePager) applyCursors(query *PersonRoleQuery, after, before *Cursor) (*PersonRoleQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultPersonRoleOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *personrolePager) applyOrder(query *PersonRoleQuery) *PersonRoleQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultPersonRoleOrder.Field {
+		query = query.Order(DefaultPersonRoleOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *personrolePager) orderExpr(query *PersonRoleQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultPersonRoleOrder.Field {
+			b.Comma().Ident(DefaultPersonRoleOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to PersonRole.
+func (pr *PersonRoleQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...PersonRolePaginateOption,
+) (*PersonRoleConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newPersonRolePager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if pr, err = pager.applyFilter(pr); err != nil {
+		return nil, err
+	}
+	conn := &PersonRoleConnection{Edges: []*PersonRoleEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := pr.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if pr, err = pager.applyCursors(pr, after, before); err != nil {
+		return nil, err
+	}
+	if limit := paginateLimit(first, last); limit != 0 {
+		pr.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := pr.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	pr = pager.applyOrder(pr)
+	nodes, err := pr.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// PersonRoleOrderFieldCreatedAt orders PersonRole by created_at.
+	PersonRoleOrderFieldCreatedAt = &PersonRoleOrderField{
+		Value: func(pr *PersonRole) (ent.Value, error) {
+			return pr.CreatedAt, nil
+		},
+		column: personrole.FieldCreatedAt,
+		toTerm: personrole.ByCreatedAt,
+		toCursor: func(pr *PersonRole) Cursor {
+			return Cursor{
+				ID:    pr.ID,
+				Value: pr.CreatedAt,
+			}
+		},
+	}
+	// PersonRoleOrderFieldUpdatedAt orders PersonRole by updated_at.
+	PersonRoleOrderFieldUpdatedAt = &PersonRoleOrderField{
+		Value: func(pr *PersonRole) (ent.Value, error) {
+			return pr.UpdatedAt, nil
+		},
+		column: personrole.FieldUpdatedAt,
+		toTerm: personrole.ByUpdatedAt,
+		toCursor: func(pr *PersonRole) Cursor {
+			return Cursor{
+				ID:    pr.ID,
+				Value: pr.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f PersonRoleOrderField) String() string {
+	var str string
+	switch f.column {
+	case PersonRoleOrderFieldCreatedAt.column:
+		str = "CREATED_AT"
+	case PersonRoleOrderFieldUpdatedAt.column:
+		str = "UPDATED_AT"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f PersonRoleOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *PersonRoleOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("PersonRoleOrderField %T must be a string", v)
+	}
+	switch str {
+	case "CREATED_AT":
+		*f = *PersonRoleOrderFieldCreatedAt
+	case "UPDATED_AT":
+		*f = *PersonRoleOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid PersonRoleOrderField", str)
+	}
+	return nil
+}
+
+// PersonRoleOrderField defines the ordering field of PersonRole.
+type PersonRoleOrderField struct {
+	// Value extracts the ordering value from the given PersonRole.
+	Value    func(*PersonRole) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) personrole.OrderOption
+	toCursor func(*PersonRole) Cursor
+}
+
+// PersonRoleOrder defines the ordering of PersonRole.
+type PersonRoleOrder struct {
+	Direction OrderDirection        `json:"direction"`
+	Field     *PersonRoleOrderField `json:"field"`
+}
+
+// DefaultPersonRoleOrder is the default ordering of PersonRole.
+var DefaultPersonRoleOrder = &PersonRoleOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &PersonRoleOrderField{
+		Value: func(pr *PersonRole) (ent.Value, error) {
+			return pr.ID, nil
+		},
+		column: personrole.FieldID,
+		toTerm: personrole.ByID,
+		toCursor: func(pr *PersonRole) Cursor {
+			return Cursor{ID: pr.ID}
+		},
+	},
+}
+
+// ToEdge converts PersonRole into PersonRoleEdge.
+func (pr *PersonRole) ToEdge(order *PersonRoleOrder) *PersonRoleEdge {
+	if order == nil {
+		order = DefaultPersonRoleOrder
+	}
+	return &PersonRoleEdge{
+		Node:   pr,
+		Cursor: order.Field.toCursor(pr),
 	}
 }
 

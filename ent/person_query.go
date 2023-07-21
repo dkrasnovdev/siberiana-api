@@ -15,6 +15,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
+	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
@@ -30,6 +31,7 @@ type PersonQuery struct {
 	withArtifacts         *ArtifactQuery
 	withProjects          *ProjectQuery
 	withPublications      *PublicationQuery
+	withPersonRoles       *PersonRoleQuery
 	withHolder            *HolderQuery
 	withFKs               bool
 	modifiers             []func(*sql.Selector)
@@ -37,6 +39,7 @@ type PersonQuery struct {
 	withNamedArtifacts    map[string]*ArtifactQuery
 	withNamedProjects     map[string]*ProjectQuery
 	withNamedPublications map[string]*PublicationQuery
+	withNamedPersonRoles  map[string]*PersonRoleQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -132,6 +135,28 @@ func (pq *PersonQuery) QueryPublications() *PublicationQuery {
 			sqlgraph.From(person.Table, person.FieldID, selector),
 			sqlgraph.To(publication.Table, publication.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, person.PublicationsTable, person.PublicationsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPersonRoles chains the current query on the "person_roles" edge.
+func (pq *PersonQuery) QueryPersonRoles() *PersonRoleQuery {
+	query := (&PersonRoleClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, selector),
+			sqlgraph.To(personrole.Table, personrole.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, person.PersonRolesTable, person.PersonRolesPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -356,6 +381,7 @@ func (pq *PersonQuery) Clone() *PersonQuery {
 		withArtifacts:    pq.withArtifacts.Clone(),
 		withProjects:     pq.withProjects.Clone(),
 		withPublications: pq.withPublications.Clone(),
+		withPersonRoles:  pq.withPersonRoles.Clone(),
 		withHolder:       pq.withHolder.Clone(),
 		// clone intermediate query.
 		sql:  pq.sql.Clone(),
@@ -393,6 +419,17 @@ func (pq *PersonQuery) WithPublications(opts ...func(*PublicationQuery)) *Person
 		opt(query)
 	}
 	pq.withPublications = query
+	return pq
+}
+
+// WithPersonRoles tells the query-builder to eager-load the nodes that are connected to
+// the "person_roles" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonQuery) WithPersonRoles(opts ...func(*PersonRoleQuery)) *PersonQuery {
+	query := (&PersonRoleClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withPersonRoles = query
 	return pq
 }
 
@@ -492,10 +529,11 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 		nodes       = []*Person{}
 		withFKs     = pq.withFKs
 		_spec       = pq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [5]bool{
 			pq.withArtifacts != nil,
 			pq.withProjects != nil,
 			pq.withPublications != nil,
+			pq.withPersonRoles != nil,
 			pq.withHolder != nil,
 		}
 	)
@@ -547,6 +585,13 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 			return nil, err
 		}
 	}
+	if query := pq.withPersonRoles; query != nil {
+		if err := pq.loadPersonRoles(ctx, query, nodes,
+			func(n *Person) { n.Edges.PersonRoles = []*PersonRole{} },
+			func(n *Person, e *PersonRole) { n.Edges.PersonRoles = append(n.Edges.PersonRoles, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := pq.withHolder; query != nil {
 		if err := pq.loadHolder(ctx, query, nodes, nil,
 			func(n *Person, e *Holder) { n.Edges.Holder = e }); err != nil {
@@ -571,6 +616,13 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 		if err := pq.loadPublications(ctx, query, nodes,
 			func(n *Person) { n.appendNamedPublications(name) },
 			func(n *Person, e *Publication) { n.appendNamedPublications(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pq.withNamedPersonRoles {
+		if err := pq.loadPersonRoles(ctx, query, nodes,
+			func(n *Person) { n.appendNamedPersonRoles(name) },
+			func(n *Person, e *PersonRole) { n.appendNamedPersonRoles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -765,6 +817,67 @@ func (pq *PersonQuery) loadPublications(ctx context.Context, query *PublicationQ
 	}
 	return nil
 }
+func (pq *PersonQuery) loadPersonRoles(ctx context.Context, query *PersonRoleQuery, nodes []*Person, init func(*Person), assign func(*Person, *PersonRole)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Person)
+	nids := make(map[int]map[*Person]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(person.PersonRolesTable)
+		s.Join(joinT).On(s.C(personrole.FieldID), joinT.C(person.PersonRolesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(person.PersonRolesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(person.PersonRolesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Person]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*PersonRole](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "person_roles" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (pq *PersonQuery) loadHolder(ctx context.Context, query *HolderQuery, nodes []*Person, init func(*Person), assign func(*Person, *Holder)) error {
 	ids := make([]int, 0, len(nodes))
 	nodeids := make(map[int][]*Person)
@@ -921,6 +1034,20 @@ func (pq *PersonQuery) WithNamedPublications(name string, opts ...func(*Publicat
 		pq.withNamedPublications = make(map[string]*PublicationQuery)
 	}
 	pq.withNamedPublications[name] = query
+	return pq
+}
+
+// WithNamedPersonRoles tells the query-builder to eager-load the nodes that are connected to the "person_roles"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonQuery) WithNamedPersonRoles(name string, opts ...func(*PersonRoleQuery)) *PersonQuery {
+	query := (&PersonRoleClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedPersonRoles == nil {
+		pq.withNamedPersonRoles = make(map[string]*PersonRoleQuery)
+	}
+	pq.withNamedPersonRoles[name] = query
 	return pq
 }
 

@@ -15,6 +15,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/medium"
@@ -22,6 +23,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/monument"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
+	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
@@ -1416,6 +1418,11 @@ func (hr *HolderResponsibilityQuery) CollectFields(ctx context.Context, satisfie
 
 func (hr *HolderResponsibilityQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(holderresponsibility.Columns))
+		selectedFields = []string{holderresponsibility.FieldID}
+	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 		case "holder":
@@ -1430,7 +1437,49 @@ func (hr *HolderResponsibilityQuery) collectField(ctx context.Context, opCtx *gr
 			hr.WithNamedHolder(alias, func(wq *HolderQuery) {
 				*wq = *query
 			})
+		case "createdAt":
+			if _, ok := fieldSeen[holderresponsibility.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, holderresponsibility.FieldCreatedAt)
+				fieldSeen[holderresponsibility.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[holderresponsibility.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, holderresponsibility.FieldCreatedBy)
+				fieldSeen[holderresponsibility.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[holderresponsibility.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, holderresponsibility.FieldUpdatedAt)
+				fieldSeen[holderresponsibility.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[holderresponsibility.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, holderresponsibility.FieldUpdatedBy)
+				fieldSeen[holderresponsibility.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[holderresponsibility.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, holderresponsibility.FieldDisplayName)
+				fieldSeen[holderresponsibility.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[holderresponsibility.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, holderresponsibility.FieldDescription)
+				fieldSeen[holderresponsibility.FieldDescription] = struct{}{}
+			}
+		case "externalLinks":
+			if _, ok := fieldSeen[holderresponsibility.FieldExternalLinks]; !ok {
+				selectedFields = append(selectedFields, holderresponsibility.FieldExternalLinks)
+				fieldSeen[holderresponsibility.FieldExternalLinks] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
 		}
+	}
+	if !unknownSeen {
+		hr.Select(selectedFields...)
 	}
 	return nil
 }
@@ -1457,6 +1506,28 @@ func newHolderResponsibilityPaginateArgs(rv map[string]any) *holderresponsibilit
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &HolderResponsibilityOrder{Field: &HolderResponsibilityOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithHolderResponsibilityOrder(order))
+			}
+		case *HolderResponsibilityOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithHolderResponsibilityOrder(v))
+			}
+		}
 	}
 	if v, ok := rv[whereField].(*HolderResponsibilityWhereInput); ok {
 		args.opts = append(args.opts, WithHolderResponsibilityFilter(v.Filter))
@@ -2482,6 +2553,18 @@ func (pe *PersonQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 			pe.WithNamedPublications(alias, func(wq *PublicationQuery) {
 				*wq = *query
 			})
+		case "personRoles":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PersonRoleClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personroleImplementors)...); err != nil {
+				return err
+			}
+			pe.WithNamedPersonRoles(alias, func(wq *PersonRoleQuery) {
+				*wq = *query
+			})
 		case "holder":
 			var (
 				alias = field.Alias
@@ -2647,6 +2730,137 @@ func newPersonPaginateArgs(rv map[string]any) *personPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*PersonWhereInput); ok {
 		args.opts = append(args.opts, WithPersonFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (pr *PersonRoleQuery) CollectFields(ctx context.Context, satisfies ...string) (*PersonRoleQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return pr, nil
+	}
+	if err := pr.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return pr, nil
+}
+
+func (pr *PersonRoleQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(personrole.Columns))
+		selectedFields = []string{personrole.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "person":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PersonClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedPerson(alias, func(wq *PersonQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[personrole.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, personrole.FieldCreatedAt)
+				fieldSeen[personrole.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[personrole.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, personrole.FieldCreatedBy)
+				fieldSeen[personrole.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[personrole.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, personrole.FieldUpdatedAt)
+				fieldSeen[personrole.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[personrole.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, personrole.FieldUpdatedBy)
+				fieldSeen[personrole.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[personrole.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, personrole.FieldDisplayName)
+				fieldSeen[personrole.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[personrole.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, personrole.FieldDescription)
+				fieldSeen[personrole.FieldDescription] = struct{}{}
+			}
+		case "externalLinks":
+			if _, ok := fieldSeen[personrole.FieldExternalLinks]; !ok {
+				selectedFields = append(selectedFields, personrole.FieldExternalLinks)
+				fieldSeen[personrole.FieldExternalLinks] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		pr.Select(selectedFields...)
+	}
+	return nil
+}
+
+type personrolePaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []PersonRolePaginateOption
+}
+
+func newPersonRolePaginateArgs(rv map[string]any) *personrolePaginateArgs {
+	args := &personrolePaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &PersonRoleOrder{Field: &PersonRoleOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithPersonRoleOrder(order))
+			}
+		case *PersonRoleOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithPersonRoleOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*PersonRoleWhereInput); ok {
+		args.opts = append(args.opts, WithPersonRoleFilter(v.Filter))
 	}
 	return args
 }

@@ -1104,6 +1104,29 @@ func HasPublicationsWith(preds ...predicate.Publication) predicate.Person {
 	})
 }
 
+// HasPersonRoles applies the HasEdge predicate on the "person_roles" edge.
+func HasPersonRoles() predicate.Person {
+	return predicate.Person(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, PersonRolesTable, PersonRolesPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPersonRolesWith applies the HasEdge predicate on the "person_roles" edge with a given conditions (other predicates).
+func HasPersonRolesWith(preds ...predicate.PersonRole) predicate.Person {
+	return predicate.Person(func(s *sql.Selector) {
+		step := newPersonRolesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasHolder applies the HasEdge predicate on the "holder" edge.
 func HasHolder() predicate.Person {
 	return predicate.Person(func(s *sql.Selector) {

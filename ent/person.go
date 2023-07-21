@@ -70,17 +70,20 @@ type PersonEdges struct {
 	Projects []*Project `json:"projects,omitempty"`
 	// Publications holds the value of the publications edge.
 	Publications []*Publication `json:"publications,omitempty"`
+	// PersonRoles holds the value of the person_roles edge.
+	PersonRoles []*PersonRole `json:"person_roles,omitempty"`
 	// Holder holds the value of the holder edge.
 	Holder *Holder `json:"holder,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [5]map[string]int
 
 	namedArtifacts    map[string][]*Artifact
 	namedProjects     map[string][]*Project
 	namedPublications map[string][]*Publication
+	namedPersonRoles  map[string][]*PersonRole
 }
 
 // ArtifactsOrErr returns the Artifacts value or an error if the edge
@@ -110,10 +113,19 @@ func (e PersonEdges) PublicationsOrErr() ([]*Publication, error) {
 	return nil, &NotLoadedError{edge: "publications"}
 }
 
+// PersonRolesOrErr returns the PersonRoles value or an error if the edge
+// was not loaded in eager-loading.
+func (e PersonEdges) PersonRolesOrErr() ([]*PersonRole, error) {
+	if e.loadedTypes[3] {
+		return e.PersonRoles, nil
+	}
+	return nil, &NotLoadedError{edge: "person_roles"}
+}
+
 // HolderOrErr returns the Holder value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e PersonEdges) HolderOrErr() (*Holder, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		if e.Holder == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: holder.Label}
@@ -310,6 +322,11 @@ func (pe *Person) QueryPublications() *PublicationQuery {
 	return NewPersonClient(pe.config).QueryPublications(pe)
 }
 
+// QueryPersonRoles queries the "person_roles" edge of the Person entity.
+func (pe *Person) QueryPersonRoles() *PersonRoleQuery {
+	return NewPersonClient(pe.config).QueryPersonRoles(pe)
+}
+
 // QueryHolder queries the "holder" edge of the Person entity.
 func (pe *Person) QueryHolder() *HolderQuery {
 	return NewPersonClient(pe.config).QueryHolder(pe)
@@ -464,6 +481,30 @@ func (pe *Person) appendNamedPublications(name string, edges ...*Publication) {
 		pe.Edges.namedPublications[name] = []*Publication{}
 	} else {
 		pe.Edges.namedPublications[name] = append(pe.Edges.namedPublications[name], edges...)
+	}
+}
+
+// NamedPersonRoles returns the PersonRoles named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pe *Person) NamedPersonRoles(name string) ([]*PersonRole, error) {
+	if pe.Edges.namedPersonRoles == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pe.Edges.namedPersonRoles[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pe *Person) appendNamedPersonRoles(name string, edges ...*PersonRole) {
+	if pe.Edges.namedPersonRoles == nil {
+		pe.Edges.namedPersonRoles = make(map[string][]*PersonRole)
+	}
+	if len(edges) == 0 {
+		pe.Edges.namedPersonRoles[name] = []*PersonRole{}
+	} else {
+		pe.Edges.namedPersonRoles[name] = append(pe.Edges.namedPersonRoles[name], edges...)
 	}
 }
 

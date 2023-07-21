@@ -1,18 +1,27 @@
 package schema
 
-import "entgo.io/ent"
+import (
+	"entgo.io/ent"
+	"entgo.io/ent/schema/edge"
+	"github.com/dkrasnovdev/heritage-api/internal/ent/mixin"
+)
 
 // PersonRole holds the schema definition for the PersonRole entity.
 type PersonRole struct {
 	ent.Schema
 }
 
-// Fields of the PersonRole.
-func (PersonRole) Fields() []ent.Field {
-	return nil
+// Mixin of the PersonRole.
+func (PersonRole) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		mixin.AuditMixin{},
+		mixin.DetailsMixin{},
+	}
 }
 
 // Edges of the PersonRole.
 func (PersonRole) Edges() []ent.Edge {
-	return nil
+	return []ent.Edge{
+		edge.From("person", Person.Type).Ref("person_roles"),
+	}
 }

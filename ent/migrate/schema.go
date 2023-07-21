@@ -254,6 +254,13 @@ var (
 	// HolderResponsibilitiesColumns holds the columns for the "holder_responsibilities" table.
 	HolderResponsibilitiesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
 	// HolderResponsibilitiesTable holds the schema information for the "holder_responsibilities" table.
 	HolderResponsibilitiesTable = &schema.Table{
@@ -433,6 +440,23 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 		},
+	}
+	// PersonRolesColumns holds the columns for the "person_roles" table.
+	PersonRolesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+	}
+	// PersonRolesTable holds the schema information for the "person_roles" table.
+	PersonRolesTable = &schema.Table{
+		Name:       "person_roles",
+		Columns:    PersonRolesColumns,
+		PrimaryKey: []*schema.Column{PersonRolesColumns[0]},
 	}
 	// ProjectsColumns holds the columns for the "projects" table.
 	ProjectsColumns = []*schema.Column{
@@ -744,6 +768,31 @@ var (
 			},
 		},
 	}
+	// PersonPersonRolesColumns holds the columns for the "person_person_roles" table.
+	PersonPersonRolesColumns = []*schema.Column{
+		{Name: "person_id", Type: field.TypeInt},
+		{Name: "person_role_id", Type: field.TypeInt},
+	}
+	// PersonPersonRolesTable holds the schema information for the "person_person_roles" table.
+	PersonPersonRolesTable = &schema.Table{
+		Name:       "person_person_roles",
+		Columns:    PersonPersonRolesColumns,
+		PrimaryKey: []*schema.Column{PersonPersonRolesColumns[0], PersonPersonRolesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "person_person_roles_person_id",
+				Columns:    []*schema.Column{PersonPersonRolesColumns[0]},
+				RefColumns: []*schema.Column{PersonsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "person_person_roles_person_role_id",
+				Columns:    []*schema.Column{PersonPersonRolesColumns[1]},
+				RefColumns: []*schema.Column{PersonRolesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// ProjectArtifactsColumns holds the columns for the "project_artifacts" table.
 	ProjectArtifactsColumns = []*schema.Column{
 		{Name: "project_id", Type: field.TypeInt},
@@ -843,6 +892,7 @@ var (
 		MonumentsTable,
 		OrganizationsTable,
 		PersonsTable,
+		PersonRolesTable,
 		ProjectsTable,
 		ProtectedAreasTable,
 		ProtectedAreaCategoriesTable,
@@ -859,6 +909,7 @@ var (
 		PersonArtifactsTable,
 		PersonProjectsTable,
 		PersonPublicationsTable,
+		PersonPersonRolesTable,
 		ProjectArtifactsTable,
 		PublicationArtifactsTable,
 		TechniqueArtifactsTable,
@@ -891,6 +942,8 @@ func init() {
 	PersonProjectsTable.ForeignKeys[1].RefTable = ProjectsTable
 	PersonPublicationsTable.ForeignKeys[0].RefTable = PersonsTable
 	PersonPublicationsTable.ForeignKeys[1].RefTable = PublicationsTable
+	PersonPersonRolesTable.ForeignKeys[0].RefTable = PersonsTable
+	PersonPersonRolesTable.ForeignKeys[1].RefTable = PersonRolesTable
 	ProjectArtifactsTable.ForeignKeys[0].RefTable = ProjectsTable
 	ProjectArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
 	PublicationArtifactsTable.ForeignKeys[0].RefTable = PublicationsTable

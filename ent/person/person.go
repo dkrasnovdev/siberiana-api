@@ -60,6 +60,8 @@ const (
 	EdgeProjects = "projects"
 	// EdgePublications holds the string denoting the publications edge name in mutations.
 	EdgePublications = "publications"
+	// EdgePersonRoles holds the string denoting the person_roles edge name in mutations.
+	EdgePersonRoles = "person_roles"
 	// EdgeHolder holds the string denoting the holder edge name in mutations.
 	EdgeHolder = "holder"
 	// Table holds the table name of the person in the database.
@@ -79,6 +81,11 @@ const (
 	// PublicationsInverseTable is the table name for the Publication entity.
 	// It exists in this package in order to avoid circular dependency with the "publication" package.
 	PublicationsInverseTable = "publications"
+	// PersonRolesTable is the table that holds the person_roles relation/edge. The primary key declared below.
+	PersonRolesTable = "person_person_roles"
+	// PersonRolesInverseTable is the table name for the PersonRole entity.
+	// It exists in this package in order to avoid circular dependency with the "personrole" package.
+	PersonRolesInverseTable = "person_roles"
 	// HolderTable is the table that holds the holder relation/edge.
 	HolderTable = "persons"
 	// HolderInverseTable is the table name for the Holder entity.
@@ -127,6 +134,9 @@ var (
 	// PublicationsPrimaryKey and PublicationsColumn2 are the table columns denoting the
 	// primary key for the publications relation (M2M).
 	PublicationsPrimaryKey = []string{"person_id", "publication_id"}
+	// PersonRolesPrimaryKey and PersonRolesColumn2 are the table columns denoting the
+	// primary key for the person_roles relation (M2M).
+	PersonRolesPrimaryKey = []string{"person_id", "person_role_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -303,6 +313,20 @@ func ByPublications(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByPersonRolesCount orders the results by person_roles count.
+func ByPersonRolesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPersonRolesStep(), opts...)
+	}
+}
+
+// ByPersonRoles orders the results by person_roles terms.
+func ByPersonRoles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPersonRolesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByHolderField orders the results by holder field.
 func ByHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -328,6 +352,13 @@ func newPublicationsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PublicationsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, PublicationsTable, PublicationsPrimaryKey...),
+	)
+}
+func newPersonRolesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PersonRolesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, PersonRolesTable, PersonRolesPrimaryKey...),
 	)
 }
 func newHolderStep() *sqlgraph.Step {

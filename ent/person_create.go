@@ -13,6 +13,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
+	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
 )
@@ -281,6 +282,21 @@ func (pc *PersonCreate) AddPublications(p ...*Publication) *PersonCreate {
 	return pc.AddPublicationIDs(ids...)
 }
 
+// AddPersonRoleIDs adds the "person_roles" edge to the PersonRole entity by IDs.
+func (pc *PersonCreate) AddPersonRoleIDs(ids ...int) *PersonCreate {
+	pc.mutation.AddPersonRoleIDs(ids...)
+	return pc
+}
+
+// AddPersonRoles adds the "person_roles" edges to the PersonRole entity.
+func (pc *PersonCreate) AddPersonRoles(p ...*PersonRole) *PersonCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pc.AddPersonRoleIDs(ids...)
+}
+
 // SetHolderID sets the "holder" edge to the Holder entity by ID.
 func (pc *PersonCreate) SetHolderID(id int) *PersonCreate {
 	pc.mutation.SetHolderID(id)
@@ -509,6 +525,22 @@ func (pc *PersonCreate) createSpec() (*Person, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(publication.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.PersonRolesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.PersonRolesTable,
+			Columns: person.PersonRolesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(personrole.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

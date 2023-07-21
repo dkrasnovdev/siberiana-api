@@ -13,6 +13,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/medium"
@@ -20,6 +21,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/monument"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
+	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
@@ -218,6 +220,23 @@ func init() {
 	holder.DefaultUpdatedAt = holderDescUpdatedAt.Default.(func() time.Time)
 	// holder.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	holder.UpdateDefaultUpdatedAt = holderDescUpdatedAt.UpdateDefault.(func() time.Time)
+	holderresponsibilityMixin := schema.HolderResponsibility{}.Mixin()
+	holderresponsibilityMixinHooks0 := holderresponsibilityMixin[0].Hooks()
+	holderresponsibility.Hooks[0] = holderresponsibilityMixinHooks0[0]
+	holderresponsibilityMixinFields0 := holderresponsibilityMixin[0].Fields()
+	_ = holderresponsibilityMixinFields0
+	holderresponsibilityFields := schema.HolderResponsibility{}.Fields()
+	_ = holderresponsibilityFields
+	// holderresponsibilityDescCreatedAt is the schema descriptor for created_at field.
+	holderresponsibilityDescCreatedAt := holderresponsibilityMixinFields0[0].Descriptor()
+	// holderresponsibility.DefaultCreatedAt holds the default value on creation for the created_at field.
+	holderresponsibility.DefaultCreatedAt = holderresponsibilityDescCreatedAt.Default.(func() time.Time)
+	// holderresponsibilityDescUpdatedAt is the schema descriptor for updated_at field.
+	holderresponsibilityDescUpdatedAt := holderresponsibilityMixinFields0[2].Descriptor()
+	// holderresponsibility.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	holderresponsibility.DefaultUpdatedAt = holderresponsibilityDescUpdatedAt.Default.(func() time.Time)
+	// holderresponsibility.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	holderresponsibility.UpdateDefaultUpdatedAt = holderresponsibilityDescUpdatedAt.UpdateDefault.(func() time.Time)
 	licenseMixin := schema.License{}.Mixin()
 	license.Policy = privacy.NewPolicies(schema.License{})
 	license.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -407,6 +426,23 @@ func init() {
 	person.DefaultUpdatedAt = personDescUpdatedAt.Default.(func() time.Time)
 	// person.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	person.UpdateDefaultUpdatedAt = personDescUpdatedAt.UpdateDefault.(func() time.Time)
+	personroleMixin := schema.PersonRole{}.Mixin()
+	personroleMixinHooks0 := personroleMixin[0].Hooks()
+	personrole.Hooks[0] = personroleMixinHooks0[0]
+	personroleMixinFields0 := personroleMixin[0].Fields()
+	_ = personroleMixinFields0
+	personroleFields := schema.PersonRole{}.Fields()
+	_ = personroleFields
+	// personroleDescCreatedAt is the schema descriptor for created_at field.
+	personroleDescCreatedAt := personroleMixinFields0[0].Descriptor()
+	// personrole.DefaultCreatedAt holds the default value on creation for the created_at field.
+	personrole.DefaultCreatedAt = personroleDescCreatedAt.Default.(func() time.Time)
+	// personroleDescUpdatedAt is the schema descriptor for updated_at field.
+	personroleDescUpdatedAt := personroleMixinFields0[2].Descriptor()
+	// personrole.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	personrole.DefaultUpdatedAt = personroleDescUpdatedAt.Default.(func() time.Time)
+	// personrole.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	personrole.UpdateDefaultUpdatedAt = personroleDescUpdatedAt.UpdateDefault.(func() time.Time)
 	projectMixin := schema.Project{}.Mixin()
 	project.Policy = privacy.NewPolicies(schema.Project{})
 	project.Hooks[0] = func(next ent.Mutator) ent.Mutator {

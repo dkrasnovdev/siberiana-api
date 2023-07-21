@@ -1889,6 +1889,7 @@ type CreatePersonInput struct {
 	ArtifactIDs          []int
 	ProjectIDs           []int
 	PublicationIDs       []int
+	PersonRoleIDs        []int
 	HolderID             *int
 }
 
@@ -1955,6 +1956,9 @@ func (i *CreatePersonInput) Mutate(m *PersonMutation) {
 	if v := i.PublicationIDs; len(v) > 0 {
 		m.AddPublicationIDs(v...)
 	}
+	if v := i.PersonRoleIDs; len(v) > 0 {
+		m.AddPersonRoleIDs(v...)
+	}
 	if v := i.HolderID; v != nil {
 		m.SetHolderID(*v)
 	}
@@ -2013,6 +2017,9 @@ type UpdatePersonInput struct {
 	ClearPublications          bool
 	AddPublicationIDs          []int
 	RemovePublicationIDs       []int
+	ClearPersonRoles           bool
+	AddPersonRoleIDs           []int
+	RemovePersonRoleIDs        []int
 	ClearHolder                bool
 	HolderID                   *int
 }
@@ -2153,6 +2160,15 @@ func (i *UpdatePersonInput) Mutate(m *PersonMutation) {
 	}
 	if v := i.RemovePublicationIDs; len(v) > 0 {
 		m.RemovePublicationIDs(v...)
+	}
+	if i.ClearPersonRoles {
+		m.ClearPersonRoles()
+	}
+	if v := i.AddPersonRoleIDs; len(v) > 0 {
+		m.AddPersonRoleIDs(v...)
+	}
+	if v := i.RemovePersonRoleIDs; len(v) > 0 {
+		m.RemovePersonRoleIDs(v...)
 	}
 	if i.ClearHolder {
 		m.ClearHolder()
