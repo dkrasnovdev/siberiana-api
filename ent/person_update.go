@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
@@ -417,6 +418,25 @@ func (pu *PersonUpdate) SetHolder(h *Holder) *PersonUpdate {
 	return pu.SetHolderID(h.ID)
 }
 
+// SetAffiliationID sets the "affiliation" edge to the Organization entity by ID.
+func (pu *PersonUpdate) SetAffiliationID(id int) *PersonUpdate {
+	pu.mutation.SetAffiliationID(id)
+	return pu
+}
+
+// SetNillableAffiliationID sets the "affiliation" edge to the Organization entity by ID if the given value is not nil.
+func (pu *PersonUpdate) SetNillableAffiliationID(id *int) *PersonUpdate {
+	if id != nil {
+		pu = pu.SetAffiliationID(*id)
+	}
+	return pu
+}
+
+// SetAffiliation sets the "affiliation" edge to the Organization entity.
+func (pu *PersonUpdate) SetAffiliation(o *Organization) *PersonUpdate {
+	return pu.SetAffiliationID(o.ID)
+}
+
 // Mutation returns the PersonMutation object of the builder.
 func (pu *PersonUpdate) Mutation() *PersonMutation {
 	return pu.mutation
@@ -509,6 +529,12 @@ func (pu *PersonUpdate) RemovePersonRoles(p ...*PersonRole) *PersonUpdate {
 // ClearHolder clears the "holder" edge to the Holder entity.
 func (pu *PersonUpdate) ClearHolder() *PersonUpdate {
 	pu.mutation.ClearHolder()
+	return pu
+}
+
+// ClearAffiliation clears the "affiliation" edge to the Organization entity.
+func (pu *PersonUpdate) ClearAffiliation() *PersonUpdate {
+	pu.mutation.ClearAffiliation()
 	return pu
 }
 
@@ -894,6 +920,35 @@ func (pu *PersonUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.AffiliationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   person.AffiliationTable,
+			Columns: []string{person.AffiliationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.AffiliationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   person.AffiliationTable,
+			Columns: []string{person.AffiliationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1304,6 +1359,25 @@ func (puo *PersonUpdateOne) SetHolder(h *Holder) *PersonUpdateOne {
 	return puo.SetHolderID(h.ID)
 }
 
+// SetAffiliationID sets the "affiliation" edge to the Organization entity by ID.
+func (puo *PersonUpdateOne) SetAffiliationID(id int) *PersonUpdateOne {
+	puo.mutation.SetAffiliationID(id)
+	return puo
+}
+
+// SetNillableAffiliationID sets the "affiliation" edge to the Organization entity by ID if the given value is not nil.
+func (puo *PersonUpdateOne) SetNillableAffiliationID(id *int) *PersonUpdateOne {
+	if id != nil {
+		puo = puo.SetAffiliationID(*id)
+	}
+	return puo
+}
+
+// SetAffiliation sets the "affiliation" edge to the Organization entity.
+func (puo *PersonUpdateOne) SetAffiliation(o *Organization) *PersonUpdateOne {
+	return puo.SetAffiliationID(o.ID)
+}
+
 // Mutation returns the PersonMutation object of the builder.
 func (puo *PersonUpdateOne) Mutation() *PersonMutation {
 	return puo.mutation
@@ -1396,6 +1470,12 @@ func (puo *PersonUpdateOne) RemovePersonRoles(p ...*PersonRole) *PersonUpdateOne
 // ClearHolder clears the "holder" edge to the Holder entity.
 func (puo *PersonUpdateOne) ClearHolder() *PersonUpdateOne {
 	puo.mutation.ClearHolder()
+	return puo
+}
+
+// ClearAffiliation clears the "affiliation" edge to the Organization entity.
+func (puo *PersonUpdateOne) ClearAffiliation() *PersonUpdateOne {
+	puo.mutation.ClearAffiliation()
 	return puo
 }
 
@@ -1811,6 +1891,35 @@ func (puo *PersonUpdateOne) sqlSave(ctx context.Context) (_node *Person, err err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.AffiliationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   person.AffiliationTable,
+			Columns: []string{person.AffiliationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.AffiliationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   person.AffiliationTable,
+			Columns: []string{person.AffiliationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

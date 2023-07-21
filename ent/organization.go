@@ -54,11 +54,15 @@ type Organization struct {
 type OrganizationEdges struct {
 	// Holder holds the value of the holder edge.
 	Holder *Holder `json:"holder,omitempty"`
+	// People holds the value of the people edge.
+	People []*Person `json:"people,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [2]map[string]int
+
+	namedPeople map[string][]*Person
 }
 
 // HolderOrErr returns the Holder value or an error if the edge
@@ -72,6 +76,15 @@ func (e OrganizationEdges) HolderOrErr() (*Holder, error) {
 		return e.Holder, nil
 	}
 	return nil, &NotLoadedError{edge: "holder"}
+}
+
+// PeopleOrErr returns the People value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) PeopleOrErr() ([]*Person, error) {
+	if e.loadedTypes[1] {
+		return e.People, nil
+	}
+	return nil, &NotLoadedError{edge: "people"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -215,6 +228,11 @@ func (o *Organization) QueryHolder() *HolderQuery {
 	return NewOrganizationClient(o.config).QueryHolder(o)
 }
 
+// QueryPeople queries the "people" edge of the Organization entity.
+func (o *Organization) QueryPeople() *PersonQuery {
+	return NewOrganizationClient(o.config).QueryPeople(o)
+}
+
 // Update returns a builder for updating this Organization.
 // Note that you need to call Organization.Unwrap() before calling this method if this Organization
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -275,6 +293,30 @@ func (o *Organization) String() string {
 	builder.WriteString(fmt.Sprintf("%v", o.AdditionalImagesUrls))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedPeople returns the People named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedPeople(name string) ([]*Person, error) {
+	if o.Edges.namedPeople == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedPeople[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedPeople(name string, edges ...*Person) {
+	if o.Edges.namedPeople == nil {
+		o.Edges.namedPeople = make(map[string][]*Person)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedPeople[name] = []*Person{}
+	} else {
+		o.Edges.namedPeople[name] = append(o.Edges.namedPeople[name], edges...)
+	}
 }
 
 // Organizations is a parsable slice of Organization.

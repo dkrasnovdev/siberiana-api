@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 )
 
@@ -57,9 +58,10 @@ type Person struct {
 	Gender person.Gender `json:"gender,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PersonQuery when eager-loading is set.
-	Edges         PersonEdges `json:"edges"`
-	holder_person *int
-	selectValues  sql.SelectValues
+	Edges               PersonEdges `json:"edges"`
+	holder_person       *int
+	organization_people *int
+	selectValues        sql.SelectValues
 }
 
 // PersonEdges holds the relations/edges for other nodes in the graph.
@@ -74,11 +76,13 @@ type PersonEdges struct {
 	PersonRoles []*PersonRole `json:"person_roles,omitempty"`
 	// Holder holds the value of the holder edge.
 	Holder *Holder `json:"holder,omitempty"`
+	// Affiliation holds the value of the affiliation edge.
+	Affiliation *Organization `json:"affiliation,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [6]map[string]int
 
 	namedArtifacts    map[string][]*Artifact
 	namedProjects     map[string][]*Project
@@ -135,6 +139,19 @@ func (e PersonEdges) HolderOrErr() (*Holder, error) {
 	return nil, &NotLoadedError{edge: "holder"}
 }
 
+// AffiliationOrErr returns the Affiliation value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e PersonEdges) AffiliationOrErr() (*Organization, error) {
+	if e.loadedTypes[5] {
+		if e.Affiliation == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: organization.Label}
+		}
+		return e.Affiliation, nil
+	}
+	return nil, &NotLoadedError{edge: "affiliation"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Person) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -149,6 +166,8 @@ func (*Person) scanValues(columns []string) ([]any, error) {
 		case person.FieldCreatedAt, person.FieldUpdatedAt, person.FieldBeginData, person.FieldEndDate:
 			values[i] = new(sql.NullTime)
 		case person.ForeignKeys[0]: // holder_person
+			values[i] = new(sql.NullInt64)
+		case person.ForeignKeys[1]: // organization_people
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -294,6 +313,13 @@ func (pe *Person) assignValues(columns []string, values []any) error {
 				pe.holder_person = new(int)
 				*pe.holder_person = int(value.Int64)
 			}
+		case person.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field organization_people", value)
+			} else if value.Valid {
+				pe.organization_people = new(int)
+				*pe.organization_people = int(value.Int64)
+			}
 		default:
 			pe.selectValues.Set(columns[i], values[i])
 		}
@@ -330,6 +356,11 @@ func (pe *Person) QueryPersonRoles() *PersonRoleQuery {
 // QueryHolder queries the "holder" edge of the Person entity.
 func (pe *Person) QueryHolder() *HolderQuery {
 	return NewPersonClient(pe.config).QueryHolder(pe)
+}
+
+// QueryAffiliation queries the "affiliation" edge of the Person entity.
+func (pe *Person) QueryAffiliation() *OrganizationQuery {
+	return NewPersonClient(pe.config).QueryAffiliation(pe)
 }
 
 // Update returns a builder for updating this Person.

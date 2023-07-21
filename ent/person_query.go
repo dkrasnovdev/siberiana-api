@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
@@ -33,6 +34,7 @@ type PersonQuery struct {
 	withPublications      *PublicationQuery
 	withPersonRoles       *PersonRoleQuery
 	withHolder            *HolderQuery
+	withAffiliation       *OrganizationQuery
 	withFKs               bool
 	modifiers             []func(*sql.Selector)
 	loadTotal             []func(context.Context, []*Person) error
@@ -179,6 +181,28 @@ func (pq *PersonQuery) QueryHolder() *HolderQuery {
 			sqlgraph.From(person.Table, person.FieldID, selector),
 			sqlgraph.To(holder.Table, holder.FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, true, person.HolderTable, person.HolderColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAffiliation chains the current query on the "affiliation" edge.
+func (pq *PersonQuery) QueryAffiliation() *OrganizationQuery {
+	query := (&OrganizationClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, selector),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, person.AffiliationTable, person.AffiliationColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -383,6 +407,7 @@ func (pq *PersonQuery) Clone() *PersonQuery {
 		withPublications: pq.withPublications.Clone(),
 		withPersonRoles:  pq.withPersonRoles.Clone(),
 		withHolder:       pq.withHolder.Clone(),
+		withAffiliation:  pq.withAffiliation.Clone(),
 		// clone intermediate query.
 		sql:  pq.sql.Clone(),
 		path: pq.path,
@@ -441,6 +466,17 @@ func (pq *PersonQuery) WithHolder(opts ...func(*HolderQuery)) *PersonQuery {
 		opt(query)
 	}
 	pq.withHolder = query
+	return pq
+}
+
+// WithAffiliation tells the query-builder to eager-load the nodes that are connected to
+// the "affiliation" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonQuery) WithAffiliation(opts ...func(*OrganizationQuery)) *PersonQuery {
+	query := (&OrganizationClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withAffiliation = query
 	return pq
 }
 
@@ -529,15 +565,16 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 		nodes       = []*Person{}
 		withFKs     = pq.withFKs
 		_spec       = pq.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [6]bool{
 			pq.withArtifacts != nil,
 			pq.withProjects != nil,
 			pq.withPublications != nil,
 			pq.withPersonRoles != nil,
 			pq.withHolder != nil,
+			pq.withAffiliation != nil,
 		}
 	)
-	if pq.withHolder != nil {
+	if pq.withHolder != nil || pq.withAffiliation != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -595,6 +632,12 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 	if query := pq.withHolder; query != nil {
 		if err := pq.loadHolder(ctx, query, nodes, nil,
 			func(n *Person, e *Holder) { n.Edges.Holder = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pq.withAffiliation; query != nil {
+		if err := pq.loadAffiliation(ctx, query, nodes, nil,
+			func(n *Person, e *Organization) { n.Edges.Affiliation = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -903,6 +946,38 @@ func (pq *PersonQuery) loadHolder(ctx context.Context, query *HolderQuery, nodes
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "holder_person" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (pq *PersonQuery) loadAffiliation(ctx context.Context, query *OrganizationQuery, nodes []*Person, init func(*Person), assign func(*Person, *Organization)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Person)
+	for i := range nodes {
+		if nodes[i].organization_people == nil {
+			continue
+		}
+		fk := *nodes[i].organization_people
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(organization.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "organization_people" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

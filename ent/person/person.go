@@ -64,6 +64,8 @@ const (
 	EdgePersonRoles = "person_roles"
 	// EdgeHolder holds the string denoting the holder edge name in mutations.
 	EdgeHolder = "holder"
+	// EdgeAffiliation holds the string denoting the affiliation edge name in mutations.
+	EdgeAffiliation = "affiliation"
 	// Table holds the table name of the person in the database.
 	Table = "persons"
 	// ArtifactsTable is the table that holds the artifacts relation/edge. The primary key declared below.
@@ -93,6 +95,13 @@ const (
 	HolderInverseTable = "holders"
 	// HolderColumn is the table column denoting the holder relation/edge.
 	HolderColumn = "holder_person"
+	// AffiliationTable is the table that holds the affiliation relation/edge.
+	AffiliationTable = "persons"
+	// AffiliationInverseTable is the table name for the Organization entity.
+	// It exists in this package in order to avoid circular dependency with the "organization" package.
+	AffiliationInverseTable = "organizations"
+	// AffiliationColumn is the table column denoting the affiliation relation/edge.
+	AffiliationColumn = "organization_people"
 )
 
 // Columns holds all SQL columns for person fields.
@@ -122,6 +131,7 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"holder_person",
+	"organization_people",
 }
 
 var (
@@ -333,6 +343,13 @@ func ByHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newHolderStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByAffiliationField orders the results by affiliation field.
+func ByAffiliationField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAffiliationStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newArtifactsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -366,6 +383,13 @@ func newHolderStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(HolderInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2O, true, HolderTable, HolderColumn),
+	)
+}
+func newAffiliationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AffiliationInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, AffiliationTable, AffiliationColumn),
 	)
 }
 

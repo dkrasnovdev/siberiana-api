@@ -426,6 +426,7 @@ var (
 		{Name: "end_date", Type: field.TypeTime, Nullable: true},
 		{Name: "gender", Type: field.TypeEnum, Enums: []string{"female", "male"}},
 		{Name: "holder_person", Type: field.TypeInt, Unique: true, Nullable: true},
+		{Name: "organization_people", Type: field.TypeInt, Nullable: true},
 	}
 	// PersonsTable holds the schema information for the "persons" table.
 	PersonsTable = &schema.Table{
@@ -437,6 +438,12 @@ var (
 				Symbol:     "persons_holders_person",
 				Columns:    []*schema.Column{PersonsColumns[19]},
 				RefColumns: []*schema.Column{HoldersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "persons_organizations_people",
+				Columns:    []*schema.Column{PersonsColumns[20]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -928,6 +935,7 @@ func init() {
 	DistrictsTable.ForeignKeys[0].RefTable = LocationsTable
 	OrganizationsTable.ForeignKeys[0].RefTable = HoldersTable
 	PersonsTable.ForeignKeys[0].RefTable = HoldersTable
+	PersonsTable.ForeignKeys[1].RefTable = OrganizationsTable
 	RegionsTable.ForeignKeys[0].RefTable = LocationsTable
 	SettlementsTable.ForeignKeys[0].RefTable = LocationsTable
 	HolderArtifactsTable.ForeignKeys[0].RefTable = HoldersTable

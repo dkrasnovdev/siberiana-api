@@ -3443,6 +3443,22 @@ func (c *OrganizationClient) QueryHolder(o *Organization) *HolderQuery {
 	return query
 }
 
+// QueryPeople queries the people edge of a Organization.
+func (c *OrganizationClient) QueryPeople(o *Organization) *PersonQuery {
+	query := (&PersonClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(person.Table, person.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.PeopleTable, organization.PeopleColumn),
+		)
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *OrganizationClient) Hooks() []Hook {
 	hooks := c.hooks.Organization
@@ -3635,6 +3651,22 @@ func (c *PersonClient) QueryHolder(pe *Person) *HolderQuery {
 			sqlgraph.From(person.Table, person.FieldID, id),
 			sqlgraph.To(holder.Table, holder.FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, true, person.HolderTable, person.HolderColumn),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAffiliation queries the affiliation edge of a Person.
+func (c *PersonClient) QueryAffiliation(pe *Person) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, person.AffiliationTable, person.AffiliationColumn),
 		)
 		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
 		return fromV, nil

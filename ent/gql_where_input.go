@@ -7519,6 +7519,10 @@ type OrganizationWhereInput struct {
 	// "holder" edge predicates.
 	HasHolder     *bool               `json:"hasHolder,omitempty"`
 	HasHolderWith []*HolderWhereInput `json:"hasHolderWith,omitempty"`
+
+	// "people" edge predicates.
+	HasPeople     *bool               `json:"hasPeople,omitempty"`
+	HasPeopleWith []*PersonWhereInput `json:"hasPeopleWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -7953,6 +7957,24 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 		}
 		predicates = append(predicates, organization.HasHolderWith(with...))
 	}
+	if i.HasPeople != nil {
+		p := organization.HasPeople()
+		if !*i.HasPeople {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasPeopleWith) > 0 {
+		with := make([]predicate.Person, 0, len(i.HasPeopleWith))
+		for _, w := range i.HasPeopleWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasPeopleWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasPeopleWith(with...))
+	}
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyOrganizationWhereInput
@@ -8202,6 +8224,10 @@ type PersonWhereInput struct {
 	// "holder" edge predicates.
 	HasHolder     *bool               `json:"hasHolder,omitempty"`
 	HasHolderWith []*HolderWhereInput `json:"hasHolderWith,omitempty"`
+
+	// "affiliation" edge predicates.
+	HasAffiliation     *bool                     `json:"hasAffiliation,omitempty"`
+	HasAffiliationWith []*OrganizationWhereInput `json:"hasAffiliationWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -8914,6 +8940,24 @@ func (i *PersonWhereInput) P() (predicate.Person, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, person.HasHolderWith(with...))
+	}
+	if i.HasAffiliation != nil {
+		p := person.HasAffiliation()
+		if !*i.HasAffiliation {
+			p = person.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasAffiliationWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasAffiliationWith))
+		for _, w := range i.HasAffiliationWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasAffiliationWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, person.HasAffiliationWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

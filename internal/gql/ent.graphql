@@ -949,6 +949,7 @@ input CreateOrganizationInput {
   primaryImageURL: String
   additionalImagesUrls: [String!]
   holderID: ID
+  personIDs: [ID!]
 }
 """
 CreatePersonInput is used for create Person object.
@@ -978,6 +979,7 @@ input CreatePersonInput {
   publicationIDs: [ID!]
   personRoleIDs: [ID!]
   holderID: ID
+  affiliationID: ID
 }
 """
 CreateProjectInput is used for create Project object.
@@ -2415,6 +2417,7 @@ type Organization implements Node {
   primaryImageURL: String
   additionalImagesUrls: [String!]
   holder: Holder
+  people: [Person!]
 }
 """A connection to a list of items."""
 type OrganizationConnection {
@@ -2578,6 +2581,9 @@ input OrganizationWhereInput {
   """holder edge predicates"""
   hasHolder: Boolean
   hasHolderWith: [HolderWhereInput!]
+  """people edge predicates"""
+  hasPeople: Boolean
+  hasPeopleWith: [PersonWhereInput!]
 }
 """
 Information about pagination in a connection.
@@ -2618,6 +2624,7 @@ type Person implements Node {
   publications: [Publication!]
   personRoles: [PersonRole!]
   holder: Holder
+  affiliation: Organization
 }
 """A connection to a list of items."""
 type PersonConnection {
@@ -2999,6 +3006,9 @@ input PersonWhereInput {
   """holder edge predicates"""
   hasHolder: Boolean
   hasHolderWith: [HolderWhereInput!]
+  """affiliation edge predicates"""
+  hasAffiliation: Boolean
+  hasAffiliationWith: [OrganizationWhereInput!]
 }
 type Project implements Node {
   id: ID!
@@ -4649,6 +4659,9 @@ input UpdateOrganizationInput {
   clearAdditionalImagesUrls: Boolean
   holderID: ID
   clearHolder: Boolean
+  addPersonIDs: [ID!]
+  removePersonIDs: [ID!]
+  clearPeople: Boolean
 }
 """
 UpdatePersonInput is used for update Person object.
@@ -4705,6 +4718,8 @@ input UpdatePersonInput {
   clearPersonRoles: Boolean
   holderID: ID
   clearHolder: Boolean
+  affiliationID: ID
+  clearAffiliation: Boolean
 }
 """
 UpdateProjectInput is used for update Project object.

@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
+	"github.com/dkrasnovdev/heritage-api/ent/person"
 )
 
 // OrganizationCreate is the builder for creating a Organization entity.
@@ -176,6 +177,21 @@ func (oc *OrganizationCreate) SetHolder(h *Holder) *OrganizationCreate {
 	return oc.SetHolderID(h.ID)
 }
 
+// AddPersonIDs adds the "people" edge to the Person entity by IDs.
+func (oc *OrganizationCreate) AddPersonIDs(ids ...int) *OrganizationCreate {
+	oc.mutation.AddPersonIDs(ids...)
+	return oc
+}
+
+// AddPeople adds the "people" edges to the Person entity.
+func (oc *OrganizationCreate) AddPeople(p ...*Person) *OrganizationCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return oc.AddPersonIDs(ids...)
+}
+
 // Mutation returns the OrganizationMutation object of the builder.
 func (oc *OrganizationCreate) Mutation() *OrganizationMutation {
 	return oc.mutation
@@ -327,6 +343,22 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.holder_organization = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.PeopleIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PeopleTable,
+			Columns: []string{organization.PeopleColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

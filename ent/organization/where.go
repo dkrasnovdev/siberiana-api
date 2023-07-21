@@ -688,6 +688,29 @@ func HasHolderWith(preds ...predicate.Holder) predicate.Organization {
 	})
 }
 
+// HasPeople applies the HasEdge predicate on the "people" edge.
+func HasPeople() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, PeopleTable, PeopleColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPeopleWith applies the HasEdge predicate on the "people" edge with a given conditions (other predicates).
+func HasPeopleWith(preds ...predicate.Person) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newPeopleStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Organization) predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

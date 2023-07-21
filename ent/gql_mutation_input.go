@@ -1687,6 +1687,7 @@ type CreateOrganizationInput struct {
 	PrimaryImageURL      *string
 	AdditionalImagesUrls []string
 	HolderID             *int
+	PersonIDs            []int
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -1730,6 +1731,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.HolderID; v != nil {
 		m.SetHolderID(*v)
 	}
+	if v := i.PersonIDs; len(v) > 0 {
+		m.AddPersonIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -1767,6 +1771,9 @@ type UpdateOrganizationInput struct {
 	AppendAdditionalImagesUrls []string
 	ClearHolder                bool
 	HolderID                   *int
+	ClearPeople                bool
+	AddPersonIDs               []int
+	RemovePersonIDs            []int
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -1852,6 +1859,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.HolderID; v != nil {
 		m.SetHolderID(*v)
 	}
+	if i.ClearPeople {
+		m.ClearPeople()
+	}
+	if v := i.AddPersonIDs; len(v) > 0 {
+		m.AddPersonIDs(v...)
+	}
+	if v := i.RemovePersonIDs; len(v) > 0 {
+		m.RemovePersonIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateOrganizationInput on the OrganizationUpdate builder.
@@ -1891,6 +1907,7 @@ type CreatePersonInput struct {
 	PublicationIDs       []int
 	PersonRoleIDs        []int
 	HolderID             *int
+	AffiliationID        *int
 }
 
 // Mutate applies the CreatePersonInput on the PersonMutation builder.
@@ -1962,6 +1979,9 @@ func (i *CreatePersonInput) Mutate(m *PersonMutation) {
 	if v := i.HolderID; v != nil {
 		m.SetHolderID(*v)
 	}
+	if v := i.AffiliationID; v != nil {
+		m.SetAffiliationID(*v)
+	}
 }
 
 // SetInput applies the change-set in the CreatePersonInput on the PersonCreate builder.
@@ -2022,6 +2042,8 @@ type UpdatePersonInput struct {
 	RemovePersonRoleIDs        []int
 	ClearHolder                bool
 	HolderID                   *int
+	ClearAffiliation           bool
+	AffiliationID              *int
 }
 
 // Mutate applies the UpdatePersonInput on the PersonMutation builder.
@@ -2175,6 +2197,12 @@ func (i *UpdatePersonInput) Mutate(m *PersonMutation) {
 	}
 	if v := i.HolderID; v != nil {
 		m.SetHolderID(*v)
+	}
+	if i.ClearAffiliation {
+		m.ClearAffiliation()
+	}
+	if v := i.AffiliationID; v != nil {
+		m.SetAffiliationID(*v)
 	}
 }
 

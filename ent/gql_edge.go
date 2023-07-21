@@ -332,6 +332,18 @@ func (o *Organization) Holder(ctx context.Context) (*Holder, error) {
 	return result, MaskNotFound(err)
 }
 
+func (o *Organization) People(ctx context.Context) (result []*Person, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = o.NamedPeople(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = o.Edges.PeopleOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = o.QueryPeople().All(ctx)
+	}
+	return result, err
+}
+
 func (pe *Person) Artifacts(ctx context.Context) (result []*Artifact, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = pe.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
@@ -384,6 +396,14 @@ func (pe *Person) Holder(ctx context.Context) (*Holder, error) {
 	result, err := pe.Edges.HolderOrErr()
 	if IsNotLoaded(err) {
 		result, err = pe.QueryHolder().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pe *Person) Affiliation(ctx context.Context) (*Organization, error) {
+	result, err := pe.Edges.AffiliationOrErr()
+	if IsNotLoaded(err) {
+		result, err = pe.QueryAffiliation().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }

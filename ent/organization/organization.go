@@ -41,6 +41,8 @@ const (
 	FieldAdditionalImagesUrls = "additional_images_urls"
 	// EdgeHolder holds the string denoting the holder edge name in mutations.
 	EdgeHolder = "holder"
+	// EdgePeople holds the string denoting the people edge name in mutations.
+	EdgePeople = "people"
 	// Table holds the table name of the organization in the database.
 	Table = "organizations"
 	// HolderTable is the table that holds the holder relation/edge.
@@ -50,6 +52,13 @@ const (
 	HolderInverseTable = "holders"
 	// HolderColumn is the table column denoting the holder relation/edge.
 	HolderColumn = "holder_organization"
+	// PeopleTable is the table that holds the people relation/edge.
+	PeopleTable = "persons"
+	// PeopleInverseTable is the table name for the Person entity.
+	// It exists in this package in order to avoid circular dependency with the "person" package.
+	PeopleInverseTable = "persons"
+	// PeopleColumn is the table column denoting the people relation/edge.
+	PeopleColumn = "organization_people"
 )
 
 // Columns holds all SQL columns for organization fields.
@@ -160,10 +169,31 @@ func ByHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newHolderStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByPeopleCount orders the results by people count.
+func ByPeopleCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPeopleStep(), opts...)
+	}
+}
+
+// ByPeople orders the results by people terms.
+func ByPeople(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPeopleStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newHolderStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(HolderInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2O, true, HolderTable, HolderColumn),
+	)
+}
+func newPeopleStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PeopleInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PeopleTable, PeopleColumn),
 	)
 }

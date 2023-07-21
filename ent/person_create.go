@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
@@ -316,6 +317,25 @@ func (pc *PersonCreate) SetHolder(h *Holder) *PersonCreate {
 	return pc.SetHolderID(h.ID)
 }
 
+// SetAffiliationID sets the "affiliation" edge to the Organization entity by ID.
+func (pc *PersonCreate) SetAffiliationID(id int) *PersonCreate {
+	pc.mutation.SetAffiliationID(id)
+	return pc
+}
+
+// SetNillableAffiliationID sets the "affiliation" edge to the Organization entity by ID if the given value is not nil.
+func (pc *PersonCreate) SetNillableAffiliationID(id *int) *PersonCreate {
+	if id != nil {
+		pc = pc.SetAffiliationID(*id)
+	}
+	return pc
+}
+
+// SetAffiliation sets the "affiliation" edge to the Organization entity.
+func (pc *PersonCreate) SetAffiliation(o *Organization) *PersonCreate {
+	return pc.SetAffiliationID(o.ID)
+}
+
 // Mutation returns the PersonMutation object of the builder.
 func (pc *PersonCreate) Mutation() *PersonMutation {
 	return pc.mutation
@@ -563,6 +583,23 @@ func (pc *PersonCreate) createSpec() (*Person, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.holder_person = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.AffiliationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   person.AffiliationTable,
+			Columns: []string{person.AffiliationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.organization_people = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
