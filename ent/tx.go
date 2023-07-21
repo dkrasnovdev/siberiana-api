@@ -54,6 +54,8 @@ type Tx struct {
 	Monument *MonumentClient
 	// Organization is the client for interacting with the Organization builders.
 	Organization *OrganizationClient
+	// OrganizationType is the client for interacting with the OrganizationType builders.
+	OrganizationType *OrganizationTypeClient
 	// Person is the client for interacting with the Person builders.
 	Person *PersonClient
 	// PersonRole is the client for interacting with the PersonRole builders.
@@ -230,6 +232,7 @@ func (tx *Tx) init() {
 	tx.Model = NewModelClient(tx.config)
 	tx.Monument = NewMonumentClient(tx.config)
 	tx.Organization = NewOrganizationClient(tx.config)
+	tx.OrganizationType = NewOrganizationTypeClient(tx.config)
 	tx.Person = NewPersonClient(tx.config)
 	tx.PersonRole = NewPersonRoleClient(tx.config)
 	tx.Project = NewProjectClient(tx.config)

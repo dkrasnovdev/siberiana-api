@@ -25,6 +25,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/model"
 	"github.com/dkrasnovdev/heritage-api/ent/monument"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
+	"github.com/dkrasnovdev/heritage-api/ent/organizationtype"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
@@ -66,6 +67,7 @@ const (
 	TypeModel                 = "Model"
 	TypeMonument              = "Monument"
 	TypeOrganization          = "Organization"
+	TypeOrganizationType      = "OrganizationType"
 	TypePerson                = "Person"
 	TypePersonRole            = "PersonRole"
 	TypeProject               = "Project"
@@ -14792,6 +14794,8 @@ type OrganizationMutation struct {
 	clearedpeople                bool
 	holder                       *int
 	clearedholder                bool
+	organization_type            *int
+	clearedorganization_type     bool
 	done                         bool
 	oldValue                     func(context.Context) (*Organization, error)
 	predicates                   []predicate.Organization
@@ -15614,6 +15618,45 @@ func (m *OrganizationMutation) ResetHolder() {
 	m.clearedholder = false
 }
 
+// SetOrganizationTypeID sets the "organization_type" edge to the OrganizationType entity by id.
+func (m *OrganizationMutation) SetOrganizationTypeID(id int) {
+	m.organization_type = &id
+}
+
+// ClearOrganizationType clears the "organization_type" edge to the OrganizationType entity.
+func (m *OrganizationMutation) ClearOrganizationType() {
+	m.clearedorganization_type = true
+}
+
+// OrganizationTypeCleared reports if the "organization_type" edge to the OrganizationType entity was cleared.
+func (m *OrganizationMutation) OrganizationTypeCleared() bool {
+	return m.clearedorganization_type
+}
+
+// OrganizationTypeID returns the "organization_type" edge ID in the mutation.
+func (m *OrganizationMutation) OrganizationTypeID() (id int, exists bool) {
+	if m.organization_type != nil {
+		return *m.organization_type, true
+	}
+	return
+}
+
+// OrganizationTypeIDs returns the "organization_type" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OrganizationTypeID instead. It exists only for internal usage by the builders.
+func (m *OrganizationMutation) OrganizationTypeIDs() (ids []int) {
+	if id := m.organization_type; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOrganizationType resets all changes to the "organization_type" edge.
+func (m *OrganizationMutation) ResetOrganizationType() {
+	m.organization_type = nil
+	m.clearedorganization_type = false
+}
+
 // Where appends a list predicates to the OrganizationMutation builder.
 func (m *OrganizationMutation) Where(ps ...predicate.Organization) {
 	m.predicates = append(m.predicates, ps...)
@@ -15997,12 +16040,15 @@ func (m *OrganizationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrganizationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.people != nil {
 		edges = append(edges, organization.EdgePeople)
 	}
 	if m.holder != nil {
 		edges = append(edges, organization.EdgeHolder)
+	}
+	if m.organization_type != nil {
+		edges = append(edges, organization.EdgeOrganizationType)
 	}
 	return edges
 }
@@ -16021,13 +16067,17 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 		if id := m.holder; id != nil {
 			return []ent.Value{*id}
 		}
+	case organization.EdgeOrganizationType:
+		if id := m.organization_type; id != nil {
+			return []ent.Value{*id}
+		}
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *OrganizationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.removedpeople != nil {
 		edges = append(edges, organization.EdgePeople)
 	}
@@ -16050,12 +16100,15 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrganizationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.clearedpeople {
 		edges = append(edges, organization.EdgePeople)
 	}
 	if m.clearedholder {
 		edges = append(edges, organization.EdgeHolder)
+	}
+	if m.clearedorganization_type {
+		edges = append(edges, organization.EdgeOrganizationType)
 	}
 	return edges
 }
@@ -16068,6 +16121,8 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearedpeople
 	case organization.EdgeHolder:
 		return m.clearedholder
+	case organization.EdgeOrganizationType:
+		return m.clearedorganization_type
 	}
 	return false
 }
@@ -16078,6 +16133,9 @@ func (m *OrganizationMutation) ClearEdge(name string) error {
 	switch name {
 	case organization.EdgeHolder:
 		m.ClearHolder()
+		return nil
+	case organization.EdgeOrganizationType:
+		m.ClearOrganizationType()
 		return nil
 	}
 	return fmt.Errorf("unknown Organization unique edge %s", name)
@@ -16093,8 +16151,869 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 	case organization.EdgeHolder:
 		m.ResetHolder()
 		return nil
+	case organization.EdgeOrganizationType:
+		m.ResetOrganizationType()
+		return nil
 	}
 	return fmt.Errorf("unknown Organization edge %s", name)
+}
+
+// OrganizationTypeMutation represents an operation that mutates the OrganizationType nodes in the graph.
+type OrganizationTypeMutation struct {
+	config
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	organizations        map[int]struct{}
+	removedorganizations map[int]struct{}
+	clearedorganizations bool
+	done                 bool
+	oldValue             func(context.Context) (*OrganizationType, error)
+	predicates           []predicate.OrganizationType
+}
+
+var _ ent.Mutation = (*OrganizationTypeMutation)(nil)
+
+// organizationtypeOption allows management of the mutation configuration using functional options.
+type organizationtypeOption func(*OrganizationTypeMutation)
+
+// newOrganizationTypeMutation creates new mutation for the OrganizationType entity.
+func newOrganizationTypeMutation(c config, op Op, opts ...organizationtypeOption) *OrganizationTypeMutation {
+	m := &OrganizationTypeMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeOrganizationType,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withOrganizationTypeID sets the ID field of the mutation.
+func withOrganizationTypeID(id int) organizationtypeOption {
+	return func(m *OrganizationTypeMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *OrganizationType
+		)
+		m.oldValue = func(ctx context.Context) (*OrganizationType, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().OrganizationType.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withOrganizationType sets the old OrganizationType of the mutation.
+func withOrganizationType(node *OrganizationType) organizationtypeOption {
+	return func(m *OrganizationTypeMutation) {
+		m.oldValue = func(context.Context) (*OrganizationType, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m OrganizationTypeMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m OrganizationTypeMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *OrganizationTypeMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *OrganizationTypeMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().OrganizationType.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *OrganizationTypeMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *OrganizationTypeMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the OrganizationType entity.
+// If the OrganizationType object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationTypeMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *OrganizationTypeMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *OrganizationTypeMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *OrganizationTypeMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the OrganizationType entity.
+// If the OrganizationType object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationTypeMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *OrganizationTypeMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[organizationtype.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *OrganizationTypeMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[organizationtype.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *OrganizationTypeMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, organizationtype.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *OrganizationTypeMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *OrganizationTypeMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the OrganizationType entity.
+// If the OrganizationType object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationTypeMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *OrganizationTypeMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *OrganizationTypeMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *OrganizationTypeMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the OrganizationType entity.
+// If the OrganizationType object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationTypeMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *OrganizationTypeMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[organizationtype.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *OrganizationTypeMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[organizationtype.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *OrganizationTypeMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, organizationtype.FieldUpdatedBy)
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *OrganizationTypeMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *OrganizationTypeMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the OrganizationType entity.
+// If the OrganizationType object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationTypeMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (m *OrganizationTypeMutation) ClearDisplayName() {
+	m.display_name = nil
+	m.clearedFields[organizationtype.FieldDisplayName] = struct{}{}
+}
+
+// DisplayNameCleared returns if the "display_name" field was cleared in this mutation.
+func (m *OrganizationTypeMutation) DisplayNameCleared() bool {
+	_, ok := m.clearedFields[organizationtype.FieldDisplayName]
+	return ok
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *OrganizationTypeMutation) ResetDisplayName() {
+	m.display_name = nil
+	delete(m.clearedFields, organizationtype.FieldDisplayName)
+}
+
+// SetDescription sets the "description" field.
+func (m *OrganizationTypeMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *OrganizationTypeMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the OrganizationType entity.
+// If the OrganizationType object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationTypeMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *OrganizationTypeMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[organizationtype.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *OrganizationTypeMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[organizationtype.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *OrganizationTypeMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, organizationtype.FieldDescription)
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (m *OrganizationTypeMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
+}
+
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *OrganizationTypeMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalLinks returns the old "external_links" field's value of the OrganizationType entity.
+// If the OrganizationType object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationTypeMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
+	}
+	return oldValue.ExternalLinks, nil
+}
+
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *OrganizationTypeMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
+}
+
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *OrganizationTypeMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *OrganizationTypeMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[organizationtype.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *OrganizationTypeMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[organizationtype.FieldExternalLinks]
+	return ok
+}
+
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *OrganizationTypeMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, organizationtype.FieldExternalLinks)
+}
+
+// AddOrganizationIDs adds the "organizations" edge to the Organization entity by ids.
+func (m *OrganizationTypeMutation) AddOrganizationIDs(ids ...int) {
+	if m.organizations == nil {
+		m.organizations = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.organizations[ids[i]] = struct{}{}
+	}
+}
+
+// ClearOrganizations clears the "organizations" edge to the Organization entity.
+func (m *OrganizationTypeMutation) ClearOrganizations() {
+	m.clearedorganizations = true
+}
+
+// OrganizationsCleared reports if the "organizations" edge to the Organization entity was cleared.
+func (m *OrganizationTypeMutation) OrganizationsCleared() bool {
+	return m.clearedorganizations
+}
+
+// RemoveOrganizationIDs removes the "organizations" edge to the Organization entity by IDs.
+func (m *OrganizationTypeMutation) RemoveOrganizationIDs(ids ...int) {
+	if m.removedorganizations == nil {
+		m.removedorganizations = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.organizations, ids[i])
+		m.removedorganizations[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedOrganizations returns the removed IDs of the "organizations" edge to the Organization entity.
+func (m *OrganizationTypeMutation) RemovedOrganizationsIDs() (ids []int) {
+	for id := range m.removedorganizations {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// OrganizationsIDs returns the "organizations" edge IDs in the mutation.
+func (m *OrganizationTypeMutation) OrganizationsIDs() (ids []int) {
+	for id := range m.organizations {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetOrganizations resets all changes to the "organizations" edge.
+func (m *OrganizationTypeMutation) ResetOrganizations() {
+	m.organizations = nil
+	m.clearedorganizations = false
+	m.removedorganizations = nil
+}
+
+// Where appends a list predicates to the OrganizationTypeMutation builder.
+func (m *OrganizationTypeMutation) Where(ps ...predicate.OrganizationType) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the OrganizationTypeMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *OrganizationTypeMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.OrganizationType, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *OrganizationTypeMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *OrganizationTypeMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (OrganizationType).
+func (m *OrganizationTypeMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *OrganizationTypeMutation) Fields() []string {
+	fields := make([]string, 0, 7)
+	if m.created_at != nil {
+		fields = append(fields, organizationtype.FieldCreatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, organizationtype.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, organizationtype.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, organizationtype.FieldUpdatedBy)
+	}
+	if m.display_name != nil {
+		fields = append(fields, organizationtype.FieldDisplayName)
+	}
+	if m.description != nil {
+		fields = append(fields, organizationtype.FieldDescription)
+	}
+	if m.external_links != nil {
+		fields = append(fields, organizationtype.FieldExternalLinks)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *OrganizationTypeMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case organizationtype.FieldCreatedAt:
+		return m.CreatedAt()
+	case organizationtype.FieldCreatedBy:
+		return m.CreatedBy()
+	case organizationtype.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case organizationtype.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case organizationtype.FieldDisplayName:
+		return m.DisplayName()
+	case organizationtype.FieldDescription:
+		return m.Description()
+	case organizationtype.FieldExternalLinks:
+		return m.ExternalLinks()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *OrganizationTypeMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case organizationtype.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case organizationtype.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case organizationtype.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case organizationtype.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case organizationtype.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case organizationtype.FieldDescription:
+		return m.OldDescription(ctx)
+	case organizationtype.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
+	}
+	return nil, fmt.Errorf("unknown OrganizationType field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *OrganizationTypeMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case organizationtype.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case organizationtype.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case organizationtype.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case organizationtype.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case organizationtype.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case organizationtype.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case organizationtype.FieldExternalLinks:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalLinks(v)
+		return nil
+	}
+	return fmt.Errorf("unknown OrganizationType field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *OrganizationTypeMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *OrganizationTypeMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *OrganizationTypeMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown OrganizationType numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *OrganizationTypeMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(organizationtype.FieldCreatedBy) {
+		fields = append(fields, organizationtype.FieldCreatedBy)
+	}
+	if m.FieldCleared(organizationtype.FieldUpdatedBy) {
+		fields = append(fields, organizationtype.FieldUpdatedBy)
+	}
+	if m.FieldCleared(organizationtype.FieldDisplayName) {
+		fields = append(fields, organizationtype.FieldDisplayName)
+	}
+	if m.FieldCleared(organizationtype.FieldDescription) {
+		fields = append(fields, organizationtype.FieldDescription)
+	}
+	if m.FieldCleared(organizationtype.FieldExternalLinks) {
+		fields = append(fields, organizationtype.FieldExternalLinks)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *OrganizationTypeMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *OrganizationTypeMutation) ClearField(name string) error {
+	switch name {
+	case organizationtype.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case organizationtype.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case organizationtype.FieldDisplayName:
+		m.ClearDisplayName()
+		return nil
+	case organizationtype.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case organizationtype.FieldExternalLinks:
+		m.ClearExternalLinks()
+		return nil
+	}
+	return fmt.Errorf("unknown OrganizationType nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *OrganizationTypeMutation) ResetField(name string) error {
+	switch name {
+	case organizationtype.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case organizationtype.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case organizationtype.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case organizationtype.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case organizationtype.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case organizationtype.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case organizationtype.FieldExternalLinks:
+		m.ResetExternalLinks()
+		return nil
+	}
+	return fmt.Errorf("unknown OrganizationType field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *OrganizationTypeMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.organizations != nil {
+		edges = append(edges, organizationtype.EdgeOrganizations)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *OrganizationTypeMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case organizationtype.EdgeOrganizations:
+		ids := make([]ent.Value, 0, len(m.organizations))
+		for id := range m.organizations {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *OrganizationTypeMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.removedorganizations != nil {
+		edges = append(edges, organizationtype.EdgeOrganizations)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *OrganizationTypeMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case organizationtype.EdgeOrganizations:
+		ids := make([]ent.Value, 0, len(m.removedorganizations))
+		for id := range m.removedorganizations {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *OrganizationTypeMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedorganizations {
+		edges = append(edges, organizationtype.EdgeOrganizations)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *OrganizationTypeMutation) EdgeCleared(name string) bool {
+	switch name {
+	case organizationtype.EdgeOrganizations:
+		return m.clearedorganizations
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *OrganizationTypeMutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown OrganizationType unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *OrganizationTypeMutation) ResetEdge(name string) error {
+	switch name {
+	case organizationtype.EdgeOrganizations:
+		m.ResetOrganizations()
+		return nil
+	}
+	return fmt.Errorf("unknown OrganizationType edge %s", name)
 }
 
 // PersonMutation represents an operation that mutates the Person nodes in the graph.

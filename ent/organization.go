@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
+	"github.com/dkrasnovdev/heritage-api/ent/organizationtype"
 )
 
 // Organization is the model entity for the Organization schema.
@@ -45,9 +46,10 @@ type Organization struct {
 	AdditionalImagesUrls []string `json:"additional_images_urls,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrganizationQuery when eager-loading is set.
-	Edges               OrganizationEdges `json:"edges"`
-	holder_organization *int
-	selectValues        sql.SelectValues
+	Edges                           OrganizationEdges `json:"edges"`
+	holder_organization             *int
+	organization_type_organizations *int
+	selectValues                    sql.SelectValues
 }
 
 // OrganizationEdges holds the relations/edges for other nodes in the graph.
@@ -56,11 +58,13 @@ type OrganizationEdges struct {
 	People []*Person `json:"people,omitempty"`
 	// Holder holds the value of the holder edge.
 	Holder *Holder `json:"holder,omitempty"`
+	// OrganizationType holds the value of the organization_type edge.
+	OrganizationType *OrganizationType `json:"organization_type,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [3]map[string]int
 
 	namedPeople map[string][]*Person
 }
@@ -87,6 +91,19 @@ func (e OrganizationEdges) HolderOrErr() (*Holder, error) {
 	return nil, &NotLoadedError{edge: "holder"}
 }
 
+// OrganizationTypeOrErr returns the OrganizationType value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e OrganizationEdges) OrganizationTypeOrErr() (*OrganizationType, error) {
+	if e.loadedTypes[2] {
+		if e.OrganizationType == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: organizationtype.Label}
+		}
+		return e.OrganizationType, nil
+	}
+	return nil, &NotLoadedError{edge: "organization_type"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Organization) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -101,6 +118,8 @@ func (*Organization) scanValues(columns []string) ([]any, error) {
 		case organization.FieldCreatedAt, organization.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		case organization.ForeignKeys[0]: // holder_organization
+			values[i] = new(sql.NullInt64)
+		case organization.ForeignKeys[1]: // organization_type_organizations
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -210,6 +229,13 @@ func (o *Organization) assignValues(columns []string, values []any) error {
 				o.holder_organization = new(int)
 				*o.holder_organization = int(value.Int64)
 			}
+		case organization.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field organization_type_organizations", value)
+			} else if value.Valid {
+				o.organization_type_organizations = new(int)
+				*o.organization_type_organizations = int(value.Int64)
+			}
 		default:
 			o.selectValues.Set(columns[i], values[i])
 		}
@@ -231,6 +257,11 @@ func (o *Organization) QueryPeople() *PersonQuery {
 // QueryHolder queries the "holder" edge of the Organization entity.
 func (o *Organization) QueryHolder() *HolderQuery {
 	return NewOrganizationClient(o.config).QueryHolder(o)
+}
+
+// QueryOrganizationType queries the "organization_type" edge of the Organization entity.
+func (o *Organization) QueryOrganizationType() *OrganizationTypeQuery {
+	return NewOrganizationClient(o.config).QueryOrganizationType(o)
 }
 
 // Update returns a builder for updating this Organization.

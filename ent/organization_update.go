@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
+	"github.com/dkrasnovdev/heritage-api/ent/organizationtype"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
@@ -263,6 +264,25 @@ func (ou *OrganizationUpdate) SetHolder(h *Holder) *OrganizationUpdate {
 	return ou.SetHolderID(h.ID)
 }
 
+// SetOrganizationTypeID sets the "organization_type" edge to the OrganizationType entity by ID.
+func (ou *OrganizationUpdate) SetOrganizationTypeID(id int) *OrganizationUpdate {
+	ou.mutation.SetOrganizationTypeID(id)
+	return ou
+}
+
+// SetNillableOrganizationTypeID sets the "organization_type" edge to the OrganizationType entity by ID if the given value is not nil.
+func (ou *OrganizationUpdate) SetNillableOrganizationTypeID(id *int) *OrganizationUpdate {
+	if id != nil {
+		ou = ou.SetOrganizationTypeID(*id)
+	}
+	return ou
+}
+
+// SetOrganizationType sets the "organization_type" edge to the OrganizationType entity.
+func (ou *OrganizationUpdate) SetOrganizationType(o *OrganizationType) *OrganizationUpdate {
+	return ou.SetOrganizationTypeID(o.ID)
+}
+
 // Mutation returns the OrganizationMutation object of the builder.
 func (ou *OrganizationUpdate) Mutation() *OrganizationMutation {
 	return ou.mutation
@@ -292,6 +312,12 @@ func (ou *OrganizationUpdate) RemovePeople(p ...*Person) *OrganizationUpdate {
 // ClearHolder clears the "holder" edge to the Holder entity.
 func (ou *OrganizationUpdate) ClearHolder() *OrganizationUpdate {
 	ou.mutation.ClearHolder()
+	return ou
+}
+
+// ClearOrganizationType clears the "organization_type" edge to the OrganizationType entity.
+func (ou *OrganizationUpdate) ClearOrganizationType() *OrganizationUpdate {
+	ou.mutation.ClearOrganizationType()
 	return ou
 }
 
@@ -496,6 +522,35 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ou.mutation.OrganizationTypeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   organization.OrganizationTypeTable,
+			Columns: []string{organization.OrganizationTypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organizationtype.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.OrganizationTypeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   organization.OrganizationTypeTable,
+			Columns: []string{organization.OrganizationTypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organizationtype.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -755,6 +810,25 @@ func (ouo *OrganizationUpdateOne) SetHolder(h *Holder) *OrganizationUpdateOne {
 	return ouo.SetHolderID(h.ID)
 }
 
+// SetOrganizationTypeID sets the "organization_type" edge to the OrganizationType entity by ID.
+func (ouo *OrganizationUpdateOne) SetOrganizationTypeID(id int) *OrganizationUpdateOne {
+	ouo.mutation.SetOrganizationTypeID(id)
+	return ouo
+}
+
+// SetNillableOrganizationTypeID sets the "organization_type" edge to the OrganizationType entity by ID if the given value is not nil.
+func (ouo *OrganizationUpdateOne) SetNillableOrganizationTypeID(id *int) *OrganizationUpdateOne {
+	if id != nil {
+		ouo = ouo.SetOrganizationTypeID(*id)
+	}
+	return ouo
+}
+
+// SetOrganizationType sets the "organization_type" edge to the OrganizationType entity.
+func (ouo *OrganizationUpdateOne) SetOrganizationType(o *OrganizationType) *OrganizationUpdateOne {
+	return ouo.SetOrganizationTypeID(o.ID)
+}
+
 // Mutation returns the OrganizationMutation object of the builder.
 func (ouo *OrganizationUpdateOne) Mutation() *OrganizationMutation {
 	return ouo.mutation
@@ -784,6 +858,12 @@ func (ouo *OrganizationUpdateOne) RemovePeople(p ...*Person) *OrganizationUpdate
 // ClearHolder clears the "holder" edge to the Holder entity.
 func (ouo *OrganizationUpdateOne) ClearHolder() *OrganizationUpdateOne {
 	ouo.mutation.ClearHolder()
+	return ouo
+}
+
+// ClearOrganizationType clears the "organization_type" edge to the OrganizationType entity.
+func (ouo *OrganizationUpdateOne) ClearOrganizationType() *OrganizationUpdateOne {
+	ouo.mutation.ClearOrganizationType()
 	return ouo
 }
 
@@ -1018,6 +1098,35 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.OrganizationTypeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   organization.OrganizationTypeTable,
+			Columns: []string{organization.OrganizationTypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organizationtype.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.OrganizationTypeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   organization.OrganizationTypeTable,
+			Columns: []string{organization.OrganizationTypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organizationtype.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

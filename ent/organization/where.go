@@ -711,6 +711,29 @@ func HasHolderWith(preds ...predicate.Holder) predicate.Organization {
 	})
 }
 
+// HasOrganizationType applies the HasEdge predicate on the "organization_type" edge.
+func HasOrganizationType() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, OrganizationTypeTable, OrganizationTypeColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasOrganizationTypeWith applies the HasEdge predicate on the "organization_type" edge with a given conditions (other predicates).
+func HasOrganizationTypeWith(preds ...predicate.OrganizationType) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newOrganizationTypeStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Organization) predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

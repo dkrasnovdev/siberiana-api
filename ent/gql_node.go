@@ -34,6 +34,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/model"
 	"github.com/dkrasnovdev/heritage-api/ent/monument"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
+	"github.com/dkrasnovdev/heritage-api/ent/organizationtype"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
@@ -159,6 +160,11 @@ var organizationImplementors = []string{"Organization", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Organization) IsNode() {}
+
+var organizationtypeImplementors = []string{"OrganizationType", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*OrganizationType) IsNode() {}
 
 var personImplementors = []string{"Person", "Node"}
 
@@ -522,6 +528,18 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 		query := c.Organization.Query().
 			Where(organization.ID(id))
 		query, err := query.CollectFields(ctx, organizationImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case organizationtype.Table:
+		query := c.OrganizationType.Query().
+			Where(organizationtype.ID(id))
+		query, err := query.CollectFields(ctx, organizationtypeImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -1071,6 +1089,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 		query := c.Organization.Query().
 			Where(organization.IDIn(ids...))
 		query, err := query.CollectFields(ctx, organizationImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case organizationtype.Table:
+		query := c.OrganizationType.Query().
+			Where(organizationtype.IDIn(ids...))
+		query, err := query.CollectFields(ctx, organizationtypeImplementors...)
 		if err != nil {
 			return nil, err
 		}

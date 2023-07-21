@@ -1704,6 +1704,7 @@ type CreateOrganizationInput struct {
 	AdditionalImagesUrls []string
 	PersonIDs            []int
 	HolderID             *int
+	OrganizationTypeID   *int
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -1750,6 +1751,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.HolderID; v != nil {
 		m.SetHolderID(*v)
 	}
+	if v := i.OrganizationTypeID; v != nil {
+		m.SetOrganizationTypeID(*v)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -1790,6 +1794,8 @@ type UpdateOrganizationInput struct {
 	RemovePersonIDs            []int
 	ClearHolder                bool
 	HolderID                   *int
+	ClearOrganizationType      bool
+	OrganizationTypeID         *int
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -1883,6 +1889,12 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.HolderID; v != nil {
 		m.SetHolderID(*v)
+	}
+	if i.ClearOrganizationType {
+		m.ClearOrganizationType()
+	}
+	if v := i.OrganizationTypeID; v != nil {
+		m.SetOrganizationTypeID(*v)
 	}
 }
 

@@ -43,6 +43,8 @@ const (
 	EdgePeople = "people"
 	// EdgeHolder holds the string denoting the holder edge name in mutations.
 	EdgeHolder = "holder"
+	// EdgeOrganizationType holds the string denoting the organization_type edge name in mutations.
+	EdgeOrganizationType = "organization_type"
 	// Table holds the table name of the organization in the database.
 	Table = "organizations"
 	// PeopleTable is the table that holds the people relation/edge.
@@ -59,6 +61,13 @@ const (
 	HolderInverseTable = "holders"
 	// HolderColumn is the table column denoting the holder relation/edge.
 	HolderColumn = "holder_organization"
+	// OrganizationTypeTable is the table that holds the organization_type relation/edge.
+	OrganizationTypeTable = "organizations"
+	// OrganizationTypeInverseTable is the table name for the OrganizationType entity.
+	// It exists in this package in order to avoid circular dependency with the "organizationtype" package.
+	OrganizationTypeInverseTable = "organization_types"
+	// OrganizationTypeColumn is the table column denoting the organization_type relation/edge.
+	OrganizationTypeColumn = "organization_type_organizations"
 )
 
 // Columns holds all SQL columns for organization fields.
@@ -82,6 +91,7 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"holder_organization",
+	"organization_type_organizations",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -183,6 +193,13 @@ func ByHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newHolderStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByOrganizationTypeField orders the results by organization_type field.
+func ByOrganizationTypeField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOrganizationTypeStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newPeopleStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -195,5 +212,12 @@ func newHolderStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(HolderInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2O, true, HolderTable, HolderColumn),
+	)
+}
+func newOrganizationTypeStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OrganizationTypeInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, OrganizationTypeTable, OrganizationTypeColumn),
 	)
 }

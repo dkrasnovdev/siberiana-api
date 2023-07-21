@@ -29,6 +29,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/model"
 	"github.com/dkrasnovdev/heritage-api/ent/monument"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
+	"github.com/dkrasnovdev/heritage-api/ent/organizationtype"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
@@ -667,6 +668,33 @@ func (f TraverseOrganization) Traverse(ctx context.Context, q ent.Query) error {
 	return fmt.Errorf("unexpected query type %T. expect *ent.OrganizationQuery", q)
 }
 
+// The OrganizationTypeFunc type is an adapter to allow the use of ordinary function as a Querier.
+type OrganizationTypeFunc func(context.Context, *ent.OrganizationTypeQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f OrganizationTypeFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.OrganizationTypeQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.OrganizationTypeQuery", q)
+}
+
+// The TraverseOrganizationType type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseOrganizationType func(context.Context, *ent.OrganizationTypeQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseOrganizationType) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseOrganizationType) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.OrganizationTypeQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.OrganizationTypeQuery", q)
+}
+
 // The PersonFunc type is an adapter to allow the use of ordinary function as a Querier.
 type PersonFunc func(context.Context, *ent.PersonQuery) (ent.Value, error)
 
@@ -1036,6 +1064,8 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.MonumentQuery, predicate.Monument, monument.OrderOption]{typ: ent.TypeMonument, tq: q}, nil
 	case *ent.OrganizationQuery:
 		return &query[*ent.OrganizationQuery, predicate.Organization, organization.OrderOption]{typ: ent.TypeOrganization, tq: q}, nil
+	case *ent.OrganizationTypeQuery:
+		return &query[*ent.OrganizationTypeQuery, predicate.OrganizationType, organizationtype.OrderOption]{typ: ent.TypeOrganizationType, tq: q}, nil
 	case *ent.PersonQuery:
 		return &query[*ent.PersonQuery, predicate.Person, person.OrderOption]{typ: ent.TypePerson, tq: q}, nil
 	case *ent.PersonRoleQuery:

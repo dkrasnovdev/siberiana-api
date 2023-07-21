@@ -389,6 +389,7 @@ var (
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
 		{Name: "holder_organization", Type: field.TypeInt, Unique: true, Nullable: true},
+		{Name: "organization_type_organizations", Type: field.TypeInt, Nullable: true},
 	}
 	// OrganizationsTable holds the schema information for the "organizations" table.
 	OrganizationsTable = &schema.Table{
@@ -402,7 +403,30 @@ var (
 				RefColumns: []*schema.Column{HoldersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
+			{
+				Symbol:     "organizations_organization_types_organizations",
+				Columns:    []*schema.Column{OrganizationsColumns[14]},
+				RefColumns: []*schema.Column{OrganizationTypesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 		},
+	}
+	// OrganizationTypesColumns holds the columns for the "organization_types" table.
+	OrganizationTypesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+	}
+	// OrganizationTypesTable holds the schema information for the "organization_types" table.
+	OrganizationTypesTable = &schema.Table{
+		Name:       "organization_types",
+		Columns:    OrganizationTypesColumns,
+		PrimaryKey: []*schema.Column{OrganizationTypesColumns[0]},
 	}
 	// PersonsColumns holds the columns for the "persons" table.
 	PersonsColumns = []*schema.Column{
@@ -905,6 +929,7 @@ var (
 		ModelsTable,
 		MonumentsTable,
 		OrganizationsTable,
+		OrganizationTypesTable,
 		PersonsTable,
 		PersonRolesTable,
 		ProjectsTable,
@@ -941,6 +966,7 @@ func init() {
 	CollectionsTable.ForeignKeys[0].RefTable = CategoriesTable
 	DistrictsTable.ForeignKeys[0].RefTable = LocationsTable
 	OrganizationsTable.ForeignKeys[0].RefTable = HoldersTable
+	OrganizationsTable.ForeignKeys[1].RefTable = OrganizationTypesTable
 	PersonsTable.ForeignKeys[0].RefTable = CollectionsTable
 	PersonsTable.ForeignKeys[1].RefTable = HoldersTable
 	PersonsTable.ForeignKeys[2].RefTable = OrganizationsTable

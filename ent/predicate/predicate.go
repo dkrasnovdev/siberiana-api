@@ -69,6 +69,9 @@ type Monument func(*sql.Selector)
 // Organization is the predicate function for organization builders.
 type Organization func(*sql.Selector)
 
+// OrganizationType is the predicate function for organizationtype builders.
+type OrganizationType func(*sql.Selector)
+
 // Person is the predicate function for person builders.
 type Person func(*sql.Selector)
 

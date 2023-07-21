@@ -20,6 +20,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/model"
 	"github.com/dkrasnovdev/heritage-api/ent/monument"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
+	"github.com/dkrasnovdev/heritage-api/ent/organizationtype"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
@@ -399,6 +400,23 @@ func init() {
 	organization.DefaultUpdatedAt = organizationDescUpdatedAt.Default.(func() time.Time)
 	// organization.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	organization.UpdateDefaultUpdatedAt = organizationDescUpdatedAt.UpdateDefault.(func() time.Time)
+	organizationtypeMixin := schema.OrganizationType{}.Mixin()
+	organizationtypeMixinHooks0 := organizationtypeMixin[0].Hooks()
+	organizationtype.Hooks[0] = organizationtypeMixinHooks0[0]
+	organizationtypeMixinFields0 := organizationtypeMixin[0].Fields()
+	_ = organizationtypeMixinFields0
+	organizationtypeFields := schema.OrganizationType{}.Fields()
+	_ = organizationtypeFields
+	// organizationtypeDescCreatedAt is the schema descriptor for created_at field.
+	organizationtypeDescCreatedAt := organizationtypeMixinFields0[0].Descriptor()
+	// organizationtype.DefaultCreatedAt holds the default value on creation for the created_at field.
+	organizationtype.DefaultCreatedAt = organizationtypeDescCreatedAt.Default.(func() time.Time)
+	// organizationtypeDescUpdatedAt is the schema descriptor for updated_at field.
+	organizationtypeDescUpdatedAt := organizationtypeMixinFields0[2].Descriptor()
+	// organizationtype.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	organizationtype.DefaultUpdatedAt = organizationtypeDescUpdatedAt.Default.(func() time.Time)
+	// organizationtype.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	organizationtype.UpdateDefaultUpdatedAt = organizationtypeDescUpdatedAt.UpdateDefault.(func() time.Time)
 	personMixin := schema.Person{}.Mixin()
 	person.Policy = privacy.NewPolicies(schema.Person{})
 	person.Hooks[0] = func(next ent.Mutator) ent.Mutator {

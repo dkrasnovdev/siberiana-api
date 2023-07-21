@@ -22,6 +22,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/model"
 	"github.com/dkrasnovdev/heritage-api/ent/monument"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
+	"github.com/dkrasnovdev/heritage-api/ent/organizationtype"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
@@ -2397,6 +2398,16 @@ func (o *OrganizationQuery) collectField(ctx context.Context, opCtx *graphql.Ope
 				return err
 			}
 			o.withHolder = query
+		case "organizationType":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationTypeClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, organizationtypeImplementors)...); err != nil {
+				return err
+			}
+			o.withOrganizationType = query
 		case "createdAt":
 			if _, ok := fieldSeen[organization.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, organization.FieldCreatedAt)
@@ -2516,6 +2527,137 @@ func newOrganizationPaginateArgs(rv map[string]any) *organizationPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*OrganizationWhereInput); ok {
 		args.opts = append(args.opts, WithOrganizationFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (ot *OrganizationTypeQuery) CollectFields(ctx context.Context, satisfies ...string) (*OrganizationTypeQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return ot, nil
+	}
+	if err := ot.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return ot, nil
+}
+
+func (ot *OrganizationTypeQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(organizationtype.Columns))
+		selectedFields = []string{organizationtype.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "organizations":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: ot.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			ot.WithNamedOrganizations(alias, func(wq *OrganizationQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[organizationtype.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, organizationtype.FieldCreatedAt)
+				fieldSeen[organizationtype.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[organizationtype.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, organizationtype.FieldCreatedBy)
+				fieldSeen[organizationtype.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[organizationtype.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, organizationtype.FieldUpdatedAt)
+				fieldSeen[organizationtype.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[organizationtype.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, organizationtype.FieldUpdatedBy)
+				fieldSeen[organizationtype.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[organizationtype.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, organizationtype.FieldDisplayName)
+				fieldSeen[organizationtype.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[organizationtype.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, organizationtype.FieldDescription)
+				fieldSeen[organizationtype.FieldDescription] = struct{}{}
+			}
+		case "externalLinks":
+			if _, ok := fieldSeen[organizationtype.FieldExternalLinks]; !ok {
+				selectedFields = append(selectedFields, organizationtype.FieldExternalLinks)
+				fieldSeen[organizationtype.FieldExternalLinks] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		ot.Select(selectedFields...)
+	}
+	return nil
+}
+
+type organizationtypePaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []OrganizationTypePaginateOption
+}
+
+func newOrganizationTypePaginateArgs(rv map[string]any) *organizationtypePaginateArgs {
+	args := &organizationtypePaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &OrganizationTypeOrder{Field: &OrganizationTypeOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithOrganizationTypeOrder(order))
+			}
+		case *OrganizationTypeOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithOrganizationTypeOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*OrganizationTypeWhereInput); ok {
+		args.opts = append(args.opts, WithOrganizationTypeFilter(v.Filter))
 	}
 	return args
 }

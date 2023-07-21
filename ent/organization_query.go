@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
+	"github.com/dkrasnovdev/heritage-api/ent/organizationtype"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
@@ -21,16 +22,17 @@ import (
 // OrganizationQuery is the builder for querying Organization entities.
 type OrganizationQuery struct {
 	config
-	ctx             *QueryContext
-	order           []organization.OrderOption
-	inters          []Interceptor
-	predicates      []predicate.Organization
-	withPeople      *PersonQuery
-	withHolder      *HolderQuery
-	withFKs         bool
-	modifiers       []func(*sql.Selector)
-	loadTotal       []func(context.Context, []*Organization) error
-	withNamedPeople map[string]*PersonQuery
+	ctx                  *QueryContext
+	order                []organization.OrderOption
+	inters               []Interceptor
+	predicates           []predicate.Organization
+	withPeople           *PersonQuery
+	withHolder           *HolderQuery
+	withOrganizationType *OrganizationTypeQuery
+	withFKs              bool
+	modifiers            []func(*sql.Selector)
+	loadTotal            []func(context.Context, []*Organization) error
+	withNamedPeople      map[string]*PersonQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -104,6 +106,28 @@ func (oq *OrganizationQuery) QueryHolder() *HolderQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(holder.Table, holder.FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, true, organization.HolderTable, organization.HolderColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryOrganizationType chains the current query on the "organization_type" edge.
+func (oq *OrganizationQuery) QueryOrganizationType() *OrganizationTypeQuery {
+	query := (&OrganizationTypeClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(organizationtype.Table, organizationtype.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, organization.OrganizationTypeTable, organization.OrganizationTypeColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
 		return fromU, nil
@@ -298,13 +322,14 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		return nil
 	}
 	return &OrganizationQuery{
-		config:     oq.config,
-		ctx:        oq.ctx.Clone(),
-		order:      append([]organization.OrderOption{}, oq.order...),
-		inters:     append([]Interceptor{}, oq.inters...),
-		predicates: append([]predicate.Organization{}, oq.predicates...),
-		withPeople: oq.withPeople.Clone(),
-		withHolder: oq.withHolder.Clone(),
+		config:               oq.config,
+		ctx:                  oq.ctx.Clone(),
+		order:                append([]organization.OrderOption{}, oq.order...),
+		inters:               append([]Interceptor{}, oq.inters...),
+		predicates:           append([]predicate.Organization{}, oq.predicates...),
+		withPeople:           oq.withPeople.Clone(),
+		withHolder:           oq.withHolder.Clone(),
+		withOrganizationType: oq.withOrganizationType.Clone(),
 		// clone intermediate query.
 		sql:  oq.sql.Clone(),
 		path: oq.path,
@@ -330,6 +355,17 @@ func (oq *OrganizationQuery) WithHolder(opts ...func(*HolderQuery)) *Organizatio
 		opt(query)
 	}
 	oq.withHolder = query
+	return oq
+}
+
+// WithOrganizationType tells the query-builder to eager-load the nodes that are connected to
+// the "organization_type" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithOrganizationType(opts ...func(*OrganizationTypeQuery)) *OrganizationQuery {
+	query := (&OrganizationTypeClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withOrganizationType = query
 	return oq
 }
 
@@ -418,12 +454,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		nodes       = []*Organization{}
 		withFKs     = oq.withFKs
 		_spec       = oq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [3]bool{
 			oq.withPeople != nil,
 			oq.withHolder != nil,
+			oq.withOrganizationType != nil,
 		}
 	)
-	if oq.withHolder != nil {
+	if oq.withHolder != nil || oq.withOrganizationType != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -460,6 +497,12 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	if query := oq.withHolder; query != nil {
 		if err := oq.loadHolder(ctx, query, nodes, nil,
 			func(n *Organization, e *Holder) { n.Edges.Holder = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := oq.withOrganizationType; query != nil {
+		if err := oq.loadOrganizationType(ctx, query, nodes, nil,
+			func(n *Organization, e *OrganizationType) { n.Edges.OrganizationType = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -534,6 +577,38 @@ func (oq *OrganizationQuery) loadHolder(ctx context.Context, query *HolderQuery,
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "holder_organization" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (oq *OrganizationQuery) loadOrganizationType(ctx context.Context, query *OrganizationTypeQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrganizationType)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Organization)
+	for i := range nodes {
+		if nodes[i].organization_type_organizations == nil {
+			continue
+		}
+		fk := *nodes[i].organization_type_organizations
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(organizationtype.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "organization_type_organizations" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

@@ -59,5 +59,6 @@ func (Organization) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("people", Person.Type),
 		edge.From("holder", Holder.Type).Ref("organization").Unique(),
+		edge.From("organization_type", OrganizationType.Type).Ref("organizations").Unique(),
 	}
 }

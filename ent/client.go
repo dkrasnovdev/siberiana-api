@@ -35,6 +35,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/model"
 	"github.com/dkrasnovdev/heritage-api/ent/monument"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
+	"github.com/dkrasnovdev/heritage-api/ent/organizationtype"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
@@ -96,6 +97,8 @@ type Client struct {
 	Monument *MonumentClient
 	// Organization is the client for interacting with the Organization builders.
 	Organization *OrganizationClient
+	// OrganizationType is the client for interacting with the OrganizationType builders.
+	OrganizationType *OrganizationTypeClient
 	// Person is the client for interacting with the Person builders.
 	Person *PersonClient
 	// PersonRole is the client for interacting with the PersonRole builders.
@@ -156,6 +159,7 @@ func (c *Client) init() {
 	c.Model = NewModelClient(c.config)
 	c.Monument = NewMonumentClient(c.config)
 	c.Organization = NewOrganizationClient(c.config)
+	c.OrganizationType = NewOrganizationTypeClient(c.config)
 	c.Person = NewPersonClient(c.config)
 	c.PersonRole = NewPersonRoleClient(c.config)
 	c.Project = NewProjectClient(c.config)
@@ -271,6 +275,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Model:                 NewModelClient(cfg),
 		Monument:              NewMonumentClient(cfg),
 		Organization:          NewOrganizationClient(cfg),
+		OrganizationType:      NewOrganizationTypeClient(cfg),
 		Person:                NewPersonClient(cfg),
 		PersonRole:            NewPersonRoleClient(cfg),
 		Project:               NewProjectClient(cfg),
@@ -323,6 +328,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Model:                 NewModelClient(cfg),
 		Monument:              NewMonumentClient(cfg),
 		Organization:          NewOrganizationClient(cfg),
+		OrganizationType:      NewOrganizationTypeClient(cfg),
 		Person:                NewPersonClient(cfg),
 		PersonRole:            NewPersonRoleClient(cfg),
 		Project:               NewProjectClient(cfg),
@@ -367,9 +373,10 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
 		c.Category, c.Collection, c.Culture, c.District, c.Holder,
 		c.HolderResponsibility, c.Keyword, c.Library, c.License, c.Location, c.Medium,
-		c.Model, c.Monument, c.Organization, c.Person, c.PersonRole, c.Project,
-		c.ProtectedArea, c.ProtectedAreaCategory, c.ProtectedAreaPicture,
-		c.Publication, c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
+		c.Model, c.Monument, c.Organization, c.OrganizationType, c.Person,
+		c.PersonRole, c.Project, c.ProtectedArea, c.ProtectedAreaCategory,
+		c.ProtectedAreaPicture, c.Publication, c.Publisher, c.Region, c.Set,
+		c.Settlement, c.Technique,
 	} {
 		n.Use(hooks...)
 	}
@@ -382,9 +389,10 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
 		c.Category, c.Collection, c.Culture, c.District, c.Holder,
 		c.HolderResponsibility, c.Keyword, c.Library, c.License, c.Location, c.Medium,
-		c.Model, c.Monument, c.Organization, c.Person, c.PersonRole, c.Project,
-		c.ProtectedArea, c.ProtectedAreaCategory, c.ProtectedAreaPicture,
-		c.Publication, c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
+		c.Model, c.Monument, c.Organization, c.OrganizationType, c.Person,
+		c.PersonRole, c.Project, c.ProtectedArea, c.ProtectedAreaCategory,
+		c.ProtectedAreaPicture, c.Publication, c.Publisher, c.Region, c.Set,
+		c.Settlement, c.Technique,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -435,6 +443,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Monument.mutate(ctx, m)
 	case *OrganizationMutation:
 		return c.Organization.mutate(ctx, m)
+	case *OrganizationTypeMutation:
+		return c.OrganizationType.mutate(ctx, m)
 	case *PersonMutation:
 		return c.Person.mutate(ctx, m)
 	case *PersonRoleMutation:
@@ -3475,6 +3485,22 @@ func (c *OrganizationClient) QueryHolder(o *Organization) *HolderQuery {
 	return query
 }
 
+// QueryOrganizationType queries the organization_type edge of a Organization.
+func (c *OrganizationClient) QueryOrganizationType(o *Organization) *OrganizationTypeQuery {
+	query := (&OrganizationTypeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(organizationtype.Table, organizationtype.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, organization.OrganizationTypeTable, organization.OrganizationTypeColumn),
+		)
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *OrganizationClient) Hooks() []Hook {
 	hooks := c.hooks.Organization
@@ -3498,6 +3524,141 @@ func (c *OrganizationClient) mutate(ctx context.Context, m *OrganizationMutation
 		return (&OrganizationDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Organization mutation op: %q", m.Op())
+	}
+}
+
+// OrganizationTypeClient is a client for the OrganizationType schema.
+type OrganizationTypeClient struct {
+	config
+}
+
+// NewOrganizationTypeClient returns a client for the OrganizationType from the given config.
+func NewOrganizationTypeClient(c config) *OrganizationTypeClient {
+	return &OrganizationTypeClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `organizationtype.Hooks(f(g(h())))`.
+func (c *OrganizationTypeClient) Use(hooks ...Hook) {
+	c.hooks.OrganizationType = append(c.hooks.OrganizationType, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `organizationtype.Intercept(f(g(h())))`.
+func (c *OrganizationTypeClient) Intercept(interceptors ...Interceptor) {
+	c.inters.OrganizationType = append(c.inters.OrganizationType, interceptors...)
+}
+
+// Create returns a builder for creating a OrganizationType entity.
+func (c *OrganizationTypeClient) Create() *OrganizationTypeCreate {
+	mutation := newOrganizationTypeMutation(c.config, OpCreate)
+	return &OrganizationTypeCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of OrganizationType entities.
+func (c *OrganizationTypeClient) CreateBulk(builders ...*OrganizationTypeCreate) *OrganizationTypeCreateBulk {
+	return &OrganizationTypeCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for OrganizationType.
+func (c *OrganizationTypeClient) Update() *OrganizationTypeUpdate {
+	mutation := newOrganizationTypeMutation(c.config, OpUpdate)
+	return &OrganizationTypeUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *OrganizationTypeClient) UpdateOne(ot *OrganizationType) *OrganizationTypeUpdateOne {
+	mutation := newOrganizationTypeMutation(c.config, OpUpdateOne, withOrganizationType(ot))
+	return &OrganizationTypeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *OrganizationTypeClient) UpdateOneID(id int) *OrganizationTypeUpdateOne {
+	mutation := newOrganizationTypeMutation(c.config, OpUpdateOne, withOrganizationTypeID(id))
+	return &OrganizationTypeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for OrganizationType.
+func (c *OrganizationTypeClient) Delete() *OrganizationTypeDelete {
+	mutation := newOrganizationTypeMutation(c.config, OpDelete)
+	return &OrganizationTypeDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *OrganizationTypeClient) DeleteOne(ot *OrganizationType) *OrganizationTypeDeleteOne {
+	return c.DeleteOneID(ot.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *OrganizationTypeClient) DeleteOneID(id int) *OrganizationTypeDeleteOne {
+	builder := c.Delete().Where(organizationtype.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &OrganizationTypeDeleteOne{builder}
+}
+
+// Query returns a query builder for OrganizationType.
+func (c *OrganizationTypeClient) Query() *OrganizationTypeQuery {
+	return &OrganizationTypeQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeOrganizationType},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a OrganizationType entity by its id.
+func (c *OrganizationTypeClient) Get(ctx context.Context, id int) (*OrganizationType, error) {
+	return c.Query().Where(organizationtype.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *OrganizationTypeClient) GetX(ctx context.Context, id int) *OrganizationType {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOrganizations queries the organizations edge of a OrganizationType.
+func (c *OrganizationTypeClient) QueryOrganizations(ot *OrganizationType) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ot.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organizationtype.Table, organizationtype.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organizationtype.OrganizationsTable, organizationtype.OrganizationsColumn),
+		)
+		fromV = sqlgraph.Neighbors(ot.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *OrganizationTypeClient) Hooks() []Hook {
+	hooks := c.hooks.OrganizationType
+	return append(hooks[:len(hooks):len(hooks)], organizationtype.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *OrganizationTypeClient) Interceptors() []Interceptor {
+	return c.inters.OrganizationType
+}
+
+func (c *OrganizationTypeClient) mutate(ctx context.Context, m *OrganizationTypeMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&OrganizationTypeCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&OrganizationTypeUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&OrganizationTypeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&OrganizationTypeDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown OrganizationType mutation op: %q", m.Op())
 	}
 }
 
@@ -5186,15 +5347,17 @@ type (
 	hooks struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
 		Collection, Culture, District, Holder, HolderResponsibility, Keyword, Library,
-		License, Location, Medium, Model, Monument, Organization, Person, PersonRole,
-		Project, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture,
-		Publication, Publisher, Region, Set, Settlement, Technique []ent.Hook
+		License, Location, Medium, Model, Monument, Organization, OrganizationType,
+		Person, PersonRole, Project, ProtectedArea, ProtectedAreaCategory,
+		ProtectedAreaPicture, Publication, Publisher, Region, Set, Settlement,
+		Technique []ent.Hook
 	}
 	inters struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
 		Collection, Culture, District, Holder, HolderResponsibility, Keyword, Library,
-		License, Location, Medium, Model, Monument, Organization, Person, PersonRole,
-		Project, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture,
-		Publication, Publisher, Region, Set, Settlement, Technique []ent.Interceptor
+		License, Location, Medium, Model, Monument, Organization, OrganizationType,
+		Person, PersonRole, Project, ProtectedArea, ProtectedAreaCategory,
+		ProtectedAreaPicture, Publication, Publisher, Region, Set, Settlement,
+		Technique []ent.Interceptor
 	}
 )

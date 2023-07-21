@@ -356,6 +356,26 @@ func (o *Organization) Holder(ctx context.Context) (*Holder, error) {
 	return result, MaskNotFound(err)
 }
 
+func (o *Organization) OrganizationType(ctx context.Context) (*OrganizationType, error) {
+	result, err := o.Edges.OrganizationTypeOrErr()
+	if IsNotLoaded(err) {
+		result, err = o.QueryOrganizationType().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (ot *OrganizationType) Organizations(ctx context.Context) (result []*Organization, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = ot.NamedOrganizations(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = ot.Edges.OrganizationsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = ot.QueryOrganizations().All(ctx)
+	}
+	return result, err
+}
+
 func (pe *Person) Artifacts(ctx context.Context) (result []*Artifact, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = pe.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
