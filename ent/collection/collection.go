@@ -31,6 +31,8 @@ const (
 	FieldExternalLinks = "external_links"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
+	// EdgePeople holds the string denoting the people edge name in mutations.
+	EdgePeople = "people"
 	// EdgeCategory holds the string denoting the category edge name in mutations.
 	EdgeCategory = "category"
 	// Table holds the table name of the collection in the database.
@@ -42,6 +44,13 @@ const (
 	ArtifactsInverseTable = "artifacts"
 	// ArtifactsColumn is the table column denoting the artifacts relation/edge.
 	ArtifactsColumn = "collection_artifacts"
+	// PeopleTable is the table that holds the people relation/edge.
+	PeopleTable = "persons"
+	// PeopleInverseTable is the table name for the Person entity.
+	// It exists in this package in order to avoid circular dependency with the "person" package.
+	PeopleInverseTable = "persons"
+	// PeopleColumn is the table column denoting the people relation/edge.
+	PeopleColumn = "collection_people"
 	// CategoryTable is the table that holds the category relation/edge.
 	CategoryTable = "collections"
 	// CategoryInverseTable is the table name for the Category entity.
@@ -152,6 +161,20 @@ func ByArtifacts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByPeopleCount orders the results by people count.
+func ByPeopleCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPeopleStep(), opts...)
+	}
+}
+
+// ByPeople orders the results by people terms.
+func ByPeople(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPeopleStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByCategoryField orders the results by category field.
 func ByCategoryField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -163,6 +186,13 @@ func newArtifactsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ArtifactsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ArtifactsTable, ArtifactsColumn),
+	)
+}
+func newPeopleStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PeopleInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PeopleTable, PeopleColumn),
 	)
 }
 func newCategoryStep() *sqlgraph.Step {

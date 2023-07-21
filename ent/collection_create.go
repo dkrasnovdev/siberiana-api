@@ -13,6 +13,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
+	"github.com/dkrasnovdev/heritage-api/ent/person"
 )
 
 // CollectionCreate is the builder for creating a Collection entity.
@@ -125,6 +126,21 @@ func (cc *CollectionCreate) AddArtifacts(a ...*Artifact) *CollectionCreate {
 		ids[i] = a[i].ID
 	}
 	return cc.AddArtifactIDs(ids...)
+}
+
+// AddPersonIDs adds the "people" edge to the Person entity by IDs.
+func (cc *CollectionCreate) AddPersonIDs(ids ...int) *CollectionCreate {
+	cc.mutation.AddPersonIDs(ids...)
+	return cc
+}
+
+// AddPeople adds the "people" edges to the Person entity.
+func (cc *CollectionCreate) AddPeople(p ...*Person) *CollectionCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cc.AddPersonIDs(ids...)
 }
 
 // SetCategoryID sets the "category" edge to the Category entity by ID.
@@ -271,6 +287,22 @@ func (cc *CollectionCreate) createSpec() (*Collection, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.PeopleIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.PeopleTable,
+			Columns: []string{collection.PeopleColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

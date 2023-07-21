@@ -52,10 +52,10 @@ type Organization struct {
 
 // OrganizationEdges holds the relations/edges for other nodes in the graph.
 type OrganizationEdges struct {
-	// Holder holds the value of the holder edge.
-	Holder *Holder `json:"holder,omitempty"`
 	// People holds the value of the people edge.
 	People []*Person `json:"people,omitempty"`
+	// Holder holds the value of the holder edge.
+	Holder *Holder `json:"holder,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [2]bool
@@ -65,10 +65,19 @@ type OrganizationEdges struct {
 	namedPeople map[string][]*Person
 }
 
+// PeopleOrErr returns the People value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) PeopleOrErr() ([]*Person, error) {
+	if e.loadedTypes[0] {
+		return e.People, nil
+	}
+	return nil, &NotLoadedError{edge: "people"}
+}
+
 // HolderOrErr returns the Holder value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e OrganizationEdges) HolderOrErr() (*Holder, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[1] {
 		if e.Holder == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: holder.Label}
@@ -76,15 +85,6 @@ func (e OrganizationEdges) HolderOrErr() (*Holder, error) {
 		return e.Holder, nil
 	}
 	return nil, &NotLoadedError{edge: "holder"}
-}
-
-// PeopleOrErr returns the People value or an error if the edge
-// was not loaded in eager-loading.
-func (e OrganizationEdges) PeopleOrErr() ([]*Person, error) {
-	if e.loadedTypes[1] {
-		return e.People, nil
-	}
-	return nil, &NotLoadedError{edge: "people"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -223,14 +223,14 @@ func (o *Organization) Value(name string) (ent.Value, error) {
 	return o.selectValues.Get(name)
 }
 
-// QueryHolder queries the "holder" edge of the Organization entity.
-func (o *Organization) QueryHolder() *HolderQuery {
-	return NewOrganizationClient(o.config).QueryHolder(o)
-}
-
 // QueryPeople queries the "people" edge of the Organization entity.
 func (o *Organization) QueryPeople() *PersonQuery {
 	return NewOrganizationClient(o.config).QueryPeople(o)
+}
+
+// QueryHolder queries the "holder" edge of the Organization entity.
+func (o *Organization) QueryHolder() *HolderQuery {
+	return NewOrganizationClient(o.config).QueryHolder(o)
 }
 
 // Update returns a builder for updating this Organization.

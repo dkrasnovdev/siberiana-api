@@ -15,6 +15,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
+	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
 
@@ -150,6 +151,21 @@ func (cu *CollectionUpdate) AddArtifacts(a ...*Artifact) *CollectionUpdate {
 	return cu.AddArtifactIDs(ids...)
 }
 
+// AddPersonIDs adds the "people" edge to the Person entity by IDs.
+func (cu *CollectionUpdate) AddPersonIDs(ids ...int) *CollectionUpdate {
+	cu.mutation.AddPersonIDs(ids...)
+	return cu
+}
+
+// AddPeople adds the "people" edges to the Person entity.
+func (cu *CollectionUpdate) AddPeople(p ...*Person) *CollectionUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cu.AddPersonIDs(ids...)
+}
+
 // SetCategoryID sets the "category" edge to the Category entity by ID.
 func (cu *CollectionUpdate) SetCategoryID(id int) *CollectionUpdate {
 	cu.mutation.SetCategoryID(id)
@@ -193,6 +209,27 @@ func (cu *CollectionUpdate) RemoveArtifacts(a ...*Artifact) *CollectionUpdate {
 		ids[i] = a[i].ID
 	}
 	return cu.RemoveArtifactIDs(ids...)
+}
+
+// ClearPeople clears all "people" edges to the Person entity.
+func (cu *CollectionUpdate) ClearPeople() *CollectionUpdate {
+	cu.mutation.ClearPeople()
+	return cu
+}
+
+// RemovePersonIDs removes the "people" edge to Person entities by IDs.
+func (cu *CollectionUpdate) RemovePersonIDs(ids ...int) *CollectionUpdate {
+	cu.mutation.RemovePersonIDs(ids...)
+	return cu
+}
+
+// RemovePeople removes "people" edges to Person entities.
+func (cu *CollectionUpdate) RemovePeople(p ...*Person) *CollectionUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cu.RemovePersonIDs(ids...)
 }
 
 // ClearCategory clears the "category" edge to the Category entity.
@@ -328,6 +365,51 @@ func (cu *CollectionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cu.mutation.PeopleCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.PeopleTable,
+			Columns: []string{collection.PeopleColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.RemovedPeopleIDs(); len(nodes) > 0 && !cu.mutation.PeopleCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.PeopleTable,
+			Columns: []string{collection.PeopleColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.PeopleIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.PeopleTable,
+			Columns: []string{collection.PeopleColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -503,6 +585,21 @@ func (cuo *CollectionUpdateOne) AddArtifacts(a ...*Artifact) *CollectionUpdateOn
 	return cuo.AddArtifactIDs(ids...)
 }
 
+// AddPersonIDs adds the "people" edge to the Person entity by IDs.
+func (cuo *CollectionUpdateOne) AddPersonIDs(ids ...int) *CollectionUpdateOne {
+	cuo.mutation.AddPersonIDs(ids...)
+	return cuo
+}
+
+// AddPeople adds the "people" edges to the Person entity.
+func (cuo *CollectionUpdateOne) AddPeople(p ...*Person) *CollectionUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cuo.AddPersonIDs(ids...)
+}
+
 // SetCategoryID sets the "category" edge to the Category entity by ID.
 func (cuo *CollectionUpdateOne) SetCategoryID(id int) *CollectionUpdateOne {
 	cuo.mutation.SetCategoryID(id)
@@ -546,6 +643,27 @@ func (cuo *CollectionUpdateOne) RemoveArtifacts(a ...*Artifact) *CollectionUpdat
 		ids[i] = a[i].ID
 	}
 	return cuo.RemoveArtifactIDs(ids...)
+}
+
+// ClearPeople clears all "people" edges to the Person entity.
+func (cuo *CollectionUpdateOne) ClearPeople() *CollectionUpdateOne {
+	cuo.mutation.ClearPeople()
+	return cuo
+}
+
+// RemovePersonIDs removes the "people" edge to Person entities by IDs.
+func (cuo *CollectionUpdateOne) RemovePersonIDs(ids ...int) *CollectionUpdateOne {
+	cuo.mutation.RemovePersonIDs(ids...)
+	return cuo
+}
+
+// RemovePeople removes "people" edges to Person entities.
+func (cuo *CollectionUpdateOne) RemovePeople(p ...*Person) *CollectionUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cuo.RemovePersonIDs(ids...)
 }
 
 // ClearCategory clears the "category" edge to the Category entity.
@@ -711,6 +829,51 @@ func (cuo *CollectionUpdateOne) sqlSave(ctx context.Context) (_node *Collection,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cuo.mutation.PeopleCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.PeopleTable,
+			Columns: []string{collection.PeopleColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.RemovedPeopleIDs(); len(nodes) > 0 && !cuo.mutation.PeopleCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.PeopleTable,
+			Columns: []string{collection.PeopleColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.PeopleIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.PeopleTable,
+			Columns: []string{collection.PeopleColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

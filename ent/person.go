@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
@@ -59,6 +60,7 @@ type Person struct {
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PersonQuery when eager-loading is set.
 	Edges               PersonEdges `json:"edges"`
+	collection_people   *int
 	holder_person       *int
 	organization_people *int
 	selectValues        sql.SelectValues
@@ -78,11 +80,13 @@ type PersonEdges struct {
 	Holder *Holder `json:"holder,omitempty"`
 	// Affiliation holds the value of the affiliation edge.
 	Affiliation *Organization `json:"affiliation,omitempty"`
+	// Collections holds the value of the collections edge.
+	Collections *Collection `json:"collections,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [7]map[string]int
 
 	namedArtifacts    map[string][]*Artifact
 	namedProjects     map[string][]*Project
@@ -152,6 +156,19 @@ func (e PersonEdges) AffiliationOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "affiliation"}
 }
 
+// CollectionsOrErr returns the Collections value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e PersonEdges) CollectionsOrErr() (*Collection, error) {
+	if e.loadedTypes[6] {
+		if e.Collections == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: collection.Label}
+		}
+		return e.Collections, nil
+	}
+	return nil, &NotLoadedError{edge: "collections"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Person) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -165,9 +182,11 @@ func (*Person) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case person.FieldCreatedAt, person.FieldUpdatedAt, person.FieldBeginData, person.FieldEndDate:
 			values[i] = new(sql.NullTime)
-		case person.ForeignKeys[0]: // holder_person
+		case person.ForeignKeys[0]: // collection_people
 			values[i] = new(sql.NullInt64)
-		case person.ForeignKeys[1]: // organization_people
+		case person.ForeignKeys[1]: // holder_person
+			values[i] = new(sql.NullInt64)
+		case person.ForeignKeys[2]: // organization_people
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -308,12 +327,19 @@ func (pe *Person) assignValues(columns []string, values []any) error {
 			}
 		case person.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field collection_people", value)
+			} else if value.Valid {
+				pe.collection_people = new(int)
+				*pe.collection_people = int(value.Int64)
+			}
+		case person.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field holder_person", value)
 			} else if value.Valid {
 				pe.holder_person = new(int)
 				*pe.holder_person = int(value.Int64)
 			}
-		case person.ForeignKeys[1]:
+		case person.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field organization_people", value)
 			} else if value.Valid {
@@ -361,6 +387,11 @@ func (pe *Person) QueryHolder() *HolderQuery {
 // QueryAffiliation queries the "affiliation" edge of the Person entity.
 func (pe *Person) QueryAffiliation() *OrganizationQuery {
 	return NewPersonClient(pe.config).QueryAffiliation(pe)
+}
+
+// QueryCollections queries the "collections" edge of the Person entity.
+func (pe *Person) QueryCollections() *CollectionQuery {
+	return NewPersonClient(pe.config).QueryCollections(pe)
 }
 
 // Update returns a builder for updating this Person.

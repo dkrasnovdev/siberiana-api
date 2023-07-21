@@ -619,6 +619,7 @@ type Collection implements Node {
   description: String
   externalLinks: [String!]
   artifacts: [Artifact!]
+  people: [Person!]
   category: Category
 }
 """A connection to a list of items."""
@@ -751,6 +752,9 @@ input CollectionWhereInput {
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
+  """people edge predicates"""
+  hasPeople: Boolean
+  hasPeopleWith: [PersonWhereInput!]
   """category edge predicates"""
   hasCategory: Boolean
   hasCategoryWith: [CategoryWhereInput!]
@@ -812,6 +816,7 @@ input CreateCollectionInput {
   description: String
   externalLinks: [String!]
   artifactIDs: [ID!]
+  personIDs: [ID!]
   categoryID: ID
 }
 """
@@ -948,8 +953,8 @@ input CreateOrganizationInput {
   externalLinks: [String!]
   primaryImageURL: String
   additionalImagesUrls: [String!]
-  holderID: ID
   personIDs: [ID!]
+  holderID: ID
 }
 """
 CreatePersonInput is used for create Person object.
@@ -980,6 +985,7 @@ input CreatePersonInput {
   personRoleIDs: [ID!]
   holderID: ID
   affiliationID: ID
+  collectionsID: ID
 }
 """
 CreateProjectInput is used for create Project object.
@@ -2416,8 +2422,8 @@ type Organization implements Node {
   externalLinks: [String!]
   primaryImageURL: String
   additionalImagesUrls: [String!]
-  holder: Holder
   people: [Person!]
+  holder: Holder
 }
 """A connection to a list of items."""
 type OrganizationConnection {
@@ -2578,12 +2584,12 @@ input OrganizationWhereInput {
   primaryImageURLNotNil: Boolean
   primaryImageURLEqualFold: String
   primaryImageURLContainsFold: String
-  """holder edge predicates"""
-  hasHolder: Boolean
-  hasHolderWith: [HolderWhereInput!]
   """people edge predicates"""
   hasPeople: Boolean
   hasPeopleWith: [PersonWhereInput!]
+  """holder edge predicates"""
+  hasHolder: Boolean
+  hasHolderWith: [HolderWhereInput!]
 }
 """
 Information about pagination in a connection.
@@ -2625,6 +2631,7 @@ type Person implements Node {
   personRoles: [PersonRole!]
   holder: Holder
   affiliation: Organization
+  collections: Collection
 }
 """A connection to a list of items."""
 type PersonConnection {
@@ -3009,6 +3016,9 @@ input PersonWhereInput {
   """affiliation edge predicates"""
   hasAffiliation: Boolean
   hasAffiliationWith: [OrganizationWhereInput!]
+  """collections edge predicates"""
+  hasCollections: Boolean
+  hasCollectionsWith: [CollectionWhereInput!]
 }
 type Project implements Node {
   id: ID!
@@ -4448,6 +4458,9 @@ input UpdateCollectionInput {
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
+  addPersonIDs: [ID!]
+  removePersonIDs: [ID!]
+  clearPeople: Boolean
   categoryID: ID
   clearCategory: Boolean
 }
@@ -4657,11 +4670,11 @@ input UpdateOrganizationInput {
   additionalImagesUrls: [String!]
   appendAdditionalImagesUrls: [String!]
   clearAdditionalImagesUrls: Boolean
-  holderID: ID
-  clearHolder: Boolean
   addPersonIDs: [ID!]
   removePersonIDs: [ID!]
   clearPeople: Boolean
+  holderID: ID
+  clearHolder: Boolean
 }
 """
 UpdatePersonInput is used for update Person object.
@@ -4720,6 +4733,8 @@ input UpdatePersonInput {
   clearHolder: Boolean
   affiliationID: ID
   clearAffiliation: Boolean
+  collectionsID: ID
+  clearCollections: Boolean
 }
 """
 UpdateProjectInput is used for update Project object.

@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
@@ -437,6 +438,25 @@ func (pu *PersonUpdate) SetAffiliation(o *Organization) *PersonUpdate {
 	return pu.SetAffiliationID(o.ID)
 }
 
+// SetCollectionsID sets the "collections" edge to the Collection entity by ID.
+func (pu *PersonUpdate) SetCollectionsID(id int) *PersonUpdate {
+	pu.mutation.SetCollectionsID(id)
+	return pu
+}
+
+// SetNillableCollectionsID sets the "collections" edge to the Collection entity by ID if the given value is not nil.
+func (pu *PersonUpdate) SetNillableCollectionsID(id *int) *PersonUpdate {
+	if id != nil {
+		pu = pu.SetCollectionsID(*id)
+	}
+	return pu
+}
+
+// SetCollections sets the "collections" edge to the Collection entity.
+func (pu *PersonUpdate) SetCollections(c *Collection) *PersonUpdate {
+	return pu.SetCollectionsID(c.ID)
+}
+
 // Mutation returns the PersonMutation object of the builder.
 func (pu *PersonUpdate) Mutation() *PersonMutation {
 	return pu.mutation
@@ -535,6 +555,12 @@ func (pu *PersonUpdate) ClearHolder() *PersonUpdate {
 // ClearAffiliation clears the "affiliation" edge to the Organization entity.
 func (pu *PersonUpdate) ClearAffiliation() *PersonUpdate {
 	pu.mutation.ClearAffiliation()
+	return pu
+}
+
+// ClearCollections clears the "collections" edge to the Collection entity.
+func (pu *PersonUpdate) ClearCollections() *PersonUpdate {
+	pu.mutation.ClearCollections()
 	return pu
 }
 
@@ -949,6 +975,35 @@ func (pu *PersonUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.CollectionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   person.CollectionsTable,
+			Columns: []string{person.CollectionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.CollectionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   person.CollectionsTable,
+			Columns: []string{person.CollectionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1378,6 +1433,25 @@ func (puo *PersonUpdateOne) SetAffiliation(o *Organization) *PersonUpdateOne {
 	return puo.SetAffiliationID(o.ID)
 }
 
+// SetCollectionsID sets the "collections" edge to the Collection entity by ID.
+func (puo *PersonUpdateOne) SetCollectionsID(id int) *PersonUpdateOne {
+	puo.mutation.SetCollectionsID(id)
+	return puo
+}
+
+// SetNillableCollectionsID sets the "collections" edge to the Collection entity by ID if the given value is not nil.
+func (puo *PersonUpdateOne) SetNillableCollectionsID(id *int) *PersonUpdateOne {
+	if id != nil {
+		puo = puo.SetCollectionsID(*id)
+	}
+	return puo
+}
+
+// SetCollections sets the "collections" edge to the Collection entity.
+func (puo *PersonUpdateOne) SetCollections(c *Collection) *PersonUpdateOne {
+	return puo.SetCollectionsID(c.ID)
+}
+
 // Mutation returns the PersonMutation object of the builder.
 func (puo *PersonUpdateOne) Mutation() *PersonMutation {
 	return puo.mutation
@@ -1476,6 +1550,12 @@ func (puo *PersonUpdateOne) ClearHolder() *PersonUpdateOne {
 // ClearAffiliation clears the "affiliation" edge to the Organization entity.
 func (puo *PersonUpdateOne) ClearAffiliation() *PersonUpdateOne {
 	puo.mutation.ClearAffiliation()
+	return puo
+}
+
+// ClearCollections clears the "collections" edge to the Collection entity.
+func (puo *PersonUpdateOne) ClearCollections() *PersonUpdateOne {
+	puo.mutation.ClearCollections()
 	return puo
 }
 
@@ -1920,6 +2000,35 @@ func (puo *PersonUpdateOne) sqlSave(ctx context.Context) (_node *Person, err err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.CollectionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   person.CollectionsTable,
+			Columns: []string{person.CollectionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.CollectionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   person.CollectionsTable,
+			Columns: []string{person.CollectionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

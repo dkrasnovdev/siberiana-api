@@ -163,6 +163,7 @@ type ComplexityRoot struct {
 		DisplayName   func(childComplexity int) int
 		ExternalLinks func(childComplexity int) int
 		ID            func(childComplexity int) int
+		People        func(childComplexity int) int
 		UpdatedAt     func(childComplexity int) int
 		UpdatedBy     func(childComplexity int) int
 	}
@@ -470,6 +471,7 @@ type ComplexityRoot struct {
 		Affiliation          func(childComplexity int) int
 		Artifacts            func(childComplexity int) int
 		BeginData            func(childComplexity int) int
+		Collections          func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
 		Description          func(childComplexity int) int
@@ -1280,6 +1282,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Collection.ID(childComplexity), true
+
+	case "Collection.people":
+		if e.complexity.Collection.People == nil {
+			break
+		}
+
+		return e.complexity.Collection.People(childComplexity), true
 
 	case "Collection.updatedAt":
 		if e.complexity.Collection.UpdatedAt == nil {
@@ -2884,6 +2893,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Person.BeginData(childComplexity), true
+
+	case "Person.collections":
+		if e.complexity.Person.Collections == nil {
+			break
+		}
+
+		return e.complexity.Person.Collections(childComplexity), true
 
 	case "Person.createdAt":
 		if e.complexity.Person.CreatedAt == nil {
@@ -6978,6 +6994,8 @@ func (ec *executionContext) fieldContext_Artifact_authors(ctx context.Context, f
 				return ec.fieldContext_Person_holder(ctx, field)
 			case "affiliation":
 				return ec.fieldContext_Person_affiliation(ctx, field)
+			case "collections":
+				return ec.fieldContext_Person_collections(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
 		},
@@ -7663,6 +7681,8 @@ func (ec *executionContext) fieldContext_Artifact_collection(ctx context.Context
 				return ec.fieldContext_Collection_externalLinks(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Collection_artifacts(ctx, field)
+			case "people":
+				return ec.fieldContext_Collection_people(ctx, field)
 			case "category":
 				return ec.fieldContext_Collection_category(ctx, field)
 			}
@@ -9162,6 +9182,8 @@ func (ec *executionContext) fieldContext_Category_collections(ctx context.Contex
 				return ec.fieldContext_Collection_externalLinks(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Collection_artifacts(ctx, field)
+			case "people":
+				return ec.fieldContext_Collection_people(ctx, field)
 			case "category":
 				return ec.fieldContext_Collection_category(ctx, field)
 			}
@@ -9851,6 +9873,101 @@ func (ec *executionContext) fieldContext_Collection_artifacts(ctx context.Contex
 	return fc, nil
 }
 
+func (ec *executionContext) _Collection_people(ctx context.Context, field graphql.CollectedField, obj *ent.Collection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Collection_people(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.People(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Person)
+	fc.Result = res
+	return ec.marshalOPerson2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPersonᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Collection_people(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Collection",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Person_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Person_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Person_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Person_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Person_updatedBy(ctx, field)
+			case "address":
+				return ec.fieldContext_Person_address(ctx, field)
+			case "phoneNumbers":
+				return ec.fieldContext_Person_phoneNumbers(ctx, field)
+			case "emails":
+				return ec.fieldContext_Person_emails(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Person_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Person_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_Person_externalLinks(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_Person_primaryImageURL(ctx, field)
+			case "additionalImagesUrls":
+				return ec.fieldContext_Person_additionalImagesUrls(ctx, field)
+			case "givenName":
+				return ec.fieldContext_Person_givenName(ctx, field)
+			case "familyName":
+				return ec.fieldContext_Person_familyName(ctx, field)
+			case "patronymicName":
+				return ec.fieldContext_Person_patronymicName(ctx, field)
+			case "beginData":
+				return ec.fieldContext_Person_beginData(ctx, field)
+			case "endDate":
+				return ec.fieldContext_Person_endDate(ctx, field)
+			case "gender":
+				return ec.fieldContext_Person_gender(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Person_artifacts(ctx, field)
+			case "projects":
+				return ec.fieldContext_Person_projects(ctx, field)
+			case "publications":
+				return ec.fieldContext_Person_publications(ctx, field)
+			case "personRoles":
+				return ec.fieldContext_Person_personRoles(ctx, field)
+			case "holder":
+				return ec.fieldContext_Person_holder(ctx, field)
+			case "affiliation":
+				return ec.fieldContext_Person_affiliation(ctx, field)
+			case "collections":
+				return ec.fieldContext_Person_collections(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Collection_category(ctx context.Context, field graphql.CollectedField, obj *ent.Collection) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Collection_category(ctx, field)
 	if err != nil {
@@ -10111,6 +10228,8 @@ func (ec *executionContext) fieldContext_CollectionEdge_node(ctx context.Context
 				return ec.fieldContext_Collection_externalLinks(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Collection_artifacts(ctx, field)
+			case "people":
+				return ec.fieldContext_Collection_people(ctx, field)
 			case "category":
 				return ec.fieldContext_Collection_category(ctx, field)
 			}
@@ -12037,6 +12156,8 @@ func (ec *executionContext) fieldContext_Holder_person(ctx context.Context, fiel
 				return ec.fieldContext_Person_holder(ctx, field)
 			case "affiliation":
 				return ec.fieldContext_Person_affiliation(ctx, field)
+			case "collections":
+				return ec.fieldContext_Person_collections(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
 		},
@@ -12106,10 +12227,10 @@ func (ec *executionContext) fieldContext_Holder_organization(ctx context.Context
 				return ec.fieldContext_Organization_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
 				return ec.fieldContext_Organization_additionalImagesUrls(ctx, field)
-			case "holder":
-				return ec.fieldContext_Organization_holder(ctx, field)
 			case "people":
 				return ec.fieldContext_Organization_people(ctx, field)
+			case "holder":
+				return ec.fieldContext_Organization_holder(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Organization", field.Name)
 		},
@@ -16871,6 +16992,8 @@ func (ec *executionContext) fieldContext_Mutation_createCollection(ctx context.C
 				return ec.fieldContext_Collection_externalLinks(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Collection_artifacts(ctx, field)
+			case "people":
+				return ec.fieldContext_Collection_people(ctx, field)
 			case "category":
 				return ec.fieldContext_Collection_category(ctx, field)
 			}
@@ -16948,6 +17071,8 @@ func (ec *executionContext) fieldContext_Mutation_updateCollection(ctx context.C
 				return ec.fieldContext_Collection_externalLinks(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Collection_artifacts(ctx, field)
+			case "people":
+				return ec.fieldContext_Collection_people(ctx, field)
 			case "category":
 				return ec.fieldContext_Collection_category(ctx, field)
 			}
@@ -18253,10 +18378,10 @@ func (ec *executionContext) fieldContext_Mutation_createOrganization(ctx context
 				return ec.fieldContext_Organization_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
 				return ec.fieldContext_Organization_additionalImagesUrls(ctx, field)
-			case "holder":
-				return ec.fieldContext_Organization_holder(ctx, field)
 			case "people":
 				return ec.fieldContext_Organization_people(ctx, field)
+			case "holder":
+				return ec.fieldContext_Organization_holder(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Organization", field.Name)
 		},
@@ -18340,10 +18465,10 @@ func (ec *executionContext) fieldContext_Mutation_updateOrganization(ctx context
 				return ec.fieldContext_Organization_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
 				return ec.fieldContext_Organization_additionalImagesUrls(ctx, field)
-			case "holder":
-				return ec.fieldContext_Organization_holder(ctx, field)
 			case "people":
 				return ec.fieldContext_Organization_people(ctx, field)
+			case "holder":
+				return ec.fieldContext_Organization_holder(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Organization", field.Name)
 		},
@@ -18451,6 +18576,8 @@ func (ec *executionContext) fieldContext_Mutation_createPerson(ctx context.Conte
 				return ec.fieldContext_Person_holder(ctx, field)
 			case "affiliation":
 				return ec.fieldContext_Person_affiliation(ctx, field)
+			case "collections":
+				return ec.fieldContext_Person_collections(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
 		},
@@ -18558,6 +18685,8 @@ func (ec *executionContext) fieldContext_Mutation_updatePerson(ctx context.Conte
 				return ec.fieldContext_Person_holder(ctx, field)
 			case "affiliation":
 				return ec.fieldContext_Person_affiliation(ctx, field)
+			case "collections":
+				return ec.fieldContext_Person_collections(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
 		},
@@ -20026,71 +20155,6 @@ func (ec *executionContext) fieldContext_Organization_additionalImagesUrls(ctx c
 	return fc, nil
 }
 
-func (ec *executionContext) _Organization_holder(ctx context.Context, field graphql.CollectedField, obj *ent.Organization) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Organization_holder(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Holder(ctx)
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*ent.Holder)
-	fc.Result = res
-	return ec.marshalOHolder2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolder(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Organization_holder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Holder_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Holder_createdAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Holder_createdBy(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Holder_updatedAt(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Holder_updatedBy(ctx, field)
-			case "beginDate":
-				return ec.fieldContext_Holder_beginDate(ctx, field)
-			case "endDate":
-				return ec.fieldContext_Holder_endDate(ctx, field)
-			case "artifacts":
-				return ec.fieldContext_Holder_artifacts(ctx, field)
-			case "holderResponsibilities":
-				return ec.fieldContext_Holder_holderResponsibilities(ctx, field)
-			case "person":
-				return ec.fieldContext_Holder_person(ctx, field)
-			case "organization":
-				return ec.fieldContext_Holder_organization(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Holder", field.Name)
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Organization_people(ctx context.Context, field graphql.CollectedField, obj *ent.Organization) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Organization_people(ctx, field)
 	if err != nil {
@@ -20177,8 +20241,75 @@ func (ec *executionContext) fieldContext_Organization_people(ctx context.Context
 				return ec.fieldContext_Person_holder(ctx, field)
 			case "affiliation":
 				return ec.fieldContext_Person_affiliation(ctx, field)
+			case "collections":
+				return ec.fieldContext_Person_collections(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Organization_holder(ctx context.Context, field graphql.CollectedField, obj *ent.Organization) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Organization_holder(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Holder(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Holder)
+	fc.Result = res
+	return ec.marshalOHolder2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolder(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Organization_holder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Organization",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Holder_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Holder_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Holder_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Holder_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Holder_updatedBy(ctx, field)
+			case "beginDate":
+				return ec.fieldContext_Holder_beginDate(ctx, field)
+			case "endDate":
+				return ec.fieldContext_Holder_endDate(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Holder_artifacts(ctx, field)
+			case "holderResponsibilities":
+				return ec.fieldContext_Holder_holderResponsibilities(ctx, field)
+			case "person":
+				return ec.fieldContext_Holder_person(ctx, field)
+			case "organization":
+				return ec.fieldContext_Holder_organization(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Holder", field.Name)
 		},
 	}
 	return fc, nil
@@ -20391,10 +20522,10 @@ func (ec *executionContext) fieldContext_OrganizationEdge_node(ctx context.Conte
 				return ec.fieldContext_Organization_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
 				return ec.fieldContext_Organization_additionalImagesUrls(ctx, field)
-			case "holder":
-				return ec.fieldContext_Organization_holder(ctx, field)
 			case "people":
 				return ec.fieldContext_Organization_people(ctx, field)
+			case "holder":
+				return ec.fieldContext_Organization_holder(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Organization", field.Name)
 		},
@@ -21814,12 +21945,77 @@ func (ec *executionContext) fieldContext_Person_affiliation(ctx context.Context,
 				return ec.fieldContext_Organization_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
 				return ec.fieldContext_Organization_additionalImagesUrls(ctx, field)
-			case "holder":
-				return ec.fieldContext_Organization_holder(ctx, field)
 			case "people":
 				return ec.fieldContext_Organization_people(ctx, field)
+			case "holder":
+				return ec.fieldContext_Organization_holder(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Organization", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Person_collections(ctx context.Context, field graphql.CollectedField, obj *ent.Person) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Person_collections(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Collections(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Collection)
+	fc.Result = res
+	return ec.marshalOCollection2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCollection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Person_collections(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Person",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Collection_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Collection_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Collection_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Collection_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Collection_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Collection_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Collection_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_Collection_externalLinks(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Collection_artifacts(ctx, field)
+			case "people":
+				return ec.fieldContext_Collection_people(ctx, field)
+			case "category":
+				return ec.fieldContext_Collection_category(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Collection", field.Name)
 		},
 	}
 	return fc, nil
@@ -22056,6 +22252,8 @@ func (ec *executionContext) fieldContext_PersonEdge_node(ctx context.Context, fi
 				return ec.fieldContext_Person_holder(ctx, field)
 			case "affiliation":
 				return ec.fieldContext_Person_affiliation(ctx, field)
+			case "collections":
+				return ec.fieldContext_Person_collections(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
 		},
@@ -22530,6 +22728,8 @@ func (ec *executionContext) fieldContext_PersonRole_person(ctx context.Context, 
 				return ec.fieldContext_Person_holder(ctx, field)
 			case "affiliation":
 				return ec.fieldContext_Person_affiliation(ctx, field)
+			case "collections":
+				return ec.fieldContext_Person_collections(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
 		},
@@ -23053,6 +23253,8 @@ func (ec *executionContext) fieldContext_Project_team(ctx context.Context, field
 				return ec.fieldContext_Person_holder(ctx, field)
 			case "affiliation":
 				return ec.fieldContext_Person_affiliation(ctx, field)
+			case "collections":
+				return ec.fieldContext_Person_collections(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
 		},
@@ -23960,6 +24162,8 @@ func (ec *executionContext) fieldContext_Publication_authors(ctx context.Context
 				return ec.fieldContext_Person_holder(ctx, field)
 			case "affiliation":
 				return ec.fieldContext_Person_affiliation(ctx, field)
+			case "collections":
+				return ec.fieldContext_Person_collections(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
 		},
@@ -33874,7 +34078,7 @@ func (ec *executionContext) unmarshalInputCollectionWhereInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasCategory", "hasCategoryWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasPeople", "hasPeopleWith", "hasCategory", "hasCategoryWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -34682,6 +34886,24 @@ func (ec *executionContext) unmarshalInputCollectionWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.HasArtifactsWith = data
+		case "hasPeople":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPeople"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasPeople = data
+		case "hasPeopleWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPeopleWith"))
+			data, err := ec.unmarshalOPersonWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPersonWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasPeopleWith = data
 		case "hasCategory":
 			var err error
 
@@ -35041,7 +35263,7 @@ func (ec *executionContext) unmarshalInputCreateCollectionInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "description", "externalLinks", "artifactIDs", "categoryID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "description", "externalLinks", "artifactIDs", "personIDs", "categoryID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -35120,6 +35342,15 @@ func (ec *executionContext) unmarshalInputCreateCollectionInput(ctx context.Cont
 				return it, err
 			}
 			it.ArtifactIDs = data
+		case "personIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("personIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PersonIDs = data
 		case "categoryID":
 			var err error
 
@@ -35923,7 +36154,7 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "address", "phoneNumbers", "emails", "displayName", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "holderID", "personIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "address", "phoneNumbers", "emails", "displayName", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "personIDs", "holderID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -36038,15 +36269,6 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.AdditionalImagesUrls = data
-		case "holderID":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("holderID"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HolderID = data
 		case "personIDs":
 			var err error
 
@@ -36056,6 +36278,15 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.PersonIDs = data
+		case "holderID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("holderID"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HolderID = data
 		}
 	}
 
@@ -36069,7 +36300,7 @@ func (ec *executionContext) unmarshalInputCreatePersonInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "address", "phoneNumbers", "emails", "displayName", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "givenName", "familyName", "patronymicName", "beginData", "endDate", "gender", "artifactIDs", "projectIDs", "publicationIDs", "personRoleIDs", "holderID", "affiliationID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "address", "phoneNumbers", "emails", "displayName", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "givenName", "familyName", "patronymicName", "beginData", "endDate", "gender", "artifactIDs", "projectIDs", "publicationIDs", "personRoleIDs", "holderID", "affiliationID", "collectionsID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -36292,6 +36523,15 @@ func (ec *executionContext) unmarshalInputCreatePersonInput(ctx context.Context,
 				return it, err
 			}
 			it.AffiliationID = data
+		case "collectionsID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("collectionsID"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CollectionsID = data
 		}
 	}
 
@@ -44922,7 +45162,7 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "address", "addressNEQ", "addressIn", "addressNotIn", "addressGT", "addressGTE", "addressLT", "addressLTE", "addressContains", "addressHasPrefix", "addressHasSuffix", "addressIsNil", "addressNotNil", "addressEqualFold", "addressContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "hasHolder", "hasHolderWith", "hasPeople", "hasPeopleWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "address", "addressNEQ", "addressIn", "addressNotIn", "addressGT", "addressGTE", "addressLT", "addressLTE", "addressContains", "addressHasPrefix", "addressHasSuffix", "addressIsNil", "addressNotNil", "addressEqualFold", "addressContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "hasPeople", "hasPeopleWith", "hasHolder", "hasHolderWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -45982,24 +46222,6 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 				return it, err
 			}
 			it.PrimaryImageURLContainsFold = data
-		case "hasHolder":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasHolder"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasHolder = data
-		case "hasHolderWith":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasHolderWith"))
-			data, err := ec.unmarshalOHolderWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolderWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasHolderWith = data
 		case "hasPeople":
 			var err error
 
@@ -46018,6 +46240,24 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 				return it, err
 			}
 			it.HasPeopleWith = data
+		case "hasHolder":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasHolder"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasHolder = data
+		case "hasHolderWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasHolderWith"))
+			data, err := ec.unmarshalOHolderWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolderWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasHolderWith = data
 		}
 	}
 
@@ -46936,7 +47176,7 @@ func (ec *executionContext) unmarshalInputPersonWhereInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "address", "addressNEQ", "addressIn", "addressNotIn", "addressGT", "addressGTE", "addressLT", "addressLTE", "addressContains", "addressHasPrefix", "addressHasSuffix", "addressIsNil", "addressNotNil", "addressEqualFold", "addressContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "givenName", "givenNameNEQ", "givenNameIn", "givenNameNotIn", "givenNameGT", "givenNameGTE", "givenNameLT", "givenNameLTE", "givenNameContains", "givenNameHasPrefix", "givenNameHasSuffix", "givenNameIsNil", "givenNameNotNil", "givenNameEqualFold", "givenNameContainsFold", "familyName", "familyNameNEQ", "familyNameIn", "familyNameNotIn", "familyNameGT", "familyNameGTE", "familyNameLT", "familyNameLTE", "familyNameContains", "familyNameHasPrefix", "familyNameHasSuffix", "familyNameIsNil", "familyNameNotNil", "familyNameEqualFold", "familyNameContainsFold", "patronymicName", "patronymicNameNEQ", "patronymicNameIn", "patronymicNameNotIn", "patronymicNameGT", "patronymicNameGTE", "patronymicNameLT", "patronymicNameLTE", "patronymicNameContains", "patronymicNameHasPrefix", "patronymicNameHasSuffix", "patronymicNameIsNil", "patronymicNameNotNil", "patronymicNameEqualFold", "patronymicNameContainsFold", "beginData", "beginDataNEQ", "beginDataIn", "beginDataNotIn", "beginDataGT", "beginDataGTE", "beginDataLT", "beginDataLTE", "beginDataIsNil", "beginDataNotNil", "endDate", "endDateNEQ", "endDateIn", "endDateNotIn", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "gender", "genderNEQ", "genderIn", "genderNotIn", "hasArtifacts", "hasArtifactsWith", "hasProjects", "hasProjectsWith", "hasPublications", "hasPublicationsWith", "hasPersonRoles", "hasPersonRolesWith", "hasHolder", "hasHolderWith", "hasAffiliation", "hasAffiliationWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "address", "addressNEQ", "addressIn", "addressNotIn", "addressGT", "addressGTE", "addressLT", "addressLTE", "addressContains", "addressHasPrefix", "addressHasSuffix", "addressIsNil", "addressNotNil", "addressEqualFold", "addressContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "givenName", "givenNameNEQ", "givenNameIn", "givenNameNotIn", "givenNameGT", "givenNameGTE", "givenNameLT", "givenNameLTE", "givenNameContains", "givenNameHasPrefix", "givenNameHasSuffix", "givenNameIsNil", "givenNameNotNil", "givenNameEqualFold", "givenNameContainsFold", "familyName", "familyNameNEQ", "familyNameIn", "familyNameNotIn", "familyNameGT", "familyNameGTE", "familyNameLT", "familyNameLTE", "familyNameContains", "familyNameHasPrefix", "familyNameHasSuffix", "familyNameIsNil", "familyNameNotNil", "familyNameEqualFold", "familyNameContainsFold", "patronymicName", "patronymicNameNEQ", "patronymicNameIn", "patronymicNameNotIn", "patronymicNameGT", "patronymicNameGTE", "patronymicNameLT", "patronymicNameLTE", "patronymicNameContains", "patronymicNameHasPrefix", "patronymicNameHasSuffix", "patronymicNameIsNil", "patronymicNameNotNil", "patronymicNameEqualFold", "patronymicNameContainsFold", "beginData", "beginDataNEQ", "beginDataIn", "beginDataNotIn", "beginDataGT", "beginDataGTE", "beginDataLT", "beginDataLTE", "beginDataIsNil", "beginDataNotNil", "endDate", "endDateNEQ", "endDateIn", "endDateNotIn", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "gender", "genderNEQ", "genderIn", "genderNotIn", "hasArtifacts", "hasArtifactsWith", "hasProjects", "hasProjectsWith", "hasPublications", "hasPublicationsWith", "hasPersonRoles", "hasPersonRolesWith", "hasHolder", "hasHolderWith", "hasAffiliation", "hasAffiliationWith", "hasCollections", "hasCollectionsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -48725,6 +48965,24 @@ func (ec *executionContext) unmarshalInputPersonWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.HasAffiliationWith = data
+		case "hasCollections":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCollections"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasCollections = data
+		case "hasCollectionsWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCollectionsWith"))
+			data, err := ec.unmarshalOCollectionWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCollectionWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasCollectionsWith = data
 		}
 	}
 
@@ -55080,7 +55338,7 @@ func (ec *executionContext) unmarshalInputUpdateCollectionInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "categoryID", "clearCategory"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addPersonIDs", "removePersonIDs", "clearPeople", "categoryID", "clearCategory"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -55222,6 +55480,33 @@ func (ec *executionContext) unmarshalInputUpdateCollectionInput(ctx context.Cont
 				return it, err
 			}
 			it.ClearArtifacts = data
+		case "addPersonIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addPersonIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddPersonIDs = data
+		case "removePersonIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removePersonIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemovePersonIDs = data
+		case "clearPeople":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearPeople"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearPeople = data
 		case "categoryID":
 			var err error
 
@@ -56565,7 +56850,7 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "address", "clearAddress", "phoneNumbers", "appendPhoneNumbers", "clearPhoneNumbers", "emails", "appendEmails", "clearEmails", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "holderID", "clearHolder", "addPersonIDs", "removePersonIDs", "clearPeople"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "address", "clearAddress", "phoneNumbers", "appendPhoneNumbers", "clearPhoneNumbers", "emails", "appendEmails", "clearEmails", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "addPersonIDs", "removePersonIDs", "clearPeople", "holderID", "clearHolder"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -56797,24 +57082,6 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.ClearAdditionalImagesUrls = data
-		case "holderID":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("holderID"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HolderID = data
-		case "clearHolder":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearHolder"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearHolder = data
 		case "addPersonIDs":
 			var err error
 
@@ -56842,6 +57109,24 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.ClearPeople = data
+		case "holderID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("holderID"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HolderID = data
+		case "clearHolder":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearHolder"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearHolder = data
 		}
 	}
 
@@ -56855,7 +57140,7 @@ func (ec *executionContext) unmarshalInputUpdatePersonInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "address", "clearAddress", "phoneNumbers", "appendPhoneNumbers", "clearPhoneNumbers", "emails", "appendEmails", "clearEmails", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "givenName", "clearGivenName", "familyName", "clearFamilyName", "patronymicName", "clearPatronymicName", "beginData", "clearBeginData", "endDate", "clearEndDate", "gender", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addProjectIDs", "removeProjectIDs", "clearProjects", "addPublicationIDs", "removePublicationIDs", "clearPublications", "addPersonRoleIDs", "removePersonRoleIDs", "clearPersonRoles", "holderID", "clearHolder", "affiliationID", "clearAffiliation"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "address", "clearAddress", "phoneNumbers", "appendPhoneNumbers", "clearPhoneNumbers", "emails", "appendEmails", "clearEmails", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "givenName", "clearGivenName", "familyName", "clearFamilyName", "patronymicName", "clearPatronymicName", "beginData", "clearBeginData", "endDate", "clearEndDate", "gender", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addProjectIDs", "removeProjectIDs", "clearProjects", "addPublicationIDs", "removePublicationIDs", "clearPublications", "addPersonRoleIDs", "removePersonRoleIDs", "clearPersonRoles", "holderID", "clearHolder", "affiliationID", "clearAffiliation", "collectionsID", "clearCollections"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -57330,6 +57615,24 @@ func (ec *executionContext) unmarshalInputUpdatePersonInput(ctx context.Context,
 				return it, err
 			}
 			it.ClearAffiliation = data
+		case "collectionsID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("collectionsID"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CollectionsID = data
+		case "clearCollections":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearCollections"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearCollections = data
 		}
 	}
 
@@ -59657,6 +59960,39 @@ func (ec *executionContext) _Collection(ctx context.Context, sel ast.SelectionSe
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "people":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Collection_people(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "category":
 			field := field
 
@@ -61955,7 +62291,7 @@ func (ec *executionContext) _Organization(ctx context.Context, sel ast.Selection
 			out.Values[i] = ec._Organization_primaryImageURL(ctx, field, obj)
 		case "additionalImagesUrls":
 			out.Values[i] = ec._Organization_additionalImagesUrls(ctx, field, obj)
-		case "holder":
+		case "people":
 			field := field
 
 			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
@@ -61964,7 +62300,7 @@ func (ec *executionContext) _Organization(ctx context.Context, sel ast.Selection
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Organization_holder(ctx, field, obj)
+				res = ec._Organization_people(ctx, field, obj)
 				return res
 			}
 
@@ -61988,7 +62324,7 @@ func (ec *executionContext) _Organization(ctx context.Context, sel ast.Selection
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "people":
+		case "holder":
 			field := field
 
 			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
@@ -61997,7 +62333,7 @@ func (ec *executionContext) _Organization(ctx context.Context, sel ast.Selection
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Organization_people(ctx, field, obj)
+				res = ec._Organization_holder(ctx, field, obj)
 				return res
 			}
 
@@ -62415,6 +62751,39 @@ func (ec *executionContext) _Person(ctx context.Context, sel ast.SelectionSet, o
 					}
 				}()
 				res = ec._Person_affiliation(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "collections":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Person_collections(ctx, field, obj)
 				return res
 			}
 

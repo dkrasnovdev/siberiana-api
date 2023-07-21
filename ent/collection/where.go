@@ -498,6 +498,29 @@ func HasArtifactsWith(preds ...predicate.Artifact) predicate.Collection {
 	})
 }
 
+// HasPeople applies the HasEdge predicate on the "people" edge.
+func HasPeople() predicate.Collection {
+	return predicate.Collection(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, PeopleTable, PeopleColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPeopleWith applies the HasEdge predicate on the "people" edge with a given conditions (other predicates).
+func HasPeopleWith(preds ...predicate.Person) predicate.Collection {
+	return predicate.Collection(func(s *sql.Selector) {
+		step := newPeopleStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasCategory applies the HasEdge predicate on the "category" edge.
 func HasCategory() predicate.Collection {
 	return predicate.Collection(func(s *sql.Selector) {

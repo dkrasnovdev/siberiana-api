@@ -15,6 +15,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
+	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
 
@@ -26,11 +27,13 @@ type CollectionQuery struct {
 	inters             []Interceptor
 	predicates         []predicate.Collection
 	withArtifacts      *ArtifactQuery
+	withPeople         *PersonQuery
 	withCategory       *CategoryQuery
 	withFKs            bool
 	modifiers          []func(*sql.Selector)
 	loadTotal          []func(context.Context, []*Collection) error
 	withNamedArtifacts map[string]*ArtifactQuery
+	withNamedPeople    map[string]*PersonQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -82,6 +85,28 @@ func (cq *CollectionQuery) QueryArtifacts() *ArtifactQuery {
 			sqlgraph.From(collection.Table, collection.FieldID, selector),
 			sqlgraph.To(artifact.Table, artifact.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, collection.ArtifactsTable, collection.ArtifactsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPeople chains the current query on the "people" edge.
+func (cq *CollectionQuery) QueryPeople() *PersonQuery {
+	query := (&PersonClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(collection.Table, collection.FieldID, selector),
+			sqlgraph.To(person.Table, person.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, collection.PeopleTable, collection.PeopleColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
@@ -304,6 +329,7 @@ func (cq *CollectionQuery) Clone() *CollectionQuery {
 		inters:        append([]Interceptor{}, cq.inters...),
 		predicates:    append([]predicate.Collection{}, cq.predicates...),
 		withArtifacts: cq.withArtifacts.Clone(),
+		withPeople:    cq.withPeople.Clone(),
 		withCategory:  cq.withCategory.Clone(),
 		// clone intermediate query.
 		sql:  cq.sql.Clone(),
@@ -319,6 +345,17 @@ func (cq *CollectionQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *Collecti
 		opt(query)
 	}
 	cq.withArtifacts = query
+	return cq
+}
+
+// WithPeople tells the query-builder to eager-load the nodes that are connected to
+// the "people" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *CollectionQuery) WithPeople(opts ...func(*PersonQuery)) *CollectionQuery {
+	query := (&PersonClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withPeople = query
 	return cq
 }
 
@@ -418,8 +455,9 @@ func (cq *CollectionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*C
 		nodes       = []*Collection{}
 		withFKs     = cq.withFKs
 		_spec       = cq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [3]bool{
 			cq.withArtifacts != nil,
+			cq.withPeople != nil,
 			cq.withCategory != nil,
 		}
 	)
@@ -457,6 +495,13 @@ func (cq *CollectionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*C
 			return nil, err
 		}
 	}
+	if query := cq.withPeople; query != nil {
+		if err := cq.loadPeople(ctx, query, nodes,
+			func(n *Collection) { n.Edges.People = []*Person{} },
+			func(n *Collection, e *Person) { n.Edges.People = append(n.Edges.People, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := cq.withCategory; query != nil {
 		if err := cq.loadCategory(ctx, query, nodes, nil,
 			func(n *Collection, e *Category) { n.Edges.Category = e }); err != nil {
@@ -467,6 +512,13 @@ func (cq *CollectionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*C
 		if err := cq.loadArtifacts(ctx, query, nodes,
 			func(n *Collection) { n.appendNamedArtifacts(name) },
 			func(n *Collection, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedPeople {
+		if err := cq.loadPeople(ctx, query, nodes,
+			func(n *Collection) { n.appendNamedPeople(name) },
+			func(n *Collection, e *Person) { n.appendNamedPeople(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -504,6 +556,37 @@ func (cq *CollectionQuery) loadArtifacts(ctx context.Context, query *ArtifactQue
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "collection_artifacts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (cq *CollectionQuery) loadPeople(ctx context.Context, query *PersonQuery, nodes []*Collection, init func(*Collection), assign func(*Collection, *Person)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Collection)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Person(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(collection.PeopleColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.collection_people
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "collection_people" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "collection_people" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -637,6 +720,20 @@ func (cq *CollectionQuery) WithNamedArtifacts(name string, opts ...func(*Artifac
 		cq.withNamedArtifacts = make(map[string]*ArtifactQuery)
 	}
 	cq.withNamedArtifacts[name] = query
+	return cq
+}
+
+// WithNamedPeople tells the query-builder to eager-load the nodes that are connected to the "people"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *CollectionQuery) WithNamedPeople(name string, opts ...func(*PersonQuery)) *CollectionQuery {
+	query := (&PersonClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedPeople == nil {
+		cq.withNamedPeople = make(map[string]*PersonQuery)
+	}
+	cq.withNamedPeople[name] = query
 	return cq
 }
 

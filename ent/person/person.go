@@ -66,6 +66,8 @@ const (
 	EdgeHolder = "holder"
 	// EdgeAffiliation holds the string denoting the affiliation edge name in mutations.
 	EdgeAffiliation = "affiliation"
+	// EdgeCollections holds the string denoting the collections edge name in mutations.
+	EdgeCollections = "collections"
 	// Table holds the table name of the person in the database.
 	Table = "persons"
 	// ArtifactsTable is the table that holds the artifacts relation/edge. The primary key declared below.
@@ -102,6 +104,13 @@ const (
 	AffiliationInverseTable = "organizations"
 	// AffiliationColumn is the table column denoting the affiliation relation/edge.
 	AffiliationColumn = "organization_people"
+	// CollectionsTable is the table that holds the collections relation/edge.
+	CollectionsTable = "persons"
+	// CollectionsInverseTable is the table name for the Collection entity.
+	// It exists in this package in order to avoid circular dependency with the "collection" package.
+	CollectionsInverseTable = "collections"
+	// CollectionsColumn is the table column denoting the collections relation/edge.
+	CollectionsColumn = "collection_people"
 )
 
 // Columns holds all SQL columns for person fields.
@@ -130,6 +139,7 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "persons"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
+	"collection_people",
 	"holder_person",
 	"organization_people",
 }
@@ -350,6 +360,13 @@ func ByAffiliationField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newAffiliationStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByCollectionsField orders the results by collections field.
+func ByCollectionsField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCollectionsStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newArtifactsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -390,6 +407,13 @@ func newAffiliationStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(AffiliationInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, AffiliationTable, AffiliationColumn),
+	)
+}
+func newCollectionsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CollectionsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, CollectionsTable, CollectionsColumn),
 	)
 }
 

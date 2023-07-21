@@ -160,6 +160,18 @@ func (c *Collection) Artifacts(ctx context.Context) (result []*Artifact, err err
 	return result, err
 }
 
+func (c *Collection) People(ctx context.Context) (result []*Person, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedPeople(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.PeopleOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = c.QueryPeople().All(ctx)
+	}
+	return result, err
+}
+
 func (c *Collection) Category(ctx context.Context) (*Category, error) {
 	result, err := c.Edges.CategoryOrErr()
 	if IsNotLoaded(err) {
@@ -324,14 +336,6 @@ func (m *Monument) Artifacts(ctx context.Context) (result []*Artifact, err error
 	return result, err
 }
 
-func (o *Organization) Holder(ctx context.Context) (*Holder, error) {
-	result, err := o.Edges.HolderOrErr()
-	if IsNotLoaded(err) {
-		result, err = o.QueryHolder().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
 func (o *Organization) People(ctx context.Context) (result []*Person, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = o.NamedPeople(graphql.GetFieldContext(ctx).Field.Alias)
@@ -342,6 +346,14 @@ func (o *Organization) People(ctx context.Context) (result []*Person, err error)
 		result, err = o.QueryPeople().All(ctx)
 	}
 	return result, err
+}
+
+func (o *Organization) Holder(ctx context.Context) (*Holder, error) {
+	result, err := o.Edges.HolderOrErr()
+	if IsNotLoaded(err) {
+		result, err = o.QueryHolder().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (pe *Person) Artifacts(ctx context.Context) (result []*Artifact, err error) {
@@ -404,6 +416,14 @@ func (pe *Person) Affiliation(ctx context.Context) (*Organization, error) {
 	result, err := pe.Edges.AffiliationOrErr()
 	if IsNotLoaded(err) {
 		result, err = pe.QueryAffiliation().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pe *Person) Collections(ctx context.Context) (*Collection, error) {
+	result, err := pe.Edges.CollectionsOrErr()
+	if IsNotLoaded(err) {
+		result, err = pe.QueryCollections().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }

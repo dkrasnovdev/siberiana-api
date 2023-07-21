@@ -2512,6 +2512,10 @@ type CollectionWhereInput struct {
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
 
+	// "people" edge predicates.
+	HasPeople     *bool               `json:"hasPeople,omitempty"`
+	HasPeopleWith []*PersonWhereInput `json:"hasPeopleWith,omitempty"`
+
 	// "category" edge predicates.
 	HasCategory     *bool                 `json:"hasCategory,omitempty"`
 	HasCategoryWith []*CategoryWhereInput `json:"hasCategoryWith,omitempty"`
@@ -2858,6 +2862,24 @@ func (i *CollectionWhereInput) P() (predicate.Collection, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, collection.HasArtifactsWith(with...))
+	}
+	if i.HasPeople != nil {
+		p := collection.HasPeople()
+		if !*i.HasPeople {
+			p = collection.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasPeopleWith) > 0 {
+		with := make([]predicate.Person, 0, len(i.HasPeopleWith))
+		for _, w := range i.HasPeopleWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasPeopleWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, collection.HasPeopleWith(with...))
 	}
 	if i.HasCategory != nil {
 		p := collection.HasCategory()
@@ -7516,13 +7538,13 @@ type OrganizationWhereInput struct {
 	PrimaryImageURLEqualFold    *string  `json:"primaryImageURLEqualFold,omitempty"`
 	PrimaryImageURLContainsFold *string  `json:"primaryImageURLContainsFold,omitempty"`
 
-	// "holder" edge predicates.
-	HasHolder     *bool               `json:"hasHolder,omitempty"`
-	HasHolderWith []*HolderWhereInput `json:"hasHolderWith,omitempty"`
-
 	// "people" edge predicates.
 	HasPeople     *bool               `json:"hasPeople,omitempty"`
 	HasPeopleWith []*PersonWhereInput `json:"hasPeopleWith,omitempty"`
+
+	// "holder" edge predicates.
+	HasHolder     *bool               `json:"hasHolder,omitempty"`
+	HasHolderWith []*HolderWhereInput `json:"hasHolderWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -7939,24 +7961,6 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 		predicates = append(predicates, organization.PrimaryImageURLContainsFold(*i.PrimaryImageURLContainsFold))
 	}
 
-	if i.HasHolder != nil {
-		p := organization.HasHolder()
-		if !*i.HasHolder {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasHolderWith) > 0 {
-		with := make([]predicate.Holder, 0, len(i.HasHolderWith))
-		for _, w := range i.HasHolderWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasHolderWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasHolderWith(with...))
-	}
 	if i.HasPeople != nil {
 		p := organization.HasPeople()
 		if !*i.HasPeople {
@@ -7974,6 +7978,24 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasPeopleWith(with...))
+	}
+	if i.HasHolder != nil {
+		p := organization.HasHolder()
+		if !*i.HasHolder {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasHolderWith) > 0 {
+		with := make([]predicate.Holder, 0, len(i.HasHolderWith))
+		for _, w := range i.HasHolderWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasHolderWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasHolderWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -8228,6 +8250,10 @@ type PersonWhereInput struct {
 	// "affiliation" edge predicates.
 	HasAffiliation     *bool                     `json:"hasAffiliation,omitempty"`
 	HasAffiliationWith []*OrganizationWhereInput `json:"hasAffiliationWith,omitempty"`
+
+	// "collections" edge predicates.
+	HasCollections     *bool                   `json:"hasCollections,omitempty"`
+	HasCollectionsWith []*CollectionWhereInput `json:"hasCollectionsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -8958,6 +8984,24 @@ func (i *PersonWhereInput) P() (predicate.Person, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, person.HasAffiliationWith(with...))
+	}
+	if i.HasCollections != nil {
+		p := person.HasCollections()
+		if !*i.HasCollections {
+			p = person.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCollectionsWith) > 0 {
+		with := make([]predicate.Collection, 0, len(i.HasCollectionsWith))
+		for _, w := range i.HasCollectionsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCollectionsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, person.HasCollectionsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

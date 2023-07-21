@@ -665,29 +665,6 @@ func AdditionalImagesUrlsNotNil() predicate.Organization {
 	return predicate.Organization(sql.FieldNotNull(FieldAdditionalImagesUrls))
 }
 
-// HasHolder applies the HasEdge predicate on the "holder" edge.
-func HasHolder() predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, HolderTable, HolderColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasHolderWith applies the HasEdge predicate on the "holder" edge with a given conditions (other predicates).
-func HasHolderWith(preds ...predicate.Holder) predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := newHolderStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasPeople applies the HasEdge predicate on the "people" edge.
 func HasPeople() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
@@ -703,6 +680,29 @@ func HasPeople() predicate.Organization {
 func HasPeopleWith(preds ...predicate.Person) predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := newPeopleStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasHolder applies the HasEdge predicate on the "holder" edge.
+func HasHolder() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, HolderTable, HolderColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasHolderWith applies the HasEdge predicate on the "holder" edge with a given conditions (other predicates).
+func HasHolderWith(preds ...predicate.Holder) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newHolderStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

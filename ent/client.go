@@ -1745,6 +1745,22 @@ func (c *CollectionClient) QueryArtifacts(co *Collection) *ArtifactQuery {
 	return query
 }
 
+// QueryPeople queries the people edge of a Collection.
+func (c *CollectionClient) QueryPeople(co *Collection) *PersonQuery {
+	query := (&PersonClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(collection.Table, collection.FieldID, id),
+			sqlgraph.To(person.Table, person.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, collection.PeopleTable, collection.PeopleColumn),
+		)
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryCategory queries the category edge of a Collection.
 func (c *CollectionClient) QueryCategory(co *Collection) *CategoryQuery {
 	query := (&CategoryClient{config: c.config}).Query()
@@ -3427,22 +3443,6 @@ func (c *OrganizationClient) GetX(ctx context.Context, id int) *Organization {
 	return obj
 }
 
-// QueryHolder queries the holder edge of a Organization.
-func (c *OrganizationClient) QueryHolder(o *Organization) *HolderQuery {
-	query := (&HolderClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := o.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(holder.Table, holder.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, organization.HolderTable, organization.HolderColumn),
-		)
-		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryPeople queries the people edge of a Organization.
 func (c *OrganizationClient) QueryPeople(o *Organization) *PersonQuery {
 	query := (&PersonClient{config: c.config}).Query()
@@ -3452,6 +3452,22 @@ func (c *OrganizationClient) QueryPeople(o *Organization) *PersonQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(person.Table, person.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.PeopleTable, organization.PeopleColumn),
+		)
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryHolder queries the holder edge of a Organization.
+func (c *OrganizationClient) QueryHolder(o *Organization) *HolderQuery {
+	query := (&HolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(holder.Table, holder.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, organization.HolderTable, organization.HolderColumn),
 		)
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
@@ -3667,6 +3683,22 @@ func (c *PersonClient) QueryAffiliation(pe *Person) *OrganizationQuery {
 			sqlgraph.From(person.Table, person.FieldID, id),
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, person.AffiliationTable, person.AffiliationColumn),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCollections queries the collections edge of a Person.
+func (c *PersonClient) QueryCollections(pe *Person) *CollectionQuery {
+	query := (&CollectionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, id),
+			sqlgraph.To(collection.Table, collection.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, person.CollectionsTable, person.CollectionsColumn),
 		)
 		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
 		return fromV, nil

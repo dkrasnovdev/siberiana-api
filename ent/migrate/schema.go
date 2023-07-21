@@ -425,6 +425,7 @@ var (
 		{Name: "begin_data", Type: field.TypeTime, Nullable: true},
 		{Name: "end_date", Type: field.TypeTime, Nullable: true},
 		{Name: "gender", Type: field.TypeEnum, Enums: []string{"female", "male"}},
+		{Name: "collection_people", Type: field.TypeInt, Nullable: true},
 		{Name: "holder_person", Type: field.TypeInt, Unique: true, Nullable: true},
 		{Name: "organization_people", Type: field.TypeInt, Nullable: true},
 	}
@@ -435,14 +436,20 @@ var (
 		PrimaryKey: []*schema.Column{PersonsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "persons_holders_person",
+				Symbol:     "persons_collections_people",
 				Columns:    []*schema.Column{PersonsColumns[19]},
+				RefColumns: []*schema.Column{CollectionsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "persons_holders_person",
+				Columns:    []*schema.Column{PersonsColumns[20]},
 				RefColumns: []*schema.Column{HoldersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "persons_organizations_people",
-				Columns:    []*schema.Column{PersonsColumns[20]},
+				Columns:    []*schema.Column{PersonsColumns[21]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -934,8 +941,9 @@ func init() {
 	CollectionsTable.ForeignKeys[0].RefTable = CategoriesTable
 	DistrictsTable.ForeignKeys[0].RefTable = LocationsTable
 	OrganizationsTable.ForeignKeys[0].RefTable = HoldersTable
-	PersonsTable.ForeignKeys[0].RefTable = HoldersTable
-	PersonsTable.ForeignKeys[1].RefTable = OrganizationsTable
+	PersonsTable.ForeignKeys[0].RefTable = CollectionsTable
+	PersonsTable.ForeignKeys[1].RefTable = HoldersTable
+	PersonsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	RegionsTable.ForeignKeys[0].RefTable = LocationsTable
 	SettlementsTable.ForeignKeys[0].RefTable = LocationsTable
 	HolderArtifactsTable.ForeignKeys[0].RefTable = HoldersTable

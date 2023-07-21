@@ -5289,6 +5289,9 @@ type CollectionMutation struct {
 	artifacts            map[int]struct{}
 	removedartifacts     map[int]struct{}
 	clearedartifacts     bool
+	people               map[int]struct{}
+	removedpeople        map[int]struct{}
+	clearedpeople        bool
 	category             *int
 	clearedcategory      bool
 	done                 bool
@@ -5781,6 +5784,60 @@ func (m *CollectionMutation) ResetArtifacts() {
 	m.removedartifacts = nil
 }
 
+// AddPersonIDs adds the "people" edge to the Person entity by ids.
+func (m *CollectionMutation) AddPersonIDs(ids ...int) {
+	if m.people == nil {
+		m.people = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.people[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPeople clears the "people" edge to the Person entity.
+func (m *CollectionMutation) ClearPeople() {
+	m.clearedpeople = true
+}
+
+// PeopleCleared reports if the "people" edge to the Person entity was cleared.
+func (m *CollectionMutation) PeopleCleared() bool {
+	return m.clearedpeople
+}
+
+// RemovePersonIDs removes the "people" edge to the Person entity by IDs.
+func (m *CollectionMutation) RemovePersonIDs(ids ...int) {
+	if m.removedpeople == nil {
+		m.removedpeople = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.people, ids[i])
+		m.removedpeople[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPeople returns the removed IDs of the "people" edge to the Person entity.
+func (m *CollectionMutation) RemovedPeopleIDs() (ids []int) {
+	for id := range m.removedpeople {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PeopleIDs returns the "people" edge IDs in the mutation.
+func (m *CollectionMutation) PeopleIDs() (ids []int) {
+	for id := range m.people {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPeople resets all changes to the "people" edge.
+func (m *CollectionMutation) ResetPeople() {
+	m.people = nil
+	m.clearedpeople = false
+	m.removedpeople = nil
+}
+
 // SetCategoryID sets the "category" edge to the Category entity by id.
 func (m *CollectionMutation) SetCategoryID(id int) {
 	m.category = &id
@@ -6088,9 +6145,12 @@ func (m *CollectionMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *CollectionMutation) AddedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.artifacts != nil {
 		edges = append(edges, collection.EdgeArtifacts)
+	}
+	if m.people != nil {
+		edges = append(edges, collection.EdgePeople)
 	}
 	if m.category != nil {
 		edges = append(edges, collection.EdgeCategory)
@@ -6108,6 +6168,12 @@ func (m *CollectionMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case collection.EdgePeople:
+		ids := make([]ent.Value, 0, len(m.people))
+		for id := range m.people {
+			ids = append(ids, id)
+		}
+		return ids
 	case collection.EdgeCategory:
 		if id := m.category; id != nil {
 			return []ent.Value{*id}
@@ -6118,9 +6184,12 @@ func (m *CollectionMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *CollectionMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.removedartifacts != nil {
 		edges = append(edges, collection.EdgeArtifacts)
+	}
+	if m.removedpeople != nil {
+		edges = append(edges, collection.EdgePeople)
 	}
 	return edges
 }
@@ -6135,15 +6204,24 @@ func (m *CollectionMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case collection.EdgePeople:
+		ids := make([]ent.Value, 0, len(m.removedpeople))
+		for id := range m.removedpeople {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *CollectionMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.clearedartifacts {
 		edges = append(edges, collection.EdgeArtifacts)
+	}
+	if m.clearedpeople {
+		edges = append(edges, collection.EdgePeople)
 	}
 	if m.clearedcategory {
 		edges = append(edges, collection.EdgeCategory)
@@ -6157,6 +6235,8 @@ func (m *CollectionMutation) EdgeCleared(name string) bool {
 	switch name {
 	case collection.EdgeArtifacts:
 		return m.clearedartifacts
+	case collection.EdgePeople:
+		return m.clearedpeople
 	case collection.EdgeCategory:
 		return m.clearedcategory
 	}
@@ -6180,6 +6260,9 @@ func (m *CollectionMutation) ResetEdge(name string) error {
 	switch name {
 	case collection.EdgeArtifacts:
 		m.ResetArtifacts()
+		return nil
+	case collection.EdgePeople:
+		m.ResetPeople()
 		return nil
 	case collection.EdgeCategory:
 		m.ResetCategory()
@@ -14704,11 +14787,11 @@ type OrganizationMutation struct {
 	additional_images_urls       *[]string
 	appendadditional_images_urls []string
 	clearedFields                map[string]struct{}
-	holder                       *int
-	clearedholder                bool
 	people                       map[int]struct{}
 	removedpeople                map[int]struct{}
 	clearedpeople                bool
+	holder                       *int
+	clearedholder                bool
 	done                         bool
 	oldValue                     func(context.Context) (*Organization, error)
 	predicates                   []predicate.Organization
@@ -15438,45 +15521,6 @@ func (m *OrganizationMutation) ResetAdditionalImagesUrls() {
 	delete(m.clearedFields, organization.FieldAdditionalImagesUrls)
 }
 
-// SetHolderID sets the "holder" edge to the Holder entity by id.
-func (m *OrganizationMutation) SetHolderID(id int) {
-	m.holder = &id
-}
-
-// ClearHolder clears the "holder" edge to the Holder entity.
-func (m *OrganizationMutation) ClearHolder() {
-	m.clearedholder = true
-}
-
-// HolderCleared reports if the "holder" edge to the Holder entity was cleared.
-func (m *OrganizationMutation) HolderCleared() bool {
-	return m.clearedholder
-}
-
-// HolderID returns the "holder" edge ID in the mutation.
-func (m *OrganizationMutation) HolderID() (id int, exists bool) {
-	if m.holder != nil {
-		return *m.holder, true
-	}
-	return
-}
-
-// HolderIDs returns the "holder" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// HolderID instead. It exists only for internal usage by the builders.
-func (m *OrganizationMutation) HolderIDs() (ids []int) {
-	if id := m.holder; id != nil {
-		ids = append(ids, *id)
-	}
-	return
-}
-
-// ResetHolder resets all changes to the "holder" edge.
-func (m *OrganizationMutation) ResetHolder() {
-	m.holder = nil
-	m.clearedholder = false
-}
-
 // AddPersonIDs adds the "people" edge to the Person entity by ids.
 func (m *OrganizationMutation) AddPersonIDs(ids ...int) {
 	if m.people == nil {
@@ -15529,6 +15573,45 @@ func (m *OrganizationMutation) ResetPeople() {
 	m.people = nil
 	m.clearedpeople = false
 	m.removedpeople = nil
+}
+
+// SetHolderID sets the "holder" edge to the Holder entity by id.
+func (m *OrganizationMutation) SetHolderID(id int) {
+	m.holder = &id
+}
+
+// ClearHolder clears the "holder" edge to the Holder entity.
+func (m *OrganizationMutation) ClearHolder() {
+	m.clearedholder = true
+}
+
+// HolderCleared reports if the "holder" edge to the Holder entity was cleared.
+func (m *OrganizationMutation) HolderCleared() bool {
+	return m.clearedholder
+}
+
+// HolderID returns the "holder" edge ID in the mutation.
+func (m *OrganizationMutation) HolderID() (id int, exists bool) {
+	if m.holder != nil {
+		return *m.holder, true
+	}
+	return
+}
+
+// HolderIDs returns the "holder" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// HolderID instead. It exists only for internal usage by the builders.
+func (m *OrganizationMutation) HolderIDs() (ids []int) {
+	if id := m.holder; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetHolder resets all changes to the "holder" edge.
+func (m *OrganizationMutation) ResetHolder() {
+	m.holder = nil
+	m.clearedholder = false
 }
 
 // Where appends a list predicates to the OrganizationMutation builder.
@@ -15915,11 +15998,11 @@ func (m *OrganizationMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrganizationMutation) AddedEdges() []string {
 	edges := make([]string, 0, 2)
-	if m.holder != nil {
-		edges = append(edges, organization.EdgeHolder)
-	}
 	if m.people != nil {
 		edges = append(edges, organization.EdgePeople)
+	}
+	if m.holder != nil {
+		edges = append(edges, organization.EdgeHolder)
 	}
 	return edges
 }
@@ -15928,16 +16011,16 @@ func (m *OrganizationMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case organization.EdgeHolder:
-		if id := m.holder; id != nil {
-			return []ent.Value{*id}
-		}
 	case organization.EdgePeople:
 		ids := make([]ent.Value, 0, len(m.people))
 		for id := range m.people {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeHolder:
+		if id := m.holder; id != nil {
+			return []ent.Value{*id}
+		}
 	}
 	return nil
 }
@@ -15968,11 +16051,11 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrganizationMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 2)
-	if m.clearedholder {
-		edges = append(edges, organization.EdgeHolder)
-	}
 	if m.clearedpeople {
 		edges = append(edges, organization.EdgePeople)
+	}
+	if m.clearedholder {
+		edges = append(edges, organization.EdgeHolder)
 	}
 	return edges
 }
@@ -15981,10 +16064,10 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *OrganizationMutation) EdgeCleared(name string) bool {
 	switch name {
-	case organization.EdgeHolder:
-		return m.clearedholder
 	case organization.EdgePeople:
 		return m.clearedpeople
+	case organization.EdgeHolder:
+		return m.clearedholder
 	}
 	return false
 }
@@ -16004,11 +16087,11 @@ func (m *OrganizationMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *OrganizationMutation) ResetEdge(name string) error {
 	switch name {
-	case organization.EdgeHolder:
-		m.ResetHolder()
-		return nil
 	case organization.EdgePeople:
 		m.ResetPeople()
+		return nil
+	case organization.EdgeHolder:
+		m.ResetHolder()
 		return nil
 	}
 	return fmt.Errorf("unknown Organization edge %s", name)
@@ -16059,6 +16142,8 @@ type PersonMutation struct {
 	clearedholder                bool
 	affiliation                  *int
 	clearedaffiliation           bool
+	collections                  *int
+	clearedcollections           bool
 	done                         bool
 	oldValue                     func(context.Context) (*Person, error)
 	predicates                   []predicate.Person
@@ -17363,6 +17448,45 @@ func (m *PersonMutation) ResetAffiliation() {
 	m.clearedaffiliation = false
 }
 
+// SetCollectionsID sets the "collections" edge to the Collection entity by id.
+func (m *PersonMutation) SetCollectionsID(id int) {
+	m.collections = &id
+}
+
+// ClearCollections clears the "collections" edge to the Collection entity.
+func (m *PersonMutation) ClearCollections() {
+	m.clearedcollections = true
+}
+
+// CollectionsCleared reports if the "collections" edge to the Collection entity was cleared.
+func (m *PersonMutation) CollectionsCleared() bool {
+	return m.clearedcollections
+}
+
+// CollectionsID returns the "collections" edge ID in the mutation.
+func (m *PersonMutation) CollectionsID() (id int, exists bool) {
+	if m.collections != nil {
+		return *m.collections, true
+	}
+	return
+}
+
+// CollectionsIDs returns the "collections" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// CollectionsID instead. It exists only for internal usage by the builders.
+func (m *PersonMutation) CollectionsIDs() (ids []int) {
+	if id := m.collections; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetCollections resets all changes to the "collections" edge.
+func (m *PersonMutation) ResetCollections() {
+	m.collections = nil
+	m.clearedcollections = false
+}
+
 // Where appends a list predicates to the PersonMutation builder.
 func (m *PersonMutation) Where(ps ...predicate.Person) {
 	m.predicates = append(m.predicates, ps...)
@@ -17878,7 +18002,7 @@ func (m *PersonMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *PersonMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.artifacts != nil {
 		edges = append(edges, person.EdgeArtifacts)
 	}
@@ -17896,6 +18020,9 @@ func (m *PersonMutation) AddedEdges() []string {
 	}
 	if m.affiliation != nil {
 		edges = append(edges, person.EdgeAffiliation)
+	}
+	if m.collections != nil {
+		edges = append(edges, person.EdgeCollections)
 	}
 	return edges
 }
@@ -17936,13 +18063,17 @@ func (m *PersonMutation) AddedIDs(name string) []ent.Value {
 		if id := m.affiliation; id != nil {
 			return []ent.Value{*id}
 		}
+	case person.EdgeCollections:
+		if id := m.collections; id != nil {
+			return []ent.Value{*id}
+		}
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *PersonMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.removedartifacts != nil {
 		edges = append(edges, person.EdgeArtifacts)
 	}
@@ -17992,7 +18123,7 @@ func (m *PersonMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *PersonMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.clearedartifacts {
 		edges = append(edges, person.EdgeArtifacts)
 	}
@@ -18010,6 +18141,9 @@ func (m *PersonMutation) ClearedEdges() []string {
 	}
 	if m.clearedaffiliation {
 		edges = append(edges, person.EdgeAffiliation)
+	}
+	if m.clearedcollections {
+		edges = append(edges, person.EdgeCollections)
 	}
 	return edges
 }
@@ -18030,6 +18164,8 @@ func (m *PersonMutation) EdgeCleared(name string) bool {
 		return m.clearedholder
 	case person.EdgeAffiliation:
 		return m.clearedaffiliation
+	case person.EdgeCollections:
+		return m.clearedcollections
 	}
 	return false
 }
@@ -18043,6 +18179,9 @@ func (m *PersonMutation) ClearEdge(name string) error {
 		return nil
 	case person.EdgeAffiliation:
 		m.ClearAffiliation()
+		return nil
+	case person.EdgeCollections:
+		m.ClearCollections()
 		return nil
 	}
 	return fmt.Errorf("unknown Person unique edge %s", name)
@@ -18069,6 +18208,9 @@ func (m *PersonMutation) ResetEdge(name string) error {
 		return nil
 	case person.EdgeAffiliation:
 		m.ResetAffiliation()
+		return nil
+	case person.EdgeCollections:
+		m.ResetCollections()
 		return nil
 	}
 	return fmt.Errorf("unknown Person edge %s", name)

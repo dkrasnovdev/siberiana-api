@@ -854,6 +854,18 @@ func (c *CollectionQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 			c.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
 				*wq = *query
 			})
+		case "people":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PersonClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedPeople(alias, func(wq *PersonQuery) {
+				*wq = *query
+			})
 		case "category":
 			var (
 				alias = field.Alias
@@ -2363,16 +2375,6 @@ func (o *OrganizationQuery) collectField(ctx context.Context, opCtx *graphql.Ope
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
-		case "holder":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&HolderClient{config: o.config}).Query()
-			)
-			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, holderImplementors)...); err != nil {
-				return err
-			}
-			o.withHolder = query
 		case "people":
 			var (
 				alias = field.Alias
@@ -2385,6 +2387,16 @@ func (o *OrganizationQuery) collectField(ctx context.Context, opCtx *graphql.Ope
 			o.WithNamedPeople(alias, func(wq *PersonQuery) {
 				*wq = *query
 			})
+		case "holder":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&HolderClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, holderImplementors)...); err != nil {
+				return err
+			}
+			o.withHolder = query
 		case "createdAt":
 			if _, ok := fieldSeen[organization.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, organization.FieldCreatedAt)
@@ -2597,6 +2609,16 @@ func (pe *PersonQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 				return err
 			}
 			pe.withAffiliation = query
+		case "collections":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CollectionClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, collectionImplementors)...); err != nil {
+				return err
+			}
+			pe.withCollections = query
 		case "createdAt":
 			if _, ok := fieldSeen[person.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, person.FieldCreatedAt)

@@ -44,15 +44,18 @@ type Collection struct {
 type CollectionEdges struct {
 	// Artifacts holds the value of the artifacts edge.
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
+	// People holds the value of the people edge.
+	People []*Person `json:"people,omitempty"`
 	// Category holds the value of the category edge.
 	Category *Category `json:"category,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [3]map[string]int
 
 	namedArtifacts map[string][]*Artifact
+	namedPeople    map[string][]*Person
 }
 
 // ArtifactsOrErr returns the Artifacts value or an error if the edge
@@ -64,10 +67,19 @@ func (e CollectionEdges) ArtifactsOrErr() ([]*Artifact, error) {
 	return nil, &NotLoadedError{edge: "artifacts"}
 }
 
+// PeopleOrErr returns the People value or an error if the edge
+// was not loaded in eager-loading.
+func (e CollectionEdges) PeopleOrErr() ([]*Person, error) {
+	if e.loadedTypes[1] {
+		return e.People, nil
+	}
+	return nil, &NotLoadedError{edge: "people"}
+}
+
 // CategoryOrErr returns the Category value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e CollectionEdges) CategoryOrErr() (*Category, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		if e.Category == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: category.Label}
@@ -182,6 +194,11 @@ func (c *Collection) QueryArtifacts() *ArtifactQuery {
 	return NewCollectionClient(c.config).QueryArtifacts(c)
 }
 
+// QueryPeople queries the "people" edge of the Collection entity.
+func (c *Collection) QueryPeople() *PersonQuery {
+	return NewCollectionClient(c.config).QueryPeople(c)
+}
+
 // QueryCategory queries the "category" edge of the Collection entity.
 func (c *Collection) QueryCategory() *CategoryQuery {
 	return NewCollectionClient(c.config).QueryCategory(c)
@@ -255,6 +272,30 @@ func (c *Collection) appendNamedArtifacts(name string, edges ...*Artifact) {
 		c.Edges.namedArtifacts[name] = []*Artifact{}
 	} else {
 		c.Edges.namedArtifacts[name] = append(c.Edges.namedArtifacts[name], edges...)
+	}
+}
+
+// NamedPeople returns the People named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Collection) NamedPeople(name string) ([]*Person, error) {
+	if c.Edges.namedPeople == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedPeople[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Collection) appendNamedPeople(name string, edges ...*Person) {
+	if c.Edges.namedPeople == nil {
+		c.Edges.namedPeople = make(map[string][]*Person)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedPeople[name] = []*Person{}
+	} else {
+		c.Edges.namedPeople[name] = append(c.Edges.namedPeople[name], edges...)
 	}
 }
 

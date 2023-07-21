@@ -486,6 +486,7 @@ type CreateCollectionInput struct {
 	Description   *string
 	ExternalLinks []string
 	ArtifactIDs   []int
+	PersonIDs     []int
 	CategoryID    *int
 }
 
@@ -515,6 +516,9 @@ func (i *CreateCollectionInput) Mutate(m *CollectionMutation) {
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
+	if v := i.PersonIDs; len(v) > 0 {
+		m.AddPersonIDs(v...)
+	}
 	if v := i.CategoryID; v != nil {
 		m.SetCategoryID(*v)
 	}
@@ -543,6 +547,9 @@ type UpdateCollectionInput struct {
 	ClearArtifacts      bool
 	AddArtifactIDs      []int
 	RemoveArtifactIDs   []int
+	ClearPeople         bool
+	AddPersonIDs        []int
+	RemovePersonIDs     []int
 	ClearCategory       bool
 	CategoryID          *int
 }
@@ -593,6 +600,15 @@ func (i *UpdateCollectionInput) Mutate(m *CollectionMutation) {
 	}
 	if v := i.RemoveArtifactIDs; len(v) > 0 {
 		m.RemoveArtifactIDs(v...)
+	}
+	if i.ClearPeople {
+		m.ClearPeople()
+	}
+	if v := i.AddPersonIDs; len(v) > 0 {
+		m.AddPersonIDs(v...)
+	}
+	if v := i.RemovePersonIDs; len(v) > 0 {
+		m.RemovePersonIDs(v...)
 	}
 	if i.ClearCategory {
 		m.ClearCategory()
@@ -1686,8 +1702,8 @@ type CreateOrganizationInput struct {
 	ExternalLinks        []string
 	PrimaryImageURL      *string
 	AdditionalImagesUrls []string
-	HolderID             *int
 	PersonIDs            []int
+	HolderID             *int
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -1728,11 +1744,11 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.AdditionalImagesUrls; v != nil {
 		m.SetAdditionalImagesUrls(v)
 	}
-	if v := i.HolderID; v != nil {
-		m.SetHolderID(*v)
-	}
 	if v := i.PersonIDs; len(v) > 0 {
 		m.AddPersonIDs(v...)
+	}
+	if v := i.HolderID; v != nil {
+		m.SetHolderID(*v)
 	}
 }
 
@@ -1769,11 +1785,11 @@ type UpdateOrganizationInput struct {
 	ClearAdditionalImagesUrls  bool
 	AdditionalImagesUrls       []string
 	AppendAdditionalImagesUrls []string
-	ClearHolder                bool
-	HolderID                   *int
 	ClearPeople                bool
 	AddPersonIDs               []int
 	RemovePersonIDs            []int
+	ClearHolder                bool
+	HolderID                   *int
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -1853,12 +1869,6 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if i.AppendAdditionalImagesUrls != nil {
 		m.AppendAdditionalImagesUrls(i.AdditionalImagesUrls)
 	}
-	if i.ClearHolder {
-		m.ClearHolder()
-	}
-	if v := i.HolderID; v != nil {
-		m.SetHolderID(*v)
-	}
 	if i.ClearPeople {
 		m.ClearPeople()
 	}
@@ -1867,6 +1877,12 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemovePersonIDs; len(v) > 0 {
 		m.RemovePersonIDs(v...)
+	}
+	if i.ClearHolder {
+		m.ClearHolder()
+	}
+	if v := i.HolderID; v != nil {
+		m.SetHolderID(*v)
 	}
 }
 
@@ -1908,6 +1924,7 @@ type CreatePersonInput struct {
 	PersonRoleIDs        []int
 	HolderID             *int
 	AffiliationID        *int
+	CollectionsID        *int
 }
 
 // Mutate applies the CreatePersonInput on the PersonMutation builder.
@@ -1982,6 +1999,9 @@ func (i *CreatePersonInput) Mutate(m *PersonMutation) {
 	if v := i.AffiliationID; v != nil {
 		m.SetAffiliationID(*v)
 	}
+	if v := i.CollectionsID; v != nil {
+		m.SetCollectionsID(*v)
+	}
 }
 
 // SetInput applies the change-set in the CreatePersonInput on the PersonCreate builder.
@@ -2044,6 +2064,8 @@ type UpdatePersonInput struct {
 	HolderID                   *int
 	ClearAffiliation           bool
 	AffiliationID              *int
+	ClearCollections           bool
+	CollectionsID              *int
 }
 
 // Mutate applies the UpdatePersonInput on the PersonMutation builder.
@@ -2203,6 +2225,12 @@ func (i *UpdatePersonInput) Mutate(m *PersonMutation) {
 	}
 	if v := i.AffiliationID; v != nil {
 		m.SetAffiliationID(*v)
+	}
+	if i.ClearCollections {
+		m.ClearCollections()
+	}
+	if v := i.CollectionsID; v != nil {
+		m.SetCollectionsID(*v)
 	}
 }
 
