@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -18,12 +19,6 @@ type Organization struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// DisplayName holds the value of the "display_name" field.
-	DisplayName string `json:"display_name,omitempty"`
-	// Description holds the value of the "description" field.
-	Description string `json:"description,omitempty"`
-	// ExternalLink holds the value of the "external_link" field.
-	ExternalLink string `json:"external_link,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// CreatedBy holds the value of the "created_by" field.
@@ -32,6 +27,22 @@ type Organization struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// Address holds the value of the "address" field.
+	Address string `json:"address,omitempty"`
+	// PhoneNumbers holds the value of the "phone_numbers" field.
+	PhoneNumbers []string `json:"phone_numbers,omitempty"`
+	// Emails holds the value of the "emails" field.
+	Emails []string `json:"emails,omitempty"`
+	// DisplayName holds the value of the "display_name" field.
+	DisplayName string `json:"display_name,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
+	// PrimaryImageURL holds the value of the "primary_image_url" field.
+	PrimaryImageURL string `json:"primary_image_url,omitempty"`
+	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
+	AdditionalImagesUrls []string `json:"additional_images_urls,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrganizationQuery when eager-loading is set.
 	Edges               OrganizationEdges `json:"edges"`
@@ -68,9 +79,11 @@ func (*Organization) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case organization.FieldPhoneNumbers, organization.FieldEmails, organization.FieldAdditionalImagesUrls:
+			values[i] = new([]byte)
 		case organization.FieldID:
 			values[i] = new(sql.NullInt64)
-		case organization.FieldDisplayName, organization.FieldDescription, organization.FieldExternalLink, organization.FieldCreatedBy, organization.FieldUpdatedBy:
+		case organization.FieldCreatedBy, organization.FieldUpdatedBy, organization.FieldAddress, organization.FieldDisplayName, organization.FieldDescription, organization.FieldExternalLink, organization.FieldPrimaryImageURL:
 			values[i] = new(sql.NullString)
 		case organization.FieldCreatedAt, organization.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -97,24 +110,6 @@ func (o *Organization) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			o.ID = int(value.Int64)
-		case organization.FieldDisplayName:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field display_name", values[i])
-			} else if value.Valid {
-				o.DisplayName = value.String
-			}
-		case organization.FieldDescription:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field description", values[i])
-			} else if value.Valid {
-				o.Description = value.String
-			}
-		case organization.FieldExternalLink:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field external_link", values[i])
-			} else if value.Valid {
-				o.ExternalLink = value.String
-			}
 		case organization.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -138,6 +133,60 @@ func (o *Organization) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				o.UpdatedBy = value.String
+			}
+		case organization.FieldAddress:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field address", values[i])
+			} else if value.Valid {
+				o.Address = value.String
+			}
+		case organization.FieldPhoneNumbers:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field phone_numbers", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &o.PhoneNumbers); err != nil {
+					return fmt.Errorf("unmarshal field phone_numbers: %w", err)
+				}
+			}
+		case organization.FieldEmails:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field emails", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &o.Emails); err != nil {
+					return fmt.Errorf("unmarshal field emails: %w", err)
+				}
+			}
+		case organization.FieldDisplayName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field display_name", values[i])
+			} else if value.Valid {
+				o.DisplayName = value.String
+			}
+		case organization.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				o.Description = value.String
+			}
+		case organization.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				o.ExternalLink = value.String
+			}
+		case organization.FieldPrimaryImageURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field primary_image_url", values[i])
+			} else if value.Valid {
+				o.PrimaryImageURL = value.String
+			}
+		case organization.FieldAdditionalImagesUrls:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field additional_images_urls", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &o.AdditionalImagesUrls); err != nil {
+					return fmt.Errorf("unmarshal field additional_images_urls: %w", err)
+				}
 			}
 		case organization.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -187,15 +236,6 @@ func (o *Organization) String() string {
 	var builder strings.Builder
 	builder.WriteString("Organization(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", o.ID))
-	builder.WriteString("display_name=")
-	builder.WriteString(o.DisplayName)
-	builder.WriteString(", ")
-	builder.WriteString("description=")
-	builder.WriteString(o.Description)
-	builder.WriteString(", ")
-	builder.WriteString("external_link=")
-	builder.WriteString(o.ExternalLink)
-	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(o.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
@@ -207,6 +247,30 @@ func (o *Organization) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(o.UpdatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("address=")
+	builder.WriteString(o.Address)
+	builder.WriteString(", ")
+	builder.WriteString("phone_numbers=")
+	builder.WriteString(fmt.Sprintf("%v", o.PhoneNumbers))
+	builder.WriteString(", ")
+	builder.WriteString("emails=")
+	builder.WriteString(fmt.Sprintf("%v", o.Emails))
+	builder.WriteString(", ")
+	builder.WriteString("display_name=")
+	builder.WriteString(o.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(o.Description)
+	builder.WriteString(", ")
+	builder.WriteString("external_link=")
+	builder.WriteString(o.ExternalLink)
+	builder.WriteString(", ")
+	builder.WriteString("primary_image_url=")
+	builder.WriteString(o.PrimaryImageURL)
+	builder.WriteString(", ")
+	builder.WriteString("additional_images_urls=")
+	builder.WriteString(fmt.Sprintf("%v", o.AdditionalImagesUrls))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -371,10 +371,10 @@ func (a *ArtifactQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				selectedFields = append(selectedFields, artifact.FieldPrimaryImageURL)
 				fieldSeen[artifact.FieldPrimaryImageURL] = struct{}{}
 			}
-		case "additionalImageUrls":
-			if _, ok := fieldSeen[artifact.FieldAdditionalImageUrls]; !ok {
-				selectedFields = append(selectedFields, artifact.FieldAdditionalImageUrls)
-				fieldSeen[artifact.FieldAdditionalImageUrls] = struct{}{}
+		case "additionalImagesUrls":
+			if _, ok := fieldSeen[artifact.FieldAdditionalImagesUrls]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldAdditionalImagesUrls)
+				fieldSeen[artifact.FieldAdditionalImagesUrls] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[artifact.FieldDeletedAt]; !ok {
@@ -2233,21 +2233,6 @@ func (o *OrganizationQuery) collectField(ctx context.Context, opCtx *graphql.Ope
 				return err
 			}
 			o.withHolder = query
-		case "displayName":
-			if _, ok := fieldSeen[organization.FieldDisplayName]; !ok {
-				selectedFields = append(selectedFields, organization.FieldDisplayName)
-				fieldSeen[organization.FieldDisplayName] = struct{}{}
-			}
-		case "description":
-			if _, ok := fieldSeen[organization.FieldDescription]; !ok {
-				selectedFields = append(selectedFields, organization.FieldDescription)
-				fieldSeen[organization.FieldDescription] = struct{}{}
-			}
-		case "externalLink":
-			if _, ok := fieldSeen[organization.FieldExternalLink]; !ok {
-				selectedFields = append(selectedFields, organization.FieldExternalLink)
-				fieldSeen[organization.FieldExternalLink] = struct{}{}
-			}
 		case "createdAt":
 			if _, ok := fieldSeen[organization.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, organization.FieldCreatedAt)
@@ -2267,6 +2252,46 @@ func (o *OrganizationQuery) collectField(ctx context.Context, opCtx *graphql.Ope
 			if _, ok := fieldSeen[organization.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, organization.FieldUpdatedBy)
 				fieldSeen[organization.FieldUpdatedBy] = struct{}{}
+			}
+		case "address":
+			if _, ok := fieldSeen[organization.FieldAddress]; !ok {
+				selectedFields = append(selectedFields, organization.FieldAddress)
+				fieldSeen[organization.FieldAddress] = struct{}{}
+			}
+		case "phoneNumbers":
+			if _, ok := fieldSeen[organization.FieldPhoneNumbers]; !ok {
+				selectedFields = append(selectedFields, organization.FieldPhoneNumbers)
+				fieldSeen[organization.FieldPhoneNumbers] = struct{}{}
+			}
+		case "emails":
+			if _, ok := fieldSeen[organization.FieldEmails]; !ok {
+				selectedFields = append(selectedFields, organization.FieldEmails)
+				fieldSeen[organization.FieldEmails] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[organization.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, organization.FieldDisplayName)
+				fieldSeen[organization.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[organization.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, organization.FieldDescription)
+				fieldSeen[organization.FieldDescription] = struct{}{}
+			}
+		case "externalLink":
+			if _, ok := fieldSeen[organization.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, organization.FieldExternalLink)
+				fieldSeen[organization.FieldExternalLink] = struct{}{}
+			}
+		case "primaryImageURL":
+			if _, ok := fieldSeen[organization.FieldPrimaryImageURL]; !ok {
+				selectedFields = append(selectedFields, organization.FieldPrimaryImageURL)
+				fieldSeen[organization.FieldPrimaryImageURL] = struct{}{}
+			}
+		case "additionalImagesUrls":
+			if _, ok := fieldSeen[organization.FieldAdditionalImagesUrls]; !ok {
+				selectedFields = append(selectedFields, organization.FieldAdditionalImagesUrls)
+				fieldSeen[organization.FieldAdditionalImagesUrls] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -2418,6 +2443,21 @@ func (pe *PersonQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 				selectedFields = append(selectedFields, person.FieldUpdatedBy)
 				fieldSeen[person.FieldUpdatedBy] = struct{}{}
 			}
+		case "address":
+			if _, ok := fieldSeen[person.FieldAddress]; !ok {
+				selectedFields = append(selectedFields, person.FieldAddress)
+				fieldSeen[person.FieldAddress] = struct{}{}
+			}
+		case "phoneNumbers":
+			if _, ok := fieldSeen[person.FieldPhoneNumbers]; !ok {
+				selectedFields = append(selectedFields, person.FieldPhoneNumbers)
+				fieldSeen[person.FieldPhoneNumbers] = struct{}{}
+			}
+		case "emails":
+			if _, ok := fieldSeen[person.FieldEmails]; !ok {
+				selectedFields = append(selectedFields, person.FieldEmails)
+				fieldSeen[person.FieldEmails] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[person.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, person.FieldDisplayName)
@@ -2432,6 +2472,16 @@ func (pe *PersonQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 			if _, ok := fieldSeen[person.FieldExternalLink]; !ok {
 				selectedFields = append(selectedFields, person.FieldExternalLink)
 				fieldSeen[person.FieldExternalLink] = struct{}{}
+			}
+		case "primaryImageURL":
+			if _, ok := fieldSeen[person.FieldPrimaryImageURL]; !ok {
+				selectedFields = append(selectedFields, person.FieldPrimaryImageURL)
+				fieldSeen[person.FieldPrimaryImageURL] = struct{}{}
+			}
+		case "additionalImagesUrls":
+			if _, ok := fieldSeen[person.FieldAdditionalImagesUrls]; !ok {
+				selectedFields = append(selectedFields, person.FieldAdditionalImagesUrls)
+				fieldSeen[person.FieldAdditionalImagesUrls] = struct{}{}
 			}
 		case "id":
 		case "__typename":

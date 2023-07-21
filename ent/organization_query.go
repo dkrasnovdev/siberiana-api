@@ -301,12 +301,12 @@ func (oq *OrganizationQuery) WithHolder(opts ...func(*HolderQuery)) *Organizatio
 // Example:
 //
 //	var v []struct {
-//		DisplayName string `json:"display_name,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Organization.Query().
-//		GroupBy(organization.FieldDisplayName).
+//		GroupBy(organization.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (oq *OrganizationQuery) GroupBy(field string, fields ...string) *OrganizationGroupBy {
@@ -324,11 +324,11 @@ func (oq *OrganizationQuery) GroupBy(field string, fields ...string) *Organizati
 // Example:
 //
 //	var v []struct {
-//		DisplayName string `json:"display_name,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
 //	client.Organization.Query().
-//		Select(organization.FieldDisplayName).
+//		Select(organization.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (oq *OrganizationQuery) Select(fields ...string) *OrganizationSelect {
 	oq.ctx.Fields = append(oq.ctx.Fields, fields...)

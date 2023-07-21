@@ -145,9 +145,9 @@ func (ac *ArtifactCreate) SetNillablePrimaryImageURL(s *string) *ArtifactCreate 
 	return ac
 }
 
-// SetAdditionalImageUrls sets the "additional_image_urls" field.
-func (ac *ArtifactCreate) SetAdditionalImageUrls(s []string) *ArtifactCreate {
-	ac.mutation.SetAdditionalImageUrls(s)
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (ac *ArtifactCreate) SetAdditionalImagesUrls(s []string) *ArtifactCreate {
+	ac.mutation.SetAdditionalImagesUrls(s)
 	return ac
 }
 
@@ -522,9 +522,9 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 		_spec.SetField(artifact.FieldPrimaryImageURL, field.TypeString, value)
 		_node.PrimaryImageURL = value
 	}
-	if value, ok := ac.mutation.AdditionalImageUrls(); ok {
-		_spec.SetField(artifact.FieldAdditionalImageUrls, field.TypeJSON, value)
-		_node.AdditionalImageUrls = value
+	if value, ok := ac.mutation.AdditionalImagesUrls(); ok {
+		_spec.SetField(artifact.FieldAdditionalImagesUrls, field.TypeJSON, value)
+		_node.AdditionalImagesUrls = value
 	}
 	if value, ok := ac.mutation.DeletedAt(); ok {
 		_spec.SetField(artifact.FieldDeletedAt, field.TypeTime, value)

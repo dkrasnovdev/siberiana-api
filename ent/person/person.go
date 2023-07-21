@@ -23,12 +23,22 @@ const (
 	FieldUpdatedAt = "updated_at"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
+	// FieldAddress holds the string denoting the address field in the database.
+	FieldAddress = "address"
+	// FieldPhoneNumbers holds the string denoting the phone_numbers field in the database.
+	FieldPhoneNumbers = "phone_numbers"
+	// FieldEmails holds the string denoting the emails field in the database.
+	FieldEmails = "emails"
 	// FieldDisplayName holds the string denoting the display_name field in the database.
 	FieldDisplayName = "display_name"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
 	// FieldExternalLink holds the string denoting the external_link field in the database.
 	FieldExternalLink = "external_link"
+	// FieldPrimaryImageURL holds the string denoting the primary_image_url field in the database.
+	FieldPrimaryImageURL = "primary_image_url"
+	// FieldAdditionalImagesUrls holds the string denoting the additional_images_urls field in the database.
+	FieldAdditionalImagesUrls = "additional_images_urls"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
 	// EdgeProjects holds the string denoting the projects edge name in mutations.
@@ -70,9 +80,14 @@ var Columns = []string{
 	FieldCreatedBy,
 	FieldUpdatedAt,
 	FieldUpdatedBy,
+	FieldAddress,
+	FieldPhoneNumbers,
+	FieldEmails,
 	FieldDisplayName,
 	FieldDescription,
 	FieldExternalLink,
+	FieldPrimaryImageURL,
+	FieldAdditionalImagesUrls,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "persons"
@@ -152,6 +167,11 @@ func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
 }
 
+// ByAddress orders the results by the address field.
+func ByAddress(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAddress, opts...).ToFunc()
+}
+
 // ByDisplayName orders the results by the display_name field.
 func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisplayName, opts...).ToFunc()
@@ -165,6 +185,11 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByExternalLink orders the results by the external_link field.
 func ByExternalLink(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalLink, opts...).ToFunc()
+}
+
+// ByPrimaryImageURL orders the results by the primary_image_url field.
+func ByPrimaryImageURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPrimaryImageURL, opts...).ToFunc()
 }
 
 // ByArtifactsCount orders the results by artifacts count.

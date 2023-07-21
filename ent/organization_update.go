@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
@@ -26,6 +27,108 @@ type OrganizationUpdate struct {
 // Where appends a list predicates to the OrganizationUpdate builder.
 func (ou *OrganizationUpdate) Where(ps ...predicate.Organization) *OrganizationUpdate {
 	ou.mutation.Where(ps...)
+	return ou
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (ou *OrganizationUpdate) SetCreatedBy(s string) *OrganizationUpdate {
+	ou.mutation.SetCreatedBy(s)
+	return ou
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (ou *OrganizationUpdate) SetNillableCreatedBy(s *string) *OrganizationUpdate {
+	if s != nil {
+		ou.SetCreatedBy(*s)
+	}
+	return ou
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (ou *OrganizationUpdate) ClearCreatedBy() *OrganizationUpdate {
+	ou.mutation.ClearCreatedBy()
+	return ou
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (ou *OrganizationUpdate) SetUpdatedAt(t time.Time) *OrganizationUpdate {
+	ou.mutation.SetUpdatedAt(t)
+	return ou
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (ou *OrganizationUpdate) SetUpdatedBy(s string) *OrganizationUpdate {
+	ou.mutation.SetUpdatedBy(s)
+	return ou
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (ou *OrganizationUpdate) SetNillableUpdatedBy(s *string) *OrganizationUpdate {
+	if s != nil {
+		ou.SetUpdatedBy(*s)
+	}
+	return ou
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (ou *OrganizationUpdate) ClearUpdatedBy() *OrganizationUpdate {
+	ou.mutation.ClearUpdatedBy()
+	return ou
+}
+
+// SetAddress sets the "address" field.
+func (ou *OrganizationUpdate) SetAddress(s string) *OrganizationUpdate {
+	ou.mutation.SetAddress(s)
+	return ou
+}
+
+// SetNillableAddress sets the "address" field if the given value is not nil.
+func (ou *OrganizationUpdate) SetNillableAddress(s *string) *OrganizationUpdate {
+	if s != nil {
+		ou.SetAddress(*s)
+	}
+	return ou
+}
+
+// ClearAddress clears the value of the "address" field.
+func (ou *OrganizationUpdate) ClearAddress() *OrganizationUpdate {
+	ou.mutation.ClearAddress()
+	return ou
+}
+
+// SetPhoneNumbers sets the "phone_numbers" field.
+func (ou *OrganizationUpdate) SetPhoneNumbers(s []string) *OrganizationUpdate {
+	ou.mutation.SetPhoneNumbers(s)
+	return ou
+}
+
+// AppendPhoneNumbers appends s to the "phone_numbers" field.
+func (ou *OrganizationUpdate) AppendPhoneNumbers(s []string) *OrganizationUpdate {
+	ou.mutation.AppendPhoneNumbers(s)
+	return ou
+}
+
+// ClearPhoneNumbers clears the value of the "phone_numbers" field.
+func (ou *OrganizationUpdate) ClearPhoneNumbers() *OrganizationUpdate {
+	ou.mutation.ClearPhoneNumbers()
+	return ou
+}
+
+// SetEmails sets the "emails" field.
+func (ou *OrganizationUpdate) SetEmails(s []string) *OrganizationUpdate {
+	ou.mutation.SetEmails(s)
+	return ou
+}
+
+// AppendEmails appends s to the "emails" field.
+func (ou *OrganizationUpdate) AppendEmails(s []string) *OrganizationUpdate {
+	ou.mutation.AppendEmails(s)
+	return ou
+}
+
+// ClearEmails clears the value of the "emails" field.
+func (ou *OrganizationUpdate) ClearEmails() *OrganizationUpdate {
+	ou.mutation.ClearEmails()
 	return ou
 }
 
@@ -89,49 +192,41 @@ func (ou *OrganizationUpdate) ClearExternalLink() *OrganizationUpdate {
 	return ou
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (ou *OrganizationUpdate) SetCreatedBy(s string) *OrganizationUpdate {
-	ou.mutation.SetCreatedBy(s)
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (ou *OrganizationUpdate) SetPrimaryImageURL(s string) *OrganizationUpdate {
+	ou.mutation.SetPrimaryImageURL(s)
 	return ou
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ou *OrganizationUpdate) SetNillableCreatedBy(s *string) *OrganizationUpdate {
+// SetNillablePrimaryImageURL sets the "primary_image_url" field if the given value is not nil.
+func (ou *OrganizationUpdate) SetNillablePrimaryImageURL(s *string) *OrganizationUpdate {
 	if s != nil {
-		ou.SetCreatedBy(*s)
+		ou.SetPrimaryImageURL(*s)
 	}
 	return ou
 }
 
-// ClearCreatedBy clears the value of the "created_by" field.
-func (ou *OrganizationUpdate) ClearCreatedBy() *OrganizationUpdate {
-	ou.mutation.ClearCreatedBy()
+// ClearPrimaryImageURL clears the value of the "primary_image_url" field.
+func (ou *OrganizationUpdate) ClearPrimaryImageURL() *OrganizationUpdate {
+	ou.mutation.ClearPrimaryImageURL()
 	return ou
 }
 
-// SetUpdatedAt sets the "updated_at" field.
-func (ou *OrganizationUpdate) SetUpdatedAt(t time.Time) *OrganizationUpdate {
-	ou.mutation.SetUpdatedAt(t)
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (ou *OrganizationUpdate) SetAdditionalImagesUrls(s []string) *OrganizationUpdate {
+	ou.mutation.SetAdditionalImagesUrls(s)
 	return ou
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ou *OrganizationUpdate) SetUpdatedBy(s string) *OrganizationUpdate {
-	ou.mutation.SetUpdatedBy(s)
+// AppendAdditionalImagesUrls appends s to the "additional_images_urls" field.
+func (ou *OrganizationUpdate) AppendAdditionalImagesUrls(s []string) *OrganizationUpdate {
+	ou.mutation.AppendAdditionalImagesUrls(s)
 	return ou
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ou *OrganizationUpdate) SetNillableUpdatedBy(s *string) *OrganizationUpdate {
-	if s != nil {
-		ou.SetUpdatedBy(*s)
-	}
-	return ou
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (ou *OrganizationUpdate) ClearUpdatedBy() *OrganizationUpdate {
-	ou.mutation.ClearUpdatedBy()
+// ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
+func (ou *OrganizationUpdate) ClearAdditionalImagesUrls() *OrganizationUpdate {
+	ou.mutation.ClearAdditionalImagesUrls()
 	return ou
 }
 
@@ -216,6 +311,49 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if value, ok := ou.mutation.CreatedBy(); ok {
+		_spec.SetField(organization.FieldCreatedBy, field.TypeString, value)
+	}
+	if ou.mutation.CreatedByCleared() {
+		_spec.ClearField(organization.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := ou.mutation.UpdatedAt(); ok {
+		_spec.SetField(organization.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := ou.mutation.UpdatedBy(); ok {
+		_spec.SetField(organization.FieldUpdatedBy, field.TypeString, value)
+	}
+	if ou.mutation.UpdatedByCleared() {
+		_spec.ClearField(organization.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := ou.mutation.Address(); ok {
+		_spec.SetField(organization.FieldAddress, field.TypeString, value)
+	}
+	if ou.mutation.AddressCleared() {
+		_spec.ClearField(organization.FieldAddress, field.TypeString)
+	}
+	if value, ok := ou.mutation.PhoneNumbers(); ok {
+		_spec.SetField(organization.FieldPhoneNumbers, field.TypeJSON, value)
+	}
+	if value, ok := ou.mutation.AppendedPhoneNumbers(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organization.FieldPhoneNumbers, value)
+		})
+	}
+	if ou.mutation.PhoneNumbersCleared() {
+		_spec.ClearField(organization.FieldPhoneNumbers, field.TypeJSON)
+	}
+	if value, ok := ou.mutation.Emails(); ok {
+		_spec.SetField(organization.FieldEmails, field.TypeJSON, value)
+	}
+	if value, ok := ou.mutation.AppendedEmails(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organization.FieldEmails, value)
+		})
+	}
+	if ou.mutation.EmailsCleared() {
+		_spec.ClearField(organization.FieldEmails, field.TypeJSON)
+	}
 	if value, ok := ou.mutation.DisplayName(); ok {
 		_spec.SetField(organization.FieldDisplayName, field.TypeString, value)
 	}
@@ -234,20 +372,22 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ou.mutation.ExternalLinkCleared() {
 		_spec.ClearField(organization.FieldExternalLink, field.TypeString)
 	}
-	if value, ok := ou.mutation.CreatedBy(); ok {
-		_spec.SetField(organization.FieldCreatedBy, field.TypeString, value)
+	if value, ok := ou.mutation.PrimaryImageURL(); ok {
+		_spec.SetField(organization.FieldPrimaryImageURL, field.TypeString, value)
 	}
-	if ou.mutation.CreatedByCleared() {
-		_spec.ClearField(organization.FieldCreatedBy, field.TypeString)
+	if ou.mutation.PrimaryImageURLCleared() {
+		_spec.ClearField(organization.FieldPrimaryImageURL, field.TypeString)
 	}
-	if value, ok := ou.mutation.UpdatedAt(); ok {
-		_spec.SetField(organization.FieldUpdatedAt, field.TypeTime, value)
+	if value, ok := ou.mutation.AdditionalImagesUrls(); ok {
+		_spec.SetField(organization.FieldAdditionalImagesUrls, field.TypeJSON, value)
 	}
-	if value, ok := ou.mutation.UpdatedBy(); ok {
-		_spec.SetField(organization.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := ou.mutation.AppendedAdditionalImagesUrls(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organization.FieldAdditionalImagesUrls, value)
+		})
 	}
-	if ou.mutation.UpdatedByCleared() {
-		_spec.ClearField(organization.FieldUpdatedBy, field.TypeString)
+	if ou.mutation.AdditionalImagesUrlsCleared() {
+		_spec.ClearField(organization.FieldAdditionalImagesUrls, field.TypeJSON)
 	}
 	if ou.mutation.HolderCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -296,6 +436,108 @@ type OrganizationUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *OrganizationMutation
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (ouo *OrganizationUpdateOne) SetCreatedBy(s string) *OrganizationUpdateOne {
+	ouo.mutation.SetCreatedBy(s)
+	return ouo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (ouo *OrganizationUpdateOne) SetNillableCreatedBy(s *string) *OrganizationUpdateOne {
+	if s != nil {
+		ouo.SetCreatedBy(*s)
+	}
+	return ouo
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (ouo *OrganizationUpdateOne) ClearCreatedBy() *OrganizationUpdateOne {
+	ouo.mutation.ClearCreatedBy()
+	return ouo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (ouo *OrganizationUpdateOne) SetUpdatedAt(t time.Time) *OrganizationUpdateOne {
+	ouo.mutation.SetUpdatedAt(t)
+	return ouo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (ouo *OrganizationUpdateOne) SetUpdatedBy(s string) *OrganizationUpdateOne {
+	ouo.mutation.SetUpdatedBy(s)
+	return ouo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (ouo *OrganizationUpdateOne) SetNillableUpdatedBy(s *string) *OrganizationUpdateOne {
+	if s != nil {
+		ouo.SetUpdatedBy(*s)
+	}
+	return ouo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (ouo *OrganizationUpdateOne) ClearUpdatedBy() *OrganizationUpdateOne {
+	ouo.mutation.ClearUpdatedBy()
+	return ouo
+}
+
+// SetAddress sets the "address" field.
+func (ouo *OrganizationUpdateOne) SetAddress(s string) *OrganizationUpdateOne {
+	ouo.mutation.SetAddress(s)
+	return ouo
+}
+
+// SetNillableAddress sets the "address" field if the given value is not nil.
+func (ouo *OrganizationUpdateOne) SetNillableAddress(s *string) *OrganizationUpdateOne {
+	if s != nil {
+		ouo.SetAddress(*s)
+	}
+	return ouo
+}
+
+// ClearAddress clears the value of the "address" field.
+func (ouo *OrganizationUpdateOne) ClearAddress() *OrganizationUpdateOne {
+	ouo.mutation.ClearAddress()
+	return ouo
+}
+
+// SetPhoneNumbers sets the "phone_numbers" field.
+func (ouo *OrganizationUpdateOne) SetPhoneNumbers(s []string) *OrganizationUpdateOne {
+	ouo.mutation.SetPhoneNumbers(s)
+	return ouo
+}
+
+// AppendPhoneNumbers appends s to the "phone_numbers" field.
+func (ouo *OrganizationUpdateOne) AppendPhoneNumbers(s []string) *OrganizationUpdateOne {
+	ouo.mutation.AppendPhoneNumbers(s)
+	return ouo
+}
+
+// ClearPhoneNumbers clears the value of the "phone_numbers" field.
+func (ouo *OrganizationUpdateOne) ClearPhoneNumbers() *OrganizationUpdateOne {
+	ouo.mutation.ClearPhoneNumbers()
+	return ouo
+}
+
+// SetEmails sets the "emails" field.
+func (ouo *OrganizationUpdateOne) SetEmails(s []string) *OrganizationUpdateOne {
+	ouo.mutation.SetEmails(s)
+	return ouo
+}
+
+// AppendEmails appends s to the "emails" field.
+func (ouo *OrganizationUpdateOne) AppendEmails(s []string) *OrganizationUpdateOne {
+	ouo.mutation.AppendEmails(s)
+	return ouo
+}
+
+// ClearEmails clears the value of the "emails" field.
+func (ouo *OrganizationUpdateOne) ClearEmails() *OrganizationUpdateOne {
+	ouo.mutation.ClearEmails()
+	return ouo
 }
 
 // SetDisplayName sets the "display_name" field.
@@ -358,49 +600,41 @@ func (ouo *OrganizationUpdateOne) ClearExternalLink() *OrganizationUpdateOne {
 	return ouo
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (ouo *OrganizationUpdateOne) SetCreatedBy(s string) *OrganizationUpdateOne {
-	ouo.mutation.SetCreatedBy(s)
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (ouo *OrganizationUpdateOne) SetPrimaryImageURL(s string) *OrganizationUpdateOne {
+	ouo.mutation.SetPrimaryImageURL(s)
 	return ouo
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ouo *OrganizationUpdateOne) SetNillableCreatedBy(s *string) *OrganizationUpdateOne {
+// SetNillablePrimaryImageURL sets the "primary_image_url" field if the given value is not nil.
+func (ouo *OrganizationUpdateOne) SetNillablePrimaryImageURL(s *string) *OrganizationUpdateOne {
 	if s != nil {
-		ouo.SetCreatedBy(*s)
+		ouo.SetPrimaryImageURL(*s)
 	}
 	return ouo
 }
 
-// ClearCreatedBy clears the value of the "created_by" field.
-func (ouo *OrganizationUpdateOne) ClearCreatedBy() *OrganizationUpdateOne {
-	ouo.mutation.ClearCreatedBy()
+// ClearPrimaryImageURL clears the value of the "primary_image_url" field.
+func (ouo *OrganizationUpdateOne) ClearPrimaryImageURL() *OrganizationUpdateOne {
+	ouo.mutation.ClearPrimaryImageURL()
 	return ouo
 }
 
-// SetUpdatedAt sets the "updated_at" field.
-func (ouo *OrganizationUpdateOne) SetUpdatedAt(t time.Time) *OrganizationUpdateOne {
-	ouo.mutation.SetUpdatedAt(t)
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (ouo *OrganizationUpdateOne) SetAdditionalImagesUrls(s []string) *OrganizationUpdateOne {
+	ouo.mutation.SetAdditionalImagesUrls(s)
 	return ouo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ouo *OrganizationUpdateOne) SetUpdatedBy(s string) *OrganizationUpdateOne {
-	ouo.mutation.SetUpdatedBy(s)
+// AppendAdditionalImagesUrls appends s to the "additional_images_urls" field.
+func (ouo *OrganizationUpdateOne) AppendAdditionalImagesUrls(s []string) *OrganizationUpdateOne {
+	ouo.mutation.AppendAdditionalImagesUrls(s)
 	return ouo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ouo *OrganizationUpdateOne) SetNillableUpdatedBy(s *string) *OrganizationUpdateOne {
-	if s != nil {
-		ouo.SetUpdatedBy(*s)
-	}
-	return ouo
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (ouo *OrganizationUpdateOne) ClearUpdatedBy() *OrganizationUpdateOne {
-	ouo.mutation.ClearUpdatedBy()
+// ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
+func (ouo *OrganizationUpdateOne) ClearAdditionalImagesUrls() *OrganizationUpdateOne {
+	ouo.mutation.ClearAdditionalImagesUrls()
 	return ouo
 }
 
@@ -515,6 +749,49 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			}
 		}
 	}
+	if value, ok := ouo.mutation.CreatedBy(); ok {
+		_spec.SetField(organization.FieldCreatedBy, field.TypeString, value)
+	}
+	if ouo.mutation.CreatedByCleared() {
+		_spec.ClearField(organization.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := ouo.mutation.UpdatedAt(); ok {
+		_spec.SetField(organization.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := ouo.mutation.UpdatedBy(); ok {
+		_spec.SetField(organization.FieldUpdatedBy, field.TypeString, value)
+	}
+	if ouo.mutation.UpdatedByCleared() {
+		_spec.ClearField(organization.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := ouo.mutation.Address(); ok {
+		_spec.SetField(organization.FieldAddress, field.TypeString, value)
+	}
+	if ouo.mutation.AddressCleared() {
+		_spec.ClearField(organization.FieldAddress, field.TypeString)
+	}
+	if value, ok := ouo.mutation.PhoneNumbers(); ok {
+		_spec.SetField(organization.FieldPhoneNumbers, field.TypeJSON, value)
+	}
+	if value, ok := ouo.mutation.AppendedPhoneNumbers(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organization.FieldPhoneNumbers, value)
+		})
+	}
+	if ouo.mutation.PhoneNumbersCleared() {
+		_spec.ClearField(organization.FieldPhoneNumbers, field.TypeJSON)
+	}
+	if value, ok := ouo.mutation.Emails(); ok {
+		_spec.SetField(organization.FieldEmails, field.TypeJSON, value)
+	}
+	if value, ok := ouo.mutation.AppendedEmails(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organization.FieldEmails, value)
+		})
+	}
+	if ouo.mutation.EmailsCleared() {
+		_spec.ClearField(organization.FieldEmails, field.TypeJSON)
+	}
 	if value, ok := ouo.mutation.DisplayName(); ok {
 		_spec.SetField(organization.FieldDisplayName, field.TypeString, value)
 	}
@@ -533,20 +810,22 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 	if ouo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(organization.FieldExternalLink, field.TypeString)
 	}
-	if value, ok := ouo.mutation.CreatedBy(); ok {
-		_spec.SetField(organization.FieldCreatedBy, field.TypeString, value)
+	if value, ok := ouo.mutation.PrimaryImageURL(); ok {
+		_spec.SetField(organization.FieldPrimaryImageURL, field.TypeString, value)
 	}
-	if ouo.mutation.CreatedByCleared() {
-		_spec.ClearField(organization.FieldCreatedBy, field.TypeString)
+	if ouo.mutation.PrimaryImageURLCleared() {
+		_spec.ClearField(organization.FieldPrimaryImageURL, field.TypeString)
 	}
-	if value, ok := ouo.mutation.UpdatedAt(); ok {
-		_spec.SetField(organization.FieldUpdatedAt, field.TypeTime, value)
+	if value, ok := ouo.mutation.AdditionalImagesUrls(); ok {
+		_spec.SetField(organization.FieldAdditionalImagesUrls, field.TypeJSON, value)
 	}
-	if value, ok := ouo.mutation.UpdatedBy(); ok {
-		_spec.SetField(organization.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := ouo.mutation.AppendedAdditionalImagesUrls(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organization.FieldAdditionalImagesUrls, value)
+		})
 	}
-	if ouo.mutation.UpdatedByCleared() {
-		_spec.ClearField(organization.FieldUpdatedBy, field.TypeString)
+	if ouo.mutation.AdditionalImagesUrlsCleared() {
+		_spec.ClearField(organization.FieldAdditionalImagesUrls, field.TypeJSON)
 	}
 	if ouo.mutation.HolderCleared() {
 		edge := &sqlgraph.EdgeSpec{

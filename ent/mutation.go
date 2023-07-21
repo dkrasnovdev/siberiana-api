@@ -871,57 +871,57 @@ func (m *ArtStyleMutation) ResetEdge(name string) error {
 // ArtifactMutation represents an operation that mutates the Artifact nodes in the graph.
 type ArtifactMutation struct {
 	config
-	op                          Op
-	typ                         string
-	id                          *int
-	created_at                  *time.Time
-	created_by                  *string
-	updated_at                  *time.Time
-	updated_by                  *string
-	display_name                *string
-	description                 *string
-	external_link               *string
-	primary_image_url           *string
-	additional_image_urls       *[]string
-	appendadditional_image_urls []string
-	deleted_at                  *time.Time
-	deleted_by                  *string
-	clearedFields               map[string]struct{}
-	authors                     map[int]struct{}
-	removedauthors              map[int]struct{}
-	clearedauthors              bool
-	mediums                     map[int]struct{}
-	removedmediums              map[int]struct{}
-	clearedmediums              bool
-	techniques                  map[int]struct{}
-	removedtechniques           map[int]struct{}
-	clearedtechniques           bool
-	projects                    map[int]struct{}
-	removedprojects             map[int]struct{}
-	clearedprojects             bool
-	publications                map[int]struct{}
-	removedpublications         map[int]struct{}
-	clearedpublications         bool
-	holders                     map[int]struct{}
-	removedholders              map[int]struct{}
-	clearedholders              bool
-	cultural_affiliation        *int
-	clearedcultural_affiliation bool
-	monument                    *int
-	clearedmonument             bool
-	model                       *int
-	clearedmodel                bool
-	set                         *int
-	clearedset                  bool
-	location                    *int
-	clearedlocation             bool
-	collection                  *int
-	clearedcollection           bool
-	license                     *int
-	clearedlicense              bool
-	done                        bool
-	oldValue                    func(context.Context) (*Artifact, error)
-	predicates                  []predicate.Artifact
+	op                           Op
+	typ                          string
+	id                           *int
+	created_at                   *time.Time
+	created_by                   *string
+	updated_at                   *time.Time
+	updated_by                   *string
+	display_name                 *string
+	description                  *string
+	external_link                *string
+	primary_image_url            *string
+	additional_images_urls       *[]string
+	appendadditional_images_urls []string
+	deleted_at                   *time.Time
+	deleted_by                   *string
+	clearedFields                map[string]struct{}
+	authors                      map[int]struct{}
+	removedauthors               map[int]struct{}
+	clearedauthors               bool
+	mediums                      map[int]struct{}
+	removedmediums               map[int]struct{}
+	clearedmediums               bool
+	techniques                   map[int]struct{}
+	removedtechniques            map[int]struct{}
+	clearedtechniques            bool
+	projects                     map[int]struct{}
+	removedprojects              map[int]struct{}
+	clearedprojects              bool
+	publications                 map[int]struct{}
+	removedpublications          map[int]struct{}
+	clearedpublications          bool
+	holders                      map[int]struct{}
+	removedholders               map[int]struct{}
+	clearedholders               bool
+	cultural_affiliation         *int
+	clearedcultural_affiliation  bool
+	monument                     *int
+	clearedmonument              bool
+	model                        *int
+	clearedmodel                 bool
+	set                          *int
+	clearedset                   bool
+	location                     *int
+	clearedlocation              bool
+	collection                   *int
+	clearedcollection            bool
+	license                      *int
+	clearedlicense               bool
+	done                         bool
+	oldValue                     func(context.Context) (*Artifact, error)
+	predicates                   []predicate.Artifact
 }
 
 var _ ent.Mutation = (*ArtifactMutation)(nil)
@@ -1388,69 +1388,69 @@ func (m *ArtifactMutation) ResetPrimaryImageURL() {
 	delete(m.clearedFields, artifact.FieldPrimaryImageURL)
 }
 
-// SetAdditionalImageUrls sets the "additional_image_urls" field.
-func (m *ArtifactMutation) SetAdditionalImageUrls(s []string) {
-	m.additional_image_urls = &s
-	m.appendadditional_image_urls = nil
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (m *ArtifactMutation) SetAdditionalImagesUrls(s []string) {
+	m.additional_images_urls = &s
+	m.appendadditional_images_urls = nil
 }
 
-// AdditionalImageUrls returns the value of the "additional_image_urls" field in the mutation.
-func (m *ArtifactMutation) AdditionalImageUrls() (r []string, exists bool) {
-	v := m.additional_image_urls
+// AdditionalImagesUrls returns the value of the "additional_images_urls" field in the mutation.
+func (m *ArtifactMutation) AdditionalImagesUrls() (r []string, exists bool) {
+	v := m.additional_images_urls
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldAdditionalImageUrls returns the old "additional_image_urls" field's value of the Artifact entity.
+// OldAdditionalImagesUrls returns the old "additional_images_urls" field's value of the Artifact entity.
 // If the Artifact object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArtifactMutation) OldAdditionalImageUrls(ctx context.Context) (v []string, err error) {
+func (m *ArtifactMutation) OldAdditionalImagesUrls(ctx context.Context) (v []string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAdditionalImageUrls is only allowed on UpdateOne operations")
+		return v, errors.New("OldAdditionalImagesUrls is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAdditionalImageUrls requires an ID field in the mutation")
+		return v, errors.New("OldAdditionalImagesUrls requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAdditionalImageUrls: %w", err)
+		return v, fmt.Errorf("querying old value for OldAdditionalImagesUrls: %w", err)
 	}
-	return oldValue.AdditionalImageUrls, nil
+	return oldValue.AdditionalImagesUrls, nil
 }
 
-// AppendAdditionalImageUrls adds s to the "additional_image_urls" field.
-func (m *ArtifactMutation) AppendAdditionalImageUrls(s []string) {
-	m.appendadditional_image_urls = append(m.appendadditional_image_urls, s...)
+// AppendAdditionalImagesUrls adds s to the "additional_images_urls" field.
+func (m *ArtifactMutation) AppendAdditionalImagesUrls(s []string) {
+	m.appendadditional_images_urls = append(m.appendadditional_images_urls, s...)
 }
 
-// AppendedAdditionalImageUrls returns the list of values that were appended to the "additional_image_urls" field in this mutation.
-func (m *ArtifactMutation) AppendedAdditionalImageUrls() ([]string, bool) {
-	if len(m.appendadditional_image_urls) == 0 {
+// AppendedAdditionalImagesUrls returns the list of values that were appended to the "additional_images_urls" field in this mutation.
+func (m *ArtifactMutation) AppendedAdditionalImagesUrls() ([]string, bool) {
+	if len(m.appendadditional_images_urls) == 0 {
 		return nil, false
 	}
-	return m.appendadditional_image_urls, true
+	return m.appendadditional_images_urls, true
 }
 
-// ClearAdditionalImageUrls clears the value of the "additional_image_urls" field.
-func (m *ArtifactMutation) ClearAdditionalImageUrls() {
-	m.additional_image_urls = nil
-	m.appendadditional_image_urls = nil
-	m.clearedFields[artifact.FieldAdditionalImageUrls] = struct{}{}
+// ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
+func (m *ArtifactMutation) ClearAdditionalImagesUrls() {
+	m.additional_images_urls = nil
+	m.appendadditional_images_urls = nil
+	m.clearedFields[artifact.FieldAdditionalImagesUrls] = struct{}{}
 }
 
-// AdditionalImageUrlsCleared returns if the "additional_image_urls" field was cleared in this mutation.
-func (m *ArtifactMutation) AdditionalImageUrlsCleared() bool {
-	_, ok := m.clearedFields[artifact.FieldAdditionalImageUrls]
+// AdditionalImagesUrlsCleared returns if the "additional_images_urls" field was cleared in this mutation.
+func (m *ArtifactMutation) AdditionalImagesUrlsCleared() bool {
+	_, ok := m.clearedFields[artifact.FieldAdditionalImagesUrls]
 	return ok
 }
 
-// ResetAdditionalImageUrls resets all changes to the "additional_image_urls" field.
-func (m *ArtifactMutation) ResetAdditionalImageUrls() {
-	m.additional_image_urls = nil
-	m.appendadditional_image_urls = nil
-	delete(m.clearedFields, artifact.FieldAdditionalImageUrls)
+// ResetAdditionalImagesUrls resets all changes to the "additional_images_urls" field.
+func (m *ArtifactMutation) ResetAdditionalImagesUrls() {
+	m.additional_images_urls = nil
+	m.appendadditional_images_urls = nil
+	delete(m.clearedFields, artifact.FieldAdditionalImagesUrls)
 }
 
 // SetDeletedAt sets the "deleted_at" field.
@@ -2207,8 +2207,8 @@ func (m *ArtifactMutation) Fields() []string {
 	if m.primary_image_url != nil {
 		fields = append(fields, artifact.FieldPrimaryImageURL)
 	}
-	if m.additional_image_urls != nil {
-		fields = append(fields, artifact.FieldAdditionalImageUrls)
+	if m.additional_images_urls != nil {
+		fields = append(fields, artifact.FieldAdditionalImagesUrls)
 	}
 	if m.deleted_at != nil {
 		fields = append(fields, artifact.FieldDeletedAt)
@@ -2240,8 +2240,8 @@ func (m *ArtifactMutation) Field(name string) (ent.Value, bool) {
 		return m.ExternalLink()
 	case artifact.FieldPrimaryImageURL:
 		return m.PrimaryImageURL()
-	case artifact.FieldAdditionalImageUrls:
-		return m.AdditionalImageUrls()
+	case artifact.FieldAdditionalImagesUrls:
+		return m.AdditionalImagesUrls()
 	case artifact.FieldDeletedAt:
 		return m.DeletedAt()
 	case artifact.FieldDeletedBy:
@@ -2271,8 +2271,8 @@ func (m *ArtifactMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldExternalLink(ctx)
 	case artifact.FieldPrimaryImageURL:
 		return m.OldPrimaryImageURL(ctx)
-	case artifact.FieldAdditionalImageUrls:
-		return m.OldAdditionalImageUrls(ctx)
+	case artifact.FieldAdditionalImagesUrls:
+		return m.OldAdditionalImagesUrls(ctx)
 	case artifact.FieldDeletedAt:
 		return m.OldDeletedAt(ctx)
 	case artifact.FieldDeletedBy:
@@ -2342,12 +2342,12 @@ func (m *ArtifactMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetPrimaryImageURL(v)
 		return nil
-	case artifact.FieldAdditionalImageUrls:
+	case artifact.FieldAdditionalImagesUrls:
 		v, ok := value.([]string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetAdditionalImageUrls(v)
+		m.SetAdditionalImagesUrls(v)
 		return nil
 	case artifact.FieldDeletedAt:
 		v, ok := value.(time.Time)
@@ -2411,8 +2411,8 @@ func (m *ArtifactMutation) ClearedFields() []string {
 	if m.FieldCleared(artifact.FieldPrimaryImageURL) {
 		fields = append(fields, artifact.FieldPrimaryImageURL)
 	}
-	if m.FieldCleared(artifact.FieldAdditionalImageUrls) {
-		fields = append(fields, artifact.FieldAdditionalImageUrls)
+	if m.FieldCleared(artifact.FieldAdditionalImagesUrls) {
+		fields = append(fields, artifact.FieldAdditionalImagesUrls)
 	}
 	if m.FieldCleared(artifact.FieldDeletedAt) {
 		fields = append(fields, artifact.FieldDeletedAt)
@@ -2452,8 +2452,8 @@ func (m *ArtifactMutation) ClearField(name string) error {
 	case artifact.FieldPrimaryImageURL:
 		m.ClearPrimaryImageURL()
 		return nil
-	case artifact.FieldAdditionalImageUrls:
-		m.ClearAdditionalImageUrls()
+	case artifact.FieldAdditionalImagesUrls:
+		m.ClearAdditionalImagesUrls()
 		return nil
 	case artifact.FieldDeletedAt:
 		m.ClearDeletedAt()
@@ -2493,8 +2493,8 @@ func (m *ArtifactMutation) ResetField(name string) error {
 	case artifact.FieldPrimaryImageURL:
 		m.ResetPrimaryImageURL()
 		return nil
-	case artifact.FieldAdditionalImageUrls:
-		m.ResetAdditionalImageUrls()
+	case artifact.FieldAdditionalImagesUrls:
+		m.ResetAdditionalImagesUrls()
 		return nil
 	case artifact.FieldDeletedAt:
 		m.ResetDeletedAt()
@@ -13661,22 +13661,30 @@ func (m *MonumentMutation) ResetEdge(name string) error {
 // OrganizationMutation represents an operation that mutates the Organization nodes in the graph.
 type OrganizationMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	display_name  *string
-	description   *string
-	external_link *string
-	created_at    *time.Time
-	created_by    *string
-	updated_at    *time.Time
-	updated_by    *string
-	clearedFields map[string]struct{}
-	holder        *int
-	clearedholder bool
-	done          bool
-	oldValue      func(context.Context) (*Organization, error)
-	predicates    []predicate.Organization
+	op                           Op
+	typ                          string
+	id                           *int
+	created_at                   *time.Time
+	created_by                   *string
+	updated_at                   *time.Time
+	updated_by                   *string
+	address                      *string
+	phone_numbers                *[]string
+	appendphone_numbers          []string
+	emails                       *[]string
+	appendemails                 []string
+	display_name                 *string
+	description                  *string
+	external_link                *string
+	primary_image_url            *string
+	additional_images_urls       *[]string
+	appendadditional_images_urls []string
+	clearedFields                map[string]struct{}
+	holder                       *int
+	clearedholder                bool
+	done                         bool
+	oldValue                     func(context.Context) (*Organization, error)
+	predicates                   []predicate.Organization
 }
 
 var _ ent.Mutation = (*OrganizationMutation)(nil)
@@ -13775,153 +13783,6 @@ func (m *OrganizationMutation) IDs(ctx context.Context) ([]int, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
-}
-
-// SetDisplayName sets the "display_name" field.
-func (m *OrganizationMutation) SetDisplayName(s string) {
-	m.display_name = &s
-}
-
-// DisplayName returns the value of the "display_name" field in the mutation.
-func (m *OrganizationMutation) DisplayName() (r string, exists bool) {
-	v := m.display_name
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldDisplayName returns the old "display_name" field's value of the Organization entity.
-// If the Organization object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *OrganizationMutation) OldDisplayName(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDisplayName requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
-	}
-	return oldValue.DisplayName, nil
-}
-
-// ClearDisplayName clears the value of the "display_name" field.
-func (m *OrganizationMutation) ClearDisplayName() {
-	m.display_name = nil
-	m.clearedFields[organization.FieldDisplayName] = struct{}{}
-}
-
-// DisplayNameCleared returns if the "display_name" field was cleared in this mutation.
-func (m *OrganizationMutation) DisplayNameCleared() bool {
-	_, ok := m.clearedFields[organization.FieldDisplayName]
-	return ok
-}
-
-// ResetDisplayName resets all changes to the "display_name" field.
-func (m *OrganizationMutation) ResetDisplayName() {
-	m.display_name = nil
-	delete(m.clearedFields, organization.FieldDisplayName)
-}
-
-// SetDescription sets the "description" field.
-func (m *OrganizationMutation) SetDescription(s string) {
-	m.description = &s
-}
-
-// Description returns the value of the "description" field in the mutation.
-func (m *OrganizationMutation) Description() (r string, exists bool) {
-	v := m.description
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldDescription returns the old "description" field's value of the Organization entity.
-// If the Organization object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *OrganizationMutation) OldDescription(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDescription requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
-	}
-	return oldValue.Description, nil
-}
-
-// ClearDescription clears the value of the "description" field.
-func (m *OrganizationMutation) ClearDescription() {
-	m.description = nil
-	m.clearedFields[organization.FieldDescription] = struct{}{}
-}
-
-// DescriptionCleared returns if the "description" field was cleared in this mutation.
-func (m *OrganizationMutation) DescriptionCleared() bool {
-	_, ok := m.clearedFields[organization.FieldDescription]
-	return ok
-}
-
-// ResetDescription resets all changes to the "description" field.
-func (m *OrganizationMutation) ResetDescription() {
-	m.description = nil
-	delete(m.clearedFields, organization.FieldDescription)
-}
-
-// SetExternalLink sets the "external_link" field.
-func (m *OrganizationMutation) SetExternalLink(s string) {
-	m.external_link = &s
-}
-
-// ExternalLink returns the value of the "external_link" field in the mutation.
-func (m *OrganizationMutation) ExternalLink() (r string, exists bool) {
-	v := m.external_link
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldExternalLink returns the old "external_link" field's value of the Organization entity.
-// If the Organization object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *OrganizationMutation) OldExternalLink(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalLink requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
-	}
-	return oldValue.ExternalLink, nil
-}
-
-// ClearExternalLink clears the value of the "external_link" field.
-func (m *OrganizationMutation) ClearExternalLink() {
-	m.external_link = nil
-	m.clearedFields[organization.FieldExternalLink] = struct{}{}
-}
-
-// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
-func (m *OrganizationMutation) ExternalLinkCleared() bool {
-	_, ok := m.clearedFields[organization.FieldExternalLink]
-	return ok
-}
-
-// ResetExternalLink resets all changes to the "external_link" field.
-func (m *OrganizationMutation) ResetExternalLink() {
-	m.external_link = nil
-	delete(m.clearedFields, organization.FieldExternalLink)
 }
 
 // SetCreatedAt sets the "created_at" field.
@@ -14094,6 +13955,446 @@ func (m *OrganizationMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, organization.FieldUpdatedBy)
 }
 
+// SetAddress sets the "address" field.
+func (m *OrganizationMutation) SetAddress(s string) {
+	m.address = &s
+}
+
+// Address returns the value of the "address" field in the mutation.
+func (m *OrganizationMutation) Address() (r string, exists bool) {
+	v := m.address
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAddress returns the old "address" field's value of the Organization entity.
+// If the Organization object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationMutation) OldAddress(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAddress is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAddress requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAddress: %w", err)
+	}
+	return oldValue.Address, nil
+}
+
+// ClearAddress clears the value of the "address" field.
+func (m *OrganizationMutation) ClearAddress() {
+	m.address = nil
+	m.clearedFields[organization.FieldAddress] = struct{}{}
+}
+
+// AddressCleared returns if the "address" field was cleared in this mutation.
+func (m *OrganizationMutation) AddressCleared() bool {
+	_, ok := m.clearedFields[organization.FieldAddress]
+	return ok
+}
+
+// ResetAddress resets all changes to the "address" field.
+func (m *OrganizationMutation) ResetAddress() {
+	m.address = nil
+	delete(m.clearedFields, organization.FieldAddress)
+}
+
+// SetPhoneNumbers sets the "phone_numbers" field.
+func (m *OrganizationMutation) SetPhoneNumbers(s []string) {
+	m.phone_numbers = &s
+	m.appendphone_numbers = nil
+}
+
+// PhoneNumbers returns the value of the "phone_numbers" field in the mutation.
+func (m *OrganizationMutation) PhoneNumbers() (r []string, exists bool) {
+	v := m.phone_numbers
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPhoneNumbers returns the old "phone_numbers" field's value of the Organization entity.
+// If the Organization object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationMutation) OldPhoneNumbers(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPhoneNumbers is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPhoneNumbers requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPhoneNumbers: %w", err)
+	}
+	return oldValue.PhoneNumbers, nil
+}
+
+// AppendPhoneNumbers adds s to the "phone_numbers" field.
+func (m *OrganizationMutation) AppendPhoneNumbers(s []string) {
+	m.appendphone_numbers = append(m.appendphone_numbers, s...)
+}
+
+// AppendedPhoneNumbers returns the list of values that were appended to the "phone_numbers" field in this mutation.
+func (m *OrganizationMutation) AppendedPhoneNumbers() ([]string, bool) {
+	if len(m.appendphone_numbers) == 0 {
+		return nil, false
+	}
+	return m.appendphone_numbers, true
+}
+
+// ClearPhoneNumbers clears the value of the "phone_numbers" field.
+func (m *OrganizationMutation) ClearPhoneNumbers() {
+	m.phone_numbers = nil
+	m.appendphone_numbers = nil
+	m.clearedFields[organization.FieldPhoneNumbers] = struct{}{}
+}
+
+// PhoneNumbersCleared returns if the "phone_numbers" field was cleared in this mutation.
+func (m *OrganizationMutation) PhoneNumbersCleared() bool {
+	_, ok := m.clearedFields[organization.FieldPhoneNumbers]
+	return ok
+}
+
+// ResetPhoneNumbers resets all changes to the "phone_numbers" field.
+func (m *OrganizationMutation) ResetPhoneNumbers() {
+	m.phone_numbers = nil
+	m.appendphone_numbers = nil
+	delete(m.clearedFields, organization.FieldPhoneNumbers)
+}
+
+// SetEmails sets the "emails" field.
+func (m *OrganizationMutation) SetEmails(s []string) {
+	m.emails = &s
+	m.appendemails = nil
+}
+
+// Emails returns the value of the "emails" field in the mutation.
+func (m *OrganizationMutation) Emails() (r []string, exists bool) {
+	v := m.emails
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEmails returns the old "emails" field's value of the Organization entity.
+// If the Organization object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationMutation) OldEmails(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEmails is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEmails requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEmails: %w", err)
+	}
+	return oldValue.Emails, nil
+}
+
+// AppendEmails adds s to the "emails" field.
+func (m *OrganizationMutation) AppendEmails(s []string) {
+	m.appendemails = append(m.appendemails, s...)
+}
+
+// AppendedEmails returns the list of values that were appended to the "emails" field in this mutation.
+func (m *OrganizationMutation) AppendedEmails() ([]string, bool) {
+	if len(m.appendemails) == 0 {
+		return nil, false
+	}
+	return m.appendemails, true
+}
+
+// ClearEmails clears the value of the "emails" field.
+func (m *OrganizationMutation) ClearEmails() {
+	m.emails = nil
+	m.appendemails = nil
+	m.clearedFields[organization.FieldEmails] = struct{}{}
+}
+
+// EmailsCleared returns if the "emails" field was cleared in this mutation.
+func (m *OrganizationMutation) EmailsCleared() bool {
+	_, ok := m.clearedFields[organization.FieldEmails]
+	return ok
+}
+
+// ResetEmails resets all changes to the "emails" field.
+func (m *OrganizationMutation) ResetEmails() {
+	m.emails = nil
+	m.appendemails = nil
+	delete(m.clearedFields, organization.FieldEmails)
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *OrganizationMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *OrganizationMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the Organization entity.
+// If the Organization object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (m *OrganizationMutation) ClearDisplayName() {
+	m.display_name = nil
+	m.clearedFields[organization.FieldDisplayName] = struct{}{}
+}
+
+// DisplayNameCleared returns if the "display_name" field was cleared in this mutation.
+func (m *OrganizationMutation) DisplayNameCleared() bool {
+	_, ok := m.clearedFields[organization.FieldDisplayName]
+	return ok
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *OrganizationMutation) ResetDisplayName() {
+	m.display_name = nil
+	delete(m.clearedFields, organization.FieldDisplayName)
+}
+
+// SetDescription sets the "description" field.
+func (m *OrganizationMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *OrganizationMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the Organization entity.
+// If the Organization object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *OrganizationMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[organization.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *OrganizationMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[organization.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *OrganizationMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, organization.FieldDescription)
+}
+
+// SetExternalLink sets the "external_link" field.
+func (m *OrganizationMutation) SetExternalLink(s string) {
+	m.external_link = &s
+}
+
+// ExternalLink returns the value of the "external_link" field in the mutation.
+func (m *OrganizationMutation) ExternalLink() (r string, exists bool) {
+	v := m.external_link
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalLink returns the old "external_link" field's value of the Organization entity.
+// If the Organization object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+	}
+	return oldValue.ExternalLink, nil
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (m *OrganizationMutation) ClearExternalLink() {
+	m.external_link = nil
+	m.clearedFields[organization.FieldExternalLink] = struct{}{}
+}
+
+// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
+func (m *OrganizationMutation) ExternalLinkCleared() bool {
+	_, ok := m.clearedFields[organization.FieldExternalLink]
+	return ok
+}
+
+// ResetExternalLink resets all changes to the "external_link" field.
+func (m *OrganizationMutation) ResetExternalLink() {
+	m.external_link = nil
+	delete(m.clearedFields, organization.FieldExternalLink)
+}
+
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (m *OrganizationMutation) SetPrimaryImageURL(s string) {
+	m.primary_image_url = &s
+}
+
+// PrimaryImageURL returns the value of the "primary_image_url" field in the mutation.
+func (m *OrganizationMutation) PrimaryImageURL() (r string, exists bool) {
+	v := m.primary_image_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPrimaryImageURL returns the old "primary_image_url" field's value of the Organization entity.
+// If the Organization object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationMutation) OldPrimaryImageURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPrimaryImageURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPrimaryImageURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPrimaryImageURL: %w", err)
+	}
+	return oldValue.PrimaryImageURL, nil
+}
+
+// ClearPrimaryImageURL clears the value of the "primary_image_url" field.
+func (m *OrganizationMutation) ClearPrimaryImageURL() {
+	m.primary_image_url = nil
+	m.clearedFields[organization.FieldPrimaryImageURL] = struct{}{}
+}
+
+// PrimaryImageURLCleared returns if the "primary_image_url" field was cleared in this mutation.
+func (m *OrganizationMutation) PrimaryImageURLCleared() bool {
+	_, ok := m.clearedFields[organization.FieldPrimaryImageURL]
+	return ok
+}
+
+// ResetPrimaryImageURL resets all changes to the "primary_image_url" field.
+func (m *OrganizationMutation) ResetPrimaryImageURL() {
+	m.primary_image_url = nil
+	delete(m.clearedFields, organization.FieldPrimaryImageURL)
+}
+
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (m *OrganizationMutation) SetAdditionalImagesUrls(s []string) {
+	m.additional_images_urls = &s
+	m.appendadditional_images_urls = nil
+}
+
+// AdditionalImagesUrls returns the value of the "additional_images_urls" field in the mutation.
+func (m *OrganizationMutation) AdditionalImagesUrls() (r []string, exists bool) {
+	v := m.additional_images_urls
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAdditionalImagesUrls returns the old "additional_images_urls" field's value of the Organization entity.
+// If the Organization object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationMutation) OldAdditionalImagesUrls(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAdditionalImagesUrls is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAdditionalImagesUrls requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAdditionalImagesUrls: %w", err)
+	}
+	return oldValue.AdditionalImagesUrls, nil
+}
+
+// AppendAdditionalImagesUrls adds s to the "additional_images_urls" field.
+func (m *OrganizationMutation) AppendAdditionalImagesUrls(s []string) {
+	m.appendadditional_images_urls = append(m.appendadditional_images_urls, s...)
+}
+
+// AppendedAdditionalImagesUrls returns the list of values that were appended to the "additional_images_urls" field in this mutation.
+func (m *OrganizationMutation) AppendedAdditionalImagesUrls() ([]string, bool) {
+	if len(m.appendadditional_images_urls) == 0 {
+		return nil, false
+	}
+	return m.appendadditional_images_urls, true
+}
+
+// ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
+func (m *OrganizationMutation) ClearAdditionalImagesUrls() {
+	m.additional_images_urls = nil
+	m.appendadditional_images_urls = nil
+	m.clearedFields[organization.FieldAdditionalImagesUrls] = struct{}{}
+}
+
+// AdditionalImagesUrlsCleared returns if the "additional_images_urls" field was cleared in this mutation.
+func (m *OrganizationMutation) AdditionalImagesUrlsCleared() bool {
+	_, ok := m.clearedFields[organization.FieldAdditionalImagesUrls]
+	return ok
+}
+
+// ResetAdditionalImagesUrls resets all changes to the "additional_images_urls" field.
+func (m *OrganizationMutation) ResetAdditionalImagesUrls() {
+	m.additional_images_urls = nil
+	m.appendadditional_images_urls = nil
+	delete(m.clearedFields, organization.FieldAdditionalImagesUrls)
+}
+
 // SetHolderID sets the "holder" edge to the Holder entity by id.
 func (m *OrganizationMutation) SetHolderID(id int) {
 	m.holder = &id
@@ -14167,16 +14468,7 @@ func (m *OrganizationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrganizationMutation) Fields() []string {
-	fields := make([]string, 0, 7)
-	if m.display_name != nil {
-		fields = append(fields, organization.FieldDisplayName)
-	}
-	if m.description != nil {
-		fields = append(fields, organization.FieldDescription)
-	}
-	if m.external_link != nil {
-		fields = append(fields, organization.FieldExternalLink)
-	}
+	fields := make([]string, 0, 12)
 	if m.created_at != nil {
 		fields = append(fields, organization.FieldCreatedAt)
 	}
@@ -14189,6 +14481,30 @@ func (m *OrganizationMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, organization.FieldUpdatedBy)
 	}
+	if m.address != nil {
+		fields = append(fields, organization.FieldAddress)
+	}
+	if m.phone_numbers != nil {
+		fields = append(fields, organization.FieldPhoneNumbers)
+	}
+	if m.emails != nil {
+		fields = append(fields, organization.FieldEmails)
+	}
+	if m.display_name != nil {
+		fields = append(fields, organization.FieldDisplayName)
+	}
+	if m.description != nil {
+		fields = append(fields, organization.FieldDescription)
+	}
+	if m.external_link != nil {
+		fields = append(fields, organization.FieldExternalLink)
+	}
+	if m.primary_image_url != nil {
+		fields = append(fields, organization.FieldPrimaryImageURL)
+	}
+	if m.additional_images_urls != nil {
+		fields = append(fields, organization.FieldAdditionalImagesUrls)
+	}
 	return fields
 }
 
@@ -14197,12 +14513,6 @@ func (m *OrganizationMutation) Fields() []string {
 // schema.
 func (m *OrganizationMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case organization.FieldDisplayName:
-		return m.DisplayName()
-	case organization.FieldDescription:
-		return m.Description()
-	case organization.FieldExternalLink:
-		return m.ExternalLink()
 	case organization.FieldCreatedAt:
 		return m.CreatedAt()
 	case organization.FieldCreatedBy:
@@ -14211,6 +14521,22 @@ func (m *OrganizationMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case organization.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case organization.FieldAddress:
+		return m.Address()
+	case organization.FieldPhoneNumbers:
+		return m.PhoneNumbers()
+	case organization.FieldEmails:
+		return m.Emails()
+	case organization.FieldDisplayName:
+		return m.DisplayName()
+	case organization.FieldDescription:
+		return m.Description()
+	case organization.FieldExternalLink:
+		return m.ExternalLink()
+	case organization.FieldPrimaryImageURL:
+		return m.PrimaryImageURL()
+	case organization.FieldAdditionalImagesUrls:
+		return m.AdditionalImagesUrls()
 	}
 	return nil, false
 }
@@ -14220,12 +14546,6 @@ func (m *OrganizationMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *OrganizationMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case organization.FieldDisplayName:
-		return m.OldDisplayName(ctx)
-	case organization.FieldDescription:
-		return m.OldDescription(ctx)
-	case organization.FieldExternalLink:
-		return m.OldExternalLink(ctx)
 	case organization.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case organization.FieldCreatedBy:
@@ -14234,6 +14554,22 @@ func (m *OrganizationMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldUpdatedAt(ctx)
 	case organization.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case organization.FieldAddress:
+		return m.OldAddress(ctx)
+	case organization.FieldPhoneNumbers:
+		return m.OldPhoneNumbers(ctx)
+	case organization.FieldEmails:
+		return m.OldEmails(ctx)
+	case organization.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case organization.FieldDescription:
+		return m.OldDescription(ctx)
+	case organization.FieldExternalLink:
+		return m.OldExternalLink(ctx)
+	case organization.FieldPrimaryImageURL:
+		return m.OldPrimaryImageURL(ctx)
+	case organization.FieldAdditionalImagesUrls:
+		return m.OldAdditionalImagesUrls(ctx)
 	}
 	return nil, fmt.Errorf("unknown Organization field %s", name)
 }
@@ -14243,27 +14579,6 @@ func (m *OrganizationMutation) OldField(ctx context.Context, name string) (ent.V
 // type.
 func (m *OrganizationMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case organization.FieldDisplayName:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetDisplayName(v)
-		return nil
-	case organization.FieldDescription:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetDescription(v)
-		return nil
-	case organization.FieldExternalLink:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetExternalLink(v)
-		return nil
 	case organization.FieldCreatedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -14291,6 +14606,62 @@ func (m *OrganizationMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case organization.FieldAddress:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAddress(v)
+		return nil
+	case organization.FieldPhoneNumbers:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPhoneNumbers(v)
+		return nil
+	case organization.FieldEmails:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEmails(v)
+		return nil
+	case organization.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case organization.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case organization.FieldExternalLink:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalLink(v)
+		return nil
+	case organization.FieldPrimaryImageURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPrimaryImageURL(v)
+		return nil
+	case organization.FieldAdditionalImagesUrls:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAdditionalImagesUrls(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Organization field %s", name)
@@ -14322,6 +14693,21 @@ func (m *OrganizationMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *OrganizationMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(organization.FieldCreatedBy) {
+		fields = append(fields, organization.FieldCreatedBy)
+	}
+	if m.FieldCleared(organization.FieldUpdatedBy) {
+		fields = append(fields, organization.FieldUpdatedBy)
+	}
+	if m.FieldCleared(organization.FieldAddress) {
+		fields = append(fields, organization.FieldAddress)
+	}
+	if m.FieldCleared(organization.FieldPhoneNumbers) {
+		fields = append(fields, organization.FieldPhoneNumbers)
+	}
+	if m.FieldCleared(organization.FieldEmails) {
+		fields = append(fields, organization.FieldEmails)
+	}
 	if m.FieldCleared(organization.FieldDisplayName) {
 		fields = append(fields, organization.FieldDisplayName)
 	}
@@ -14331,11 +14717,11 @@ func (m *OrganizationMutation) ClearedFields() []string {
 	if m.FieldCleared(organization.FieldExternalLink) {
 		fields = append(fields, organization.FieldExternalLink)
 	}
-	if m.FieldCleared(organization.FieldCreatedBy) {
-		fields = append(fields, organization.FieldCreatedBy)
+	if m.FieldCleared(organization.FieldPrimaryImageURL) {
+		fields = append(fields, organization.FieldPrimaryImageURL)
 	}
-	if m.FieldCleared(organization.FieldUpdatedBy) {
-		fields = append(fields, organization.FieldUpdatedBy)
+	if m.FieldCleared(organization.FieldAdditionalImagesUrls) {
+		fields = append(fields, organization.FieldAdditionalImagesUrls)
 	}
 	return fields
 }
@@ -14351,6 +14737,21 @@ func (m *OrganizationMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *OrganizationMutation) ClearField(name string) error {
 	switch name {
+	case organization.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case organization.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case organization.FieldAddress:
+		m.ClearAddress()
+		return nil
+	case organization.FieldPhoneNumbers:
+		m.ClearPhoneNumbers()
+		return nil
+	case organization.FieldEmails:
+		m.ClearEmails()
+		return nil
 	case organization.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -14360,11 +14761,11 @@ func (m *OrganizationMutation) ClearField(name string) error {
 	case organization.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
-	case organization.FieldCreatedBy:
-		m.ClearCreatedBy()
+	case organization.FieldPrimaryImageURL:
+		m.ClearPrimaryImageURL()
 		return nil
-	case organization.FieldUpdatedBy:
-		m.ClearUpdatedBy()
+	case organization.FieldAdditionalImagesUrls:
+		m.ClearAdditionalImagesUrls()
 		return nil
 	}
 	return fmt.Errorf("unknown Organization nullable field %s", name)
@@ -14374,15 +14775,6 @@ func (m *OrganizationMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *OrganizationMutation) ResetField(name string) error {
 	switch name {
-	case organization.FieldDisplayName:
-		m.ResetDisplayName()
-		return nil
-	case organization.FieldDescription:
-		m.ResetDescription()
-		return nil
-	case organization.FieldExternalLink:
-		m.ResetExternalLink()
-		return nil
 	case organization.FieldCreatedAt:
 		m.ResetCreatedAt()
 		return nil
@@ -14394,6 +14786,30 @@ func (m *OrganizationMutation) ResetField(name string) error {
 		return nil
 	case organization.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case organization.FieldAddress:
+		m.ResetAddress()
+		return nil
+	case organization.FieldPhoneNumbers:
+		m.ResetPhoneNumbers()
+		return nil
+	case organization.FieldEmails:
+		m.ResetEmails()
+		return nil
+	case organization.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case organization.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case organization.FieldExternalLink:
+		m.ResetExternalLink()
+		return nil
+	case organization.FieldPrimaryImageURL:
+		m.ResetPrimaryImageURL()
+		return nil
+	case organization.FieldAdditionalImagesUrls:
+		m.ResetAdditionalImagesUrls()
 		return nil
 	}
 	return fmt.Errorf("unknown Organization field %s", name)
@@ -14476,31 +14892,39 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 // PersonMutation represents an operation that mutates the Person nodes in the graph.
 type PersonMutation struct {
 	config
-	op                  Op
-	typ                 string
-	id                  *int
-	created_at          *time.Time
-	created_by          *string
-	updated_at          *time.Time
-	updated_by          *string
-	display_name        *string
-	description         *string
-	external_link       *string
-	clearedFields       map[string]struct{}
-	artifacts           map[int]struct{}
-	removedartifacts    map[int]struct{}
-	clearedartifacts    bool
-	projects            map[int]struct{}
-	removedprojects     map[int]struct{}
-	clearedprojects     bool
-	publications        map[int]struct{}
-	removedpublications map[int]struct{}
-	clearedpublications bool
-	holder              *int
-	clearedholder       bool
-	done                bool
-	oldValue            func(context.Context) (*Person, error)
-	predicates          []predicate.Person
+	op                           Op
+	typ                          string
+	id                           *int
+	created_at                   *time.Time
+	created_by                   *string
+	updated_at                   *time.Time
+	updated_by                   *string
+	address                      *string
+	phone_numbers                *[]string
+	appendphone_numbers          []string
+	emails                       *[]string
+	appendemails                 []string
+	display_name                 *string
+	description                  *string
+	external_link                *string
+	primary_image_url            *string
+	additional_images_urls       *[]string
+	appendadditional_images_urls []string
+	clearedFields                map[string]struct{}
+	artifacts                    map[int]struct{}
+	removedartifacts             map[int]struct{}
+	clearedartifacts             bool
+	projects                     map[int]struct{}
+	removedprojects              map[int]struct{}
+	clearedprojects              bool
+	publications                 map[int]struct{}
+	removedpublications          map[int]struct{}
+	clearedpublications          bool
+	holder                       *int
+	clearedholder                bool
+	done                         bool
+	oldValue                     func(context.Context) (*Person, error)
+	predicates                   []predicate.Person
 }
 
 var _ ent.Mutation = (*PersonMutation)(nil)
@@ -14771,6 +15195,185 @@ func (m *PersonMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, person.FieldUpdatedBy)
 }
 
+// SetAddress sets the "address" field.
+func (m *PersonMutation) SetAddress(s string) {
+	m.address = &s
+}
+
+// Address returns the value of the "address" field in the mutation.
+func (m *PersonMutation) Address() (r string, exists bool) {
+	v := m.address
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAddress returns the old "address" field's value of the Person entity.
+// If the Person object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonMutation) OldAddress(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAddress is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAddress requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAddress: %w", err)
+	}
+	return oldValue.Address, nil
+}
+
+// ClearAddress clears the value of the "address" field.
+func (m *PersonMutation) ClearAddress() {
+	m.address = nil
+	m.clearedFields[person.FieldAddress] = struct{}{}
+}
+
+// AddressCleared returns if the "address" field was cleared in this mutation.
+func (m *PersonMutation) AddressCleared() bool {
+	_, ok := m.clearedFields[person.FieldAddress]
+	return ok
+}
+
+// ResetAddress resets all changes to the "address" field.
+func (m *PersonMutation) ResetAddress() {
+	m.address = nil
+	delete(m.clearedFields, person.FieldAddress)
+}
+
+// SetPhoneNumbers sets the "phone_numbers" field.
+func (m *PersonMutation) SetPhoneNumbers(s []string) {
+	m.phone_numbers = &s
+	m.appendphone_numbers = nil
+}
+
+// PhoneNumbers returns the value of the "phone_numbers" field in the mutation.
+func (m *PersonMutation) PhoneNumbers() (r []string, exists bool) {
+	v := m.phone_numbers
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPhoneNumbers returns the old "phone_numbers" field's value of the Person entity.
+// If the Person object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonMutation) OldPhoneNumbers(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPhoneNumbers is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPhoneNumbers requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPhoneNumbers: %w", err)
+	}
+	return oldValue.PhoneNumbers, nil
+}
+
+// AppendPhoneNumbers adds s to the "phone_numbers" field.
+func (m *PersonMutation) AppendPhoneNumbers(s []string) {
+	m.appendphone_numbers = append(m.appendphone_numbers, s...)
+}
+
+// AppendedPhoneNumbers returns the list of values that were appended to the "phone_numbers" field in this mutation.
+func (m *PersonMutation) AppendedPhoneNumbers() ([]string, bool) {
+	if len(m.appendphone_numbers) == 0 {
+		return nil, false
+	}
+	return m.appendphone_numbers, true
+}
+
+// ClearPhoneNumbers clears the value of the "phone_numbers" field.
+func (m *PersonMutation) ClearPhoneNumbers() {
+	m.phone_numbers = nil
+	m.appendphone_numbers = nil
+	m.clearedFields[person.FieldPhoneNumbers] = struct{}{}
+}
+
+// PhoneNumbersCleared returns if the "phone_numbers" field was cleared in this mutation.
+func (m *PersonMutation) PhoneNumbersCleared() bool {
+	_, ok := m.clearedFields[person.FieldPhoneNumbers]
+	return ok
+}
+
+// ResetPhoneNumbers resets all changes to the "phone_numbers" field.
+func (m *PersonMutation) ResetPhoneNumbers() {
+	m.phone_numbers = nil
+	m.appendphone_numbers = nil
+	delete(m.clearedFields, person.FieldPhoneNumbers)
+}
+
+// SetEmails sets the "emails" field.
+func (m *PersonMutation) SetEmails(s []string) {
+	m.emails = &s
+	m.appendemails = nil
+}
+
+// Emails returns the value of the "emails" field in the mutation.
+func (m *PersonMutation) Emails() (r []string, exists bool) {
+	v := m.emails
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEmails returns the old "emails" field's value of the Person entity.
+// If the Person object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonMutation) OldEmails(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEmails is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEmails requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEmails: %w", err)
+	}
+	return oldValue.Emails, nil
+}
+
+// AppendEmails adds s to the "emails" field.
+func (m *PersonMutation) AppendEmails(s []string) {
+	m.appendemails = append(m.appendemails, s...)
+}
+
+// AppendedEmails returns the list of values that were appended to the "emails" field in this mutation.
+func (m *PersonMutation) AppendedEmails() ([]string, bool) {
+	if len(m.appendemails) == 0 {
+		return nil, false
+	}
+	return m.appendemails, true
+}
+
+// ClearEmails clears the value of the "emails" field.
+func (m *PersonMutation) ClearEmails() {
+	m.emails = nil
+	m.appendemails = nil
+	m.clearedFields[person.FieldEmails] = struct{}{}
+}
+
+// EmailsCleared returns if the "emails" field was cleared in this mutation.
+func (m *PersonMutation) EmailsCleared() bool {
+	_, ok := m.clearedFields[person.FieldEmails]
+	return ok
+}
+
+// ResetEmails resets all changes to the "emails" field.
+func (m *PersonMutation) ResetEmails() {
+	m.emails = nil
+	m.appendemails = nil
+	delete(m.clearedFields, person.FieldEmails)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *PersonMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -14916,6 +15519,120 @@ func (m *PersonMutation) ExternalLinkCleared() bool {
 func (m *PersonMutation) ResetExternalLink() {
 	m.external_link = nil
 	delete(m.clearedFields, person.FieldExternalLink)
+}
+
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (m *PersonMutation) SetPrimaryImageURL(s string) {
+	m.primary_image_url = &s
+}
+
+// PrimaryImageURL returns the value of the "primary_image_url" field in the mutation.
+func (m *PersonMutation) PrimaryImageURL() (r string, exists bool) {
+	v := m.primary_image_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPrimaryImageURL returns the old "primary_image_url" field's value of the Person entity.
+// If the Person object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonMutation) OldPrimaryImageURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPrimaryImageURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPrimaryImageURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPrimaryImageURL: %w", err)
+	}
+	return oldValue.PrimaryImageURL, nil
+}
+
+// ClearPrimaryImageURL clears the value of the "primary_image_url" field.
+func (m *PersonMutation) ClearPrimaryImageURL() {
+	m.primary_image_url = nil
+	m.clearedFields[person.FieldPrimaryImageURL] = struct{}{}
+}
+
+// PrimaryImageURLCleared returns if the "primary_image_url" field was cleared in this mutation.
+func (m *PersonMutation) PrimaryImageURLCleared() bool {
+	_, ok := m.clearedFields[person.FieldPrimaryImageURL]
+	return ok
+}
+
+// ResetPrimaryImageURL resets all changes to the "primary_image_url" field.
+func (m *PersonMutation) ResetPrimaryImageURL() {
+	m.primary_image_url = nil
+	delete(m.clearedFields, person.FieldPrimaryImageURL)
+}
+
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (m *PersonMutation) SetAdditionalImagesUrls(s []string) {
+	m.additional_images_urls = &s
+	m.appendadditional_images_urls = nil
+}
+
+// AdditionalImagesUrls returns the value of the "additional_images_urls" field in the mutation.
+func (m *PersonMutation) AdditionalImagesUrls() (r []string, exists bool) {
+	v := m.additional_images_urls
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAdditionalImagesUrls returns the old "additional_images_urls" field's value of the Person entity.
+// If the Person object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonMutation) OldAdditionalImagesUrls(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAdditionalImagesUrls is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAdditionalImagesUrls requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAdditionalImagesUrls: %w", err)
+	}
+	return oldValue.AdditionalImagesUrls, nil
+}
+
+// AppendAdditionalImagesUrls adds s to the "additional_images_urls" field.
+func (m *PersonMutation) AppendAdditionalImagesUrls(s []string) {
+	m.appendadditional_images_urls = append(m.appendadditional_images_urls, s...)
+}
+
+// AppendedAdditionalImagesUrls returns the list of values that were appended to the "additional_images_urls" field in this mutation.
+func (m *PersonMutation) AppendedAdditionalImagesUrls() ([]string, bool) {
+	if len(m.appendadditional_images_urls) == 0 {
+		return nil, false
+	}
+	return m.appendadditional_images_urls, true
+}
+
+// ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
+func (m *PersonMutation) ClearAdditionalImagesUrls() {
+	m.additional_images_urls = nil
+	m.appendadditional_images_urls = nil
+	m.clearedFields[person.FieldAdditionalImagesUrls] = struct{}{}
+}
+
+// AdditionalImagesUrlsCleared returns if the "additional_images_urls" field was cleared in this mutation.
+func (m *PersonMutation) AdditionalImagesUrlsCleared() bool {
+	_, ok := m.clearedFields[person.FieldAdditionalImagesUrls]
+	return ok
+}
+
+// ResetAdditionalImagesUrls resets all changes to the "additional_images_urls" field.
+func (m *PersonMutation) ResetAdditionalImagesUrls() {
+	m.additional_images_urls = nil
+	m.appendadditional_images_urls = nil
+	delete(m.clearedFields, person.FieldAdditionalImagesUrls)
 }
 
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
@@ -15153,7 +15870,7 @@ func (m *PersonMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PersonMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 12)
 	if m.created_at != nil {
 		fields = append(fields, person.FieldCreatedAt)
 	}
@@ -15166,6 +15883,15 @@ func (m *PersonMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, person.FieldUpdatedBy)
 	}
+	if m.address != nil {
+		fields = append(fields, person.FieldAddress)
+	}
+	if m.phone_numbers != nil {
+		fields = append(fields, person.FieldPhoneNumbers)
+	}
+	if m.emails != nil {
+		fields = append(fields, person.FieldEmails)
+	}
 	if m.display_name != nil {
 		fields = append(fields, person.FieldDisplayName)
 	}
@@ -15174,6 +15900,12 @@ func (m *PersonMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, person.FieldExternalLink)
+	}
+	if m.primary_image_url != nil {
+		fields = append(fields, person.FieldPrimaryImageURL)
+	}
+	if m.additional_images_urls != nil {
+		fields = append(fields, person.FieldAdditionalImagesUrls)
 	}
 	return fields
 }
@@ -15191,12 +15923,22 @@ func (m *PersonMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case person.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case person.FieldAddress:
+		return m.Address()
+	case person.FieldPhoneNumbers:
+		return m.PhoneNumbers()
+	case person.FieldEmails:
+		return m.Emails()
 	case person.FieldDisplayName:
 		return m.DisplayName()
 	case person.FieldDescription:
 		return m.Description()
 	case person.FieldExternalLink:
 		return m.ExternalLink()
+	case person.FieldPrimaryImageURL:
+		return m.PrimaryImageURL()
+	case person.FieldAdditionalImagesUrls:
+		return m.AdditionalImagesUrls()
 	}
 	return nil, false
 }
@@ -15214,12 +15956,22 @@ func (m *PersonMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldUpdatedAt(ctx)
 	case person.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case person.FieldAddress:
+		return m.OldAddress(ctx)
+	case person.FieldPhoneNumbers:
+		return m.OldPhoneNumbers(ctx)
+	case person.FieldEmails:
+		return m.OldEmails(ctx)
 	case person.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case person.FieldDescription:
 		return m.OldDescription(ctx)
 	case person.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case person.FieldPrimaryImageURL:
+		return m.OldPrimaryImageURL(ctx)
+	case person.FieldAdditionalImagesUrls:
+		return m.OldAdditionalImagesUrls(ctx)
 	}
 	return nil, fmt.Errorf("unknown Person field %s", name)
 }
@@ -15257,6 +16009,27 @@ func (m *PersonMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
+	case person.FieldAddress:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAddress(v)
+		return nil
+	case person.FieldPhoneNumbers:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPhoneNumbers(v)
+		return nil
+	case person.FieldEmails:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEmails(v)
+		return nil
 	case person.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
@@ -15277,6 +16050,20 @@ func (m *PersonMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetExternalLink(v)
+		return nil
+	case person.FieldPrimaryImageURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPrimaryImageURL(v)
+		return nil
+	case person.FieldAdditionalImagesUrls:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAdditionalImagesUrls(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Person field %s", name)
@@ -15314,6 +16101,15 @@ func (m *PersonMutation) ClearedFields() []string {
 	if m.FieldCleared(person.FieldUpdatedBy) {
 		fields = append(fields, person.FieldUpdatedBy)
 	}
+	if m.FieldCleared(person.FieldAddress) {
+		fields = append(fields, person.FieldAddress)
+	}
+	if m.FieldCleared(person.FieldPhoneNumbers) {
+		fields = append(fields, person.FieldPhoneNumbers)
+	}
+	if m.FieldCleared(person.FieldEmails) {
+		fields = append(fields, person.FieldEmails)
+	}
 	if m.FieldCleared(person.FieldDisplayName) {
 		fields = append(fields, person.FieldDisplayName)
 	}
@@ -15322,6 +16118,12 @@ func (m *PersonMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(person.FieldExternalLink) {
 		fields = append(fields, person.FieldExternalLink)
+	}
+	if m.FieldCleared(person.FieldPrimaryImageURL) {
+		fields = append(fields, person.FieldPrimaryImageURL)
+	}
+	if m.FieldCleared(person.FieldAdditionalImagesUrls) {
+		fields = append(fields, person.FieldAdditionalImagesUrls)
 	}
 	return fields
 }
@@ -15343,6 +16145,15 @@ func (m *PersonMutation) ClearField(name string) error {
 	case person.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case person.FieldAddress:
+		m.ClearAddress()
+		return nil
+	case person.FieldPhoneNumbers:
+		m.ClearPhoneNumbers()
+		return nil
+	case person.FieldEmails:
+		m.ClearEmails()
+		return nil
 	case person.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -15351,6 +16162,12 @@ func (m *PersonMutation) ClearField(name string) error {
 		return nil
 	case person.FieldExternalLink:
 		m.ClearExternalLink()
+		return nil
+	case person.FieldPrimaryImageURL:
+		m.ClearPrimaryImageURL()
+		return nil
+	case person.FieldAdditionalImagesUrls:
+		m.ClearAdditionalImagesUrls()
 		return nil
 	}
 	return fmt.Errorf("unknown Person nullable field %s", name)
@@ -15372,6 +16189,15 @@ func (m *PersonMutation) ResetField(name string) error {
 	case person.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
+	case person.FieldAddress:
+		m.ResetAddress()
+		return nil
+	case person.FieldPhoneNumbers:
+		m.ResetPhoneNumbers()
+		return nil
+	case person.FieldEmails:
+		m.ResetEmails()
+		return nil
 	case person.FieldDisplayName:
 		m.ResetDisplayName()
 		return nil
@@ -15380,6 +16206,12 @@ func (m *PersonMutation) ResetField(name string) error {
 		return nil
 	case person.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case person.FieldPrimaryImageURL:
+		m.ResetPrimaryImageURL()
+		return nil
+	case person.FieldAdditionalImagesUrls:
+		m.ResetAdditionalImagesUrls()
 		return nil
 	}
 	return fmt.Errorf("unknown Person field %s", name)

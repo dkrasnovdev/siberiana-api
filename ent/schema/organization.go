@@ -32,8 +32,10 @@ func (Organization) Policy() ent.Policy {
 // Mixin of the Organization.
 func (Organization) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		mixin.DetailsMixin{},
 		mixin.AuditMixin{},
+		mixin.ContactInformationMixin{},
+		mixin.DetailsMixin{},
+		mixin.ImagesMixin{},
 	}
 }
 

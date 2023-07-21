@@ -75,6 +75,11 @@ func UpdatedBy(v string) predicate.Person {
 	return predicate.Person(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
+// Address applies equality check predicate on the "address" field. It's identical to AddressEQ.
+func Address(v string) predicate.Person {
+	return predicate.Person(sql.FieldEQ(FieldAddress, v))
+}
+
 // DisplayName applies equality check predicate on the "display_name" field. It's identical to DisplayNameEQ.
 func DisplayName(v string) predicate.Person {
 	return predicate.Person(sql.FieldEQ(FieldDisplayName, v))
@@ -88,6 +93,11 @@ func Description(v string) predicate.Person {
 // ExternalLink applies equality check predicate on the "external_link" field. It's identical to ExternalLinkEQ.
 func ExternalLink(v string) predicate.Person {
 	return predicate.Person(sql.FieldEQ(FieldExternalLink, v))
+}
+
+// PrimaryImageURL applies equality check predicate on the "primary_image_url" field. It's identical to PrimaryImageURLEQ.
+func PrimaryImageURL(v string) predicate.Person {
+	return predicate.Person(sql.FieldEQ(FieldPrimaryImageURL, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -320,6 +330,101 @@ func UpdatedByContainsFold(v string) predicate.Person {
 	return predicate.Person(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
+// AddressEQ applies the EQ predicate on the "address" field.
+func AddressEQ(v string) predicate.Person {
+	return predicate.Person(sql.FieldEQ(FieldAddress, v))
+}
+
+// AddressNEQ applies the NEQ predicate on the "address" field.
+func AddressNEQ(v string) predicate.Person {
+	return predicate.Person(sql.FieldNEQ(FieldAddress, v))
+}
+
+// AddressIn applies the In predicate on the "address" field.
+func AddressIn(vs ...string) predicate.Person {
+	return predicate.Person(sql.FieldIn(FieldAddress, vs...))
+}
+
+// AddressNotIn applies the NotIn predicate on the "address" field.
+func AddressNotIn(vs ...string) predicate.Person {
+	return predicate.Person(sql.FieldNotIn(FieldAddress, vs...))
+}
+
+// AddressGT applies the GT predicate on the "address" field.
+func AddressGT(v string) predicate.Person {
+	return predicate.Person(sql.FieldGT(FieldAddress, v))
+}
+
+// AddressGTE applies the GTE predicate on the "address" field.
+func AddressGTE(v string) predicate.Person {
+	return predicate.Person(sql.FieldGTE(FieldAddress, v))
+}
+
+// AddressLT applies the LT predicate on the "address" field.
+func AddressLT(v string) predicate.Person {
+	return predicate.Person(sql.FieldLT(FieldAddress, v))
+}
+
+// AddressLTE applies the LTE predicate on the "address" field.
+func AddressLTE(v string) predicate.Person {
+	return predicate.Person(sql.FieldLTE(FieldAddress, v))
+}
+
+// AddressContains applies the Contains predicate on the "address" field.
+func AddressContains(v string) predicate.Person {
+	return predicate.Person(sql.FieldContains(FieldAddress, v))
+}
+
+// AddressHasPrefix applies the HasPrefix predicate on the "address" field.
+func AddressHasPrefix(v string) predicate.Person {
+	return predicate.Person(sql.FieldHasPrefix(FieldAddress, v))
+}
+
+// AddressHasSuffix applies the HasSuffix predicate on the "address" field.
+func AddressHasSuffix(v string) predicate.Person {
+	return predicate.Person(sql.FieldHasSuffix(FieldAddress, v))
+}
+
+// AddressIsNil applies the IsNil predicate on the "address" field.
+func AddressIsNil() predicate.Person {
+	return predicate.Person(sql.FieldIsNull(FieldAddress))
+}
+
+// AddressNotNil applies the NotNil predicate on the "address" field.
+func AddressNotNil() predicate.Person {
+	return predicate.Person(sql.FieldNotNull(FieldAddress))
+}
+
+// AddressEqualFold applies the EqualFold predicate on the "address" field.
+func AddressEqualFold(v string) predicate.Person {
+	return predicate.Person(sql.FieldEqualFold(FieldAddress, v))
+}
+
+// AddressContainsFold applies the ContainsFold predicate on the "address" field.
+func AddressContainsFold(v string) predicate.Person {
+	return predicate.Person(sql.FieldContainsFold(FieldAddress, v))
+}
+
+// PhoneNumbersIsNil applies the IsNil predicate on the "phone_numbers" field.
+func PhoneNumbersIsNil() predicate.Person {
+	return predicate.Person(sql.FieldIsNull(FieldPhoneNumbers))
+}
+
+// PhoneNumbersNotNil applies the NotNil predicate on the "phone_numbers" field.
+func PhoneNumbersNotNil() predicate.Person {
+	return predicate.Person(sql.FieldNotNull(FieldPhoneNumbers))
+}
+
+// EmailsIsNil applies the IsNil predicate on the "emails" field.
+func EmailsIsNil() predicate.Person {
+	return predicate.Person(sql.FieldIsNull(FieldEmails))
+}
+
+// EmailsNotNil applies the NotNil predicate on the "emails" field.
+func EmailsNotNil() predicate.Person {
+	return predicate.Person(sql.FieldNotNull(FieldEmails))
+}
+
 // DisplayNameEQ applies the EQ predicate on the "display_name" field.
 func DisplayNameEQ(v string) predicate.Person {
 	return predicate.Person(sql.FieldEQ(FieldDisplayName, v))
@@ -543,6 +648,91 @@ func ExternalLinkEqualFold(v string) predicate.Person {
 // ExternalLinkContainsFold applies the ContainsFold predicate on the "external_link" field.
 func ExternalLinkContainsFold(v string) predicate.Person {
 	return predicate.Person(sql.FieldContainsFold(FieldExternalLink, v))
+}
+
+// PrimaryImageURLEQ applies the EQ predicate on the "primary_image_url" field.
+func PrimaryImageURLEQ(v string) predicate.Person {
+	return predicate.Person(sql.FieldEQ(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLNEQ applies the NEQ predicate on the "primary_image_url" field.
+func PrimaryImageURLNEQ(v string) predicate.Person {
+	return predicate.Person(sql.FieldNEQ(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLIn applies the In predicate on the "primary_image_url" field.
+func PrimaryImageURLIn(vs ...string) predicate.Person {
+	return predicate.Person(sql.FieldIn(FieldPrimaryImageURL, vs...))
+}
+
+// PrimaryImageURLNotIn applies the NotIn predicate on the "primary_image_url" field.
+func PrimaryImageURLNotIn(vs ...string) predicate.Person {
+	return predicate.Person(sql.FieldNotIn(FieldPrimaryImageURL, vs...))
+}
+
+// PrimaryImageURLGT applies the GT predicate on the "primary_image_url" field.
+func PrimaryImageURLGT(v string) predicate.Person {
+	return predicate.Person(sql.FieldGT(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLGTE applies the GTE predicate on the "primary_image_url" field.
+func PrimaryImageURLGTE(v string) predicate.Person {
+	return predicate.Person(sql.FieldGTE(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLLT applies the LT predicate on the "primary_image_url" field.
+func PrimaryImageURLLT(v string) predicate.Person {
+	return predicate.Person(sql.FieldLT(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLLTE applies the LTE predicate on the "primary_image_url" field.
+func PrimaryImageURLLTE(v string) predicate.Person {
+	return predicate.Person(sql.FieldLTE(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLContains applies the Contains predicate on the "primary_image_url" field.
+func PrimaryImageURLContains(v string) predicate.Person {
+	return predicate.Person(sql.FieldContains(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLHasPrefix applies the HasPrefix predicate on the "primary_image_url" field.
+func PrimaryImageURLHasPrefix(v string) predicate.Person {
+	return predicate.Person(sql.FieldHasPrefix(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLHasSuffix applies the HasSuffix predicate on the "primary_image_url" field.
+func PrimaryImageURLHasSuffix(v string) predicate.Person {
+	return predicate.Person(sql.FieldHasSuffix(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLIsNil applies the IsNil predicate on the "primary_image_url" field.
+func PrimaryImageURLIsNil() predicate.Person {
+	return predicate.Person(sql.FieldIsNull(FieldPrimaryImageURL))
+}
+
+// PrimaryImageURLNotNil applies the NotNil predicate on the "primary_image_url" field.
+func PrimaryImageURLNotNil() predicate.Person {
+	return predicate.Person(sql.FieldNotNull(FieldPrimaryImageURL))
+}
+
+// PrimaryImageURLEqualFold applies the EqualFold predicate on the "primary_image_url" field.
+func PrimaryImageURLEqualFold(v string) predicate.Person {
+	return predicate.Person(sql.FieldEqualFold(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLContainsFold applies the ContainsFold predicate on the "primary_image_url" field.
+func PrimaryImageURLContainsFold(v string) predicate.Person {
+	return predicate.Person(sql.FieldContainsFold(FieldPrimaryImageURL, v))
+}
+
+// AdditionalImagesUrlsIsNil applies the IsNil predicate on the "additional_images_urls" field.
+func AdditionalImagesUrlsIsNil() predicate.Person {
+	return predicate.Person(sql.FieldIsNull(FieldAdditionalImagesUrls))
+}
+
+// AdditionalImagesUrlsNotNil applies the NotNil predicate on the "additional_images_urls" field.
+func AdditionalImagesUrlsNotNil() predicate.Person {
+	return predicate.Person(sql.FieldNotNull(FieldAdditionalImagesUrls))
 }
 
 // HasArtifacts applies the HasEdge predicate on the "artifacts" edge.

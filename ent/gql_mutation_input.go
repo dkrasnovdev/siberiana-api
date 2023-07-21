@@ -16,7 +16,7 @@ type CreateArtifactInput struct {
 	Description           *string
 	ExternalLink          *string
 	PrimaryImageURL       *string
-	AdditionalImageUrls   []string
+	AdditionalImagesUrls  []string
 	DeletedAt             *time.Time
 	DeletedBy             *string
 	AuthorIDs             []int
@@ -60,8 +60,8 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.PrimaryImageURL; v != nil {
 		m.SetPrimaryImageURL(*v)
 	}
-	if v := i.AdditionalImageUrls; v != nil {
-		m.SetAdditionalImageUrls(v)
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
 	}
 	if v := i.DeletedAt; v != nil {
 		m.SetDeletedAt(*v)
@@ -118,58 +118,58 @@ func (c *ArtifactCreate) SetInput(i CreateArtifactInput) *ArtifactCreate {
 
 // UpdateArtifactInput represents a mutation input for updating artifacts.
 type UpdateArtifactInput struct {
-	ClearCreatedBy            bool
-	CreatedBy                 *string
-	UpdatedAt                 *time.Time
-	ClearUpdatedBy            bool
-	UpdatedBy                 *string
-	ClearDisplayName          bool
-	DisplayName               *string
-	ClearDescription          bool
-	Description               *string
-	ClearExternalLink         bool
-	ExternalLink              *string
-	ClearPrimaryImageURL      bool
-	PrimaryImageURL           *string
-	ClearAdditionalImageUrls  bool
-	AdditionalImageUrls       []string
-	AppendAdditionalImageUrls []string
-	ClearDeletedAt            bool
-	DeletedAt                 *time.Time
-	ClearDeletedBy            bool
-	DeletedBy                 *string
-	ClearAuthors              bool
-	AddAuthorIDs              []int
-	RemoveAuthorIDs           []int
-	ClearMediums              bool
-	AddMediumIDs              []int
-	RemoveMediumIDs           []int
-	ClearTechniques           bool
-	AddTechniqueIDs           []int
-	RemoveTechniqueIDs        []int
-	ClearProjects             bool
-	AddProjectIDs             []int
-	RemoveProjectIDs          []int
-	ClearPublications         bool
-	AddPublicationIDs         []int
-	RemovePublicationIDs      []int
-	ClearHolders              bool
-	AddHolderIDs              []int
-	RemoveHolderIDs           []int
-	ClearCulturalAffiliation  bool
-	CulturalAffiliationID     *int
-	ClearMonument             bool
-	MonumentID                *int
-	ClearModel                bool
-	ModelID                   *int
-	ClearSet                  bool
-	SetID                     *int
-	ClearLocation             bool
-	LocationID                *int
-	ClearCollection           bool
-	CollectionID              *int
-	ClearLicense              bool
-	LicenseID                 *int
+	ClearCreatedBy             bool
+	CreatedBy                  *string
+	UpdatedAt                  *time.Time
+	ClearUpdatedBy             bool
+	UpdatedBy                  *string
+	ClearDisplayName           bool
+	DisplayName                *string
+	ClearDescription           bool
+	Description                *string
+	ClearExternalLink          bool
+	ExternalLink               *string
+	ClearPrimaryImageURL       bool
+	PrimaryImageURL            *string
+	ClearAdditionalImagesUrls  bool
+	AdditionalImagesUrls       []string
+	AppendAdditionalImagesUrls []string
+	ClearDeletedAt             bool
+	DeletedAt                  *time.Time
+	ClearDeletedBy             bool
+	DeletedBy                  *string
+	ClearAuthors               bool
+	AddAuthorIDs               []int
+	RemoveAuthorIDs            []int
+	ClearMediums               bool
+	AddMediumIDs               []int
+	RemoveMediumIDs            []int
+	ClearTechniques            bool
+	AddTechniqueIDs            []int
+	RemoveTechniqueIDs         []int
+	ClearProjects              bool
+	AddProjectIDs              []int
+	RemoveProjectIDs           []int
+	ClearPublications          bool
+	AddPublicationIDs          []int
+	RemovePublicationIDs       []int
+	ClearHolders               bool
+	AddHolderIDs               []int
+	RemoveHolderIDs            []int
+	ClearCulturalAffiliation   bool
+	CulturalAffiliationID      *int
+	ClearMonument              bool
+	MonumentID                 *int
+	ClearModel                 bool
+	ModelID                    *int
+	ClearSet                   bool
+	SetID                      *int
+	ClearLocation              bool
+	LocationID                 *int
+	ClearCollection            bool
+	CollectionID               *int
+	ClearLicense               bool
+	LicenseID                  *int
 }
 
 // Mutate applies the UpdateArtifactInput on the ArtifactMutation builder.
@@ -213,14 +213,14 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.PrimaryImageURL; v != nil {
 		m.SetPrimaryImageURL(*v)
 	}
-	if i.ClearAdditionalImageUrls {
-		m.ClearAdditionalImageUrls()
+	if i.ClearAdditionalImagesUrls {
+		m.ClearAdditionalImagesUrls()
 	}
-	if v := i.AdditionalImageUrls; v != nil {
-		m.SetAdditionalImageUrls(v)
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
 	}
-	if i.AppendAdditionalImageUrls != nil {
-		m.AppendAdditionalImageUrls(i.AdditionalImageUrls)
+	if i.AppendAdditionalImagesUrls != nil {
+		m.AppendAdditionalImagesUrls(i.AdditionalImagesUrls)
 	}
 	if i.ClearDeletedAt {
 		m.ClearDeletedAt()
@@ -1634,27 +1634,23 @@ func (c *MonumentUpdateOne) SetInput(i UpdateMonumentInput) *MonumentUpdateOne {
 
 // CreateOrganizationInput represents a mutation input for creating organizations.
 type CreateOrganizationInput struct {
-	DisplayName  *string
-	Description  *string
-	ExternalLink *string
-	CreatedAt    *time.Time
-	CreatedBy    *string
-	UpdatedAt    *time.Time
-	UpdatedBy    *string
-	HolderID     *int
+	CreatedAt            *time.Time
+	CreatedBy            *string
+	UpdatedAt            *time.Time
+	UpdatedBy            *string
+	Address              *string
+	PhoneNumbers         []string
+	Emails               []string
+	DisplayName          *string
+	Description          *string
+	ExternalLink         *string
+	PrimaryImageURL      *string
+	AdditionalImagesUrls []string
+	HolderID             *int
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
 func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
-	if v := i.DisplayName; v != nil {
-		m.SetDisplayName(*v)
-	}
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
-	if v := i.ExternalLink; v != nil {
-		m.SetExternalLink(*v)
-	}
 	if v := i.CreatedAt; v != nil {
 		m.SetCreatedAt(*v)
 	}
@@ -1666,6 +1662,30 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Address; v != nil {
+		m.SetAddress(*v)
+	}
+	if v := i.PhoneNumbers; v != nil {
+		m.SetPhoneNumbers(v)
+	}
+	if v := i.Emails; v != nil {
+		m.SetEmails(v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
 	}
 	if v := i.HolderID; v != nil {
 		m.SetHolderID(*v)
@@ -1680,23 +1700,75 @@ func (c *OrganizationCreate) SetInput(i CreateOrganizationInput) *OrganizationCr
 
 // UpdateOrganizationInput represents a mutation input for updating organizations.
 type UpdateOrganizationInput struct {
-	ClearDisplayName  bool
-	DisplayName       *string
-	ClearDescription  bool
-	Description       *string
-	ClearExternalLink bool
-	ExternalLink      *string
-	ClearCreatedBy    bool
-	CreatedBy         *string
-	UpdatedAt         *time.Time
-	ClearUpdatedBy    bool
-	UpdatedBy         *string
-	ClearHolder       bool
-	HolderID          *int
+	ClearCreatedBy             bool
+	CreatedBy                  *string
+	UpdatedAt                  *time.Time
+	ClearUpdatedBy             bool
+	UpdatedBy                  *string
+	ClearAddress               bool
+	Address                    *string
+	ClearPhoneNumbers          bool
+	PhoneNumbers               []string
+	AppendPhoneNumbers         []string
+	ClearEmails                bool
+	Emails                     []string
+	AppendEmails               []string
+	ClearDisplayName           bool
+	DisplayName                *string
+	ClearDescription           bool
+	Description                *string
+	ClearExternalLink          bool
+	ExternalLink               *string
+	ClearPrimaryImageURL       bool
+	PrimaryImageURL            *string
+	ClearAdditionalImagesUrls  bool
+	AdditionalImagesUrls       []string
+	AppendAdditionalImagesUrls []string
+	ClearHolder                bool
+	HolderID                   *int
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
 func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAddress {
+		m.ClearAddress()
+	}
+	if v := i.Address; v != nil {
+		m.SetAddress(*v)
+	}
+	if i.ClearPhoneNumbers {
+		m.ClearPhoneNumbers()
+	}
+	if v := i.PhoneNumbers; v != nil {
+		m.SetPhoneNumbers(v)
+	}
+	if i.AppendPhoneNumbers != nil {
+		m.AppendPhoneNumbers(i.PhoneNumbers)
+	}
+	if i.ClearEmails {
+		m.ClearEmails()
+	}
+	if v := i.Emails; v != nil {
+		m.SetEmails(v)
+	}
+	if i.AppendEmails != nil {
+		m.AppendEmails(i.Emails)
+	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
 	}
@@ -1715,20 +1787,20 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
-	if i.ClearCreatedBy {
-		m.ClearCreatedBy()
+	if i.ClearPrimaryImageURL {
+		m.ClearPrimaryImageURL()
 	}
-	if v := i.CreatedBy; v != nil {
-		m.SetCreatedBy(*v)
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
 	}
-	if v := i.UpdatedAt; v != nil {
-		m.SetUpdatedAt(*v)
+	if i.ClearAdditionalImagesUrls {
+		m.ClearAdditionalImagesUrls()
 	}
-	if i.ClearUpdatedBy {
-		m.ClearUpdatedBy()
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
 	}
-	if v := i.UpdatedBy; v != nil {
-		m.SetUpdatedBy(*v)
+	if i.AppendAdditionalImagesUrls != nil {
+		m.AppendAdditionalImagesUrls(i.AdditionalImagesUrls)
 	}
 	if i.ClearHolder {
 		m.ClearHolder()
@@ -1752,17 +1824,22 @@ func (c *OrganizationUpdateOne) SetInput(i UpdateOrganizationInput) *Organizatio
 
 // CreatePersonInput represents a mutation input for creating persons.
 type CreatePersonInput struct {
-	CreatedAt      *time.Time
-	CreatedBy      *string
-	UpdatedAt      *time.Time
-	UpdatedBy      *string
-	DisplayName    *string
-	Description    *string
-	ExternalLink   *string
-	ArtifactIDs    []int
-	ProjectIDs     []int
-	PublicationIDs []int
-	HolderID       *int
+	CreatedAt            *time.Time
+	CreatedBy            *string
+	UpdatedAt            *time.Time
+	UpdatedBy            *string
+	Address              *string
+	PhoneNumbers         []string
+	Emails               []string
+	DisplayName          *string
+	Description          *string
+	ExternalLink         *string
+	PrimaryImageURL      *string
+	AdditionalImagesUrls []string
+	ArtifactIDs          []int
+	ProjectIDs           []int
+	PublicationIDs       []int
+	HolderID             *int
 }
 
 // Mutate applies the CreatePersonInput on the PersonMutation builder.
@@ -1779,6 +1856,15 @@ func (i *CreatePersonInput) Mutate(m *PersonMutation) {
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
 	}
+	if v := i.Address; v != nil {
+		m.SetAddress(*v)
+	}
+	if v := i.PhoneNumbers; v != nil {
+		m.SetPhoneNumbers(v)
+	}
+	if v := i.Emails; v != nil {
+		m.SetEmails(v)
+	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
 	}
@@ -1787,6 +1873,12 @@ func (i *CreatePersonInput) Mutate(m *PersonMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
 	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
@@ -1810,28 +1902,41 @@ func (c *PersonCreate) SetInput(i CreatePersonInput) *PersonCreate {
 
 // UpdatePersonInput represents a mutation input for updating persons.
 type UpdatePersonInput struct {
-	ClearCreatedBy       bool
-	CreatedBy            *string
-	UpdatedAt            *time.Time
-	ClearUpdatedBy       bool
-	UpdatedBy            *string
-	ClearDisplayName     bool
-	DisplayName          *string
-	ClearDescription     bool
-	Description          *string
-	ClearExternalLink    bool
-	ExternalLink         *string
-	ClearArtifacts       bool
-	AddArtifactIDs       []int
-	RemoveArtifactIDs    []int
-	ClearProjects        bool
-	AddProjectIDs        []int
-	RemoveProjectIDs     []int
-	ClearPublications    bool
-	AddPublicationIDs    []int
-	RemovePublicationIDs []int
-	ClearHolder          bool
-	HolderID             *int
+	ClearCreatedBy             bool
+	CreatedBy                  *string
+	UpdatedAt                  *time.Time
+	ClearUpdatedBy             bool
+	UpdatedBy                  *string
+	ClearAddress               bool
+	Address                    *string
+	ClearPhoneNumbers          bool
+	PhoneNumbers               []string
+	AppendPhoneNumbers         []string
+	ClearEmails                bool
+	Emails                     []string
+	AppendEmails               []string
+	ClearDisplayName           bool
+	DisplayName                *string
+	ClearDescription           bool
+	Description                *string
+	ClearExternalLink          bool
+	ExternalLink               *string
+	ClearPrimaryImageURL       bool
+	PrimaryImageURL            *string
+	ClearAdditionalImagesUrls  bool
+	AdditionalImagesUrls       []string
+	AppendAdditionalImagesUrls []string
+	ClearArtifacts             bool
+	AddArtifactIDs             []int
+	RemoveArtifactIDs          []int
+	ClearProjects              bool
+	AddProjectIDs              []int
+	RemoveProjectIDs           []int
+	ClearPublications          bool
+	AddPublicationIDs          []int
+	RemovePublicationIDs       []int
+	ClearHolder                bool
+	HolderID                   *int
 }
 
 // Mutate applies the UpdatePersonInput on the PersonMutation builder.
@@ -1851,6 +1956,30 @@ func (i *UpdatePersonInput) Mutate(m *PersonMutation) {
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
 	}
+	if i.ClearAddress {
+		m.ClearAddress()
+	}
+	if v := i.Address; v != nil {
+		m.SetAddress(*v)
+	}
+	if i.ClearPhoneNumbers {
+		m.ClearPhoneNumbers()
+	}
+	if v := i.PhoneNumbers; v != nil {
+		m.SetPhoneNumbers(v)
+	}
+	if i.AppendPhoneNumbers != nil {
+		m.AppendPhoneNumbers(i.PhoneNumbers)
+	}
+	if i.ClearEmails {
+		m.ClearEmails()
+	}
+	if v := i.Emails; v != nil {
+		m.SetEmails(v)
+	}
+	if i.AppendEmails != nil {
+		m.AppendEmails(i.Emails)
+	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
 	}
@@ -1868,6 +1997,21 @@ func (i *UpdatePersonInput) Mutate(m *PersonMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if i.ClearPrimaryImageURL {
+		m.ClearPrimaryImageURL()
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if i.ClearAdditionalImagesUrls {
+		m.ClearAdditionalImagesUrls()
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
+	}
+	if i.AppendAdditionalImagesUrls != nil {
+		m.AppendAdditionalImagesUrls(i.AdditionalImagesUrls)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()

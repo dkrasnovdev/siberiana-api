@@ -55,21 +55,6 @@ func IDLTE(id int) predicate.Organization {
 	return predicate.Organization(sql.FieldLTE(FieldID, id))
 }
 
-// DisplayName applies equality check predicate on the "display_name" field. It's identical to DisplayNameEQ.
-func DisplayName(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldEQ(FieldDisplayName, v))
-}
-
-// Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
-func Description(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldEQ(FieldDescription, v))
-}
-
-// ExternalLink applies equality check predicate on the "external_link" field. It's identical to ExternalLinkEQ.
-func ExternalLink(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldEQ(FieldExternalLink, v))
-}
-
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
 func CreatedAt(v time.Time) predicate.Organization {
 	return predicate.Organization(sql.FieldEQ(FieldCreatedAt, v))
@@ -90,229 +75,29 @@ func UpdatedBy(v string) predicate.Organization {
 	return predicate.Organization(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
-// DisplayNameEQ applies the EQ predicate on the "display_name" field.
-func DisplayNameEQ(v string) predicate.Organization {
+// Address applies equality check predicate on the "address" field. It's identical to AddressEQ.
+func Address(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldAddress, v))
+}
+
+// DisplayName applies equality check predicate on the "display_name" field. It's identical to DisplayNameEQ.
+func DisplayName(v string) predicate.Organization {
 	return predicate.Organization(sql.FieldEQ(FieldDisplayName, v))
 }
 
-// DisplayNameNEQ applies the NEQ predicate on the "display_name" field.
-func DisplayNameNEQ(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldNEQ(FieldDisplayName, v))
-}
-
-// DisplayNameIn applies the In predicate on the "display_name" field.
-func DisplayNameIn(vs ...string) predicate.Organization {
-	return predicate.Organization(sql.FieldIn(FieldDisplayName, vs...))
-}
-
-// DisplayNameNotIn applies the NotIn predicate on the "display_name" field.
-func DisplayNameNotIn(vs ...string) predicate.Organization {
-	return predicate.Organization(sql.FieldNotIn(FieldDisplayName, vs...))
-}
-
-// DisplayNameGT applies the GT predicate on the "display_name" field.
-func DisplayNameGT(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldGT(FieldDisplayName, v))
-}
-
-// DisplayNameGTE applies the GTE predicate on the "display_name" field.
-func DisplayNameGTE(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldGTE(FieldDisplayName, v))
-}
-
-// DisplayNameLT applies the LT predicate on the "display_name" field.
-func DisplayNameLT(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldLT(FieldDisplayName, v))
-}
-
-// DisplayNameLTE applies the LTE predicate on the "display_name" field.
-func DisplayNameLTE(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldLTE(FieldDisplayName, v))
-}
-
-// DisplayNameContains applies the Contains predicate on the "display_name" field.
-func DisplayNameContains(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldContains(FieldDisplayName, v))
-}
-
-// DisplayNameHasPrefix applies the HasPrefix predicate on the "display_name" field.
-func DisplayNameHasPrefix(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldHasPrefix(FieldDisplayName, v))
-}
-
-// DisplayNameHasSuffix applies the HasSuffix predicate on the "display_name" field.
-func DisplayNameHasSuffix(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldHasSuffix(FieldDisplayName, v))
-}
-
-// DisplayNameIsNil applies the IsNil predicate on the "display_name" field.
-func DisplayNameIsNil() predicate.Organization {
-	return predicate.Organization(sql.FieldIsNull(FieldDisplayName))
-}
-
-// DisplayNameNotNil applies the NotNil predicate on the "display_name" field.
-func DisplayNameNotNil() predicate.Organization {
-	return predicate.Organization(sql.FieldNotNull(FieldDisplayName))
-}
-
-// DisplayNameEqualFold applies the EqualFold predicate on the "display_name" field.
-func DisplayNameEqualFold(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldEqualFold(FieldDisplayName, v))
-}
-
-// DisplayNameContainsFold applies the ContainsFold predicate on the "display_name" field.
-func DisplayNameContainsFold(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldContainsFold(FieldDisplayName, v))
-}
-
-// DescriptionEQ applies the EQ predicate on the "description" field.
-func DescriptionEQ(v string) predicate.Organization {
+// Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
+func Description(v string) predicate.Organization {
 	return predicate.Organization(sql.FieldEQ(FieldDescription, v))
 }
 
-// DescriptionNEQ applies the NEQ predicate on the "description" field.
-func DescriptionNEQ(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldNEQ(FieldDescription, v))
-}
-
-// DescriptionIn applies the In predicate on the "description" field.
-func DescriptionIn(vs ...string) predicate.Organization {
-	return predicate.Organization(sql.FieldIn(FieldDescription, vs...))
-}
-
-// DescriptionNotIn applies the NotIn predicate on the "description" field.
-func DescriptionNotIn(vs ...string) predicate.Organization {
-	return predicate.Organization(sql.FieldNotIn(FieldDescription, vs...))
-}
-
-// DescriptionGT applies the GT predicate on the "description" field.
-func DescriptionGT(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldGT(FieldDescription, v))
-}
-
-// DescriptionGTE applies the GTE predicate on the "description" field.
-func DescriptionGTE(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldGTE(FieldDescription, v))
-}
-
-// DescriptionLT applies the LT predicate on the "description" field.
-func DescriptionLT(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldLT(FieldDescription, v))
-}
-
-// DescriptionLTE applies the LTE predicate on the "description" field.
-func DescriptionLTE(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldLTE(FieldDescription, v))
-}
-
-// DescriptionContains applies the Contains predicate on the "description" field.
-func DescriptionContains(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldContains(FieldDescription, v))
-}
-
-// DescriptionHasPrefix applies the HasPrefix predicate on the "description" field.
-func DescriptionHasPrefix(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldHasPrefix(FieldDescription, v))
-}
-
-// DescriptionHasSuffix applies the HasSuffix predicate on the "description" field.
-func DescriptionHasSuffix(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldHasSuffix(FieldDescription, v))
-}
-
-// DescriptionIsNil applies the IsNil predicate on the "description" field.
-func DescriptionIsNil() predicate.Organization {
-	return predicate.Organization(sql.FieldIsNull(FieldDescription))
-}
-
-// DescriptionNotNil applies the NotNil predicate on the "description" field.
-func DescriptionNotNil() predicate.Organization {
-	return predicate.Organization(sql.FieldNotNull(FieldDescription))
-}
-
-// DescriptionEqualFold applies the EqualFold predicate on the "description" field.
-func DescriptionEqualFold(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldEqualFold(FieldDescription, v))
-}
-
-// DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
-func DescriptionContainsFold(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldContainsFold(FieldDescription, v))
-}
-
-// ExternalLinkEQ applies the EQ predicate on the "external_link" field.
-func ExternalLinkEQ(v string) predicate.Organization {
+// ExternalLink applies equality check predicate on the "external_link" field. It's identical to ExternalLinkEQ.
+func ExternalLink(v string) predicate.Organization {
 	return predicate.Organization(sql.FieldEQ(FieldExternalLink, v))
 }
 
-// ExternalLinkNEQ applies the NEQ predicate on the "external_link" field.
-func ExternalLinkNEQ(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldNEQ(FieldExternalLink, v))
-}
-
-// ExternalLinkIn applies the In predicate on the "external_link" field.
-func ExternalLinkIn(vs ...string) predicate.Organization {
-	return predicate.Organization(sql.FieldIn(FieldExternalLink, vs...))
-}
-
-// ExternalLinkNotIn applies the NotIn predicate on the "external_link" field.
-func ExternalLinkNotIn(vs ...string) predicate.Organization {
-	return predicate.Organization(sql.FieldNotIn(FieldExternalLink, vs...))
-}
-
-// ExternalLinkGT applies the GT predicate on the "external_link" field.
-func ExternalLinkGT(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldGT(FieldExternalLink, v))
-}
-
-// ExternalLinkGTE applies the GTE predicate on the "external_link" field.
-func ExternalLinkGTE(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldGTE(FieldExternalLink, v))
-}
-
-// ExternalLinkLT applies the LT predicate on the "external_link" field.
-func ExternalLinkLT(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldLT(FieldExternalLink, v))
-}
-
-// ExternalLinkLTE applies the LTE predicate on the "external_link" field.
-func ExternalLinkLTE(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldLTE(FieldExternalLink, v))
-}
-
-// ExternalLinkContains applies the Contains predicate on the "external_link" field.
-func ExternalLinkContains(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldContains(FieldExternalLink, v))
-}
-
-// ExternalLinkHasPrefix applies the HasPrefix predicate on the "external_link" field.
-func ExternalLinkHasPrefix(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldHasPrefix(FieldExternalLink, v))
-}
-
-// ExternalLinkHasSuffix applies the HasSuffix predicate on the "external_link" field.
-func ExternalLinkHasSuffix(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldHasSuffix(FieldExternalLink, v))
-}
-
-// ExternalLinkIsNil applies the IsNil predicate on the "external_link" field.
-func ExternalLinkIsNil() predicate.Organization {
-	return predicate.Organization(sql.FieldIsNull(FieldExternalLink))
-}
-
-// ExternalLinkNotNil applies the NotNil predicate on the "external_link" field.
-func ExternalLinkNotNil() predicate.Organization {
-	return predicate.Organization(sql.FieldNotNull(FieldExternalLink))
-}
-
-// ExternalLinkEqualFold applies the EqualFold predicate on the "external_link" field.
-func ExternalLinkEqualFold(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldEqualFold(FieldExternalLink, v))
-}
-
-// ExternalLinkContainsFold applies the ContainsFold predicate on the "external_link" field.
-func ExternalLinkContainsFold(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldContainsFold(FieldExternalLink, v))
+// PrimaryImageURL applies equality check predicate on the "primary_image_url" field. It's identical to PrimaryImageURLEQ.
+func PrimaryImageURL(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldPrimaryImageURL, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -543,6 +328,411 @@ func UpdatedByEqualFold(v string) predicate.Organization {
 // UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
 func UpdatedByContainsFold(v string) predicate.Organization {
 	return predicate.Organization(sql.FieldContainsFold(FieldUpdatedBy, v))
+}
+
+// AddressEQ applies the EQ predicate on the "address" field.
+func AddressEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldAddress, v))
+}
+
+// AddressNEQ applies the NEQ predicate on the "address" field.
+func AddressNEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldNEQ(FieldAddress, v))
+}
+
+// AddressIn applies the In predicate on the "address" field.
+func AddressIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldIn(FieldAddress, vs...))
+}
+
+// AddressNotIn applies the NotIn predicate on the "address" field.
+func AddressNotIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldNotIn(FieldAddress, vs...))
+}
+
+// AddressGT applies the GT predicate on the "address" field.
+func AddressGT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGT(FieldAddress, v))
+}
+
+// AddressGTE applies the GTE predicate on the "address" field.
+func AddressGTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGTE(FieldAddress, v))
+}
+
+// AddressLT applies the LT predicate on the "address" field.
+func AddressLT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLT(FieldAddress, v))
+}
+
+// AddressLTE applies the LTE predicate on the "address" field.
+func AddressLTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLTE(FieldAddress, v))
+}
+
+// AddressContains applies the Contains predicate on the "address" field.
+func AddressContains(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContains(FieldAddress, v))
+}
+
+// AddressHasPrefix applies the HasPrefix predicate on the "address" field.
+func AddressHasPrefix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasPrefix(FieldAddress, v))
+}
+
+// AddressHasSuffix applies the HasSuffix predicate on the "address" field.
+func AddressHasSuffix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasSuffix(FieldAddress, v))
+}
+
+// AddressIsNil applies the IsNil predicate on the "address" field.
+func AddressIsNil() predicate.Organization {
+	return predicate.Organization(sql.FieldIsNull(FieldAddress))
+}
+
+// AddressNotNil applies the NotNil predicate on the "address" field.
+func AddressNotNil() predicate.Organization {
+	return predicate.Organization(sql.FieldNotNull(FieldAddress))
+}
+
+// AddressEqualFold applies the EqualFold predicate on the "address" field.
+func AddressEqualFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEqualFold(FieldAddress, v))
+}
+
+// AddressContainsFold applies the ContainsFold predicate on the "address" field.
+func AddressContainsFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContainsFold(FieldAddress, v))
+}
+
+// PhoneNumbersIsNil applies the IsNil predicate on the "phone_numbers" field.
+func PhoneNumbersIsNil() predicate.Organization {
+	return predicate.Organization(sql.FieldIsNull(FieldPhoneNumbers))
+}
+
+// PhoneNumbersNotNil applies the NotNil predicate on the "phone_numbers" field.
+func PhoneNumbersNotNil() predicate.Organization {
+	return predicate.Organization(sql.FieldNotNull(FieldPhoneNumbers))
+}
+
+// EmailsIsNil applies the IsNil predicate on the "emails" field.
+func EmailsIsNil() predicate.Organization {
+	return predicate.Organization(sql.FieldIsNull(FieldEmails))
+}
+
+// EmailsNotNil applies the NotNil predicate on the "emails" field.
+func EmailsNotNil() predicate.Organization {
+	return predicate.Organization(sql.FieldNotNull(FieldEmails))
+}
+
+// DisplayNameEQ applies the EQ predicate on the "display_name" field.
+func DisplayNameEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldDisplayName, v))
+}
+
+// DisplayNameNEQ applies the NEQ predicate on the "display_name" field.
+func DisplayNameNEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldNEQ(FieldDisplayName, v))
+}
+
+// DisplayNameIn applies the In predicate on the "display_name" field.
+func DisplayNameIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldIn(FieldDisplayName, vs...))
+}
+
+// DisplayNameNotIn applies the NotIn predicate on the "display_name" field.
+func DisplayNameNotIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldNotIn(FieldDisplayName, vs...))
+}
+
+// DisplayNameGT applies the GT predicate on the "display_name" field.
+func DisplayNameGT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGT(FieldDisplayName, v))
+}
+
+// DisplayNameGTE applies the GTE predicate on the "display_name" field.
+func DisplayNameGTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGTE(FieldDisplayName, v))
+}
+
+// DisplayNameLT applies the LT predicate on the "display_name" field.
+func DisplayNameLT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLT(FieldDisplayName, v))
+}
+
+// DisplayNameLTE applies the LTE predicate on the "display_name" field.
+func DisplayNameLTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLTE(FieldDisplayName, v))
+}
+
+// DisplayNameContains applies the Contains predicate on the "display_name" field.
+func DisplayNameContains(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContains(FieldDisplayName, v))
+}
+
+// DisplayNameHasPrefix applies the HasPrefix predicate on the "display_name" field.
+func DisplayNameHasPrefix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasPrefix(FieldDisplayName, v))
+}
+
+// DisplayNameHasSuffix applies the HasSuffix predicate on the "display_name" field.
+func DisplayNameHasSuffix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasSuffix(FieldDisplayName, v))
+}
+
+// DisplayNameIsNil applies the IsNil predicate on the "display_name" field.
+func DisplayNameIsNil() predicate.Organization {
+	return predicate.Organization(sql.FieldIsNull(FieldDisplayName))
+}
+
+// DisplayNameNotNil applies the NotNil predicate on the "display_name" field.
+func DisplayNameNotNil() predicate.Organization {
+	return predicate.Organization(sql.FieldNotNull(FieldDisplayName))
+}
+
+// DisplayNameEqualFold applies the EqualFold predicate on the "display_name" field.
+func DisplayNameEqualFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEqualFold(FieldDisplayName, v))
+}
+
+// DisplayNameContainsFold applies the ContainsFold predicate on the "display_name" field.
+func DisplayNameContainsFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContainsFold(FieldDisplayName, v))
+}
+
+// DescriptionEQ applies the EQ predicate on the "description" field.
+func DescriptionEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldDescription, v))
+}
+
+// DescriptionNEQ applies the NEQ predicate on the "description" field.
+func DescriptionNEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldNEQ(FieldDescription, v))
+}
+
+// DescriptionIn applies the In predicate on the "description" field.
+func DescriptionIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldIn(FieldDescription, vs...))
+}
+
+// DescriptionNotIn applies the NotIn predicate on the "description" field.
+func DescriptionNotIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldNotIn(FieldDescription, vs...))
+}
+
+// DescriptionGT applies the GT predicate on the "description" field.
+func DescriptionGT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGT(FieldDescription, v))
+}
+
+// DescriptionGTE applies the GTE predicate on the "description" field.
+func DescriptionGTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGTE(FieldDescription, v))
+}
+
+// DescriptionLT applies the LT predicate on the "description" field.
+func DescriptionLT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLT(FieldDescription, v))
+}
+
+// DescriptionLTE applies the LTE predicate on the "description" field.
+func DescriptionLTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLTE(FieldDescription, v))
+}
+
+// DescriptionContains applies the Contains predicate on the "description" field.
+func DescriptionContains(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContains(FieldDescription, v))
+}
+
+// DescriptionHasPrefix applies the HasPrefix predicate on the "description" field.
+func DescriptionHasPrefix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasPrefix(FieldDescription, v))
+}
+
+// DescriptionHasSuffix applies the HasSuffix predicate on the "description" field.
+func DescriptionHasSuffix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasSuffix(FieldDescription, v))
+}
+
+// DescriptionIsNil applies the IsNil predicate on the "description" field.
+func DescriptionIsNil() predicate.Organization {
+	return predicate.Organization(sql.FieldIsNull(FieldDescription))
+}
+
+// DescriptionNotNil applies the NotNil predicate on the "description" field.
+func DescriptionNotNil() predicate.Organization {
+	return predicate.Organization(sql.FieldNotNull(FieldDescription))
+}
+
+// DescriptionEqualFold applies the EqualFold predicate on the "description" field.
+func DescriptionEqualFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEqualFold(FieldDescription, v))
+}
+
+// DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
+func DescriptionContainsFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContainsFold(FieldDescription, v))
+}
+
+// ExternalLinkEQ applies the EQ predicate on the "external_link" field.
+func ExternalLinkEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldExternalLink, v))
+}
+
+// ExternalLinkNEQ applies the NEQ predicate on the "external_link" field.
+func ExternalLinkNEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldNEQ(FieldExternalLink, v))
+}
+
+// ExternalLinkIn applies the In predicate on the "external_link" field.
+func ExternalLinkIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldIn(FieldExternalLink, vs...))
+}
+
+// ExternalLinkNotIn applies the NotIn predicate on the "external_link" field.
+func ExternalLinkNotIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldNotIn(FieldExternalLink, vs...))
+}
+
+// ExternalLinkGT applies the GT predicate on the "external_link" field.
+func ExternalLinkGT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGT(FieldExternalLink, v))
+}
+
+// ExternalLinkGTE applies the GTE predicate on the "external_link" field.
+func ExternalLinkGTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGTE(FieldExternalLink, v))
+}
+
+// ExternalLinkLT applies the LT predicate on the "external_link" field.
+func ExternalLinkLT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLT(FieldExternalLink, v))
+}
+
+// ExternalLinkLTE applies the LTE predicate on the "external_link" field.
+func ExternalLinkLTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLTE(FieldExternalLink, v))
+}
+
+// ExternalLinkContains applies the Contains predicate on the "external_link" field.
+func ExternalLinkContains(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContains(FieldExternalLink, v))
+}
+
+// ExternalLinkHasPrefix applies the HasPrefix predicate on the "external_link" field.
+func ExternalLinkHasPrefix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasPrefix(FieldExternalLink, v))
+}
+
+// ExternalLinkHasSuffix applies the HasSuffix predicate on the "external_link" field.
+func ExternalLinkHasSuffix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasSuffix(FieldExternalLink, v))
+}
+
+// ExternalLinkIsNil applies the IsNil predicate on the "external_link" field.
+func ExternalLinkIsNil() predicate.Organization {
+	return predicate.Organization(sql.FieldIsNull(FieldExternalLink))
+}
+
+// ExternalLinkNotNil applies the NotNil predicate on the "external_link" field.
+func ExternalLinkNotNil() predicate.Organization {
+	return predicate.Organization(sql.FieldNotNull(FieldExternalLink))
+}
+
+// ExternalLinkEqualFold applies the EqualFold predicate on the "external_link" field.
+func ExternalLinkEqualFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEqualFold(FieldExternalLink, v))
+}
+
+// ExternalLinkContainsFold applies the ContainsFold predicate on the "external_link" field.
+func ExternalLinkContainsFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContainsFold(FieldExternalLink, v))
+}
+
+// PrimaryImageURLEQ applies the EQ predicate on the "primary_image_url" field.
+func PrimaryImageURLEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLNEQ applies the NEQ predicate on the "primary_image_url" field.
+func PrimaryImageURLNEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldNEQ(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLIn applies the In predicate on the "primary_image_url" field.
+func PrimaryImageURLIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldIn(FieldPrimaryImageURL, vs...))
+}
+
+// PrimaryImageURLNotIn applies the NotIn predicate on the "primary_image_url" field.
+func PrimaryImageURLNotIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldNotIn(FieldPrimaryImageURL, vs...))
+}
+
+// PrimaryImageURLGT applies the GT predicate on the "primary_image_url" field.
+func PrimaryImageURLGT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGT(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLGTE applies the GTE predicate on the "primary_image_url" field.
+func PrimaryImageURLGTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGTE(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLLT applies the LT predicate on the "primary_image_url" field.
+func PrimaryImageURLLT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLT(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLLTE applies the LTE predicate on the "primary_image_url" field.
+func PrimaryImageURLLTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLTE(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLContains applies the Contains predicate on the "primary_image_url" field.
+func PrimaryImageURLContains(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContains(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLHasPrefix applies the HasPrefix predicate on the "primary_image_url" field.
+func PrimaryImageURLHasPrefix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasPrefix(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLHasSuffix applies the HasSuffix predicate on the "primary_image_url" field.
+func PrimaryImageURLHasSuffix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasSuffix(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLIsNil applies the IsNil predicate on the "primary_image_url" field.
+func PrimaryImageURLIsNil() predicate.Organization {
+	return predicate.Organization(sql.FieldIsNull(FieldPrimaryImageURL))
+}
+
+// PrimaryImageURLNotNil applies the NotNil predicate on the "primary_image_url" field.
+func PrimaryImageURLNotNil() predicate.Organization {
+	return predicate.Organization(sql.FieldNotNull(FieldPrimaryImageURL))
+}
+
+// PrimaryImageURLEqualFold applies the EqualFold predicate on the "primary_image_url" field.
+func PrimaryImageURLEqualFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEqualFold(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLContainsFold applies the ContainsFold predicate on the "primary_image_url" field.
+func PrimaryImageURLContainsFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContainsFold(FieldPrimaryImageURL, v))
+}
+
+// AdditionalImagesUrlsIsNil applies the IsNil predicate on the "additional_images_urls" field.
+func AdditionalImagesUrlsIsNil() predicate.Organization {
+	return predicate.Organization(sql.FieldIsNull(FieldAdditionalImagesUrls))
+}
+
+// AdditionalImagesUrlsNotNil applies the NotNil predicate on the "additional_images_urls" field.
+func AdditionalImagesUrlsNotNil() predicate.Organization {
+	return predicate.Organization(sql.FieldNotNull(FieldAdditionalImagesUrls))
 }
 
 // HasHolder applies the HasEdge predicate on the "holder" edge.

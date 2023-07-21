@@ -34,7 +34,9 @@ func (Person) Policy() ent.Policy {
 func (Person) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixin.AuditMixin{},
+		mixin.ContactInformationMixin{},
 		mixin.DetailsMixin{},
+		mixin.ImagesMixin{},
 	}
 }
 

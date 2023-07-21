@@ -31,8 +31,8 @@ const (
 	FieldExternalLink = "external_link"
 	// FieldPrimaryImageURL holds the string denoting the primary_image_url field in the database.
 	FieldPrimaryImageURL = "primary_image_url"
-	// FieldAdditionalImageUrls holds the string denoting the additional_image_urls field in the database.
-	FieldAdditionalImageUrls = "additional_image_urls"
+	// FieldAdditionalImagesUrls holds the string denoting the additional_images_urls field in the database.
+	FieldAdditionalImagesUrls = "additional_images_urls"
 	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
@@ -157,7 +157,7 @@ var Columns = []string{
 	FieldDescription,
 	FieldExternalLink,
 	FieldPrimaryImageURL,
-	FieldAdditionalImageUrls,
+	FieldAdditionalImagesUrls,
 	FieldDeletedAt,
 	FieldDeletedBy,
 }

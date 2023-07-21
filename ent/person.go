@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -26,12 +27,22 @@ type Person struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// Address holds the value of the "address" field.
+	Address string `json:"address,omitempty"`
+	// PhoneNumbers holds the value of the "phone_numbers" field.
+	PhoneNumbers []string `json:"phone_numbers,omitempty"`
+	// Emails holds the value of the "emails" field.
+	Emails []string `json:"emails,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
+	// PrimaryImageURL holds the value of the "primary_image_url" field.
+	PrimaryImageURL string `json:"primary_image_url,omitempty"`
+	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
+	AdditionalImagesUrls []string `json:"additional_images_urls,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PersonQuery when eager-loading is set.
 	Edges         PersonEdges `json:"edges"`
@@ -105,9 +116,11 @@ func (*Person) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case person.FieldPhoneNumbers, person.FieldEmails, person.FieldAdditionalImagesUrls:
+			values[i] = new([]byte)
 		case person.FieldID:
 			values[i] = new(sql.NullInt64)
-		case person.FieldCreatedBy, person.FieldUpdatedBy, person.FieldDisplayName, person.FieldDescription, person.FieldExternalLink:
+		case person.FieldCreatedBy, person.FieldUpdatedBy, person.FieldAddress, person.FieldDisplayName, person.FieldDescription, person.FieldExternalLink, person.FieldPrimaryImageURL:
 			values[i] = new(sql.NullString)
 		case person.FieldCreatedAt, person.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -158,6 +171,28 @@ func (pe *Person) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pe.UpdatedBy = value.String
 			}
+		case person.FieldAddress:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field address", values[i])
+			} else if value.Valid {
+				pe.Address = value.String
+			}
+		case person.FieldPhoneNumbers:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field phone_numbers", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &pe.PhoneNumbers); err != nil {
+					return fmt.Errorf("unmarshal field phone_numbers: %w", err)
+				}
+			}
+		case person.FieldEmails:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field emails", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &pe.Emails); err != nil {
+					return fmt.Errorf("unmarshal field emails: %w", err)
+				}
+			}
 		case person.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
@@ -175,6 +210,20 @@ func (pe *Person) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field external_link", values[i])
 			} else if value.Valid {
 				pe.ExternalLink = value.String
+			}
+		case person.FieldPrimaryImageURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field primary_image_url", values[i])
+			} else if value.Valid {
+				pe.PrimaryImageURL = value.String
+			}
+		case person.FieldAdditionalImagesUrls:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field additional_images_urls", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &pe.AdditionalImagesUrls); err != nil {
+					return fmt.Errorf("unmarshal field additional_images_urls: %w", err)
+				}
 			}
 		case person.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -251,6 +300,15 @@ func (pe *Person) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(pe.UpdatedBy)
 	builder.WriteString(", ")
+	builder.WriteString("address=")
+	builder.WriteString(pe.Address)
+	builder.WriteString(", ")
+	builder.WriteString("phone_numbers=")
+	builder.WriteString(fmt.Sprintf("%v", pe.PhoneNumbers))
+	builder.WriteString(", ")
+	builder.WriteString("emails=")
+	builder.WriteString(fmt.Sprintf("%v", pe.Emails))
+	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(pe.DisplayName)
 	builder.WriteString(", ")
@@ -259,6 +317,12 @@ func (pe *Person) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(pe.ExternalLink)
+	builder.WriteString(", ")
+	builder.WriteString("primary_image_url=")
+	builder.WriteString(pe.PrimaryImageURL)
+	builder.WriteString(", ")
+	builder.WriteString("additional_images_urls=")
+	builder.WriteString(fmt.Sprintf("%v", pe.AdditionalImagesUrls))
 	builder.WriteByte(')')
 	return builder.String()
 }

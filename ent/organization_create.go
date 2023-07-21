@@ -21,48 +21,6 @@ type OrganizationCreate struct {
 	hooks    []Hook
 }
 
-// SetDisplayName sets the "display_name" field.
-func (oc *OrganizationCreate) SetDisplayName(s string) *OrganizationCreate {
-	oc.mutation.SetDisplayName(s)
-	return oc
-}
-
-// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableDisplayName(s *string) *OrganizationCreate {
-	if s != nil {
-		oc.SetDisplayName(*s)
-	}
-	return oc
-}
-
-// SetDescription sets the "description" field.
-func (oc *OrganizationCreate) SetDescription(s string) *OrganizationCreate {
-	oc.mutation.SetDescription(s)
-	return oc
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableDescription(s *string) *OrganizationCreate {
-	if s != nil {
-		oc.SetDescription(*s)
-	}
-	return oc
-}
-
-// SetExternalLink sets the "external_link" field.
-func (oc *OrganizationCreate) SetExternalLink(s string) *OrganizationCreate {
-	oc.mutation.SetExternalLink(s)
-	return oc
-}
-
-// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableExternalLink(s *string) *OrganizationCreate {
-	if s != nil {
-		oc.SetExternalLink(*s)
-	}
-	return oc
-}
-
 // SetCreatedAt sets the "created_at" field.
 func (oc *OrganizationCreate) SetCreatedAt(t time.Time) *OrganizationCreate {
 	oc.mutation.SetCreatedAt(t)
@@ -116,6 +74,94 @@ func (oc *OrganizationCreate) SetNillableUpdatedBy(s *string) *OrganizationCreat
 	if s != nil {
 		oc.SetUpdatedBy(*s)
 	}
+	return oc
+}
+
+// SetAddress sets the "address" field.
+func (oc *OrganizationCreate) SetAddress(s string) *OrganizationCreate {
+	oc.mutation.SetAddress(s)
+	return oc
+}
+
+// SetNillableAddress sets the "address" field if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableAddress(s *string) *OrganizationCreate {
+	if s != nil {
+		oc.SetAddress(*s)
+	}
+	return oc
+}
+
+// SetPhoneNumbers sets the "phone_numbers" field.
+func (oc *OrganizationCreate) SetPhoneNumbers(s []string) *OrganizationCreate {
+	oc.mutation.SetPhoneNumbers(s)
+	return oc
+}
+
+// SetEmails sets the "emails" field.
+func (oc *OrganizationCreate) SetEmails(s []string) *OrganizationCreate {
+	oc.mutation.SetEmails(s)
+	return oc
+}
+
+// SetDisplayName sets the "display_name" field.
+func (oc *OrganizationCreate) SetDisplayName(s string) *OrganizationCreate {
+	oc.mutation.SetDisplayName(s)
+	return oc
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableDisplayName(s *string) *OrganizationCreate {
+	if s != nil {
+		oc.SetDisplayName(*s)
+	}
+	return oc
+}
+
+// SetDescription sets the "description" field.
+func (oc *OrganizationCreate) SetDescription(s string) *OrganizationCreate {
+	oc.mutation.SetDescription(s)
+	return oc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableDescription(s *string) *OrganizationCreate {
+	if s != nil {
+		oc.SetDescription(*s)
+	}
+	return oc
+}
+
+// SetExternalLink sets the "external_link" field.
+func (oc *OrganizationCreate) SetExternalLink(s string) *OrganizationCreate {
+	oc.mutation.SetExternalLink(s)
+	return oc
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableExternalLink(s *string) *OrganizationCreate {
+	if s != nil {
+		oc.SetExternalLink(*s)
+	}
+	return oc
+}
+
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (oc *OrganizationCreate) SetPrimaryImageURL(s string) *OrganizationCreate {
+	oc.mutation.SetPrimaryImageURL(s)
+	return oc
+}
+
+// SetNillablePrimaryImageURL sets the "primary_image_url" field if the given value is not nil.
+func (oc *OrganizationCreate) SetNillablePrimaryImageURL(s *string) *OrganizationCreate {
+	if s != nil {
+		oc.SetPrimaryImageURL(*s)
+	}
+	return oc
+}
+
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (oc *OrganizationCreate) SetAdditionalImagesUrls(s []string) *OrganizationCreate {
+	oc.mutation.SetAdditionalImagesUrls(s)
 	return oc
 }
 
@@ -226,18 +272,6 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		_node = &Organization{config: oc.config}
 		_spec = sqlgraph.NewCreateSpec(organization.Table, sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt))
 	)
-	if value, ok := oc.mutation.DisplayName(); ok {
-		_spec.SetField(organization.FieldDisplayName, field.TypeString, value)
-		_node.DisplayName = value
-	}
-	if value, ok := oc.mutation.Description(); ok {
-		_spec.SetField(organization.FieldDescription, field.TypeString, value)
-		_node.Description = value
-	}
-	if value, ok := oc.mutation.ExternalLink(); ok {
-		_spec.SetField(organization.FieldExternalLink, field.TypeString, value)
-		_node.ExternalLink = value
-	}
 	if value, ok := oc.mutation.CreatedAt(); ok {
 		_spec.SetField(organization.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -253,6 +287,38 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 	if value, ok := oc.mutation.UpdatedBy(); ok {
 		_spec.SetField(organization.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := oc.mutation.Address(); ok {
+		_spec.SetField(organization.FieldAddress, field.TypeString, value)
+		_node.Address = value
+	}
+	if value, ok := oc.mutation.PhoneNumbers(); ok {
+		_spec.SetField(organization.FieldPhoneNumbers, field.TypeJSON, value)
+		_node.PhoneNumbers = value
+	}
+	if value, ok := oc.mutation.Emails(); ok {
+		_spec.SetField(organization.FieldEmails, field.TypeJSON, value)
+		_node.Emails = value
+	}
+	if value, ok := oc.mutation.DisplayName(); ok {
+		_spec.SetField(organization.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
+	}
+	if value, ok := oc.mutation.Description(); ok {
+		_spec.SetField(organization.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if value, ok := oc.mutation.ExternalLink(); ok {
+		_spec.SetField(organization.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
+	}
+	if value, ok := oc.mutation.PrimaryImageURL(); ok {
+		_spec.SetField(organization.FieldPrimaryImageURL, field.TypeString, value)
+		_node.PrimaryImageURL = value
+	}
+	if value, ok := oc.mutation.AdditionalImagesUrls(); ok {
+		_spec.SetField(organization.FieldAdditionalImagesUrls, field.TypeJSON, value)
+		_node.AdditionalImagesUrls = value
 	}
 	if nodes := oc.mutation.HolderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

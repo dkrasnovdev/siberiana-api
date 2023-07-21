@@ -635,14 +635,14 @@ func PrimaryImageURLContainsFold(v string) predicate.Artifact {
 	return predicate.Artifact(sql.FieldContainsFold(FieldPrimaryImageURL, v))
 }
 
-// AdditionalImageUrlsIsNil applies the IsNil predicate on the "additional_image_urls" field.
-func AdditionalImageUrlsIsNil() predicate.Artifact {
-	return predicate.Artifact(sql.FieldIsNull(FieldAdditionalImageUrls))
+// AdditionalImagesUrlsIsNil applies the IsNil predicate on the "additional_images_urls" field.
+func AdditionalImagesUrlsIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldAdditionalImagesUrls))
 }
 
-// AdditionalImageUrlsNotNil applies the NotNil predicate on the "additional_image_urls" field.
-func AdditionalImageUrlsNotNil() predicate.Artifact {
-	return predicate.Artifact(sql.FieldNotNull(FieldAdditionalImageUrls))
+// AdditionalImagesUrlsNotNil applies the NotNil predicate on the "additional_images_urls" field.
+func AdditionalImagesUrlsNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldAdditionalImagesUrls))
 }
 
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.

@@ -15,12 +15,6 @@ const (
 	Label = "organization"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldDisplayName holds the string denoting the display_name field in the database.
-	FieldDisplayName = "display_name"
-	// FieldDescription holds the string denoting the description field in the database.
-	FieldDescription = "description"
-	// FieldExternalLink holds the string denoting the external_link field in the database.
-	FieldExternalLink = "external_link"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldCreatedBy holds the string denoting the created_by field in the database.
@@ -29,6 +23,22 @@ const (
 	FieldUpdatedAt = "updated_at"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
+	// FieldAddress holds the string denoting the address field in the database.
+	FieldAddress = "address"
+	// FieldPhoneNumbers holds the string denoting the phone_numbers field in the database.
+	FieldPhoneNumbers = "phone_numbers"
+	// FieldEmails holds the string denoting the emails field in the database.
+	FieldEmails = "emails"
+	// FieldDisplayName holds the string denoting the display_name field in the database.
+	FieldDisplayName = "display_name"
+	// FieldDescription holds the string denoting the description field in the database.
+	FieldDescription = "description"
+	// FieldExternalLink holds the string denoting the external_link field in the database.
+	FieldExternalLink = "external_link"
+	// FieldPrimaryImageURL holds the string denoting the primary_image_url field in the database.
+	FieldPrimaryImageURL = "primary_image_url"
+	// FieldAdditionalImagesUrls holds the string denoting the additional_images_urls field in the database.
+	FieldAdditionalImagesUrls = "additional_images_urls"
 	// EdgeHolder holds the string denoting the holder edge name in mutations.
 	EdgeHolder = "holder"
 	// Table holds the table name of the organization in the database.
@@ -45,13 +55,18 @@ const (
 // Columns holds all SQL columns for organization fields.
 var Columns = []string{
 	FieldID,
-	FieldDisplayName,
-	FieldDescription,
-	FieldExternalLink,
 	FieldCreatedAt,
 	FieldCreatedBy,
 	FieldUpdatedAt,
 	FieldUpdatedBy,
+	FieldAddress,
+	FieldPhoneNumbers,
+	FieldEmails,
+	FieldDisplayName,
+	FieldDescription,
+	FieldExternalLink,
+	FieldPrimaryImageURL,
+	FieldAdditionalImagesUrls,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "organizations"
@@ -99,21 +114,6 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
 }
 
-// ByDisplayName orders the results by the display_name field.
-func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDisplayName, opts...).ToFunc()
-}
-
-// ByDescription orders the results by the description field.
-func ByDescription(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDescription, opts...).ToFunc()
-}
-
-// ByExternalLink orders the results by the external_link field.
-func ByExternalLink(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldExternalLink, opts...).ToFunc()
-}
-
 // ByCreatedAt orders the results by the created_at field.
 func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
@@ -132,6 +132,31 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedBy orders the results by the updated_by field.
 func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
+}
+
+// ByAddress orders the results by the address field.
+func ByAddress(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAddress, opts...).ToFunc()
+}
+
+// ByDisplayName orders the results by the display_name field.
+func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDisplayName, opts...).ToFunc()
+}
+
+// ByDescription orders the results by the description field.
+func ByDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByExternalLink orders the results by the external_link field.
+func ByExternalLink(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalLink, opts...).ToFunc()
+}
+
+// ByPrimaryImageURL orders the results by the primary_image_url field.
+func ByPrimaryImageURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPrimaryImageURL, opts...).ToFunc()
 }
 
 // ByHolderField orders the results by holder field.

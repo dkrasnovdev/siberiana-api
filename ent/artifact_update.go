@@ -168,21 +168,21 @@ func (au *ArtifactUpdate) ClearPrimaryImageURL() *ArtifactUpdate {
 	return au
 }
 
-// SetAdditionalImageUrls sets the "additional_image_urls" field.
-func (au *ArtifactUpdate) SetAdditionalImageUrls(s []string) *ArtifactUpdate {
-	au.mutation.SetAdditionalImageUrls(s)
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (au *ArtifactUpdate) SetAdditionalImagesUrls(s []string) *ArtifactUpdate {
+	au.mutation.SetAdditionalImagesUrls(s)
 	return au
 }
 
-// AppendAdditionalImageUrls appends s to the "additional_image_urls" field.
-func (au *ArtifactUpdate) AppendAdditionalImageUrls(s []string) *ArtifactUpdate {
-	au.mutation.AppendAdditionalImageUrls(s)
+// AppendAdditionalImagesUrls appends s to the "additional_images_urls" field.
+func (au *ArtifactUpdate) AppendAdditionalImagesUrls(s []string) *ArtifactUpdate {
+	au.mutation.AppendAdditionalImagesUrls(s)
 	return au
 }
 
-// ClearAdditionalImageUrls clears the value of the "additional_image_urls" field.
-func (au *ArtifactUpdate) ClearAdditionalImageUrls() *ArtifactUpdate {
-	au.mutation.ClearAdditionalImageUrls()
+// ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
+func (au *ArtifactUpdate) ClearAdditionalImagesUrls() *ArtifactUpdate {
+	au.mutation.ClearAdditionalImagesUrls()
 	return au
 }
 
@@ -712,16 +712,16 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if au.mutation.PrimaryImageURLCleared() {
 		_spec.ClearField(artifact.FieldPrimaryImageURL, field.TypeString)
 	}
-	if value, ok := au.mutation.AdditionalImageUrls(); ok {
-		_spec.SetField(artifact.FieldAdditionalImageUrls, field.TypeJSON, value)
+	if value, ok := au.mutation.AdditionalImagesUrls(); ok {
+		_spec.SetField(artifact.FieldAdditionalImagesUrls, field.TypeJSON, value)
 	}
-	if value, ok := au.mutation.AppendedAdditionalImageUrls(); ok {
+	if value, ok := au.mutation.AppendedAdditionalImagesUrls(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, artifact.FieldAdditionalImageUrls, value)
+			sqljson.Append(u, artifact.FieldAdditionalImagesUrls, value)
 		})
 	}
-	if au.mutation.AdditionalImageUrlsCleared() {
-		_spec.ClearField(artifact.FieldAdditionalImageUrls, field.TypeJSON)
+	if au.mutation.AdditionalImagesUrlsCleared() {
+		_spec.ClearField(artifact.FieldAdditionalImagesUrls, field.TypeJSON)
 	}
 	if value, ok := au.mutation.DeletedAt(); ok {
 		_spec.SetField(artifact.FieldDeletedAt, field.TypeTime, value)
@@ -1354,21 +1354,21 @@ func (auo *ArtifactUpdateOne) ClearPrimaryImageURL() *ArtifactUpdateOne {
 	return auo
 }
 
-// SetAdditionalImageUrls sets the "additional_image_urls" field.
-func (auo *ArtifactUpdateOne) SetAdditionalImageUrls(s []string) *ArtifactUpdateOne {
-	auo.mutation.SetAdditionalImageUrls(s)
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (auo *ArtifactUpdateOne) SetAdditionalImagesUrls(s []string) *ArtifactUpdateOne {
+	auo.mutation.SetAdditionalImagesUrls(s)
 	return auo
 }
 
-// AppendAdditionalImageUrls appends s to the "additional_image_urls" field.
-func (auo *ArtifactUpdateOne) AppendAdditionalImageUrls(s []string) *ArtifactUpdateOne {
-	auo.mutation.AppendAdditionalImageUrls(s)
+// AppendAdditionalImagesUrls appends s to the "additional_images_urls" field.
+func (auo *ArtifactUpdateOne) AppendAdditionalImagesUrls(s []string) *ArtifactUpdateOne {
+	auo.mutation.AppendAdditionalImagesUrls(s)
 	return auo
 }
 
-// ClearAdditionalImageUrls clears the value of the "additional_image_urls" field.
-func (auo *ArtifactUpdateOne) ClearAdditionalImageUrls() *ArtifactUpdateOne {
-	auo.mutation.ClearAdditionalImageUrls()
+// ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
+func (auo *ArtifactUpdateOne) ClearAdditionalImagesUrls() *ArtifactUpdateOne {
+	auo.mutation.ClearAdditionalImagesUrls()
 	return auo
 }
 
@@ -1928,16 +1928,16 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 	if auo.mutation.PrimaryImageURLCleared() {
 		_spec.ClearField(artifact.FieldPrimaryImageURL, field.TypeString)
 	}
-	if value, ok := auo.mutation.AdditionalImageUrls(); ok {
-		_spec.SetField(artifact.FieldAdditionalImageUrls, field.TypeJSON, value)
+	if value, ok := auo.mutation.AdditionalImagesUrls(); ok {
+		_spec.SetField(artifact.FieldAdditionalImagesUrls, field.TypeJSON, value)
 	}
-	if value, ok := auo.mutation.AppendedAdditionalImageUrls(); ok {
+	if value, ok := auo.mutation.AppendedAdditionalImagesUrls(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, artifact.FieldAdditionalImageUrls, value)
+			sqljson.Append(u, artifact.FieldAdditionalImagesUrls, value)
 		})
 	}
-	if auo.mutation.AdditionalImageUrlsCleared() {
-		_spec.ClearField(artifact.FieldAdditionalImageUrls, field.TypeJSON)
+	if auo.mutation.AdditionalImagesUrlsCleared() {
+		_spec.ClearField(artifact.FieldAdditionalImagesUrls, field.TypeJSON)
 	}
 	if value, ok := auo.mutation.DeletedAt(); ok {
 		_spec.SetField(artifact.FieldDeletedAt, field.TypeTime, value)

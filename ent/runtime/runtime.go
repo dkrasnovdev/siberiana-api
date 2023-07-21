@@ -363,19 +363,19 @@ func init() {
 			return next.Mutate(ctx, m)
 		})
 	}
-	organizationMixinHooks1 := organizationMixin[1].Hooks()
+	organizationMixinHooks0 := organizationMixin[0].Hooks()
 
-	organization.Hooks[1] = organizationMixinHooks1[0]
-	organizationMixinFields1 := organizationMixin[1].Fields()
-	_ = organizationMixinFields1
+	organization.Hooks[1] = organizationMixinHooks0[0]
+	organizationMixinFields0 := organizationMixin[0].Fields()
+	_ = organizationMixinFields0
 	organizationFields := schema.Organization{}.Fields()
 	_ = organizationFields
 	// organizationDescCreatedAt is the schema descriptor for created_at field.
-	organizationDescCreatedAt := organizationMixinFields1[0].Descriptor()
+	organizationDescCreatedAt := organizationMixinFields0[0].Descriptor()
 	// organization.DefaultCreatedAt holds the default value on creation for the created_at field.
 	organization.DefaultCreatedAt = organizationDescCreatedAt.Default.(func() time.Time)
 	// organizationDescUpdatedAt is the schema descriptor for updated_at field.
-	organizationDescUpdatedAt := organizationMixinFields1[2].Descriptor()
+	organizationDescUpdatedAt := organizationMixinFields0[2].Descriptor()
 	// organization.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	organization.DefaultUpdatedAt = organizationDescUpdatedAt.Default.(func() time.Time)
 	// organization.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.

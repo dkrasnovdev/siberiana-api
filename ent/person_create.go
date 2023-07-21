@@ -80,6 +80,32 @@ func (pc *PersonCreate) SetNillableUpdatedBy(s *string) *PersonCreate {
 	return pc
 }
 
+// SetAddress sets the "address" field.
+func (pc *PersonCreate) SetAddress(s string) *PersonCreate {
+	pc.mutation.SetAddress(s)
+	return pc
+}
+
+// SetNillableAddress sets the "address" field if the given value is not nil.
+func (pc *PersonCreate) SetNillableAddress(s *string) *PersonCreate {
+	if s != nil {
+		pc.SetAddress(*s)
+	}
+	return pc
+}
+
+// SetPhoneNumbers sets the "phone_numbers" field.
+func (pc *PersonCreate) SetPhoneNumbers(s []string) *PersonCreate {
+	pc.mutation.SetPhoneNumbers(s)
+	return pc
+}
+
+// SetEmails sets the "emails" field.
+func (pc *PersonCreate) SetEmails(s []string) *PersonCreate {
+	pc.mutation.SetEmails(s)
+	return pc
+}
+
 // SetDisplayName sets the "display_name" field.
 func (pc *PersonCreate) SetDisplayName(s string) *PersonCreate {
 	pc.mutation.SetDisplayName(s)
@@ -119,6 +145,26 @@ func (pc *PersonCreate) SetNillableExternalLink(s *string) *PersonCreate {
 	if s != nil {
 		pc.SetExternalLink(*s)
 	}
+	return pc
+}
+
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (pc *PersonCreate) SetPrimaryImageURL(s string) *PersonCreate {
+	pc.mutation.SetPrimaryImageURL(s)
+	return pc
+}
+
+// SetNillablePrimaryImageURL sets the "primary_image_url" field if the given value is not nil.
+func (pc *PersonCreate) SetNillablePrimaryImageURL(s *string) *PersonCreate {
+	if s != nil {
+		pc.SetPrimaryImageURL(*s)
+	}
+	return pc
+}
+
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (pc *PersonCreate) SetAdditionalImagesUrls(s []string) *PersonCreate {
+	pc.mutation.SetAdditionalImagesUrls(s)
 	return pc
 }
 
@@ -290,6 +336,18 @@ func (pc *PersonCreate) createSpec() (*Person, *sqlgraph.CreateSpec) {
 		_spec.SetField(person.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
+	if value, ok := pc.mutation.Address(); ok {
+		_spec.SetField(person.FieldAddress, field.TypeString, value)
+		_node.Address = value
+	}
+	if value, ok := pc.mutation.PhoneNumbers(); ok {
+		_spec.SetField(person.FieldPhoneNumbers, field.TypeJSON, value)
+		_node.PhoneNumbers = value
+	}
+	if value, ok := pc.mutation.Emails(); ok {
+		_spec.SetField(person.FieldEmails, field.TypeJSON, value)
+		_node.Emails = value
+	}
 	if value, ok := pc.mutation.DisplayName(); ok {
 		_spec.SetField(person.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
@@ -301,6 +359,14 @@ func (pc *PersonCreate) createSpec() (*Person, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.ExternalLink(); ok {
 		_spec.SetField(person.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
+	}
+	if value, ok := pc.mutation.PrimaryImageURL(); ok {
+		_spec.SetField(person.FieldPrimaryImageURL, field.TypeString, value)
+		_node.PrimaryImageURL = value
+	}
+	if value, ok := pc.mutation.AdditionalImagesUrls(); ok {
+		_spec.SetField(person.FieldAdditionalImagesUrls, field.TypeJSON, value)
+		_node.AdditionalImagesUrls = value
 	}
 	if nodes := pc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

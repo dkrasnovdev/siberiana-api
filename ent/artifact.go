@@ -41,8 +41,8 @@ type Artifact struct {
 	ExternalLink string `json:"external_link,omitempty"`
 	// PrimaryImageURL holds the value of the "primary_image_url" field.
 	PrimaryImageURL string `json:"primary_image_url,omitempty"`
-	// AdditionalImageUrls holds the value of the "additional_image_urls" field.
-	AdditionalImageUrls []string `json:"additional_image_urls,omitempty"`
+	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
+	AdditionalImagesUrls []string `json:"additional_images_urls,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -252,7 +252,7 @@ func (*Artifact) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case artifact.FieldAdditionalImageUrls:
+		case artifact.FieldAdditionalImagesUrls:
 			values[i] = new([]byte)
 		case artifact.FieldID:
 			values[i] = new(sql.NullInt64)
@@ -343,12 +343,12 @@ func (a *Artifact) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				a.PrimaryImageURL = value.String
 			}
-		case artifact.FieldAdditionalImageUrls:
+		case artifact.FieldAdditionalImagesUrls:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field additional_image_urls", values[i])
+				return fmt.Errorf("unexpected type %T for field additional_images_urls", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &a.AdditionalImageUrls); err != nil {
-					return fmt.Errorf("unmarshal field additional_image_urls: %w", err)
+				if err := json.Unmarshal(*value, &a.AdditionalImagesUrls); err != nil {
+					return fmt.Errorf("unmarshal field additional_images_urls: %w", err)
 				}
 			}
 		case artifact.FieldDeletedAt:
@@ -537,8 +537,8 @@ func (a *Artifact) String() string {
 	builder.WriteString("primary_image_url=")
 	builder.WriteString(a.PrimaryImageURL)
 	builder.WriteString(", ")
-	builder.WriteString("additional_image_urls=")
-	builder.WriteString(fmt.Sprintf("%v", a.AdditionalImageUrls))
+	builder.WriteString("additional_images_urls=")
+	builder.WriteString(fmt.Sprintf("%v", a.AdditionalImagesUrls))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(a.DeletedAt.Format(time.ANSIC))

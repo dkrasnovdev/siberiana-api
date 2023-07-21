@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
@@ -78,6 +79,62 @@ func (pu *PersonUpdate) ClearUpdatedBy() *PersonUpdate {
 	return pu
 }
 
+// SetAddress sets the "address" field.
+func (pu *PersonUpdate) SetAddress(s string) *PersonUpdate {
+	pu.mutation.SetAddress(s)
+	return pu
+}
+
+// SetNillableAddress sets the "address" field if the given value is not nil.
+func (pu *PersonUpdate) SetNillableAddress(s *string) *PersonUpdate {
+	if s != nil {
+		pu.SetAddress(*s)
+	}
+	return pu
+}
+
+// ClearAddress clears the value of the "address" field.
+func (pu *PersonUpdate) ClearAddress() *PersonUpdate {
+	pu.mutation.ClearAddress()
+	return pu
+}
+
+// SetPhoneNumbers sets the "phone_numbers" field.
+func (pu *PersonUpdate) SetPhoneNumbers(s []string) *PersonUpdate {
+	pu.mutation.SetPhoneNumbers(s)
+	return pu
+}
+
+// AppendPhoneNumbers appends s to the "phone_numbers" field.
+func (pu *PersonUpdate) AppendPhoneNumbers(s []string) *PersonUpdate {
+	pu.mutation.AppendPhoneNumbers(s)
+	return pu
+}
+
+// ClearPhoneNumbers clears the value of the "phone_numbers" field.
+func (pu *PersonUpdate) ClearPhoneNumbers() *PersonUpdate {
+	pu.mutation.ClearPhoneNumbers()
+	return pu
+}
+
+// SetEmails sets the "emails" field.
+func (pu *PersonUpdate) SetEmails(s []string) *PersonUpdate {
+	pu.mutation.SetEmails(s)
+	return pu
+}
+
+// AppendEmails appends s to the "emails" field.
+func (pu *PersonUpdate) AppendEmails(s []string) *PersonUpdate {
+	pu.mutation.AppendEmails(s)
+	return pu
+}
+
+// ClearEmails clears the value of the "emails" field.
+func (pu *PersonUpdate) ClearEmails() *PersonUpdate {
+	pu.mutation.ClearEmails()
+	return pu
+}
+
 // SetDisplayName sets the "display_name" field.
 func (pu *PersonUpdate) SetDisplayName(s string) *PersonUpdate {
 	pu.mutation.SetDisplayName(s)
@@ -135,6 +192,44 @@ func (pu *PersonUpdate) SetNillableExternalLink(s *string) *PersonUpdate {
 // ClearExternalLink clears the value of the "external_link" field.
 func (pu *PersonUpdate) ClearExternalLink() *PersonUpdate {
 	pu.mutation.ClearExternalLink()
+	return pu
+}
+
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (pu *PersonUpdate) SetPrimaryImageURL(s string) *PersonUpdate {
+	pu.mutation.SetPrimaryImageURL(s)
+	return pu
+}
+
+// SetNillablePrimaryImageURL sets the "primary_image_url" field if the given value is not nil.
+func (pu *PersonUpdate) SetNillablePrimaryImageURL(s *string) *PersonUpdate {
+	if s != nil {
+		pu.SetPrimaryImageURL(*s)
+	}
+	return pu
+}
+
+// ClearPrimaryImageURL clears the value of the "primary_image_url" field.
+func (pu *PersonUpdate) ClearPrimaryImageURL() *PersonUpdate {
+	pu.mutation.ClearPrimaryImageURL()
+	return pu
+}
+
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (pu *PersonUpdate) SetAdditionalImagesUrls(s []string) *PersonUpdate {
+	pu.mutation.SetAdditionalImagesUrls(s)
+	return pu
+}
+
+// AppendAdditionalImagesUrls appends s to the "additional_images_urls" field.
+func (pu *PersonUpdate) AppendAdditionalImagesUrls(s []string) *PersonUpdate {
+	pu.mutation.AppendAdditionalImagesUrls(s)
+	return pu
+}
+
+// ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
+func (pu *PersonUpdate) ClearAdditionalImagesUrls() *PersonUpdate {
+	pu.mutation.ClearAdditionalImagesUrls()
 	return pu
 }
 
@@ -342,6 +437,34 @@ func (pu *PersonUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.UpdatedByCleared() {
 		_spec.ClearField(person.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := pu.mutation.Address(); ok {
+		_spec.SetField(person.FieldAddress, field.TypeString, value)
+	}
+	if pu.mutation.AddressCleared() {
+		_spec.ClearField(person.FieldAddress, field.TypeString)
+	}
+	if value, ok := pu.mutation.PhoneNumbers(); ok {
+		_spec.SetField(person.FieldPhoneNumbers, field.TypeJSON, value)
+	}
+	if value, ok := pu.mutation.AppendedPhoneNumbers(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, person.FieldPhoneNumbers, value)
+		})
+	}
+	if pu.mutation.PhoneNumbersCleared() {
+		_spec.ClearField(person.FieldPhoneNumbers, field.TypeJSON)
+	}
+	if value, ok := pu.mutation.Emails(); ok {
+		_spec.SetField(person.FieldEmails, field.TypeJSON, value)
+	}
+	if value, ok := pu.mutation.AppendedEmails(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, person.FieldEmails, value)
+		})
+	}
+	if pu.mutation.EmailsCleared() {
+		_spec.ClearField(person.FieldEmails, field.TypeJSON)
+	}
 	if value, ok := pu.mutation.DisplayName(); ok {
 		_spec.SetField(person.FieldDisplayName, field.TypeString, value)
 	}
@@ -359,6 +482,23 @@ func (pu *PersonUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(person.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := pu.mutation.PrimaryImageURL(); ok {
+		_spec.SetField(person.FieldPrimaryImageURL, field.TypeString, value)
+	}
+	if pu.mutation.PrimaryImageURLCleared() {
+		_spec.ClearField(person.FieldPrimaryImageURL, field.TypeString)
+	}
+	if value, ok := pu.mutation.AdditionalImagesUrls(); ok {
+		_spec.SetField(person.FieldAdditionalImagesUrls, field.TypeJSON, value)
+	}
+	if value, ok := pu.mutation.AppendedAdditionalImagesUrls(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, person.FieldAdditionalImagesUrls, value)
+		})
+	}
+	if pu.mutation.AdditionalImagesUrlsCleared() {
+		_spec.ClearField(person.FieldAdditionalImagesUrls, field.TypeJSON)
 	}
 	if pu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -590,6 +730,62 @@ func (puo *PersonUpdateOne) ClearUpdatedBy() *PersonUpdateOne {
 	return puo
 }
 
+// SetAddress sets the "address" field.
+func (puo *PersonUpdateOne) SetAddress(s string) *PersonUpdateOne {
+	puo.mutation.SetAddress(s)
+	return puo
+}
+
+// SetNillableAddress sets the "address" field if the given value is not nil.
+func (puo *PersonUpdateOne) SetNillableAddress(s *string) *PersonUpdateOne {
+	if s != nil {
+		puo.SetAddress(*s)
+	}
+	return puo
+}
+
+// ClearAddress clears the value of the "address" field.
+func (puo *PersonUpdateOne) ClearAddress() *PersonUpdateOne {
+	puo.mutation.ClearAddress()
+	return puo
+}
+
+// SetPhoneNumbers sets the "phone_numbers" field.
+func (puo *PersonUpdateOne) SetPhoneNumbers(s []string) *PersonUpdateOne {
+	puo.mutation.SetPhoneNumbers(s)
+	return puo
+}
+
+// AppendPhoneNumbers appends s to the "phone_numbers" field.
+func (puo *PersonUpdateOne) AppendPhoneNumbers(s []string) *PersonUpdateOne {
+	puo.mutation.AppendPhoneNumbers(s)
+	return puo
+}
+
+// ClearPhoneNumbers clears the value of the "phone_numbers" field.
+func (puo *PersonUpdateOne) ClearPhoneNumbers() *PersonUpdateOne {
+	puo.mutation.ClearPhoneNumbers()
+	return puo
+}
+
+// SetEmails sets the "emails" field.
+func (puo *PersonUpdateOne) SetEmails(s []string) *PersonUpdateOne {
+	puo.mutation.SetEmails(s)
+	return puo
+}
+
+// AppendEmails appends s to the "emails" field.
+func (puo *PersonUpdateOne) AppendEmails(s []string) *PersonUpdateOne {
+	puo.mutation.AppendEmails(s)
+	return puo
+}
+
+// ClearEmails clears the value of the "emails" field.
+func (puo *PersonUpdateOne) ClearEmails() *PersonUpdateOne {
+	puo.mutation.ClearEmails()
+	return puo
+}
+
 // SetDisplayName sets the "display_name" field.
 func (puo *PersonUpdateOne) SetDisplayName(s string) *PersonUpdateOne {
 	puo.mutation.SetDisplayName(s)
@@ -647,6 +843,44 @@ func (puo *PersonUpdateOne) SetNillableExternalLink(s *string) *PersonUpdateOne 
 // ClearExternalLink clears the value of the "external_link" field.
 func (puo *PersonUpdateOne) ClearExternalLink() *PersonUpdateOne {
 	puo.mutation.ClearExternalLink()
+	return puo
+}
+
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (puo *PersonUpdateOne) SetPrimaryImageURL(s string) *PersonUpdateOne {
+	puo.mutation.SetPrimaryImageURL(s)
+	return puo
+}
+
+// SetNillablePrimaryImageURL sets the "primary_image_url" field if the given value is not nil.
+func (puo *PersonUpdateOne) SetNillablePrimaryImageURL(s *string) *PersonUpdateOne {
+	if s != nil {
+		puo.SetPrimaryImageURL(*s)
+	}
+	return puo
+}
+
+// ClearPrimaryImageURL clears the value of the "primary_image_url" field.
+func (puo *PersonUpdateOne) ClearPrimaryImageURL() *PersonUpdateOne {
+	puo.mutation.ClearPrimaryImageURL()
+	return puo
+}
+
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (puo *PersonUpdateOne) SetAdditionalImagesUrls(s []string) *PersonUpdateOne {
+	puo.mutation.SetAdditionalImagesUrls(s)
+	return puo
+}
+
+// AppendAdditionalImagesUrls appends s to the "additional_images_urls" field.
+func (puo *PersonUpdateOne) AppendAdditionalImagesUrls(s []string) *PersonUpdateOne {
+	puo.mutation.AppendAdditionalImagesUrls(s)
+	return puo
+}
+
+// ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
+func (puo *PersonUpdateOne) ClearAdditionalImagesUrls() *PersonUpdateOne {
+	puo.mutation.ClearAdditionalImagesUrls()
 	return puo
 }
 
@@ -884,6 +1118,34 @@ func (puo *PersonUpdateOne) sqlSave(ctx context.Context) (_node *Person, err err
 	if puo.mutation.UpdatedByCleared() {
 		_spec.ClearField(person.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := puo.mutation.Address(); ok {
+		_spec.SetField(person.FieldAddress, field.TypeString, value)
+	}
+	if puo.mutation.AddressCleared() {
+		_spec.ClearField(person.FieldAddress, field.TypeString)
+	}
+	if value, ok := puo.mutation.PhoneNumbers(); ok {
+		_spec.SetField(person.FieldPhoneNumbers, field.TypeJSON, value)
+	}
+	if value, ok := puo.mutation.AppendedPhoneNumbers(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, person.FieldPhoneNumbers, value)
+		})
+	}
+	if puo.mutation.PhoneNumbersCleared() {
+		_spec.ClearField(person.FieldPhoneNumbers, field.TypeJSON)
+	}
+	if value, ok := puo.mutation.Emails(); ok {
+		_spec.SetField(person.FieldEmails, field.TypeJSON, value)
+	}
+	if value, ok := puo.mutation.AppendedEmails(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, person.FieldEmails, value)
+		})
+	}
+	if puo.mutation.EmailsCleared() {
+		_spec.ClearField(person.FieldEmails, field.TypeJSON)
+	}
 	if value, ok := puo.mutation.DisplayName(); ok {
 		_spec.SetField(person.FieldDisplayName, field.TypeString, value)
 	}
@@ -901,6 +1163,23 @@ func (puo *PersonUpdateOne) sqlSave(ctx context.Context) (_node *Person, err err
 	}
 	if puo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(person.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := puo.mutation.PrimaryImageURL(); ok {
+		_spec.SetField(person.FieldPrimaryImageURL, field.TypeString, value)
+	}
+	if puo.mutation.PrimaryImageURLCleared() {
+		_spec.ClearField(person.FieldPrimaryImageURL, field.TypeString)
+	}
+	if value, ok := puo.mutation.AdditionalImagesUrls(); ok {
+		_spec.SetField(person.FieldAdditionalImagesUrls, field.TypeJSON, value)
+	}
+	if value, ok := puo.mutation.AppendedAdditionalImagesUrls(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, person.FieldAdditionalImagesUrls, value)
+		})
+	}
+	if puo.mutation.AdditionalImagesUrlsCleared() {
+		_spec.ClearField(person.FieldAdditionalImagesUrls, field.TypeJSON)
 	}
 	if puo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
