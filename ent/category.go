@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -29,8 +30,8 @@ type Category struct {
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
-	// ExternalLink holds the value of the "external_link" field.
-	ExternalLink string `json:"external_link,omitempty"`
+	// ExternalLinks holds the value of the "external_links" field.
+	ExternalLinks []string `json:"external_links,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CategoryQuery when eager-loading is set.
 	Edges        CategoryEdges `json:"edges"`
@@ -64,9 +65,11 @@ func (*Category) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case category.FieldExternalLinks:
+			values[i] = new([]byte)
 		case category.FieldID:
 			values[i] = new(sql.NullInt64)
-		case category.FieldCreatedBy, category.FieldUpdatedBy, category.FieldDisplayName, category.FieldDescription, category.FieldExternalLink:
+		case category.FieldCreatedBy, category.FieldUpdatedBy, category.FieldDisplayName, category.FieldDescription:
 			values[i] = new(sql.NullString)
 		case category.FieldCreatedAt, category.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -127,11 +130,13 @@ func (c *Category) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.Description = value.String
 			}
-		case category.FieldExternalLink:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field external_link", values[i])
-			} else if value.Valid {
-				c.ExternalLink = value.String
+		case category.FieldExternalLinks:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field external_links", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &c.ExternalLinks); err != nil {
+					return fmt.Errorf("unmarshal field external_links: %w", err)
+				}
 			}
 		default:
 			c.selectValues.Set(columns[i], values[i])
@@ -192,8 +197,8 @@ func (c *Category) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(c.Description)
 	builder.WriteString(", ")
-	builder.WriteString("external_link=")
-	builder.WriteString(c.ExternalLink)
+	builder.WriteString("external_links=")
+	builder.WriteString(fmt.Sprintf("%v", c.ExternalLinks))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -29,8 +30,8 @@ type Monument struct {
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
-	// ExternalLink holds the value of the "external_link" field.
-	ExternalLink string `json:"external_link,omitempty"`
+	// ExternalLinks holds the value of the "external_links" field.
+	ExternalLinks []string `json:"external_links,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MonumentQuery when eager-loading is set.
 	Edges        MonumentEdges `json:"edges"`
@@ -64,9 +65,11 @@ func (*Monument) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case monument.FieldExternalLinks:
+			values[i] = new([]byte)
 		case monument.FieldID:
 			values[i] = new(sql.NullInt64)
-		case monument.FieldCreatedBy, monument.FieldUpdatedBy, monument.FieldDisplayName, monument.FieldDescription, monument.FieldExternalLink:
+		case monument.FieldCreatedBy, monument.FieldUpdatedBy, monument.FieldDisplayName, monument.FieldDescription:
 			values[i] = new(sql.NullString)
 		case monument.FieldCreatedAt, monument.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -127,11 +130,13 @@ func (m *Monument) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				m.Description = value.String
 			}
-		case monument.FieldExternalLink:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field external_link", values[i])
-			} else if value.Valid {
-				m.ExternalLink = value.String
+		case monument.FieldExternalLinks:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field external_links", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &m.ExternalLinks); err != nil {
+					return fmt.Errorf("unmarshal field external_links: %w", err)
+				}
 			}
 		default:
 			m.selectValues.Set(columns[i], values[i])
@@ -192,8 +197,8 @@ func (m *Monument) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(m.Description)
 	builder.WriteString(", ")
-	builder.WriteString("external_link=")
-	builder.WriteString(m.ExternalLink)
+	builder.WriteString("external_links=")
+	builder.WriteString(fmt.Sprintf("%v", m.ExternalLinks))
 	builder.WriteByte(')')
 	return builder.String()
 }

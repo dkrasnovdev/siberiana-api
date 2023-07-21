@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -29,8 +30,8 @@ type Set struct {
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
-	// ExternalLink holds the value of the "external_link" field.
-	ExternalLink string `json:"external_link,omitempty"`
+	// ExternalLinks holds the value of the "external_links" field.
+	ExternalLinks []string `json:"external_links,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SetQuery when eager-loading is set.
 	Edges        SetEdges `json:"edges"`
@@ -64,9 +65,11 @@ func (*Set) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case set.FieldExternalLinks:
+			values[i] = new([]byte)
 		case set.FieldID:
 			values[i] = new(sql.NullInt64)
-		case set.FieldCreatedBy, set.FieldUpdatedBy, set.FieldDisplayName, set.FieldDescription, set.FieldExternalLink:
+		case set.FieldCreatedBy, set.FieldUpdatedBy, set.FieldDisplayName, set.FieldDescription:
 			values[i] = new(sql.NullString)
 		case set.FieldCreatedAt, set.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -127,11 +130,13 @@ func (s *Set) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.Description = value.String
 			}
-		case set.FieldExternalLink:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field external_link", values[i])
-			} else if value.Valid {
-				s.ExternalLink = value.String
+		case set.FieldExternalLinks:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field external_links", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &s.ExternalLinks); err != nil {
+					return fmt.Errorf("unmarshal field external_links: %w", err)
+				}
 			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
@@ -192,8 +197,8 @@ func (s *Set) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(s.Description)
 	builder.WriteString(", ")
-	builder.WriteString("external_link=")
-	builder.WriteString(s.ExternalLink)
+	builder.WriteString("external_links=")
+	builder.WriteString(fmt.Sprintf("%v", s.ExternalLinks))
 	builder.WriteByte(')')
 	return builder.String()
 }

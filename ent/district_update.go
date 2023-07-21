@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
@@ -115,23 +116,21 @@ func (du *DistrictUpdate) ClearDescription() *DistrictUpdate {
 	return du
 }
 
-// SetExternalLink sets the "external_link" field.
-func (du *DistrictUpdate) SetExternalLink(s string) *DistrictUpdate {
-	du.mutation.SetExternalLink(s)
+// SetExternalLinks sets the "external_links" field.
+func (du *DistrictUpdate) SetExternalLinks(s []string) *DistrictUpdate {
+	du.mutation.SetExternalLinks(s)
 	return du
 }
 
-// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
-func (du *DistrictUpdate) SetNillableExternalLink(s *string) *DistrictUpdate {
-	if s != nil {
-		du.SetExternalLink(*s)
-	}
+// AppendExternalLinks appends s to the "external_links" field.
+func (du *DistrictUpdate) AppendExternalLinks(s []string) *DistrictUpdate {
+	du.mutation.AppendExternalLinks(s)
 	return du
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (du *DistrictUpdate) ClearExternalLink() *DistrictUpdate {
-	du.mutation.ClearExternalLink()
+// ClearExternalLinks clears the value of the "external_links" field.
+func (du *DistrictUpdate) ClearExternalLinks() *DistrictUpdate {
+	du.mutation.ClearExternalLinks()
 	return du
 }
 
@@ -243,11 +242,16 @@ func (du *DistrictUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if du.mutation.DescriptionCleared() {
 		_spec.ClearField(district.FieldDescription, field.TypeString)
 	}
-	if value, ok := du.mutation.ExternalLink(); ok {
-		_spec.SetField(district.FieldExternalLink, field.TypeString, value)
+	if value, ok := du.mutation.ExternalLinks(); ok {
+		_spec.SetField(district.FieldExternalLinks, field.TypeJSON, value)
 	}
-	if du.mutation.ExternalLinkCleared() {
-		_spec.ClearField(district.FieldExternalLink, field.TypeString)
+	if value, ok := du.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, district.FieldExternalLinks, value)
+		})
+	}
+	if du.mutation.ExternalLinksCleared() {
+		_spec.ClearField(district.FieldExternalLinks, field.TypeJSON)
 	}
 	if du.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -384,23 +388,21 @@ func (duo *DistrictUpdateOne) ClearDescription() *DistrictUpdateOne {
 	return duo
 }
 
-// SetExternalLink sets the "external_link" field.
-func (duo *DistrictUpdateOne) SetExternalLink(s string) *DistrictUpdateOne {
-	duo.mutation.SetExternalLink(s)
+// SetExternalLinks sets the "external_links" field.
+func (duo *DistrictUpdateOne) SetExternalLinks(s []string) *DistrictUpdateOne {
+	duo.mutation.SetExternalLinks(s)
 	return duo
 }
 
-// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
-func (duo *DistrictUpdateOne) SetNillableExternalLink(s *string) *DistrictUpdateOne {
-	if s != nil {
-		duo.SetExternalLink(*s)
-	}
+// AppendExternalLinks appends s to the "external_links" field.
+func (duo *DistrictUpdateOne) AppendExternalLinks(s []string) *DistrictUpdateOne {
+	duo.mutation.AppendExternalLinks(s)
 	return duo
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (duo *DistrictUpdateOne) ClearExternalLink() *DistrictUpdateOne {
-	duo.mutation.ClearExternalLink()
+// ClearExternalLinks clears the value of the "external_links" field.
+func (duo *DistrictUpdateOne) ClearExternalLinks() *DistrictUpdateOne {
+	duo.mutation.ClearExternalLinks()
 	return duo
 }
 
@@ -542,11 +544,16 @@ func (duo *DistrictUpdateOne) sqlSave(ctx context.Context) (_node *District, err
 	if duo.mutation.DescriptionCleared() {
 		_spec.ClearField(district.FieldDescription, field.TypeString)
 	}
-	if value, ok := duo.mutation.ExternalLink(); ok {
-		_spec.SetField(district.FieldExternalLink, field.TypeString, value)
+	if value, ok := duo.mutation.ExternalLinks(); ok {
+		_spec.SetField(district.FieldExternalLinks, field.TypeJSON, value)
 	}
-	if duo.mutation.ExternalLinkCleared() {
-		_spec.ClearField(district.FieldExternalLink, field.TypeString)
+	if value, ok := duo.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, district.FieldExternalLinks, value)
+		})
+	}
+	if duo.mutation.ExternalLinksCleared() {
+		_spec.ClearField(district.FieldExternalLinks, field.TypeJSON)
 	}
 	if duo.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{

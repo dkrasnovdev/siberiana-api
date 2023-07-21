@@ -77,63 +77,29 @@ func (hu *HolderUpdate) ClearUpdatedBy() *HolderUpdate {
 	return hu
 }
 
-// SetDisplayName sets the "display_name" field.
-func (hu *HolderUpdate) SetDisplayName(s string) *HolderUpdate {
-	hu.mutation.SetDisplayName(s)
+// SetBeginDate sets the "begin_date" field.
+func (hu *HolderUpdate) SetBeginDate(t time.Time) *HolderUpdate {
+	hu.mutation.SetBeginDate(t)
 	return hu
 }
 
-// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
-func (hu *HolderUpdate) SetNillableDisplayName(s *string) *HolderUpdate {
-	if s != nil {
-		hu.SetDisplayName(*s)
+// SetEndDate sets the "end_date" field.
+func (hu *HolderUpdate) SetEndDate(t time.Time) *HolderUpdate {
+	hu.mutation.SetEndDate(t)
+	return hu
+}
+
+// SetNillableEndDate sets the "end_date" field if the given value is not nil.
+func (hu *HolderUpdate) SetNillableEndDate(t *time.Time) *HolderUpdate {
+	if t != nil {
+		hu.SetEndDate(*t)
 	}
 	return hu
 }
 
-// ClearDisplayName clears the value of the "display_name" field.
-func (hu *HolderUpdate) ClearDisplayName() *HolderUpdate {
-	hu.mutation.ClearDisplayName()
-	return hu
-}
-
-// SetDescription sets the "description" field.
-func (hu *HolderUpdate) SetDescription(s string) *HolderUpdate {
-	hu.mutation.SetDescription(s)
-	return hu
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (hu *HolderUpdate) SetNillableDescription(s *string) *HolderUpdate {
-	if s != nil {
-		hu.SetDescription(*s)
-	}
-	return hu
-}
-
-// ClearDescription clears the value of the "description" field.
-func (hu *HolderUpdate) ClearDescription() *HolderUpdate {
-	hu.mutation.ClearDescription()
-	return hu
-}
-
-// SetExternalLink sets the "external_link" field.
-func (hu *HolderUpdate) SetExternalLink(s string) *HolderUpdate {
-	hu.mutation.SetExternalLink(s)
-	return hu
-}
-
-// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
-func (hu *HolderUpdate) SetNillableExternalLink(s *string) *HolderUpdate {
-	if s != nil {
-		hu.SetExternalLink(*s)
-	}
-	return hu
-}
-
-// ClearExternalLink clears the value of the "external_link" field.
-func (hu *HolderUpdate) ClearExternalLink() *HolderUpdate {
-	hu.mutation.ClearExternalLink()
+// ClearEndDate clears the value of the "end_date" field.
+func (hu *HolderUpdate) ClearEndDate() *HolderUpdate {
+	hu.mutation.ClearEndDate()
 	return hu
 }
 
@@ -294,23 +260,14 @@ func (hu *HolderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if hu.mutation.UpdatedByCleared() {
 		_spec.ClearField(holder.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := hu.mutation.DisplayName(); ok {
-		_spec.SetField(holder.FieldDisplayName, field.TypeString, value)
+	if value, ok := hu.mutation.BeginDate(); ok {
+		_spec.SetField(holder.FieldBeginDate, field.TypeTime, value)
 	}
-	if hu.mutation.DisplayNameCleared() {
-		_spec.ClearField(holder.FieldDisplayName, field.TypeString)
+	if value, ok := hu.mutation.EndDate(); ok {
+		_spec.SetField(holder.FieldEndDate, field.TypeTime, value)
 	}
-	if value, ok := hu.mutation.Description(); ok {
-		_spec.SetField(holder.FieldDescription, field.TypeString, value)
-	}
-	if hu.mutation.DescriptionCleared() {
-		_spec.ClearField(holder.FieldDescription, field.TypeString)
-	}
-	if value, ok := hu.mutation.ExternalLink(); ok {
-		_spec.SetField(holder.FieldExternalLink, field.TypeString, value)
-	}
-	if hu.mutation.ExternalLinkCleared() {
-		_spec.ClearField(holder.FieldExternalLink, field.TypeString)
+	if hu.mutation.EndDateCleared() {
+		_spec.ClearField(holder.FieldEndDate, field.TypeTime)
 	}
 	if hu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -481,63 +438,29 @@ func (huo *HolderUpdateOne) ClearUpdatedBy() *HolderUpdateOne {
 	return huo
 }
 
-// SetDisplayName sets the "display_name" field.
-func (huo *HolderUpdateOne) SetDisplayName(s string) *HolderUpdateOne {
-	huo.mutation.SetDisplayName(s)
+// SetBeginDate sets the "begin_date" field.
+func (huo *HolderUpdateOne) SetBeginDate(t time.Time) *HolderUpdateOne {
+	huo.mutation.SetBeginDate(t)
 	return huo
 }
 
-// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
-func (huo *HolderUpdateOne) SetNillableDisplayName(s *string) *HolderUpdateOne {
-	if s != nil {
-		huo.SetDisplayName(*s)
+// SetEndDate sets the "end_date" field.
+func (huo *HolderUpdateOne) SetEndDate(t time.Time) *HolderUpdateOne {
+	huo.mutation.SetEndDate(t)
+	return huo
+}
+
+// SetNillableEndDate sets the "end_date" field if the given value is not nil.
+func (huo *HolderUpdateOne) SetNillableEndDate(t *time.Time) *HolderUpdateOne {
+	if t != nil {
+		huo.SetEndDate(*t)
 	}
 	return huo
 }
 
-// ClearDisplayName clears the value of the "display_name" field.
-func (huo *HolderUpdateOne) ClearDisplayName() *HolderUpdateOne {
-	huo.mutation.ClearDisplayName()
-	return huo
-}
-
-// SetDescription sets the "description" field.
-func (huo *HolderUpdateOne) SetDescription(s string) *HolderUpdateOne {
-	huo.mutation.SetDescription(s)
-	return huo
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (huo *HolderUpdateOne) SetNillableDescription(s *string) *HolderUpdateOne {
-	if s != nil {
-		huo.SetDescription(*s)
-	}
-	return huo
-}
-
-// ClearDescription clears the value of the "description" field.
-func (huo *HolderUpdateOne) ClearDescription() *HolderUpdateOne {
-	huo.mutation.ClearDescription()
-	return huo
-}
-
-// SetExternalLink sets the "external_link" field.
-func (huo *HolderUpdateOne) SetExternalLink(s string) *HolderUpdateOne {
-	huo.mutation.SetExternalLink(s)
-	return huo
-}
-
-// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
-func (huo *HolderUpdateOne) SetNillableExternalLink(s *string) *HolderUpdateOne {
-	if s != nil {
-		huo.SetExternalLink(*s)
-	}
-	return huo
-}
-
-// ClearExternalLink clears the value of the "external_link" field.
-func (huo *HolderUpdateOne) ClearExternalLink() *HolderUpdateOne {
-	huo.mutation.ClearExternalLink()
+// ClearEndDate clears the value of the "end_date" field.
+func (huo *HolderUpdateOne) ClearEndDate() *HolderUpdateOne {
+	huo.mutation.ClearEndDate()
 	return huo
 }
 
@@ -728,23 +651,14 @@ func (huo *HolderUpdateOne) sqlSave(ctx context.Context) (_node *Holder, err err
 	if huo.mutation.UpdatedByCleared() {
 		_spec.ClearField(holder.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := huo.mutation.DisplayName(); ok {
-		_spec.SetField(holder.FieldDisplayName, field.TypeString, value)
+	if value, ok := huo.mutation.BeginDate(); ok {
+		_spec.SetField(holder.FieldBeginDate, field.TypeTime, value)
 	}
-	if huo.mutation.DisplayNameCleared() {
-		_spec.ClearField(holder.FieldDisplayName, field.TypeString)
+	if value, ok := huo.mutation.EndDate(); ok {
+		_spec.SetField(holder.FieldEndDate, field.TypeTime, value)
 	}
-	if value, ok := huo.mutation.Description(); ok {
-		_spec.SetField(holder.FieldDescription, field.TypeString, value)
-	}
-	if huo.mutation.DescriptionCleared() {
-		_spec.ClearField(holder.FieldDescription, field.TypeString)
-	}
-	if value, ok := huo.mutation.ExternalLink(); ok {
-		_spec.SetField(holder.FieldExternalLink, field.TypeString, value)
-	}
-	if huo.mutation.ExternalLinkCleared() {
-		_spec.ClearField(holder.FieldExternalLink, field.TypeString)
+	if huo.mutation.EndDateCleared() {
+		_spec.ClearField(holder.FieldEndDate, field.TypeTime)
 	}
 	if huo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

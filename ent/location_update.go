@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
@@ -118,23 +119,21 @@ func (lu *LocationUpdate) ClearDescription() *LocationUpdate {
 	return lu
 }
 
-// SetExternalLink sets the "external_link" field.
-func (lu *LocationUpdate) SetExternalLink(s string) *LocationUpdate {
-	lu.mutation.SetExternalLink(s)
+// SetExternalLinks sets the "external_links" field.
+func (lu *LocationUpdate) SetExternalLinks(s []string) *LocationUpdate {
+	lu.mutation.SetExternalLinks(s)
 	return lu
 }
 
-// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
-func (lu *LocationUpdate) SetNillableExternalLink(s *string) *LocationUpdate {
-	if s != nil {
-		lu.SetExternalLink(*s)
-	}
+// AppendExternalLinks appends s to the "external_links" field.
+func (lu *LocationUpdate) AppendExternalLinks(s []string) *LocationUpdate {
+	lu.mutation.AppendExternalLinks(s)
 	return lu
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (lu *LocationUpdate) ClearExternalLink() *LocationUpdate {
-	lu.mutation.ClearExternalLink()
+// ClearExternalLinks clears the value of the "external_links" field.
+func (lu *LocationUpdate) ClearExternalLinks() *LocationUpdate {
+	lu.mutation.ClearExternalLinks()
 	return lu
 }
 
@@ -332,11 +331,16 @@ func (lu *LocationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if lu.mutation.DescriptionCleared() {
 		_spec.ClearField(location.FieldDescription, field.TypeString)
 	}
-	if value, ok := lu.mutation.ExternalLink(); ok {
-		_spec.SetField(location.FieldExternalLink, field.TypeString, value)
+	if value, ok := lu.mutation.ExternalLinks(); ok {
+		_spec.SetField(location.FieldExternalLinks, field.TypeJSON, value)
 	}
-	if lu.mutation.ExternalLinkCleared() {
-		_spec.ClearField(location.FieldExternalLink, field.TypeString)
+	if value, ok := lu.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, location.FieldExternalLinks, value)
+		})
+	}
+	if lu.mutation.ExternalLinksCleared() {
+		_spec.ClearField(location.FieldExternalLinks, field.TypeJSON)
 	}
 	if lu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -576,23 +580,21 @@ func (luo *LocationUpdateOne) ClearDescription() *LocationUpdateOne {
 	return luo
 }
 
-// SetExternalLink sets the "external_link" field.
-func (luo *LocationUpdateOne) SetExternalLink(s string) *LocationUpdateOne {
-	luo.mutation.SetExternalLink(s)
+// SetExternalLinks sets the "external_links" field.
+func (luo *LocationUpdateOne) SetExternalLinks(s []string) *LocationUpdateOne {
+	luo.mutation.SetExternalLinks(s)
 	return luo
 }
 
-// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
-func (luo *LocationUpdateOne) SetNillableExternalLink(s *string) *LocationUpdateOne {
-	if s != nil {
-		luo.SetExternalLink(*s)
-	}
+// AppendExternalLinks appends s to the "external_links" field.
+func (luo *LocationUpdateOne) AppendExternalLinks(s []string) *LocationUpdateOne {
+	luo.mutation.AppendExternalLinks(s)
 	return luo
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (luo *LocationUpdateOne) ClearExternalLink() *LocationUpdateOne {
-	luo.mutation.ClearExternalLink()
+// ClearExternalLinks clears the value of the "external_links" field.
+func (luo *LocationUpdateOne) ClearExternalLinks() *LocationUpdateOne {
+	luo.mutation.ClearExternalLinks()
 	return luo
 }
 
@@ -820,11 +822,16 @@ func (luo *LocationUpdateOne) sqlSave(ctx context.Context) (_node *Location, err
 	if luo.mutation.DescriptionCleared() {
 		_spec.ClearField(location.FieldDescription, field.TypeString)
 	}
-	if value, ok := luo.mutation.ExternalLink(); ok {
-		_spec.SetField(location.FieldExternalLink, field.TypeString, value)
+	if value, ok := luo.mutation.ExternalLinks(); ok {
+		_spec.SetField(location.FieldExternalLinks, field.TypeJSON, value)
 	}
-	if luo.mutation.ExternalLinkCleared() {
-		_spec.ClearField(location.FieldExternalLink, field.TypeString)
+	if value, ok := luo.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, location.FieldExternalLinks, value)
+		})
+	}
+	if luo.mutation.ExternalLinksCleared() {
+		_spec.ClearField(location.FieldExternalLinks, field.TypeJSON)
 	}
 	if luo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

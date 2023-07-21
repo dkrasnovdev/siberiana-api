@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
@@ -115,23 +116,21 @@ func (ru *RegionUpdate) ClearDescription() *RegionUpdate {
 	return ru
 }
 
-// SetExternalLink sets the "external_link" field.
-func (ru *RegionUpdate) SetExternalLink(s string) *RegionUpdate {
-	ru.mutation.SetExternalLink(s)
+// SetExternalLinks sets the "external_links" field.
+func (ru *RegionUpdate) SetExternalLinks(s []string) *RegionUpdate {
+	ru.mutation.SetExternalLinks(s)
 	return ru
 }
 
-// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
-func (ru *RegionUpdate) SetNillableExternalLink(s *string) *RegionUpdate {
-	if s != nil {
-		ru.SetExternalLink(*s)
-	}
+// AppendExternalLinks appends s to the "external_links" field.
+func (ru *RegionUpdate) AppendExternalLinks(s []string) *RegionUpdate {
+	ru.mutation.AppendExternalLinks(s)
 	return ru
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (ru *RegionUpdate) ClearExternalLink() *RegionUpdate {
-	ru.mutation.ClearExternalLink()
+// ClearExternalLinks clears the value of the "external_links" field.
+func (ru *RegionUpdate) ClearExternalLinks() *RegionUpdate {
+	ru.mutation.ClearExternalLinks()
 	return ru
 }
 
@@ -243,11 +242,16 @@ func (ru *RegionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ru.mutation.DescriptionCleared() {
 		_spec.ClearField(region.FieldDescription, field.TypeString)
 	}
-	if value, ok := ru.mutation.ExternalLink(); ok {
-		_spec.SetField(region.FieldExternalLink, field.TypeString, value)
+	if value, ok := ru.mutation.ExternalLinks(); ok {
+		_spec.SetField(region.FieldExternalLinks, field.TypeJSON, value)
 	}
-	if ru.mutation.ExternalLinkCleared() {
-		_spec.ClearField(region.FieldExternalLink, field.TypeString)
+	if value, ok := ru.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, region.FieldExternalLinks, value)
+		})
+	}
+	if ru.mutation.ExternalLinksCleared() {
+		_spec.ClearField(region.FieldExternalLinks, field.TypeJSON)
 	}
 	if ru.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -384,23 +388,21 @@ func (ruo *RegionUpdateOne) ClearDescription() *RegionUpdateOne {
 	return ruo
 }
 
-// SetExternalLink sets the "external_link" field.
-func (ruo *RegionUpdateOne) SetExternalLink(s string) *RegionUpdateOne {
-	ruo.mutation.SetExternalLink(s)
+// SetExternalLinks sets the "external_links" field.
+func (ruo *RegionUpdateOne) SetExternalLinks(s []string) *RegionUpdateOne {
+	ruo.mutation.SetExternalLinks(s)
 	return ruo
 }
 
-// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
-func (ruo *RegionUpdateOne) SetNillableExternalLink(s *string) *RegionUpdateOne {
-	if s != nil {
-		ruo.SetExternalLink(*s)
-	}
+// AppendExternalLinks appends s to the "external_links" field.
+func (ruo *RegionUpdateOne) AppendExternalLinks(s []string) *RegionUpdateOne {
+	ruo.mutation.AppendExternalLinks(s)
 	return ruo
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (ruo *RegionUpdateOne) ClearExternalLink() *RegionUpdateOne {
-	ruo.mutation.ClearExternalLink()
+// ClearExternalLinks clears the value of the "external_links" field.
+func (ruo *RegionUpdateOne) ClearExternalLinks() *RegionUpdateOne {
+	ruo.mutation.ClearExternalLinks()
 	return ruo
 }
 
@@ -542,11 +544,16 @@ func (ruo *RegionUpdateOne) sqlSave(ctx context.Context) (_node *Region, err err
 	if ruo.mutation.DescriptionCleared() {
 		_spec.ClearField(region.FieldDescription, field.TypeString)
 	}
-	if value, ok := ruo.mutation.ExternalLink(); ok {
-		_spec.SetField(region.FieldExternalLink, field.TypeString, value)
+	if value, ok := ruo.mutation.ExternalLinks(); ok {
+		_spec.SetField(region.FieldExternalLinks, field.TypeJSON, value)
 	}
-	if ruo.mutation.ExternalLinkCleared() {
-		_spec.ClearField(region.FieldExternalLink, field.TypeString)
+	if value, ok := ruo.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, region.FieldExternalLinks, value)
+		})
+	}
+	if ruo.mutation.ExternalLinksCleared() {
+		_spec.ClearField(region.FieldExternalLinks, field.TypeJSON)
 	}
 	if ruo.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -175,23 +175,21 @@ func (pu *PersonUpdate) ClearDescription() *PersonUpdate {
 	return pu
 }
 
-// SetExternalLink sets the "external_link" field.
-func (pu *PersonUpdate) SetExternalLink(s string) *PersonUpdate {
-	pu.mutation.SetExternalLink(s)
+// SetExternalLinks sets the "external_links" field.
+func (pu *PersonUpdate) SetExternalLinks(s []string) *PersonUpdate {
+	pu.mutation.SetExternalLinks(s)
 	return pu
 }
 
-// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
-func (pu *PersonUpdate) SetNillableExternalLink(s *string) *PersonUpdate {
-	if s != nil {
-		pu.SetExternalLink(*s)
-	}
+// AppendExternalLinks appends s to the "external_links" field.
+func (pu *PersonUpdate) AppendExternalLinks(s []string) *PersonUpdate {
+	pu.mutation.AppendExternalLinks(s)
 	return pu
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (pu *PersonUpdate) ClearExternalLink() *PersonUpdate {
-	pu.mutation.ClearExternalLink()
+// ClearExternalLinks clears the value of the "external_links" field.
+func (pu *PersonUpdate) ClearExternalLinks() *PersonUpdate {
+	pu.mutation.ClearExternalLinks()
 	return pu
 }
 
@@ -477,11 +475,16 @@ func (pu *PersonUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.DescriptionCleared() {
 		_spec.ClearField(person.FieldDescription, field.TypeString)
 	}
-	if value, ok := pu.mutation.ExternalLink(); ok {
-		_spec.SetField(person.FieldExternalLink, field.TypeString, value)
+	if value, ok := pu.mutation.ExternalLinks(); ok {
+		_spec.SetField(person.FieldExternalLinks, field.TypeJSON, value)
 	}
-	if pu.mutation.ExternalLinkCleared() {
-		_spec.ClearField(person.FieldExternalLink, field.TypeString)
+	if value, ok := pu.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, person.FieldExternalLinks, value)
+		})
+	}
+	if pu.mutation.ExternalLinksCleared() {
+		_spec.ClearField(person.FieldExternalLinks, field.TypeJSON)
 	}
 	if value, ok := pu.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(person.FieldPrimaryImageURL, field.TypeString, value)
@@ -826,23 +829,21 @@ func (puo *PersonUpdateOne) ClearDescription() *PersonUpdateOne {
 	return puo
 }
 
-// SetExternalLink sets the "external_link" field.
-func (puo *PersonUpdateOne) SetExternalLink(s string) *PersonUpdateOne {
-	puo.mutation.SetExternalLink(s)
+// SetExternalLinks sets the "external_links" field.
+func (puo *PersonUpdateOne) SetExternalLinks(s []string) *PersonUpdateOne {
+	puo.mutation.SetExternalLinks(s)
 	return puo
 }
 
-// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
-func (puo *PersonUpdateOne) SetNillableExternalLink(s *string) *PersonUpdateOne {
-	if s != nil {
-		puo.SetExternalLink(*s)
-	}
+// AppendExternalLinks appends s to the "external_links" field.
+func (puo *PersonUpdateOne) AppendExternalLinks(s []string) *PersonUpdateOne {
+	puo.mutation.AppendExternalLinks(s)
 	return puo
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (puo *PersonUpdateOne) ClearExternalLink() *PersonUpdateOne {
-	puo.mutation.ClearExternalLink()
+// ClearExternalLinks clears the value of the "external_links" field.
+func (puo *PersonUpdateOne) ClearExternalLinks() *PersonUpdateOne {
+	puo.mutation.ClearExternalLinks()
 	return puo
 }
 
@@ -1158,11 +1159,16 @@ func (puo *PersonUpdateOne) sqlSave(ctx context.Context) (_node *Person, err err
 	if puo.mutation.DescriptionCleared() {
 		_spec.ClearField(person.FieldDescription, field.TypeString)
 	}
-	if value, ok := puo.mutation.ExternalLink(); ok {
-		_spec.SetField(person.FieldExternalLink, field.TypeString, value)
+	if value, ok := puo.mutation.ExternalLinks(); ok {
+		_spec.SetField(person.FieldExternalLinks, field.TypeJSON, value)
 	}
-	if puo.mutation.ExternalLinkCleared() {
-		_spec.ClearField(person.FieldExternalLink, field.TypeString)
+	if value, ok := puo.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, person.FieldExternalLinks, value)
+		})
+	}
+	if puo.mutation.ExternalLinksCleared() {
+		_spec.ClearField(person.FieldExternalLinks, field.TypeJSON)
 	}
 	if value, ok := puo.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(person.FieldPrimaryImageURL, field.TypeString, value)

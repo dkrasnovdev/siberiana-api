@@ -105,17 +105,9 @@ func (cc *CultureCreate) SetNillableDescription(s *string) *CultureCreate {
 	return cc
 }
 
-// SetExternalLink sets the "external_link" field.
-func (cc *CultureCreate) SetExternalLink(s string) *CultureCreate {
-	cc.mutation.SetExternalLink(s)
-	return cc
-}
-
-// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
-func (cc *CultureCreate) SetNillableExternalLink(s *string) *CultureCreate {
-	if s != nil {
-		cc.SetExternalLink(*s)
-	}
+// SetExternalLinks sets the "external_links" field.
+func (cc *CultureCreate) SetExternalLinks(s []string) *CultureCreate {
+	cc.mutation.SetExternalLinks(s)
 	return cc
 }
 
@@ -246,9 +238,9 @@ func (cc *CultureCreate) createSpec() (*Culture, *sqlgraph.CreateSpec) {
 		_spec.SetField(culture.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := cc.mutation.ExternalLink(); ok {
-		_spec.SetField(culture.FieldExternalLink, field.TypeString, value)
-		_node.ExternalLink = value
+	if value, ok := cc.mutation.ExternalLinks(); ok {
+		_spec.SetField(culture.FieldExternalLinks, field.TypeJSON, value)
+		_node.ExternalLinks = value
 	}
 	if nodes := cc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

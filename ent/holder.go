@@ -27,12 +27,10 @@ type Holder struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// DisplayName holds the value of the "display_name" field.
-	DisplayName string `json:"display_name,omitempty"`
-	// Description holds the value of the "description" field.
-	Description string `json:"description,omitempty"`
-	// ExternalLink holds the value of the "external_link" field.
-	ExternalLink string `json:"external_link,omitempty"`
+	// BeginDate holds the value of the "begin_date" field.
+	BeginDate time.Time `json:"begin_date,omitempty"`
+	// EndDate holds the value of the "end_date" field.
+	EndDate time.Time `json:"end_date,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the HolderQuery when eager-loading is set.
 	Edges        HolderEdges `json:"edges"`
@@ -98,9 +96,9 @@ func (*Holder) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case holder.FieldID:
 			values[i] = new(sql.NullInt64)
-		case holder.FieldCreatedBy, holder.FieldUpdatedBy, holder.FieldDisplayName, holder.FieldDescription, holder.FieldExternalLink:
+		case holder.FieldCreatedBy, holder.FieldUpdatedBy:
 			values[i] = new(sql.NullString)
-		case holder.FieldCreatedAt, holder.FieldUpdatedAt:
+		case holder.FieldCreatedAt, holder.FieldUpdatedAt, holder.FieldBeginDate, holder.FieldEndDate:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -147,23 +145,17 @@ func (h *Holder) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				h.UpdatedBy = value.String
 			}
-		case holder.FieldDisplayName:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field display_name", values[i])
+		case holder.FieldBeginDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field begin_date", values[i])
 			} else if value.Valid {
-				h.DisplayName = value.String
+				h.BeginDate = value.Time
 			}
-		case holder.FieldDescription:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field description", values[i])
+		case holder.FieldEndDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field end_date", values[i])
 			} else if value.Valid {
-				h.Description = value.String
-			}
-		case holder.FieldExternalLink:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field external_link", values[i])
-			} else if value.Valid {
-				h.ExternalLink = value.String
+				h.EndDate = value.Time
 			}
 		default:
 			h.selectValues.Set(columns[i], values[i])
@@ -228,14 +220,11 @@ func (h *Holder) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(h.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("display_name=")
-	builder.WriteString(h.DisplayName)
+	builder.WriteString("begin_date=")
+	builder.WriteString(h.BeginDate.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("description=")
-	builder.WriteString(h.Description)
-	builder.WriteString(", ")
-	builder.WriteString("external_link=")
-	builder.WriteString(h.ExternalLink)
+	builder.WriteString("end_date=")
+	builder.WriteString(h.EndDate.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

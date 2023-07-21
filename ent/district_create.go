@@ -105,17 +105,9 @@ func (dc *DistrictCreate) SetNillableDescription(s *string) *DistrictCreate {
 	return dc
 }
 
-// SetExternalLink sets the "external_link" field.
-func (dc *DistrictCreate) SetExternalLink(s string) *DistrictCreate {
-	dc.mutation.SetExternalLink(s)
-	return dc
-}
-
-// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
-func (dc *DistrictCreate) SetNillableExternalLink(s *string) *DistrictCreate {
-	if s != nil {
-		dc.SetExternalLink(*s)
-	}
+// SetExternalLinks sets the "external_links" field.
+func (dc *DistrictCreate) SetExternalLinks(s []string) *DistrictCreate {
+	dc.mutation.SetExternalLinks(s)
 	return dc
 }
 
@@ -250,9 +242,9 @@ func (dc *DistrictCreate) createSpec() (*District, *sqlgraph.CreateSpec) {
 		_spec.SetField(district.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := dc.mutation.ExternalLink(); ok {
-		_spec.SetField(district.FieldExternalLink, field.TypeString, value)
-		_node.ExternalLink = value
+	if value, ok := dc.mutation.ExternalLinks(); ok {
+		_spec.SetField(district.FieldExternalLinks, field.TypeJSON, value)
+		_node.ExternalLinks = value
 	}
 	if nodes := dc.mutation.LocationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

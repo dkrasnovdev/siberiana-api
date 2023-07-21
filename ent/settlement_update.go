@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
@@ -115,23 +116,21 @@ func (su *SettlementUpdate) ClearDescription() *SettlementUpdate {
 	return su
 }
 
-// SetExternalLink sets the "external_link" field.
-func (su *SettlementUpdate) SetExternalLink(s string) *SettlementUpdate {
-	su.mutation.SetExternalLink(s)
+// SetExternalLinks sets the "external_links" field.
+func (su *SettlementUpdate) SetExternalLinks(s []string) *SettlementUpdate {
+	su.mutation.SetExternalLinks(s)
 	return su
 }
 
-// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
-func (su *SettlementUpdate) SetNillableExternalLink(s *string) *SettlementUpdate {
-	if s != nil {
-		su.SetExternalLink(*s)
-	}
+// AppendExternalLinks appends s to the "external_links" field.
+func (su *SettlementUpdate) AppendExternalLinks(s []string) *SettlementUpdate {
+	su.mutation.AppendExternalLinks(s)
 	return su
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (su *SettlementUpdate) ClearExternalLink() *SettlementUpdate {
-	su.mutation.ClearExternalLink()
+// ClearExternalLinks clears the value of the "external_links" field.
+func (su *SettlementUpdate) ClearExternalLinks() *SettlementUpdate {
+	su.mutation.ClearExternalLinks()
 	return su
 }
 
@@ -243,11 +242,16 @@ func (su *SettlementUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.DescriptionCleared() {
 		_spec.ClearField(settlement.FieldDescription, field.TypeString)
 	}
-	if value, ok := su.mutation.ExternalLink(); ok {
-		_spec.SetField(settlement.FieldExternalLink, field.TypeString, value)
+	if value, ok := su.mutation.ExternalLinks(); ok {
+		_spec.SetField(settlement.FieldExternalLinks, field.TypeJSON, value)
 	}
-	if su.mutation.ExternalLinkCleared() {
-		_spec.ClearField(settlement.FieldExternalLink, field.TypeString)
+	if value, ok := su.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, settlement.FieldExternalLinks, value)
+		})
+	}
+	if su.mutation.ExternalLinksCleared() {
+		_spec.ClearField(settlement.FieldExternalLinks, field.TypeJSON)
 	}
 	if su.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -384,23 +388,21 @@ func (suo *SettlementUpdateOne) ClearDescription() *SettlementUpdateOne {
 	return suo
 }
 
-// SetExternalLink sets the "external_link" field.
-func (suo *SettlementUpdateOne) SetExternalLink(s string) *SettlementUpdateOne {
-	suo.mutation.SetExternalLink(s)
+// SetExternalLinks sets the "external_links" field.
+func (suo *SettlementUpdateOne) SetExternalLinks(s []string) *SettlementUpdateOne {
+	suo.mutation.SetExternalLinks(s)
 	return suo
 }
 
-// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
-func (suo *SettlementUpdateOne) SetNillableExternalLink(s *string) *SettlementUpdateOne {
-	if s != nil {
-		suo.SetExternalLink(*s)
-	}
+// AppendExternalLinks appends s to the "external_links" field.
+func (suo *SettlementUpdateOne) AppendExternalLinks(s []string) *SettlementUpdateOne {
+	suo.mutation.AppendExternalLinks(s)
 	return suo
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (suo *SettlementUpdateOne) ClearExternalLink() *SettlementUpdateOne {
-	suo.mutation.ClearExternalLink()
+// ClearExternalLinks clears the value of the "external_links" field.
+func (suo *SettlementUpdateOne) ClearExternalLinks() *SettlementUpdateOne {
+	suo.mutation.ClearExternalLinks()
 	return suo
 }
 
@@ -542,11 +544,16 @@ func (suo *SettlementUpdateOne) sqlSave(ctx context.Context) (_node *Settlement,
 	if suo.mutation.DescriptionCleared() {
 		_spec.ClearField(settlement.FieldDescription, field.TypeString)
 	}
-	if value, ok := suo.mutation.ExternalLink(); ok {
-		_spec.SetField(settlement.FieldExternalLink, field.TypeString, value)
+	if value, ok := suo.mutation.ExternalLinks(); ok {
+		_spec.SetField(settlement.FieldExternalLinks, field.TypeJSON, value)
 	}
-	if suo.mutation.ExternalLinkCleared() {
-		_spec.ClearField(settlement.FieldExternalLink, field.TypeString)
+	if value, ok := suo.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, settlement.FieldExternalLinks, value)
+		})
+	}
+	if suo.mutation.ExternalLinksCleared() {
+		_spec.ClearField(settlement.FieldExternalLinks, field.TypeJSON)
 	}
 	if suo.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{

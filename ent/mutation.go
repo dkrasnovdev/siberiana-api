@@ -880,7 +880,8 @@ type ArtifactMutation struct {
 	updated_by                   *string
 	display_name                 *string
 	description                  *string
-	external_link                *string
+	external_links               *[]string
+	appendexternal_links         []string
 	primary_image_url            *string
 	additional_images_urls       *[]string
 	appendadditional_images_urls []string
@@ -1290,53 +1291,69 @@ func (m *ArtifactMutation) ResetDescription() {
 	delete(m.clearedFields, artifact.FieldDescription)
 }
 
-// SetExternalLink sets the "external_link" field.
-func (m *ArtifactMutation) SetExternalLink(s string) {
-	m.external_link = &s
+// SetExternalLinks sets the "external_links" field.
+func (m *ArtifactMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
 }
 
-// ExternalLink returns the value of the "external_link" field in the mutation.
-func (m *ArtifactMutation) ExternalLink() (r string, exists bool) {
-	v := m.external_link
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *ArtifactMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldExternalLink returns the old "external_link" field's value of the Artifact entity.
+// OldExternalLinks returns the old "external_links" field's value of the Artifact entity.
 // If the Artifact object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArtifactMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+func (m *ArtifactMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
 	}
-	return oldValue.ExternalLink, nil
+	return oldValue.ExternalLinks, nil
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (m *ArtifactMutation) ClearExternalLink() {
-	m.external_link = nil
-	m.clearedFields[artifact.FieldExternalLink] = struct{}{}
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *ArtifactMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
 }
 
-// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
-func (m *ArtifactMutation) ExternalLinkCleared() bool {
-	_, ok := m.clearedFields[artifact.FieldExternalLink]
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *ArtifactMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *ArtifactMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[artifact.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *ArtifactMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[artifact.FieldExternalLinks]
 	return ok
 }
 
-// ResetExternalLink resets all changes to the "external_link" field.
-func (m *ArtifactMutation) ResetExternalLink() {
-	m.external_link = nil
-	delete(m.clearedFields, artifact.FieldExternalLink)
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *ArtifactMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, artifact.FieldExternalLinks)
 }
 
 // SetPrimaryImageURL sets the "primary_image_url" field.
@@ -2201,8 +2218,8 @@ func (m *ArtifactMutation) Fields() []string {
 	if m.description != nil {
 		fields = append(fields, artifact.FieldDescription)
 	}
-	if m.external_link != nil {
-		fields = append(fields, artifact.FieldExternalLink)
+	if m.external_links != nil {
+		fields = append(fields, artifact.FieldExternalLinks)
 	}
 	if m.primary_image_url != nil {
 		fields = append(fields, artifact.FieldPrimaryImageURL)
@@ -2236,8 +2253,8 @@ func (m *ArtifactMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayName()
 	case artifact.FieldDescription:
 		return m.Description()
-	case artifact.FieldExternalLink:
-		return m.ExternalLink()
+	case artifact.FieldExternalLinks:
+		return m.ExternalLinks()
 	case artifact.FieldPrimaryImageURL:
 		return m.PrimaryImageURL()
 	case artifact.FieldAdditionalImagesUrls:
@@ -2267,8 +2284,8 @@ func (m *ArtifactMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldDisplayName(ctx)
 	case artifact.FieldDescription:
 		return m.OldDescription(ctx)
-	case artifact.FieldExternalLink:
-		return m.OldExternalLink(ctx)
+	case artifact.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
 	case artifact.FieldPrimaryImageURL:
 		return m.OldPrimaryImageURL(ctx)
 	case artifact.FieldAdditionalImagesUrls:
@@ -2328,12 +2345,12 @@ func (m *ArtifactMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDescription(v)
 		return nil
-	case artifact.FieldExternalLink:
-		v, ok := value.(string)
+	case artifact.FieldExternalLinks:
+		v, ok := value.([]string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetExternalLink(v)
+		m.SetExternalLinks(v)
 		return nil
 	case artifact.FieldPrimaryImageURL:
 		v, ok := value.(string)
@@ -2405,8 +2422,8 @@ func (m *ArtifactMutation) ClearedFields() []string {
 	if m.FieldCleared(artifact.FieldDescription) {
 		fields = append(fields, artifact.FieldDescription)
 	}
-	if m.FieldCleared(artifact.FieldExternalLink) {
-		fields = append(fields, artifact.FieldExternalLink)
+	if m.FieldCleared(artifact.FieldExternalLinks) {
+		fields = append(fields, artifact.FieldExternalLinks)
 	}
 	if m.FieldCleared(artifact.FieldPrimaryImageURL) {
 		fields = append(fields, artifact.FieldPrimaryImageURL)
@@ -2446,8 +2463,8 @@ func (m *ArtifactMutation) ClearField(name string) error {
 	case artifact.FieldDescription:
 		m.ClearDescription()
 		return nil
-	case artifact.FieldExternalLink:
-		m.ClearExternalLink()
+	case artifact.FieldExternalLinks:
+		m.ClearExternalLinks()
 		return nil
 	case artifact.FieldPrimaryImageURL:
 		m.ClearPrimaryImageURL()
@@ -2487,8 +2504,8 @@ func (m *ArtifactMutation) ResetField(name string) error {
 	case artifact.FieldDescription:
 		m.ResetDescription()
 		return nil
-	case artifact.FieldExternalLink:
-		m.ResetExternalLink()
+	case artifact.FieldExternalLinks:
+		m.ResetExternalLinks()
 		return nil
 	case artifact.FieldPrimaryImageURL:
 		m.ResetPrimaryImageURL()
@@ -4395,23 +4412,24 @@ func (m *BookGenreMutation) ResetEdge(name string) error {
 // CategoryMutation represents an operation that mutates the Category nodes in the graph.
 type CategoryMutation struct {
 	config
-	op                 Op
-	typ                string
-	id                 *int
-	created_at         *time.Time
-	created_by         *string
-	updated_at         *time.Time
-	updated_by         *string
-	display_name       *string
-	description        *string
-	external_link      *string
-	clearedFields      map[string]struct{}
-	collections        map[int]struct{}
-	removedcollections map[int]struct{}
-	clearedcollections bool
-	done               bool
-	oldValue           func(context.Context) (*Category, error)
-	predicates         []predicate.Category
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	collections          map[int]struct{}
+	removedcollections   map[int]struct{}
+	clearedcollections   bool
+	done                 bool
+	oldValue             func(context.Context) (*Category, error)
+	predicates           []predicate.Category
 }
 
 var _ ent.Mutation = (*CategoryMutation)(nil)
@@ -4780,53 +4798,69 @@ func (m *CategoryMutation) ResetDescription() {
 	delete(m.clearedFields, category.FieldDescription)
 }
 
-// SetExternalLink sets the "external_link" field.
-func (m *CategoryMutation) SetExternalLink(s string) {
-	m.external_link = &s
+// SetExternalLinks sets the "external_links" field.
+func (m *CategoryMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
 }
 
-// ExternalLink returns the value of the "external_link" field in the mutation.
-func (m *CategoryMutation) ExternalLink() (r string, exists bool) {
-	v := m.external_link
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *CategoryMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldExternalLink returns the old "external_link" field's value of the Category entity.
+// OldExternalLinks returns the old "external_links" field's value of the Category entity.
 // If the Category object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CategoryMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+func (m *CategoryMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
 	}
-	return oldValue.ExternalLink, nil
+	return oldValue.ExternalLinks, nil
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (m *CategoryMutation) ClearExternalLink() {
-	m.external_link = nil
-	m.clearedFields[category.FieldExternalLink] = struct{}{}
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *CategoryMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
 }
 
-// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
-func (m *CategoryMutation) ExternalLinkCleared() bool {
-	_, ok := m.clearedFields[category.FieldExternalLink]
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *CategoryMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *CategoryMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[category.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *CategoryMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[category.FieldExternalLinks]
 	return ok
 }
 
-// ResetExternalLink resets all changes to the "external_link" field.
-func (m *CategoryMutation) ResetExternalLink() {
-	m.external_link = nil
-	delete(m.clearedFields, category.FieldExternalLink)
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *CategoryMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, category.FieldExternalLinks)
 }
 
 // AddCollectionIDs adds the "collections" edge to the Collection entity by ids.
@@ -4936,8 +4970,8 @@ func (m *CategoryMutation) Fields() []string {
 	if m.description != nil {
 		fields = append(fields, category.FieldDescription)
 	}
-	if m.external_link != nil {
-		fields = append(fields, category.FieldExternalLink)
+	if m.external_links != nil {
+		fields = append(fields, category.FieldExternalLinks)
 	}
 	return fields
 }
@@ -4959,8 +4993,8 @@ func (m *CategoryMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayName()
 	case category.FieldDescription:
 		return m.Description()
-	case category.FieldExternalLink:
-		return m.ExternalLink()
+	case category.FieldExternalLinks:
+		return m.ExternalLinks()
 	}
 	return nil, false
 }
@@ -4982,8 +5016,8 @@ func (m *CategoryMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldDisplayName(ctx)
 	case category.FieldDescription:
 		return m.OldDescription(ctx)
-	case category.FieldExternalLink:
-		return m.OldExternalLink(ctx)
+	case category.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
 	}
 	return nil, fmt.Errorf("unknown Category field %s", name)
 }
@@ -5035,12 +5069,12 @@ func (m *CategoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDescription(v)
 		return nil
-	case category.FieldExternalLink:
-		v, ok := value.(string)
+	case category.FieldExternalLinks:
+		v, ok := value.([]string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetExternalLink(v)
+		m.SetExternalLinks(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Category field %s", name)
@@ -5084,8 +5118,8 @@ func (m *CategoryMutation) ClearedFields() []string {
 	if m.FieldCleared(category.FieldDescription) {
 		fields = append(fields, category.FieldDescription)
 	}
-	if m.FieldCleared(category.FieldExternalLink) {
-		fields = append(fields, category.FieldExternalLink)
+	if m.FieldCleared(category.FieldExternalLinks) {
+		fields = append(fields, category.FieldExternalLinks)
 	}
 	return fields
 }
@@ -5113,8 +5147,8 @@ func (m *CategoryMutation) ClearField(name string) error {
 	case category.FieldDescription:
 		m.ClearDescription()
 		return nil
-	case category.FieldExternalLink:
-		m.ClearExternalLink()
+	case category.FieldExternalLinks:
+		m.ClearExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Category nullable field %s", name)
@@ -5142,8 +5176,8 @@ func (m *CategoryMutation) ResetField(name string) error {
 	case category.FieldDescription:
 		m.ResetDescription()
 		return nil
-	case category.FieldExternalLink:
-		m.ResetExternalLink()
+	case category.FieldExternalLinks:
+		m.ResetExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Category field %s", name)
@@ -5236,25 +5270,26 @@ func (m *CategoryMutation) ResetEdge(name string) error {
 // CollectionMutation represents an operation that mutates the Collection nodes in the graph.
 type CollectionMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *int
-	created_at       *time.Time
-	created_by       *string
-	updated_at       *time.Time
-	updated_by       *string
-	display_name     *string
-	description      *string
-	external_link    *string
-	clearedFields    map[string]struct{}
-	artifacts        map[int]struct{}
-	removedartifacts map[int]struct{}
-	clearedartifacts bool
-	category         *int
-	clearedcategory  bool
-	done             bool
-	oldValue         func(context.Context) (*Collection, error)
-	predicates       []predicate.Collection
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	artifacts            map[int]struct{}
+	removedartifacts     map[int]struct{}
+	clearedartifacts     bool
+	category             *int
+	clearedcategory      bool
+	done                 bool
+	oldValue             func(context.Context) (*Collection, error)
+	predicates           []predicate.Collection
 }
 
 var _ ent.Mutation = (*CollectionMutation)(nil)
@@ -5623,53 +5658,69 @@ func (m *CollectionMutation) ResetDescription() {
 	delete(m.clearedFields, collection.FieldDescription)
 }
 
-// SetExternalLink sets the "external_link" field.
-func (m *CollectionMutation) SetExternalLink(s string) {
-	m.external_link = &s
+// SetExternalLinks sets the "external_links" field.
+func (m *CollectionMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
 }
 
-// ExternalLink returns the value of the "external_link" field in the mutation.
-func (m *CollectionMutation) ExternalLink() (r string, exists bool) {
-	v := m.external_link
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *CollectionMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldExternalLink returns the old "external_link" field's value of the Collection entity.
+// OldExternalLinks returns the old "external_links" field's value of the Collection entity.
 // If the Collection object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CollectionMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+func (m *CollectionMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
 	}
-	return oldValue.ExternalLink, nil
+	return oldValue.ExternalLinks, nil
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (m *CollectionMutation) ClearExternalLink() {
-	m.external_link = nil
-	m.clearedFields[collection.FieldExternalLink] = struct{}{}
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *CollectionMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
 }
 
-// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
-func (m *CollectionMutation) ExternalLinkCleared() bool {
-	_, ok := m.clearedFields[collection.FieldExternalLink]
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *CollectionMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *CollectionMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[collection.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *CollectionMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[collection.FieldExternalLinks]
 	return ok
 }
 
-// ResetExternalLink resets all changes to the "external_link" field.
-func (m *CollectionMutation) ResetExternalLink() {
-	m.external_link = nil
-	delete(m.clearedFields, collection.FieldExternalLink)
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *CollectionMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, collection.FieldExternalLinks)
 }
 
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
@@ -5818,8 +5869,8 @@ func (m *CollectionMutation) Fields() []string {
 	if m.description != nil {
 		fields = append(fields, collection.FieldDescription)
 	}
-	if m.external_link != nil {
-		fields = append(fields, collection.FieldExternalLink)
+	if m.external_links != nil {
+		fields = append(fields, collection.FieldExternalLinks)
 	}
 	return fields
 }
@@ -5841,8 +5892,8 @@ func (m *CollectionMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayName()
 	case collection.FieldDescription:
 		return m.Description()
-	case collection.FieldExternalLink:
-		return m.ExternalLink()
+	case collection.FieldExternalLinks:
+		return m.ExternalLinks()
 	}
 	return nil, false
 }
@@ -5864,8 +5915,8 @@ func (m *CollectionMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldDisplayName(ctx)
 	case collection.FieldDescription:
 		return m.OldDescription(ctx)
-	case collection.FieldExternalLink:
-		return m.OldExternalLink(ctx)
+	case collection.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
 	}
 	return nil, fmt.Errorf("unknown Collection field %s", name)
 }
@@ -5917,12 +5968,12 @@ func (m *CollectionMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDescription(v)
 		return nil
-	case collection.FieldExternalLink:
-		v, ok := value.(string)
+	case collection.FieldExternalLinks:
+		v, ok := value.([]string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetExternalLink(v)
+		m.SetExternalLinks(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Collection field %s", name)
@@ -5966,8 +6017,8 @@ func (m *CollectionMutation) ClearedFields() []string {
 	if m.FieldCleared(collection.FieldDescription) {
 		fields = append(fields, collection.FieldDescription)
 	}
-	if m.FieldCleared(collection.FieldExternalLink) {
-		fields = append(fields, collection.FieldExternalLink)
+	if m.FieldCleared(collection.FieldExternalLinks) {
+		fields = append(fields, collection.FieldExternalLinks)
 	}
 	return fields
 }
@@ -5995,8 +6046,8 @@ func (m *CollectionMutation) ClearField(name string) error {
 	case collection.FieldDescription:
 		m.ClearDescription()
 		return nil
-	case collection.FieldExternalLink:
-		m.ClearExternalLink()
+	case collection.FieldExternalLinks:
+		m.ClearExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Collection nullable field %s", name)
@@ -6024,8 +6075,8 @@ func (m *CollectionMutation) ResetField(name string) error {
 	case collection.FieldDescription:
 		m.ResetDescription()
 		return nil
-	case collection.FieldExternalLink:
-		m.ResetExternalLink()
+	case collection.FieldExternalLinks:
+		m.ResetExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Collection field %s", name)
@@ -6136,23 +6187,24 @@ func (m *CollectionMutation) ResetEdge(name string) error {
 // CultureMutation represents an operation that mutates the Culture nodes in the graph.
 type CultureMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *int
-	created_at       *time.Time
-	created_by       *string
-	updated_at       *time.Time
-	updated_by       *string
-	display_name     *string
-	description      *string
-	external_link    *string
-	clearedFields    map[string]struct{}
-	artifacts        map[int]struct{}
-	removedartifacts map[int]struct{}
-	clearedartifacts bool
-	done             bool
-	oldValue         func(context.Context) (*Culture, error)
-	predicates       []predicate.Culture
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	artifacts            map[int]struct{}
+	removedartifacts     map[int]struct{}
+	clearedartifacts     bool
+	done                 bool
+	oldValue             func(context.Context) (*Culture, error)
+	predicates           []predicate.Culture
 }
 
 var _ ent.Mutation = (*CultureMutation)(nil)
@@ -6521,53 +6573,69 @@ func (m *CultureMutation) ResetDescription() {
 	delete(m.clearedFields, culture.FieldDescription)
 }
 
-// SetExternalLink sets the "external_link" field.
-func (m *CultureMutation) SetExternalLink(s string) {
-	m.external_link = &s
+// SetExternalLinks sets the "external_links" field.
+func (m *CultureMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
 }
 
-// ExternalLink returns the value of the "external_link" field in the mutation.
-func (m *CultureMutation) ExternalLink() (r string, exists bool) {
-	v := m.external_link
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *CultureMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldExternalLink returns the old "external_link" field's value of the Culture entity.
+// OldExternalLinks returns the old "external_links" field's value of the Culture entity.
 // If the Culture object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CultureMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+func (m *CultureMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
 	}
-	return oldValue.ExternalLink, nil
+	return oldValue.ExternalLinks, nil
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (m *CultureMutation) ClearExternalLink() {
-	m.external_link = nil
-	m.clearedFields[culture.FieldExternalLink] = struct{}{}
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *CultureMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
 }
 
-// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
-func (m *CultureMutation) ExternalLinkCleared() bool {
-	_, ok := m.clearedFields[culture.FieldExternalLink]
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *CultureMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *CultureMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[culture.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *CultureMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[culture.FieldExternalLinks]
 	return ok
 }
 
-// ResetExternalLink resets all changes to the "external_link" field.
-func (m *CultureMutation) ResetExternalLink() {
-	m.external_link = nil
-	delete(m.clearedFields, culture.FieldExternalLink)
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *CultureMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, culture.FieldExternalLinks)
 }
 
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
@@ -6677,8 +6745,8 @@ func (m *CultureMutation) Fields() []string {
 	if m.description != nil {
 		fields = append(fields, culture.FieldDescription)
 	}
-	if m.external_link != nil {
-		fields = append(fields, culture.FieldExternalLink)
+	if m.external_links != nil {
+		fields = append(fields, culture.FieldExternalLinks)
 	}
 	return fields
 }
@@ -6700,8 +6768,8 @@ func (m *CultureMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayName()
 	case culture.FieldDescription:
 		return m.Description()
-	case culture.FieldExternalLink:
-		return m.ExternalLink()
+	case culture.FieldExternalLinks:
+		return m.ExternalLinks()
 	}
 	return nil, false
 }
@@ -6723,8 +6791,8 @@ func (m *CultureMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldDisplayName(ctx)
 	case culture.FieldDescription:
 		return m.OldDescription(ctx)
-	case culture.FieldExternalLink:
-		return m.OldExternalLink(ctx)
+	case culture.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
 	}
 	return nil, fmt.Errorf("unknown Culture field %s", name)
 }
@@ -6776,12 +6844,12 @@ func (m *CultureMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDescription(v)
 		return nil
-	case culture.FieldExternalLink:
-		v, ok := value.(string)
+	case culture.FieldExternalLinks:
+		v, ok := value.([]string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetExternalLink(v)
+		m.SetExternalLinks(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Culture field %s", name)
@@ -6825,8 +6893,8 @@ func (m *CultureMutation) ClearedFields() []string {
 	if m.FieldCleared(culture.FieldDescription) {
 		fields = append(fields, culture.FieldDescription)
 	}
-	if m.FieldCleared(culture.FieldExternalLink) {
-		fields = append(fields, culture.FieldExternalLink)
+	if m.FieldCleared(culture.FieldExternalLinks) {
+		fields = append(fields, culture.FieldExternalLinks)
 	}
 	return fields
 }
@@ -6854,8 +6922,8 @@ func (m *CultureMutation) ClearField(name string) error {
 	case culture.FieldDescription:
 		m.ClearDescription()
 		return nil
-	case culture.FieldExternalLink:
-		m.ClearExternalLink()
+	case culture.FieldExternalLinks:
+		m.ClearExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Culture nullable field %s", name)
@@ -6883,8 +6951,8 @@ func (m *CultureMutation) ResetField(name string) error {
 	case culture.FieldDescription:
 		m.ResetDescription()
 		return nil
-	case culture.FieldExternalLink:
-		m.ResetExternalLink()
+	case culture.FieldExternalLinks:
+		m.ResetExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Culture field %s", name)
@@ -6977,22 +7045,23 @@ func (m *CultureMutation) ResetEdge(name string) error {
 // DistrictMutation represents an operation that mutates the District nodes in the graph.
 type DistrictMutation struct {
 	config
-	op              Op
-	typ             string
-	id              *int
-	created_at      *time.Time
-	created_by      *string
-	updated_at      *time.Time
-	updated_by      *string
-	display_name    *string
-	description     *string
-	external_link   *string
-	clearedFields   map[string]struct{}
-	location        *int
-	clearedlocation bool
-	done            bool
-	oldValue        func(context.Context) (*District, error)
-	predicates      []predicate.District
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	location             *int
+	clearedlocation      bool
+	done                 bool
+	oldValue             func(context.Context) (*District, error)
+	predicates           []predicate.District
 }
 
 var _ ent.Mutation = (*DistrictMutation)(nil)
@@ -7361,53 +7430,69 @@ func (m *DistrictMutation) ResetDescription() {
 	delete(m.clearedFields, district.FieldDescription)
 }
 
-// SetExternalLink sets the "external_link" field.
-func (m *DistrictMutation) SetExternalLink(s string) {
-	m.external_link = &s
+// SetExternalLinks sets the "external_links" field.
+func (m *DistrictMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
 }
 
-// ExternalLink returns the value of the "external_link" field in the mutation.
-func (m *DistrictMutation) ExternalLink() (r string, exists bool) {
-	v := m.external_link
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *DistrictMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldExternalLink returns the old "external_link" field's value of the District entity.
+// OldExternalLinks returns the old "external_links" field's value of the District entity.
 // If the District object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *DistrictMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+func (m *DistrictMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
 	}
-	return oldValue.ExternalLink, nil
+	return oldValue.ExternalLinks, nil
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (m *DistrictMutation) ClearExternalLink() {
-	m.external_link = nil
-	m.clearedFields[district.FieldExternalLink] = struct{}{}
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *DistrictMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
 }
 
-// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
-func (m *DistrictMutation) ExternalLinkCleared() bool {
-	_, ok := m.clearedFields[district.FieldExternalLink]
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *DistrictMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *DistrictMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[district.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *DistrictMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[district.FieldExternalLinks]
 	return ok
 }
 
-// ResetExternalLink resets all changes to the "external_link" field.
-func (m *DistrictMutation) ResetExternalLink() {
-	m.external_link = nil
-	delete(m.clearedFields, district.FieldExternalLink)
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *DistrictMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, district.FieldExternalLinks)
 }
 
 // SetLocationID sets the "location" edge to the Location entity by id.
@@ -7502,8 +7587,8 @@ func (m *DistrictMutation) Fields() []string {
 	if m.description != nil {
 		fields = append(fields, district.FieldDescription)
 	}
-	if m.external_link != nil {
-		fields = append(fields, district.FieldExternalLink)
+	if m.external_links != nil {
+		fields = append(fields, district.FieldExternalLinks)
 	}
 	return fields
 }
@@ -7525,8 +7610,8 @@ func (m *DistrictMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayName()
 	case district.FieldDescription:
 		return m.Description()
-	case district.FieldExternalLink:
-		return m.ExternalLink()
+	case district.FieldExternalLinks:
+		return m.ExternalLinks()
 	}
 	return nil, false
 }
@@ -7548,8 +7633,8 @@ func (m *DistrictMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldDisplayName(ctx)
 	case district.FieldDescription:
 		return m.OldDescription(ctx)
-	case district.FieldExternalLink:
-		return m.OldExternalLink(ctx)
+	case district.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
 	}
 	return nil, fmt.Errorf("unknown District field %s", name)
 }
@@ -7601,12 +7686,12 @@ func (m *DistrictMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDescription(v)
 		return nil
-	case district.FieldExternalLink:
-		v, ok := value.(string)
+	case district.FieldExternalLinks:
+		v, ok := value.([]string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetExternalLink(v)
+		m.SetExternalLinks(v)
 		return nil
 	}
 	return fmt.Errorf("unknown District field %s", name)
@@ -7650,8 +7735,8 @@ func (m *DistrictMutation) ClearedFields() []string {
 	if m.FieldCleared(district.FieldDescription) {
 		fields = append(fields, district.FieldDescription)
 	}
-	if m.FieldCleared(district.FieldExternalLink) {
-		fields = append(fields, district.FieldExternalLink)
+	if m.FieldCleared(district.FieldExternalLinks) {
+		fields = append(fields, district.FieldExternalLinks)
 	}
 	return fields
 }
@@ -7679,8 +7764,8 @@ func (m *DistrictMutation) ClearField(name string) error {
 	case district.FieldDescription:
 		m.ClearDescription()
 		return nil
-	case district.FieldExternalLink:
-		m.ClearExternalLink()
+	case district.FieldExternalLinks:
+		m.ClearExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown District nullable field %s", name)
@@ -7708,8 +7793,8 @@ func (m *DistrictMutation) ResetField(name string) error {
 	case district.FieldDescription:
 		m.ResetDescription()
 		return nil
-	case district.FieldExternalLink:
-		m.ResetExternalLink()
+	case district.FieldExternalLinks:
+		m.ResetExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown District field %s", name)
@@ -7799,9 +7884,8 @@ type HolderMutation struct {
 	created_by          *string
 	updated_at          *time.Time
 	updated_by          *string
-	display_name        *string
-	description         *string
-	external_link       *string
+	begin_date          *time.Time
+	end_date            *time.Time
 	clearedFields       map[string]struct{}
 	artifacts           map[int]struct{}
 	removedartifacts    map[int]struct{}
@@ -8083,151 +8167,89 @@ func (m *HolderMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, holder.FieldUpdatedBy)
 }
 
-// SetDisplayName sets the "display_name" field.
-func (m *HolderMutation) SetDisplayName(s string) {
-	m.display_name = &s
+// SetBeginDate sets the "begin_date" field.
+func (m *HolderMutation) SetBeginDate(t time.Time) {
+	m.begin_date = &t
 }
 
-// DisplayName returns the value of the "display_name" field in the mutation.
-func (m *HolderMutation) DisplayName() (r string, exists bool) {
-	v := m.display_name
+// BeginDate returns the value of the "begin_date" field in the mutation.
+func (m *HolderMutation) BeginDate() (r time.Time, exists bool) {
+	v := m.begin_date
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldDisplayName returns the old "display_name" field's value of the Holder entity.
+// OldBeginDate returns the old "begin_date" field's value of the Holder entity.
 // If the Holder object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *HolderMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+func (m *HolderMutation) OldBeginDate(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+		return v, errors.New("OldBeginDate is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+		return v, errors.New("OldBeginDate requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+		return v, fmt.Errorf("querying old value for OldBeginDate: %w", err)
 	}
-	return oldValue.DisplayName, nil
+	return oldValue.BeginDate, nil
 }
 
-// ClearDisplayName clears the value of the "display_name" field.
-func (m *HolderMutation) ClearDisplayName() {
-	m.display_name = nil
-	m.clearedFields[holder.FieldDisplayName] = struct{}{}
+// ResetBeginDate resets all changes to the "begin_date" field.
+func (m *HolderMutation) ResetBeginDate() {
+	m.begin_date = nil
 }
 
-// DisplayNameCleared returns if the "display_name" field was cleared in this mutation.
-func (m *HolderMutation) DisplayNameCleared() bool {
-	_, ok := m.clearedFields[holder.FieldDisplayName]
-	return ok
+// SetEndDate sets the "end_date" field.
+func (m *HolderMutation) SetEndDate(t time.Time) {
+	m.end_date = &t
 }
 
-// ResetDisplayName resets all changes to the "display_name" field.
-func (m *HolderMutation) ResetDisplayName() {
-	m.display_name = nil
-	delete(m.clearedFields, holder.FieldDisplayName)
-}
-
-// SetDescription sets the "description" field.
-func (m *HolderMutation) SetDescription(s string) {
-	m.description = &s
-}
-
-// Description returns the value of the "description" field in the mutation.
-func (m *HolderMutation) Description() (r string, exists bool) {
-	v := m.description
+// EndDate returns the value of the "end_date" field in the mutation.
+func (m *HolderMutation) EndDate() (r time.Time, exists bool) {
+	v := m.end_date
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldDescription returns the old "description" field's value of the Holder entity.
+// OldEndDate returns the old "end_date" field's value of the Holder entity.
 // If the Holder object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *HolderMutation) OldDescription(ctx context.Context) (v string, err error) {
+func (m *HolderMutation) OldEndDate(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+		return v, errors.New("OldEndDate is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDescription requires an ID field in the mutation")
+		return v, errors.New("OldEndDate requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+		return v, fmt.Errorf("querying old value for OldEndDate: %w", err)
 	}
-	return oldValue.Description, nil
+	return oldValue.EndDate, nil
 }
 
-// ClearDescription clears the value of the "description" field.
-func (m *HolderMutation) ClearDescription() {
-	m.description = nil
-	m.clearedFields[holder.FieldDescription] = struct{}{}
+// ClearEndDate clears the value of the "end_date" field.
+func (m *HolderMutation) ClearEndDate() {
+	m.end_date = nil
+	m.clearedFields[holder.FieldEndDate] = struct{}{}
 }
 
-// DescriptionCleared returns if the "description" field was cleared in this mutation.
-func (m *HolderMutation) DescriptionCleared() bool {
-	_, ok := m.clearedFields[holder.FieldDescription]
+// EndDateCleared returns if the "end_date" field was cleared in this mutation.
+func (m *HolderMutation) EndDateCleared() bool {
+	_, ok := m.clearedFields[holder.FieldEndDate]
 	return ok
 }
 
-// ResetDescription resets all changes to the "description" field.
-func (m *HolderMutation) ResetDescription() {
-	m.description = nil
-	delete(m.clearedFields, holder.FieldDescription)
-}
-
-// SetExternalLink sets the "external_link" field.
-func (m *HolderMutation) SetExternalLink(s string) {
-	m.external_link = &s
-}
-
-// ExternalLink returns the value of the "external_link" field in the mutation.
-func (m *HolderMutation) ExternalLink() (r string, exists bool) {
-	v := m.external_link
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldExternalLink returns the old "external_link" field's value of the Holder entity.
-// If the Holder object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *HolderMutation) OldExternalLink(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalLink requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
-	}
-	return oldValue.ExternalLink, nil
-}
-
-// ClearExternalLink clears the value of the "external_link" field.
-func (m *HolderMutation) ClearExternalLink() {
-	m.external_link = nil
-	m.clearedFields[holder.FieldExternalLink] = struct{}{}
-}
-
-// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
-func (m *HolderMutation) ExternalLinkCleared() bool {
-	_, ok := m.clearedFields[holder.FieldExternalLink]
-	return ok
-}
-
-// ResetExternalLink resets all changes to the "external_link" field.
-func (m *HolderMutation) ResetExternalLink() {
-	m.external_link = nil
-	delete(m.clearedFields, holder.FieldExternalLink)
+// ResetEndDate resets all changes to the "end_date" field.
+func (m *HolderMutation) ResetEndDate() {
+	m.end_date = nil
+	delete(m.clearedFields, holder.FieldEndDate)
 }
 
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
@@ -8396,7 +8418,7 @@ func (m *HolderMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *HolderMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 6)
 	if m.created_at != nil {
 		fields = append(fields, holder.FieldCreatedAt)
 	}
@@ -8409,14 +8431,11 @@ func (m *HolderMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, holder.FieldUpdatedBy)
 	}
-	if m.display_name != nil {
-		fields = append(fields, holder.FieldDisplayName)
+	if m.begin_date != nil {
+		fields = append(fields, holder.FieldBeginDate)
 	}
-	if m.description != nil {
-		fields = append(fields, holder.FieldDescription)
-	}
-	if m.external_link != nil {
-		fields = append(fields, holder.FieldExternalLink)
+	if m.end_date != nil {
+		fields = append(fields, holder.FieldEndDate)
 	}
 	return fields
 }
@@ -8434,12 +8453,10 @@ func (m *HolderMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case holder.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case holder.FieldDisplayName:
-		return m.DisplayName()
-	case holder.FieldDescription:
-		return m.Description()
-	case holder.FieldExternalLink:
-		return m.ExternalLink()
+	case holder.FieldBeginDate:
+		return m.BeginDate()
+	case holder.FieldEndDate:
+		return m.EndDate()
 	}
 	return nil, false
 }
@@ -8457,12 +8474,10 @@ func (m *HolderMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldUpdatedAt(ctx)
 	case holder.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case holder.FieldDisplayName:
-		return m.OldDisplayName(ctx)
-	case holder.FieldDescription:
-		return m.OldDescription(ctx)
-	case holder.FieldExternalLink:
-		return m.OldExternalLink(ctx)
+	case holder.FieldBeginDate:
+		return m.OldBeginDate(ctx)
+	case holder.FieldEndDate:
+		return m.OldEndDate(ctx)
 	}
 	return nil, fmt.Errorf("unknown Holder field %s", name)
 }
@@ -8500,26 +8515,19 @@ func (m *HolderMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case holder.FieldDisplayName:
-		v, ok := value.(string)
+	case holder.FieldBeginDate:
+		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetDisplayName(v)
+		m.SetBeginDate(v)
 		return nil
-	case holder.FieldDescription:
-		v, ok := value.(string)
+	case holder.FieldEndDate:
+		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetDescription(v)
-		return nil
-	case holder.FieldExternalLink:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetExternalLink(v)
+		m.SetEndDate(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Holder field %s", name)
@@ -8557,14 +8565,8 @@ func (m *HolderMutation) ClearedFields() []string {
 	if m.FieldCleared(holder.FieldUpdatedBy) {
 		fields = append(fields, holder.FieldUpdatedBy)
 	}
-	if m.FieldCleared(holder.FieldDisplayName) {
-		fields = append(fields, holder.FieldDisplayName)
-	}
-	if m.FieldCleared(holder.FieldDescription) {
-		fields = append(fields, holder.FieldDescription)
-	}
-	if m.FieldCleared(holder.FieldExternalLink) {
-		fields = append(fields, holder.FieldExternalLink)
+	if m.FieldCleared(holder.FieldEndDate) {
+		fields = append(fields, holder.FieldEndDate)
 	}
 	return fields
 }
@@ -8586,14 +8588,8 @@ func (m *HolderMutation) ClearField(name string) error {
 	case holder.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case holder.FieldDisplayName:
-		m.ClearDisplayName()
-		return nil
-	case holder.FieldDescription:
-		m.ClearDescription()
-		return nil
-	case holder.FieldExternalLink:
-		m.ClearExternalLink()
+	case holder.FieldEndDate:
+		m.ClearEndDate()
 		return nil
 	}
 	return fmt.Errorf("unknown Holder nullable field %s", name)
@@ -8615,14 +8611,11 @@ func (m *HolderMutation) ResetField(name string) error {
 	case holder.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case holder.FieldDisplayName:
-		m.ResetDisplayName()
+	case holder.FieldBeginDate:
+		m.ResetBeginDate()
 		return nil
-	case holder.FieldDescription:
-		m.ResetDescription()
-		return nil
-	case holder.FieldExternalLink:
-		m.ResetExternalLink()
+	case holder.FieldEndDate:
+		m.ResetEndDate()
 		return nil
 	}
 	return fmt.Errorf("unknown Holder field %s", name)
@@ -9279,23 +9272,24 @@ func (m *LibraryMutation) ResetEdge(name string) error {
 // LicenseMutation represents an operation that mutates the License nodes in the graph.
 type LicenseMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *int
-	created_at       *time.Time
-	created_by       *string
-	updated_at       *time.Time
-	updated_by       *string
-	display_name     *string
-	description      *string
-	external_link    *string
-	clearedFields    map[string]struct{}
-	artifacts        map[int]struct{}
-	removedartifacts map[int]struct{}
-	clearedartifacts bool
-	done             bool
-	oldValue         func(context.Context) (*License, error)
-	predicates       []predicate.License
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	artifacts            map[int]struct{}
+	removedartifacts     map[int]struct{}
+	clearedartifacts     bool
+	done                 bool
+	oldValue             func(context.Context) (*License, error)
+	predicates           []predicate.License
 }
 
 var _ ent.Mutation = (*LicenseMutation)(nil)
@@ -9664,53 +9658,69 @@ func (m *LicenseMutation) ResetDescription() {
 	delete(m.clearedFields, license.FieldDescription)
 }
 
-// SetExternalLink sets the "external_link" field.
-func (m *LicenseMutation) SetExternalLink(s string) {
-	m.external_link = &s
+// SetExternalLinks sets the "external_links" field.
+func (m *LicenseMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
 }
 
-// ExternalLink returns the value of the "external_link" field in the mutation.
-func (m *LicenseMutation) ExternalLink() (r string, exists bool) {
-	v := m.external_link
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *LicenseMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldExternalLink returns the old "external_link" field's value of the License entity.
+// OldExternalLinks returns the old "external_links" field's value of the License entity.
 // If the License object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *LicenseMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+func (m *LicenseMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
 	}
-	return oldValue.ExternalLink, nil
+	return oldValue.ExternalLinks, nil
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (m *LicenseMutation) ClearExternalLink() {
-	m.external_link = nil
-	m.clearedFields[license.FieldExternalLink] = struct{}{}
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *LicenseMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
 }
 
-// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
-func (m *LicenseMutation) ExternalLinkCleared() bool {
-	_, ok := m.clearedFields[license.FieldExternalLink]
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *LicenseMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *LicenseMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[license.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *LicenseMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[license.FieldExternalLinks]
 	return ok
 }
 
-// ResetExternalLink resets all changes to the "external_link" field.
-func (m *LicenseMutation) ResetExternalLink() {
-	m.external_link = nil
-	delete(m.clearedFields, license.FieldExternalLink)
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *LicenseMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, license.FieldExternalLinks)
 }
 
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
@@ -9820,8 +9830,8 @@ func (m *LicenseMutation) Fields() []string {
 	if m.description != nil {
 		fields = append(fields, license.FieldDescription)
 	}
-	if m.external_link != nil {
-		fields = append(fields, license.FieldExternalLink)
+	if m.external_links != nil {
+		fields = append(fields, license.FieldExternalLinks)
 	}
 	return fields
 }
@@ -9843,8 +9853,8 @@ func (m *LicenseMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayName()
 	case license.FieldDescription:
 		return m.Description()
-	case license.FieldExternalLink:
-		return m.ExternalLink()
+	case license.FieldExternalLinks:
+		return m.ExternalLinks()
 	}
 	return nil, false
 }
@@ -9866,8 +9876,8 @@ func (m *LicenseMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldDisplayName(ctx)
 	case license.FieldDescription:
 		return m.OldDescription(ctx)
-	case license.FieldExternalLink:
-		return m.OldExternalLink(ctx)
+	case license.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
 	}
 	return nil, fmt.Errorf("unknown License field %s", name)
 }
@@ -9919,12 +9929,12 @@ func (m *LicenseMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDescription(v)
 		return nil
-	case license.FieldExternalLink:
-		v, ok := value.(string)
+	case license.FieldExternalLinks:
+		v, ok := value.([]string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetExternalLink(v)
+		m.SetExternalLinks(v)
 		return nil
 	}
 	return fmt.Errorf("unknown License field %s", name)
@@ -9968,8 +9978,8 @@ func (m *LicenseMutation) ClearedFields() []string {
 	if m.FieldCleared(license.FieldDescription) {
 		fields = append(fields, license.FieldDescription)
 	}
-	if m.FieldCleared(license.FieldExternalLink) {
-		fields = append(fields, license.FieldExternalLink)
+	if m.FieldCleared(license.FieldExternalLinks) {
+		fields = append(fields, license.FieldExternalLinks)
 	}
 	return fields
 }
@@ -9997,8 +10007,8 @@ func (m *LicenseMutation) ClearField(name string) error {
 	case license.FieldDescription:
 		m.ClearDescription()
 		return nil
-	case license.FieldExternalLink:
-		m.ClearExternalLink()
+	case license.FieldExternalLinks:
+		m.ClearExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown License nullable field %s", name)
@@ -10026,8 +10036,8 @@ func (m *LicenseMutation) ResetField(name string) error {
 	case license.FieldDescription:
 		m.ResetDescription()
 		return nil
-	case license.FieldExternalLink:
-		m.ResetExternalLink()
+	case license.FieldExternalLinks:
+		m.ResetExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown License field %s", name)
@@ -10120,29 +10130,30 @@ func (m *LicenseMutation) ResetEdge(name string) error {
 // LocationMutation represents an operation that mutates the Location nodes in the graph.
 type LocationMutation struct {
 	config
-	op                Op
-	typ               string
-	id                *int
-	created_at        *time.Time
-	created_by        *string
-	updated_at        *time.Time
-	updated_by        *string
-	display_name      *string
-	description       *string
-	external_link     *string
-	clearedFields     map[string]struct{}
-	artifacts         map[int]struct{}
-	removedartifacts  map[int]struct{}
-	clearedartifacts  bool
-	settlement        *int
-	clearedsettlement bool
-	region            *int
-	clearedregion     bool
-	district          *int
-	cleareddistrict   bool
-	done              bool
-	oldValue          func(context.Context) (*Location, error)
-	predicates        []predicate.Location
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	artifacts            map[int]struct{}
+	removedartifacts     map[int]struct{}
+	clearedartifacts     bool
+	settlement           *int
+	clearedsettlement    bool
+	region               *int
+	clearedregion        bool
+	district             *int
+	cleareddistrict      bool
+	done                 bool
+	oldValue             func(context.Context) (*Location, error)
+	predicates           []predicate.Location
 }
 
 var _ ent.Mutation = (*LocationMutation)(nil)
@@ -10511,53 +10522,69 @@ func (m *LocationMutation) ResetDescription() {
 	delete(m.clearedFields, location.FieldDescription)
 }
 
-// SetExternalLink sets the "external_link" field.
-func (m *LocationMutation) SetExternalLink(s string) {
-	m.external_link = &s
+// SetExternalLinks sets the "external_links" field.
+func (m *LocationMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
 }
 
-// ExternalLink returns the value of the "external_link" field in the mutation.
-func (m *LocationMutation) ExternalLink() (r string, exists bool) {
-	v := m.external_link
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *LocationMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldExternalLink returns the old "external_link" field's value of the Location entity.
+// OldExternalLinks returns the old "external_links" field's value of the Location entity.
 // If the Location object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *LocationMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+func (m *LocationMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
 	}
-	return oldValue.ExternalLink, nil
+	return oldValue.ExternalLinks, nil
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (m *LocationMutation) ClearExternalLink() {
-	m.external_link = nil
-	m.clearedFields[location.FieldExternalLink] = struct{}{}
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *LocationMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
 }
 
-// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
-func (m *LocationMutation) ExternalLinkCleared() bool {
-	_, ok := m.clearedFields[location.FieldExternalLink]
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *LocationMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *LocationMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[location.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *LocationMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[location.FieldExternalLinks]
 	return ok
 }
 
-// ResetExternalLink resets all changes to the "external_link" field.
-func (m *LocationMutation) ResetExternalLink() {
-	m.external_link = nil
-	delete(m.clearedFields, location.FieldExternalLink)
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *LocationMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, location.FieldExternalLinks)
 }
 
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
@@ -10784,8 +10811,8 @@ func (m *LocationMutation) Fields() []string {
 	if m.description != nil {
 		fields = append(fields, location.FieldDescription)
 	}
-	if m.external_link != nil {
-		fields = append(fields, location.FieldExternalLink)
+	if m.external_links != nil {
+		fields = append(fields, location.FieldExternalLinks)
 	}
 	return fields
 }
@@ -10807,8 +10834,8 @@ func (m *LocationMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayName()
 	case location.FieldDescription:
 		return m.Description()
-	case location.FieldExternalLink:
-		return m.ExternalLink()
+	case location.FieldExternalLinks:
+		return m.ExternalLinks()
 	}
 	return nil, false
 }
@@ -10830,8 +10857,8 @@ func (m *LocationMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldDisplayName(ctx)
 	case location.FieldDescription:
 		return m.OldDescription(ctx)
-	case location.FieldExternalLink:
-		return m.OldExternalLink(ctx)
+	case location.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
 	}
 	return nil, fmt.Errorf("unknown Location field %s", name)
 }
@@ -10883,12 +10910,12 @@ func (m *LocationMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDescription(v)
 		return nil
-	case location.FieldExternalLink:
-		v, ok := value.(string)
+	case location.FieldExternalLinks:
+		v, ok := value.([]string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetExternalLink(v)
+		m.SetExternalLinks(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Location field %s", name)
@@ -10932,8 +10959,8 @@ func (m *LocationMutation) ClearedFields() []string {
 	if m.FieldCleared(location.FieldDescription) {
 		fields = append(fields, location.FieldDescription)
 	}
-	if m.FieldCleared(location.FieldExternalLink) {
-		fields = append(fields, location.FieldExternalLink)
+	if m.FieldCleared(location.FieldExternalLinks) {
+		fields = append(fields, location.FieldExternalLinks)
 	}
 	return fields
 }
@@ -10961,8 +10988,8 @@ func (m *LocationMutation) ClearField(name string) error {
 	case location.FieldDescription:
 		m.ClearDescription()
 		return nil
-	case location.FieldExternalLink:
-		m.ClearExternalLink()
+	case location.FieldExternalLinks:
+		m.ClearExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Location nullable field %s", name)
@@ -10990,8 +11017,8 @@ func (m *LocationMutation) ResetField(name string) error {
 	case location.FieldDescription:
 		m.ResetDescription()
 		return nil
-	case location.FieldExternalLink:
-		m.ResetExternalLink()
+	case location.FieldExternalLinks:
+		m.ResetExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Location field %s", name)
@@ -11138,23 +11165,24 @@ func (m *LocationMutation) ResetEdge(name string) error {
 // MediumMutation represents an operation that mutates the Medium nodes in the graph.
 type MediumMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *int
-	created_at       *time.Time
-	created_by       *string
-	updated_at       *time.Time
-	updated_by       *string
-	display_name     *string
-	description      *string
-	external_link    *string
-	clearedFields    map[string]struct{}
-	artifacts        map[int]struct{}
-	removedartifacts map[int]struct{}
-	clearedartifacts bool
-	done             bool
-	oldValue         func(context.Context) (*Medium, error)
-	predicates       []predicate.Medium
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	artifacts            map[int]struct{}
+	removedartifacts     map[int]struct{}
+	clearedartifacts     bool
+	done                 bool
+	oldValue             func(context.Context) (*Medium, error)
+	predicates           []predicate.Medium
 }
 
 var _ ent.Mutation = (*MediumMutation)(nil)
@@ -11523,53 +11551,69 @@ func (m *MediumMutation) ResetDescription() {
 	delete(m.clearedFields, medium.FieldDescription)
 }
 
-// SetExternalLink sets the "external_link" field.
-func (m *MediumMutation) SetExternalLink(s string) {
-	m.external_link = &s
+// SetExternalLinks sets the "external_links" field.
+func (m *MediumMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
 }
 
-// ExternalLink returns the value of the "external_link" field in the mutation.
-func (m *MediumMutation) ExternalLink() (r string, exists bool) {
-	v := m.external_link
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *MediumMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldExternalLink returns the old "external_link" field's value of the Medium entity.
+// OldExternalLinks returns the old "external_links" field's value of the Medium entity.
 // If the Medium object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MediumMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+func (m *MediumMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
 	}
-	return oldValue.ExternalLink, nil
+	return oldValue.ExternalLinks, nil
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (m *MediumMutation) ClearExternalLink() {
-	m.external_link = nil
-	m.clearedFields[medium.FieldExternalLink] = struct{}{}
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *MediumMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
 }
 
-// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
-func (m *MediumMutation) ExternalLinkCleared() bool {
-	_, ok := m.clearedFields[medium.FieldExternalLink]
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *MediumMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *MediumMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[medium.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *MediumMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[medium.FieldExternalLinks]
 	return ok
 }
 
-// ResetExternalLink resets all changes to the "external_link" field.
-func (m *MediumMutation) ResetExternalLink() {
-	m.external_link = nil
-	delete(m.clearedFields, medium.FieldExternalLink)
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *MediumMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, medium.FieldExternalLinks)
 }
 
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
@@ -11679,8 +11723,8 @@ func (m *MediumMutation) Fields() []string {
 	if m.description != nil {
 		fields = append(fields, medium.FieldDescription)
 	}
-	if m.external_link != nil {
-		fields = append(fields, medium.FieldExternalLink)
+	if m.external_links != nil {
+		fields = append(fields, medium.FieldExternalLinks)
 	}
 	return fields
 }
@@ -11702,8 +11746,8 @@ func (m *MediumMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayName()
 	case medium.FieldDescription:
 		return m.Description()
-	case medium.FieldExternalLink:
-		return m.ExternalLink()
+	case medium.FieldExternalLinks:
+		return m.ExternalLinks()
 	}
 	return nil, false
 }
@@ -11725,8 +11769,8 @@ func (m *MediumMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldDisplayName(ctx)
 	case medium.FieldDescription:
 		return m.OldDescription(ctx)
-	case medium.FieldExternalLink:
-		return m.OldExternalLink(ctx)
+	case medium.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
 	}
 	return nil, fmt.Errorf("unknown Medium field %s", name)
 }
@@ -11778,12 +11822,12 @@ func (m *MediumMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDescription(v)
 		return nil
-	case medium.FieldExternalLink:
-		v, ok := value.(string)
+	case medium.FieldExternalLinks:
+		v, ok := value.([]string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetExternalLink(v)
+		m.SetExternalLinks(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Medium field %s", name)
@@ -11827,8 +11871,8 @@ func (m *MediumMutation) ClearedFields() []string {
 	if m.FieldCleared(medium.FieldDescription) {
 		fields = append(fields, medium.FieldDescription)
 	}
-	if m.FieldCleared(medium.FieldExternalLink) {
-		fields = append(fields, medium.FieldExternalLink)
+	if m.FieldCleared(medium.FieldExternalLinks) {
+		fields = append(fields, medium.FieldExternalLinks)
 	}
 	return fields
 }
@@ -11856,8 +11900,8 @@ func (m *MediumMutation) ClearField(name string) error {
 	case medium.FieldDescription:
 		m.ClearDescription()
 		return nil
-	case medium.FieldExternalLink:
-		m.ClearExternalLink()
+	case medium.FieldExternalLinks:
+		m.ClearExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Medium nullable field %s", name)
@@ -11885,8 +11929,8 @@ func (m *MediumMutation) ResetField(name string) error {
 	case medium.FieldDescription:
 		m.ResetDescription()
 		return nil
-	case medium.FieldExternalLink:
-		m.ResetExternalLink()
+	case medium.FieldExternalLinks:
+		m.ResetExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Medium field %s", name)
@@ -11979,23 +12023,24 @@ func (m *MediumMutation) ResetEdge(name string) error {
 // ModelMutation represents an operation that mutates the Model nodes in the graph.
 type ModelMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *int
-	created_at       *time.Time
-	created_by       *string
-	updated_at       *time.Time
-	updated_by       *string
-	display_name     *string
-	description      *string
-	external_link    *string
-	clearedFields    map[string]struct{}
-	artifacts        map[int]struct{}
-	removedartifacts map[int]struct{}
-	clearedartifacts bool
-	done             bool
-	oldValue         func(context.Context) (*Model, error)
-	predicates       []predicate.Model
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	artifacts            map[int]struct{}
+	removedartifacts     map[int]struct{}
+	clearedartifacts     bool
+	done                 bool
+	oldValue             func(context.Context) (*Model, error)
+	predicates           []predicate.Model
 }
 
 var _ ent.Mutation = (*ModelMutation)(nil)
@@ -12364,53 +12409,69 @@ func (m *ModelMutation) ResetDescription() {
 	delete(m.clearedFields, model.FieldDescription)
 }
 
-// SetExternalLink sets the "external_link" field.
-func (m *ModelMutation) SetExternalLink(s string) {
-	m.external_link = &s
+// SetExternalLinks sets the "external_links" field.
+func (m *ModelMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
 }
 
-// ExternalLink returns the value of the "external_link" field in the mutation.
-func (m *ModelMutation) ExternalLink() (r string, exists bool) {
-	v := m.external_link
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *ModelMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldExternalLink returns the old "external_link" field's value of the Model entity.
+// OldExternalLinks returns the old "external_links" field's value of the Model entity.
 // If the Model object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ModelMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+func (m *ModelMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
 	}
-	return oldValue.ExternalLink, nil
+	return oldValue.ExternalLinks, nil
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (m *ModelMutation) ClearExternalLink() {
-	m.external_link = nil
-	m.clearedFields[model.FieldExternalLink] = struct{}{}
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *ModelMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
 }
 
-// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
-func (m *ModelMutation) ExternalLinkCleared() bool {
-	_, ok := m.clearedFields[model.FieldExternalLink]
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *ModelMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *ModelMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[model.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *ModelMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[model.FieldExternalLinks]
 	return ok
 }
 
-// ResetExternalLink resets all changes to the "external_link" field.
-func (m *ModelMutation) ResetExternalLink() {
-	m.external_link = nil
-	delete(m.clearedFields, model.FieldExternalLink)
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *ModelMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, model.FieldExternalLinks)
 }
 
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
@@ -12520,8 +12581,8 @@ func (m *ModelMutation) Fields() []string {
 	if m.description != nil {
 		fields = append(fields, model.FieldDescription)
 	}
-	if m.external_link != nil {
-		fields = append(fields, model.FieldExternalLink)
+	if m.external_links != nil {
+		fields = append(fields, model.FieldExternalLinks)
 	}
 	return fields
 }
@@ -12543,8 +12604,8 @@ func (m *ModelMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayName()
 	case model.FieldDescription:
 		return m.Description()
-	case model.FieldExternalLink:
-		return m.ExternalLink()
+	case model.FieldExternalLinks:
+		return m.ExternalLinks()
 	}
 	return nil, false
 }
@@ -12566,8 +12627,8 @@ func (m *ModelMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldDisplayName(ctx)
 	case model.FieldDescription:
 		return m.OldDescription(ctx)
-	case model.FieldExternalLink:
-		return m.OldExternalLink(ctx)
+	case model.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
 	}
 	return nil, fmt.Errorf("unknown Model field %s", name)
 }
@@ -12619,12 +12680,12 @@ func (m *ModelMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDescription(v)
 		return nil
-	case model.FieldExternalLink:
-		v, ok := value.(string)
+	case model.FieldExternalLinks:
+		v, ok := value.([]string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetExternalLink(v)
+		m.SetExternalLinks(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Model field %s", name)
@@ -12668,8 +12729,8 @@ func (m *ModelMutation) ClearedFields() []string {
 	if m.FieldCleared(model.FieldDescription) {
 		fields = append(fields, model.FieldDescription)
 	}
-	if m.FieldCleared(model.FieldExternalLink) {
-		fields = append(fields, model.FieldExternalLink)
+	if m.FieldCleared(model.FieldExternalLinks) {
+		fields = append(fields, model.FieldExternalLinks)
 	}
 	return fields
 }
@@ -12697,8 +12758,8 @@ func (m *ModelMutation) ClearField(name string) error {
 	case model.FieldDescription:
 		m.ClearDescription()
 		return nil
-	case model.FieldExternalLink:
-		m.ClearExternalLink()
+	case model.FieldExternalLinks:
+		m.ClearExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Model nullable field %s", name)
@@ -12726,8 +12787,8 @@ func (m *ModelMutation) ResetField(name string) error {
 	case model.FieldDescription:
 		m.ResetDescription()
 		return nil
-	case model.FieldExternalLink:
-		m.ResetExternalLink()
+	case model.FieldExternalLinks:
+		m.ResetExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Model field %s", name)
@@ -12820,23 +12881,24 @@ func (m *ModelMutation) ResetEdge(name string) error {
 // MonumentMutation represents an operation that mutates the Monument nodes in the graph.
 type MonumentMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *int
-	created_at       *time.Time
-	created_by       *string
-	updated_at       *time.Time
-	updated_by       *string
-	display_name     *string
-	description      *string
-	external_link    *string
-	clearedFields    map[string]struct{}
-	artifacts        map[int]struct{}
-	removedartifacts map[int]struct{}
-	clearedartifacts bool
-	done             bool
-	oldValue         func(context.Context) (*Monument, error)
-	predicates       []predicate.Monument
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	artifacts            map[int]struct{}
+	removedartifacts     map[int]struct{}
+	clearedartifacts     bool
+	done                 bool
+	oldValue             func(context.Context) (*Monument, error)
+	predicates           []predicate.Monument
 }
 
 var _ ent.Mutation = (*MonumentMutation)(nil)
@@ -13205,53 +13267,69 @@ func (m *MonumentMutation) ResetDescription() {
 	delete(m.clearedFields, monument.FieldDescription)
 }
 
-// SetExternalLink sets the "external_link" field.
-func (m *MonumentMutation) SetExternalLink(s string) {
-	m.external_link = &s
+// SetExternalLinks sets the "external_links" field.
+func (m *MonumentMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
 }
 
-// ExternalLink returns the value of the "external_link" field in the mutation.
-func (m *MonumentMutation) ExternalLink() (r string, exists bool) {
-	v := m.external_link
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *MonumentMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldExternalLink returns the old "external_link" field's value of the Monument entity.
+// OldExternalLinks returns the old "external_links" field's value of the Monument entity.
 // If the Monument object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MonumentMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+func (m *MonumentMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
 	}
-	return oldValue.ExternalLink, nil
+	return oldValue.ExternalLinks, nil
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (m *MonumentMutation) ClearExternalLink() {
-	m.external_link = nil
-	m.clearedFields[monument.FieldExternalLink] = struct{}{}
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *MonumentMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
 }
 
-// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
-func (m *MonumentMutation) ExternalLinkCleared() bool {
-	_, ok := m.clearedFields[monument.FieldExternalLink]
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *MonumentMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *MonumentMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[monument.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *MonumentMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[monument.FieldExternalLinks]
 	return ok
 }
 
-// ResetExternalLink resets all changes to the "external_link" field.
-func (m *MonumentMutation) ResetExternalLink() {
-	m.external_link = nil
-	delete(m.clearedFields, monument.FieldExternalLink)
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *MonumentMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, monument.FieldExternalLinks)
 }
 
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
@@ -13361,8 +13439,8 @@ func (m *MonumentMutation) Fields() []string {
 	if m.description != nil {
 		fields = append(fields, monument.FieldDescription)
 	}
-	if m.external_link != nil {
-		fields = append(fields, monument.FieldExternalLink)
+	if m.external_links != nil {
+		fields = append(fields, monument.FieldExternalLinks)
 	}
 	return fields
 }
@@ -13384,8 +13462,8 @@ func (m *MonumentMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayName()
 	case monument.FieldDescription:
 		return m.Description()
-	case monument.FieldExternalLink:
-		return m.ExternalLink()
+	case monument.FieldExternalLinks:
+		return m.ExternalLinks()
 	}
 	return nil, false
 }
@@ -13407,8 +13485,8 @@ func (m *MonumentMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldDisplayName(ctx)
 	case monument.FieldDescription:
 		return m.OldDescription(ctx)
-	case monument.FieldExternalLink:
-		return m.OldExternalLink(ctx)
+	case monument.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
 	}
 	return nil, fmt.Errorf("unknown Monument field %s", name)
 }
@@ -13460,12 +13538,12 @@ func (m *MonumentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDescription(v)
 		return nil
-	case monument.FieldExternalLink:
-		v, ok := value.(string)
+	case monument.FieldExternalLinks:
+		v, ok := value.([]string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetExternalLink(v)
+		m.SetExternalLinks(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Monument field %s", name)
@@ -13509,8 +13587,8 @@ func (m *MonumentMutation) ClearedFields() []string {
 	if m.FieldCleared(monument.FieldDescription) {
 		fields = append(fields, monument.FieldDescription)
 	}
-	if m.FieldCleared(monument.FieldExternalLink) {
-		fields = append(fields, monument.FieldExternalLink)
+	if m.FieldCleared(monument.FieldExternalLinks) {
+		fields = append(fields, monument.FieldExternalLinks)
 	}
 	return fields
 }
@@ -13538,8 +13616,8 @@ func (m *MonumentMutation) ClearField(name string) error {
 	case monument.FieldDescription:
 		m.ClearDescription()
 		return nil
-	case monument.FieldExternalLink:
-		m.ClearExternalLink()
+	case monument.FieldExternalLinks:
+		m.ClearExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Monument nullable field %s", name)
@@ -13567,8 +13645,8 @@ func (m *MonumentMutation) ResetField(name string) error {
 	case monument.FieldDescription:
 		m.ResetDescription()
 		return nil
-	case monument.FieldExternalLink:
-		m.ResetExternalLink()
+	case monument.FieldExternalLinks:
+		m.ResetExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Monument field %s", name)
@@ -13675,7 +13753,8 @@ type OrganizationMutation struct {
 	appendemails                 []string
 	display_name                 *string
 	description                  *string
-	external_link                *string
+	external_links               *[]string
+	appendexternal_links         []string
 	primary_image_url            *string
 	additional_images_urls       *[]string
 	appendadditional_images_urls []string
@@ -14232,53 +14311,69 @@ func (m *OrganizationMutation) ResetDescription() {
 	delete(m.clearedFields, organization.FieldDescription)
 }
 
-// SetExternalLink sets the "external_link" field.
-func (m *OrganizationMutation) SetExternalLink(s string) {
-	m.external_link = &s
+// SetExternalLinks sets the "external_links" field.
+func (m *OrganizationMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
 }
 
-// ExternalLink returns the value of the "external_link" field in the mutation.
-func (m *OrganizationMutation) ExternalLink() (r string, exists bool) {
-	v := m.external_link
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *OrganizationMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldExternalLink returns the old "external_link" field's value of the Organization entity.
+// OldExternalLinks returns the old "external_links" field's value of the Organization entity.
 // If the Organization object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *OrganizationMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+func (m *OrganizationMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
 	}
-	return oldValue.ExternalLink, nil
+	return oldValue.ExternalLinks, nil
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (m *OrganizationMutation) ClearExternalLink() {
-	m.external_link = nil
-	m.clearedFields[organization.FieldExternalLink] = struct{}{}
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *OrganizationMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
 }
 
-// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
-func (m *OrganizationMutation) ExternalLinkCleared() bool {
-	_, ok := m.clearedFields[organization.FieldExternalLink]
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *OrganizationMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *OrganizationMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[organization.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *OrganizationMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[organization.FieldExternalLinks]
 	return ok
 }
 
-// ResetExternalLink resets all changes to the "external_link" field.
-func (m *OrganizationMutation) ResetExternalLink() {
-	m.external_link = nil
-	delete(m.clearedFields, organization.FieldExternalLink)
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *OrganizationMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, organization.FieldExternalLinks)
 }
 
 // SetPrimaryImageURL sets the "primary_image_url" field.
@@ -14496,8 +14591,8 @@ func (m *OrganizationMutation) Fields() []string {
 	if m.description != nil {
 		fields = append(fields, organization.FieldDescription)
 	}
-	if m.external_link != nil {
-		fields = append(fields, organization.FieldExternalLink)
+	if m.external_links != nil {
+		fields = append(fields, organization.FieldExternalLinks)
 	}
 	if m.primary_image_url != nil {
 		fields = append(fields, organization.FieldPrimaryImageURL)
@@ -14531,8 +14626,8 @@ func (m *OrganizationMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayName()
 	case organization.FieldDescription:
 		return m.Description()
-	case organization.FieldExternalLink:
-		return m.ExternalLink()
+	case organization.FieldExternalLinks:
+		return m.ExternalLinks()
 	case organization.FieldPrimaryImageURL:
 		return m.PrimaryImageURL()
 	case organization.FieldAdditionalImagesUrls:
@@ -14564,8 +14659,8 @@ func (m *OrganizationMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldDisplayName(ctx)
 	case organization.FieldDescription:
 		return m.OldDescription(ctx)
-	case organization.FieldExternalLink:
-		return m.OldExternalLink(ctx)
+	case organization.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
 	case organization.FieldPrimaryImageURL:
 		return m.OldPrimaryImageURL(ctx)
 	case organization.FieldAdditionalImagesUrls:
@@ -14642,12 +14737,12 @@ func (m *OrganizationMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDescription(v)
 		return nil
-	case organization.FieldExternalLink:
-		v, ok := value.(string)
+	case organization.FieldExternalLinks:
+		v, ok := value.([]string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetExternalLink(v)
+		m.SetExternalLinks(v)
 		return nil
 	case organization.FieldPrimaryImageURL:
 		v, ok := value.(string)
@@ -14714,8 +14809,8 @@ func (m *OrganizationMutation) ClearedFields() []string {
 	if m.FieldCleared(organization.FieldDescription) {
 		fields = append(fields, organization.FieldDescription)
 	}
-	if m.FieldCleared(organization.FieldExternalLink) {
-		fields = append(fields, organization.FieldExternalLink)
+	if m.FieldCleared(organization.FieldExternalLinks) {
+		fields = append(fields, organization.FieldExternalLinks)
 	}
 	if m.FieldCleared(organization.FieldPrimaryImageURL) {
 		fields = append(fields, organization.FieldPrimaryImageURL)
@@ -14758,8 +14853,8 @@ func (m *OrganizationMutation) ClearField(name string) error {
 	case organization.FieldDescription:
 		m.ClearDescription()
 		return nil
-	case organization.FieldExternalLink:
-		m.ClearExternalLink()
+	case organization.FieldExternalLinks:
+		m.ClearExternalLinks()
 		return nil
 	case organization.FieldPrimaryImageURL:
 		m.ClearPrimaryImageURL()
@@ -14802,8 +14897,8 @@ func (m *OrganizationMutation) ResetField(name string) error {
 	case organization.FieldDescription:
 		m.ResetDescription()
 		return nil
-	case organization.FieldExternalLink:
-		m.ResetExternalLink()
+	case organization.FieldExternalLinks:
+		m.ResetExternalLinks()
 		return nil
 	case organization.FieldPrimaryImageURL:
 		m.ResetPrimaryImageURL()
@@ -14906,7 +15001,8 @@ type PersonMutation struct {
 	appendemails                 []string
 	display_name                 *string
 	description                  *string
-	external_link                *string
+	external_links               *[]string
+	appendexternal_links         []string
 	primary_image_url            *string
 	additional_images_urls       *[]string
 	appendadditional_images_urls []string
@@ -15472,53 +15568,69 @@ func (m *PersonMutation) ResetDescription() {
 	delete(m.clearedFields, person.FieldDescription)
 }
 
-// SetExternalLink sets the "external_link" field.
-func (m *PersonMutation) SetExternalLink(s string) {
-	m.external_link = &s
+// SetExternalLinks sets the "external_links" field.
+func (m *PersonMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
 }
 
-// ExternalLink returns the value of the "external_link" field in the mutation.
-func (m *PersonMutation) ExternalLink() (r string, exists bool) {
-	v := m.external_link
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *PersonMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldExternalLink returns the old "external_link" field's value of the Person entity.
+// OldExternalLinks returns the old "external_links" field's value of the Person entity.
 // If the Person object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PersonMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+func (m *PersonMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
 	}
-	return oldValue.ExternalLink, nil
+	return oldValue.ExternalLinks, nil
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (m *PersonMutation) ClearExternalLink() {
-	m.external_link = nil
-	m.clearedFields[person.FieldExternalLink] = struct{}{}
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *PersonMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
 }
 
-// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
-func (m *PersonMutation) ExternalLinkCleared() bool {
-	_, ok := m.clearedFields[person.FieldExternalLink]
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *PersonMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *PersonMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[person.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *PersonMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[person.FieldExternalLinks]
 	return ok
 }
 
-// ResetExternalLink resets all changes to the "external_link" field.
-func (m *PersonMutation) ResetExternalLink() {
-	m.external_link = nil
-	delete(m.clearedFields, person.FieldExternalLink)
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *PersonMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, person.FieldExternalLinks)
 }
 
 // SetPrimaryImageURL sets the "primary_image_url" field.
@@ -15898,8 +16010,8 @@ func (m *PersonMutation) Fields() []string {
 	if m.description != nil {
 		fields = append(fields, person.FieldDescription)
 	}
-	if m.external_link != nil {
-		fields = append(fields, person.FieldExternalLink)
+	if m.external_links != nil {
+		fields = append(fields, person.FieldExternalLinks)
 	}
 	if m.primary_image_url != nil {
 		fields = append(fields, person.FieldPrimaryImageURL)
@@ -15933,8 +16045,8 @@ func (m *PersonMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayName()
 	case person.FieldDescription:
 		return m.Description()
-	case person.FieldExternalLink:
-		return m.ExternalLink()
+	case person.FieldExternalLinks:
+		return m.ExternalLinks()
 	case person.FieldPrimaryImageURL:
 		return m.PrimaryImageURL()
 	case person.FieldAdditionalImagesUrls:
@@ -15966,8 +16078,8 @@ func (m *PersonMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldDisplayName(ctx)
 	case person.FieldDescription:
 		return m.OldDescription(ctx)
-	case person.FieldExternalLink:
-		return m.OldExternalLink(ctx)
+	case person.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
 	case person.FieldPrimaryImageURL:
 		return m.OldPrimaryImageURL(ctx)
 	case person.FieldAdditionalImagesUrls:
@@ -16044,12 +16156,12 @@ func (m *PersonMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDescription(v)
 		return nil
-	case person.FieldExternalLink:
-		v, ok := value.(string)
+	case person.FieldExternalLinks:
+		v, ok := value.([]string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetExternalLink(v)
+		m.SetExternalLinks(v)
 		return nil
 	case person.FieldPrimaryImageURL:
 		v, ok := value.(string)
@@ -16116,8 +16228,8 @@ func (m *PersonMutation) ClearedFields() []string {
 	if m.FieldCleared(person.FieldDescription) {
 		fields = append(fields, person.FieldDescription)
 	}
-	if m.FieldCleared(person.FieldExternalLink) {
-		fields = append(fields, person.FieldExternalLink)
+	if m.FieldCleared(person.FieldExternalLinks) {
+		fields = append(fields, person.FieldExternalLinks)
 	}
 	if m.FieldCleared(person.FieldPrimaryImageURL) {
 		fields = append(fields, person.FieldPrimaryImageURL)
@@ -16160,8 +16272,8 @@ func (m *PersonMutation) ClearField(name string) error {
 	case person.FieldDescription:
 		m.ClearDescription()
 		return nil
-	case person.FieldExternalLink:
-		m.ClearExternalLink()
+	case person.FieldExternalLinks:
+		m.ClearExternalLinks()
 		return nil
 	case person.FieldPrimaryImageURL:
 		m.ClearPrimaryImageURL()
@@ -16204,8 +16316,8 @@ func (m *PersonMutation) ResetField(name string) error {
 	case person.FieldDescription:
 		m.ResetDescription()
 		return nil
-	case person.FieldExternalLink:
-		m.ResetExternalLink()
+	case person.FieldExternalLinks:
+		m.ResetExternalLinks()
 		return nil
 	case person.FieldPrimaryImageURL:
 		m.ResetPrimaryImageURL()
@@ -16374,26 +16486,27 @@ func (m *PersonMutation) ResetEdge(name string) error {
 // ProjectMutation represents an operation that mutates the Project nodes in the graph.
 type ProjectMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *int
-	created_at       *time.Time
-	created_by       *string
-	updated_at       *time.Time
-	updated_by       *string
-	display_name     *string
-	description      *string
-	external_link    *string
-	clearedFields    map[string]struct{}
-	artifacts        map[int]struct{}
-	removedartifacts map[int]struct{}
-	clearedartifacts bool
-	team             map[int]struct{}
-	removedteam      map[int]struct{}
-	clearedteam      bool
-	done             bool
-	oldValue         func(context.Context) (*Project, error)
-	predicates       []predicate.Project
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	artifacts            map[int]struct{}
+	removedartifacts     map[int]struct{}
+	clearedartifacts     bool
+	team                 map[int]struct{}
+	removedteam          map[int]struct{}
+	clearedteam          bool
+	done                 bool
+	oldValue             func(context.Context) (*Project, error)
+	predicates           []predicate.Project
 }
 
 var _ ent.Mutation = (*ProjectMutation)(nil)
@@ -16762,53 +16875,69 @@ func (m *ProjectMutation) ResetDescription() {
 	delete(m.clearedFields, project.FieldDescription)
 }
 
-// SetExternalLink sets the "external_link" field.
-func (m *ProjectMutation) SetExternalLink(s string) {
-	m.external_link = &s
+// SetExternalLinks sets the "external_links" field.
+func (m *ProjectMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
 }
 
-// ExternalLink returns the value of the "external_link" field in the mutation.
-func (m *ProjectMutation) ExternalLink() (r string, exists bool) {
-	v := m.external_link
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *ProjectMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldExternalLink returns the old "external_link" field's value of the Project entity.
+// OldExternalLinks returns the old "external_links" field's value of the Project entity.
 // If the Project object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProjectMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+func (m *ProjectMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
 	}
-	return oldValue.ExternalLink, nil
+	return oldValue.ExternalLinks, nil
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (m *ProjectMutation) ClearExternalLink() {
-	m.external_link = nil
-	m.clearedFields[project.FieldExternalLink] = struct{}{}
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *ProjectMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
 }
 
-// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
-func (m *ProjectMutation) ExternalLinkCleared() bool {
-	_, ok := m.clearedFields[project.FieldExternalLink]
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *ProjectMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *ProjectMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[project.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *ProjectMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[project.FieldExternalLinks]
 	return ok
 }
 
-// ResetExternalLink resets all changes to the "external_link" field.
-func (m *ProjectMutation) ResetExternalLink() {
-	m.external_link = nil
-	delete(m.clearedFields, project.FieldExternalLink)
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *ProjectMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, project.FieldExternalLinks)
 }
 
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
@@ -16972,8 +17101,8 @@ func (m *ProjectMutation) Fields() []string {
 	if m.description != nil {
 		fields = append(fields, project.FieldDescription)
 	}
-	if m.external_link != nil {
-		fields = append(fields, project.FieldExternalLink)
+	if m.external_links != nil {
+		fields = append(fields, project.FieldExternalLinks)
 	}
 	return fields
 }
@@ -16995,8 +17124,8 @@ func (m *ProjectMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayName()
 	case project.FieldDescription:
 		return m.Description()
-	case project.FieldExternalLink:
-		return m.ExternalLink()
+	case project.FieldExternalLinks:
+		return m.ExternalLinks()
 	}
 	return nil, false
 }
@@ -17018,8 +17147,8 @@ func (m *ProjectMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldDisplayName(ctx)
 	case project.FieldDescription:
 		return m.OldDescription(ctx)
-	case project.FieldExternalLink:
-		return m.OldExternalLink(ctx)
+	case project.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
 	}
 	return nil, fmt.Errorf("unknown Project field %s", name)
 }
@@ -17071,12 +17200,12 @@ func (m *ProjectMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDescription(v)
 		return nil
-	case project.FieldExternalLink:
-		v, ok := value.(string)
+	case project.FieldExternalLinks:
+		v, ok := value.([]string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetExternalLink(v)
+		m.SetExternalLinks(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Project field %s", name)
@@ -17120,8 +17249,8 @@ func (m *ProjectMutation) ClearedFields() []string {
 	if m.FieldCleared(project.FieldDescription) {
 		fields = append(fields, project.FieldDescription)
 	}
-	if m.FieldCleared(project.FieldExternalLink) {
-		fields = append(fields, project.FieldExternalLink)
+	if m.FieldCleared(project.FieldExternalLinks) {
+		fields = append(fields, project.FieldExternalLinks)
 	}
 	return fields
 }
@@ -17149,8 +17278,8 @@ func (m *ProjectMutation) ClearField(name string) error {
 	case project.FieldDescription:
 		m.ClearDescription()
 		return nil
-	case project.FieldExternalLink:
-		m.ClearExternalLink()
+	case project.FieldExternalLinks:
+		m.ClearExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Project nullable field %s", name)
@@ -17178,8 +17307,8 @@ func (m *ProjectMutation) ResetField(name string) error {
 	case project.FieldDescription:
 		m.ResetDescription()
 		return nil
-	case project.FieldExternalLink:
-		m.ResetExternalLink()
+	case project.FieldExternalLinks:
+		m.ResetExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Project field %s", name)
@@ -18090,26 +18219,27 @@ func (m *ProtectedAreaPictureMutation) ResetEdge(name string) error {
 // PublicationMutation represents an operation that mutates the Publication nodes in the graph.
 type PublicationMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *int
-	created_at       *time.Time
-	created_by       *string
-	updated_at       *time.Time
-	updated_by       *string
-	display_name     *string
-	description      *string
-	external_link    *string
-	clearedFields    map[string]struct{}
-	artifacts        map[int]struct{}
-	removedartifacts map[int]struct{}
-	clearedartifacts bool
-	authors          map[int]struct{}
-	removedauthors   map[int]struct{}
-	clearedauthors   bool
-	done             bool
-	oldValue         func(context.Context) (*Publication, error)
-	predicates       []predicate.Publication
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	artifacts            map[int]struct{}
+	removedartifacts     map[int]struct{}
+	clearedartifacts     bool
+	authors              map[int]struct{}
+	removedauthors       map[int]struct{}
+	clearedauthors       bool
+	done                 bool
+	oldValue             func(context.Context) (*Publication, error)
+	predicates           []predicate.Publication
 }
 
 var _ ent.Mutation = (*PublicationMutation)(nil)
@@ -18478,53 +18608,69 @@ func (m *PublicationMutation) ResetDescription() {
 	delete(m.clearedFields, publication.FieldDescription)
 }
 
-// SetExternalLink sets the "external_link" field.
-func (m *PublicationMutation) SetExternalLink(s string) {
-	m.external_link = &s
+// SetExternalLinks sets the "external_links" field.
+func (m *PublicationMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
 }
 
-// ExternalLink returns the value of the "external_link" field in the mutation.
-func (m *PublicationMutation) ExternalLink() (r string, exists bool) {
-	v := m.external_link
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *PublicationMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldExternalLink returns the old "external_link" field's value of the Publication entity.
+// OldExternalLinks returns the old "external_links" field's value of the Publication entity.
 // If the Publication object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PublicationMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+func (m *PublicationMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
 	}
-	return oldValue.ExternalLink, nil
+	return oldValue.ExternalLinks, nil
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (m *PublicationMutation) ClearExternalLink() {
-	m.external_link = nil
-	m.clearedFields[publication.FieldExternalLink] = struct{}{}
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *PublicationMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
 }
 
-// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
-func (m *PublicationMutation) ExternalLinkCleared() bool {
-	_, ok := m.clearedFields[publication.FieldExternalLink]
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *PublicationMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *PublicationMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[publication.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *PublicationMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[publication.FieldExternalLinks]
 	return ok
 }
 
-// ResetExternalLink resets all changes to the "external_link" field.
-func (m *PublicationMutation) ResetExternalLink() {
-	m.external_link = nil
-	delete(m.clearedFields, publication.FieldExternalLink)
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *PublicationMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, publication.FieldExternalLinks)
 }
 
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
@@ -18688,8 +18834,8 @@ func (m *PublicationMutation) Fields() []string {
 	if m.description != nil {
 		fields = append(fields, publication.FieldDescription)
 	}
-	if m.external_link != nil {
-		fields = append(fields, publication.FieldExternalLink)
+	if m.external_links != nil {
+		fields = append(fields, publication.FieldExternalLinks)
 	}
 	return fields
 }
@@ -18711,8 +18857,8 @@ func (m *PublicationMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayName()
 	case publication.FieldDescription:
 		return m.Description()
-	case publication.FieldExternalLink:
-		return m.ExternalLink()
+	case publication.FieldExternalLinks:
+		return m.ExternalLinks()
 	}
 	return nil, false
 }
@@ -18734,8 +18880,8 @@ func (m *PublicationMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldDisplayName(ctx)
 	case publication.FieldDescription:
 		return m.OldDescription(ctx)
-	case publication.FieldExternalLink:
-		return m.OldExternalLink(ctx)
+	case publication.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
 	}
 	return nil, fmt.Errorf("unknown Publication field %s", name)
 }
@@ -18787,12 +18933,12 @@ func (m *PublicationMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDescription(v)
 		return nil
-	case publication.FieldExternalLink:
-		v, ok := value.(string)
+	case publication.FieldExternalLinks:
+		v, ok := value.([]string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetExternalLink(v)
+		m.SetExternalLinks(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Publication field %s", name)
@@ -18836,8 +18982,8 @@ func (m *PublicationMutation) ClearedFields() []string {
 	if m.FieldCleared(publication.FieldDescription) {
 		fields = append(fields, publication.FieldDescription)
 	}
-	if m.FieldCleared(publication.FieldExternalLink) {
-		fields = append(fields, publication.FieldExternalLink)
+	if m.FieldCleared(publication.FieldExternalLinks) {
+		fields = append(fields, publication.FieldExternalLinks)
 	}
 	return fields
 }
@@ -18865,8 +19011,8 @@ func (m *PublicationMutation) ClearField(name string) error {
 	case publication.FieldDescription:
 		m.ClearDescription()
 		return nil
-	case publication.FieldExternalLink:
-		m.ClearExternalLink()
+	case publication.FieldExternalLinks:
+		m.ClearExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Publication nullable field %s", name)
@@ -18894,8 +19040,8 @@ func (m *PublicationMutation) ResetField(name string) error {
 	case publication.FieldDescription:
 		m.ResetDescription()
 		return nil
-	case publication.FieldExternalLink:
-		m.ResetExternalLink()
+	case publication.FieldExternalLinks:
+		m.ResetExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Publication field %s", name)
@@ -19278,22 +19424,23 @@ func (m *PublisherMutation) ResetEdge(name string) error {
 // RegionMutation represents an operation that mutates the Region nodes in the graph.
 type RegionMutation struct {
 	config
-	op              Op
-	typ             string
-	id              *int
-	created_at      *time.Time
-	created_by      *string
-	updated_at      *time.Time
-	updated_by      *string
-	display_name    *string
-	description     *string
-	external_link   *string
-	clearedFields   map[string]struct{}
-	location        *int
-	clearedlocation bool
-	done            bool
-	oldValue        func(context.Context) (*Region, error)
-	predicates      []predicate.Region
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	location             *int
+	clearedlocation      bool
+	done                 bool
+	oldValue             func(context.Context) (*Region, error)
+	predicates           []predicate.Region
 }
 
 var _ ent.Mutation = (*RegionMutation)(nil)
@@ -19662,53 +19809,69 @@ func (m *RegionMutation) ResetDescription() {
 	delete(m.clearedFields, region.FieldDescription)
 }
 
-// SetExternalLink sets the "external_link" field.
-func (m *RegionMutation) SetExternalLink(s string) {
-	m.external_link = &s
+// SetExternalLinks sets the "external_links" field.
+func (m *RegionMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
 }
 
-// ExternalLink returns the value of the "external_link" field in the mutation.
-func (m *RegionMutation) ExternalLink() (r string, exists bool) {
-	v := m.external_link
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *RegionMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldExternalLink returns the old "external_link" field's value of the Region entity.
+// OldExternalLinks returns the old "external_links" field's value of the Region entity.
 // If the Region object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RegionMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+func (m *RegionMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
 	}
-	return oldValue.ExternalLink, nil
+	return oldValue.ExternalLinks, nil
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (m *RegionMutation) ClearExternalLink() {
-	m.external_link = nil
-	m.clearedFields[region.FieldExternalLink] = struct{}{}
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *RegionMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
 }
 
-// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
-func (m *RegionMutation) ExternalLinkCleared() bool {
-	_, ok := m.clearedFields[region.FieldExternalLink]
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *RegionMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *RegionMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[region.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *RegionMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[region.FieldExternalLinks]
 	return ok
 }
 
-// ResetExternalLink resets all changes to the "external_link" field.
-func (m *RegionMutation) ResetExternalLink() {
-	m.external_link = nil
-	delete(m.clearedFields, region.FieldExternalLink)
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *RegionMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, region.FieldExternalLinks)
 }
 
 // SetLocationID sets the "location" edge to the Location entity by id.
@@ -19803,8 +19966,8 @@ func (m *RegionMutation) Fields() []string {
 	if m.description != nil {
 		fields = append(fields, region.FieldDescription)
 	}
-	if m.external_link != nil {
-		fields = append(fields, region.FieldExternalLink)
+	if m.external_links != nil {
+		fields = append(fields, region.FieldExternalLinks)
 	}
 	return fields
 }
@@ -19826,8 +19989,8 @@ func (m *RegionMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayName()
 	case region.FieldDescription:
 		return m.Description()
-	case region.FieldExternalLink:
-		return m.ExternalLink()
+	case region.FieldExternalLinks:
+		return m.ExternalLinks()
 	}
 	return nil, false
 }
@@ -19849,8 +20012,8 @@ func (m *RegionMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldDisplayName(ctx)
 	case region.FieldDescription:
 		return m.OldDescription(ctx)
-	case region.FieldExternalLink:
-		return m.OldExternalLink(ctx)
+	case region.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
 	}
 	return nil, fmt.Errorf("unknown Region field %s", name)
 }
@@ -19902,12 +20065,12 @@ func (m *RegionMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDescription(v)
 		return nil
-	case region.FieldExternalLink:
-		v, ok := value.(string)
+	case region.FieldExternalLinks:
+		v, ok := value.([]string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetExternalLink(v)
+		m.SetExternalLinks(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Region field %s", name)
@@ -19951,8 +20114,8 @@ func (m *RegionMutation) ClearedFields() []string {
 	if m.FieldCleared(region.FieldDescription) {
 		fields = append(fields, region.FieldDescription)
 	}
-	if m.FieldCleared(region.FieldExternalLink) {
-		fields = append(fields, region.FieldExternalLink)
+	if m.FieldCleared(region.FieldExternalLinks) {
+		fields = append(fields, region.FieldExternalLinks)
 	}
 	return fields
 }
@@ -19980,8 +20143,8 @@ func (m *RegionMutation) ClearField(name string) error {
 	case region.FieldDescription:
 		m.ClearDescription()
 		return nil
-	case region.FieldExternalLink:
-		m.ClearExternalLink()
+	case region.FieldExternalLinks:
+		m.ClearExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Region nullable field %s", name)
@@ -20009,8 +20172,8 @@ func (m *RegionMutation) ResetField(name string) error {
 	case region.FieldDescription:
 		m.ResetDescription()
 		return nil
-	case region.FieldExternalLink:
-		m.ResetExternalLink()
+	case region.FieldExternalLinks:
+		m.ResetExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Region field %s", name)
@@ -20093,23 +20256,24 @@ func (m *RegionMutation) ResetEdge(name string) error {
 // SetMutation represents an operation that mutates the Set nodes in the graph.
 type SetMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *int
-	created_at       *time.Time
-	created_by       *string
-	updated_at       *time.Time
-	updated_by       *string
-	display_name     *string
-	description      *string
-	external_link    *string
-	clearedFields    map[string]struct{}
-	artifacts        map[int]struct{}
-	removedartifacts map[int]struct{}
-	clearedartifacts bool
-	done             bool
-	oldValue         func(context.Context) (*Set, error)
-	predicates       []predicate.Set
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	artifacts            map[int]struct{}
+	removedartifacts     map[int]struct{}
+	clearedartifacts     bool
+	done                 bool
+	oldValue             func(context.Context) (*Set, error)
+	predicates           []predicate.Set
 }
 
 var _ ent.Mutation = (*SetMutation)(nil)
@@ -20478,53 +20642,69 @@ func (m *SetMutation) ResetDescription() {
 	delete(m.clearedFields, set.FieldDescription)
 }
 
-// SetExternalLink sets the "external_link" field.
-func (m *SetMutation) SetExternalLink(s string) {
-	m.external_link = &s
+// SetExternalLinks sets the "external_links" field.
+func (m *SetMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
 }
 
-// ExternalLink returns the value of the "external_link" field in the mutation.
-func (m *SetMutation) ExternalLink() (r string, exists bool) {
-	v := m.external_link
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *SetMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldExternalLink returns the old "external_link" field's value of the Set entity.
+// OldExternalLinks returns the old "external_links" field's value of the Set entity.
 // If the Set object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SetMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+func (m *SetMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
 	}
-	return oldValue.ExternalLink, nil
+	return oldValue.ExternalLinks, nil
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (m *SetMutation) ClearExternalLink() {
-	m.external_link = nil
-	m.clearedFields[set.FieldExternalLink] = struct{}{}
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *SetMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
 }
 
-// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
-func (m *SetMutation) ExternalLinkCleared() bool {
-	_, ok := m.clearedFields[set.FieldExternalLink]
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *SetMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *SetMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[set.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *SetMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[set.FieldExternalLinks]
 	return ok
 }
 
-// ResetExternalLink resets all changes to the "external_link" field.
-func (m *SetMutation) ResetExternalLink() {
-	m.external_link = nil
-	delete(m.clearedFields, set.FieldExternalLink)
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *SetMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, set.FieldExternalLinks)
 }
 
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
@@ -20634,8 +20814,8 @@ func (m *SetMutation) Fields() []string {
 	if m.description != nil {
 		fields = append(fields, set.FieldDescription)
 	}
-	if m.external_link != nil {
-		fields = append(fields, set.FieldExternalLink)
+	if m.external_links != nil {
+		fields = append(fields, set.FieldExternalLinks)
 	}
 	return fields
 }
@@ -20657,8 +20837,8 @@ func (m *SetMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayName()
 	case set.FieldDescription:
 		return m.Description()
-	case set.FieldExternalLink:
-		return m.ExternalLink()
+	case set.FieldExternalLinks:
+		return m.ExternalLinks()
 	}
 	return nil, false
 }
@@ -20680,8 +20860,8 @@ func (m *SetMutation) OldField(ctx context.Context, name string) (ent.Value, err
 		return m.OldDisplayName(ctx)
 	case set.FieldDescription:
 		return m.OldDescription(ctx)
-	case set.FieldExternalLink:
-		return m.OldExternalLink(ctx)
+	case set.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
 	}
 	return nil, fmt.Errorf("unknown Set field %s", name)
 }
@@ -20733,12 +20913,12 @@ func (m *SetMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDescription(v)
 		return nil
-	case set.FieldExternalLink:
-		v, ok := value.(string)
+	case set.FieldExternalLinks:
+		v, ok := value.([]string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetExternalLink(v)
+		m.SetExternalLinks(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Set field %s", name)
@@ -20782,8 +20962,8 @@ func (m *SetMutation) ClearedFields() []string {
 	if m.FieldCleared(set.FieldDescription) {
 		fields = append(fields, set.FieldDescription)
 	}
-	if m.FieldCleared(set.FieldExternalLink) {
-		fields = append(fields, set.FieldExternalLink)
+	if m.FieldCleared(set.FieldExternalLinks) {
+		fields = append(fields, set.FieldExternalLinks)
 	}
 	return fields
 }
@@ -20811,8 +20991,8 @@ func (m *SetMutation) ClearField(name string) error {
 	case set.FieldDescription:
 		m.ClearDescription()
 		return nil
-	case set.FieldExternalLink:
-		m.ClearExternalLink()
+	case set.FieldExternalLinks:
+		m.ClearExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Set nullable field %s", name)
@@ -20840,8 +21020,8 @@ func (m *SetMutation) ResetField(name string) error {
 	case set.FieldDescription:
 		m.ResetDescription()
 		return nil
-	case set.FieldExternalLink:
-		m.ResetExternalLink()
+	case set.FieldExternalLinks:
+		m.ResetExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Set field %s", name)
@@ -20934,22 +21114,23 @@ func (m *SetMutation) ResetEdge(name string) error {
 // SettlementMutation represents an operation that mutates the Settlement nodes in the graph.
 type SettlementMutation struct {
 	config
-	op              Op
-	typ             string
-	id              *int
-	created_at      *time.Time
-	created_by      *string
-	updated_at      *time.Time
-	updated_by      *string
-	display_name    *string
-	description     *string
-	external_link   *string
-	clearedFields   map[string]struct{}
-	location        *int
-	clearedlocation bool
-	done            bool
-	oldValue        func(context.Context) (*Settlement, error)
-	predicates      []predicate.Settlement
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	location             *int
+	clearedlocation      bool
+	done                 bool
+	oldValue             func(context.Context) (*Settlement, error)
+	predicates           []predicate.Settlement
 }
 
 var _ ent.Mutation = (*SettlementMutation)(nil)
@@ -21318,53 +21499,69 @@ func (m *SettlementMutation) ResetDescription() {
 	delete(m.clearedFields, settlement.FieldDescription)
 }
 
-// SetExternalLink sets the "external_link" field.
-func (m *SettlementMutation) SetExternalLink(s string) {
-	m.external_link = &s
+// SetExternalLinks sets the "external_links" field.
+func (m *SettlementMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
 }
 
-// ExternalLink returns the value of the "external_link" field in the mutation.
-func (m *SettlementMutation) ExternalLink() (r string, exists bool) {
-	v := m.external_link
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *SettlementMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldExternalLink returns the old "external_link" field's value of the Settlement entity.
+// OldExternalLinks returns the old "external_links" field's value of the Settlement entity.
 // If the Settlement object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SettlementMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+func (m *SettlementMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
 	}
-	return oldValue.ExternalLink, nil
+	return oldValue.ExternalLinks, nil
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (m *SettlementMutation) ClearExternalLink() {
-	m.external_link = nil
-	m.clearedFields[settlement.FieldExternalLink] = struct{}{}
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *SettlementMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
 }
 
-// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
-func (m *SettlementMutation) ExternalLinkCleared() bool {
-	_, ok := m.clearedFields[settlement.FieldExternalLink]
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *SettlementMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *SettlementMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[settlement.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *SettlementMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[settlement.FieldExternalLinks]
 	return ok
 }
 
-// ResetExternalLink resets all changes to the "external_link" field.
-func (m *SettlementMutation) ResetExternalLink() {
-	m.external_link = nil
-	delete(m.clearedFields, settlement.FieldExternalLink)
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *SettlementMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, settlement.FieldExternalLinks)
 }
 
 // SetLocationID sets the "location" edge to the Location entity by id.
@@ -21459,8 +21656,8 @@ func (m *SettlementMutation) Fields() []string {
 	if m.description != nil {
 		fields = append(fields, settlement.FieldDescription)
 	}
-	if m.external_link != nil {
-		fields = append(fields, settlement.FieldExternalLink)
+	if m.external_links != nil {
+		fields = append(fields, settlement.FieldExternalLinks)
 	}
 	return fields
 }
@@ -21482,8 +21679,8 @@ func (m *SettlementMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayName()
 	case settlement.FieldDescription:
 		return m.Description()
-	case settlement.FieldExternalLink:
-		return m.ExternalLink()
+	case settlement.FieldExternalLinks:
+		return m.ExternalLinks()
 	}
 	return nil, false
 }
@@ -21505,8 +21702,8 @@ func (m *SettlementMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldDisplayName(ctx)
 	case settlement.FieldDescription:
 		return m.OldDescription(ctx)
-	case settlement.FieldExternalLink:
-		return m.OldExternalLink(ctx)
+	case settlement.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
 	}
 	return nil, fmt.Errorf("unknown Settlement field %s", name)
 }
@@ -21558,12 +21755,12 @@ func (m *SettlementMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDescription(v)
 		return nil
-	case settlement.FieldExternalLink:
-		v, ok := value.(string)
+	case settlement.FieldExternalLinks:
+		v, ok := value.([]string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetExternalLink(v)
+		m.SetExternalLinks(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Settlement field %s", name)
@@ -21607,8 +21804,8 @@ func (m *SettlementMutation) ClearedFields() []string {
 	if m.FieldCleared(settlement.FieldDescription) {
 		fields = append(fields, settlement.FieldDescription)
 	}
-	if m.FieldCleared(settlement.FieldExternalLink) {
-		fields = append(fields, settlement.FieldExternalLink)
+	if m.FieldCleared(settlement.FieldExternalLinks) {
+		fields = append(fields, settlement.FieldExternalLinks)
 	}
 	return fields
 }
@@ -21636,8 +21833,8 @@ func (m *SettlementMutation) ClearField(name string) error {
 	case settlement.FieldDescription:
 		m.ClearDescription()
 		return nil
-	case settlement.FieldExternalLink:
-		m.ClearExternalLink()
+	case settlement.FieldExternalLinks:
+		m.ClearExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Settlement nullable field %s", name)
@@ -21665,8 +21862,8 @@ func (m *SettlementMutation) ResetField(name string) error {
 	case settlement.FieldDescription:
 		m.ResetDescription()
 		return nil
-	case settlement.FieldExternalLink:
-		m.ResetExternalLink()
+	case settlement.FieldExternalLinks:
+		m.ResetExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Settlement field %s", name)
@@ -21749,23 +21946,24 @@ func (m *SettlementMutation) ResetEdge(name string) error {
 // TechniqueMutation represents an operation that mutates the Technique nodes in the graph.
 type TechniqueMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *int
-	created_at       *time.Time
-	created_by       *string
-	updated_at       *time.Time
-	updated_by       *string
-	display_name     *string
-	description      *string
-	external_link    *string
-	clearedFields    map[string]struct{}
-	artifacts        map[int]struct{}
-	removedartifacts map[int]struct{}
-	clearedartifacts bool
-	done             bool
-	oldValue         func(context.Context) (*Technique, error)
-	predicates       []predicate.Technique
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	artifacts            map[int]struct{}
+	removedartifacts     map[int]struct{}
+	clearedartifacts     bool
+	done                 bool
+	oldValue             func(context.Context) (*Technique, error)
+	predicates           []predicate.Technique
 }
 
 var _ ent.Mutation = (*TechniqueMutation)(nil)
@@ -22134,53 +22332,69 @@ func (m *TechniqueMutation) ResetDescription() {
 	delete(m.clearedFields, technique.FieldDescription)
 }
 
-// SetExternalLink sets the "external_link" field.
-func (m *TechniqueMutation) SetExternalLink(s string) {
-	m.external_link = &s
+// SetExternalLinks sets the "external_links" field.
+func (m *TechniqueMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
 }
 
-// ExternalLink returns the value of the "external_link" field in the mutation.
-func (m *TechniqueMutation) ExternalLink() (r string, exists bool) {
-	v := m.external_link
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *TechniqueMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldExternalLink returns the old "external_link" field's value of the Technique entity.
+// OldExternalLinks returns the old "external_links" field's value of the Technique entity.
 // If the Technique object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TechniqueMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+func (m *TechniqueMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
 	}
-	return oldValue.ExternalLink, nil
+	return oldValue.ExternalLinks, nil
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (m *TechniqueMutation) ClearExternalLink() {
-	m.external_link = nil
-	m.clearedFields[technique.FieldExternalLink] = struct{}{}
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *TechniqueMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
 }
 
-// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
-func (m *TechniqueMutation) ExternalLinkCleared() bool {
-	_, ok := m.clearedFields[technique.FieldExternalLink]
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *TechniqueMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *TechniqueMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[technique.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *TechniqueMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[technique.FieldExternalLinks]
 	return ok
 }
 
-// ResetExternalLink resets all changes to the "external_link" field.
-func (m *TechniqueMutation) ResetExternalLink() {
-	m.external_link = nil
-	delete(m.clearedFields, technique.FieldExternalLink)
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *TechniqueMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, technique.FieldExternalLinks)
 }
 
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
@@ -22290,8 +22504,8 @@ func (m *TechniqueMutation) Fields() []string {
 	if m.description != nil {
 		fields = append(fields, technique.FieldDescription)
 	}
-	if m.external_link != nil {
-		fields = append(fields, technique.FieldExternalLink)
+	if m.external_links != nil {
+		fields = append(fields, technique.FieldExternalLinks)
 	}
 	return fields
 }
@@ -22313,8 +22527,8 @@ func (m *TechniqueMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayName()
 	case technique.FieldDescription:
 		return m.Description()
-	case technique.FieldExternalLink:
-		return m.ExternalLink()
+	case technique.FieldExternalLinks:
+		return m.ExternalLinks()
 	}
 	return nil, false
 }
@@ -22336,8 +22550,8 @@ func (m *TechniqueMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldDisplayName(ctx)
 	case technique.FieldDescription:
 		return m.OldDescription(ctx)
-	case technique.FieldExternalLink:
-		return m.OldExternalLink(ctx)
+	case technique.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
 	}
 	return nil, fmt.Errorf("unknown Technique field %s", name)
 }
@@ -22389,12 +22603,12 @@ func (m *TechniqueMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDescription(v)
 		return nil
-	case technique.FieldExternalLink:
-		v, ok := value.(string)
+	case technique.FieldExternalLinks:
+		v, ok := value.([]string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetExternalLink(v)
+		m.SetExternalLinks(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Technique field %s", name)
@@ -22438,8 +22652,8 @@ func (m *TechniqueMutation) ClearedFields() []string {
 	if m.FieldCleared(technique.FieldDescription) {
 		fields = append(fields, technique.FieldDescription)
 	}
-	if m.FieldCleared(technique.FieldExternalLink) {
-		fields = append(fields, technique.FieldExternalLink)
+	if m.FieldCleared(technique.FieldExternalLinks) {
+		fields = append(fields, technique.FieldExternalLinks)
 	}
 	return fields
 }
@@ -22467,8 +22681,8 @@ func (m *TechniqueMutation) ClearField(name string) error {
 	case technique.FieldDescription:
 		m.ClearDescription()
 		return nil
-	case technique.FieldExternalLink:
-		m.ClearExternalLink()
+	case technique.FieldExternalLinks:
+		m.ClearExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Technique nullable field %s", name)
@@ -22496,8 +22710,8 @@ func (m *TechniqueMutation) ResetField(name string) error {
 	case technique.FieldDescription:
 		m.ResetDescription()
 		return nil
-	case technique.FieldExternalLink:
-		m.ResetExternalLink()
+	case technique.FieldExternalLinks:
+		m.ResetExternalLinks()
 		return nil
 	}
 	return fmt.Errorf("unknown Technique field %s", name)

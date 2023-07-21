@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
@@ -116,23 +117,21 @@ func (pu *PublicationUpdate) ClearDescription() *PublicationUpdate {
 	return pu
 }
 
-// SetExternalLink sets the "external_link" field.
-func (pu *PublicationUpdate) SetExternalLink(s string) *PublicationUpdate {
-	pu.mutation.SetExternalLink(s)
+// SetExternalLinks sets the "external_links" field.
+func (pu *PublicationUpdate) SetExternalLinks(s []string) *PublicationUpdate {
+	pu.mutation.SetExternalLinks(s)
 	return pu
 }
 
-// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
-func (pu *PublicationUpdate) SetNillableExternalLink(s *string) *PublicationUpdate {
-	if s != nil {
-		pu.SetExternalLink(*s)
-	}
+// AppendExternalLinks appends s to the "external_links" field.
+func (pu *PublicationUpdate) AppendExternalLinks(s []string) *PublicationUpdate {
+	pu.mutation.AppendExternalLinks(s)
 	return pu
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (pu *PublicationUpdate) ClearExternalLink() *PublicationUpdate {
-	pu.mutation.ClearExternalLink()
+// ClearExternalLinks clears the value of the "external_links" field.
+func (pu *PublicationUpdate) ClearExternalLinks() *PublicationUpdate {
+	pu.mutation.ClearExternalLinks()
 	return pu
 }
 
@@ -291,11 +290,16 @@ func (pu *PublicationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.DescriptionCleared() {
 		_spec.ClearField(publication.FieldDescription, field.TypeString)
 	}
-	if value, ok := pu.mutation.ExternalLink(); ok {
-		_spec.SetField(publication.FieldExternalLink, field.TypeString, value)
+	if value, ok := pu.mutation.ExternalLinks(); ok {
+		_spec.SetField(publication.FieldExternalLinks, field.TypeJSON, value)
 	}
-	if pu.mutation.ExternalLinkCleared() {
-		_spec.ClearField(publication.FieldExternalLink, field.TypeString)
+	if value, ok := pu.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, publication.FieldExternalLinks, value)
+		})
+	}
+	if pu.mutation.ExternalLinksCleared() {
+		_spec.ClearField(publication.FieldExternalLinks, field.TypeJSON)
 	}
 	if pu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -493,23 +497,21 @@ func (puo *PublicationUpdateOne) ClearDescription() *PublicationUpdateOne {
 	return puo
 }
 
-// SetExternalLink sets the "external_link" field.
-func (puo *PublicationUpdateOne) SetExternalLink(s string) *PublicationUpdateOne {
-	puo.mutation.SetExternalLink(s)
+// SetExternalLinks sets the "external_links" field.
+func (puo *PublicationUpdateOne) SetExternalLinks(s []string) *PublicationUpdateOne {
+	puo.mutation.SetExternalLinks(s)
 	return puo
 }
 
-// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
-func (puo *PublicationUpdateOne) SetNillableExternalLink(s *string) *PublicationUpdateOne {
-	if s != nil {
-		puo.SetExternalLink(*s)
-	}
+// AppendExternalLinks appends s to the "external_links" field.
+func (puo *PublicationUpdateOne) AppendExternalLinks(s []string) *PublicationUpdateOne {
+	puo.mutation.AppendExternalLinks(s)
 	return puo
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (puo *PublicationUpdateOne) ClearExternalLink() *PublicationUpdateOne {
-	puo.mutation.ClearExternalLink()
+// ClearExternalLinks clears the value of the "external_links" field.
+func (puo *PublicationUpdateOne) ClearExternalLinks() *PublicationUpdateOne {
+	puo.mutation.ClearExternalLinks()
 	return puo
 }
 
@@ -698,11 +700,16 @@ func (puo *PublicationUpdateOne) sqlSave(ctx context.Context) (_node *Publicatio
 	if puo.mutation.DescriptionCleared() {
 		_spec.ClearField(publication.FieldDescription, field.TypeString)
 	}
-	if value, ok := puo.mutation.ExternalLink(); ok {
-		_spec.SetField(publication.FieldExternalLink, field.TypeString, value)
+	if value, ok := puo.mutation.ExternalLinks(); ok {
+		_spec.SetField(publication.FieldExternalLinks, field.TypeJSON, value)
 	}
-	if puo.mutation.ExternalLinkCleared() {
-		_spec.ClearField(publication.FieldExternalLink, field.TypeString)
+	if value, ok := puo.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, publication.FieldExternalLinks, value)
+		})
+	}
+	if puo.mutation.ExternalLinksCleared() {
+		_spec.ClearField(publication.FieldExternalLinks, field.TypeJSON)
 	}
 	if puo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

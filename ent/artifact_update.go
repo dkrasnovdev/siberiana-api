@@ -128,23 +128,21 @@ func (au *ArtifactUpdate) ClearDescription() *ArtifactUpdate {
 	return au
 }
 
-// SetExternalLink sets the "external_link" field.
-func (au *ArtifactUpdate) SetExternalLink(s string) *ArtifactUpdate {
-	au.mutation.SetExternalLink(s)
+// SetExternalLinks sets the "external_links" field.
+func (au *ArtifactUpdate) SetExternalLinks(s []string) *ArtifactUpdate {
+	au.mutation.SetExternalLinks(s)
 	return au
 }
 
-// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
-func (au *ArtifactUpdate) SetNillableExternalLink(s *string) *ArtifactUpdate {
-	if s != nil {
-		au.SetExternalLink(*s)
-	}
+// AppendExternalLinks appends s to the "external_links" field.
+func (au *ArtifactUpdate) AppendExternalLinks(s []string) *ArtifactUpdate {
+	au.mutation.AppendExternalLinks(s)
 	return au
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (au *ArtifactUpdate) ClearExternalLink() *ArtifactUpdate {
-	au.mutation.ClearExternalLink()
+// ClearExternalLinks clears the value of the "external_links" field.
+func (au *ArtifactUpdate) ClearExternalLinks() *ArtifactUpdate {
+	au.mutation.ClearExternalLinks()
 	return au
 }
 
@@ -700,11 +698,16 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if au.mutation.DescriptionCleared() {
 		_spec.ClearField(artifact.FieldDescription, field.TypeString)
 	}
-	if value, ok := au.mutation.ExternalLink(); ok {
-		_spec.SetField(artifact.FieldExternalLink, field.TypeString, value)
+	if value, ok := au.mutation.ExternalLinks(); ok {
+		_spec.SetField(artifact.FieldExternalLinks, field.TypeJSON, value)
 	}
-	if au.mutation.ExternalLinkCleared() {
-		_spec.ClearField(artifact.FieldExternalLink, field.TypeString)
+	if value, ok := au.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, artifact.FieldExternalLinks, value)
+		})
+	}
+	if au.mutation.ExternalLinksCleared() {
+		_spec.ClearField(artifact.FieldExternalLinks, field.TypeJSON)
 	}
 	if value, ok := au.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(artifact.FieldPrimaryImageURL, field.TypeString, value)
@@ -1314,23 +1317,21 @@ func (auo *ArtifactUpdateOne) ClearDescription() *ArtifactUpdateOne {
 	return auo
 }
 
-// SetExternalLink sets the "external_link" field.
-func (auo *ArtifactUpdateOne) SetExternalLink(s string) *ArtifactUpdateOne {
-	auo.mutation.SetExternalLink(s)
+// SetExternalLinks sets the "external_links" field.
+func (auo *ArtifactUpdateOne) SetExternalLinks(s []string) *ArtifactUpdateOne {
+	auo.mutation.SetExternalLinks(s)
 	return auo
 }
 
-// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
-func (auo *ArtifactUpdateOne) SetNillableExternalLink(s *string) *ArtifactUpdateOne {
-	if s != nil {
-		auo.SetExternalLink(*s)
-	}
+// AppendExternalLinks appends s to the "external_links" field.
+func (auo *ArtifactUpdateOne) AppendExternalLinks(s []string) *ArtifactUpdateOne {
+	auo.mutation.AppendExternalLinks(s)
 	return auo
 }
 
-// ClearExternalLink clears the value of the "external_link" field.
-func (auo *ArtifactUpdateOne) ClearExternalLink() *ArtifactUpdateOne {
-	auo.mutation.ClearExternalLink()
+// ClearExternalLinks clears the value of the "external_links" field.
+func (auo *ArtifactUpdateOne) ClearExternalLinks() *ArtifactUpdateOne {
+	auo.mutation.ClearExternalLinks()
 	return auo
 }
 
@@ -1916,11 +1917,16 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 	if auo.mutation.DescriptionCleared() {
 		_spec.ClearField(artifact.FieldDescription, field.TypeString)
 	}
-	if value, ok := auo.mutation.ExternalLink(); ok {
-		_spec.SetField(artifact.FieldExternalLink, field.TypeString, value)
+	if value, ok := auo.mutation.ExternalLinks(); ok {
+		_spec.SetField(artifact.FieldExternalLinks, field.TypeJSON, value)
 	}
-	if auo.mutation.ExternalLinkCleared() {
-		_spec.ClearField(artifact.FieldExternalLink, field.TypeString)
+	if value, ok := auo.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, artifact.FieldExternalLinks, value)
+		})
+	}
+	if auo.mutation.ExternalLinksCleared() {
+		_spec.ClearField(artifact.FieldExternalLinks, field.TypeJSON)
 	}
 	if value, ok := auo.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(artifact.FieldPrimaryImageURL, field.TypeString, value)

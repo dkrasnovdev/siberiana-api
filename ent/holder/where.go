@@ -75,19 +75,14 @@ func UpdatedBy(v string) predicate.Holder {
 	return predicate.Holder(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
-// DisplayName applies equality check predicate on the "display_name" field. It's identical to DisplayNameEQ.
-func DisplayName(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldEQ(FieldDisplayName, v))
+// BeginDate applies equality check predicate on the "begin_date" field. It's identical to BeginDateEQ.
+func BeginDate(v time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldEQ(FieldBeginDate, v))
 }
 
-// Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
-func Description(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldEQ(FieldDescription, v))
-}
-
-// ExternalLink applies equality check predicate on the "external_link" field. It's identical to ExternalLinkEQ.
-func ExternalLink(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldEQ(FieldExternalLink, v))
+// EndDate applies equality check predicate on the "end_date" field. It's identical to EndDateEQ.
+func EndDate(v time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldEQ(FieldEndDate, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -320,229 +315,94 @@ func UpdatedByContainsFold(v string) predicate.Holder {
 	return predicate.Holder(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
-// DisplayNameEQ applies the EQ predicate on the "display_name" field.
-func DisplayNameEQ(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldEQ(FieldDisplayName, v))
+// BeginDateEQ applies the EQ predicate on the "begin_date" field.
+func BeginDateEQ(v time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldEQ(FieldBeginDate, v))
 }
 
-// DisplayNameNEQ applies the NEQ predicate on the "display_name" field.
-func DisplayNameNEQ(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldNEQ(FieldDisplayName, v))
+// BeginDateNEQ applies the NEQ predicate on the "begin_date" field.
+func BeginDateNEQ(v time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldNEQ(FieldBeginDate, v))
 }
 
-// DisplayNameIn applies the In predicate on the "display_name" field.
-func DisplayNameIn(vs ...string) predicate.Holder {
-	return predicate.Holder(sql.FieldIn(FieldDisplayName, vs...))
+// BeginDateIn applies the In predicate on the "begin_date" field.
+func BeginDateIn(vs ...time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldIn(FieldBeginDate, vs...))
 }
 
-// DisplayNameNotIn applies the NotIn predicate on the "display_name" field.
-func DisplayNameNotIn(vs ...string) predicate.Holder {
-	return predicate.Holder(sql.FieldNotIn(FieldDisplayName, vs...))
+// BeginDateNotIn applies the NotIn predicate on the "begin_date" field.
+func BeginDateNotIn(vs ...time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldNotIn(FieldBeginDate, vs...))
 }
 
-// DisplayNameGT applies the GT predicate on the "display_name" field.
-func DisplayNameGT(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldGT(FieldDisplayName, v))
+// BeginDateGT applies the GT predicate on the "begin_date" field.
+func BeginDateGT(v time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldGT(FieldBeginDate, v))
 }
 
-// DisplayNameGTE applies the GTE predicate on the "display_name" field.
-func DisplayNameGTE(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldGTE(FieldDisplayName, v))
+// BeginDateGTE applies the GTE predicate on the "begin_date" field.
+func BeginDateGTE(v time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldGTE(FieldBeginDate, v))
 }
 
-// DisplayNameLT applies the LT predicate on the "display_name" field.
-func DisplayNameLT(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldLT(FieldDisplayName, v))
+// BeginDateLT applies the LT predicate on the "begin_date" field.
+func BeginDateLT(v time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldLT(FieldBeginDate, v))
 }
 
-// DisplayNameLTE applies the LTE predicate on the "display_name" field.
-func DisplayNameLTE(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldLTE(FieldDisplayName, v))
+// BeginDateLTE applies the LTE predicate on the "begin_date" field.
+func BeginDateLTE(v time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldLTE(FieldBeginDate, v))
 }
 
-// DisplayNameContains applies the Contains predicate on the "display_name" field.
-func DisplayNameContains(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldContains(FieldDisplayName, v))
+// EndDateEQ applies the EQ predicate on the "end_date" field.
+func EndDateEQ(v time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldEQ(FieldEndDate, v))
 }
 
-// DisplayNameHasPrefix applies the HasPrefix predicate on the "display_name" field.
-func DisplayNameHasPrefix(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldHasPrefix(FieldDisplayName, v))
+// EndDateNEQ applies the NEQ predicate on the "end_date" field.
+func EndDateNEQ(v time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldNEQ(FieldEndDate, v))
 }
 
-// DisplayNameHasSuffix applies the HasSuffix predicate on the "display_name" field.
-func DisplayNameHasSuffix(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldHasSuffix(FieldDisplayName, v))
+// EndDateIn applies the In predicate on the "end_date" field.
+func EndDateIn(vs ...time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldIn(FieldEndDate, vs...))
 }
 
-// DisplayNameIsNil applies the IsNil predicate on the "display_name" field.
-func DisplayNameIsNil() predicate.Holder {
-	return predicate.Holder(sql.FieldIsNull(FieldDisplayName))
+// EndDateNotIn applies the NotIn predicate on the "end_date" field.
+func EndDateNotIn(vs ...time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldNotIn(FieldEndDate, vs...))
 }
 
-// DisplayNameNotNil applies the NotNil predicate on the "display_name" field.
-func DisplayNameNotNil() predicate.Holder {
-	return predicate.Holder(sql.FieldNotNull(FieldDisplayName))
+// EndDateGT applies the GT predicate on the "end_date" field.
+func EndDateGT(v time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldGT(FieldEndDate, v))
 }
 
-// DisplayNameEqualFold applies the EqualFold predicate on the "display_name" field.
-func DisplayNameEqualFold(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldEqualFold(FieldDisplayName, v))
+// EndDateGTE applies the GTE predicate on the "end_date" field.
+func EndDateGTE(v time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldGTE(FieldEndDate, v))
 }
 
-// DisplayNameContainsFold applies the ContainsFold predicate on the "display_name" field.
-func DisplayNameContainsFold(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldContainsFold(FieldDisplayName, v))
+// EndDateLT applies the LT predicate on the "end_date" field.
+func EndDateLT(v time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldLT(FieldEndDate, v))
 }
 
-// DescriptionEQ applies the EQ predicate on the "description" field.
-func DescriptionEQ(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldEQ(FieldDescription, v))
+// EndDateLTE applies the LTE predicate on the "end_date" field.
+func EndDateLTE(v time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldLTE(FieldEndDate, v))
 }
 
-// DescriptionNEQ applies the NEQ predicate on the "description" field.
-func DescriptionNEQ(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldNEQ(FieldDescription, v))
+// EndDateIsNil applies the IsNil predicate on the "end_date" field.
+func EndDateIsNil() predicate.Holder {
+	return predicate.Holder(sql.FieldIsNull(FieldEndDate))
 }
 
-// DescriptionIn applies the In predicate on the "description" field.
-func DescriptionIn(vs ...string) predicate.Holder {
-	return predicate.Holder(sql.FieldIn(FieldDescription, vs...))
-}
-
-// DescriptionNotIn applies the NotIn predicate on the "description" field.
-func DescriptionNotIn(vs ...string) predicate.Holder {
-	return predicate.Holder(sql.FieldNotIn(FieldDescription, vs...))
-}
-
-// DescriptionGT applies the GT predicate on the "description" field.
-func DescriptionGT(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldGT(FieldDescription, v))
-}
-
-// DescriptionGTE applies the GTE predicate on the "description" field.
-func DescriptionGTE(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldGTE(FieldDescription, v))
-}
-
-// DescriptionLT applies the LT predicate on the "description" field.
-func DescriptionLT(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldLT(FieldDescription, v))
-}
-
-// DescriptionLTE applies the LTE predicate on the "description" field.
-func DescriptionLTE(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldLTE(FieldDescription, v))
-}
-
-// DescriptionContains applies the Contains predicate on the "description" field.
-func DescriptionContains(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldContains(FieldDescription, v))
-}
-
-// DescriptionHasPrefix applies the HasPrefix predicate on the "description" field.
-func DescriptionHasPrefix(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldHasPrefix(FieldDescription, v))
-}
-
-// DescriptionHasSuffix applies the HasSuffix predicate on the "description" field.
-func DescriptionHasSuffix(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldHasSuffix(FieldDescription, v))
-}
-
-// DescriptionIsNil applies the IsNil predicate on the "description" field.
-func DescriptionIsNil() predicate.Holder {
-	return predicate.Holder(sql.FieldIsNull(FieldDescription))
-}
-
-// DescriptionNotNil applies the NotNil predicate on the "description" field.
-func DescriptionNotNil() predicate.Holder {
-	return predicate.Holder(sql.FieldNotNull(FieldDescription))
-}
-
-// DescriptionEqualFold applies the EqualFold predicate on the "description" field.
-func DescriptionEqualFold(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldEqualFold(FieldDescription, v))
-}
-
-// DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
-func DescriptionContainsFold(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldContainsFold(FieldDescription, v))
-}
-
-// ExternalLinkEQ applies the EQ predicate on the "external_link" field.
-func ExternalLinkEQ(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldEQ(FieldExternalLink, v))
-}
-
-// ExternalLinkNEQ applies the NEQ predicate on the "external_link" field.
-func ExternalLinkNEQ(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldNEQ(FieldExternalLink, v))
-}
-
-// ExternalLinkIn applies the In predicate on the "external_link" field.
-func ExternalLinkIn(vs ...string) predicate.Holder {
-	return predicate.Holder(sql.FieldIn(FieldExternalLink, vs...))
-}
-
-// ExternalLinkNotIn applies the NotIn predicate on the "external_link" field.
-func ExternalLinkNotIn(vs ...string) predicate.Holder {
-	return predicate.Holder(sql.FieldNotIn(FieldExternalLink, vs...))
-}
-
-// ExternalLinkGT applies the GT predicate on the "external_link" field.
-func ExternalLinkGT(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldGT(FieldExternalLink, v))
-}
-
-// ExternalLinkGTE applies the GTE predicate on the "external_link" field.
-func ExternalLinkGTE(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldGTE(FieldExternalLink, v))
-}
-
-// ExternalLinkLT applies the LT predicate on the "external_link" field.
-func ExternalLinkLT(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldLT(FieldExternalLink, v))
-}
-
-// ExternalLinkLTE applies the LTE predicate on the "external_link" field.
-func ExternalLinkLTE(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldLTE(FieldExternalLink, v))
-}
-
-// ExternalLinkContains applies the Contains predicate on the "external_link" field.
-func ExternalLinkContains(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldContains(FieldExternalLink, v))
-}
-
-// ExternalLinkHasPrefix applies the HasPrefix predicate on the "external_link" field.
-func ExternalLinkHasPrefix(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldHasPrefix(FieldExternalLink, v))
-}
-
-// ExternalLinkHasSuffix applies the HasSuffix predicate on the "external_link" field.
-func ExternalLinkHasSuffix(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldHasSuffix(FieldExternalLink, v))
-}
-
-// ExternalLinkIsNil applies the IsNil predicate on the "external_link" field.
-func ExternalLinkIsNil() predicate.Holder {
-	return predicate.Holder(sql.FieldIsNull(FieldExternalLink))
-}
-
-// ExternalLinkNotNil applies the NotNil predicate on the "external_link" field.
-func ExternalLinkNotNil() predicate.Holder {
-	return predicate.Holder(sql.FieldNotNull(FieldExternalLink))
-}
-
-// ExternalLinkEqualFold applies the EqualFold predicate on the "external_link" field.
-func ExternalLinkEqualFold(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldEqualFold(FieldExternalLink, v))
-}
-
-// ExternalLinkContainsFold applies the ContainsFold predicate on the "external_link" field.
-func ExternalLinkContainsFold(v string) predicate.Holder {
-	return predicate.Holder(sql.FieldContainsFold(FieldExternalLink, v))
+// EndDateNotNil applies the NotNil predicate on the "end_date" field.
+func EndDateNotNil() predicate.Holder {
+	return predicate.Holder(sql.FieldNotNull(FieldEndDate))
 }
 
 // HasArtifacts applies the HasEdge predicate on the "artifacts" edge.

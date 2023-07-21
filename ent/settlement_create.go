@@ -105,17 +105,9 @@ func (sc *SettlementCreate) SetNillableDescription(s *string) *SettlementCreate 
 	return sc
 }
 
-// SetExternalLink sets the "external_link" field.
-func (sc *SettlementCreate) SetExternalLink(s string) *SettlementCreate {
-	sc.mutation.SetExternalLink(s)
-	return sc
-}
-
-// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
-func (sc *SettlementCreate) SetNillableExternalLink(s *string) *SettlementCreate {
-	if s != nil {
-		sc.SetExternalLink(*s)
-	}
+// SetExternalLinks sets the "external_links" field.
+func (sc *SettlementCreate) SetExternalLinks(s []string) *SettlementCreate {
+	sc.mutation.SetExternalLinks(s)
 	return sc
 }
 
@@ -250,9 +242,9 @@ func (sc *SettlementCreate) createSpec() (*Settlement, *sqlgraph.CreateSpec) {
 		_spec.SetField(settlement.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := sc.mutation.ExternalLink(); ok {
-		_spec.SetField(settlement.FieldExternalLink, field.TypeString, value)
-		_node.ExternalLink = value
+	if value, ok := sc.mutation.ExternalLinks(); ok {
+		_spec.SetField(settlement.FieldExternalLinks, field.TypeJSON, value)
+		_node.ExternalLinks = value
 	}
 	if nodes := sc.mutation.LocationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

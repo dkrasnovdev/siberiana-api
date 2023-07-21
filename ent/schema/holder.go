@@ -5,6 +5,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
+	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/privacy"
 	"github.com/dkrasnovdev/heritage-api/internal/ent/mixin"
 	rule "github.com/dkrasnovdev/heritage-api/internal/ent/privacy"
@@ -34,7 +35,6 @@ func (Holder) Policy() ent.Policy {
 func (Holder) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixin.AuditMixin{},
-		mixin.DetailsMixin{},
 	}
 }
 
@@ -50,7 +50,10 @@ func (Holder) Annotations() []schema.Annotation {
 
 // Fields of the Holder.
 func (Holder) Fields() []ent.Field {
-	return nil
+	return []ent.Field{
+		field.Time("begin_date"),
+		field.Time("end_date").Optional(),
+	}
 }
 
 // Edges of the Holder.

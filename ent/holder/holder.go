@@ -23,12 +23,10 @@ const (
 	FieldUpdatedAt = "updated_at"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
-	// FieldDisplayName holds the string denoting the display_name field in the database.
-	FieldDisplayName = "display_name"
-	// FieldDescription holds the string denoting the description field in the database.
-	FieldDescription = "description"
-	// FieldExternalLink holds the string denoting the external_link field in the database.
-	FieldExternalLink = "external_link"
+	// FieldBeginDate holds the string denoting the begin_date field in the database.
+	FieldBeginDate = "begin_date"
+	// FieldEndDate holds the string denoting the end_date field in the database.
+	FieldEndDate = "end_date"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
 	// EdgePerson holds the string denoting the person edge name in mutations.
@@ -65,9 +63,8 @@ var Columns = []string{
 	FieldCreatedBy,
 	FieldUpdatedAt,
 	FieldUpdatedBy,
-	FieldDisplayName,
-	FieldDescription,
-	FieldExternalLink,
+	FieldBeginDate,
+	FieldEndDate,
 }
 
 var (
@@ -130,19 +127,14 @@ func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
 }
 
-// ByDisplayName orders the results by the display_name field.
-func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDisplayName, opts...).ToFunc()
+// ByBeginDate orders the results by the begin_date field.
+func ByBeginDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBeginDate, opts...).ToFunc()
 }
 
-// ByDescription orders the results by the description field.
-func ByDescription(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDescription, opts...).ToFunc()
-}
-
-// ByExternalLink orders the results by the external_link field.
-func ByExternalLink(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldExternalLink, opts...).ToFunc()
+// ByEndDate orders the results by the end_date field.
+func ByEndDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEndDate, opts...).ToFunc()
 }
 
 // ByArtifactsCount orders the results by artifacts count.

@@ -79,44 +79,22 @@ func (hc *HolderCreate) SetNillableUpdatedBy(s *string) *HolderCreate {
 	return hc
 }
 
-// SetDisplayName sets the "display_name" field.
-func (hc *HolderCreate) SetDisplayName(s string) *HolderCreate {
-	hc.mutation.SetDisplayName(s)
+// SetBeginDate sets the "begin_date" field.
+func (hc *HolderCreate) SetBeginDate(t time.Time) *HolderCreate {
+	hc.mutation.SetBeginDate(t)
 	return hc
 }
 
-// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
-func (hc *HolderCreate) SetNillableDisplayName(s *string) *HolderCreate {
-	if s != nil {
-		hc.SetDisplayName(*s)
-	}
+// SetEndDate sets the "end_date" field.
+func (hc *HolderCreate) SetEndDate(t time.Time) *HolderCreate {
+	hc.mutation.SetEndDate(t)
 	return hc
 }
 
-// SetDescription sets the "description" field.
-func (hc *HolderCreate) SetDescription(s string) *HolderCreate {
-	hc.mutation.SetDescription(s)
-	return hc
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (hc *HolderCreate) SetNillableDescription(s *string) *HolderCreate {
-	if s != nil {
-		hc.SetDescription(*s)
-	}
-	return hc
-}
-
-// SetExternalLink sets the "external_link" field.
-func (hc *HolderCreate) SetExternalLink(s string) *HolderCreate {
-	hc.mutation.SetExternalLink(s)
-	return hc
-}
-
-// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
-func (hc *HolderCreate) SetNillableExternalLink(s *string) *HolderCreate {
-	if s != nil {
-		hc.SetExternalLink(*s)
+// SetNillableEndDate sets the "end_date" field if the given value is not nil.
+func (hc *HolderCreate) SetNillableEndDate(t *time.Time) *HolderCreate {
+	if t != nil {
+		hc.SetEndDate(*t)
 	}
 	return hc
 }
@@ -236,6 +214,9 @@ func (hc *HolderCreate) check() error {
 	if _, ok := hc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Holder.updated_at"`)}
 	}
+	if _, ok := hc.mutation.BeginDate(); !ok {
+		return &ValidationError{Name: "begin_date", err: errors.New(`ent: missing required field "Holder.begin_date"`)}
+	}
 	return nil
 }
 
@@ -278,17 +259,13 @@ func (hc *HolderCreate) createSpec() (*Holder, *sqlgraph.CreateSpec) {
 		_spec.SetField(holder.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := hc.mutation.DisplayName(); ok {
-		_spec.SetField(holder.FieldDisplayName, field.TypeString, value)
-		_node.DisplayName = value
+	if value, ok := hc.mutation.BeginDate(); ok {
+		_spec.SetField(holder.FieldBeginDate, field.TypeTime, value)
+		_node.BeginDate = value
 	}
-	if value, ok := hc.mutation.Description(); ok {
-		_spec.SetField(holder.FieldDescription, field.TypeString, value)
-		_node.Description = value
-	}
-	if value, ok := hc.mutation.ExternalLink(); ok {
-		_spec.SetField(holder.FieldExternalLink, field.TypeString, value)
-		_node.ExternalLink = value
+	if value, ok := hc.mutation.EndDate(); ok {
+		_spec.SetField(holder.FieldEndDate, field.TypeTime, value)
+		_node.EndDate = value
 	}
 	if nodes := hc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -30,8 +31,8 @@ type Region struct {
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
-	// ExternalLink holds the value of the "external_link" field.
-	ExternalLink string `json:"external_link,omitempty"`
+	// ExternalLinks holds the value of the "external_links" field.
+	ExternalLinks []string `json:"external_links,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the RegionQuery when eager-loading is set.
 	Edges           RegionEdges `json:"edges"`
@@ -68,9 +69,11 @@ func (*Region) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case region.FieldExternalLinks:
+			values[i] = new([]byte)
 		case region.FieldID:
 			values[i] = new(sql.NullInt64)
-		case region.FieldCreatedBy, region.FieldUpdatedBy, region.FieldDisplayName, region.FieldDescription, region.FieldExternalLink:
+		case region.FieldCreatedBy, region.FieldUpdatedBy, region.FieldDisplayName, region.FieldDescription:
 			values[i] = new(sql.NullString)
 		case region.FieldCreatedAt, region.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -133,11 +136,13 @@ func (r *Region) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				r.Description = value.String
 			}
-		case region.FieldExternalLink:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field external_link", values[i])
-			} else if value.Valid {
-				r.ExternalLink = value.String
+		case region.FieldExternalLinks:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field external_links", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &r.ExternalLinks); err != nil {
+					return fmt.Errorf("unmarshal field external_links: %w", err)
+				}
 			}
 		case region.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -205,8 +210,8 @@ func (r *Region) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(r.Description)
 	builder.WriteString(", ")
-	builder.WriteString("external_link=")
-	builder.WriteString(r.ExternalLink)
+	builder.WriteString("external_links=")
+	builder.WriteString(fmt.Sprintf("%v", r.ExternalLinks))
 	builder.WriteByte(')')
 	return builder.String()
 }

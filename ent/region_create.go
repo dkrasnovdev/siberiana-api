@@ -105,17 +105,9 @@ func (rc *RegionCreate) SetNillableDescription(s *string) *RegionCreate {
 	return rc
 }
 
-// SetExternalLink sets the "external_link" field.
-func (rc *RegionCreate) SetExternalLink(s string) *RegionCreate {
-	rc.mutation.SetExternalLink(s)
-	return rc
-}
-
-// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
-func (rc *RegionCreate) SetNillableExternalLink(s *string) *RegionCreate {
-	if s != nil {
-		rc.SetExternalLink(*s)
-	}
+// SetExternalLinks sets the "external_links" field.
+func (rc *RegionCreate) SetExternalLinks(s []string) *RegionCreate {
+	rc.mutation.SetExternalLinks(s)
 	return rc
 }
 
@@ -250,9 +242,9 @@ func (rc *RegionCreate) createSpec() (*Region, *sqlgraph.CreateSpec) {
 		_spec.SetField(region.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := rc.mutation.ExternalLink(); ok {
-		_spec.SetField(region.FieldExternalLink, field.TypeString, value)
-		_node.ExternalLink = value
+	if value, ok := rc.mutation.ExternalLinks(); ok {
+		_spec.SetField(region.FieldExternalLinks, field.TypeJSON, value)
+		_node.ExternalLinks = value
 	}
 	if nodes := rc.mutation.LocationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
