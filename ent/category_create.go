@@ -105,6 +105,20 @@ func (cc *CategoryCreate) SetNillableDescription(s *string) *CategoryCreate {
 	return cc
 }
 
+// SetExternalLink sets the "external_link" field.
+func (cc *CategoryCreate) SetExternalLink(s string) *CategoryCreate {
+	cc.mutation.SetExternalLink(s)
+	return cc
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (cc *CategoryCreate) SetNillableExternalLink(s *string) *CategoryCreate {
+	if s != nil {
+		cc.SetExternalLink(*s)
+	}
+	return cc
+}
+
 // AddCollectionIDs adds the "collections" edge to the Collection entity by IDs.
 func (cc *CategoryCreate) AddCollectionIDs(ids ...int) *CategoryCreate {
 	cc.mutation.AddCollectionIDs(ids...)
@@ -231,6 +245,10 @@ func (cc *CategoryCreate) createSpec() (*Category, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.Description(); ok {
 		_spec.SetField(category.FieldDescription, field.TypeString, value)
 		_node.Description = value
+	}
+	if value, ok := cc.mutation.ExternalLink(); ok {
+		_spec.SetField(category.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
 	}
 	if nodes := cc.mutation.CollectionsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

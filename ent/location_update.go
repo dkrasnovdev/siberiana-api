@@ -118,6 +118,26 @@ func (lu *LocationUpdate) ClearDescription() *LocationUpdate {
 	return lu
 }
 
+// SetExternalLink sets the "external_link" field.
+func (lu *LocationUpdate) SetExternalLink(s string) *LocationUpdate {
+	lu.mutation.SetExternalLink(s)
+	return lu
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (lu *LocationUpdate) SetNillableExternalLink(s *string) *LocationUpdate {
+	if s != nil {
+		lu.SetExternalLink(*s)
+	}
+	return lu
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (lu *LocationUpdate) ClearExternalLink() *LocationUpdate {
+	lu.mutation.ClearExternalLink()
+	return lu
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (lu *LocationUpdate) AddArtifactIDs(ids ...int) *LocationUpdate {
 	lu.mutation.AddArtifactIDs(ids...)
@@ -311,6 +331,12 @@ func (lu *LocationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if lu.mutation.DescriptionCleared() {
 		_spec.ClearField(location.FieldDescription, field.TypeString)
+	}
+	if value, ok := lu.mutation.ExternalLink(); ok {
+		_spec.SetField(location.FieldExternalLink, field.TypeString, value)
+	}
+	if lu.mutation.ExternalLinkCleared() {
+		_spec.ClearField(location.FieldExternalLink, field.TypeString)
 	}
 	if lu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -550,6 +576,26 @@ func (luo *LocationUpdateOne) ClearDescription() *LocationUpdateOne {
 	return luo
 }
 
+// SetExternalLink sets the "external_link" field.
+func (luo *LocationUpdateOne) SetExternalLink(s string) *LocationUpdateOne {
+	luo.mutation.SetExternalLink(s)
+	return luo
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (luo *LocationUpdateOne) SetNillableExternalLink(s *string) *LocationUpdateOne {
+	if s != nil {
+		luo.SetExternalLink(*s)
+	}
+	return luo
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (luo *LocationUpdateOne) ClearExternalLink() *LocationUpdateOne {
+	luo.mutation.ClearExternalLink()
+	return luo
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (luo *LocationUpdateOne) AddArtifactIDs(ids ...int) *LocationUpdateOne {
 	luo.mutation.AddArtifactIDs(ids...)
@@ -773,6 +819,12 @@ func (luo *LocationUpdateOne) sqlSave(ctx context.Context) (_node *Location, err
 	}
 	if luo.mutation.DescriptionCleared() {
 		_spec.ClearField(location.FieldDescription, field.TypeString)
+	}
+	if value, ok := luo.mutation.ExternalLink(); ok {
+		_spec.SetField(location.FieldExternalLink, field.TypeString, value)
+	}
+	if luo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(location.FieldExternalLink, field.TypeString)
 	}
 	if luo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

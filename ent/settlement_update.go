@@ -115,6 +115,26 @@ func (su *SettlementUpdate) ClearDescription() *SettlementUpdate {
 	return su
 }
 
+// SetExternalLink sets the "external_link" field.
+func (su *SettlementUpdate) SetExternalLink(s string) *SettlementUpdate {
+	su.mutation.SetExternalLink(s)
+	return su
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (su *SettlementUpdate) SetNillableExternalLink(s *string) *SettlementUpdate {
+	if s != nil {
+		su.SetExternalLink(*s)
+	}
+	return su
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (su *SettlementUpdate) ClearExternalLink() *SettlementUpdate {
+	su.mutation.ClearExternalLink()
+	return su
+}
+
 // SetLocationID sets the "location" edge to the Location entity by ID.
 func (su *SettlementUpdate) SetLocationID(id int) *SettlementUpdate {
 	su.mutation.SetLocationID(id)
@@ -222,6 +242,12 @@ func (su *SettlementUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.DescriptionCleared() {
 		_spec.ClearField(settlement.FieldDescription, field.TypeString)
+	}
+	if value, ok := su.mutation.ExternalLink(); ok {
+		_spec.SetField(settlement.FieldExternalLink, field.TypeString, value)
+	}
+	if su.mutation.ExternalLinkCleared() {
+		_spec.ClearField(settlement.FieldExternalLink, field.TypeString)
 	}
 	if su.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -355,6 +381,26 @@ func (suo *SettlementUpdateOne) SetNillableDescription(s *string) *SettlementUpd
 // ClearDescription clears the value of the "description" field.
 func (suo *SettlementUpdateOne) ClearDescription() *SettlementUpdateOne {
 	suo.mutation.ClearDescription()
+	return suo
+}
+
+// SetExternalLink sets the "external_link" field.
+func (suo *SettlementUpdateOne) SetExternalLink(s string) *SettlementUpdateOne {
+	suo.mutation.SetExternalLink(s)
+	return suo
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (suo *SettlementUpdateOne) SetNillableExternalLink(s *string) *SettlementUpdateOne {
+	if s != nil {
+		suo.SetExternalLink(*s)
+	}
+	return suo
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (suo *SettlementUpdateOne) ClearExternalLink() *SettlementUpdateOne {
+	suo.mutation.ClearExternalLink()
 	return suo
 }
 
@@ -495,6 +541,12 @@ func (suo *SettlementUpdateOne) sqlSave(ctx context.Context) (_node *Settlement,
 	}
 	if suo.mutation.DescriptionCleared() {
 		_spec.ClearField(settlement.FieldDescription, field.TypeString)
+	}
+	if value, ok := suo.mutation.ExternalLink(); ok {
+		_spec.SetField(settlement.FieldExternalLink, field.TypeString, value)
+	}
+	if suo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(settlement.FieldExternalLink, field.TypeString)
 	}
 	if suo.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -16,5 +16,7 @@ func (DetailsMixin) Fields() []ent.Field {
 			Optional(),
 		field.String("description").
 			Optional(),
+		field.String("external_link").
+			Optional(),
 	}
 }

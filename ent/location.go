@@ -32,6 +32,8 @@ type Location struct {
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the LocationQuery when eager-loading is set.
 	Edges        LocationEdges `json:"edges"`
@@ -112,7 +114,7 @@ func (*Location) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case location.FieldID:
 			values[i] = new(sql.NullInt64)
-		case location.FieldCreatedBy, location.FieldUpdatedBy, location.FieldDisplayName, location.FieldDescription:
+		case location.FieldCreatedBy, location.FieldUpdatedBy, location.FieldDisplayName, location.FieldDescription, location.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case location.FieldCreatedAt, location.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -172,6 +174,12 @@ func (l *Location) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				l.Description = value.String
+			}
+		case location.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				l.ExternalLink = value.String
 			}
 		default:
 			l.selectValues.Set(columns[i], values[i])
@@ -246,6 +254,9 @@ func (l *Location) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(l.Description)
+	builder.WriteString(", ")
+	builder.WriteString("external_link=")
+	builder.WriteString(l.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
 }

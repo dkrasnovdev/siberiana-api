@@ -105,6 +105,20 @@ func (mc *MediumCreate) SetNillableDescription(s *string) *MediumCreate {
 	return mc
 }
 
+// SetExternalLink sets the "external_link" field.
+func (mc *MediumCreate) SetExternalLink(s string) *MediumCreate {
+	mc.mutation.SetExternalLink(s)
+	return mc
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (mc *MediumCreate) SetNillableExternalLink(s *string) *MediumCreate {
+	if s != nil {
+		mc.SetExternalLink(*s)
+	}
+	return mc
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (mc *MediumCreate) AddArtifactIDs(ids ...int) *MediumCreate {
 	mc.mutation.AddArtifactIDs(ids...)
@@ -231,6 +245,10 @@ func (mc *MediumCreate) createSpec() (*Medium, *sqlgraph.CreateSpec) {
 	if value, ok := mc.mutation.Description(); ok {
 		_spec.SetField(medium.FieldDescription, field.TypeString, value)
 		_node.Description = value
+	}
+	if value, ok := mc.mutation.ExternalLink(); ok {
+		_spec.SetField(medium.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
 	}
 	if nodes := mc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

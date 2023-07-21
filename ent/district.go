@@ -30,6 +30,8 @@ type District struct {
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the DistrictQuery when eager-loading is set.
 	Edges             DistrictEdges `json:"edges"`
@@ -68,7 +70,7 @@ func (*District) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case district.FieldID:
 			values[i] = new(sql.NullInt64)
-		case district.FieldCreatedBy, district.FieldUpdatedBy, district.FieldDisplayName, district.FieldDescription:
+		case district.FieldCreatedBy, district.FieldUpdatedBy, district.FieldDisplayName, district.FieldDescription, district.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case district.FieldCreatedAt, district.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -130,6 +132,12 @@ func (d *District) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				d.Description = value.String
+			}
+		case district.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				d.ExternalLink = value.String
 			}
 		case district.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -196,6 +204,9 @@ func (d *District) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(d.Description)
+	builder.WriteString(", ")
+	builder.WriteString("external_link=")
+	builder.WriteString(d.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
 }

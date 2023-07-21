@@ -118,6 +118,26 @@ func (pu *PersonUpdate) ClearDescription() *PersonUpdate {
 	return pu
 }
 
+// SetExternalLink sets the "external_link" field.
+func (pu *PersonUpdate) SetExternalLink(s string) *PersonUpdate {
+	pu.mutation.SetExternalLink(s)
+	return pu
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (pu *PersonUpdate) SetNillableExternalLink(s *string) *PersonUpdate {
+	if s != nil {
+		pu.SetExternalLink(*s)
+	}
+	return pu
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (pu *PersonUpdate) ClearExternalLink() *PersonUpdate {
+	pu.mutation.ClearExternalLink()
+	return pu
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (pu *PersonUpdate) AddArtifactIDs(ids ...int) *PersonUpdate {
 	pu.mutation.AddArtifactIDs(ids...)
@@ -333,6 +353,12 @@ func (pu *PersonUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.DescriptionCleared() {
 		_spec.ClearField(person.FieldDescription, field.TypeString)
+	}
+	if value, ok := pu.mutation.ExternalLink(); ok {
+		_spec.SetField(person.FieldExternalLink, field.TypeString, value)
+	}
+	if pu.mutation.ExternalLinkCleared() {
+		_spec.ClearField(person.FieldExternalLink, field.TypeString)
 	}
 	if pu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -604,6 +630,26 @@ func (puo *PersonUpdateOne) ClearDescription() *PersonUpdateOne {
 	return puo
 }
 
+// SetExternalLink sets the "external_link" field.
+func (puo *PersonUpdateOne) SetExternalLink(s string) *PersonUpdateOne {
+	puo.mutation.SetExternalLink(s)
+	return puo
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (puo *PersonUpdateOne) SetNillableExternalLink(s *string) *PersonUpdateOne {
+	if s != nil {
+		puo.SetExternalLink(*s)
+	}
+	return puo
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (puo *PersonUpdateOne) ClearExternalLink() *PersonUpdateOne {
+	puo.mutation.ClearExternalLink()
+	return puo
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (puo *PersonUpdateOne) AddArtifactIDs(ids ...int) *PersonUpdateOne {
 	puo.mutation.AddArtifactIDs(ids...)
@@ -849,6 +895,12 @@ func (puo *PersonUpdateOne) sqlSave(ctx context.Context) (_node *Person, err err
 	}
 	if puo.mutation.DescriptionCleared() {
 		_spec.ClearField(person.FieldDescription, field.TypeString)
+	}
+	if value, ok := puo.mutation.ExternalLink(); ok {
+		_spec.SetField(person.FieldExternalLink, field.TypeString, value)
+	}
+	if puo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(person.FieldExternalLink, field.TypeString)
 	}
 	if puo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

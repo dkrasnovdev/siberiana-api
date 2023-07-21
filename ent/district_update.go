@@ -115,6 +115,26 @@ func (du *DistrictUpdate) ClearDescription() *DistrictUpdate {
 	return du
 }
 
+// SetExternalLink sets the "external_link" field.
+func (du *DistrictUpdate) SetExternalLink(s string) *DistrictUpdate {
+	du.mutation.SetExternalLink(s)
+	return du
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (du *DistrictUpdate) SetNillableExternalLink(s *string) *DistrictUpdate {
+	if s != nil {
+		du.SetExternalLink(*s)
+	}
+	return du
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (du *DistrictUpdate) ClearExternalLink() *DistrictUpdate {
+	du.mutation.ClearExternalLink()
+	return du
+}
+
 // SetLocationID sets the "location" edge to the Location entity by ID.
 func (du *DistrictUpdate) SetLocationID(id int) *DistrictUpdate {
 	du.mutation.SetLocationID(id)
@@ -222,6 +242,12 @@ func (du *DistrictUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if du.mutation.DescriptionCleared() {
 		_spec.ClearField(district.FieldDescription, field.TypeString)
+	}
+	if value, ok := du.mutation.ExternalLink(); ok {
+		_spec.SetField(district.FieldExternalLink, field.TypeString, value)
+	}
+	if du.mutation.ExternalLinkCleared() {
+		_spec.ClearField(district.FieldExternalLink, field.TypeString)
 	}
 	if du.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -355,6 +381,26 @@ func (duo *DistrictUpdateOne) SetNillableDescription(s *string) *DistrictUpdateO
 // ClearDescription clears the value of the "description" field.
 func (duo *DistrictUpdateOne) ClearDescription() *DistrictUpdateOne {
 	duo.mutation.ClearDescription()
+	return duo
+}
+
+// SetExternalLink sets the "external_link" field.
+func (duo *DistrictUpdateOne) SetExternalLink(s string) *DistrictUpdateOne {
+	duo.mutation.SetExternalLink(s)
+	return duo
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (duo *DistrictUpdateOne) SetNillableExternalLink(s *string) *DistrictUpdateOne {
+	if s != nil {
+		duo.SetExternalLink(*s)
+	}
+	return duo
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (duo *DistrictUpdateOne) ClearExternalLink() *DistrictUpdateOne {
+	duo.mutation.ClearExternalLink()
 	return duo
 }
 
@@ -495,6 +541,12 @@ func (duo *DistrictUpdateOne) sqlSave(ctx context.Context) (_node *District, err
 	}
 	if duo.mutation.DescriptionCleared() {
 		_spec.ClearField(district.FieldDescription, field.TypeString)
+	}
+	if value, ok := duo.mutation.ExternalLink(); ok {
+		_spec.SetField(district.FieldExternalLink, field.TypeString, value)
+	}
+	if duo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(district.FieldExternalLink, field.TypeString)
 	}
 	if duo.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{

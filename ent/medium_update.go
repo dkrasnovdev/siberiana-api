@@ -115,6 +115,26 @@ func (mu *MediumUpdate) ClearDescription() *MediumUpdate {
 	return mu
 }
 
+// SetExternalLink sets the "external_link" field.
+func (mu *MediumUpdate) SetExternalLink(s string) *MediumUpdate {
+	mu.mutation.SetExternalLink(s)
+	return mu
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (mu *MediumUpdate) SetNillableExternalLink(s *string) *MediumUpdate {
+	if s != nil {
+		mu.SetExternalLink(*s)
+	}
+	return mu
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (mu *MediumUpdate) ClearExternalLink() *MediumUpdate {
+	mu.mutation.ClearExternalLink()
+	return mu
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (mu *MediumUpdate) AddArtifactIDs(ids ...int) *MediumUpdate {
 	mu.mutation.AddArtifactIDs(ids...)
@@ -233,6 +253,12 @@ func (mu *MediumUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if mu.mutation.DescriptionCleared() {
 		_spec.ClearField(medium.FieldDescription, field.TypeString)
+	}
+	if value, ok := mu.mutation.ExternalLink(); ok {
+		_spec.SetField(medium.FieldExternalLink, field.TypeString, value)
+	}
+	if mu.mutation.ExternalLinkCleared() {
+		_spec.ClearField(medium.FieldExternalLink, field.TypeString)
 	}
 	if mu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -385,6 +411,26 @@ func (muo *MediumUpdateOne) ClearDescription() *MediumUpdateOne {
 	return muo
 }
 
+// SetExternalLink sets the "external_link" field.
+func (muo *MediumUpdateOne) SetExternalLink(s string) *MediumUpdateOne {
+	muo.mutation.SetExternalLink(s)
+	return muo
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (muo *MediumUpdateOne) SetNillableExternalLink(s *string) *MediumUpdateOne {
+	if s != nil {
+		muo.SetExternalLink(*s)
+	}
+	return muo
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (muo *MediumUpdateOne) ClearExternalLink() *MediumUpdateOne {
+	muo.mutation.ClearExternalLink()
+	return muo
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (muo *MediumUpdateOne) AddArtifactIDs(ids ...int) *MediumUpdateOne {
 	muo.mutation.AddArtifactIDs(ids...)
@@ -533,6 +579,12 @@ func (muo *MediumUpdateOne) sqlSave(ctx context.Context) (_node *Medium, err err
 	}
 	if muo.mutation.DescriptionCleared() {
 		_spec.ClearField(medium.FieldDescription, field.TypeString)
+	}
+	if value, ok := muo.mutation.ExternalLink(); ok {
+		_spec.SetField(medium.FieldExternalLink, field.TypeString, value)
+	}
+	if muo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(medium.FieldExternalLink, field.TypeString)
 	}
 	if muo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

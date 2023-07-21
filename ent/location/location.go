@@ -27,6 +27,8 @@ const (
 	FieldDisplayName = "display_name"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
+	// FieldExternalLink holds the string denoting the external_link field in the database.
+	FieldExternalLink = "external_link"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
 	// EdgeSettlement holds the string denoting the settlement edge name in mutations.
@@ -76,6 +78,7 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldDisplayName,
 	FieldDescription,
+	FieldExternalLink,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -140,6 +143,11 @@ func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByExternalLink orders the results by the external_link field.
+func ByExternalLink(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalLink, opts...).ToFunc()
 }
 
 // ByArtifactsCount orders the results by artifacts count.

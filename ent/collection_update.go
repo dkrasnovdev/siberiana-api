@@ -116,6 +116,26 @@ func (cu *CollectionUpdate) ClearDescription() *CollectionUpdate {
 	return cu
 }
 
+// SetExternalLink sets the "external_link" field.
+func (cu *CollectionUpdate) SetExternalLink(s string) *CollectionUpdate {
+	cu.mutation.SetExternalLink(s)
+	return cu
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (cu *CollectionUpdate) SetNillableExternalLink(s *string) *CollectionUpdate {
+	if s != nil {
+		cu.SetExternalLink(*s)
+	}
+	return cu
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (cu *CollectionUpdate) ClearExternalLink() *CollectionUpdate {
+	cu.mutation.ClearExternalLink()
+	return cu
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (cu *CollectionUpdate) AddArtifactIDs(ids ...int) *CollectionUpdate {
 	cu.mutation.AddArtifactIDs(ids...)
@@ -259,6 +279,12 @@ func (cu *CollectionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if cu.mutation.DescriptionCleared() {
 		_spec.ClearField(collection.FieldDescription, field.TypeString)
+	}
+	if value, ok := cu.mutation.ExternalLink(); ok {
+		_spec.SetField(collection.FieldExternalLink, field.TypeString, value)
+	}
+	if cu.mutation.ExternalLinkCleared() {
+		_spec.ClearField(collection.FieldExternalLink, field.TypeString)
 	}
 	if cu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -440,6 +466,26 @@ func (cuo *CollectionUpdateOne) ClearDescription() *CollectionUpdateOne {
 	return cuo
 }
 
+// SetExternalLink sets the "external_link" field.
+func (cuo *CollectionUpdateOne) SetExternalLink(s string) *CollectionUpdateOne {
+	cuo.mutation.SetExternalLink(s)
+	return cuo
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (cuo *CollectionUpdateOne) SetNillableExternalLink(s *string) *CollectionUpdateOne {
+	if s != nil {
+		cuo.SetExternalLink(*s)
+	}
+	return cuo
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (cuo *CollectionUpdateOne) ClearExternalLink() *CollectionUpdateOne {
+	cuo.mutation.ClearExternalLink()
+	return cuo
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (cuo *CollectionUpdateOne) AddArtifactIDs(ids ...int) *CollectionUpdateOne {
 	cuo.mutation.AddArtifactIDs(ids...)
@@ -613,6 +659,12 @@ func (cuo *CollectionUpdateOne) sqlSave(ctx context.Context) (_node *Collection,
 	}
 	if cuo.mutation.DescriptionCleared() {
 		_spec.ClearField(collection.FieldDescription, field.TypeString)
+	}
+	if value, ok := cuo.mutation.ExternalLink(); ok {
+		_spec.SetField(collection.FieldExternalLink, field.TypeString, value)
+	}
+	if cuo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(collection.FieldExternalLink, field.TypeString)
 	}
 	if cuo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -29,6 +29,8 @@ type Medium struct {
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MediumQuery when eager-loading is set.
 	Edges        MediumEdges `json:"edges"`
@@ -64,7 +66,7 @@ func (*Medium) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case medium.FieldID:
 			values[i] = new(sql.NullInt64)
-		case medium.FieldCreatedBy, medium.FieldUpdatedBy, medium.FieldDisplayName, medium.FieldDescription:
+		case medium.FieldCreatedBy, medium.FieldUpdatedBy, medium.FieldDisplayName, medium.FieldDescription, medium.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case medium.FieldCreatedAt, medium.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -125,6 +127,12 @@ func (m *Medium) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				m.Description = value.String
 			}
+		case medium.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				m.ExternalLink = value.String
+			}
 		default:
 			m.selectValues.Set(columns[i], values[i])
 		}
@@ -183,6 +191,9 @@ func (m *Medium) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(m.Description)
+	builder.WriteString(", ")
+	builder.WriteString("external_link=")
+	builder.WriteString(m.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -115,6 +115,26 @@ func (tu *TechniqueUpdate) ClearDescription() *TechniqueUpdate {
 	return tu
 }
 
+// SetExternalLink sets the "external_link" field.
+func (tu *TechniqueUpdate) SetExternalLink(s string) *TechniqueUpdate {
+	tu.mutation.SetExternalLink(s)
+	return tu
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (tu *TechniqueUpdate) SetNillableExternalLink(s *string) *TechniqueUpdate {
+	if s != nil {
+		tu.SetExternalLink(*s)
+	}
+	return tu
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (tu *TechniqueUpdate) ClearExternalLink() *TechniqueUpdate {
+	tu.mutation.ClearExternalLink()
+	return tu
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (tu *TechniqueUpdate) AddArtifactIDs(ids ...int) *TechniqueUpdate {
 	tu.mutation.AddArtifactIDs(ids...)
@@ -233,6 +253,12 @@ func (tu *TechniqueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.DescriptionCleared() {
 		_spec.ClearField(technique.FieldDescription, field.TypeString)
+	}
+	if value, ok := tu.mutation.ExternalLink(); ok {
+		_spec.SetField(technique.FieldExternalLink, field.TypeString, value)
+	}
+	if tu.mutation.ExternalLinkCleared() {
+		_spec.ClearField(technique.FieldExternalLink, field.TypeString)
 	}
 	if tu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -385,6 +411,26 @@ func (tuo *TechniqueUpdateOne) ClearDescription() *TechniqueUpdateOne {
 	return tuo
 }
 
+// SetExternalLink sets the "external_link" field.
+func (tuo *TechniqueUpdateOne) SetExternalLink(s string) *TechniqueUpdateOne {
+	tuo.mutation.SetExternalLink(s)
+	return tuo
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (tuo *TechniqueUpdateOne) SetNillableExternalLink(s *string) *TechniqueUpdateOne {
+	if s != nil {
+		tuo.SetExternalLink(*s)
+	}
+	return tuo
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (tuo *TechniqueUpdateOne) ClearExternalLink() *TechniqueUpdateOne {
+	tuo.mutation.ClearExternalLink()
+	return tuo
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (tuo *TechniqueUpdateOne) AddArtifactIDs(ids ...int) *TechniqueUpdateOne {
 	tuo.mutation.AddArtifactIDs(ids...)
@@ -533,6 +579,12 @@ func (tuo *TechniqueUpdateOne) sqlSave(ctx context.Context) (_node *Technique, e
 	}
 	if tuo.mutation.DescriptionCleared() {
 		_spec.ClearField(technique.FieldDescription, field.TypeString)
+	}
+	if value, ok := tuo.mutation.ExternalLink(); ok {
+		_spec.SetField(technique.FieldExternalLink, field.TypeString, value)
+	}
+	if tuo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(technique.FieldExternalLink, field.TypeString)
 	}
 	if tuo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

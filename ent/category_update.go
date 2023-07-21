@@ -115,6 +115,26 @@ func (cu *CategoryUpdate) ClearDescription() *CategoryUpdate {
 	return cu
 }
 
+// SetExternalLink sets the "external_link" field.
+func (cu *CategoryUpdate) SetExternalLink(s string) *CategoryUpdate {
+	cu.mutation.SetExternalLink(s)
+	return cu
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (cu *CategoryUpdate) SetNillableExternalLink(s *string) *CategoryUpdate {
+	if s != nil {
+		cu.SetExternalLink(*s)
+	}
+	return cu
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (cu *CategoryUpdate) ClearExternalLink() *CategoryUpdate {
+	cu.mutation.ClearExternalLink()
+	return cu
+}
+
 // AddCollectionIDs adds the "collections" edge to the Collection entity by IDs.
 func (cu *CategoryUpdate) AddCollectionIDs(ids ...int) *CategoryUpdate {
 	cu.mutation.AddCollectionIDs(ids...)
@@ -233,6 +253,12 @@ func (cu *CategoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if cu.mutation.DescriptionCleared() {
 		_spec.ClearField(category.FieldDescription, field.TypeString)
+	}
+	if value, ok := cu.mutation.ExternalLink(); ok {
+		_spec.SetField(category.FieldExternalLink, field.TypeString, value)
+	}
+	if cu.mutation.ExternalLinkCleared() {
+		_spec.ClearField(category.FieldExternalLink, field.TypeString)
 	}
 	if cu.mutation.CollectionsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -385,6 +411,26 @@ func (cuo *CategoryUpdateOne) ClearDescription() *CategoryUpdateOne {
 	return cuo
 }
 
+// SetExternalLink sets the "external_link" field.
+func (cuo *CategoryUpdateOne) SetExternalLink(s string) *CategoryUpdateOne {
+	cuo.mutation.SetExternalLink(s)
+	return cuo
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (cuo *CategoryUpdateOne) SetNillableExternalLink(s *string) *CategoryUpdateOne {
+	if s != nil {
+		cuo.SetExternalLink(*s)
+	}
+	return cuo
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (cuo *CategoryUpdateOne) ClearExternalLink() *CategoryUpdateOne {
+	cuo.mutation.ClearExternalLink()
+	return cuo
+}
+
 // AddCollectionIDs adds the "collections" edge to the Collection entity by IDs.
 func (cuo *CategoryUpdateOne) AddCollectionIDs(ids ...int) *CategoryUpdateOne {
 	cuo.mutation.AddCollectionIDs(ids...)
@@ -533,6 +579,12 @@ func (cuo *CategoryUpdateOne) sqlSave(ctx context.Context) (_node *Category, err
 	}
 	if cuo.mutation.DescriptionCleared() {
 		_spec.ClearField(category.FieldDescription, field.TypeString)
+	}
+	if value, ok := cuo.mutation.ExternalLink(); ok {
+		_spec.SetField(category.FieldExternalLink, field.TypeString, value)
+	}
+	if cuo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(category.FieldExternalLink, field.TypeString)
 	}
 	if cuo.mutation.CollectionsCleared() {
 		edge := &sqlgraph.EdgeSpec{

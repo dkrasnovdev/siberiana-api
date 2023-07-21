@@ -69,6 +69,26 @@ func (ou *OrganizationUpdate) ClearDescription() *OrganizationUpdate {
 	return ou
 }
 
+// SetExternalLink sets the "external_link" field.
+func (ou *OrganizationUpdate) SetExternalLink(s string) *OrganizationUpdate {
+	ou.mutation.SetExternalLink(s)
+	return ou
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (ou *OrganizationUpdate) SetNillableExternalLink(s *string) *OrganizationUpdate {
+	if s != nil {
+		ou.SetExternalLink(*s)
+	}
+	return ou
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (ou *OrganizationUpdate) ClearExternalLink() *OrganizationUpdate {
+	ou.mutation.ClearExternalLink()
+	return ou
+}
+
 // SetCreatedBy sets the "created_by" field.
 func (ou *OrganizationUpdate) SetCreatedBy(s string) *OrganizationUpdate {
 	ou.mutation.SetCreatedBy(s)
@@ -208,6 +228,12 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ou.mutation.DescriptionCleared() {
 		_spec.ClearField(organization.FieldDescription, field.TypeString)
 	}
+	if value, ok := ou.mutation.ExternalLink(); ok {
+		_spec.SetField(organization.FieldExternalLink, field.TypeString, value)
+	}
+	if ou.mutation.ExternalLinkCleared() {
+		_spec.ClearField(organization.FieldExternalLink, field.TypeString)
+	}
 	if value, ok := ou.mutation.CreatedBy(); ok {
 		_spec.SetField(organization.FieldCreatedBy, field.TypeString, value)
 	}
@@ -309,6 +335,26 @@ func (ouo *OrganizationUpdateOne) SetNillableDescription(s *string) *Organizatio
 // ClearDescription clears the value of the "description" field.
 func (ouo *OrganizationUpdateOne) ClearDescription() *OrganizationUpdateOne {
 	ouo.mutation.ClearDescription()
+	return ouo
+}
+
+// SetExternalLink sets the "external_link" field.
+func (ouo *OrganizationUpdateOne) SetExternalLink(s string) *OrganizationUpdateOne {
+	ouo.mutation.SetExternalLink(s)
+	return ouo
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (ouo *OrganizationUpdateOne) SetNillableExternalLink(s *string) *OrganizationUpdateOne {
+	if s != nil {
+		ouo.SetExternalLink(*s)
+	}
+	return ouo
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (ouo *OrganizationUpdateOne) ClearExternalLink() *OrganizationUpdateOne {
+	ouo.mutation.ClearExternalLink()
 	return ouo
 }
 
@@ -480,6 +526,12 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 	}
 	if ouo.mutation.DescriptionCleared() {
 		_spec.ClearField(organization.FieldDescription, field.TypeString)
+	}
+	if value, ok := ouo.mutation.ExternalLink(); ok {
+		_spec.SetField(organization.FieldExternalLink, field.TypeString, value)
+	}
+	if ouo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(organization.FieldExternalLink, field.TypeString)
 	}
 	if value, ok := ouo.mutation.CreatedBy(); ok {
 		_spec.SetField(organization.FieldCreatedBy, field.TypeString, value)

@@ -19,6 +19,8 @@ const (
 	FieldDisplayName = "display_name"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
+	// FieldExternalLink holds the string denoting the external_link field in the database.
+	FieldExternalLink = "external_link"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldCreatedBy holds the string denoting the created_by field in the database.
@@ -45,6 +47,7 @@ var Columns = []string{
 	FieldID,
 	FieldDisplayName,
 	FieldDescription,
+	FieldExternalLink,
 	FieldCreatedAt,
 	FieldCreatedBy,
 	FieldUpdatedAt,
@@ -104,6 +107,11 @@ func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByExternalLink orders the results by the external_link field.
+func ByExternalLink(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalLink, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

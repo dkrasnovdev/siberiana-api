@@ -85,6 +85,11 @@ func Description(v string) predicate.Medium {
 	return predicate.Medium(sql.FieldEQ(FieldDescription, v))
 }
 
+// ExternalLink applies equality check predicate on the "external_link" field. It's identical to ExternalLinkEQ.
+func ExternalLink(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldEQ(FieldExternalLink, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Medium {
 	return predicate.Medium(sql.FieldEQ(FieldCreatedAt, v))
@@ -463,6 +468,81 @@ func DescriptionEqualFold(v string) predicate.Medium {
 // DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
 func DescriptionContainsFold(v string) predicate.Medium {
 	return predicate.Medium(sql.FieldContainsFold(FieldDescription, v))
+}
+
+// ExternalLinkEQ applies the EQ predicate on the "external_link" field.
+func ExternalLinkEQ(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldEQ(FieldExternalLink, v))
+}
+
+// ExternalLinkNEQ applies the NEQ predicate on the "external_link" field.
+func ExternalLinkNEQ(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldNEQ(FieldExternalLink, v))
+}
+
+// ExternalLinkIn applies the In predicate on the "external_link" field.
+func ExternalLinkIn(vs ...string) predicate.Medium {
+	return predicate.Medium(sql.FieldIn(FieldExternalLink, vs...))
+}
+
+// ExternalLinkNotIn applies the NotIn predicate on the "external_link" field.
+func ExternalLinkNotIn(vs ...string) predicate.Medium {
+	return predicate.Medium(sql.FieldNotIn(FieldExternalLink, vs...))
+}
+
+// ExternalLinkGT applies the GT predicate on the "external_link" field.
+func ExternalLinkGT(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldGT(FieldExternalLink, v))
+}
+
+// ExternalLinkGTE applies the GTE predicate on the "external_link" field.
+func ExternalLinkGTE(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldGTE(FieldExternalLink, v))
+}
+
+// ExternalLinkLT applies the LT predicate on the "external_link" field.
+func ExternalLinkLT(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldLT(FieldExternalLink, v))
+}
+
+// ExternalLinkLTE applies the LTE predicate on the "external_link" field.
+func ExternalLinkLTE(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldLTE(FieldExternalLink, v))
+}
+
+// ExternalLinkContains applies the Contains predicate on the "external_link" field.
+func ExternalLinkContains(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldContains(FieldExternalLink, v))
+}
+
+// ExternalLinkHasPrefix applies the HasPrefix predicate on the "external_link" field.
+func ExternalLinkHasPrefix(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldHasPrefix(FieldExternalLink, v))
+}
+
+// ExternalLinkHasSuffix applies the HasSuffix predicate on the "external_link" field.
+func ExternalLinkHasSuffix(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldHasSuffix(FieldExternalLink, v))
+}
+
+// ExternalLinkIsNil applies the IsNil predicate on the "external_link" field.
+func ExternalLinkIsNil() predicate.Medium {
+	return predicate.Medium(sql.FieldIsNull(FieldExternalLink))
+}
+
+// ExternalLinkNotNil applies the NotNil predicate on the "external_link" field.
+func ExternalLinkNotNil() predicate.Medium {
+	return predicate.Medium(sql.FieldNotNull(FieldExternalLink))
+}
+
+// ExternalLinkEqualFold applies the EqualFold predicate on the "external_link" field.
+func ExternalLinkEqualFold(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldEqualFold(FieldExternalLink, v))
+}
+
+// ExternalLinkContainsFold applies the ContainsFold predicate on the "external_link" field.
+func ExternalLinkContainsFold(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldContainsFold(FieldExternalLink, v))
 }
 
 // HasArtifacts applies the HasEdge predicate on the "artifacts" edge.

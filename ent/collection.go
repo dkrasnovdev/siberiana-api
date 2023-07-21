@@ -30,6 +30,8 @@ type Collection struct {
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CollectionQuery when eager-loading is set.
 	Edges                CollectionEdges `json:"edges"`
@@ -81,7 +83,7 @@ func (*Collection) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case collection.FieldID:
 			values[i] = new(sql.NullInt64)
-		case collection.FieldCreatedBy, collection.FieldUpdatedBy, collection.FieldDisplayName, collection.FieldDescription:
+		case collection.FieldCreatedBy, collection.FieldUpdatedBy, collection.FieldDisplayName, collection.FieldDescription, collection.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case collection.FieldCreatedAt, collection.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -143,6 +145,12 @@ func (c *Collection) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				c.Description = value.String
+			}
+		case collection.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				c.ExternalLink = value.String
 			}
 		case collection.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -214,6 +222,9 @@ func (c *Collection) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(c.Description)
+	builder.WriteString(", ")
+	builder.WriteString("external_link=")
+	builder.WriteString(c.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
 }

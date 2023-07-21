@@ -47,6 +47,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
 		{Name: "additional_image_urls", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
@@ -67,43 +68,43 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "artifacts_collections_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[11]},
+				Columns:    []*schema.Column{ArtifactsColumns[12]},
 				RefColumns: []*schema.Column{CollectionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_cultures_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[12]},
+				Columns:    []*schema.Column{ArtifactsColumns[13]},
 				RefColumns: []*schema.Column{CulturesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_licenses_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[13]},
+				Columns:    []*schema.Column{ArtifactsColumns[14]},
 				RefColumns: []*schema.Column{LicensesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_locations_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[14]},
+				Columns:    []*schema.Column{ArtifactsColumns[15]},
 				RefColumns: []*schema.Column{LocationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_models_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[15]},
+				Columns:    []*schema.Column{ArtifactsColumns[16]},
 				RefColumns: []*schema.Column{ModelsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_monuments_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[16]},
+				Columns:    []*schema.Column{ArtifactsColumns[17]},
 				RefColumns: []*schema.Column{MonumentsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_sets_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[17]},
+				Columns:    []*schema.Column{ArtifactsColumns[18]},
 				RefColumns: []*schema.Column{SetsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -157,6 +158,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// CategoriesTable holds the schema information for the "categories" table.
 	CategoriesTable = &schema.Table{
@@ -173,6 +175,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "category_collections", Type: field.TypeInt, Nullable: true},
 	}
 	// CollectionsTable holds the schema information for the "collections" table.
@@ -183,7 +186,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "collections_categories_collections",
-				Columns:    []*schema.Column{CollectionsColumns[7]},
+				Columns:    []*schema.Column{CollectionsColumns[8]},
 				RefColumns: []*schema.Column{CategoriesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -198,6 +201,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// CulturesTable holds the schema information for the "cultures" table.
 	CulturesTable = &schema.Table{
@@ -214,6 +218,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "location_district", Type: field.TypeInt, Unique: true, Nullable: true},
 	}
 	// DistrictsTable holds the schema information for the "districts" table.
@@ -224,7 +229,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "districts_locations_district",
-				Columns:    []*schema.Column{DistrictsColumns[7]},
+				Columns:    []*schema.Column{DistrictsColumns[8]},
 				RefColumns: []*schema.Column{LocationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -239,6 +244,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// HoldersTable holds the schema information for the "holders" table.
 	HoldersTable = &schema.Table{
@@ -275,6 +281,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// LicensesTable holds the schema information for the "licenses" table.
 	LicensesTable = &schema.Table{
@@ -291,6 +298,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// LocationsTable holds the schema information for the "locations" table.
 	LocationsTable = &schema.Table{
@@ -307,6 +315,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// MediaTable holds the schema information for the "media" table.
 	MediaTable = &schema.Table{
@@ -323,6 +332,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// ModelsTable holds the schema information for the "models" table.
 	ModelsTable = &schema.Table{
@@ -339,6 +349,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// MonumentsTable holds the schema information for the "monuments" table.
 	MonumentsTable = &schema.Table{
@@ -351,6 +362,7 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
@@ -365,7 +377,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "organizations_holders_organization",
-				Columns:    []*schema.Column{OrganizationsColumns[7]},
+				Columns:    []*schema.Column{OrganizationsColumns[8]},
 				RefColumns: []*schema.Column{HoldersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -380,6 +392,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "holder_person", Type: field.TypeInt, Unique: true, Nullable: true},
 	}
 	// PersonsTable holds the schema information for the "persons" table.
@@ -390,7 +403,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "persons_holders_person",
-				Columns:    []*schema.Column{PersonsColumns[7]},
+				Columns:    []*schema.Column{PersonsColumns[8]},
 				RefColumns: []*schema.Column{HoldersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -405,6 +418,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// ProjectsTable holds the schema information for the "projects" table.
 	ProjectsTable = &schema.Table{
@@ -451,6 +465,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// PublicationsTable holds the schema information for the "publications" table.
 	PublicationsTable = &schema.Table{
@@ -477,6 +492,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "location_region", Type: field.TypeInt, Unique: true, Nullable: true},
 	}
 	// RegionsTable holds the schema information for the "regions" table.
@@ -487,7 +503,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "regions_locations_region",
-				Columns:    []*schema.Column{RegionsColumns[7]},
+				Columns:    []*schema.Column{RegionsColumns[8]},
 				RefColumns: []*schema.Column{LocationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -502,6 +518,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// SetsTable holds the schema information for the "sets" table.
 	SetsTable = &schema.Table{
@@ -518,6 +535,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "location_settlement", Type: field.TypeInt, Unique: true, Nullable: true},
 	}
 	// SettlementsTable holds the schema information for the "settlements" table.
@@ -528,7 +546,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "settlements_locations_settlement",
-				Columns:    []*schema.Column{SettlementsColumns[7]},
+				Columns:    []*schema.Column{SettlementsColumns[8]},
 				RefColumns: []*schema.Column{LocationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -543,6 +561,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// TechniquesTable holds the schema information for the "techniques" table.
 	TechniquesTable = &schema.Table{

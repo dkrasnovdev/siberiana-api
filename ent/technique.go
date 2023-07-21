@@ -29,6 +29,8 @@ type Technique struct {
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TechniqueQuery when eager-loading is set.
 	Edges        TechniqueEdges `json:"edges"`
@@ -64,7 +66,7 @@ func (*Technique) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case technique.FieldID:
 			values[i] = new(sql.NullInt64)
-		case technique.FieldCreatedBy, technique.FieldUpdatedBy, technique.FieldDisplayName, technique.FieldDescription:
+		case technique.FieldCreatedBy, technique.FieldUpdatedBy, technique.FieldDisplayName, technique.FieldDescription, technique.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case technique.FieldCreatedAt, technique.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -125,6 +127,12 @@ func (t *Technique) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				t.Description = value.String
 			}
+		case technique.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				t.ExternalLink = value.String
+			}
 		default:
 			t.selectValues.Set(columns[i], values[i])
 		}
@@ -183,6 +191,9 @@ func (t *Technique) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(t.Description)
+	builder.WriteString(", ")
+	builder.WriteString("external_link=")
+	builder.WriteString(t.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
 }

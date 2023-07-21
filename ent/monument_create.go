@@ -105,6 +105,20 @@ func (mc *MonumentCreate) SetNillableDescription(s *string) *MonumentCreate {
 	return mc
 }
 
+// SetExternalLink sets the "external_link" field.
+func (mc *MonumentCreate) SetExternalLink(s string) *MonumentCreate {
+	mc.mutation.SetExternalLink(s)
+	return mc
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (mc *MonumentCreate) SetNillableExternalLink(s *string) *MonumentCreate {
+	if s != nil {
+		mc.SetExternalLink(*s)
+	}
+	return mc
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (mc *MonumentCreate) AddArtifactIDs(ids ...int) *MonumentCreate {
 	mc.mutation.AddArtifactIDs(ids...)
@@ -231,6 +245,10 @@ func (mc *MonumentCreate) createSpec() (*Monument, *sqlgraph.CreateSpec) {
 	if value, ok := mc.mutation.Description(); ok {
 		_spec.SetField(monument.FieldDescription, field.TypeString, value)
 		_node.Description = value
+	}
+	if value, ok := mc.mutation.ExternalLink(); ok {
+		_spec.SetField(monument.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
 	}
 	if nodes := mc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

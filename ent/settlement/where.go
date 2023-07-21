@@ -85,6 +85,11 @@ func Description(v string) predicate.Settlement {
 	return predicate.Settlement(sql.FieldEQ(FieldDescription, v))
 }
 
+// ExternalLink applies equality check predicate on the "external_link" field. It's identical to ExternalLinkEQ.
+func ExternalLink(v string) predicate.Settlement {
+	return predicate.Settlement(sql.FieldEQ(FieldExternalLink, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Settlement {
 	return predicate.Settlement(sql.FieldEQ(FieldCreatedAt, v))
@@ -463,6 +468,81 @@ func DescriptionEqualFold(v string) predicate.Settlement {
 // DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
 func DescriptionContainsFold(v string) predicate.Settlement {
 	return predicate.Settlement(sql.FieldContainsFold(FieldDescription, v))
+}
+
+// ExternalLinkEQ applies the EQ predicate on the "external_link" field.
+func ExternalLinkEQ(v string) predicate.Settlement {
+	return predicate.Settlement(sql.FieldEQ(FieldExternalLink, v))
+}
+
+// ExternalLinkNEQ applies the NEQ predicate on the "external_link" field.
+func ExternalLinkNEQ(v string) predicate.Settlement {
+	return predicate.Settlement(sql.FieldNEQ(FieldExternalLink, v))
+}
+
+// ExternalLinkIn applies the In predicate on the "external_link" field.
+func ExternalLinkIn(vs ...string) predicate.Settlement {
+	return predicate.Settlement(sql.FieldIn(FieldExternalLink, vs...))
+}
+
+// ExternalLinkNotIn applies the NotIn predicate on the "external_link" field.
+func ExternalLinkNotIn(vs ...string) predicate.Settlement {
+	return predicate.Settlement(sql.FieldNotIn(FieldExternalLink, vs...))
+}
+
+// ExternalLinkGT applies the GT predicate on the "external_link" field.
+func ExternalLinkGT(v string) predicate.Settlement {
+	return predicate.Settlement(sql.FieldGT(FieldExternalLink, v))
+}
+
+// ExternalLinkGTE applies the GTE predicate on the "external_link" field.
+func ExternalLinkGTE(v string) predicate.Settlement {
+	return predicate.Settlement(sql.FieldGTE(FieldExternalLink, v))
+}
+
+// ExternalLinkLT applies the LT predicate on the "external_link" field.
+func ExternalLinkLT(v string) predicate.Settlement {
+	return predicate.Settlement(sql.FieldLT(FieldExternalLink, v))
+}
+
+// ExternalLinkLTE applies the LTE predicate on the "external_link" field.
+func ExternalLinkLTE(v string) predicate.Settlement {
+	return predicate.Settlement(sql.FieldLTE(FieldExternalLink, v))
+}
+
+// ExternalLinkContains applies the Contains predicate on the "external_link" field.
+func ExternalLinkContains(v string) predicate.Settlement {
+	return predicate.Settlement(sql.FieldContains(FieldExternalLink, v))
+}
+
+// ExternalLinkHasPrefix applies the HasPrefix predicate on the "external_link" field.
+func ExternalLinkHasPrefix(v string) predicate.Settlement {
+	return predicate.Settlement(sql.FieldHasPrefix(FieldExternalLink, v))
+}
+
+// ExternalLinkHasSuffix applies the HasSuffix predicate on the "external_link" field.
+func ExternalLinkHasSuffix(v string) predicate.Settlement {
+	return predicate.Settlement(sql.FieldHasSuffix(FieldExternalLink, v))
+}
+
+// ExternalLinkIsNil applies the IsNil predicate on the "external_link" field.
+func ExternalLinkIsNil() predicate.Settlement {
+	return predicate.Settlement(sql.FieldIsNull(FieldExternalLink))
+}
+
+// ExternalLinkNotNil applies the NotNil predicate on the "external_link" field.
+func ExternalLinkNotNil() predicate.Settlement {
+	return predicate.Settlement(sql.FieldNotNull(FieldExternalLink))
+}
+
+// ExternalLinkEqualFold applies the EqualFold predicate on the "external_link" field.
+func ExternalLinkEqualFold(v string) predicate.Settlement {
+	return predicate.Settlement(sql.FieldEqualFold(FieldExternalLink, v))
+}
+
+// ExternalLinkContainsFold applies the ContainsFold predicate on the "external_link" field.
+func ExternalLinkContainsFold(v string) predicate.Settlement {
+	return predicate.Settlement(sql.FieldContainsFold(FieldExternalLink, v))
 }
 
 // HasLocation applies the HasEdge predicate on the "location" edge.

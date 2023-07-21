@@ -29,6 +29,8 @@ type Publication struct {
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PublicationQuery when eager-loading is set.
 	Edges        PublicationEdges `json:"edges"`
@@ -76,7 +78,7 @@ func (*Publication) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case publication.FieldID:
 			values[i] = new(sql.NullInt64)
-		case publication.FieldCreatedBy, publication.FieldUpdatedBy, publication.FieldDisplayName, publication.FieldDescription:
+		case publication.FieldCreatedBy, publication.FieldUpdatedBy, publication.FieldDisplayName, publication.FieldDescription, publication.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case publication.FieldCreatedAt, publication.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -136,6 +138,12 @@ func (pu *Publication) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				pu.Description = value.String
+			}
+		case publication.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				pu.ExternalLink = value.String
 			}
 		default:
 			pu.selectValues.Set(columns[i], values[i])
@@ -200,6 +208,9 @@ func (pu *Publication) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(pu.Description)
+	builder.WriteString(", ")
+	builder.WriteString("external_link=")
+	builder.WriteString(pu.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -518,6 +518,23 @@ type ArtifactWhereInput struct {
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
+
 	// "primary_image_url" field predicates.
 	PrimaryImageURL             *string  `json:"primaryImageURL,omitempty"`
 	PrimaryImageURLNEQ          *string  `json:"primaryImageURLNEQ,omitempty"`
@@ -939,6 +956,51 @@ func (i *ArtifactWhereInput) P() (predicate.Artifact, error) {
 	}
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, artifact.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, artifact.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, artifact.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, artifact.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, artifact.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, artifact.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, artifact.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, artifact.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, artifact.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, artifact.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, artifact.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, artifact.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, artifact.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, artifact.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, artifact.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, artifact.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
 	if i.PrimaryImageURL != nil {
 		predicates = append(predicates, artifact.PrimaryImageURLEQ(*i.PrimaryImageURL))
@@ -2044,6 +2106,23 @@ type CategoryWhereInput struct {
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
+
 	// "collections" edge predicates.
 	HasCollections     *bool                   `json:"hasCollections,omitempty"`
 	HasCollectionsWith []*CollectionWhereInput `json:"hasCollectionsWith,omitempty"`
@@ -2372,6 +2451,51 @@ func (i *CategoryWhereInput) P() (predicate.Category, error) {
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, category.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, category.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, category.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, category.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, category.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, category.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, category.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, category.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, category.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, category.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, category.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, category.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, category.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, category.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, category.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, category.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
 
 	if i.HasCollections != nil {
 		p := category.HasCollections()
@@ -2505,6 +2629,23 @@ type CollectionWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -2838,6 +2979,51 @@ func (i *CollectionWhereInput) P() (predicate.Collection, error) {
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, collection.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, collection.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, collection.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, collection.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, collection.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, collection.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, collection.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, collection.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, collection.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, collection.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, collection.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, collection.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, collection.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, collection.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, collection.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, collection.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
 
 	if i.HasArtifacts != nil {
 		p := collection.HasArtifacts()
@@ -2989,6 +3175,23 @@ type CultureWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -3318,6 +3521,51 @@ func (i *CultureWhereInput) P() (predicate.Culture, error) {
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, culture.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, culture.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, culture.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, culture.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, culture.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, culture.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, culture.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, culture.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, culture.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, culture.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, culture.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, culture.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, culture.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, culture.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, culture.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, culture.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
 
 	if i.HasArtifacts != nil {
 		p := culture.HasArtifacts()
@@ -3451,6 +3699,23 @@ type DistrictWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
 	// "location" edge predicates.
 	HasLocation     *bool                 `json:"hasLocation,omitempty"`
@@ -3780,6 +4045,51 @@ func (i *DistrictWhereInput) P() (predicate.District, error) {
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, district.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, district.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, district.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, district.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, district.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, district.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, district.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, district.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, district.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, district.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, district.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, district.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, district.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, district.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, district.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, district.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
 
 	if i.HasLocation != nil {
 		p := district.HasLocation()
@@ -3913,6 +4223,23 @@ type HolderWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -4249,6 +4576,51 @@ func (i *HolderWhereInput) P() (predicate.Holder, error) {
 	}
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, holder.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, holder.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, holder.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, holder.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, holder.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, holder.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, holder.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, holder.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, holder.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, holder.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, holder.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, holder.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, holder.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, holder.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, holder.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, holder.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
 
 	if i.HasArtifacts != nil {
@@ -4668,6 +5040,23 @@ type LicenseWhereInput struct {
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
+
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
@@ -4996,6 +5385,51 @@ func (i *LicenseWhereInput) P() (predicate.License, error) {
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, license.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, license.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, license.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, license.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, license.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, license.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, license.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, license.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, license.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, license.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, license.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, license.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, license.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, license.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, license.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, license.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
 
 	if i.HasArtifacts != nil {
 		p := license.HasArtifacts()
@@ -5129,6 +5563,23 @@ type LocationWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -5470,6 +5921,51 @@ func (i *LocationWhereInput) P() (predicate.Location, error) {
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, location.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, location.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, location.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, location.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, location.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, location.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, location.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, location.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, location.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, location.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, location.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, location.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, location.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, location.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, location.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, location.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
 
 	if i.HasArtifacts != nil {
 		p := location.HasArtifacts()
@@ -5657,6 +6153,23 @@ type MediumWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -5986,6 +6499,51 @@ func (i *MediumWhereInput) P() (predicate.Medium, error) {
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, medium.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, medium.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, medium.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, medium.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, medium.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, medium.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, medium.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, medium.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, medium.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, medium.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, medium.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, medium.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, medium.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, medium.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, medium.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, medium.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
 
 	if i.HasArtifacts != nil {
 		p := medium.HasArtifacts()
@@ -6119,6 +6677,23 @@ type ModelWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -6448,6 +7023,51 @@ func (i *ModelWhereInput) P() (predicate.Model, error) {
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, model.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, model.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, model.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, model.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, model.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, model.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, model.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, model.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, model.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, model.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, model.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, model.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, model.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, model.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, model.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, model.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
 
 	if i.HasArtifacts != nil {
 		p := model.HasArtifacts()
@@ -6581,6 +7201,23 @@ type MonumentWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -6910,6 +7547,51 @@ func (i *MonumentWhereInput) P() (predicate.Monument, error) {
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, monument.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, monument.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, monument.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, monument.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, monument.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, monument.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, monument.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, monument.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, monument.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, monument.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, monument.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, monument.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, monument.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, monument.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, monument.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, monument.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
 
 	if i.HasArtifacts != nil {
 		p := monument.HasArtifacts()
@@ -6989,6 +7671,23 @@ type OrganizationWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt      *time.Time  `json:"createdAt,omitempty"`
@@ -7233,6 +7932,51 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, organization.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, organization.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, organization.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, organization.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, organization.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, organization.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, organization.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, organization.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, organization.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, organization.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, organization.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, organization.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, organization.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, organization.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, organization.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, organization.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
 	if i.CreatedAt != nil {
 		predicates = append(predicates, organization.CreatedAtEQ(*i.CreatedAt))
@@ -7505,6 +8249,23 @@ type PersonWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -7846,6 +8607,51 @@ func (i *PersonWhereInput) P() (predicate.Person, error) {
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, person.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, person.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, person.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, person.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, person.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, person.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, person.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, person.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, person.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, person.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, person.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, person.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, person.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, person.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, person.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, person.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
 
 	if i.HasArtifacts != nil {
 		p := person.HasArtifacts()
@@ -8033,6 +8839,23 @@ type ProjectWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -8365,6 +9188,51 @@ func (i *ProjectWhereInput) P() (predicate.Project, error) {
 	}
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, project.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, project.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, project.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, project.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, project.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, project.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, project.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, project.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, project.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, project.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, project.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, project.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, project.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, project.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, project.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, project.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
 
 	if i.HasArtifacts != nil {
@@ -8890,6 +9758,23 @@ type PublicationWhereInput struct {
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
+
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
@@ -9222,6 +10107,51 @@ func (i *PublicationWhereInput) P() (predicate.Publication, error) {
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, publication.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, publication.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, publication.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, publication.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, publication.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, publication.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, publication.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, publication.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, publication.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, publication.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, publication.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, publication.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, publication.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, publication.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, publication.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, publication.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
 
 	if i.HasArtifacts != nil {
 		p := publication.HasArtifacts()
@@ -9497,6 +10427,23 @@ type RegionWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
 	// "location" edge predicates.
 	HasLocation     *bool                 `json:"hasLocation,omitempty"`
@@ -9826,6 +10773,51 @@ func (i *RegionWhereInput) P() (predicate.Region, error) {
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, region.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, region.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, region.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, region.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, region.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, region.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, region.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, region.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, region.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, region.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, region.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, region.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, region.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, region.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, region.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, region.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
 
 	if i.HasLocation != nil {
 		p := region.HasLocation()
@@ -9959,6 +10951,23 @@ type SetWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -10288,6 +11297,51 @@ func (i *SetWhereInput) P() (predicate.Set, error) {
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, set.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, set.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, set.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, set.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, set.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, set.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, set.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, set.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, set.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, set.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, set.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, set.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, set.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, set.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, set.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, set.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
 
 	if i.HasArtifacts != nil {
 		p := set.HasArtifacts()
@@ -10421,6 +11475,23 @@ type SettlementWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
 	// "location" edge predicates.
 	HasLocation     *bool                 `json:"hasLocation,omitempty"`
@@ -10750,6 +11821,51 @@ func (i *SettlementWhereInput) P() (predicate.Settlement, error) {
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, settlement.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, settlement.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, settlement.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, settlement.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, settlement.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, settlement.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, settlement.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, settlement.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, settlement.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, settlement.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, settlement.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, settlement.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, settlement.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, settlement.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, settlement.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, settlement.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
 
 	if i.HasLocation != nil {
 		p := settlement.HasLocation()
@@ -10883,6 +11999,23 @@ type TechniqueWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -11211,6 +12344,51 @@ func (i *TechniqueWhereInput) P() (predicate.Technique, error) {
 	}
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, technique.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, technique.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, technique.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, technique.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, technique.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, technique.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, technique.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, technique.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, technique.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, technique.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, technique.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, technique.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, technique.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, technique.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, technique.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, technique.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
 
 	if i.HasArtifacts != nil {

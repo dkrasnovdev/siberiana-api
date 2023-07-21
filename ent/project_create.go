@@ -106,6 +106,20 @@ func (pc *ProjectCreate) SetNillableDescription(s *string) *ProjectCreate {
 	return pc
 }
 
+// SetExternalLink sets the "external_link" field.
+func (pc *ProjectCreate) SetExternalLink(s string) *ProjectCreate {
+	pc.mutation.SetExternalLink(s)
+	return pc
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableExternalLink(s *string) *ProjectCreate {
+	if s != nil {
+		pc.SetExternalLink(*s)
+	}
+	return pc
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (pc *ProjectCreate) AddArtifactIDs(ids ...int) *ProjectCreate {
 	pc.mutation.AddArtifactIDs(ids...)
@@ -247,6 +261,10 @@ func (pc *ProjectCreate) createSpec() (*Project, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.Description(); ok {
 		_spec.SetField(project.FieldDescription, field.TypeString, value)
 		_node.Description = value
+	}
+	if value, ok := pc.mutation.ExternalLink(); ok {
+		_spec.SetField(project.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
 	}
 	if nodes := pc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

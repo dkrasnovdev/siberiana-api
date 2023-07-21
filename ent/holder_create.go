@@ -107,6 +107,20 @@ func (hc *HolderCreate) SetNillableDescription(s *string) *HolderCreate {
 	return hc
 }
 
+// SetExternalLink sets the "external_link" field.
+func (hc *HolderCreate) SetExternalLink(s string) *HolderCreate {
+	hc.mutation.SetExternalLink(s)
+	return hc
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (hc *HolderCreate) SetNillableExternalLink(s *string) *HolderCreate {
+	if s != nil {
+		hc.SetExternalLink(*s)
+	}
+	return hc
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (hc *HolderCreate) AddArtifactIDs(ids ...int) *HolderCreate {
 	hc.mutation.AddArtifactIDs(ids...)
@@ -271,6 +285,10 @@ func (hc *HolderCreate) createSpec() (*Holder, *sqlgraph.CreateSpec) {
 	if value, ok := hc.mutation.Description(); ok {
 		_spec.SetField(holder.FieldDescription, field.TypeString, value)
 		_node.Description = value
+	}
+	if value, ok := hc.mutation.ExternalLink(); ok {
+		_spec.SetField(holder.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
 	}
 	if nodes := hc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

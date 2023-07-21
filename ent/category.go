@@ -29,6 +29,8 @@ type Category struct {
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CategoryQuery when eager-loading is set.
 	Edges        CategoryEdges `json:"edges"`
@@ -64,7 +66,7 @@ func (*Category) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case category.FieldID:
 			values[i] = new(sql.NullInt64)
-		case category.FieldCreatedBy, category.FieldUpdatedBy, category.FieldDisplayName, category.FieldDescription:
+		case category.FieldCreatedBy, category.FieldUpdatedBy, category.FieldDisplayName, category.FieldDescription, category.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case category.FieldCreatedAt, category.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -125,6 +127,12 @@ func (c *Category) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.Description = value.String
 			}
+		case category.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				c.ExternalLink = value.String
+			}
 		default:
 			c.selectValues.Set(columns[i], values[i])
 		}
@@ -183,6 +191,9 @@ func (c *Category) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(c.Description)
+	builder.WriteString(", ")
+	builder.WriteString("external_link=")
+	builder.WriteString(c.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -30,6 +30,8 @@ type Person struct {
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PersonQuery when eager-loading is set.
 	Edges         PersonEdges `json:"edges"`
@@ -105,7 +107,7 @@ func (*Person) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case person.FieldID:
 			values[i] = new(sql.NullInt64)
-		case person.FieldCreatedBy, person.FieldUpdatedBy, person.FieldDisplayName, person.FieldDescription:
+		case person.FieldCreatedBy, person.FieldUpdatedBy, person.FieldDisplayName, person.FieldDescription, person.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case person.FieldCreatedAt, person.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -167,6 +169,12 @@ func (pe *Person) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				pe.Description = value.String
+			}
+		case person.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				pe.ExternalLink = value.String
 			}
 		case person.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -248,6 +256,9 @@ func (pe *Person) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(pe.Description)
+	builder.WriteString(", ")
+	builder.WriteString("external_link=")
+	builder.WriteString(pe.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
 }

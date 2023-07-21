@@ -115,6 +115,26 @@ func (lu *LicenseUpdate) ClearDescription() *LicenseUpdate {
 	return lu
 }
 
+// SetExternalLink sets the "external_link" field.
+func (lu *LicenseUpdate) SetExternalLink(s string) *LicenseUpdate {
+	lu.mutation.SetExternalLink(s)
+	return lu
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (lu *LicenseUpdate) SetNillableExternalLink(s *string) *LicenseUpdate {
+	if s != nil {
+		lu.SetExternalLink(*s)
+	}
+	return lu
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (lu *LicenseUpdate) ClearExternalLink() *LicenseUpdate {
+	lu.mutation.ClearExternalLink()
+	return lu
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (lu *LicenseUpdate) AddArtifactIDs(ids ...int) *LicenseUpdate {
 	lu.mutation.AddArtifactIDs(ids...)
@@ -233,6 +253,12 @@ func (lu *LicenseUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if lu.mutation.DescriptionCleared() {
 		_spec.ClearField(license.FieldDescription, field.TypeString)
+	}
+	if value, ok := lu.mutation.ExternalLink(); ok {
+		_spec.SetField(license.FieldExternalLink, field.TypeString, value)
+	}
+	if lu.mutation.ExternalLinkCleared() {
+		_spec.ClearField(license.FieldExternalLink, field.TypeString)
 	}
 	if lu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -385,6 +411,26 @@ func (luo *LicenseUpdateOne) ClearDescription() *LicenseUpdateOne {
 	return luo
 }
 
+// SetExternalLink sets the "external_link" field.
+func (luo *LicenseUpdateOne) SetExternalLink(s string) *LicenseUpdateOne {
+	luo.mutation.SetExternalLink(s)
+	return luo
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (luo *LicenseUpdateOne) SetNillableExternalLink(s *string) *LicenseUpdateOne {
+	if s != nil {
+		luo.SetExternalLink(*s)
+	}
+	return luo
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (luo *LicenseUpdateOne) ClearExternalLink() *LicenseUpdateOne {
+	luo.mutation.ClearExternalLink()
+	return luo
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (luo *LicenseUpdateOne) AddArtifactIDs(ids ...int) *LicenseUpdateOne {
 	luo.mutation.AddArtifactIDs(ids...)
@@ -533,6 +579,12 @@ func (luo *LicenseUpdateOne) sqlSave(ctx context.Context) (_node *License, err e
 	}
 	if luo.mutation.DescriptionCleared() {
 		_spec.ClearField(license.FieldDescription, field.TypeString)
+	}
+	if value, ok := luo.mutation.ExternalLink(); ok {
+		_spec.SetField(license.FieldExternalLink, field.TypeString, value)
+	}
+	if luo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(license.FieldExternalLink, field.TypeString)
 	}
 	if luo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

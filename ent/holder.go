@@ -31,6 +31,8 @@ type Holder struct {
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the HolderQuery when eager-loading is set.
 	Edges        HolderEdges `json:"edges"`
@@ -96,7 +98,7 @@ func (*Holder) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case holder.FieldID:
 			values[i] = new(sql.NullInt64)
-		case holder.FieldCreatedBy, holder.FieldUpdatedBy, holder.FieldDisplayName, holder.FieldDescription:
+		case holder.FieldCreatedBy, holder.FieldUpdatedBy, holder.FieldDisplayName, holder.FieldDescription, holder.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case holder.FieldCreatedAt, holder.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -156,6 +158,12 @@ func (h *Holder) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				h.Description = value.String
+			}
+		case holder.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				h.ExternalLink = value.String
 			}
 		default:
 			h.selectValues.Set(columns[i], values[i])
@@ -225,6 +233,9 @@ func (h *Holder) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(h.Description)
+	builder.WriteString(", ")
+	builder.WriteString("external_link=")
+	builder.WriteString(h.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
 }

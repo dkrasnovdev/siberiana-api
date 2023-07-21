@@ -22,6 +22,8 @@ type Organization struct {
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// CreatedBy holds the value of the "created_by" field.
@@ -68,7 +70,7 @@ func (*Organization) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case organization.FieldID:
 			values[i] = new(sql.NullInt64)
-		case organization.FieldDisplayName, organization.FieldDescription, organization.FieldCreatedBy, organization.FieldUpdatedBy:
+		case organization.FieldDisplayName, organization.FieldDescription, organization.FieldExternalLink, organization.FieldCreatedBy, organization.FieldUpdatedBy:
 			values[i] = new(sql.NullString)
 		case organization.FieldCreatedAt, organization.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -106,6 +108,12 @@ func (o *Organization) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				o.Description = value.String
+			}
+		case organization.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				o.ExternalLink = value.String
 			}
 		case organization.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -184,6 +192,9 @@ func (o *Organization) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(o.Description)
+	builder.WriteString(", ")
+	builder.WriteString("external_link=")
+	builder.WriteString(o.ExternalLink)
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(o.CreatedAt.Format(time.ANSIC))

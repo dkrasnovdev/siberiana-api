@@ -115,6 +115,26 @@ func (ru *RegionUpdate) ClearDescription() *RegionUpdate {
 	return ru
 }
 
+// SetExternalLink sets the "external_link" field.
+func (ru *RegionUpdate) SetExternalLink(s string) *RegionUpdate {
+	ru.mutation.SetExternalLink(s)
+	return ru
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (ru *RegionUpdate) SetNillableExternalLink(s *string) *RegionUpdate {
+	if s != nil {
+		ru.SetExternalLink(*s)
+	}
+	return ru
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (ru *RegionUpdate) ClearExternalLink() *RegionUpdate {
+	ru.mutation.ClearExternalLink()
+	return ru
+}
+
 // SetLocationID sets the "location" edge to the Location entity by ID.
 func (ru *RegionUpdate) SetLocationID(id int) *RegionUpdate {
 	ru.mutation.SetLocationID(id)
@@ -222,6 +242,12 @@ func (ru *RegionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ru.mutation.DescriptionCleared() {
 		_spec.ClearField(region.FieldDescription, field.TypeString)
+	}
+	if value, ok := ru.mutation.ExternalLink(); ok {
+		_spec.SetField(region.FieldExternalLink, field.TypeString, value)
+	}
+	if ru.mutation.ExternalLinkCleared() {
+		_spec.ClearField(region.FieldExternalLink, field.TypeString)
 	}
 	if ru.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -355,6 +381,26 @@ func (ruo *RegionUpdateOne) SetNillableDescription(s *string) *RegionUpdateOne {
 // ClearDescription clears the value of the "description" field.
 func (ruo *RegionUpdateOne) ClearDescription() *RegionUpdateOne {
 	ruo.mutation.ClearDescription()
+	return ruo
+}
+
+// SetExternalLink sets the "external_link" field.
+func (ruo *RegionUpdateOne) SetExternalLink(s string) *RegionUpdateOne {
+	ruo.mutation.SetExternalLink(s)
+	return ruo
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (ruo *RegionUpdateOne) SetNillableExternalLink(s *string) *RegionUpdateOne {
+	if s != nil {
+		ruo.SetExternalLink(*s)
+	}
+	return ruo
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (ruo *RegionUpdateOne) ClearExternalLink() *RegionUpdateOne {
+	ruo.mutation.ClearExternalLink()
 	return ruo
 }
 
@@ -495,6 +541,12 @@ func (ruo *RegionUpdateOne) sqlSave(ctx context.Context) (_node *Region, err err
 	}
 	if ruo.mutation.DescriptionCleared() {
 		_spec.ClearField(region.FieldDescription, field.TypeString)
+	}
+	if value, ok := ruo.mutation.ExternalLink(); ok {
+		_spec.SetField(region.FieldExternalLink, field.TypeString, value)
+	}
+	if ruo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(region.FieldExternalLink, field.TypeString)
 	}
 	if ruo.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{

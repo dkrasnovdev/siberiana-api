@@ -117,6 +117,26 @@ func (hu *HolderUpdate) ClearDescription() *HolderUpdate {
 	return hu
 }
 
+// SetExternalLink sets the "external_link" field.
+func (hu *HolderUpdate) SetExternalLink(s string) *HolderUpdate {
+	hu.mutation.SetExternalLink(s)
+	return hu
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (hu *HolderUpdate) SetNillableExternalLink(s *string) *HolderUpdate {
+	if s != nil {
+		hu.SetExternalLink(*s)
+	}
+	return hu
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (hu *HolderUpdate) ClearExternalLink() *HolderUpdate {
+	hu.mutation.ClearExternalLink()
+	return hu
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (hu *HolderUpdate) AddArtifactIDs(ids ...int) *HolderUpdate {
 	hu.mutation.AddArtifactIDs(ids...)
@@ -285,6 +305,12 @@ func (hu *HolderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if hu.mutation.DescriptionCleared() {
 		_spec.ClearField(holder.FieldDescription, field.TypeString)
+	}
+	if value, ok := hu.mutation.ExternalLink(); ok {
+		_spec.SetField(holder.FieldExternalLink, field.TypeString, value)
+	}
+	if hu.mutation.ExternalLinkCleared() {
+		_spec.ClearField(holder.FieldExternalLink, field.TypeString)
 	}
 	if hu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -495,6 +521,26 @@ func (huo *HolderUpdateOne) ClearDescription() *HolderUpdateOne {
 	return huo
 }
 
+// SetExternalLink sets the "external_link" field.
+func (huo *HolderUpdateOne) SetExternalLink(s string) *HolderUpdateOne {
+	huo.mutation.SetExternalLink(s)
+	return huo
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (huo *HolderUpdateOne) SetNillableExternalLink(s *string) *HolderUpdateOne {
+	if s != nil {
+		huo.SetExternalLink(*s)
+	}
+	return huo
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (huo *HolderUpdateOne) ClearExternalLink() *HolderUpdateOne {
+	huo.mutation.ClearExternalLink()
+	return huo
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (huo *HolderUpdateOne) AddArtifactIDs(ids ...int) *HolderUpdateOne {
 	huo.mutation.AddArtifactIDs(ids...)
@@ -693,6 +739,12 @@ func (huo *HolderUpdateOne) sqlSave(ctx context.Context) (_node *Holder, err err
 	}
 	if huo.mutation.DescriptionCleared() {
 		_spec.ClearField(holder.FieldDescription, field.TypeString)
+	}
+	if value, ok := huo.mutation.ExternalLink(); ok {
+		_spec.SetField(holder.FieldExternalLink, field.TypeString, value)
+	}
+	if huo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(holder.FieldExternalLink, field.TypeString)
 	}
 	if huo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
