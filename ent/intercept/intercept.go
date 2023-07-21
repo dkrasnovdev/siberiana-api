@@ -20,6 +20,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/heritage-api/ent/keyword"
 	"github.com/dkrasnovdev/heritage-api/ent/library"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
@@ -420,6 +421,33 @@ func (f TraverseHolder) Traverse(ctx context.Context, q ent.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *ent.HolderQuery", q)
+}
+
+// The HolderResponsibilityFunc type is an adapter to allow the use of ordinary function as a Querier.
+type HolderResponsibilityFunc func(context.Context, *ent.HolderResponsibilityQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f HolderResponsibilityFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.HolderResponsibilityQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.HolderResponsibilityQuery", q)
+}
+
+// The TraverseHolderResponsibility type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseHolderResponsibility func(context.Context, *ent.HolderResponsibilityQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseHolderResponsibility) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseHolderResponsibility) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.HolderResponsibilityQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.HolderResponsibilityQuery", q)
 }
 
 // The KeywordFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -962,6 +990,8 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.DistrictQuery, predicate.District, district.OrderOption]{typ: ent.TypeDistrict, tq: q}, nil
 	case *ent.HolderQuery:
 		return &query[*ent.HolderQuery, predicate.Holder, holder.OrderOption]{typ: ent.TypeHolder, tq: q}, nil
+	case *ent.HolderResponsibilityQuery:
+		return &query[*ent.HolderResponsibilityQuery, predicate.HolderResponsibility, holderresponsibility.OrderOption]{typ: ent.TypeHolderResponsibility, tq: q}, nil
 	case *ent.KeywordQuery:
 		return &query[*ent.KeywordQuery, predicate.Keyword, keyword.OrderOption]{typ: ent.TypeKeyword, tq: q}, nil
 	case *ent.LibraryQuery:

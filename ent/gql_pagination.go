@@ -26,6 +26,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/heritage-api/ent/keyword"
 	"github.com/dkrasnovdev/heritage-api/ent/library"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
@@ -3790,6 +3791,254 @@ func (h *Holder) ToEdge(order *HolderOrder) *HolderEdge {
 	return &HolderEdge{
 		Node:   h,
 		Cursor: order.Field.toCursor(h),
+	}
+}
+
+// HolderResponsibilityEdge is the edge representation of HolderResponsibility.
+type HolderResponsibilityEdge struct {
+	Node   *HolderResponsibility `json:"node"`
+	Cursor Cursor                `json:"cursor"`
+}
+
+// HolderResponsibilityConnection is the connection containing edges to HolderResponsibility.
+type HolderResponsibilityConnection struct {
+	Edges      []*HolderResponsibilityEdge `json:"edges"`
+	PageInfo   PageInfo                    `json:"pageInfo"`
+	TotalCount int                         `json:"totalCount"`
+}
+
+func (c *HolderResponsibilityConnection) build(nodes []*HolderResponsibility, pager *holderresponsibilityPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *HolderResponsibility
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *HolderResponsibility {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *HolderResponsibility {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*HolderResponsibilityEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &HolderResponsibilityEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// HolderResponsibilityPaginateOption enables pagination customization.
+type HolderResponsibilityPaginateOption func(*holderresponsibilityPager) error
+
+// WithHolderResponsibilityOrder configures pagination ordering.
+func WithHolderResponsibilityOrder(order *HolderResponsibilityOrder) HolderResponsibilityPaginateOption {
+	if order == nil {
+		order = DefaultHolderResponsibilityOrder
+	}
+	o := *order
+	return func(pager *holderresponsibilityPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultHolderResponsibilityOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithHolderResponsibilityFilter configures pagination filter.
+func WithHolderResponsibilityFilter(filter func(*HolderResponsibilityQuery) (*HolderResponsibilityQuery, error)) HolderResponsibilityPaginateOption {
+	return func(pager *holderresponsibilityPager) error {
+		if filter == nil {
+			return errors.New("HolderResponsibilityQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type holderresponsibilityPager struct {
+	reverse bool
+	order   *HolderResponsibilityOrder
+	filter  func(*HolderResponsibilityQuery) (*HolderResponsibilityQuery, error)
+}
+
+func newHolderResponsibilityPager(opts []HolderResponsibilityPaginateOption, reverse bool) (*holderresponsibilityPager, error) {
+	pager := &holderresponsibilityPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultHolderResponsibilityOrder
+	}
+	return pager, nil
+}
+
+func (p *holderresponsibilityPager) applyFilter(query *HolderResponsibilityQuery) (*HolderResponsibilityQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *holderresponsibilityPager) toCursor(hr *HolderResponsibility) Cursor {
+	return p.order.Field.toCursor(hr)
+}
+
+func (p *holderresponsibilityPager) applyCursors(query *HolderResponsibilityQuery, after, before *Cursor) (*HolderResponsibilityQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultHolderResponsibilityOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *holderresponsibilityPager) applyOrder(query *HolderResponsibilityQuery) *HolderResponsibilityQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultHolderResponsibilityOrder.Field {
+		query = query.Order(DefaultHolderResponsibilityOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *holderresponsibilityPager) orderExpr(query *HolderResponsibilityQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultHolderResponsibilityOrder.Field {
+			b.Comma().Ident(DefaultHolderResponsibilityOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to HolderResponsibility.
+func (hr *HolderResponsibilityQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...HolderResponsibilityPaginateOption,
+) (*HolderResponsibilityConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newHolderResponsibilityPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if hr, err = pager.applyFilter(hr); err != nil {
+		return nil, err
+	}
+	conn := &HolderResponsibilityConnection{Edges: []*HolderResponsibilityEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := hr.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if hr, err = pager.applyCursors(hr, after, before); err != nil {
+		return nil, err
+	}
+	if limit := paginateLimit(first, last); limit != 0 {
+		hr.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := hr.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	hr = pager.applyOrder(hr)
+	nodes, err := hr.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// HolderResponsibilityOrderField defines the ordering field of HolderResponsibility.
+type HolderResponsibilityOrderField struct {
+	// Value extracts the ordering value from the given HolderResponsibility.
+	Value    func(*HolderResponsibility) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) holderresponsibility.OrderOption
+	toCursor func(*HolderResponsibility) Cursor
+}
+
+// HolderResponsibilityOrder defines the ordering of HolderResponsibility.
+type HolderResponsibilityOrder struct {
+	Direction OrderDirection                  `json:"direction"`
+	Field     *HolderResponsibilityOrderField `json:"field"`
+}
+
+// DefaultHolderResponsibilityOrder is the default ordering of HolderResponsibility.
+var DefaultHolderResponsibilityOrder = &HolderResponsibilityOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &HolderResponsibilityOrderField{
+		Value: func(hr *HolderResponsibility) (ent.Value, error) {
+			return hr.ID, nil
+		},
+		column: holderresponsibility.FieldID,
+		toTerm: holderresponsibility.ByID,
+		toCursor: func(hr *HolderResponsibility) Cursor {
+			return Cursor{ID: hr.ID}
+		},
+	},
+}
+
+// ToEdge converts HolderResponsibility into HolderResponsibilityEdge.
+func (hr *HolderResponsibility) ToEdge(order *HolderResponsibilityOrder) *HolderResponsibilityEdge {
+	if order == nil {
+		order = DefaultHolderResponsibilityOrder
+	}
+	return &HolderResponsibilityEdge{
+		Node:   hr,
+		Cursor: order.Field.toCursor(hr),
 	}
 }
 

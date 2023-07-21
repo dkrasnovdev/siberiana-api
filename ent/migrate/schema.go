@@ -251,6 +251,16 @@ var (
 		Columns:    HoldersColumns,
 		PrimaryKey: []*schema.Column{HoldersColumns[0]},
 	}
+	// HolderResponsibilitiesColumns holds the columns for the "holder_responsibilities" table.
+	HolderResponsibilitiesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+	}
+	// HolderResponsibilitiesTable holds the schema information for the "holder_responsibilities" table.
+	HolderResponsibilitiesTable = &schema.Table{
+		Name:       "holder_responsibilities",
+		Columns:    HolderResponsibilitiesColumns,
+		PrimaryKey: []*schema.Column{HolderResponsibilitiesColumns[0]},
+	}
 	// KeywordsColumns holds the columns for the "keywords" table.
 	KeywordsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -609,6 +619,31 @@ var (
 			},
 		},
 	}
+	// HolderHolderResponsibilitiesColumns holds the columns for the "holder_holder_responsibilities" table.
+	HolderHolderResponsibilitiesColumns = []*schema.Column{
+		{Name: "holder_id", Type: field.TypeInt},
+		{Name: "holder_responsibility_id", Type: field.TypeInt},
+	}
+	// HolderHolderResponsibilitiesTable holds the schema information for the "holder_holder_responsibilities" table.
+	HolderHolderResponsibilitiesTable = &schema.Table{
+		Name:       "holder_holder_responsibilities",
+		Columns:    HolderHolderResponsibilitiesColumns,
+		PrimaryKey: []*schema.Column{HolderHolderResponsibilitiesColumns[0], HolderHolderResponsibilitiesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "holder_holder_responsibilities_holder_id",
+				Columns:    []*schema.Column{HolderHolderResponsibilitiesColumns[0]},
+				RefColumns: []*schema.Column{HoldersColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "holder_holder_responsibilities_holder_responsibility_id",
+				Columns:    []*schema.Column{HolderHolderResponsibilitiesColumns[1]},
+				RefColumns: []*schema.Column{HolderResponsibilitiesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// MediumArtifactsColumns holds the columns for the "medium_artifacts" table.
 	MediumArtifactsColumns = []*schema.Column{
 		{Name: "medium_id", Type: field.TypeInt},
@@ -798,6 +833,7 @@ var (
 		CulturesTable,
 		DistrictsTable,
 		HoldersTable,
+		HolderResponsibilitiesTable,
 		KeywordsTable,
 		LibrariesTable,
 		LicensesTable,
@@ -818,6 +854,7 @@ var (
 		SettlementsTable,
 		TechniquesTable,
 		HolderArtifactsTable,
+		HolderHolderResponsibilitiesTable,
 		MediumArtifactsTable,
 		PersonArtifactsTable,
 		PersonProjectsTable,
@@ -844,6 +881,8 @@ func init() {
 	SettlementsTable.ForeignKeys[0].RefTable = LocationsTable
 	HolderArtifactsTable.ForeignKeys[0].RefTable = HoldersTable
 	HolderArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
+	HolderHolderResponsibilitiesTable.ForeignKeys[0].RefTable = HoldersTable
+	HolderHolderResponsibilitiesTable.ForeignKeys[1].RefTable = HolderResponsibilitiesTable
 	MediumArtifactsTable.ForeignKeys[0].RefTable = MediaTable
 	MediumArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
 	PersonArtifactsTable.ForeignKeys[0].RefTable = PersonsTable

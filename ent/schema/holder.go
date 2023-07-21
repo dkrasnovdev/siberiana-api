@@ -60,6 +60,7 @@ func (Holder) Fields() []ent.Field {
 func (Holder) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("artifacts", Artifact.Type),
+		edge.To("holder_responsibilities", HolderResponsibility.Type),
 		edge.To("person", Person.Type).Unique(),
 		edge.To("organization", Organization.Type).Unique(),
 	}

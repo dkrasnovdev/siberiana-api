@@ -19,6 +19,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/heritage-api/ent/keyword"
 	"github.com/dkrasnovdev/heritage-api/ent/library"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
@@ -3906,6 +3907,10 @@ type HolderWhereInput struct {
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
 
+	// "holder_responsibilities" edge predicates.
+	HasHolderResponsibilities     *bool                             `json:"hasHolderResponsibilities,omitempty"`
+	HasHolderResponsibilitiesWith []*HolderResponsibilityWhereInput `json:"hasHolderResponsibilitiesWith,omitempty"`
+
 	// "person" edge predicates.
 	HasPerson     *bool               `json:"hasPerson,omitempty"`
 	HasPersonWith []*PersonWhereInput `json:"hasPersonWith,omitempty"`
@@ -4221,6 +4226,24 @@ func (i *HolderWhereInput) P() (predicate.Holder, error) {
 		}
 		predicates = append(predicates, holder.HasArtifactsWith(with...))
 	}
+	if i.HasHolderResponsibilities != nil {
+		p := holder.HasHolderResponsibilities()
+		if !*i.HasHolderResponsibilities {
+			p = holder.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasHolderResponsibilitiesWith) > 0 {
+		with := make([]predicate.HolderResponsibility, 0, len(i.HasHolderResponsibilitiesWith))
+		for _, w := range i.HasHolderResponsibilitiesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasHolderResponsibilitiesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, holder.HasHolderResponsibilitiesWith(with...))
+	}
 	if i.HasPerson != nil {
 		p := holder.HasPerson()
 		if !*i.HasPerson {
@@ -4264,6 +4287,152 @@ func (i *HolderWhereInput) P() (predicate.Holder, error) {
 		return predicates[0], nil
 	default:
 		return holder.And(predicates...), nil
+	}
+}
+
+// HolderResponsibilityWhereInput represents a where input for filtering HolderResponsibility queries.
+type HolderResponsibilityWhereInput struct {
+	Predicates []predicate.HolderResponsibility  `json:"-"`
+	Not        *HolderResponsibilityWhereInput   `json:"not,omitempty"`
+	Or         []*HolderResponsibilityWhereInput `json:"or,omitempty"`
+	And        []*HolderResponsibilityWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+
+	// "holder" edge predicates.
+	HasHolder     *bool               `json:"hasHolder,omitempty"`
+	HasHolderWith []*HolderWhereInput `json:"hasHolderWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *HolderResponsibilityWhereInput) AddPredicates(predicates ...predicate.HolderResponsibility) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the HolderResponsibilityWhereInput filter on the HolderResponsibilityQuery builder.
+func (i *HolderResponsibilityWhereInput) Filter(q *HolderResponsibilityQuery) (*HolderResponsibilityQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyHolderResponsibilityWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyHolderResponsibilityWhereInput is returned in case the HolderResponsibilityWhereInput is empty.
+var ErrEmptyHolderResponsibilityWhereInput = errors.New("ent: empty predicate HolderResponsibilityWhereInput")
+
+// P returns a predicate for filtering holderresponsibilities.
+// An error is returned if the input is empty or invalid.
+func (i *HolderResponsibilityWhereInput) P() (predicate.HolderResponsibility, error) {
+	var predicates []predicate.HolderResponsibility
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, holderresponsibility.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.HolderResponsibility, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, holderresponsibility.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.HolderResponsibility, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, holderresponsibility.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, holderresponsibility.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, holderresponsibility.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, holderresponsibility.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, holderresponsibility.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, holderresponsibility.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, holderresponsibility.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, holderresponsibility.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, holderresponsibility.IDLTE(*i.IDLTE))
+	}
+
+	if i.HasHolder != nil {
+		p := holderresponsibility.HasHolder()
+		if !*i.HasHolder {
+			p = holderresponsibility.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasHolderWith) > 0 {
+		with := make([]predicate.Holder, 0, len(i.HasHolderWith))
+		for _, w := range i.HasHolderWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasHolderWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, holderresponsibility.HasHolderWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyHolderResponsibilityWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return holderresponsibility.And(predicates...), nil
 	}
 }
 

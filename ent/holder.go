@@ -41,17 +41,20 @@ type Holder struct {
 type HolderEdges struct {
 	// Artifacts holds the value of the artifacts edge.
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
+	// HolderResponsibilities holds the value of the holder_responsibilities edge.
+	HolderResponsibilities []*HolderResponsibility `json:"holder_responsibilities,omitempty"`
 	// Person holds the value of the person edge.
 	Person *Person `json:"person,omitempty"`
 	// Organization holds the value of the organization edge.
 	Organization *Organization `json:"organization,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [4]map[string]int
 
-	namedArtifacts map[string][]*Artifact
+	namedArtifacts              map[string][]*Artifact
+	namedHolderResponsibilities map[string][]*HolderResponsibility
 }
 
 // ArtifactsOrErr returns the Artifacts value or an error if the edge
@@ -63,10 +66,19 @@ func (e HolderEdges) ArtifactsOrErr() ([]*Artifact, error) {
 	return nil, &NotLoadedError{edge: "artifacts"}
 }
 
+// HolderResponsibilitiesOrErr returns the HolderResponsibilities value or an error if the edge
+// was not loaded in eager-loading.
+func (e HolderEdges) HolderResponsibilitiesOrErr() ([]*HolderResponsibility, error) {
+	if e.loadedTypes[1] {
+		return e.HolderResponsibilities, nil
+	}
+	return nil, &NotLoadedError{edge: "holder_responsibilities"}
+}
+
 // PersonOrErr returns the Person value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e HolderEdges) PersonOrErr() (*Person, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		if e.Person == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: person.Label}
@@ -79,7 +91,7 @@ func (e HolderEdges) PersonOrErr() (*Person, error) {
 // OrganizationOrErr returns the Organization value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e HolderEdges) OrganizationOrErr() (*Organization, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		if e.Organization == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: organization.Label}
@@ -175,6 +187,11 @@ func (h *Holder) QueryArtifacts() *ArtifactQuery {
 	return NewHolderClient(h.config).QueryArtifacts(h)
 }
 
+// QueryHolderResponsibilities queries the "holder_responsibilities" edge of the Holder entity.
+func (h *Holder) QueryHolderResponsibilities() *HolderResponsibilityQuery {
+	return NewHolderClient(h.config).QueryHolderResponsibilities(h)
+}
+
 // QueryPerson queries the "person" edge of the Holder entity.
 func (h *Holder) QueryPerson() *PersonQuery {
 	return NewHolderClient(h.config).QueryPerson(h)
@@ -250,6 +267,30 @@ func (h *Holder) appendNamedArtifacts(name string, edges ...*Artifact) {
 		h.Edges.namedArtifacts[name] = []*Artifact{}
 	} else {
 		h.Edges.namedArtifacts[name] = append(h.Edges.namedArtifacts[name], edges...)
+	}
+}
+
+// NamedHolderResponsibilities returns the HolderResponsibilities named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (h *Holder) NamedHolderResponsibilities(name string) ([]*HolderResponsibility, error) {
+	if h.Edges.namedHolderResponsibilities == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := h.Edges.namedHolderResponsibilities[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (h *Holder) appendNamedHolderResponsibilities(name string, edges ...*HolderResponsibility) {
+	if h.Edges.namedHolderResponsibilities == nil {
+		h.Edges.namedHolderResponsibilities = make(map[string][]*HolderResponsibility)
+	}
+	if len(edges) == 0 {
+		h.Edges.namedHolderResponsibilities[name] = []*HolderResponsibility{}
+	} else {
+		h.Edges.namedHolderResponsibilities[name] = append(h.Edges.namedHolderResponsibilities[name], edges...)
 	}
 }
 

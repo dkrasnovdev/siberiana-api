@@ -25,6 +25,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/heritage-api/ent/keyword"
 	"github.com/dkrasnovdev/heritage-api/ent/library"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
@@ -112,6 +113,11 @@ var holderImplementors = []string{"Holder", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Holder) IsNode() {}
+
+var holderresponsibilityImplementors = []string{"HolderResponsibility", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*HolderResponsibility) IsNode() {}
 
 var keywordImplementors = []string{"Keyword", "Node"}
 
@@ -402,6 +408,18 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 		query := c.Holder.Query().
 			Where(holder.ID(id))
 		query, err := query.CollectFields(ctx, holderImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case holderresponsibility.Table:
+		query := c.HolderResponsibility.Query().
+			Where(holderresponsibility.ID(id))
+		query, err := query.CollectFields(ctx, holderresponsibilityImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -891,6 +909,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 		query := c.Holder.Query().
 			Where(holder.IDIn(ids...))
 		query, err := query.CollectFields(ctx, holderImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case holderresponsibility.Table:
+		query := c.HolderResponsibility.Query().
+			Where(holderresponsibility.IDIn(ids...))
+		query, err := query.CollectFields(ctx, holderresponsibilityImplementors...)
 		if err != nil {
 			return nil, err
 		}

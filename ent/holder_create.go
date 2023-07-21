@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 )
@@ -112,6 +113,21 @@ func (hc *HolderCreate) AddArtifacts(a ...*Artifact) *HolderCreate {
 		ids[i] = a[i].ID
 	}
 	return hc.AddArtifactIDs(ids...)
+}
+
+// AddHolderResponsibilityIDs adds the "holder_responsibilities" edge to the HolderResponsibility entity by IDs.
+func (hc *HolderCreate) AddHolderResponsibilityIDs(ids ...int) *HolderCreate {
+	hc.mutation.AddHolderResponsibilityIDs(ids...)
+	return hc
+}
+
+// AddHolderResponsibilities adds the "holder_responsibilities" edges to the HolderResponsibility entity.
+func (hc *HolderCreate) AddHolderResponsibilities(h ...*HolderResponsibility) *HolderCreate {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return hc.AddHolderResponsibilityIDs(ids...)
 }
 
 // SetPersonID sets the "person" edge to the Person entity by ID.
@@ -276,6 +292,22 @@ func (hc *HolderCreate) createSpec() (*Holder, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := hc.mutation.HolderResponsibilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   holder.HolderResponsibilitiesTable,
+			Columns: holder.HolderResponsibilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holderresponsibility.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

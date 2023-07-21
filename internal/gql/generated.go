@@ -225,16 +225,17 @@ type ComplexityRoot struct {
 	}
 
 	Holder struct {
-		Artifacts    func(childComplexity int) int
-		BeginDate    func(childComplexity int) int
-		CreatedAt    func(childComplexity int) int
-		CreatedBy    func(childComplexity int) int
-		EndDate      func(childComplexity int) int
-		ID           func(childComplexity int) int
-		Organization func(childComplexity int) int
-		Person       func(childComplexity int) int
-		UpdatedAt    func(childComplexity int) int
-		UpdatedBy    func(childComplexity int) int
+		Artifacts              func(childComplexity int) int
+		BeginDate              func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		EndDate                func(childComplexity int) int
+		HolderResponsibilities func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		Organization           func(childComplexity int) int
+		Person                 func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
 	}
 
 	HolderConnection struct {
@@ -246,6 +247,11 @@ type ComplexityRoot struct {
 	HolderEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
+	}
+
+	HolderResponsibility struct {
+		Holder func(childComplexity int) int
+		ID     func(childComplexity int) int
 	}
 
 	Keyword struct {
@@ -1533,6 +1539,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Holder.EndDate(childComplexity), true
 
+	case "Holder.holderResponsibilities":
+		if e.complexity.Holder.HolderResponsibilities == nil {
+			break
+		}
+
+		return e.complexity.Holder.HolderResponsibilities(childComplexity), true
+
 	case "Holder.id":
 		if e.complexity.Holder.ID == nil {
 			break
@@ -1602,6 +1615,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.HolderEdge.Node(childComplexity), true
+
+	case "HolderResponsibility.holder":
+		if e.complexity.HolderResponsibility.Holder == nil {
+			break
+		}
+
+		return e.complexity.HolderResponsibility.Holder(childComplexity), true
+
+	case "HolderResponsibility.id":
+		if e.complexity.HolderResponsibility.ID == nil {
+			break
+		}
+
+		return e.complexity.HolderResponsibility.ID(childComplexity), true
 
 	case "Keyword.id":
 		if e.complexity.Keyword.ID == nil {
@@ -3880,6 +3907,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputDistrictOrder,
 		ec.unmarshalInputDistrictWhereInput,
 		ec.unmarshalInputHolderOrder,
+		ec.unmarshalInputHolderResponsibilityWhereInput,
 		ec.unmarshalInputHolderWhereInput,
 		ec.unmarshalInputKeywordWhereInput,
 		ec.unmarshalInputLibraryWhereInput,
@@ -7095,6 +7123,8 @@ func (ec *executionContext) fieldContext_Artifact_holders(ctx context.Context, f
 				return ec.fieldContext_Holder_endDate(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Holder_artifacts(ctx, field)
+			case "holderResponsibilities":
+				return ec.fieldContext_Holder_holderResponsibilities(ctx, field)
 			case "person":
 				return ec.fieldContext_Holder_person(ctx, field)
 			case "organization":
@@ -11698,6 +11728,53 @@ func (ec *executionContext) fieldContext_Holder_artifacts(ctx context.Context, f
 	return fc, nil
 }
 
+func (ec *executionContext) _Holder_holderResponsibilities(ctx context.Context, field graphql.CollectedField, obj *ent.Holder) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Holder_holderResponsibilities(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.HolderResponsibilities(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.HolderResponsibility)
+	fc.Result = res
+	return ec.marshalOHolderResponsibility2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolderResponsibilityᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Holder_holderResponsibilities(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Holder",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_HolderResponsibility_id(ctx, field)
+			case "holder":
+				return ec.fieldContext_HolderResponsibility_holder(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type HolderResponsibility", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Holder_person(ctx context.Context, field graphql.CollectedField, obj *ent.Holder) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Holder_person(ctx, field)
 	if err != nil {
@@ -12055,6 +12132,8 @@ func (ec *executionContext) fieldContext_HolderEdge_node(ctx context.Context, fi
 				return ec.fieldContext_Holder_endDate(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Holder_artifacts(ctx, field)
+			case "holderResponsibilities":
+				return ec.fieldContext_Holder_holderResponsibilities(ctx, field)
 			case "person":
 				return ec.fieldContext_Holder_person(ctx, field)
 			case "organization":
@@ -12105,6 +12184,115 @@ func (ec *executionContext) fieldContext_HolderEdge_cursor(ctx context.Context, 
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Cursor does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _HolderResponsibility_id(ctx context.Context, field graphql.CollectedField, obj *ent.HolderResponsibility) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_HolderResponsibility_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNID2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_HolderResponsibility_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "HolderResponsibility",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _HolderResponsibility_holder(ctx context.Context, field graphql.CollectedField, obj *ent.HolderResponsibility) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_HolderResponsibility_holder(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Holder(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Holder)
+	fc.Result = res
+	return ec.marshalOHolder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolderᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_HolderResponsibility_holder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "HolderResponsibility",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Holder_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Holder_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Holder_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Holder_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Holder_updatedBy(ctx, field)
+			case "beginDate":
+				return ec.fieldContext_Holder_beginDate(ctx, field)
+			case "endDate":
+				return ec.fieldContext_Holder_endDate(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Holder_artifacts(ctx, field)
+			case "holderResponsibilities":
+				return ec.fieldContext_Holder_holderResponsibilities(ctx, field)
+			case "person":
+				return ec.fieldContext_Holder_person(ctx, field)
+			case "organization":
+				return ec.fieldContext_Holder_organization(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Holder", field.Name)
 		},
 	}
 	return fc, nil
@@ -16660,6 +16848,8 @@ func (ec *executionContext) fieldContext_Mutation_createHolder(ctx context.Conte
 				return ec.fieldContext_Holder_endDate(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Holder_artifacts(ctx, field)
+			case "holderResponsibilities":
+				return ec.fieldContext_Holder_holderResponsibilities(ctx, field)
 			case "person":
 				return ec.fieldContext_Holder_person(ctx, field)
 			case "organization":
@@ -16737,6 +16927,8 @@ func (ec *executionContext) fieldContext_Mutation_updateHolder(ctx context.Conte
 				return ec.fieldContext_Holder_endDate(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Holder_artifacts(ctx, field)
+			case "holderResponsibilities":
+				return ec.fieldContext_Holder_holderResponsibilities(ctx, field)
 			case "person":
 				return ec.fieldContext_Holder_person(ctx, field)
 			case "organization":
@@ -19399,6 +19591,8 @@ func (ec *executionContext) fieldContext_Organization_holder(ctx context.Context
 				return ec.fieldContext_Holder_endDate(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Holder_artifacts(ctx, field)
+			case "holderResponsibilities":
+				return ec.fieldContext_Holder_holderResponsibilities(ctx, field)
 			case "person":
 				return ec.fieldContext_Holder_person(ctx, field)
 			case "organization":
@@ -20902,6 +21096,8 @@ func (ec *executionContext) fieldContext_Person_holder(ctx context.Context, fiel
 				return ec.fieldContext_Holder_endDate(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Holder_artifacts(ctx, field)
+			case "holderResponsibilities":
+				return ec.fieldContext_Holder_holderResponsibilities(ctx, field)
 			case "person":
 				return ec.fieldContext_Holder_person(ctx, field)
 			case "organization":
@@ -33972,7 +34168,7 @@ func (ec *executionContext) unmarshalInputCreateHolderInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "beginDate", "endDate", "artifactIDs", "personID", "organizationID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "beginDate", "endDate", "artifactIDs", "holderResponsibilityIDs", "personID", "organizationID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -34042,6 +34238,15 @@ func (ec *executionContext) unmarshalInputCreateHolderInput(ctx context.Context,
 				return it, err
 			}
 			it.ArtifactIDs = data
+		case "holderResponsibilityIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("holderResponsibilityIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HolderResponsibilityIDs = data
 		case "personID":
 			var err error
 
@@ -37246,6 +37451,143 @@ func (ec *executionContext) unmarshalInputHolderOrder(ctx context.Context, obj i
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputHolderResponsibilityWhereInput(ctx context.Context, obj interface{}) (ent.HolderResponsibilityWhereInput, error) {
+	var it ent.HolderResponsibilityWhereInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "hasHolder", "hasHolderWith"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "not":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
+			data, err := ec.unmarshalOHolderResponsibilityWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolderResponsibilityWhereInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Not = data
+		case "and":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
+			data, err := ec.unmarshalOHolderResponsibilityWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolderResponsibilityWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.And = data
+		case "or":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
+			data, err := ec.unmarshalOHolderResponsibilityWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolderResponsibilityWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Or = data
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "idNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNEQ = data
+		case "idIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDIn = data
+		case "idNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNotIn = data
+		case "idGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGT"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDGT = data
+		case "idGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGTE"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDGTE = data
+		case "idLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLT"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDLT = data
+		case "idLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLTE"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDLTE = data
+		case "hasHolder":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasHolder"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasHolder = data
+		case "hasHolderWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasHolderWith"))
+			data, err := ec.unmarshalOHolderWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolderWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasHolderWith = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputHolderWhereInput(ctx context.Context, obj interface{}) (ent.HolderWhereInput, error) {
 	var it ent.HolderWhereInput
 	asMap := map[string]interface{}{}
@@ -37253,7 +37595,7 @@ func (ec *executionContext) unmarshalInputHolderWhereInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "beginDate", "beginDateNEQ", "beginDateIn", "beginDateNotIn", "beginDateGT", "beginDateGTE", "beginDateLT", "beginDateLTE", "endDate", "endDateNEQ", "endDateIn", "endDateNotIn", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "hasArtifacts", "hasArtifactsWith", "hasPerson", "hasPersonWith", "hasOrganization", "hasOrganizationWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "beginDate", "beginDateNEQ", "beginDateIn", "beginDateNotIn", "beginDateGT", "beginDateGTE", "beginDateLT", "beginDateLTE", "endDate", "endDateNEQ", "endDateIn", "endDateNotIn", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "hasArtifacts", "hasArtifactsWith", "hasHolderResponsibilities", "hasHolderResponsibilitiesWith", "hasPerson", "hasPersonWith", "hasOrganization", "hasOrganizationWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -37953,6 +38295,24 @@ func (ec *executionContext) unmarshalInputHolderWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.HasArtifactsWith = data
+		case "hasHolderResponsibilities":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasHolderResponsibilities"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasHolderResponsibilities = data
+		case "hasHolderResponsibilitiesWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasHolderResponsibilitiesWith"))
+			data, err := ec.unmarshalOHolderResponsibilityWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolderResponsibilityWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasHolderResponsibilitiesWith = data
 		case "hasPerson":
 			var err error
 
@@ -52366,7 +52726,7 @@ func (ec *executionContext) unmarshalInputUpdateHolderInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "beginDate", "endDate", "clearEndDate", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "personID", "clearPerson", "organizationID", "clearOrganization"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "beginDate", "endDate", "clearEndDate", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addHolderResponsibilityIDs", "removeHolderResponsibilityIDs", "clearHolderResponsibilities", "personID", "clearPerson", "organizationID", "clearOrganization"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -52472,6 +52832,33 @@ func (ec *executionContext) unmarshalInputUpdateHolderInput(ctx context.Context,
 				return it, err
 			}
 			it.ClearArtifacts = data
+		case "addHolderResponsibilityIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addHolderResponsibilityIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddHolderResponsibilityIDs = data
+		case "removeHolderResponsibilityIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeHolderResponsibilityIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveHolderResponsibilityIDs = data
+		case "clearHolderResponsibilities":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearHolderResponsibilities"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearHolderResponsibilities = data
 		case "personID":
 			var err error
 
@@ -55083,6 +55470,11 @@ func (ec *executionContext) _Node(ctx context.Context, sel ast.SelectionSet, obj
 			return graphql.Null
 		}
 		return ec._Holder(ctx, sel, obj)
+	case *ent.HolderResponsibility:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._HolderResponsibility(ctx, sel, obj)
 	case *ent.Keyword:
 		if obj == nil {
 			return graphql.Null
@@ -56931,6 +57323,39 @@ func (ec *executionContext) _Holder(ctx context.Context, sel ast.SelectionSet, o
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "holderResponsibilities":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Holder_holderResponsibilities(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "person":
 			field := field
 
@@ -57084,6 +57509,78 @@ func (ec *executionContext) _HolderEdge(ctx context.Context, sel ast.SelectionSe
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var holderResponsibilityImplementors = []string{"HolderResponsibility", "Node"}
+
+func (ec *executionContext) _HolderResponsibility(ctx context.Context, sel ast.SelectionSet, obj *ent.HolderResponsibility) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, holderResponsibilityImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("HolderResponsibility")
+		case "id":
+			out.Values[i] = ec._HolderResponsibility_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "holder":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._HolderResponsibility_holder(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -61684,6 +62181,21 @@ func (ec *executionContext) marshalNHolderOrderField2ᚖgithubᚗcomᚋdkrasnovd
 	return v
 }
 
+func (ec *executionContext) marshalNHolderResponsibility2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolderResponsibility(ctx context.Context, sel ast.SelectionSet, v *ent.HolderResponsibility) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._HolderResponsibility(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNHolderResponsibilityWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolderResponsibilityWhereInput(ctx context.Context, v interface{}) (*ent.HolderResponsibilityWhereInput, error) {
+	res, err := ec.unmarshalInputHolderResponsibilityWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNHolderWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolderWhereInput(ctx context.Context, v interface{}) (*ent.HolderWhereInput, error) {
 	res, err := ec.unmarshalInputHolderWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
@@ -63932,6 +64444,81 @@ func (ec *executionContext) unmarshalOHolderOrder2ᚕᚖgithubᚗcomᚋdkrasnovd
 		}
 	}
 	return res, nil
+}
+
+func (ec *executionContext) marshalOHolderResponsibility2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolderResponsibilityᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.HolderResponsibility) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNHolderResponsibility2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolderResponsibility(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOHolderResponsibilityWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolderResponsibilityWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.HolderResponsibilityWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*ent.HolderResponsibilityWhereInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNHolderResponsibilityWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolderResponsibilityWhereInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOHolderResponsibilityWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolderResponsibilityWhereInput(ctx context.Context, v interface{}) (*ent.HolderResponsibilityWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputHolderResponsibilityWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalOHolderWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolderWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.HolderWhereInput, error) {

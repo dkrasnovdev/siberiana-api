@@ -42,6 +42,9 @@ type District func(*sql.Selector)
 // Holder is the predicate function for holder builders.
 type Holder func(*sql.Selector)
 
+// HolderResponsibility is the predicate function for holderresponsibility builders.
+type HolderResponsibility func(*sql.Selector)
+
 // Keyword is the predicate function for keyword builders.
 type Keyword func(*sql.Selector)
 

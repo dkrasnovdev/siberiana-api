@@ -864,15 +864,16 @@ func (c *DistrictUpdateOne) SetInput(i UpdateDistrictInput) *DistrictUpdateOne {
 
 // CreateHolderInput represents a mutation input for creating holders.
 type CreateHolderInput struct {
-	CreatedAt      *time.Time
-	CreatedBy      *string
-	UpdatedAt      *time.Time
-	UpdatedBy      *string
-	BeginDate      time.Time
-	EndDate        *time.Time
-	ArtifactIDs    []int
-	PersonID       *int
-	OrganizationID *int
+	CreatedAt               *time.Time
+	CreatedBy               *string
+	UpdatedAt               *time.Time
+	UpdatedBy               *string
+	BeginDate               time.Time
+	EndDate                 *time.Time
+	ArtifactIDs             []int
+	HolderResponsibilityIDs []int
+	PersonID                *int
+	OrganizationID          *int
 }
 
 // Mutate applies the CreateHolderInput on the HolderMutation builder.
@@ -896,6 +897,9 @@ func (i *CreateHolderInput) Mutate(m *HolderMutation) {
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
+	if v := i.HolderResponsibilityIDs; len(v) > 0 {
+		m.AddHolderResponsibilityIDs(v...)
+	}
 	if v := i.PersonID; v != nil {
 		m.SetPersonID(*v)
 	}
@@ -912,21 +916,24 @@ func (c *HolderCreate) SetInput(i CreateHolderInput) *HolderCreate {
 
 // UpdateHolderInput represents a mutation input for updating holders.
 type UpdateHolderInput struct {
-	ClearCreatedBy    bool
-	CreatedBy         *string
-	UpdatedAt         *time.Time
-	ClearUpdatedBy    bool
-	UpdatedBy         *string
-	BeginDate         *time.Time
-	ClearEndDate      bool
-	EndDate           *time.Time
-	ClearArtifacts    bool
-	AddArtifactIDs    []int
-	RemoveArtifactIDs []int
-	ClearPerson       bool
-	PersonID          *int
-	ClearOrganization bool
-	OrganizationID    *int
+	ClearCreatedBy                bool
+	CreatedBy                     *string
+	UpdatedAt                     *time.Time
+	ClearUpdatedBy                bool
+	UpdatedBy                     *string
+	BeginDate                     *time.Time
+	ClearEndDate                  bool
+	EndDate                       *time.Time
+	ClearArtifacts                bool
+	AddArtifactIDs                []int
+	RemoveArtifactIDs             []int
+	ClearHolderResponsibilities   bool
+	AddHolderResponsibilityIDs    []int
+	RemoveHolderResponsibilityIDs []int
+	ClearPerson                   bool
+	PersonID                      *int
+	ClearOrganization             bool
+	OrganizationID                *int
 }
 
 // Mutate applies the UpdateHolderInput on the HolderMutation builder.
@@ -963,6 +970,15 @@ func (i *UpdateHolderInput) Mutate(m *HolderMutation) {
 	}
 	if v := i.RemoveArtifactIDs; len(v) > 0 {
 		m.RemoveArtifactIDs(v...)
+	}
+	if i.ClearHolderResponsibilities {
+		m.ClearHolderResponsibilities()
+	}
+	if v := i.AddHolderResponsibilityIDs; len(v) > 0 {
+		m.AddHolderResponsibilityIDs(v...)
+	}
+	if v := i.RemoveHolderResponsibilityIDs; len(v) > 0 {
+		m.RemoveHolderResponsibilityIDs(v...)
 	}
 	if i.ClearPerson {
 		m.ClearPerson()

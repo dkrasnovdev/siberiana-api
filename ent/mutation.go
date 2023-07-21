@@ -18,6 +18,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/medium"
@@ -55,6 +56,7 @@ const (
 	TypeCulture               = "Culture"
 	TypeDistrict              = "District"
 	TypeHolder                = "Holder"
+	TypeHolderResponsibility  = "HolderResponsibility"
 	TypeKeyword               = "Keyword"
 	TypeLibrary               = "Library"
 	TypeLicense               = "License"
@@ -7877,26 +7879,29 @@ func (m *DistrictMutation) ResetEdge(name string) error {
 // HolderMutation represents an operation that mutates the Holder nodes in the graph.
 type HolderMutation struct {
 	config
-	op                  Op
-	typ                 string
-	id                  *int
-	created_at          *time.Time
-	created_by          *string
-	updated_at          *time.Time
-	updated_by          *string
-	begin_date          *time.Time
-	end_date            *time.Time
-	clearedFields       map[string]struct{}
-	artifacts           map[int]struct{}
-	removedartifacts    map[int]struct{}
-	clearedartifacts    bool
-	person              *int
-	clearedperson       bool
-	organization        *int
-	clearedorganization bool
-	done                bool
-	oldValue            func(context.Context) (*Holder, error)
-	predicates          []predicate.Holder
+	op                             Op
+	typ                            string
+	id                             *int
+	created_at                     *time.Time
+	created_by                     *string
+	updated_at                     *time.Time
+	updated_by                     *string
+	begin_date                     *time.Time
+	end_date                       *time.Time
+	clearedFields                  map[string]struct{}
+	artifacts                      map[int]struct{}
+	removedartifacts               map[int]struct{}
+	clearedartifacts               bool
+	holder_responsibilities        map[int]struct{}
+	removedholder_responsibilities map[int]struct{}
+	clearedholder_responsibilities bool
+	person                         *int
+	clearedperson                  bool
+	organization                   *int
+	clearedorganization            bool
+	done                           bool
+	oldValue                       func(context.Context) (*Holder, error)
+	predicates                     []predicate.Holder
 }
 
 var _ ent.Mutation = (*HolderMutation)(nil)
@@ -8306,6 +8311,60 @@ func (m *HolderMutation) ResetArtifacts() {
 	m.removedartifacts = nil
 }
 
+// AddHolderResponsibilityIDs adds the "holder_responsibilities" edge to the HolderResponsibility entity by ids.
+func (m *HolderMutation) AddHolderResponsibilityIDs(ids ...int) {
+	if m.holder_responsibilities == nil {
+		m.holder_responsibilities = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.holder_responsibilities[ids[i]] = struct{}{}
+	}
+}
+
+// ClearHolderResponsibilities clears the "holder_responsibilities" edge to the HolderResponsibility entity.
+func (m *HolderMutation) ClearHolderResponsibilities() {
+	m.clearedholder_responsibilities = true
+}
+
+// HolderResponsibilitiesCleared reports if the "holder_responsibilities" edge to the HolderResponsibility entity was cleared.
+func (m *HolderMutation) HolderResponsibilitiesCleared() bool {
+	return m.clearedholder_responsibilities
+}
+
+// RemoveHolderResponsibilityIDs removes the "holder_responsibilities" edge to the HolderResponsibility entity by IDs.
+func (m *HolderMutation) RemoveHolderResponsibilityIDs(ids ...int) {
+	if m.removedholder_responsibilities == nil {
+		m.removedholder_responsibilities = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.holder_responsibilities, ids[i])
+		m.removedholder_responsibilities[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedHolderResponsibilities returns the removed IDs of the "holder_responsibilities" edge to the HolderResponsibility entity.
+func (m *HolderMutation) RemovedHolderResponsibilitiesIDs() (ids []int) {
+	for id := range m.removedholder_responsibilities {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// HolderResponsibilitiesIDs returns the "holder_responsibilities" edge IDs in the mutation.
+func (m *HolderMutation) HolderResponsibilitiesIDs() (ids []int) {
+	for id := range m.holder_responsibilities {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetHolderResponsibilities resets all changes to the "holder_responsibilities" edge.
+func (m *HolderMutation) ResetHolderResponsibilities() {
+	m.holder_responsibilities = nil
+	m.clearedholder_responsibilities = false
+	m.removedholder_responsibilities = nil
+}
+
 // SetPersonID sets the "person" edge to the Person entity by id.
 func (m *HolderMutation) SetPersonID(id int) {
 	m.person = &id
@@ -8623,9 +8682,12 @@ func (m *HolderMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *HolderMutation) AddedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.artifacts != nil {
 		edges = append(edges, holder.EdgeArtifacts)
+	}
+	if m.holder_responsibilities != nil {
+		edges = append(edges, holder.EdgeHolderResponsibilities)
 	}
 	if m.person != nil {
 		edges = append(edges, holder.EdgePerson)
@@ -8646,6 +8708,12 @@ func (m *HolderMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case holder.EdgeHolderResponsibilities:
+		ids := make([]ent.Value, 0, len(m.holder_responsibilities))
+		for id := range m.holder_responsibilities {
+			ids = append(ids, id)
+		}
+		return ids
 	case holder.EdgePerson:
 		if id := m.person; id != nil {
 			return []ent.Value{*id}
@@ -8660,9 +8728,12 @@ func (m *HolderMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *HolderMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.removedartifacts != nil {
 		edges = append(edges, holder.EdgeArtifacts)
+	}
+	if m.removedholder_responsibilities != nil {
+		edges = append(edges, holder.EdgeHolderResponsibilities)
 	}
 	return edges
 }
@@ -8677,15 +8748,24 @@ func (m *HolderMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case holder.EdgeHolderResponsibilities:
+		ids := make([]ent.Value, 0, len(m.removedholder_responsibilities))
+		for id := range m.removedholder_responsibilities {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *HolderMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.clearedartifacts {
 		edges = append(edges, holder.EdgeArtifacts)
+	}
+	if m.clearedholder_responsibilities {
+		edges = append(edges, holder.EdgeHolderResponsibilities)
 	}
 	if m.clearedperson {
 		edges = append(edges, holder.EdgePerson)
@@ -8702,6 +8782,8 @@ func (m *HolderMutation) EdgeCleared(name string) bool {
 	switch name {
 	case holder.EdgeArtifacts:
 		return m.clearedartifacts
+	case holder.EdgeHolderResponsibilities:
+		return m.clearedholder_responsibilities
 	case holder.EdgePerson:
 		return m.clearedperson
 	case holder.EdgeOrganization:
@@ -8731,6 +8813,9 @@ func (m *HolderMutation) ResetEdge(name string) error {
 	case holder.EdgeArtifacts:
 		m.ResetArtifacts()
 		return nil
+	case holder.EdgeHolderResponsibilities:
+		m.ResetHolderResponsibilities()
+		return nil
 	case holder.EdgePerson:
 		m.ResetPerson()
 		return nil
@@ -8739,6 +8824,363 @@ func (m *HolderMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown Holder edge %s", name)
+}
+
+// HolderResponsibilityMutation represents an operation that mutates the HolderResponsibility nodes in the graph.
+type HolderResponsibilityMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	clearedFields map[string]struct{}
+	holder        map[int]struct{}
+	removedholder map[int]struct{}
+	clearedholder bool
+	done          bool
+	oldValue      func(context.Context) (*HolderResponsibility, error)
+	predicates    []predicate.HolderResponsibility
+}
+
+var _ ent.Mutation = (*HolderResponsibilityMutation)(nil)
+
+// holderresponsibilityOption allows management of the mutation configuration using functional options.
+type holderresponsibilityOption func(*HolderResponsibilityMutation)
+
+// newHolderResponsibilityMutation creates new mutation for the HolderResponsibility entity.
+func newHolderResponsibilityMutation(c config, op Op, opts ...holderresponsibilityOption) *HolderResponsibilityMutation {
+	m := &HolderResponsibilityMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeHolderResponsibility,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withHolderResponsibilityID sets the ID field of the mutation.
+func withHolderResponsibilityID(id int) holderresponsibilityOption {
+	return func(m *HolderResponsibilityMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *HolderResponsibility
+		)
+		m.oldValue = func(ctx context.Context) (*HolderResponsibility, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().HolderResponsibility.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withHolderResponsibility sets the old HolderResponsibility of the mutation.
+func withHolderResponsibility(node *HolderResponsibility) holderresponsibilityOption {
+	return func(m *HolderResponsibilityMutation) {
+		m.oldValue = func(context.Context) (*HolderResponsibility, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m HolderResponsibilityMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m HolderResponsibilityMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *HolderResponsibilityMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *HolderResponsibilityMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().HolderResponsibility.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// AddHolderIDs adds the "holder" edge to the Holder entity by ids.
+func (m *HolderResponsibilityMutation) AddHolderIDs(ids ...int) {
+	if m.holder == nil {
+		m.holder = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.holder[ids[i]] = struct{}{}
+	}
+}
+
+// ClearHolder clears the "holder" edge to the Holder entity.
+func (m *HolderResponsibilityMutation) ClearHolder() {
+	m.clearedholder = true
+}
+
+// HolderCleared reports if the "holder" edge to the Holder entity was cleared.
+func (m *HolderResponsibilityMutation) HolderCleared() bool {
+	return m.clearedholder
+}
+
+// RemoveHolderIDs removes the "holder" edge to the Holder entity by IDs.
+func (m *HolderResponsibilityMutation) RemoveHolderIDs(ids ...int) {
+	if m.removedholder == nil {
+		m.removedholder = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.holder, ids[i])
+		m.removedholder[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedHolder returns the removed IDs of the "holder" edge to the Holder entity.
+func (m *HolderResponsibilityMutation) RemovedHolderIDs() (ids []int) {
+	for id := range m.removedholder {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// HolderIDs returns the "holder" edge IDs in the mutation.
+func (m *HolderResponsibilityMutation) HolderIDs() (ids []int) {
+	for id := range m.holder {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetHolder resets all changes to the "holder" edge.
+func (m *HolderResponsibilityMutation) ResetHolder() {
+	m.holder = nil
+	m.clearedholder = false
+	m.removedholder = nil
+}
+
+// Where appends a list predicates to the HolderResponsibilityMutation builder.
+func (m *HolderResponsibilityMutation) Where(ps ...predicate.HolderResponsibility) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the HolderResponsibilityMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *HolderResponsibilityMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.HolderResponsibility, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *HolderResponsibilityMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *HolderResponsibilityMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (HolderResponsibility).
+func (m *HolderResponsibilityMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *HolderResponsibilityMutation) Fields() []string {
+	fields := make([]string, 0, 0)
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *HolderResponsibilityMutation) Field(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *HolderResponsibilityMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	return nil, fmt.Errorf("unknown HolderResponsibility field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *HolderResponsibilityMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown HolderResponsibility field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *HolderResponsibilityMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *HolderResponsibilityMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *HolderResponsibilityMutation) AddField(name string, value ent.Value) error {
+	return fmt.Errorf("unknown HolderResponsibility numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *HolderResponsibilityMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *HolderResponsibilityMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *HolderResponsibilityMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown HolderResponsibility nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *HolderResponsibilityMutation) ResetField(name string) error {
+	return fmt.Errorf("unknown HolderResponsibility field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *HolderResponsibilityMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.holder != nil {
+		edges = append(edges, holderresponsibility.EdgeHolder)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *HolderResponsibilityMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case holderresponsibility.EdgeHolder:
+		ids := make([]ent.Value, 0, len(m.holder))
+		for id := range m.holder {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *HolderResponsibilityMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.removedholder != nil {
+		edges = append(edges, holderresponsibility.EdgeHolder)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *HolderResponsibilityMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case holderresponsibility.EdgeHolder:
+		ids := make([]ent.Value, 0, len(m.removedholder))
+		for id := range m.removedholder {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *HolderResponsibilityMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedholder {
+		edges = append(edges, holderresponsibility.EdgeHolder)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *HolderResponsibilityMutation) EdgeCleared(name string) bool {
+	switch name {
+	case holderresponsibility.EdgeHolder:
+		return m.clearedholder
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *HolderResponsibilityMutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown HolderResponsibility unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *HolderResponsibilityMutation) ResetEdge(name string) error {
+	switch name {
+	case holderresponsibility.EdgeHolder:
+		m.ResetHolder()
+		return nil
+	}
+	return fmt.Errorf("unknown HolderResponsibility edge %s", name)
 }
 
 // KeywordMutation represents an operation that mutates the Keyword nodes in the graph.

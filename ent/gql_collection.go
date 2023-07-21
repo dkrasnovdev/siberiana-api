@@ -1271,6 +1271,18 @@ func (h *HolderQuery) collectField(ctx context.Context, opCtx *graphql.Operation
 			h.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
 				*wq = *query
 			})
+		case "holderResponsibilities":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&HolderResponsibilityClient{config: h.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, holderresponsibilityImplementors)...); err != nil {
+				return err
+			}
+			h.WithNamedHolderResponsibilities(alias, func(wq *HolderResponsibilityQuery) {
+				*wq = *query
+			})
 		case "person":
 			var (
 				alias = field.Alias
@@ -1386,6 +1398,68 @@ func newHolderPaginateArgs(rv map[string]any) *holderPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*HolderWhereInput); ok {
 		args.opts = append(args.opts, WithHolderFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (hr *HolderResponsibilityQuery) CollectFields(ctx context.Context, satisfies ...string) (*HolderResponsibilityQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return hr, nil
+	}
+	if err := hr.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return hr, nil
+}
+
+func (hr *HolderResponsibilityQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "holder":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&HolderClient{config: hr.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, holderImplementors)...); err != nil {
+				return err
+			}
+			hr.WithNamedHolder(alias, func(wq *HolderQuery) {
+				*wq = *query
+			})
+		}
+	}
+	return nil
+}
+
+type holderresponsibilityPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []HolderResponsibilityPaginateOption
+}
+
+func newHolderResponsibilityPaginateArgs(rv map[string]any) *holderresponsibilityPaginateArgs {
+	args := &holderresponsibilityPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*HolderResponsibilityWhereInput); ok {
+		args.opts = append(args.opts, WithHolderResponsibilityFilter(v.Filter))
 	}
 	return args
 }

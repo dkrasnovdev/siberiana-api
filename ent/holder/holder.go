@@ -29,6 +29,8 @@ const (
 	FieldEndDate = "end_date"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
+	// EdgeHolderResponsibilities holds the string denoting the holder_responsibilities edge name in mutations.
+	EdgeHolderResponsibilities = "holder_responsibilities"
 	// EdgePerson holds the string denoting the person edge name in mutations.
 	EdgePerson = "person"
 	// EdgeOrganization holds the string denoting the organization edge name in mutations.
@@ -40,6 +42,11 @@ const (
 	// ArtifactsInverseTable is the table name for the Artifact entity.
 	// It exists in this package in order to avoid circular dependency with the "artifact" package.
 	ArtifactsInverseTable = "artifacts"
+	// HolderResponsibilitiesTable is the table that holds the holder_responsibilities relation/edge. The primary key declared below.
+	HolderResponsibilitiesTable = "holder_holder_responsibilities"
+	// HolderResponsibilitiesInverseTable is the table name for the HolderResponsibility entity.
+	// It exists in this package in order to avoid circular dependency with the "holderresponsibility" package.
+	HolderResponsibilitiesInverseTable = "holder_responsibilities"
 	// PersonTable is the table that holds the person relation/edge.
 	PersonTable = "persons"
 	// PersonInverseTable is the table name for the Person entity.
@@ -71,6 +78,9 @@ var (
 	// ArtifactsPrimaryKey and ArtifactsColumn2 are the table columns denoting the
 	// primary key for the artifacts relation (M2M).
 	ArtifactsPrimaryKey = []string{"holder_id", "artifact_id"}
+	// HolderResponsibilitiesPrimaryKey and HolderResponsibilitiesColumn2 are the table columns denoting the
+	// primary key for the holder_responsibilities relation (M2M).
+	HolderResponsibilitiesPrimaryKey = []string{"holder_id", "holder_responsibility_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -151,6 +161,20 @@ func ByArtifacts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByHolderResponsibilitiesCount orders the results by holder_responsibilities count.
+func ByHolderResponsibilitiesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newHolderResponsibilitiesStep(), opts...)
+	}
+}
+
+// ByHolderResponsibilities orders the results by holder_responsibilities terms.
+func ByHolderResponsibilities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newHolderResponsibilitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByPersonField orders the results by person field.
 func ByPersonField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -169,6 +193,13 @@ func newArtifactsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ArtifactsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, ArtifactsTable, ArtifactsPrimaryKey...),
+	)
+}
+func newHolderResponsibilitiesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(HolderResponsibilitiesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, HolderResponsibilitiesTable, HolderResponsibilitiesPrimaryKey...),
 	)
 }
 func newPersonStep() *sqlgraph.Step {

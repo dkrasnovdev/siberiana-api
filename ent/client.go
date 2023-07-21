@@ -26,6 +26,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/heritage-api/ent/keyword"
 	"github.com/dkrasnovdev/heritage-api/ent/library"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
@@ -76,6 +77,8 @@ type Client struct {
 	District *DistrictClient
 	// Holder is the client for interacting with the Holder builders.
 	Holder *HolderClient
+	// HolderResponsibility is the client for interacting with the HolderResponsibility builders.
+	HolderResponsibility *HolderResponsibilityClient
 	// Keyword is the client for interacting with the Keyword builders.
 	Keyword *KeywordClient
 	// Library is the client for interacting with the Library builders.
@@ -141,6 +144,7 @@ func (c *Client) init() {
 	c.Culture = NewCultureClient(c.config)
 	c.District = NewDistrictClient(c.config)
 	c.Holder = NewHolderClient(c.config)
+	c.HolderResponsibility = NewHolderResponsibilityClient(c.config)
 	c.Keyword = NewKeywordClient(c.config)
 	c.Library = NewLibraryClient(c.config)
 	c.License = NewLicenseClient(c.config)
@@ -254,6 +258,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Culture:               NewCultureClient(cfg),
 		District:              NewDistrictClient(cfg),
 		Holder:                NewHolderClient(cfg),
+		HolderResponsibility:  NewHolderResponsibilityClient(cfg),
 		Keyword:               NewKeywordClient(cfg),
 		Library:               NewLibraryClient(cfg),
 		License:               NewLicenseClient(cfg),
@@ -304,6 +309,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Culture:               NewCultureClient(cfg),
 		District:              NewDistrictClient(cfg),
 		Holder:                NewHolderClient(cfg),
+		HolderResponsibility:  NewHolderResponsibilityClient(cfg),
 		Keyword:               NewKeywordClient(cfg),
 		Library:               NewLibraryClient(cfg),
 		License:               NewLicenseClient(cfg),
@@ -353,11 +359,11 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
-		c.Category, c.Collection, c.Culture, c.District, c.Holder, c.Keyword,
-		c.Library, c.License, c.Location, c.Medium, c.Model, c.Monument,
-		c.Organization, c.Person, c.Project, c.ProtectedArea, c.ProtectedAreaCategory,
-		c.ProtectedAreaPicture, c.Publication, c.Publisher, c.Region, c.Set,
-		c.Settlement, c.Technique,
+		c.Category, c.Collection, c.Culture, c.District, c.Holder,
+		c.HolderResponsibility, c.Keyword, c.Library, c.License, c.Location, c.Medium,
+		c.Model, c.Monument, c.Organization, c.Person, c.Project, c.ProtectedArea,
+		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Publication, c.Publisher,
+		c.Region, c.Set, c.Settlement, c.Technique,
 	} {
 		n.Use(hooks...)
 	}
@@ -368,11 +374,11 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
-		c.Category, c.Collection, c.Culture, c.District, c.Holder, c.Keyword,
-		c.Library, c.License, c.Location, c.Medium, c.Model, c.Monument,
-		c.Organization, c.Person, c.Project, c.ProtectedArea, c.ProtectedAreaCategory,
-		c.ProtectedAreaPicture, c.Publication, c.Publisher, c.Region, c.Set,
-		c.Settlement, c.Technique,
+		c.Category, c.Collection, c.Culture, c.District, c.Holder,
+		c.HolderResponsibility, c.Keyword, c.Library, c.License, c.Location, c.Medium,
+		c.Model, c.Monument, c.Organization, c.Person, c.Project, c.ProtectedArea,
+		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Publication, c.Publisher,
+		c.Region, c.Set, c.Settlement, c.Technique,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -405,6 +411,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.District.mutate(ctx, m)
 	case *HolderMutation:
 		return c.Holder.mutate(ctx, m)
+	case *HolderResponsibilityMutation:
+		return c.HolderResponsibility.mutate(ctx, m)
 	case *KeywordMutation:
 		return c.Keyword.mutate(ctx, m)
 	case *LibraryMutation:
@@ -2150,6 +2158,22 @@ func (c *HolderClient) QueryArtifacts(h *Holder) *ArtifactQuery {
 	return query
 }
 
+// QueryHolderResponsibilities queries the holder_responsibilities edge of a Holder.
+func (c *HolderClient) QueryHolderResponsibilities(h *Holder) *HolderResponsibilityQuery {
+	query := (&HolderResponsibilityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := h.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(holder.Table, holder.FieldID, id),
+			sqlgraph.To(holderresponsibility.Table, holderresponsibility.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, holder.HolderResponsibilitiesTable, holder.HolderResponsibilitiesPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryPerson queries the person edge of a Holder.
 func (c *HolderClient) QueryPerson(h *Holder) *PersonQuery {
 	query := (&PersonClient{config: c.config}).Query()
@@ -2205,6 +2229,140 @@ func (c *HolderClient) mutate(ctx context.Context, m *HolderMutation) (Value, er
 		return (&HolderDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Holder mutation op: %q", m.Op())
+	}
+}
+
+// HolderResponsibilityClient is a client for the HolderResponsibility schema.
+type HolderResponsibilityClient struct {
+	config
+}
+
+// NewHolderResponsibilityClient returns a client for the HolderResponsibility from the given config.
+func NewHolderResponsibilityClient(c config) *HolderResponsibilityClient {
+	return &HolderResponsibilityClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `holderresponsibility.Hooks(f(g(h())))`.
+func (c *HolderResponsibilityClient) Use(hooks ...Hook) {
+	c.hooks.HolderResponsibility = append(c.hooks.HolderResponsibility, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `holderresponsibility.Intercept(f(g(h())))`.
+func (c *HolderResponsibilityClient) Intercept(interceptors ...Interceptor) {
+	c.inters.HolderResponsibility = append(c.inters.HolderResponsibility, interceptors...)
+}
+
+// Create returns a builder for creating a HolderResponsibility entity.
+func (c *HolderResponsibilityClient) Create() *HolderResponsibilityCreate {
+	mutation := newHolderResponsibilityMutation(c.config, OpCreate)
+	return &HolderResponsibilityCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of HolderResponsibility entities.
+func (c *HolderResponsibilityClient) CreateBulk(builders ...*HolderResponsibilityCreate) *HolderResponsibilityCreateBulk {
+	return &HolderResponsibilityCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for HolderResponsibility.
+func (c *HolderResponsibilityClient) Update() *HolderResponsibilityUpdate {
+	mutation := newHolderResponsibilityMutation(c.config, OpUpdate)
+	return &HolderResponsibilityUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *HolderResponsibilityClient) UpdateOne(hr *HolderResponsibility) *HolderResponsibilityUpdateOne {
+	mutation := newHolderResponsibilityMutation(c.config, OpUpdateOne, withHolderResponsibility(hr))
+	return &HolderResponsibilityUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *HolderResponsibilityClient) UpdateOneID(id int) *HolderResponsibilityUpdateOne {
+	mutation := newHolderResponsibilityMutation(c.config, OpUpdateOne, withHolderResponsibilityID(id))
+	return &HolderResponsibilityUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for HolderResponsibility.
+func (c *HolderResponsibilityClient) Delete() *HolderResponsibilityDelete {
+	mutation := newHolderResponsibilityMutation(c.config, OpDelete)
+	return &HolderResponsibilityDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *HolderResponsibilityClient) DeleteOne(hr *HolderResponsibility) *HolderResponsibilityDeleteOne {
+	return c.DeleteOneID(hr.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *HolderResponsibilityClient) DeleteOneID(id int) *HolderResponsibilityDeleteOne {
+	builder := c.Delete().Where(holderresponsibility.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &HolderResponsibilityDeleteOne{builder}
+}
+
+// Query returns a query builder for HolderResponsibility.
+func (c *HolderResponsibilityClient) Query() *HolderResponsibilityQuery {
+	return &HolderResponsibilityQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeHolderResponsibility},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a HolderResponsibility entity by its id.
+func (c *HolderResponsibilityClient) Get(ctx context.Context, id int) (*HolderResponsibility, error) {
+	return c.Query().Where(holderresponsibility.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *HolderResponsibilityClient) GetX(ctx context.Context, id int) *HolderResponsibility {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryHolder queries the holder edge of a HolderResponsibility.
+func (c *HolderResponsibilityClient) QueryHolder(hr *HolderResponsibility) *HolderQuery {
+	query := (&HolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := hr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(holderresponsibility.Table, holderresponsibility.FieldID, id),
+			sqlgraph.To(holder.Table, holder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, holderresponsibility.HolderTable, holderresponsibility.HolderPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(hr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *HolderResponsibilityClient) Hooks() []Hook {
+	return c.hooks.HolderResponsibility
+}
+
+// Interceptors returns the client interceptors.
+func (c *HolderResponsibilityClient) Interceptors() []Interceptor {
+	return c.inters.HolderResponsibility
+}
+
+func (c *HolderResponsibilityClient) mutate(ctx context.Context, m *HolderResponsibilityMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&HolderResponsibilityCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&HolderResponsibilityUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&HolderResponsibilityUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&HolderResponsibilityDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown HolderResponsibility mutation op: %q", m.Op())
 	}
 }
 
@@ -4803,16 +4961,16 @@ func (c *TechniqueClient) mutate(ctx context.Context, m *TechniqueMutation) (Val
 type (
 	hooks struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
-		Collection, Culture, District, Holder, Keyword, Library, License, Location,
-		Medium, Model, Monument, Organization, Person, Project, ProtectedArea,
-		ProtectedAreaCategory, ProtectedAreaPicture, Publication, Publisher, Region,
-		Set, Settlement, Technique []ent.Hook
+		Collection, Culture, District, Holder, HolderResponsibility, Keyword, Library,
+		License, Location, Medium, Model, Monument, Organization, Person, Project,
+		ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Publication,
+		Publisher, Region, Set, Settlement, Technique []ent.Hook
 	}
 	inters struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
-		Collection, Culture, District, Holder, Keyword, Library, License, Location,
-		Medium, Model, Monument, Organization, Person, Project, ProtectedArea,
-		ProtectedAreaCategory, ProtectedAreaPicture, Publication, Publisher, Region,
-		Set, Settlement, Technique []ent.Interceptor
+		Collection, Culture, District, Holder, HolderResponsibility, Keyword, Library,
+		License, Location, Medium, Model, Monument, Organization, Person, Project,
+		ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Publication,
+		Publisher, Region, Set, Settlement, Technique []ent.Interceptor
 	}
 )

@@ -437,6 +437,30 @@ func (f HolderMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation
 	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.HolderMutation", m)
 }
 
+// The HolderResponsibilityQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type HolderResponsibilityQueryRuleFunc func(context.Context, *ent.HolderResponsibilityQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f HolderResponsibilityQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.HolderResponsibilityQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("ent/privacy: unexpected query type %T, expect *ent.HolderResponsibilityQuery", q)
+}
+
+// The HolderResponsibilityMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type HolderResponsibilityMutationRuleFunc func(context.Context, *ent.HolderResponsibilityMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f HolderResponsibilityMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
+	if m, ok := m.(*ent.HolderResponsibilityMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.HolderResponsibilityMutation", m)
+}
+
 // The KeywordQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type KeywordQueryRuleFunc func(context.Context, *ent.KeywordQuery) error

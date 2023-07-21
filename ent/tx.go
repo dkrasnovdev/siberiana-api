@@ -36,6 +36,8 @@ type Tx struct {
 	District *DistrictClient
 	// Holder is the client for interacting with the Holder builders.
 	Holder *HolderClient
+	// HolderResponsibility is the client for interacting with the HolderResponsibility builders.
+	HolderResponsibility *HolderResponsibilityClient
 	// Keyword is the client for interacting with the Keyword builders.
 	Keyword *KeywordClient
 	// Library is the client for interacting with the Library builders.
@@ -217,6 +219,7 @@ func (tx *Tx) init() {
 	tx.Culture = NewCultureClient(tx.config)
 	tx.District = NewDistrictClient(tx.config)
 	tx.Holder = NewHolderClient(tx.config)
+	tx.HolderResponsibility = NewHolderResponsibilityClient(tx.config)
 	tx.Keyword = NewKeywordClient(tx.config)
 	tx.Library = NewLibraryClient(tx.config)
 	tx.License = NewLicenseClient(tx.config)

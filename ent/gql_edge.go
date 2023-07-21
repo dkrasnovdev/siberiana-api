@@ -200,6 +200,18 @@ func (h *Holder) Artifacts(ctx context.Context) (result []*Artifact, err error) 
 	return result, err
 }
 
+func (h *Holder) HolderResponsibilities(ctx context.Context) (result []*HolderResponsibility, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = h.NamedHolderResponsibilities(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = h.Edges.HolderResponsibilitiesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = h.QueryHolderResponsibilities().All(ctx)
+	}
+	return result, err
+}
+
 func (h *Holder) Person(ctx context.Context) (*Person, error) {
 	result, err := h.Edges.PersonOrErr()
 	if IsNotLoaded(err) {
@@ -214,6 +226,18 @@ func (h *Holder) Organization(ctx context.Context) (*Organization, error) {
 		result, err = h.QueryOrganization().Only(ctx)
 	}
 	return result, MaskNotFound(err)
+}
+
+func (hr *HolderResponsibility) Holder(ctx context.Context) (result []*Holder, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = hr.NamedHolder(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = hr.Edges.HolderOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = hr.QueryHolder().All(ctx)
+	}
+	return result, err
 }
 
 func (l *License) Artifacts(ctx context.Context) (result []*Artifact, err error) {

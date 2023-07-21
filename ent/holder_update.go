@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
@@ -118,6 +119,21 @@ func (hu *HolderUpdate) AddArtifacts(a ...*Artifact) *HolderUpdate {
 	return hu.AddArtifactIDs(ids...)
 }
 
+// AddHolderResponsibilityIDs adds the "holder_responsibilities" edge to the HolderResponsibility entity by IDs.
+func (hu *HolderUpdate) AddHolderResponsibilityIDs(ids ...int) *HolderUpdate {
+	hu.mutation.AddHolderResponsibilityIDs(ids...)
+	return hu
+}
+
+// AddHolderResponsibilities adds the "holder_responsibilities" edges to the HolderResponsibility entity.
+func (hu *HolderUpdate) AddHolderResponsibilities(h ...*HolderResponsibility) *HolderUpdate {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return hu.AddHolderResponsibilityIDs(ids...)
+}
+
 // SetPersonID sets the "person" edge to the Person entity by ID.
 func (hu *HolderUpdate) SetPersonID(id int) *HolderUpdate {
 	hu.mutation.SetPersonID(id)
@@ -180,6 +196,27 @@ func (hu *HolderUpdate) RemoveArtifacts(a ...*Artifact) *HolderUpdate {
 		ids[i] = a[i].ID
 	}
 	return hu.RemoveArtifactIDs(ids...)
+}
+
+// ClearHolderResponsibilities clears all "holder_responsibilities" edges to the HolderResponsibility entity.
+func (hu *HolderUpdate) ClearHolderResponsibilities() *HolderUpdate {
+	hu.mutation.ClearHolderResponsibilities()
+	return hu
+}
+
+// RemoveHolderResponsibilityIDs removes the "holder_responsibilities" edge to HolderResponsibility entities by IDs.
+func (hu *HolderUpdate) RemoveHolderResponsibilityIDs(ids ...int) *HolderUpdate {
+	hu.mutation.RemoveHolderResponsibilityIDs(ids...)
+	return hu
+}
+
+// RemoveHolderResponsibilities removes "holder_responsibilities" edges to HolderResponsibility entities.
+func (hu *HolderUpdate) RemoveHolderResponsibilities(h ...*HolderResponsibility) *HolderUpdate {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return hu.RemoveHolderResponsibilityIDs(ids...)
 }
 
 // ClearPerson clears the "person" edge to the Person entity.
@@ -307,6 +344,51 @@ func (hu *HolderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if hu.mutation.HolderResponsibilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   holder.HolderResponsibilitiesTable,
+			Columns: holder.HolderResponsibilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holderresponsibility.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := hu.mutation.RemovedHolderResponsibilitiesIDs(); len(nodes) > 0 && !hu.mutation.HolderResponsibilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   holder.HolderResponsibilitiesTable,
+			Columns: holder.HolderResponsibilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holderresponsibility.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := hu.mutation.HolderResponsibilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   holder.HolderResponsibilitiesTable,
+			Columns: holder.HolderResponsibilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holderresponsibility.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -479,6 +561,21 @@ func (huo *HolderUpdateOne) AddArtifacts(a ...*Artifact) *HolderUpdateOne {
 	return huo.AddArtifactIDs(ids...)
 }
 
+// AddHolderResponsibilityIDs adds the "holder_responsibilities" edge to the HolderResponsibility entity by IDs.
+func (huo *HolderUpdateOne) AddHolderResponsibilityIDs(ids ...int) *HolderUpdateOne {
+	huo.mutation.AddHolderResponsibilityIDs(ids...)
+	return huo
+}
+
+// AddHolderResponsibilities adds the "holder_responsibilities" edges to the HolderResponsibility entity.
+func (huo *HolderUpdateOne) AddHolderResponsibilities(h ...*HolderResponsibility) *HolderUpdateOne {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return huo.AddHolderResponsibilityIDs(ids...)
+}
+
 // SetPersonID sets the "person" edge to the Person entity by ID.
 func (huo *HolderUpdateOne) SetPersonID(id int) *HolderUpdateOne {
 	huo.mutation.SetPersonID(id)
@@ -541,6 +638,27 @@ func (huo *HolderUpdateOne) RemoveArtifacts(a ...*Artifact) *HolderUpdateOne {
 		ids[i] = a[i].ID
 	}
 	return huo.RemoveArtifactIDs(ids...)
+}
+
+// ClearHolderResponsibilities clears all "holder_responsibilities" edges to the HolderResponsibility entity.
+func (huo *HolderUpdateOne) ClearHolderResponsibilities() *HolderUpdateOne {
+	huo.mutation.ClearHolderResponsibilities()
+	return huo
+}
+
+// RemoveHolderResponsibilityIDs removes the "holder_responsibilities" edge to HolderResponsibility entities by IDs.
+func (huo *HolderUpdateOne) RemoveHolderResponsibilityIDs(ids ...int) *HolderUpdateOne {
+	huo.mutation.RemoveHolderResponsibilityIDs(ids...)
+	return huo
+}
+
+// RemoveHolderResponsibilities removes "holder_responsibilities" edges to HolderResponsibility entities.
+func (huo *HolderUpdateOne) RemoveHolderResponsibilities(h ...*HolderResponsibility) *HolderUpdateOne {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return huo.RemoveHolderResponsibilityIDs(ids...)
 }
 
 // ClearPerson clears the "person" edge to the Person entity.
@@ -698,6 +816,51 @@ func (huo *HolderUpdateOne) sqlSave(ctx context.Context) (_node *Holder, err err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if huo.mutation.HolderResponsibilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   holder.HolderResponsibilitiesTable,
+			Columns: holder.HolderResponsibilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holderresponsibility.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := huo.mutation.RemovedHolderResponsibilitiesIDs(); len(nodes) > 0 && !huo.mutation.HolderResponsibilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   holder.HolderResponsibilitiesTable,
+			Columns: holder.HolderResponsibilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holderresponsibility.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := huo.mutation.HolderResponsibilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   holder.HolderResponsibilitiesTable,
+			Columns: holder.HolderResponsibilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holderresponsibility.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

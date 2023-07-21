@@ -428,6 +428,29 @@ func HasArtifactsWith(preds ...predicate.Artifact) predicate.Holder {
 	})
 }
 
+// HasHolderResponsibilities applies the HasEdge predicate on the "holder_responsibilities" edge.
+func HasHolderResponsibilities() predicate.Holder {
+	return predicate.Holder(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, HolderResponsibilitiesTable, HolderResponsibilitiesPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasHolderResponsibilitiesWith applies the HasEdge predicate on the "holder_responsibilities" edge with a given conditions (other predicates).
+func HasHolderResponsibilitiesWith(preds ...predicate.HolderResponsibility) predicate.Holder {
+	return predicate.Holder(func(s *sql.Selector) {
+		step := newHolderResponsibilitiesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasPerson applies the HasEdge predicate on the "person" edge.
 func HasPerson() predicate.Holder {
 	return predicate.Holder(func(s *sql.Selector) {
