@@ -2468,6 +2468,21 @@ func (o *OrganizationQuery) collectField(ctx context.Context, opCtx *graphql.Ope
 				selectedFields = append(selectedFields, organization.FieldAdditionalImagesUrls)
 				fieldSeen[organization.FieldAdditionalImagesUrls] = struct{}{}
 			}
+		case "previousNames":
+			if _, ok := fieldSeen[organization.FieldPreviousNames]; !ok {
+				selectedFields = append(selectedFields, organization.FieldPreviousNames)
+				fieldSeen[organization.FieldPreviousNames] = struct{}{}
+			}
+		case "isInAConsortium":
+			if _, ok := fieldSeen[organization.FieldIsInAConsortium]; !ok {
+				selectedFields = append(selectedFields, organization.FieldIsInAConsortium)
+				fieldSeen[organization.FieldIsInAConsortium] = struct{}{}
+			}
+		case "consortiumDocumentURL":
+			if _, ok := fieldSeen[organization.FieldConsortiumDocumentURL]; !ok {
+				selectedFields = append(selectedFields, organization.FieldConsortiumDocumentURL)
+				fieldSeen[organization.FieldConsortiumDocumentURL] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

@@ -230,6 +230,64 @@ func (ou *OrganizationUpdate) ClearAdditionalImagesUrls() *OrganizationUpdate {
 	return ou
 }
 
+// SetPreviousNames sets the "previous_names" field.
+func (ou *OrganizationUpdate) SetPreviousNames(s []string) *OrganizationUpdate {
+	ou.mutation.SetPreviousNames(s)
+	return ou
+}
+
+// AppendPreviousNames appends s to the "previous_names" field.
+func (ou *OrganizationUpdate) AppendPreviousNames(s []string) *OrganizationUpdate {
+	ou.mutation.AppendPreviousNames(s)
+	return ou
+}
+
+// ClearPreviousNames clears the value of the "previous_names" field.
+func (ou *OrganizationUpdate) ClearPreviousNames() *OrganizationUpdate {
+	ou.mutation.ClearPreviousNames()
+	return ou
+}
+
+// SetIsInAConsortium sets the "is_in_a_consortium" field.
+func (ou *OrganizationUpdate) SetIsInAConsortium(b bool) *OrganizationUpdate {
+	ou.mutation.SetIsInAConsortium(b)
+	return ou
+}
+
+// SetNillableIsInAConsortium sets the "is_in_a_consortium" field if the given value is not nil.
+func (ou *OrganizationUpdate) SetNillableIsInAConsortium(b *bool) *OrganizationUpdate {
+	if b != nil {
+		ou.SetIsInAConsortium(*b)
+	}
+	return ou
+}
+
+// ClearIsInAConsortium clears the value of the "is_in_a_consortium" field.
+func (ou *OrganizationUpdate) ClearIsInAConsortium() *OrganizationUpdate {
+	ou.mutation.ClearIsInAConsortium()
+	return ou
+}
+
+// SetConsortiumDocumentURL sets the "consortium_document_url" field.
+func (ou *OrganizationUpdate) SetConsortiumDocumentURL(s string) *OrganizationUpdate {
+	ou.mutation.SetConsortiumDocumentURL(s)
+	return ou
+}
+
+// SetNillableConsortiumDocumentURL sets the "consortium_document_url" field if the given value is not nil.
+func (ou *OrganizationUpdate) SetNillableConsortiumDocumentURL(s *string) *OrganizationUpdate {
+	if s != nil {
+		ou.SetConsortiumDocumentURL(*s)
+	}
+	return ou
+}
+
+// ClearConsortiumDocumentURL clears the value of the "consortium_document_url" field.
+func (ou *OrganizationUpdate) ClearConsortiumDocumentURL() *OrganizationUpdate {
+	ou.mutation.ClearConsortiumDocumentURL()
+	return ou
+}
+
 // AddPersonIDs adds the "people" edge to the Person entity by IDs.
 func (ou *OrganizationUpdate) AddPersonIDs(ids ...int) *OrganizationUpdate {
 	ou.mutation.AddPersonIDs(ids...)
@@ -454,6 +512,29 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ou.mutation.AdditionalImagesUrlsCleared() {
 		_spec.ClearField(organization.FieldAdditionalImagesUrls, field.TypeJSON)
+	}
+	if value, ok := ou.mutation.PreviousNames(); ok {
+		_spec.SetField(organization.FieldPreviousNames, field.TypeJSON, value)
+	}
+	if value, ok := ou.mutation.AppendedPreviousNames(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organization.FieldPreviousNames, value)
+		})
+	}
+	if ou.mutation.PreviousNamesCleared() {
+		_spec.ClearField(organization.FieldPreviousNames, field.TypeJSON)
+	}
+	if value, ok := ou.mutation.IsInAConsortium(); ok {
+		_spec.SetField(organization.FieldIsInAConsortium, field.TypeBool, value)
+	}
+	if ou.mutation.IsInAConsortiumCleared() {
+		_spec.ClearField(organization.FieldIsInAConsortium, field.TypeBool)
+	}
+	if value, ok := ou.mutation.ConsortiumDocumentURL(); ok {
+		_spec.SetField(organization.FieldConsortiumDocumentURL, field.TypeString, value)
+	}
+	if ou.mutation.ConsortiumDocumentURLCleared() {
+		_spec.ClearField(organization.FieldConsortiumDocumentURL, field.TypeString)
 	}
 	if ou.mutation.PeopleCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -776,6 +857,64 @@ func (ouo *OrganizationUpdateOne) ClearAdditionalImagesUrls() *OrganizationUpdat
 	return ouo
 }
 
+// SetPreviousNames sets the "previous_names" field.
+func (ouo *OrganizationUpdateOne) SetPreviousNames(s []string) *OrganizationUpdateOne {
+	ouo.mutation.SetPreviousNames(s)
+	return ouo
+}
+
+// AppendPreviousNames appends s to the "previous_names" field.
+func (ouo *OrganizationUpdateOne) AppendPreviousNames(s []string) *OrganizationUpdateOne {
+	ouo.mutation.AppendPreviousNames(s)
+	return ouo
+}
+
+// ClearPreviousNames clears the value of the "previous_names" field.
+func (ouo *OrganizationUpdateOne) ClearPreviousNames() *OrganizationUpdateOne {
+	ouo.mutation.ClearPreviousNames()
+	return ouo
+}
+
+// SetIsInAConsortium sets the "is_in_a_consortium" field.
+func (ouo *OrganizationUpdateOne) SetIsInAConsortium(b bool) *OrganizationUpdateOne {
+	ouo.mutation.SetIsInAConsortium(b)
+	return ouo
+}
+
+// SetNillableIsInAConsortium sets the "is_in_a_consortium" field if the given value is not nil.
+func (ouo *OrganizationUpdateOne) SetNillableIsInAConsortium(b *bool) *OrganizationUpdateOne {
+	if b != nil {
+		ouo.SetIsInAConsortium(*b)
+	}
+	return ouo
+}
+
+// ClearIsInAConsortium clears the value of the "is_in_a_consortium" field.
+func (ouo *OrganizationUpdateOne) ClearIsInAConsortium() *OrganizationUpdateOne {
+	ouo.mutation.ClearIsInAConsortium()
+	return ouo
+}
+
+// SetConsortiumDocumentURL sets the "consortium_document_url" field.
+func (ouo *OrganizationUpdateOne) SetConsortiumDocumentURL(s string) *OrganizationUpdateOne {
+	ouo.mutation.SetConsortiumDocumentURL(s)
+	return ouo
+}
+
+// SetNillableConsortiumDocumentURL sets the "consortium_document_url" field if the given value is not nil.
+func (ouo *OrganizationUpdateOne) SetNillableConsortiumDocumentURL(s *string) *OrganizationUpdateOne {
+	if s != nil {
+		ouo.SetConsortiumDocumentURL(*s)
+	}
+	return ouo
+}
+
+// ClearConsortiumDocumentURL clears the value of the "consortium_document_url" field.
+func (ouo *OrganizationUpdateOne) ClearConsortiumDocumentURL() *OrganizationUpdateOne {
+	ouo.mutation.ClearConsortiumDocumentURL()
+	return ouo
+}
+
 // AddPersonIDs adds the "people" edge to the Person entity by IDs.
 func (ouo *OrganizationUpdateOne) AddPersonIDs(ids ...int) *OrganizationUpdateOne {
 	ouo.mutation.AddPersonIDs(ids...)
@@ -1030,6 +1169,29 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 	}
 	if ouo.mutation.AdditionalImagesUrlsCleared() {
 		_spec.ClearField(organization.FieldAdditionalImagesUrls, field.TypeJSON)
+	}
+	if value, ok := ouo.mutation.PreviousNames(); ok {
+		_spec.SetField(organization.FieldPreviousNames, field.TypeJSON, value)
+	}
+	if value, ok := ouo.mutation.AppendedPreviousNames(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organization.FieldPreviousNames, value)
+		})
+	}
+	if ouo.mutation.PreviousNamesCleared() {
+		_spec.ClearField(organization.FieldPreviousNames, field.TypeJSON)
+	}
+	if value, ok := ouo.mutation.IsInAConsortium(); ok {
+		_spec.SetField(organization.FieldIsInAConsortium, field.TypeBool, value)
+	}
+	if ouo.mutation.IsInAConsortiumCleared() {
+		_spec.ClearField(organization.FieldIsInAConsortium, field.TypeBool)
+	}
+	if value, ok := ouo.mutation.ConsortiumDocumentURL(); ok {
+		_spec.SetField(organization.FieldConsortiumDocumentURL, field.TypeString, value)
+	}
+	if ouo.mutation.ConsortiumDocumentURLCleared() {
+		_spec.ClearField(organization.FieldConsortiumDocumentURL, field.TypeString)
 	}
 	if ouo.mutation.PeopleCleared() {
 		edge := &sqlgraph.EdgeSpec{

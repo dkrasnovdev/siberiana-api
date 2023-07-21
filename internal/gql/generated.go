@@ -430,22 +430,25 @@ type ComplexityRoot struct {
 	}
 
 	Organization struct {
-		AdditionalImagesUrls func(childComplexity int) int
-		Address              func(childComplexity int) int
-		CreatedAt            func(childComplexity int) int
-		CreatedBy            func(childComplexity int) int
-		Description          func(childComplexity int) int
-		DisplayName          func(childComplexity int) int
-		Emails               func(childComplexity int) int
-		ExternalLinks        func(childComplexity int) int
-		Holder               func(childComplexity int) int
-		ID                   func(childComplexity int) int
-		OrganizationType     func(childComplexity int) int
-		People               func(childComplexity int) int
-		PhoneNumbers         func(childComplexity int) int
-		PrimaryImageURL      func(childComplexity int) int
-		UpdatedAt            func(childComplexity int) int
-		UpdatedBy            func(childComplexity int) int
+		AdditionalImagesUrls  func(childComplexity int) int
+		Address               func(childComplexity int) int
+		ConsortiumDocumentURL func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Description           func(childComplexity int) int
+		DisplayName           func(childComplexity int) int
+		Emails                func(childComplexity int) int
+		ExternalLinks         func(childComplexity int) int
+		Holder                func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		IsInAConsortium       func(childComplexity int) int
+		OrganizationType      func(childComplexity int) int
+		People                func(childComplexity int) int
+		PhoneNumbers          func(childComplexity int) int
+		PreviousNames         func(childComplexity int) int
+		PrimaryImageURL       func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
 	}
 
 	OrganizationConnection struct {
@@ -2718,6 +2721,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Organization.Address(childComplexity), true
 
+	case "Organization.consortiumDocumentURL":
+		if e.complexity.Organization.ConsortiumDocumentURL == nil {
+			break
+		}
+
+		return e.complexity.Organization.ConsortiumDocumentURL(childComplexity), true
+
 	case "Organization.createdAt":
 		if e.complexity.Organization.CreatedAt == nil {
 			break
@@ -2774,6 +2784,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Organization.ID(childComplexity), true
 
+	case "Organization.isInAConsortium":
+		if e.complexity.Organization.IsInAConsortium == nil {
+			break
+		}
+
+		return e.complexity.Organization.IsInAConsortium(childComplexity), true
+
 	case "Organization.organizationType":
 		if e.complexity.Organization.OrganizationType == nil {
 			break
@@ -2794,6 +2811,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Organization.PhoneNumbers(childComplexity), true
+
+	case "Organization.previousNames":
+		if e.complexity.Organization.PreviousNames == nil {
+			break
+		}
+
+		return e.complexity.Organization.PreviousNames(childComplexity), true
 
 	case "Organization.primaryImageURL":
 		if e.complexity.Organization.PrimaryImageURL == nil {
@@ -12312,6 +12336,12 @@ func (ec *executionContext) fieldContext_Holder_organization(ctx context.Context
 				return ec.fieldContext_Organization_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
 				return ec.fieldContext_Organization_additionalImagesUrls(ctx, field)
+			case "previousNames":
+				return ec.fieldContext_Organization_previousNames(ctx, field)
+			case "isInAConsortium":
+				return ec.fieldContext_Organization_isInAConsortium(ctx, field)
+			case "consortiumDocumentURL":
+				return ec.fieldContext_Organization_consortiumDocumentURL(ctx, field)
 			case "people":
 				return ec.fieldContext_Organization_people(ctx, field)
 			case "holder":
@@ -18465,6 +18495,12 @@ func (ec *executionContext) fieldContext_Mutation_createOrganization(ctx context
 				return ec.fieldContext_Organization_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
 				return ec.fieldContext_Organization_additionalImagesUrls(ctx, field)
+			case "previousNames":
+				return ec.fieldContext_Organization_previousNames(ctx, field)
+			case "isInAConsortium":
+				return ec.fieldContext_Organization_isInAConsortium(ctx, field)
+			case "consortiumDocumentURL":
+				return ec.fieldContext_Organization_consortiumDocumentURL(ctx, field)
 			case "people":
 				return ec.fieldContext_Organization_people(ctx, field)
 			case "holder":
@@ -18554,6 +18590,12 @@ func (ec *executionContext) fieldContext_Mutation_updateOrganization(ctx context
 				return ec.fieldContext_Organization_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
 				return ec.fieldContext_Organization_additionalImagesUrls(ctx, field)
+			case "previousNames":
+				return ec.fieldContext_Organization_previousNames(ctx, field)
+			case "isInAConsortium":
+				return ec.fieldContext_Organization_isInAConsortium(ctx, field)
+			case "consortiumDocumentURL":
+				return ec.fieldContext_Organization_consortiumDocumentURL(ctx, field)
 			case "people":
 				return ec.fieldContext_Organization_people(ctx, field)
 			case "holder":
@@ -20246,6 +20288,129 @@ func (ec *executionContext) fieldContext_Organization_additionalImagesUrls(ctx c
 	return fc, nil
 }
 
+func (ec *executionContext) _Organization_previousNames(ctx context.Context, field graphql.CollectedField, obj *ent.Organization) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Organization_previousNames(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PreviousNames, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Organization_previousNames(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Organization",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Organization_isInAConsortium(ctx context.Context, field graphql.CollectedField, obj *ent.Organization) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Organization_isInAConsortium(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.IsInAConsortium, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalOBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Organization_isInAConsortium(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Organization",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Organization_consortiumDocumentURL(ctx context.Context, field graphql.CollectedField, obj *ent.Organization) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Organization_consortiumDocumentURL(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ConsortiumDocumentURL, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Organization_consortiumDocumentURL(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Organization",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Organization_people(ctx context.Context, field graphql.CollectedField, obj *ent.Organization) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Organization_people(ctx, field)
 	if err != nil {
@@ -20674,6 +20839,12 @@ func (ec *executionContext) fieldContext_OrganizationEdge_node(ctx context.Conte
 				return ec.fieldContext_Organization_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
 				return ec.fieldContext_Organization_additionalImagesUrls(ctx, field)
+			case "previousNames":
+				return ec.fieldContext_Organization_previousNames(ctx, field)
+			case "isInAConsortium":
+				return ec.fieldContext_Organization_isInAConsortium(ctx, field)
+			case "consortiumDocumentURL":
+				return ec.fieldContext_Organization_consortiumDocumentURL(ctx, field)
 			case "people":
 				return ec.fieldContext_Organization_people(ctx, field)
 			case "holder":
@@ -21130,6 +21301,12 @@ func (ec *executionContext) fieldContext_OrganizationType_organizations(ctx cont
 				return ec.fieldContext_Organization_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
 				return ec.fieldContext_Organization_additionalImagesUrls(ctx, field)
+			case "previousNames":
+				return ec.fieldContext_Organization_previousNames(ctx, field)
+			case "isInAConsortium":
+				return ec.fieldContext_Organization_isInAConsortium(ctx, field)
+			case "consortiumDocumentURL":
+				return ec.fieldContext_Organization_consortiumDocumentURL(ctx, field)
 			case "people":
 				return ec.fieldContext_Organization_people(ctx, field)
 			case "holder":
@@ -22511,6 +22688,12 @@ func (ec *executionContext) fieldContext_Person_affiliation(ctx context.Context,
 				return ec.fieldContext_Organization_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
 				return ec.fieldContext_Organization_additionalImagesUrls(ctx, field)
+			case "previousNames":
+				return ec.fieldContext_Organization_previousNames(ctx, field)
+			case "isInAConsortium":
+				return ec.fieldContext_Organization_isInAConsortium(ctx, field)
+			case "consortiumDocumentURL":
+				return ec.fieldContext_Organization_consortiumDocumentURL(ctx, field)
 			case "people":
 				return ec.fieldContext_Organization_people(ctx, field)
 			case "holder":
@@ -36722,7 +36905,7 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "address", "phoneNumbers", "emails", "displayName", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "personIDs", "holderID", "organizationTypeID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "address", "phoneNumbers", "emails", "displayName", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "previousNames", "isInAConsortium", "consortiumDocumentURL", "personIDs", "holderID", "organizationTypeID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -36837,6 +37020,33 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.AdditionalImagesUrls = data
+		case "previousNames":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("previousNames"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PreviousNames = data
+		case "isInAConsortium":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isInAConsortium"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsInAConsortium = data
+		case "consortiumDocumentURL":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("consortiumDocumentURL"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ConsortiumDocumentURL = data
 		case "personIDs":
 			var err error
 
@@ -46602,7 +46812,7 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "address", "addressNEQ", "addressIn", "addressNotIn", "addressGT", "addressGTE", "addressLT", "addressLTE", "addressContains", "addressHasPrefix", "addressHasSuffix", "addressIsNil", "addressNotNil", "addressEqualFold", "addressContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "hasPeople", "hasPeopleWith", "hasHolder", "hasHolderWith", "hasOrganizationType", "hasOrganizationTypeWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "address", "addressNEQ", "addressIn", "addressNotIn", "addressGT", "addressGTE", "addressLT", "addressLTE", "addressContains", "addressHasPrefix", "addressHasSuffix", "addressIsNil", "addressNotNil", "addressEqualFold", "addressContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "isInAConsortium", "isInAConsortiumNEQ", "isInAConsortiumIsNil", "isInAConsortiumNotNil", "consortiumDocumentURL", "consortiumDocumentURLNEQ", "consortiumDocumentURLIn", "consortiumDocumentURLNotIn", "consortiumDocumentURLGT", "consortiumDocumentURLGTE", "consortiumDocumentURLLT", "consortiumDocumentURLLTE", "consortiumDocumentURLContains", "consortiumDocumentURLHasPrefix", "consortiumDocumentURLHasSuffix", "consortiumDocumentURLIsNil", "consortiumDocumentURLNotNil", "consortiumDocumentURLEqualFold", "consortiumDocumentURLContainsFold", "hasPeople", "hasPeopleWith", "hasHolder", "hasHolderWith", "hasOrganizationType", "hasOrganizationTypeWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -47662,6 +47872,177 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 				return it, err
 			}
 			it.PrimaryImageURLContainsFold = data
+		case "isInAConsortium":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isInAConsortium"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsInAConsortium = data
+		case "isInAConsortiumNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isInAConsortiumNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsInAConsortiumNEQ = data
+		case "isInAConsortiumIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isInAConsortiumIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsInAConsortiumIsNil = data
+		case "isInAConsortiumNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isInAConsortiumNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsInAConsortiumNotNil = data
+		case "consortiumDocumentURL":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("consortiumDocumentURL"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ConsortiumDocumentURL = data
+		case "consortiumDocumentURLNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("consortiumDocumentURLNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ConsortiumDocumentURLNEQ = data
+		case "consortiumDocumentURLIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("consortiumDocumentURLIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ConsortiumDocumentURLIn = data
+		case "consortiumDocumentURLNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("consortiumDocumentURLNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ConsortiumDocumentURLNotIn = data
+		case "consortiumDocumentURLGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("consortiumDocumentURLGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ConsortiumDocumentURLGT = data
+		case "consortiumDocumentURLGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("consortiumDocumentURLGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ConsortiumDocumentURLGTE = data
+		case "consortiumDocumentURLLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("consortiumDocumentURLLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ConsortiumDocumentURLLT = data
+		case "consortiumDocumentURLLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("consortiumDocumentURLLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ConsortiumDocumentURLLTE = data
+		case "consortiumDocumentURLContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("consortiumDocumentURLContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ConsortiumDocumentURLContains = data
+		case "consortiumDocumentURLHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("consortiumDocumentURLHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ConsortiumDocumentURLHasPrefix = data
+		case "consortiumDocumentURLHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("consortiumDocumentURLHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ConsortiumDocumentURLHasSuffix = data
+		case "consortiumDocumentURLIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("consortiumDocumentURLIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ConsortiumDocumentURLIsNil = data
+		case "consortiumDocumentURLNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("consortiumDocumentURLNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ConsortiumDocumentURLNotNil = data
+		case "consortiumDocumentURLEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("consortiumDocumentURLEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ConsortiumDocumentURLEqualFold = data
+		case "consortiumDocumentURLContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("consortiumDocumentURLContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ConsortiumDocumentURLContainsFold = data
 		case "hasPeople":
 			var err error
 
@@ -58308,7 +58689,7 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "address", "clearAddress", "phoneNumbers", "appendPhoneNumbers", "clearPhoneNumbers", "emails", "appendEmails", "clearEmails", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "addPersonIDs", "removePersonIDs", "clearPeople", "holderID", "clearHolder", "organizationTypeID", "clearOrganizationType"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "address", "clearAddress", "phoneNumbers", "appendPhoneNumbers", "clearPhoneNumbers", "emails", "appendEmails", "clearEmails", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "previousNames", "appendPreviousNames", "clearPreviousNames", "isInAConsortium", "clearIsInAConsortium", "consortiumDocumentURL", "clearConsortiumDocumentURL", "addPersonIDs", "removePersonIDs", "clearPeople", "holderID", "clearHolder", "organizationTypeID", "clearOrganizationType"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -58540,6 +58921,69 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.ClearAdditionalImagesUrls = data
+		case "previousNames":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("previousNames"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PreviousNames = data
+		case "appendPreviousNames":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendPreviousNames"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AppendPreviousNames = data
+		case "clearPreviousNames":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearPreviousNames"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearPreviousNames = data
+		case "isInAConsortium":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isInAConsortium"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsInAConsortium = data
+		case "clearIsInAConsortium":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearIsInAConsortium"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearIsInAConsortium = data
+		case "consortiumDocumentURL":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("consortiumDocumentURL"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ConsortiumDocumentURL = data
+		case "clearConsortiumDocumentURL":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearConsortiumDocumentURL"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearConsortiumDocumentURL = data
 		case "addPersonIDs":
 			var err error
 
@@ -63772,6 +64216,12 @@ func (ec *executionContext) _Organization(ctx context.Context, sel ast.Selection
 			out.Values[i] = ec._Organization_primaryImageURL(ctx, field, obj)
 		case "additionalImagesUrls":
 			out.Values[i] = ec._Organization_additionalImagesUrls(ctx, field, obj)
+		case "previousNames":
+			out.Values[i] = ec._Organization_previousNames(ctx, field, obj)
+		case "isInAConsortium":
+			out.Values[i] = ec._Organization_isInAConsortium(ctx, field, obj)
+		case "consortiumDocumentURL":
+			out.Values[i] = ec._Organization_consortiumDocumentURL(ctx, field, obj)
 		case "people":
 			field := field
 

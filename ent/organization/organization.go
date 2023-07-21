@@ -39,6 +39,12 @@ const (
 	FieldPrimaryImageURL = "primary_image_url"
 	// FieldAdditionalImagesUrls holds the string denoting the additional_images_urls field in the database.
 	FieldAdditionalImagesUrls = "additional_images_urls"
+	// FieldPreviousNames holds the string denoting the previous_names field in the database.
+	FieldPreviousNames = "previous_names"
+	// FieldIsInAConsortium holds the string denoting the is_in_a_consortium field in the database.
+	FieldIsInAConsortium = "is_in_a_consortium"
+	// FieldConsortiumDocumentURL holds the string denoting the consortium_document_url field in the database.
+	FieldConsortiumDocumentURL = "consortium_document_url"
 	// EdgePeople holds the string denoting the people edge name in mutations.
 	EdgePeople = "people"
 	// EdgeHolder holds the string denoting the holder edge name in mutations.
@@ -85,6 +91,9 @@ var Columns = []string{
 	FieldExternalLinks,
 	FieldPrimaryImageURL,
 	FieldAdditionalImagesUrls,
+	FieldPreviousNames,
+	FieldIsInAConsortium,
+	FieldConsortiumDocumentURL,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "organizations"
@@ -171,6 +180,16 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByPrimaryImageURL orders the results by the primary_image_url field.
 func ByPrimaryImageURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPrimaryImageURL, opts...).ToFunc()
+}
+
+// ByIsInAConsortium orders the results by the is_in_a_consortium field.
+func ByIsInAConsortium(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsInAConsortium, opts...).ToFunc()
+}
+
+// ByConsortiumDocumentURL orders the results by the consortium_document_url field.
+func ByConsortiumDocumentURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldConsortiumDocumentURL, opts...).ToFunc()
 }
 
 // ByPeopleCount orders the results by people count.

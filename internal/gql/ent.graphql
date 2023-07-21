@@ -953,6 +953,9 @@ input CreateOrganizationInput {
   externalLinks: [String!]
   primaryImageURL: String
   additionalImagesUrls: [String!]
+  previousNames: [String!]
+  isInAConsortium: Boolean
+  consortiumDocumentURL: String
   personIDs: [ID!]
   holderID: ID
   organizationTypeID: ID
@@ -2423,6 +2426,9 @@ type Organization implements Node {
   externalLinks: [String!]
   primaryImageURL: String
   additionalImagesUrls: [String!]
+  previousNames: [String!]
+  isInAConsortium: Boolean
+  consortiumDocumentURL: String
   people: [Person!]
   holder: Holder
   organizationType: OrganizationType
@@ -2712,6 +2718,27 @@ input OrganizationWhereInput {
   primaryImageURLNotNil: Boolean
   primaryImageURLEqualFold: String
   primaryImageURLContainsFold: String
+  """is_in_a_consortium field predicates"""
+  isInAConsortium: Boolean
+  isInAConsortiumNEQ: Boolean
+  isInAConsortiumIsNil: Boolean
+  isInAConsortiumNotNil: Boolean
+  """consortium_document_url field predicates"""
+  consortiumDocumentURL: String
+  consortiumDocumentURLNEQ: String
+  consortiumDocumentURLIn: [String!]
+  consortiumDocumentURLNotIn: [String!]
+  consortiumDocumentURLGT: String
+  consortiumDocumentURLGTE: String
+  consortiumDocumentURLLT: String
+  consortiumDocumentURLLTE: String
+  consortiumDocumentURLContains: String
+  consortiumDocumentURLHasPrefix: String
+  consortiumDocumentURLHasSuffix: String
+  consortiumDocumentURLIsNil: Boolean
+  consortiumDocumentURLNotNil: Boolean
+  consortiumDocumentURLEqualFold: String
+  consortiumDocumentURLContainsFold: String
   """people edge predicates"""
   hasPeople: Boolean
   hasPeopleWith: [PersonWhereInput!]
@@ -4801,6 +4828,13 @@ input UpdateOrganizationInput {
   additionalImagesUrls: [String!]
   appendAdditionalImagesUrls: [String!]
   clearAdditionalImagesUrls: Boolean
+  previousNames: [String!]
+  appendPreviousNames: [String!]
+  clearPreviousNames: Boolean
+  isInAConsortium: Boolean
+  clearIsInAConsortium: Boolean
+  consortiumDocumentURL: String
+  clearConsortiumDocumentURL: Boolean
   addPersonIDs: [ID!]
   removePersonIDs: [ID!]
   clearPeople: Boolean

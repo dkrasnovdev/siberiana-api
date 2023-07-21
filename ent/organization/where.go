@@ -95,6 +95,16 @@ func PrimaryImageURL(v string) predicate.Organization {
 	return predicate.Organization(sql.FieldEQ(FieldPrimaryImageURL, v))
 }
 
+// IsInAConsortium applies equality check predicate on the "is_in_a_consortium" field. It's identical to IsInAConsortiumEQ.
+func IsInAConsortium(v bool) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldIsInAConsortium, v))
+}
+
+// ConsortiumDocumentURL applies equality check predicate on the "consortium_document_url" field. It's identical to ConsortiumDocumentURLEQ.
+func ConsortiumDocumentURL(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldConsortiumDocumentURL, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Organization {
 	return predicate.Organization(sql.FieldEQ(FieldCreatedAt, v))
@@ -663,6 +673,111 @@ func AdditionalImagesUrlsIsNil() predicate.Organization {
 // AdditionalImagesUrlsNotNil applies the NotNil predicate on the "additional_images_urls" field.
 func AdditionalImagesUrlsNotNil() predicate.Organization {
 	return predicate.Organization(sql.FieldNotNull(FieldAdditionalImagesUrls))
+}
+
+// PreviousNamesIsNil applies the IsNil predicate on the "previous_names" field.
+func PreviousNamesIsNil() predicate.Organization {
+	return predicate.Organization(sql.FieldIsNull(FieldPreviousNames))
+}
+
+// PreviousNamesNotNil applies the NotNil predicate on the "previous_names" field.
+func PreviousNamesNotNil() predicate.Organization {
+	return predicate.Organization(sql.FieldNotNull(FieldPreviousNames))
+}
+
+// IsInAConsortiumEQ applies the EQ predicate on the "is_in_a_consortium" field.
+func IsInAConsortiumEQ(v bool) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldIsInAConsortium, v))
+}
+
+// IsInAConsortiumNEQ applies the NEQ predicate on the "is_in_a_consortium" field.
+func IsInAConsortiumNEQ(v bool) predicate.Organization {
+	return predicate.Organization(sql.FieldNEQ(FieldIsInAConsortium, v))
+}
+
+// IsInAConsortiumIsNil applies the IsNil predicate on the "is_in_a_consortium" field.
+func IsInAConsortiumIsNil() predicate.Organization {
+	return predicate.Organization(sql.FieldIsNull(FieldIsInAConsortium))
+}
+
+// IsInAConsortiumNotNil applies the NotNil predicate on the "is_in_a_consortium" field.
+func IsInAConsortiumNotNil() predicate.Organization {
+	return predicate.Organization(sql.FieldNotNull(FieldIsInAConsortium))
+}
+
+// ConsortiumDocumentURLEQ applies the EQ predicate on the "consortium_document_url" field.
+func ConsortiumDocumentURLEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldConsortiumDocumentURL, v))
+}
+
+// ConsortiumDocumentURLNEQ applies the NEQ predicate on the "consortium_document_url" field.
+func ConsortiumDocumentURLNEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldNEQ(FieldConsortiumDocumentURL, v))
+}
+
+// ConsortiumDocumentURLIn applies the In predicate on the "consortium_document_url" field.
+func ConsortiumDocumentURLIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldIn(FieldConsortiumDocumentURL, vs...))
+}
+
+// ConsortiumDocumentURLNotIn applies the NotIn predicate on the "consortium_document_url" field.
+func ConsortiumDocumentURLNotIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldNotIn(FieldConsortiumDocumentURL, vs...))
+}
+
+// ConsortiumDocumentURLGT applies the GT predicate on the "consortium_document_url" field.
+func ConsortiumDocumentURLGT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGT(FieldConsortiumDocumentURL, v))
+}
+
+// ConsortiumDocumentURLGTE applies the GTE predicate on the "consortium_document_url" field.
+func ConsortiumDocumentURLGTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGTE(FieldConsortiumDocumentURL, v))
+}
+
+// ConsortiumDocumentURLLT applies the LT predicate on the "consortium_document_url" field.
+func ConsortiumDocumentURLLT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLT(FieldConsortiumDocumentURL, v))
+}
+
+// ConsortiumDocumentURLLTE applies the LTE predicate on the "consortium_document_url" field.
+func ConsortiumDocumentURLLTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLTE(FieldConsortiumDocumentURL, v))
+}
+
+// ConsortiumDocumentURLContains applies the Contains predicate on the "consortium_document_url" field.
+func ConsortiumDocumentURLContains(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContains(FieldConsortiumDocumentURL, v))
+}
+
+// ConsortiumDocumentURLHasPrefix applies the HasPrefix predicate on the "consortium_document_url" field.
+func ConsortiumDocumentURLHasPrefix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasPrefix(FieldConsortiumDocumentURL, v))
+}
+
+// ConsortiumDocumentURLHasSuffix applies the HasSuffix predicate on the "consortium_document_url" field.
+func ConsortiumDocumentURLHasSuffix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasSuffix(FieldConsortiumDocumentURL, v))
+}
+
+// ConsortiumDocumentURLIsNil applies the IsNil predicate on the "consortium_document_url" field.
+func ConsortiumDocumentURLIsNil() predicate.Organization {
+	return predicate.Organization(sql.FieldIsNull(FieldConsortiumDocumentURL))
+}
+
+// ConsortiumDocumentURLNotNil applies the NotNil predicate on the "consortium_document_url" field.
+func ConsortiumDocumentURLNotNil() predicate.Organization {
+	return predicate.Organization(sql.FieldNotNull(FieldConsortiumDocumentURL))
+}
+
+// ConsortiumDocumentURLEqualFold applies the EqualFold predicate on the "consortium_document_url" field.
+func ConsortiumDocumentURLEqualFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEqualFold(FieldConsortiumDocumentURL, v))
+}
+
+// ConsortiumDocumentURLContainsFold applies the ContainsFold predicate on the "consortium_document_url" field.
+func ConsortiumDocumentURLContainsFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContainsFold(FieldConsortiumDocumentURL, v))
 }
 
 // HasPeople applies the HasEdge predicate on the "people" edge.

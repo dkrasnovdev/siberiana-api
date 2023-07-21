@@ -388,6 +388,9 @@ var (
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
+		{Name: "previous_names", Type: field.TypeJSON, Nullable: true},
+		{Name: "is_in_a_consortium", Type: field.TypeBool, Nullable: true},
+		{Name: "consortium_document_url", Type: field.TypeString, Nullable: true},
 		{Name: "holder_organization", Type: field.TypeInt, Unique: true, Nullable: true},
 		{Name: "organization_type_organizations", Type: field.TypeInt, Nullable: true},
 	}
@@ -399,13 +402,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "organizations_holders_organization",
-				Columns:    []*schema.Column{OrganizationsColumns[13]},
+				Columns:    []*schema.Column{OrganizationsColumns[16]},
 				RefColumns: []*schema.Column{HoldersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "organizations_organization_types_organizations",
-				Columns:    []*schema.Column{OrganizationsColumns[14]},
+				Columns:    []*schema.Column{OrganizationsColumns[17]},
 				RefColumns: []*schema.Column{OrganizationTypesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

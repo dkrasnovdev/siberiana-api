@@ -7539,6 +7539,29 @@ type OrganizationWhereInput struct {
 	PrimaryImageURLEqualFold    *string  `json:"primaryImageURLEqualFold,omitempty"`
 	PrimaryImageURLContainsFold *string  `json:"primaryImageURLContainsFold,omitempty"`
 
+	// "is_in_a_consortium" field predicates.
+	IsInAConsortium       *bool `json:"isInAConsortium,omitempty"`
+	IsInAConsortiumNEQ    *bool `json:"isInAConsortiumNEQ,omitempty"`
+	IsInAConsortiumIsNil  bool  `json:"isInAConsortiumIsNil,omitempty"`
+	IsInAConsortiumNotNil bool  `json:"isInAConsortiumNotNil,omitempty"`
+
+	// "consortium_document_url" field predicates.
+	ConsortiumDocumentURL             *string  `json:"consortiumDocumentURL,omitempty"`
+	ConsortiumDocumentURLNEQ          *string  `json:"consortiumDocumentURLNEQ,omitempty"`
+	ConsortiumDocumentURLIn           []string `json:"consortiumDocumentURLIn,omitempty"`
+	ConsortiumDocumentURLNotIn        []string `json:"consortiumDocumentURLNotIn,omitempty"`
+	ConsortiumDocumentURLGT           *string  `json:"consortiumDocumentURLGT,omitempty"`
+	ConsortiumDocumentURLGTE          *string  `json:"consortiumDocumentURLGTE,omitempty"`
+	ConsortiumDocumentURLLT           *string  `json:"consortiumDocumentURLLT,omitempty"`
+	ConsortiumDocumentURLLTE          *string  `json:"consortiumDocumentURLLTE,omitempty"`
+	ConsortiumDocumentURLContains     *string  `json:"consortiumDocumentURLContains,omitempty"`
+	ConsortiumDocumentURLHasPrefix    *string  `json:"consortiumDocumentURLHasPrefix,omitempty"`
+	ConsortiumDocumentURLHasSuffix    *string  `json:"consortiumDocumentURLHasSuffix,omitempty"`
+	ConsortiumDocumentURLIsNil        bool     `json:"consortiumDocumentURLIsNil,omitempty"`
+	ConsortiumDocumentURLNotNil       bool     `json:"consortiumDocumentURLNotNil,omitempty"`
+	ConsortiumDocumentURLEqualFold    *string  `json:"consortiumDocumentURLEqualFold,omitempty"`
+	ConsortiumDocumentURLContainsFold *string  `json:"consortiumDocumentURLContainsFold,omitempty"`
+
 	// "people" edge predicates.
 	HasPeople     *bool               `json:"hasPeople,omitempty"`
 	HasPeopleWith []*PersonWhereInput `json:"hasPeopleWith,omitempty"`
@@ -7964,6 +7987,63 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if i.PrimaryImageURLContainsFold != nil {
 		predicates = append(predicates, organization.PrimaryImageURLContainsFold(*i.PrimaryImageURLContainsFold))
+	}
+	if i.IsInAConsortium != nil {
+		predicates = append(predicates, organization.IsInAConsortiumEQ(*i.IsInAConsortium))
+	}
+	if i.IsInAConsortiumNEQ != nil {
+		predicates = append(predicates, organization.IsInAConsortiumNEQ(*i.IsInAConsortiumNEQ))
+	}
+	if i.IsInAConsortiumIsNil {
+		predicates = append(predicates, organization.IsInAConsortiumIsNil())
+	}
+	if i.IsInAConsortiumNotNil {
+		predicates = append(predicates, organization.IsInAConsortiumNotNil())
+	}
+	if i.ConsortiumDocumentURL != nil {
+		predicates = append(predicates, organization.ConsortiumDocumentURLEQ(*i.ConsortiumDocumentURL))
+	}
+	if i.ConsortiumDocumentURLNEQ != nil {
+		predicates = append(predicates, organization.ConsortiumDocumentURLNEQ(*i.ConsortiumDocumentURLNEQ))
+	}
+	if len(i.ConsortiumDocumentURLIn) > 0 {
+		predicates = append(predicates, organization.ConsortiumDocumentURLIn(i.ConsortiumDocumentURLIn...))
+	}
+	if len(i.ConsortiumDocumentURLNotIn) > 0 {
+		predicates = append(predicates, organization.ConsortiumDocumentURLNotIn(i.ConsortiumDocumentURLNotIn...))
+	}
+	if i.ConsortiumDocumentURLGT != nil {
+		predicates = append(predicates, organization.ConsortiumDocumentURLGT(*i.ConsortiumDocumentURLGT))
+	}
+	if i.ConsortiumDocumentURLGTE != nil {
+		predicates = append(predicates, organization.ConsortiumDocumentURLGTE(*i.ConsortiumDocumentURLGTE))
+	}
+	if i.ConsortiumDocumentURLLT != nil {
+		predicates = append(predicates, organization.ConsortiumDocumentURLLT(*i.ConsortiumDocumentURLLT))
+	}
+	if i.ConsortiumDocumentURLLTE != nil {
+		predicates = append(predicates, organization.ConsortiumDocumentURLLTE(*i.ConsortiumDocumentURLLTE))
+	}
+	if i.ConsortiumDocumentURLContains != nil {
+		predicates = append(predicates, organization.ConsortiumDocumentURLContains(*i.ConsortiumDocumentURLContains))
+	}
+	if i.ConsortiumDocumentURLHasPrefix != nil {
+		predicates = append(predicates, organization.ConsortiumDocumentURLHasPrefix(*i.ConsortiumDocumentURLHasPrefix))
+	}
+	if i.ConsortiumDocumentURLHasSuffix != nil {
+		predicates = append(predicates, organization.ConsortiumDocumentURLHasSuffix(*i.ConsortiumDocumentURLHasSuffix))
+	}
+	if i.ConsortiumDocumentURLIsNil {
+		predicates = append(predicates, organization.ConsortiumDocumentURLIsNil())
+	}
+	if i.ConsortiumDocumentURLNotNil {
+		predicates = append(predicates, organization.ConsortiumDocumentURLNotNil())
+	}
+	if i.ConsortiumDocumentURLEqualFold != nil {
+		predicates = append(predicates, organization.ConsortiumDocumentURLEqualFold(*i.ConsortiumDocumentURLEqualFold))
+	}
+	if i.ConsortiumDocumentURLContainsFold != nil {
+		predicates = append(predicates, organization.ConsortiumDocumentURLContainsFold(*i.ConsortiumDocumentURLContainsFold))
 	}
 
 	if i.HasPeople != nil {

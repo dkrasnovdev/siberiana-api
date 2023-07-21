@@ -159,6 +159,40 @@ func (oc *OrganizationCreate) SetAdditionalImagesUrls(s []string) *OrganizationC
 	return oc
 }
 
+// SetPreviousNames sets the "previous_names" field.
+func (oc *OrganizationCreate) SetPreviousNames(s []string) *OrganizationCreate {
+	oc.mutation.SetPreviousNames(s)
+	return oc
+}
+
+// SetIsInAConsortium sets the "is_in_a_consortium" field.
+func (oc *OrganizationCreate) SetIsInAConsortium(b bool) *OrganizationCreate {
+	oc.mutation.SetIsInAConsortium(b)
+	return oc
+}
+
+// SetNillableIsInAConsortium sets the "is_in_a_consortium" field if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableIsInAConsortium(b *bool) *OrganizationCreate {
+	if b != nil {
+		oc.SetIsInAConsortium(*b)
+	}
+	return oc
+}
+
+// SetConsortiumDocumentURL sets the "consortium_document_url" field.
+func (oc *OrganizationCreate) SetConsortiumDocumentURL(s string) *OrganizationCreate {
+	oc.mutation.SetConsortiumDocumentURL(s)
+	return oc
+}
+
+// SetNillableConsortiumDocumentURL sets the "consortium_document_url" field if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableConsortiumDocumentURL(s *string) *OrganizationCreate {
+	if s != nil {
+		oc.SetConsortiumDocumentURL(*s)
+	}
+	return oc
+}
+
 // AddPersonIDs adds the "people" edge to the Person entity by IDs.
 func (oc *OrganizationCreate) AddPersonIDs(ids ...int) *OrganizationCreate {
 	oc.mutation.AddPersonIDs(ids...)
@@ -347,6 +381,18 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 	if value, ok := oc.mutation.AdditionalImagesUrls(); ok {
 		_spec.SetField(organization.FieldAdditionalImagesUrls, field.TypeJSON, value)
 		_node.AdditionalImagesUrls = value
+	}
+	if value, ok := oc.mutation.PreviousNames(); ok {
+		_spec.SetField(organization.FieldPreviousNames, field.TypeJSON, value)
+		_node.PreviousNames = value
+	}
+	if value, ok := oc.mutation.IsInAConsortium(); ok {
+		_spec.SetField(organization.FieldIsInAConsortium, field.TypeBool, value)
+		_node.IsInAConsortium = value
+	}
+	if value, ok := oc.mutation.ConsortiumDocumentURL(); ok {
+		_spec.SetField(organization.FieldConsortiumDocumentURL, field.TypeString, value)
+		_node.ConsortiumDocumentURL = value
 	}
 	if nodes := oc.mutation.PeopleIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

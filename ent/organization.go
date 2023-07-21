@@ -44,6 +44,12 @@ type Organization struct {
 	PrimaryImageURL string `json:"primary_image_url,omitempty"`
 	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
 	AdditionalImagesUrls []string `json:"additional_images_urls,omitempty"`
+	// PreviousNames holds the value of the "previous_names" field.
+	PreviousNames []string `json:"previous_names,omitempty"`
+	// IsInAConsortium holds the value of the "is_in_a_consortium" field.
+	IsInAConsortium bool `json:"is_in_a_consortium,omitempty"`
+	// ConsortiumDocumentURL holds the value of the "consortium_document_url" field.
+	ConsortiumDocumentURL string `json:"consortium_document_url,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrganizationQuery when eager-loading is set.
 	Edges                           OrganizationEdges `json:"edges"`
@@ -109,11 +115,13 @@ func (*Organization) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case organization.FieldPhoneNumbers, organization.FieldEmails, organization.FieldExternalLinks, organization.FieldAdditionalImagesUrls:
+		case organization.FieldPhoneNumbers, organization.FieldEmails, organization.FieldExternalLinks, organization.FieldAdditionalImagesUrls, organization.FieldPreviousNames:
 			values[i] = new([]byte)
+		case organization.FieldIsInAConsortium:
+			values[i] = new(sql.NullBool)
 		case organization.FieldID:
 			values[i] = new(sql.NullInt64)
-		case organization.FieldCreatedBy, organization.FieldUpdatedBy, organization.FieldAddress, organization.FieldDisplayName, organization.FieldDescription, organization.FieldPrimaryImageURL:
+		case organization.FieldCreatedBy, organization.FieldUpdatedBy, organization.FieldAddress, organization.FieldDisplayName, organization.FieldDescription, organization.FieldPrimaryImageURL, organization.FieldConsortiumDocumentURL:
 			values[i] = new(sql.NullString)
 		case organization.FieldCreatedAt, organization.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -222,6 +230,26 @@ func (o *Organization) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field additional_images_urls: %w", err)
 				}
 			}
+		case organization.FieldPreviousNames:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field previous_names", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &o.PreviousNames); err != nil {
+					return fmt.Errorf("unmarshal field previous_names: %w", err)
+				}
+			}
+		case organization.FieldIsInAConsortium:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_in_a_consortium", values[i])
+			} else if value.Valid {
+				o.IsInAConsortium = value.Bool
+			}
+		case organization.FieldConsortiumDocumentURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field consortium_document_url", values[i])
+			} else if value.Valid {
+				o.ConsortiumDocumentURL = value.String
+			}
 		case organization.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field holder_organization", value)
@@ -322,6 +350,15 @@ func (o *Organization) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("additional_images_urls=")
 	builder.WriteString(fmt.Sprintf("%v", o.AdditionalImagesUrls))
+	builder.WriteString(", ")
+	builder.WriteString("previous_names=")
+	builder.WriteString(fmt.Sprintf("%v", o.PreviousNames))
+	builder.WriteString(", ")
+	builder.WriteString("is_in_a_consortium=")
+	builder.WriteString(fmt.Sprintf("%v", o.IsInAConsortium))
+	builder.WriteString(", ")
+	builder.WriteString("consortium_document_url=")
+	builder.WriteString(o.ConsortiumDocumentURL)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -1690,21 +1690,24 @@ func (c *MonumentUpdateOne) SetInput(i UpdateMonumentInput) *MonumentUpdateOne {
 
 // CreateOrganizationInput represents a mutation input for creating organizations.
 type CreateOrganizationInput struct {
-	CreatedAt            *time.Time
-	CreatedBy            *string
-	UpdatedAt            *time.Time
-	UpdatedBy            *string
-	Address              *string
-	PhoneNumbers         []string
-	Emails               []string
-	DisplayName          *string
-	Description          *string
-	ExternalLinks        []string
-	PrimaryImageURL      *string
-	AdditionalImagesUrls []string
-	PersonIDs            []int
-	HolderID             *int
-	OrganizationTypeID   *int
+	CreatedAt             *time.Time
+	CreatedBy             *string
+	UpdatedAt             *time.Time
+	UpdatedBy             *string
+	Address               *string
+	PhoneNumbers          []string
+	Emails                []string
+	DisplayName           *string
+	Description           *string
+	ExternalLinks         []string
+	PrimaryImageURL       *string
+	AdditionalImagesUrls  []string
+	PreviousNames         []string
+	IsInAConsortium       *bool
+	ConsortiumDocumentURL *string
+	PersonIDs             []int
+	HolderID              *int
+	OrganizationTypeID    *int
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -1744,6 +1747,15 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.AdditionalImagesUrls; v != nil {
 		m.SetAdditionalImagesUrls(v)
+	}
+	if v := i.PreviousNames; v != nil {
+		m.SetPreviousNames(v)
+	}
+	if v := i.IsInAConsortium; v != nil {
+		m.SetIsInAConsortium(*v)
+	}
+	if v := i.ConsortiumDocumentURL; v != nil {
+		m.SetConsortiumDocumentURL(*v)
 	}
 	if v := i.PersonIDs; len(v) > 0 {
 		m.AddPersonIDs(v...)
@@ -1789,6 +1801,13 @@ type UpdateOrganizationInput struct {
 	ClearAdditionalImagesUrls  bool
 	AdditionalImagesUrls       []string
 	AppendAdditionalImagesUrls []string
+	ClearPreviousNames         bool
+	PreviousNames              []string
+	AppendPreviousNames        []string
+	ClearIsInAConsortium       bool
+	IsInAConsortium            *bool
+	ClearConsortiumDocumentURL bool
+	ConsortiumDocumentURL      *string
 	ClearPeople                bool
 	AddPersonIDs               []int
 	RemovePersonIDs            []int
@@ -1874,6 +1893,27 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if i.AppendAdditionalImagesUrls != nil {
 		m.AppendAdditionalImagesUrls(i.AdditionalImagesUrls)
+	}
+	if i.ClearPreviousNames {
+		m.ClearPreviousNames()
+	}
+	if v := i.PreviousNames; v != nil {
+		m.SetPreviousNames(v)
+	}
+	if i.AppendPreviousNames != nil {
+		m.AppendPreviousNames(i.PreviousNames)
+	}
+	if i.ClearIsInAConsortium {
+		m.ClearIsInAConsortium()
+	}
+	if v := i.IsInAConsortium; v != nil {
+		m.SetIsInAConsortium(*v)
+	}
+	if i.ClearConsortiumDocumentURL {
+		m.ClearConsortiumDocumentURL()
+	}
+	if v := i.ConsortiumDocumentURL; v != nil {
+		m.SetConsortiumDocumentURL(*v)
 	}
 	if i.ClearPeople {
 		m.ClearPeople()

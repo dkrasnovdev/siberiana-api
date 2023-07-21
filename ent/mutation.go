@@ -14788,6 +14788,10 @@ type OrganizationMutation struct {
 	primary_image_url            *string
 	additional_images_urls       *[]string
 	appendadditional_images_urls []string
+	previous_names               *[]string
+	appendprevious_names         []string
+	is_in_a_consortium           *bool
+	consortium_document_url      *string
 	clearedFields                map[string]struct{}
 	people                       map[int]struct{}
 	removedpeople                map[int]struct{}
@@ -15525,6 +15529,169 @@ func (m *OrganizationMutation) ResetAdditionalImagesUrls() {
 	delete(m.clearedFields, organization.FieldAdditionalImagesUrls)
 }
 
+// SetPreviousNames sets the "previous_names" field.
+func (m *OrganizationMutation) SetPreviousNames(s []string) {
+	m.previous_names = &s
+	m.appendprevious_names = nil
+}
+
+// PreviousNames returns the value of the "previous_names" field in the mutation.
+func (m *OrganizationMutation) PreviousNames() (r []string, exists bool) {
+	v := m.previous_names
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPreviousNames returns the old "previous_names" field's value of the Organization entity.
+// If the Organization object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationMutation) OldPreviousNames(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPreviousNames is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPreviousNames requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPreviousNames: %w", err)
+	}
+	return oldValue.PreviousNames, nil
+}
+
+// AppendPreviousNames adds s to the "previous_names" field.
+func (m *OrganizationMutation) AppendPreviousNames(s []string) {
+	m.appendprevious_names = append(m.appendprevious_names, s...)
+}
+
+// AppendedPreviousNames returns the list of values that were appended to the "previous_names" field in this mutation.
+func (m *OrganizationMutation) AppendedPreviousNames() ([]string, bool) {
+	if len(m.appendprevious_names) == 0 {
+		return nil, false
+	}
+	return m.appendprevious_names, true
+}
+
+// ClearPreviousNames clears the value of the "previous_names" field.
+func (m *OrganizationMutation) ClearPreviousNames() {
+	m.previous_names = nil
+	m.appendprevious_names = nil
+	m.clearedFields[organization.FieldPreviousNames] = struct{}{}
+}
+
+// PreviousNamesCleared returns if the "previous_names" field was cleared in this mutation.
+func (m *OrganizationMutation) PreviousNamesCleared() bool {
+	_, ok := m.clearedFields[organization.FieldPreviousNames]
+	return ok
+}
+
+// ResetPreviousNames resets all changes to the "previous_names" field.
+func (m *OrganizationMutation) ResetPreviousNames() {
+	m.previous_names = nil
+	m.appendprevious_names = nil
+	delete(m.clearedFields, organization.FieldPreviousNames)
+}
+
+// SetIsInAConsortium sets the "is_in_a_consortium" field.
+func (m *OrganizationMutation) SetIsInAConsortium(b bool) {
+	m.is_in_a_consortium = &b
+}
+
+// IsInAConsortium returns the value of the "is_in_a_consortium" field in the mutation.
+func (m *OrganizationMutation) IsInAConsortium() (r bool, exists bool) {
+	v := m.is_in_a_consortium
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsInAConsortium returns the old "is_in_a_consortium" field's value of the Organization entity.
+// If the Organization object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationMutation) OldIsInAConsortium(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsInAConsortium is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsInAConsortium requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsInAConsortium: %w", err)
+	}
+	return oldValue.IsInAConsortium, nil
+}
+
+// ClearIsInAConsortium clears the value of the "is_in_a_consortium" field.
+func (m *OrganizationMutation) ClearIsInAConsortium() {
+	m.is_in_a_consortium = nil
+	m.clearedFields[organization.FieldIsInAConsortium] = struct{}{}
+}
+
+// IsInAConsortiumCleared returns if the "is_in_a_consortium" field was cleared in this mutation.
+func (m *OrganizationMutation) IsInAConsortiumCleared() bool {
+	_, ok := m.clearedFields[organization.FieldIsInAConsortium]
+	return ok
+}
+
+// ResetIsInAConsortium resets all changes to the "is_in_a_consortium" field.
+func (m *OrganizationMutation) ResetIsInAConsortium() {
+	m.is_in_a_consortium = nil
+	delete(m.clearedFields, organization.FieldIsInAConsortium)
+}
+
+// SetConsortiumDocumentURL sets the "consortium_document_url" field.
+func (m *OrganizationMutation) SetConsortiumDocumentURL(s string) {
+	m.consortium_document_url = &s
+}
+
+// ConsortiumDocumentURL returns the value of the "consortium_document_url" field in the mutation.
+func (m *OrganizationMutation) ConsortiumDocumentURL() (r string, exists bool) {
+	v := m.consortium_document_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldConsortiumDocumentURL returns the old "consortium_document_url" field's value of the Organization entity.
+// If the Organization object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationMutation) OldConsortiumDocumentURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldConsortiumDocumentURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldConsortiumDocumentURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldConsortiumDocumentURL: %w", err)
+	}
+	return oldValue.ConsortiumDocumentURL, nil
+}
+
+// ClearConsortiumDocumentURL clears the value of the "consortium_document_url" field.
+func (m *OrganizationMutation) ClearConsortiumDocumentURL() {
+	m.consortium_document_url = nil
+	m.clearedFields[organization.FieldConsortiumDocumentURL] = struct{}{}
+}
+
+// ConsortiumDocumentURLCleared returns if the "consortium_document_url" field was cleared in this mutation.
+func (m *OrganizationMutation) ConsortiumDocumentURLCleared() bool {
+	_, ok := m.clearedFields[organization.FieldConsortiumDocumentURL]
+	return ok
+}
+
+// ResetConsortiumDocumentURL resets all changes to the "consortium_document_url" field.
+func (m *OrganizationMutation) ResetConsortiumDocumentURL() {
+	m.consortium_document_url = nil
+	delete(m.clearedFields, organization.FieldConsortiumDocumentURL)
+}
+
 // AddPersonIDs adds the "people" edge to the Person entity by ids.
 func (m *OrganizationMutation) AddPersonIDs(ids ...int) {
 	if m.people == nil {
@@ -15691,7 +15858,7 @@ func (m *OrganizationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrganizationMutation) Fields() []string {
-	fields := make([]string, 0, 12)
+	fields := make([]string, 0, 15)
 	if m.created_at != nil {
 		fields = append(fields, organization.FieldCreatedAt)
 	}
@@ -15728,6 +15895,15 @@ func (m *OrganizationMutation) Fields() []string {
 	if m.additional_images_urls != nil {
 		fields = append(fields, organization.FieldAdditionalImagesUrls)
 	}
+	if m.previous_names != nil {
+		fields = append(fields, organization.FieldPreviousNames)
+	}
+	if m.is_in_a_consortium != nil {
+		fields = append(fields, organization.FieldIsInAConsortium)
+	}
+	if m.consortium_document_url != nil {
+		fields = append(fields, organization.FieldConsortiumDocumentURL)
+	}
 	return fields
 }
 
@@ -15760,6 +15936,12 @@ func (m *OrganizationMutation) Field(name string) (ent.Value, bool) {
 		return m.PrimaryImageURL()
 	case organization.FieldAdditionalImagesUrls:
 		return m.AdditionalImagesUrls()
+	case organization.FieldPreviousNames:
+		return m.PreviousNames()
+	case organization.FieldIsInAConsortium:
+		return m.IsInAConsortium()
+	case organization.FieldConsortiumDocumentURL:
+		return m.ConsortiumDocumentURL()
 	}
 	return nil, false
 }
@@ -15793,6 +15975,12 @@ func (m *OrganizationMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldPrimaryImageURL(ctx)
 	case organization.FieldAdditionalImagesUrls:
 		return m.OldAdditionalImagesUrls(ctx)
+	case organization.FieldPreviousNames:
+		return m.OldPreviousNames(ctx)
+	case organization.FieldIsInAConsortium:
+		return m.OldIsInAConsortium(ctx)
+	case organization.FieldConsortiumDocumentURL:
+		return m.OldConsortiumDocumentURL(ctx)
 	}
 	return nil, fmt.Errorf("unknown Organization field %s", name)
 }
@@ -15886,6 +16074,27 @@ func (m *OrganizationMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetAdditionalImagesUrls(v)
 		return nil
+	case organization.FieldPreviousNames:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPreviousNames(v)
+		return nil
+	case organization.FieldIsInAConsortium:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsInAConsortium(v)
+		return nil
+	case organization.FieldConsortiumDocumentURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetConsortiumDocumentURL(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Organization field %s", name)
 }
@@ -15946,6 +16155,15 @@ func (m *OrganizationMutation) ClearedFields() []string {
 	if m.FieldCleared(organization.FieldAdditionalImagesUrls) {
 		fields = append(fields, organization.FieldAdditionalImagesUrls)
 	}
+	if m.FieldCleared(organization.FieldPreviousNames) {
+		fields = append(fields, organization.FieldPreviousNames)
+	}
+	if m.FieldCleared(organization.FieldIsInAConsortium) {
+		fields = append(fields, organization.FieldIsInAConsortium)
+	}
+	if m.FieldCleared(organization.FieldConsortiumDocumentURL) {
+		fields = append(fields, organization.FieldConsortiumDocumentURL)
+	}
 	return fields
 }
 
@@ -15990,6 +16208,15 @@ func (m *OrganizationMutation) ClearField(name string) error {
 	case organization.FieldAdditionalImagesUrls:
 		m.ClearAdditionalImagesUrls()
 		return nil
+	case organization.FieldPreviousNames:
+		m.ClearPreviousNames()
+		return nil
+	case organization.FieldIsInAConsortium:
+		m.ClearIsInAConsortium()
+		return nil
+	case organization.FieldConsortiumDocumentURL:
+		m.ClearConsortiumDocumentURL()
+		return nil
 	}
 	return fmt.Errorf("unknown Organization nullable field %s", name)
 }
@@ -16033,6 +16260,15 @@ func (m *OrganizationMutation) ResetField(name string) error {
 		return nil
 	case organization.FieldAdditionalImagesUrls:
 		m.ResetAdditionalImagesUrls()
+		return nil
+	case organization.FieldPreviousNames:
+		m.ResetPreviousNames()
+		return nil
+	case organization.FieldIsInAConsortium:
+		m.ResetIsInAConsortium()
+		return nil
+	case organization.FieldConsortiumDocumentURL:
+		m.ResetConsortiumDocumentURL()
 		return nil
 	}
 	return fmt.Errorf("unknown Organization field %s", name)
