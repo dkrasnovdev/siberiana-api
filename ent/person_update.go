@@ -231,6 +231,112 @@ func (pu *PersonUpdate) ClearAdditionalImagesUrls() *PersonUpdate {
 	return pu
 }
 
+// SetGivenName sets the "given_name" field.
+func (pu *PersonUpdate) SetGivenName(s string) *PersonUpdate {
+	pu.mutation.SetGivenName(s)
+	return pu
+}
+
+// SetNillableGivenName sets the "given_name" field if the given value is not nil.
+func (pu *PersonUpdate) SetNillableGivenName(s *string) *PersonUpdate {
+	if s != nil {
+		pu.SetGivenName(*s)
+	}
+	return pu
+}
+
+// ClearGivenName clears the value of the "given_name" field.
+func (pu *PersonUpdate) ClearGivenName() *PersonUpdate {
+	pu.mutation.ClearGivenName()
+	return pu
+}
+
+// SetFamilyName sets the "family_name" field.
+func (pu *PersonUpdate) SetFamilyName(s string) *PersonUpdate {
+	pu.mutation.SetFamilyName(s)
+	return pu
+}
+
+// SetNillableFamilyName sets the "family_name" field if the given value is not nil.
+func (pu *PersonUpdate) SetNillableFamilyName(s *string) *PersonUpdate {
+	if s != nil {
+		pu.SetFamilyName(*s)
+	}
+	return pu
+}
+
+// ClearFamilyName clears the value of the "family_name" field.
+func (pu *PersonUpdate) ClearFamilyName() *PersonUpdate {
+	pu.mutation.ClearFamilyName()
+	return pu
+}
+
+// SetPatronymicName sets the "patronymic_name" field.
+func (pu *PersonUpdate) SetPatronymicName(s string) *PersonUpdate {
+	pu.mutation.SetPatronymicName(s)
+	return pu
+}
+
+// SetNillablePatronymicName sets the "patronymic_name" field if the given value is not nil.
+func (pu *PersonUpdate) SetNillablePatronymicName(s *string) *PersonUpdate {
+	if s != nil {
+		pu.SetPatronymicName(*s)
+	}
+	return pu
+}
+
+// ClearPatronymicName clears the value of the "patronymic_name" field.
+func (pu *PersonUpdate) ClearPatronymicName() *PersonUpdate {
+	pu.mutation.ClearPatronymicName()
+	return pu
+}
+
+// SetBeginData sets the "begin_data" field.
+func (pu *PersonUpdate) SetBeginData(t time.Time) *PersonUpdate {
+	pu.mutation.SetBeginData(t)
+	return pu
+}
+
+// SetNillableBeginData sets the "begin_data" field if the given value is not nil.
+func (pu *PersonUpdate) SetNillableBeginData(t *time.Time) *PersonUpdate {
+	if t != nil {
+		pu.SetBeginData(*t)
+	}
+	return pu
+}
+
+// ClearBeginData clears the value of the "begin_data" field.
+func (pu *PersonUpdate) ClearBeginData() *PersonUpdate {
+	pu.mutation.ClearBeginData()
+	return pu
+}
+
+// SetEndDate sets the "end_date" field.
+func (pu *PersonUpdate) SetEndDate(t time.Time) *PersonUpdate {
+	pu.mutation.SetEndDate(t)
+	return pu
+}
+
+// SetNillableEndDate sets the "end_date" field if the given value is not nil.
+func (pu *PersonUpdate) SetNillableEndDate(t *time.Time) *PersonUpdate {
+	if t != nil {
+		pu.SetEndDate(*t)
+	}
+	return pu
+}
+
+// ClearEndDate clears the value of the "end_date" field.
+func (pu *PersonUpdate) ClearEndDate() *PersonUpdate {
+	pu.mutation.ClearEndDate()
+	return pu
+}
+
+// SetGender sets the "gender" field.
+func (pu *PersonUpdate) SetGender(pe person.Gender) *PersonUpdate {
+	pu.mutation.SetGender(pe)
+	return pu
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (pu *PersonUpdate) AddArtifactIDs(ids ...int) *PersonUpdate {
 	pu.mutation.AddArtifactIDs(ids...)
@@ -411,7 +517,20 @@ func (pu *PersonUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (pu *PersonUpdate) check() error {
+	if v, ok := pu.mutation.Gender(); ok {
+		if err := person.GenderValidator(v); err != nil {
+			return &ValidationError{Name: "gender", err: fmt.Errorf(`ent: validator failed for field "Person.gender": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (pu *PersonUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := pu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(person.Table, person.Columns, sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt))
 	if ps := pu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -502,6 +621,39 @@ func (pu *PersonUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.AdditionalImagesUrlsCleared() {
 		_spec.ClearField(person.FieldAdditionalImagesUrls, field.TypeJSON)
+	}
+	if value, ok := pu.mutation.GivenName(); ok {
+		_spec.SetField(person.FieldGivenName, field.TypeString, value)
+	}
+	if pu.mutation.GivenNameCleared() {
+		_spec.ClearField(person.FieldGivenName, field.TypeString)
+	}
+	if value, ok := pu.mutation.FamilyName(); ok {
+		_spec.SetField(person.FieldFamilyName, field.TypeString, value)
+	}
+	if pu.mutation.FamilyNameCleared() {
+		_spec.ClearField(person.FieldFamilyName, field.TypeString)
+	}
+	if value, ok := pu.mutation.PatronymicName(); ok {
+		_spec.SetField(person.FieldPatronymicName, field.TypeString, value)
+	}
+	if pu.mutation.PatronymicNameCleared() {
+		_spec.ClearField(person.FieldPatronymicName, field.TypeString)
+	}
+	if value, ok := pu.mutation.BeginData(); ok {
+		_spec.SetField(person.FieldBeginData, field.TypeTime, value)
+	}
+	if pu.mutation.BeginDataCleared() {
+		_spec.ClearField(person.FieldBeginData, field.TypeTime)
+	}
+	if value, ok := pu.mutation.EndDate(); ok {
+		_spec.SetField(person.FieldEndDate, field.TypeTime, value)
+	}
+	if pu.mutation.EndDateCleared() {
+		_spec.ClearField(person.FieldEndDate, field.TypeTime)
+	}
+	if value, ok := pu.mutation.Gender(); ok {
+		_spec.SetField(person.FieldGender, field.TypeEnum, value)
 	}
 	if pu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -885,6 +1037,112 @@ func (puo *PersonUpdateOne) ClearAdditionalImagesUrls() *PersonUpdateOne {
 	return puo
 }
 
+// SetGivenName sets the "given_name" field.
+func (puo *PersonUpdateOne) SetGivenName(s string) *PersonUpdateOne {
+	puo.mutation.SetGivenName(s)
+	return puo
+}
+
+// SetNillableGivenName sets the "given_name" field if the given value is not nil.
+func (puo *PersonUpdateOne) SetNillableGivenName(s *string) *PersonUpdateOne {
+	if s != nil {
+		puo.SetGivenName(*s)
+	}
+	return puo
+}
+
+// ClearGivenName clears the value of the "given_name" field.
+func (puo *PersonUpdateOne) ClearGivenName() *PersonUpdateOne {
+	puo.mutation.ClearGivenName()
+	return puo
+}
+
+// SetFamilyName sets the "family_name" field.
+func (puo *PersonUpdateOne) SetFamilyName(s string) *PersonUpdateOne {
+	puo.mutation.SetFamilyName(s)
+	return puo
+}
+
+// SetNillableFamilyName sets the "family_name" field if the given value is not nil.
+func (puo *PersonUpdateOne) SetNillableFamilyName(s *string) *PersonUpdateOne {
+	if s != nil {
+		puo.SetFamilyName(*s)
+	}
+	return puo
+}
+
+// ClearFamilyName clears the value of the "family_name" field.
+func (puo *PersonUpdateOne) ClearFamilyName() *PersonUpdateOne {
+	puo.mutation.ClearFamilyName()
+	return puo
+}
+
+// SetPatronymicName sets the "patronymic_name" field.
+func (puo *PersonUpdateOne) SetPatronymicName(s string) *PersonUpdateOne {
+	puo.mutation.SetPatronymicName(s)
+	return puo
+}
+
+// SetNillablePatronymicName sets the "patronymic_name" field if the given value is not nil.
+func (puo *PersonUpdateOne) SetNillablePatronymicName(s *string) *PersonUpdateOne {
+	if s != nil {
+		puo.SetPatronymicName(*s)
+	}
+	return puo
+}
+
+// ClearPatronymicName clears the value of the "patronymic_name" field.
+func (puo *PersonUpdateOne) ClearPatronymicName() *PersonUpdateOne {
+	puo.mutation.ClearPatronymicName()
+	return puo
+}
+
+// SetBeginData sets the "begin_data" field.
+func (puo *PersonUpdateOne) SetBeginData(t time.Time) *PersonUpdateOne {
+	puo.mutation.SetBeginData(t)
+	return puo
+}
+
+// SetNillableBeginData sets the "begin_data" field if the given value is not nil.
+func (puo *PersonUpdateOne) SetNillableBeginData(t *time.Time) *PersonUpdateOne {
+	if t != nil {
+		puo.SetBeginData(*t)
+	}
+	return puo
+}
+
+// ClearBeginData clears the value of the "begin_data" field.
+func (puo *PersonUpdateOne) ClearBeginData() *PersonUpdateOne {
+	puo.mutation.ClearBeginData()
+	return puo
+}
+
+// SetEndDate sets the "end_date" field.
+func (puo *PersonUpdateOne) SetEndDate(t time.Time) *PersonUpdateOne {
+	puo.mutation.SetEndDate(t)
+	return puo
+}
+
+// SetNillableEndDate sets the "end_date" field if the given value is not nil.
+func (puo *PersonUpdateOne) SetNillableEndDate(t *time.Time) *PersonUpdateOne {
+	if t != nil {
+		puo.SetEndDate(*t)
+	}
+	return puo
+}
+
+// ClearEndDate clears the value of the "end_date" field.
+func (puo *PersonUpdateOne) ClearEndDate() *PersonUpdateOne {
+	puo.mutation.ClearEndDate()
+	return puo
+}
+
+// SetGender sets the "gender" field.
+func (puo *PersonUpdateOne) SetGender(pe person.Gender) *PersonUpdateOne {
+	puo.mutation.SetGender(pe)
+	return puo
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (puo *PersonUpdateOne) AddArtifactIDs(ids ...int) *PersonUpdateOne {
 	puo.mutation.AddArtifactIDs(ids...)
@@ -1078,7 +1336,20 @@ func (puo *PersonUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (puo *PersonUpdateOne) check() error {
+	if v, ok := puo.mutation.Gender(); ok {
+		if err := person.GenderValidator(v); err != nil {
+			return &ValidationError{Name: "gender", err: fmt.Errorf(`ent: validator failed for field "Person.gender": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (puo *PersonUpdateOne) sqlSave(ctx context.Context) (_node *Person, err error) {
+	if err := puo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(person.Table, person.Columns, sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt))
 	id, ok := puo.mutation.ID()
 	if !ok {
@@ -1186,6 +1457,39 @@ func (puo *PersonUpdateOne) sqlSave(ctx context.Context) (_node *Person, err err
 	}
 	if puo.mutation.AdditionalImagesUrlsCleared() {
 		_spec.ClearField(person.FieldAdditionalImagesUrls, field.TypeJSON)
+	}
+	if value, ok := puo.mutation.GivenName(); ok {
+		_spec.SetField(person.FieldGivenName, field.TypeString, value)
+	}
+	if puo.mutation.GivenNameCleared() {
+		_spec.ClearField(person.FieldGivenName, field.TypeString)
+	}
+	if value, ok := puo.mutation.FamilyName(); ok {
+		_spec.SetField(person.FieldFamilyName, field.TypeString, value)
+	}
+	if puo.mutation.FamilyNameCleared() {
+		_spec.ClearField(person.FieldFamilyName, field.TypeString)
+	}
+	if value, ok := puo.mutation.PatronymicName(); ok {
+		_spec.SetField(person.FieldPatronymicName, field.TypeString, value)
+	}
+	if puo.mutation.PatronymicNameCleared() {
+		_spec.ClearField(person.FieldPatronymicName, field.TypeString)
+	}
+	if value, ok := puo.mutation.BeginData(); ok {
+		_spec.SetField(person.FieldBeginData, field.TypeTime, value)
+	}
+	if puo.mutation.BeginDataCleared() {
+		_spec.ClearField(person.FieldBeginData, field.TypeTime)
+	}
+	if value, ok := puo.mutation.EndDate(); ok {
+		_spec.SetField(person.FieldEndDate, field.TypeTime, value)
+	}
+	if puo.mutation.EndDateCleared() {
+		_spec.ClearField(person.FieldEndDate, field.TypeTime)
+	}
+	if value, ok := puo.mutation.Gender(); ok {
+		_spec.SetField(person.FieldGender, field.TypeEnum, value)
 	}
 	if puo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

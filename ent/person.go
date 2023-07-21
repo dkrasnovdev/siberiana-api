@@ -43,6 +43,18 @@ type Person struct {
 	PrimaryImageURL string `json:"primary_image_url,omitempty"`
 	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
 	AdditionalImagesUrls []string `json:"additional_images_urls,omitempty"`
+	// GivenName holds the value of the "given_name" field.
+	GivenName string `json:"given_name,omitempty"`
+	// FamilyName holds the value of the "family_name" field.
+	FamilyName string `json:"family_name,omitempty"`
+	// PatronymicName holds the value of the "patronymic_name" field.
+	PatronymicName string `json:"patronymic_name,omitempty"`
+	// BeginData holds the value of the "begin_data" field.
+	BeginData time.Time `json:"begin_data,omitempty"`
+	// EndDate holds the value of the "end_date" field.
+	EndDate time.Time `json:"end_date,omitempty"`
+	// Gender holds the value of the "gender" field.
+	Gender person.Gender `json:"gender,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PersonQuery when eager-loading is set.
 	Edges         PersonEdges `json:"edges"`
@@ -120,9 +132,9 @@ func (*Person) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case person.FieldID:
 			values[i] = new(sql.NullInt64)
-		case person.FieldCreatedBy, person.FieldUpdatedBy, person.FieldAddress, person.FieldDisplayName, person.FieldDescription, person.FieldPrimaryImageURL:
+		case person.FieldCreatedBy, person.FieldUpdatedBy, person.FieldAddress, person.FieldDisplayName, person.FieldDescription, person.FieldPrimaryImageURL, person.FieldGivenName, person.FieldFamilyName, person.FieldPatronymicName, person.FieldGender:
 			values[i] = new(sql.NullString)
-		case person.FieldCreatedAt, person.FieldUpdatedAt:
+		case person.FieldCreatedAt, person.FieldUpdatedAt, person.FieldBeginData, person.FieldEndDate:
 			values[i] = new(sql.NullTime)
 		case person.ForeignKeys[0]: // holder_person
 			values[i] = new(sql.NullInt64)
@@ -227,6 +239,42 @@ func (pe *Person) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field additional_images_urls: %w", err)
 				}
 			}
+		case person.FieldGivenName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field given_name", values[i])
+			} else if value.Valid {
+				pe.GivenName = value.String
+			}
+		case person.FieldFamilyName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field family_name", values[i])
+			} else if value.Valid {
+				pe.FamilyName = value.String
+			}
+		case person.FieldPatronymicName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field patronymic_name", values[i])
+			} else if value.Valid {
+				pe.PatronymicName = value.String
+			}
+		case person.FieldBeginData:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field begin_data", values[i])
+			} else if value.Valid {
+				pe.BeginData = value.Time
+			}
+		case person.FieldEndDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field end_date", values[i])
+			} else if value.Valid {
+				pe.EndDate = value.Time
+			}
+		case person.FieldGender:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field gender", values[i])
+			} else if value.Valid {
+				pe.Gender = person.Gender(value.String)
+			}
 		case person.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field holder_person", value)
@@ -325,6 +373,24 @@ func (pe *Person) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("additional_images_urls=")
 	builder.WriteString(fmt.Sprintf("%v", pe.AdditionalImagesUrls))
+	builder.WriteString(", ")
+	builder.WriteString("given_name=")
+	builder.WriteString(pe.GivenName)
+	builder.WriteString(", ")
+	builder.WriteString("family_name=")
+	builder.WriteString(pe.FamilyName)
+	builder.WriteString(", ")
+	builder.WriteString("patronymic_name=")
+	builder.WriteString(pe.PatronymicName)
+	builder.WriteString(", ")
+	builder.WriteString("begin_data=")
+	builder.WriteString(pe.BeginData.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("end_date=")
+	builder.WriteString(pe.EndDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("gender=")
+	builder.WriteString(fmt.Sprintf("%v", pe.Gender))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -7616,6 +7616,87 @@ type PersonWhereInput struct {
 	PrimaryImageURLEqualFold    *string  `json:"primaryImageURLEqualFold,omitempty"`
 	PrimaryImageURLContainsFold *string  `json:"primaryImageURLContainsFold,omitempty"`
 
+	// "given_name" field predicates.
+	GivenName             *string  `json:"givenName,omitempty"`
+	GivenNameNEQ          *string  `json:"givenNameNEQ,omitempty"`
+	GivenNameIn           []string `json:"givenNameIn,omitempty"`
+	GivenNameNotIn        []string `json:"givenNameNotIn,omitempty"`
+	GivenNameGT           *string  `json:"givenNameGT,omitempty"`
+	GivenNameGTE          *string  `json:"givenNameGTE,omitempty"`
+	GivenNameLT           *string  `json:"givenNameLT,omitempty"`
+	GivenNameLTE          *string  `json:"givenNameLTE,omitempty"`
+	GivenNameContains     *string  `json:"givenNameContains,omitempty"`
+	GivenNameHasPrefix    *string  `json:"givenNameHasPrefix,omitempty"`
+	GivenNameHasSuffix    *string  `json:"givenNameHasSuffix,omitempty"`
+	GivenNameIsNil        bool     `json:"givenNameIsNil,omitempty"`
+	GivenNameNotNil       bool     `json:"givenNameNotNil,omitempty"`
+	GivenNameEqualFold    *string  `json:"givenNameEqualFold,omitempty"`
+	GivenNameContainsFold *string  `json:"givenNameContainsFold,omitempty"`
+
+	// "family_name" field predicates.
+	FamilyName             *string  `json:"familyName,omitempty"`
+	FamilyNameNEQ          *string  `json:"familyNameNEQ,omitempty"`
+	FamilyNameIn           []string `json:"familyNameIn,omitempty"`
+	FamilyNameNotIn        []string `json:"familyNameNotIn,omitempty"`
+	FamilyNameGT           *string  `json:"familyNameGT,omitempty"`
+	FamilyNameGTE          *string  `json:"familyNameGTE,omitempty"`
+	FamilyNameLT           *string  `json:"familyNameLT,omitempty"`
+	FamilyNameLTE          *string  `json:"familyNameLTE,omitempty"`
+	FamilyNameContains     *string  `json:"familyNameContains,omitempty"`
+	FamilyNameHasPrefix    *string  `json:"familyNameHasPrefix,omitempty"`
+	FamilyNameHasSuffix    *string  `json:"familyNameHasSuffix,omitempty"`
+	FamilyNameIsNil        bool     `json:"familyNameIsNil,omitempty"`
+	FamilyNameNotNil       bool     `json:"familyNameNotNil,omitempty"`
+	FamilyNameEqualFold    *string  `json:"familyNameEqualFold,omitempty"`
+	FamilyNameContainsFold *string  `json:"familyNameContainsFold,omitempty"`
+
+	// "patronymic_name" field predicates.
+	PatronymicName             *string  `json:"patronymicName,omitempty"`
+	PatronymicNameNEQ          *string  `json:"patronymicNameNEQ,omitempty"`
+	PatronymicNameIn           []string `json:"patronymicNameIn,omitempty"`
+	PatronymicNameNotIn        []string `json:"patronymicNameNotIn,omitempty"`
+	PatronymicNameGT           *string  `json:"patronymicNameGT,omitempty"`
+	PatronymicNameGTE          *string  `json:"patronymicNameGTE,omitempty"`
+	PatronymicNameLT           *string  `json:"patronymicNameLT,omitempty"`
+	PatronymicNameLTE          *string  `json:"patronymicNameLTE,omitempty"`
+	PatronymicNameContains     *string  `json:"patronymicNameContains,omitempty"`
+	PatronymicNameHasPrefix    *string  `json:"patronymicNameHasPrefix,omitempty"`
+	PatronymicNameHasSuffix    *string  `json:"patronymicNameHasSuffix,omitempty"`
+	PatronymicNameIsNil        bool     `json:"patronymicNameIsNil,omitempty"`
+	PatronymicNameNotNil       bool     `json:"patronymicNameNotNil,omitempty"`
+	PatronymicNameEqualFold    *string  `json:"patronymicNameEqualFold,omitempty"`
+	PatronymicNameContainsFold *string  `json:"patronymicNameContainsFold,omitempty"`
+
+	// "begin_data" field predicates.
+	BeginData       *time.Time  `json:"beginData,omitempty"`
+	BeginDataNEQ    *time.Time  `json:"beginDataNEQ,omitempty"`
+	BeginDataIn     []time.Time `json:"beginDataIn,omitempty"`
+	BeginDataNotIn  []time.Time `json:"beginDataNotIn,omitempty"`
+	BeginDataGT     *time.Time  `json:"beginDataGT,omitempty"`
+	BeginDataGTE    *time.Time  `json:"beginDataGTE,omitempty"`
+	BeginDataLT     *time.Time  `json:"beginDataLT,omitempty"`
+	BeginDataLTE    *time.Time  `json:"beginDataLTE,omitempty"`
+	BeginDataIsNil  bool        `json:"beginDataIsNil,omitempty"`
+	BeginDataNotNil bool        `json:"beginDataNotNil,omitempty"`
+
+	// "end_date" field predicates.
+	EndDate       *time.Time  `json:"endDate,omitempty"`
+	EndDateNEQ    *time.Time  `json:"endDateNEQ,omitempty"`
+	EndDateIn     []time.Time `json:"endDateIn,omitempty"`
+	EndDateNotIn  []time.Time `json:"endDateNotIn,omitempty"`
+	EndDateGT     *time.Time  `json:"endDateGT,omitempty"`
+	EndDateGTE    *time.Time  `json:"endDateGTE,omitempty"`
+	EndDateLT     *time.Time  `json:"endDateLT,omitempty"`
+	EndDateLTE    *time.Time  `json:"endDateLTE,omitempty"`
+	EndDateIsNil  bool        `json:"endDateIsNil,omitempty"`
+	EndDateNotNil bool        `json:"endDateNotNil,omitempty"`
+
+	// "gender" field predicates.
+	Gender      *person.Gender  `json:"gender,omitempty"`
+	GenderNEQ   *person.Gender  `json:"genderNEQ,omitempty"`
+	GenderIn    []person.Gender `json:"genderIn,omitempty"`
+	GenderNotIn []person.Gender `json:"genderNotIn,omitempty"`
+
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
@@ -8045,6 +8126,213 @@ func (i *PersonWhereInput) P() (predicate.Person, error) {
 	}
 	if i.PrimaryImageURLContainsFold != nil {
 		predicates = append(predicates, person.PrimaryImageURLContainsFold(*i.PrimaryImageURLContainsFold))
+	}
+	if i.GivenName != nil {
+		predicates = append(predicates, person.GivenNameEQ(*i.GivenName))
+	}
+	if i.GivenNameNEQ != nil {
+		predicates = append(predicates, person.GivenNameNEQ(*i.GivenNameNEQ))
+	}
+	if len(i.GivenNameIn) > 0 {
+		predicates = append(predicates, person.GivenNameIn(i.GivenNameIn...))
+	}
+	if len(i.GivenNameNotIn) > 0 {
+		predicates = append(predicates, person.GivenNameNotIn(i.GivenNameNotIn...))
+	}
+	if i.GivenNameGT != nil {
+		predicates = append(predicates, person.GivenNameGT(*i.GivenNameGT))
+	}
+	if i.GivenNameGTE != nil {
+		predicates = append(predicates, person.GivenNameGTE(*i.GivenNameGTE))
+	}
+	if i.GivenNameLT != nil {
+		predicates = append(predicates, person.GivenNameLT(*i.GivenNameLT))
+	}
+	if i.GivenNameLTE != nil {
+		predicates = append(predicates, person.GivenNameLTE(*i.GivenNameLTE))
+	}
+	if i.GivenNameContains != nil {
+		predicates = append(predicates, person.GivenNameContains(*i.GivenNameContains))
+	}
+	if i.GivenNameHasPrefix != nil {
+		predicates = append(predicates, person.GivenNameHasPrefix(*i.GivenNameHasPrefix))
+	}
+	if i.GivenNameHasSuffix != nil {
+		predicates = append(predicates, person.GivenNameHasSuffix(*i.GivenNameHasSuffix))
+	}
+	if i.GivenNameIsNil {
+		predicates = append(predicates, person.GivenNameIsNil())
+	}
+	if i.GivenNameNotNil {
+		predicates = append(predicates, person.GivenNameNotNil())
+	}
+	if i.GivenNameEqualFold != nil {
+		predicates = append(predicates, person.GivenNameEqualFold(*i.GivenNameEqualFold))
+	}
+	if i.GivenNameContainsFold != nil {
+		predicates = append(predicates, person.GivenNameContainsFold(*i.GivenNameContainsFold))
+	}
+	if i.FamilyName != nil {
+		predicates = append(predicates, person.FamilyNameEQ(*i.FamilyName))
+	}
+	if i.FamilyNameNEQ != nil {
+		predicates = append(predicates, person.FamilyNameNEQ(*i.FamilyNameNEQ))
+	}
+	if len(i.FamilyNameIn) > 0 {
+		predicates = append(predicates, person.FamilyNameIn(i.FamilyNameIn...))
+	}
+	if len(i.FamilyNameNotIn) > 0 {
+		predicates = append(predicates, person.FamilyNameNotIn(i.FamilyNameNotIn...))
+	}
+	if i.FamilyNameGT != nil {
+		predicates = append(predicates, person.FamilyNameGT(*i.FamilyNameGT))
+	}
+	if i.FamilyNameGTE != nil {
+		predicates = append(predicates, person.FamilyNameGTE(*i.FamilyNameGTE))
+	}
+	if i.FamilyNameLT != nil {
+		predicates = append(predicates, person.FamilyNameLT(*i.FamilyNameLT))
+	}
+	if i.FamilyNameLTE != nil {
+		predicates = append(predicates, person.FamilyNameLTE(*i.FamilyNameLTE))
+	}
+	if i.FamilyNameContains != nil {
+		predicates = append(predicates, person.FamilyNameContains(*i.FamilyNameContains))
+	}
+	if i.FamilyNameHasPrefix != nil {
+		predicates = append(predicates, person.FamilyNameHasPrefix(*i.FamilyNameHasPrefix))
+	}
+	if i.FamilyNameHasSuffix != nil {
+		predicates = append(predicates, person.FamilyNameHasSuffix(*i.FamilyNameHasSuffix))
+	}
+	if i.FamilyNameIsNil {
+		predicates = append(predicates, person.FamilyNameIsNil())
+	}
+	if i.FamilyNameNotNil {
+		predicates = append(predicates, person.FamilyNameNotNil())
+	}
+	if i.FamilyNameEqualFold != nil {
+		predicates = append(predicates, person.FamilyNameEqualFold(*i.FamilyNameEqualFold))
+	}
+	if i.FamilyNameContainsFold != nil {
+		predicates = append(predicates, person.FamilyNameContainsFold(*i.FamilyNameContainsFold))
+	}
+	if i.PatronymicName != nil {
+		predicates = append(predicates, person.PatronymicNameEQ(*i.PatronymicName))
+	}
+	if i.PatronymicNameNEQ != nil {
+		predicates = append(predicates, person.PatronymicNameNEQ(*i.PatronymicNameNEQ))
+	}
+	if len(i.PatronymicNameIn) > 0 {
+		predicates = append(predicates, person.PatronymicNameIn(i.PatronymicNameIn...))
+	}
+	if len(i.PatronymicNameNotIn) > 0 {
+		predicates = append(predicates, person.PatronymicNameNotIn(i.PatronymicNameNotIn...))
+	}
+	if i.PatronymicNameGT != nil {
+		predicates = append(predicates, person.PatronymicNameGT(*i.PatronymicNameGT))
+	}
+	if i.PatronymicNameGTE != nil {
+		predicates = append(predicates, person.PatronymicNameGTE(*i.PatronymicNameGTE))
+	}
+	if i.PatronymicNameLT != nil {
+		predicates = append(predicates, person.PatronymicNameLT(*i.PatronymicNameLT))
+	}
+	if i.PatronymicNameLTE != nil {
+		predicates = append(predicates, person.PatronymicNameLTE(*i.PatronymicNameLTE))
+	}
+	if i.PatronymicNameContains != nil {
+		predicates = append(predicates, person.PatronymicNameContains(*i.PatronymicNameContains))
+	}
+	if i.PatronymicNameHasPrefix != nil {
+		predicates = append(predicates, person.PatronymicNameHasPrefix(*i.PatronymicNameHasPrefix))
+	}
+	if i.PatronymicNameHasSuffix != nil {
+		predicates = append(predicates, person.PatronymicNameHasSuffix(*i.PatronymicNameHasSuffix))
+	}
+	if i.PatronymicNameIsNil {
+		predicates = append(predicates, person.PatronymicNameIsNil())
+	}
+	if i.PatronymicNameNotNil {
+		predicates = append(predicates, person.PatronymicNameNotNil())
+	}
+	if i.PatronymicNameEqualFold != nil {
+		predicates = append(predicates, person.PatronymicNameEqualFold(*i.PatronymicNameEqualFold))
+	}
+	if i.PatronymicNameContainsFold != nil {
+		predicates = append(predicates, person.PatronymicNameContainsFold(*i.PatronymicNameContainsFold))
+	}
+	if i.BeginData != nil {
+		predicates = append(predicates, person.BeginDataEQ(*i.BeginData))
+	}
+	if i.BeginDataNEQ != nil {
+		predicates = append(predicates, person.BeginDataNEQ(*i.BeginDataNEQ))
+	}
+	if len(i.BeginDataIn) > 0 {
+		predicates = append(predicates, person.BeginDataIn(i.BeginDataIn...))
+	}
+	if len(i.BeginDataNotIn) > 0 {
+		predicates = append(predicates, person.BeginDataNotIn(i.BeginDataNotIn...))
+	}
+	if i.BeginDataGT != nil {
+		predicates = append(predicates, person.BeginDataGT(*i.BeginDataGT))
+	}
+	if i.BeginDataGTE != nil {
+		predicates = append(predicates, person.BeginDataGTE(*i.BeginDataGTE))
+	}
+	if i.BeginDataLT != nil {
+		predicates = append(predicates, person.BeginDataLT(*i.BeginDataLT))
+	}
+	if i.BeginDataLTE != nil {
+		predicates = append(predicates, person.BeginDataLTE(*i.BeginDataLTE))
+	}
+	if i.BeginDataIsNil {
+		predicates = append(predicates, person.BeginDataIsNil())
+	}
+	if i.BeginDataNotNil {
+		predicates = append(predicates, person.BeginDataNotNil())
+	}
+	if i.EndDate != nil {
+		predicates = append(predicates, person.EndDateEQ(*i.EndDate))
+	}
+	if i.EndDateNEQ != nil {
+		predicates = append(predicates, person.EndDateNEQ(*i.EndDateNEQ))
+	}
+	if len(i.EndDateIn) > 0 {
+		predicates = append(predicates, person.EndDateIn(i.EndDateIn...))
+	}
+	if len(i.EndDateNotIn) > 0 {
+		predicates = append(predicates, person.EndDateNotIn(i.EndDateNotIn...))
+	}
+	if i.EndDateGT != nil {
+		predicates = append(predicates, person.EndDateGT(*i.EndDateGT))
+	}
+	if i.EndDateGTE != nil {
+		predicates = append(predicates, person.EndDateGTE(*i.EndDateGTE))
+	}
+	if i.EndDateLT != nil {
+		predicates = append(predicates, person.EndDateLT(*i.EndDateLT))
+	}
+	if i.EndDateLTE != nil {
+		predicates = append(predicates, person.EndDateLTE(*i.EndDateLTE))
+	}
+	if i.EndDateIsNil {
+		predicates = append(predicates, person.EndDateIsNil())
+	}
+	if i.EndDateNotNil {
+		predicates = append(predicates, person.EndDateNotNil())
+	}
+	if i.Gender != nil {
+		predicates = append(predicates, person.GenderEQ(*i.Gender))
+	}
+	if i.GenderNEQ != nil {
+		predicates = append(predicates, person.GenderNEQ(*i.GenderNEQ))
+	}
+	if len(i.GenderIn) > 0 {
+		predicates = append(predicates, person.GenderIn(i.GenderIn...))
+	}
+	if len(i.GenderNotIn) > 0 {
+		predicates = append(predicates, person.GenderNotIn(i.GenderNotIn...))
 	}
 
 	if i.HasArtifacts != nil {

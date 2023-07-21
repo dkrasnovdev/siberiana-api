@@ -402,6 +402,12 @@ var (
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
+		{Name: "given_name", Type: field.TypeString, Nullable: true},
+		{Name: "family_name", Type: field.TypeString, Nullable: true},
+		{Name: "patronymic_name", Type: field.TypeString, Nullable: true},
+		{Name: "begin_data", Type: field.TypeTime, Nullable: true},
+		{Name: "end_date", Type: field.TypeTime, Nullable: true},
+		{Name: "gender", Type: field.TypeEnum, Enums: []string{"female", "male"}},
 		{Name: "holder_person", Type: field.TypeInt, Unique: true, Nullable: true},
 	}
 	// PersonsTable holds the schema information for the "persons" table.
@@ -412,7 +418,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "persons_holders_person",
-				Columns:    []*schema.Column{PersonsColumns[13]},
+				Columns:    []*schema.Column{PersonsColumns[19]},
 				RefColumns: []*schema.Column{HoldersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

@@ -5,6 +5,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
+	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/privacy"
 	"github.com/dkrasnovdev/heritage-api/internal/ent/mixin"
 	rule "github.com/dkrasnovdev/heritage-api/internal/ent/privacy"
@@ -52,7 +53,20 @@ func (Person) Annotations() []schema.Annotation {
 
 // Fields of the Person.
 func (Person) Fields() []ent.Field {
-	return nil
+	return []ent.Field{
+		field.String("given_name").
+			Optional(),
+		field.String("family_name").
+			Optional(),
+		field.String("patronymic_name").
+			Optional(),
+		field.Time("begin_data").
+			Optional(),
+		field.Time("end_date").
+			Optional(),
+		field.Enum("gender").
+			Values("female", "male"),
+	}
 }
 
 // Edges of the Person.

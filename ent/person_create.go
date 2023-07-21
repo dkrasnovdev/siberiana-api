@@ -160,6 +160,82 @@ func (pc *PersonCreate) SetAdditionalImagesUrls(s []string) *PersonCreate {
 	return pc
 }
 
+// SetGivenName sets the "given_name" field.
+func (pc *PersonCreate) SetGivenName(s string) *PersonCreate {
+	pc.mutation.SetGivenName(s)
+	return pc
+}
+
+// SetNillableGivenName sets the "given_name" field if the given value is not nil.
+func (pc *PersonCreate) SetNillableGivenName(s *string) *PersonCreate {
+	if s != nil {
+		pc.SetGivenName(*s)
+	}
+	return pc
+}
+
+// SetFamilyName sets the "family_name" field.
+func (pc *PersonCreate) SetFamilyName(s string) *PersonCreate {
+	pc.mutation.SetFamilyName(s)
+	return pc
+}
+
+// SetNillableFamilyName sets the "family_name" field if the given value is not nil.
+func (pc *PersonCreate) SetNillableFamilyName(s *string) *PersonCreate {
+	if s != nil {
+		pc.SetFamilyName(*s)
+	}
+	return pc
+}
+
+// SetPatronymicName sets the "patronymic_name" field.
+func (pc *PersonCreate) SetPatronymicName(s string) *PersonCreate {
+	pc.mutation.SetPatronymicName(s)
+	return pc
+}
+
+// SetNillablePatronymicName sets the "patronymic_name" field if the given value is not nil.
+func (pc *PersonCreate) SetNillablePatronymicName(s *string) *PersonCreate {
+	if s != nil {
+		pc.SetPatronymicName(*s)
+	}
+	return pc
+}
+
+// SetBeginData sets the "begin_data" field.
+func (pc *PersonCreate) SetBeginData(t time.Time) *PersonCreate {
+	pc.mutation.SetBeginData(t)
+	return pc
+}
+
+// SetNillableBeginData sets the "begin_data" field if the given value is not nil.
+func (pc *PersonCreate) SetNillableBeginData(t *time.Time) *PersonCreate {
+	if t != nil {
+		pc.SetBeginData(*t)
+	}
+	return pc
+}
+
+// SetEndDate sets the "end_date" field.
+func (pc *PersonCreate) SetEndDate(t time.Time) *PersonCreate {
+	pc.mutation.SetEndDate(t)
+	return pc
+}
+
+// SetNillableEndDate sets the "end_date" field if the given value is not nil.
+func (pc *PersonCreate) SetNillableEndDate(t *time.Time) *PersonCreate {
+	if t != nil {
+		pc.SetEndDate(*t)
+	}
+	return pc
+}
+
+// SetGender sets the "gender" field.
+func (pc *PersonCreate) SetGender(pe person.Gender) *PersonCreate {
+	pc.mutation.SetGender(pe)
+	return pc
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (pc *PersonCreate) AddArtifactIDs(ids ...int) *PersonCreate {
 	pc.mutation.AddArtifactIDs(ids...)
@@ -286,6 +362,14 @@ func (pc *PersonCreate) check() error {
 	if _, ok := pc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Person.updated_at"`)}
 	}
+	if _, ok := pc.mutation.Gender(); !ok {
+		return &ValidationError{Name: "gender", err: errors.New(`ent: missing required field "Person.gender"`)}
+	}
+	if v, ok := pc.mutation.Gender(); ok {
+		if err := person.GenderValidator(v); err != nil {
+			return &ValidationError{Name: "gender", err: fmt.Errorf(`ent: validator failed for field "Person.gender": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -359,6 +443,30 @@ func (pc *PersonCreate) createSpec() (*Person, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.AdditionalImagesUrls(); ok {
 		_spec.SetField(person.FieldAdditionalImagesUrls, field.TypeJSON, value)
 		_node.AdditionalImagesUrls = value
+	}
+	if value, ok := pc.mutation.GivenName(); ok {
+		_spec.SetField(person.FieldGivenName, field.TypeString, value)
+		_node.GivenName = value
+	}
+	if value, ok := pc.mutation.FamilyName(); ok {
+		_spec.SetField(person.FieldFamilyName, field.TypeString, value)
+		_node.FamilyName = value
+	}
+	if value, ok := pc.mutation.PatronymicName(); ok {
+		_spec.SetField(person.FieldPatronymicName, field.TypeString, value)
+		_node.PatronymicName = value
+	}
+	if value, ok := pc.mutation.BeginData(); ok {
+		_spec.SetField(person.FieldBeginData, field.TypeTime, value)
+		_node.BeginData = value
+	}
+	if value, ok := pc.mutation.EndDate(); ok {
+		_spec.SetField(person.FieldEndDate, field.TypeTime, value)
+		_node.EndDate = value
+	}
+	if value, ok := pc.mutation.Gender(); ok {
+		_spec.SetField(person.FieldGender, field.TypeEnum, value)
+		_node.Gender = value
 	}
 	if nodes := pc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

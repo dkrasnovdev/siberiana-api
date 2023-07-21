@@ -2478,6 +2478,36 @@ func (pe *PersonQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 				selectedFields = append(selectedFields, person.FieldAdditionalImagesUrls)
 				fieldSeen[person.FieldAdditionalImagesUrls] = struct{}{}
 			}
+		case "givenName":
+			if _, ok := fieldSeen[person.FieldGivenName]; !ok {
+				selectedFields = append(selectedFields, person.FieldGivenName)
+				fieldSeen[person.FieldGivenName] = struct{}{}
+			}
+		case "familyName":
+			if _, ok := fieldSeen[person.FieldFamilyName]; !ok {
+				selectedFields = append(selectedFields, person.FieldFamilyName)
+				fieldSeen[person.FieldFamilyName] = struct{}{}
+			}
+		case "patronymicName":
+			if _, ok := fieldSeen[person.FieldPatronymicName]; !ok {
+				selectedFields = append(selectedFields, person.FieldPatronymicName)
+				fieldSeen[person.FieldPatronymicName] = struct{}{}
+			}
+		case "beginData":
+			if _, ok := fieldSeen[person.FieldBeginData]; !ok {
+				selectedFields = append(selectedFields, person.FieldBeginData)
+				fieldSeen[person.FieldBeginData] = struct{}{}
+			}
+		case "endDate":
+			if _, ok := fieldSeen[person.FieldEndDate]; !ok {
+				selectedFields = append(selectedFields, person.FieldEndDate)
+				fieldSeen[person.FieldEndDate] = struct{}{}
+			}
+		case "gender":
+			if _, ok := fieldSeen[person.FieldGender]; !ok {
+				selectedFields = append(selectedFields, person.FieldGender)
+				fieldSeen[person.FieldGender] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

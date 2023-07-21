@@ -966,6 +966,12 @@ input CreatePersonInput {
   externalLinks: [String!]
   primaryImageURL: String
   additionalImagesUrls: [String!]
+  givenName: String
+  familyName: String
+  patronymicName: String
+  beginData: Time
+  endDate: Time
+  gender: PersonGender!
   artifactIDs: [ID!]
   projectIDs: [ID!]
   publicationIDs: [ID!]
@@ -2469,6 +2475,12 @@ type Person implements Node {
   externalLinks: [String!]
   primaryImageURL: String
   additionalImagesUrls: [String!]
+  givenName: String
+  familyName: String
+  patronymicName: String
+  beginData: Time
+  endDate: Time
+  gender: PersonGender!
   artifacts: [Artifact!]
   projects: [Project!]
   publications: [Publication!]
@@ -2489,6 +2501,11 @@ type PersonEdge {
   node: Person
   """A cursor for use in pagination."""
   cursor: Cursor!
+}
+"""PersonGender is enum for the field gender"""
+enum PersonGender @goModel(model: "github.com/dkrasnovdev/heritage-api/ent/person.Gender") {
+  female
+  male
 }
 """Ordering options for Person connections"""
 input PersonOrder {
@@ -2633,6 +2650,81 @@ input PersonWhereInput {
   primaryImageURLNotNil: Boolean
   primaryImageURLEqualFold: String
   primaryImageURLContainsFold: String
+  """given_name field predicates"""
+  givenName: String
+  givenNameNEQ: String
+  givenNameIn: [String!]
+  givenNameNotIn: [String!]
+  givenNameGT: String
+  givenNameGTE: String
+  givenNameLT: String
+  givenNameLTE: String
+  givenNameContains: String
+  givenNameHasPrefix: String
+  givenNameHasSuffix: String
+  givenNameIsNil: Boolean
+  givenNameNotNil: Boolean
+  givenNameEqualFold: String
+  givenNameContainsFold: String
+  """family_name field predicates"""
+  familyName: String
+  familyNameNEQ: String
+  familyNameIn: [String!]
+  familyNameNotIn: [String!]
+  familyNameGT: String
+  familyNameGTE: String
+  familyNameLT: String
+  familyNameLTE: String
+  familyNameContains: String
+  familyNameHasPrefix: String
+  familyNameHasSuffix: String
+  familyNameIsNil: Boolean
+  familyNameNotNil: Boolean
+  familyNameEqualFold: String
+  familyNameContainsFold: String
+  """patronymic_name field predicates"""
+  patronymicName: String
+  patronymicNameNEQ: String
+  patronymicNameIn: [String!]
+  patronymicNameNotIn: [String!]
+  patronymicNameGT: String
+  patronymicNameGTE: String
+  patronymicNameLT: String
+  patronymicNameLTE: String
+  patronymicNameContains: String
+  patronymicNameHasPrefix: String
+  patronymicNameHasSuffix: String
+  patronymicNameIsNil: Boolean
+  patronymicNameNotNil: Boolean
+  patronymicNameEqualFold: String
+  patronymicNameContainsFold: String
+  """begin_data field predicates"""
+  beginData: Time
+  beginDataNEQ: Time
+  beginDataIn: [Time!]
+  beginDataNotIn: [Time!]
+  beginDataGT: Time
+  beginDataGTE: Time
+  beginDataLT: Time
+  beginDataLTE: Time
+  beginDataIsNil: Boolean
+  beginDataNotNil: Boolean
+  """end_date field predicates"""
+  endDate: Time
+  endDateNEQ: Time
+  endDateIn: [Time!]
+  endDateNotIn: [Time!]
+  endDateGT: Time
+  endDateGTE: Time
+  endDateLT: Time
+  endDateLTE: Time
+  endDateIsNil: Boolean
+  endDateNotNil: Boolean
+  """gender field predicates"""
+  gender: PersonGender
+  genderNEQ: PersonGender
+  genderIn: [PersonGender!]
+  genderNotIn: [PersonGender!]
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -4323,6 +4415,17 @@ input UpdatePersonInput {
   additionalImagesUrls: [String!]
   appendAdditionalImagesUrls: [String!]
   clearAdditionalImagesUrls: Boolean
+  givenName: String
+  clearGivenName: Boolean
+  familyName: String
+  clearFamilyName: Boolean
+  patronymicName: String
+  clearPatronymicName: Boolean
+  beginData: Time
+  clearBeginData: Boolean
+  endDate: Time
+  clearEndDate: Boolean
+  gender: PersonGender
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean

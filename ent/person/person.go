@@ -3,6 +3,9 @@
 package person
 
 import (
+	"fmt"
+	"io"
+	"strconv"
 	"time"
 
 	"entgo.io/ent"
@@ -39,6 +42,18 @@ const (
 	FieldPrimaryImageURL = "primary_image_url"
 	// FieldAdditionalImagesUrls holds the string denoting the additional_images_urls field in the database.
 	FieldAdditionalImagesUrls = "additional_images_urls"
+	// FieldGivenName holds the string denoting the given_name field in the database.
+	FieldGivenName = "given_name"
+	// FieldFamilyName holds the string denoting the family_name field in the database.
+	FieldFamilyName = "family_name"
+	// FieldPatronymicName holds the string denoting the patronymic_name field in the database.
+	FieldPatronymicName = "patronymic_name"
+	// FieldBeginData holds the string denoting the begin_data field in the database.
+	FieldBeginData = "begin_data"
+	// FieldEndDate holds the string denoting the end_date field in the database.
+	FieldEndDate = "end_date"
+	// FieldGender holds the string denoting the gender field in the database.
+	FieldGender = "gender"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
 	// EdgeProjects holds the string denoting the projects edge name in mutations.
@@ -88,6 +103,12 @@ var Columns = []string{
 	FieldExternalLinks,
 	FieldPrimaryImageURL,
 	FieldAdditionalImagesUrls,
+	FieldGivenName,
+	FieldFamilyName,
+	FieldPatronymicName,
+	FieldBeginData,
+	FieldEndDate,
+	FieldGender,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "persons"
@@ -139,6 +160,29 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 )
 
+// Gender defines the type for the "gender" enum field.
+type Gender string
+
+// Gender values.
+const (
+	GenderFemale Gender = "female"
+	GenderMale   Gender = "male"
+)
+
+func (ge Gender) String() string {
+	return string(ge)
+}
+
+// GenderValidator is a validator for the "gender" field enum values. It is called by the builders before save.
+func GenderValidator(ge Gender) error {
+	switch ge {
+	case GenderFemale, GenderMale:
+		return nil
+	default:
+		return fmt.Errorf("person: invalid enum value for gender field: %q", ge)
+	}
+}
+
 // OrderOption defines the ordering options for the Person queries.
 type OrderOption func(*sql.Selector)
 
@@ -185,6 +229,36 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByPrimaryImageURL orders the results by the primary_image_url field.
 func ByPrimaryImageURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPrimaryImageURL, opts...).ToFunc()
+}
+
+// ByGivenName orders the results by the given_name field.
+func ByGivenName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldGivenName, opts...).ToFunc()
+}
+
+// ByFamilyName orders the results by the family_name field.
+func ByFamilyName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFamilyName, opts...).ToFunc()
+}
+
+// ByPatronymicName orders the results by the patronymic_name field.
+func ByPatronymicName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPatronymicName, opts...).ToFunc()
+}
+
+// ByBeginData orders the results by the begin_data field.
+func ByBeginData(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBeginData, opts...).ToFunc()
+}
+
+// ByEndDate orders the results by the end_date field.
+func ByEndDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEndDate, opts...).ToFunc()
+}
+
+// ByGender orders the results by the gender field.
+func ByGender(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldGender, opts...).ToFunc()
 }
 
 // ByArtifactsCount orders the results by artifacts count.
@@ -262,4 +336,22 @@ func newHolderStep() *sqlgraph.Step {
 		sqlgraph.To(HolderInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2O, true, HolderTable, HolderColumn),
 	)
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (e Gender) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(e.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (e *Gender) UnmarshalGQL(val interface{}) error {
+	str, ok := val.(string)
+	if !ok {
+		return fmt.Errorf("enum %T must be a string", val)
+	}
+	*e = Gender(str)
+	if err := GenderValidator(*e); err != nil {
+		return fmt.Errorf("%s is not a valid Gender", str)
+	}
+	return nil
 }

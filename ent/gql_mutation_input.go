@@ -4,6 +4,8 @@ package ent
 
 import (
 	"time"
+
+	"github.com/dkrasnovdev/heritage-api/ent/person"
 )
 
 // CreateArtifactInput represents a mutation input for creating artifacts.
@@ -1862,6 +1864,12 @@ type CreatePersonInput struct {
 	ExternalLinks        []string
 	PrimaryImageURL      *string
 	AdditionalImagesUrls []string
+	GivenName            *string
+	FamilyName           *string
+	PatronymicName       *string
+	BeginData            *time.Time
+	EndDate              *time.Time
+	Gender               person.Gender
 	ArtifactIDs          []int
 	ProjectIDs           []int
 	PublicationIDs       []int
@@ -1906,6 +1914,22 @@ func (i *CreatePersonInput) Mutate(m *PersonMutation) {
 	if v := i.AdditionalImagesUrls; v != nil {
 		m.SetAdditionalImagesUrls(v)
 	}
+	if v := i.GivenName; v != nil {
+		m.SetGivenName(*v)
+	}
+	if v := i.FamilyName; v != nil {
+		m.SetFamilyName(*v)
+	}
+	if v := i.PatronymicName; v != nil {
+		m.SetPatronymicName(*v)
+	}
+	if v := i.BeginData; v != nil {
+		m.SetBeginData(*v)
+	}
+	if v := i.EndDate; v != nil {
+		m.SetEndDate(*v)
+	}
+	m.SetGender(i.Gender)
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
@@ -1953,6 +1977,17 @@ type UpdatePersonInput struct {
 	ClearAdditionalImagesUrls  bool
 	AdditionalImagesUrls       []string
 	AppendAdditionalImagesUrls []string
+	ClearGivenName             bool
+	GivenName                  *string
+	ClearFamilyName            bool
+	FamilyName                 *string
+	ClearPatronymicName        bool
+	PatronymicName             *string
+	ClearBeginData             bool
+	BeginData                  *time.Time
+	ClearEndDate               bool
+	EndDate                    *time.Time
+	Gender                     *person.Gender
 	ClearArtifacts             bool
 	AddArtifactIDs             []int
 	RemoveArtifactIDs          []int
@@ -2042,6 +2077,39 @@ func (i *UpdatePersonInput) Mutate(m *PersonMutation) {
 	}
 	if i.AppendAdditionalImagesUrls != nil {
 		m.AppendAdditionalImagesUrls(i.AdditionalImagesUrls)
+	}
+	if i.ClearGivenName {
+		m.ClearGivenName()
+	}
+	if v := i.GivenName; v != nil {
+		m.SetGivenName(*v)
+	}
+	if i.ClearFamilyName {
+		m.ClearFamilyName()
+	}
+	if v := i.FamilyName; v != nil {
+		m.SetFamilyName(*v)
+	}
+	if i.ClearPatronymicName {
+		m.ClearPatronymicName()
+	}
+	if v := i.PatronymicName; v != nil {
+		m.SetPatronymicName(*v)
+	}
+	if i.ClearBeginData {
+		m.ClearBeginData()
+	}
+	if v := i.BeginData; v != nil {
+		m.SetBeginData(*v)
+	}
+	if i.ClearEndDate {
+		m.ClearEndDate()
+	}
+	if v := i.EndDate; v != nil {
+		m.SetEndDate(*v)
+	}
+	if v := i.Gender; v != nil {
+		m.SetGender(*v)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
