@@ -3,8 +3,10 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
+	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/privacy"
 	"github.com/dkrasnovdev/heritage-api/internal/ent/mixin"
 	rule "github.com/dkrasnovdev/heritage-api/internal/ent/privacy"
@@ -52,7 +54,18 @@ func (Artifact) Annotations() []schema.Annotation {
 
 // Fields of the Artifact.
 func (Artifact) Fields() []ent.Field {
-	return []ent.Field{}
+	return []ent.Field{
+		// TODO: Add 'Номер по КП'
+		field.String("dimensions").Optional(),
+		field.String("weight").Optional(),
+		field.String("chemical_composition").Optional(),
+		field.String("typology").Optional(),
+		field.Time("admission_date").
+			Optional().
+			SchemaType(map[string]string{
+				dialect.Postgres: "date",
+			}),
+	}
 }
 
 // Edges of the Artifact.

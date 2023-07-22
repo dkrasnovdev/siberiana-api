@@ -37,6 +37,16 @@ const (
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
+	// FieldDimensions holds the string denoting the dimensions field in the database.
+	FieldDimensions = "dimensions"
+	// FieldWeight holds the string denoting the weight field in the database.
+	FieldWeight = "weight"
+	// FieldChemicalComposition holds the string denoting the chemical_composition field in the database.
+	FieldChemicalComposition = "chemical_composition"
+	// FieldTypology holds the string denoting the typology field in the database.
+	FieldTypology = "typology"
+	// FieldAdmissionDate holds the string denoting the admission_date field in the database.
+	FieldAdmissionDate = "admission_date"
 	// EdgeAuthors holds the string denoting the authors edge name in mutations.
 	EdgeAuthors = "authors"
 	// EdgeMediums holds the string denoting the mediums edge name in mutations.
@@ -169,6 +179,11 @@ var Columns = []string{
 	FieldAdditionalImagesUrls,
 	FieldDeletedAt,
 	FieldDeletedBy,
+	FieldDimensions,
+	FieldWeight,
+	FieldChemicalComposition,
+	FieldTypology,
+	FieldAdmissionDate,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "artifacts"
@@ -288,6 +303,31 @@ func ByDeletedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByDeletedBy orders the results by the deleted_by field.
 func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
+}
+
+// ByDimensions orders the results by the dimensions field.
+func ByDimensions(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDimensions, opts...).ToFunc()
+}
+
+// ByWeight orders the results by the weight field.
+func ByWeight(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWeight, opts...).ToFunc()
+}
+
+// ByChemicalComposition orders the results by the chemical_composition field.
+func ByChemicalComposition(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldChemicalComposition, opts...).ToFunc()
+}
+
+// ByTypology orders the results by the typology field.
+func ByTypology(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTypology, opts...).ToFunc()
+}
+
+// ByAdmissionDate orders the results by the admission_date field.
+func ByAdmissionDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAdmissionDate, opts...).ToFunc()
 }
 
 // ByAuthorsCount orders the results by authors count.

@@ -100,6 +100,31 @@ func DeletedBy(v string) predicate.Artifact {
 	return predicate.Artifact(sql.FieldEQ(FieldDeletedBy, v))
 }
 
+// Dimensions applies equality check predicate on the "dimensions" field. It's identical to DimensionsEQ.
+func Dimensions(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDimensions, v))
+}
+
+// Weight applies equality check predicate on the "weight" field. It's identical to WeightEQ.
+func Weight(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldWeight, v))
+}
+
+// ChemicalComposition applies equality check predicate on the "chemical_composition" field. It's identical to ChemicalCompositionEQ.
+func ChemicalComposition(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldChemicalComposition, v))
+}
+
+// Typology applies equality check predicate on the "typology" field. It's identical to TypologyEQ.
+func Typology(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldTypology, v))
+}
+
+// AdmissionDate applies equality check predicate on the "admission_date" field. It's identical to AdmissionDateEQ.
+func AdmissionDate(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldAdmissionDate, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Artifact {
 	return predicate.Artifact(sql.FieldEQ(FieldCreatedAt, v))
@@ -698,6 +723,356 @@ func DeletedByEqualFold(v string) predicate.Artifact {
 // DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
 func DeletedByContainsFold(v string) predicate.Artifact {
 	return predicate.Artifact(sql.FieldContainsFold(FieldDeletedBy, v))
+}
+
+// DimensionsEQ applies the EQ predicate on the "dimensions" field.
+func DimensionsEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDimensions, v))
+}
+
+// DimensionsNEQ applies the NEQ predicate on the "dimensions" field.
+func DimensionsNEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldDimensions, v))
+}
+
+// DimensionsIn applies the In predicate on the "dimensions" field.
+func DimensionsIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldDimensions, vs...))
+}
+
+// DimensionsNotIn applies the NotIn predicate on the "dimensions" field.
+func DimensionsNotIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldDimensions, vs...))
+}
+
+// DimensionsGT applies the GT predicate on the "dimensions" field.
+func DimensionsGT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldDimensions, v))
+}
+
+// DimensionsGTE applies the GTE predicate on the "dimensions" field.
+func DimensionsGTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldDimensions, v))
+}
+
+// DimensionsLT applies the LT predicate on the "dimensions" field.
+func DimensionsLT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldDimensions, v))
+}
+
+// DimensionsLTE applies the LTE predicate on the "dimensions" field.
+func DimensionsLTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldDimensions, v))
+}
+
+// DimensionsContains applies the Contains predicate on the "dimensions" field.
+func DimensionsContains(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContains(FieldDimensions, v))
+}
+
+// DimensionsHasPrefix applies the HasPrefix predicate on the "dimensions" field.
+func DimensionsHasPrefix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasPrefix(FieldDimensions, v))
+}
+
+// DimensionsHasSuffix applies the HasSuffix predicate on the "dimensions" field.
+func DimensionsHasSuffix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasSuffix(FieldDimensions, v))
+}
+
+// DimensionsIsNil applies the IsNil predicate on the "dimensions" field.
+func DimensionsIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldDimensions))
+}
+
+// DimensionsNotNil applies the NotNil predicate on the "dimensions" field.
+func DimensionsNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldDimensions))
+}
+
+// DimensionsEqualFold applies the EqualFold predicate on the "dimensions" field.
+func DimensionsEqualFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEqualFold(FieldDimensions, v))
+}
+
+// DimensionsContainsFold applies the ContainsFold predicate on the "dimensions" field.
+func DimensionsContainsFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContainsFold(FieldDimensions, v))
+}
+
+// WeightEQ applies the EQ predicate on the "weight" field.
+func WeightEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldWeight, v))
+}
+
+// WeightNEQ applies the NEQ predicate on the "weight" field.
+func WeightNEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldWeight, v))
+}
+
+// WeightIn applies the In predicate on the "weight" field.
+func WeightIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldWeight, vs...))
+}
+
+// WeightNotIn applies the NotIn predicate on the "weight" field.
+func WeightNotIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldWeight, vs...))
+}
+
+// WeightGT applies the GT predicate on the "weight" field.
+func WeightGT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldWeight, v))
+}
+
+// WeightGTE applies the GTE predicate on the "weight" field.
+func WeightGTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldWeight, v))
+}
+
+// WeightLT applies the LT predicate on the "weight" field.
+func WeightLT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldWeight, v))
+}
+
+// WeightLTE applies the LTE predicate on the "weight" field.
+func WeightLTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldWeight, v))
+}
+
+// WeightContains applies the Contains predicate on the "weight" field.
+func WeightContains(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContains(FieldWeight, v))
+}
+
+// WeightHasPrefix applies the HasPrefix predicate on the "weight" field.
+func WeightHasPrefix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasPrefix(FieldWeight, v))
+}
+
+// WeightHasSuffix applies the HasSuffix predicate on the "weight" field.
+func WeightHasSuffix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasSuffix(FieldWeight, v))
+}
+
+// WeightIsNil applies the IsNil predicate on the "weight" field.
+func WeightIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldWeight))
+}
+
+// WeightNotNil applies the NotNil predicate on the "weight" field.
+func WeightNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldWeight))
+}
+
+// WeightEqualFold applies the EqualFold predicate on the "weight" field.
+func WeightEqualFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEqualFold(FieldWeight, v))
+}
+
+// WeightContainsFold applies the ContainsFold predicate on the "weight" field.
+func WeightContainsFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContainsFold(FieldWeight, v))
+}
+
+// ChemicalCompositionEQ applies the EQ predicate on the "chemical_composition" field.
+func ChemicalCompositionEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldChemicalComposition, v))
+}
+
+// ChemicalCompositionNEQ applies the NEQ predicate on the "chemical_composition" field.
+func ChemicalCompositionNEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldChemicalComposition, v))
+}
+
+// ChemicalCompositionIn applies the In predicate on the "chemical_composition" field.
+func ChemicalCompositionIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldChemicalComposition, vs...))
+}
+
+// ChemicalCompositionNotIn applies the NotIn predicate on the "chemical_composition" field.
+func ChemicalCompositionNotIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldChemicalComposition, vs...))
+}
+
+// ChemicalCompositionGT applies the GT predicate on the "chemical_composition" field.
+func ChemicalCompositionGT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldChemicalComposition, v))
+}
+
+// ChemicalCompositionGTE applies the GTE predicate on the "chemical_composition" field.
+func ChemicalCompositionGTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldChemicalComposition, v))
+}
+
+// ChemicalCompositionLT applies the LT predicate on the "chemical_composition" field.
+func ChemicalCompositionLT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldChemicalComposition, v))
+}
+
+// ChemicalCompositionLTE applies the LTE predicate on the "chemical_composition" field.
+func ChemicalCompositionLTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldChemicalComposition, v))
+}
+
+// ChemicalCompositionContains applies the Contains predicate on the "chemical_composition" field.
+func ChemicalCompositionContains(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContains(FieldChemicalComposition, v))
+}
+
+// ChemicalCompositionHasPrefix applies the HasPrefix predicate on the "chemical_composition" field.
+func ChemicalCompositionHasPrefix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasPrefix(FieldChemicalComposition, v))
+}
+
+// ChemicalCompositionHasSuffix applies the HasSuffix predicate on the "chemical_composition" field.
+func ChemicalCompositionHasSuffix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasSuffix(FieldChemicalComposition, v))
+}
+
+// ChemicalCompositionIsNil applies the IsNil predicate on the "chemical_composition" field.
+func ChemicalCompositionIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldChemicalComposition))
+}
+
+// ChemicalCompositionNotNil applies the NotNil predicate on the "chemical_composition" field.
+func ChemicalCompositionNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldChemicalComposition))
+}
+
+// ChemicalCompositionEqualFold applies the EqualFold predicate on the "chemical_composition" field.
+func ChemicalCompositionEqualFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEqualFold(FieldChemicalComposition, v))
+}
+
+// ChemicalCompositionContainsFold applies the ContainsFold predicate on the "chemical_composition" field.
+func ChemicalCompositionContainsFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContainsFold(FieldChemicalComposition, v))
+}
+
+// TypologyEQ applies the EQ predicate on the "typology" field.
+func TypologyEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldTypology, v))
+}
+
+// TypologyNEQ applies the NEQ predicate on the "typology" field.
+func TypologyNEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldTypology, v))
+}
+
+// TypologyIn applies the In predicate on the "typology" field.
+func TypologyIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldTypology, vs...))
+}
+
+// TypologyNotIn applies the NotIn predicate on the "typology" field.
+func TypologyNotIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldTypology, vs...))
+}
+
+// TypologyGT applies the GT predicate on the "typology" field.
+func TypologyGT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldTypology, v))
+}
+
+// TypologyGTE applies the GTE predicate on the "typology" field.
+func TypologyGTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldTypology, v))
+}
+
+// TypologyLT applies the LT predicate on the "typology" field.
+func TypologyLT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldTypology, v))
+}
+
+// TypologyLTE applies the LTE predicate on the "typology" field.
+func TypologyLTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldTypology, v))
+}
+
+// TypologyContains applies the Contains predicate on the "typology" field.
+func TypologyContains(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContains(FieldTypology, v))
+}
+
+// TypologyHasPrefix applies the HasPrefix predicate on the "typology" field.
+func TypologyHasPrefix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasPrefix(FieldTypology, v))
+}
+
+// TypologyHasSuffix applies the HasSuffix predicate on the "typology" field.
+func TypologyHasSuffix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasSuffix(FieldTypology, v))
+}
+
+// TypologyIsNil applies the IsNil predicate on the "typology" field.
+func TypologyIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldTypology))
+}
+
+// TypologyNotNil applies the NotNil predicate on the "typology" field.
+func TypologyNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldTypology))
+}
+
+// TypologyEqualFold applies the EqualFold predicate on the "typology" field.
+func TypologyEqualFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEqualFold(FieldTypology, v))
+}
+
+// TypologyContainsFold applies the ContainsFold predicate on the "typology" field.
+func TypologyContainsFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContainsFold(FieldTypology, v))
+}
+
+// AdmissionDateEQ applies the EQ predicate on the "admission_date" field.
+func AdmissionDateEQ(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldAdmissionDate, v))
+}
+
+// AdmissionDateNEQ applies the NEQ predicate on the "admission_date" field.
+func AdmissionDateNEQ(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldAdmissionDate, v))
+}
+
+// AdmissionDateIn applies the In predicate on the "admission_date" field.
+func AdmissionDateIn(vs ...time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldAdmissionDate, vs...))
+}
+
+// AdmissionDateNotIn applies the NotIn predicate on the "admission_date" field.
+func AdmissionDateNotIn(vs ...time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldAdmissionDate, vs...))
+}
+
+// AdmissionDateGT applies the GT predicate on the "admission_date" field.
+func AdmissionDateGT(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldAdmissionDate, v))
+}
+
+// AdmissionDateGTE applies the GTE predicate on the "admission_date" field.
+func AdmissionDateGTE(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldAdmissionDate, v))
+}
+
+// AdmissionDateLT applies the LT predicate on the "admission_date" field.
+func AdmissionDateLT(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldAdmissionDate, v))
+}
+
+// AdmissionDateLTE applies the LTE predicate on the "admission_date" field.
+func AdmissionDateLTE(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldAdmissionDate, v))
+}
+
+// AdmissionDateIsNil applies the IsNil predicate on the "admission_date" field.
+func AdmissionDateIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldAdmissionDate))
+}
+
+// AdmissionDateNotNil applies the NotNil predicate on the "admission_date" field.
+func AdmissionDateNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldAdmissionDate))
 }
 
 // HasAuthors applies the HasEdge predicate on the "authors" edge.

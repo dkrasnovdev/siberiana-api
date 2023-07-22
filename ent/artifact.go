@@ -48,6 +48,16 @@ type Artifact struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// Dimensions holds the value of the "dimensions" field.
+	Dimensions string `json:"dimensions,omitempty"`
+	// Weight holds the value of the "weight" field.
+	Weight string `json:"weight,omitempty"`
+	// ChemicalComposition holds the value of the "chemical_composition" field.
+	ChemicalComposition string `json:"chemical_composition,omitempty"`
+	// Typology holds the value of the "typology" field.
+	Typology string `json:"typology,omitempty"`
+	// AdmissionDate holds the value of the "admission_date" field.
+	AdmissionDate time.Time `json:"admission_date,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ArtifactQuery when eager-loading is set.
 	Edges                ArtifactEdges `json:"edges"`
@@ -273,9 +283,9 @@ func (*Artifact) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case artifact.FieldID:
 			values[i] = new(sql.NullInt64)
-		case artifact.FieldCreatedBy, artifact.FieldUpdatedBy, artifact.FieldDisplayName, artifact.FieldDescription, artifact.FieldPrimaryImageURL, artifact.FieldDeletedBy:
+		case artifact.FieldCreatedBy, artifact.FieldUpdatedBy, artifact.FieldDisplayName, artifact.FieldDescription, artifact.FieldPrimaryImageURL, artifact.FieldDeletedBy, artifact.FieldDimensions, artifact.FieldWeight, artifact.FieldChemicalComposition, artifact.FieldTypology:
 			values[i] = new(sql.NullString)
-		case artifact.FieldCreatedAt, artifact.FieldUpdatedAt, artifact.FieldDeletedAt:
+		case artifact.FieldCreatedAt, artifact.FieldUpdatedAt, artifact.FieldDeletedAt, artifact.FieldAdmissionDate:
 			values[i] = new(sql.NullTime)
 		case artifact.ForeignKeys[0]: // collection_artifacts
 			values[i] = new(sql.NullInt64)
@@ -383,6 +393,36 @@ func (a *Artifact) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				a.DeletedBy = value.String
+			}
+		case artifact.FieldDimensions:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field dimensions", values[i])
+			} else if value.Valid {
+				a.Dimensions = value.String
+			}
+		case artifact.FieldWeight:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field weight", values[i])
+			} else if value.Valid {
+				a.Weight = value.String
+			}
+		case artifact.FieldChemicalComposition:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field chemical_composition", values[i])
+			} else if value.Valid {
+				a.ChemicalComposition = value.String
+			}
+		case artifact.FieldTypology:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field typology", values[i])
+			} else if value.Valid {
+				a.Typology = value.String
+			}
+		case artifact.FieldAdmissionDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field admission_date", values[i])
+			} else if value.Valid {
+				a.AdmissionDate = value.Time
 			}
 		case artifact.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -578,6 +618,21 @@ func (a *Artifact) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
 	builder.WriteString(a.DeletedBy)
+	builder.WriteString(", ")
+	builder.WriteString("dimensions=")
+	builder.WriteString(a.Dimensions)
+	builder.WriteString(", ")
+	builder.WriteString("weight=")
+	builder.WriteString(a.Weight)
+	builder.WriteString(", ")
+	builder.WriteString("chemical_composition=")
+	builder.WriteString(a.ChemicalComposition)
+	builder.WriteString(", ")
+	builder.WriteString("typology=")
+	builder.WriteString(a.Typology)
+	builder.WriteString(", ")
+	builder.WriteString("admission_date=")
+	builder.WriteString(a.AdmissionDate.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

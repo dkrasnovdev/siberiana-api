@@ -225,6 +225,106 @@ func (au *ArtifactUpdate) ClearDeletedBy() *ArtifactUpdate {
 	return au
 }
 
+// SetDimensions sets the "dimensions" field.
+func (au *ArtifactUpdate) SetDimensions(s string) *ArtifactUpdate {
+	au.mutation.SetDimensions(s)
+	return au
+}
+
+// SetNillableDimensions sets the "dimensions" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableDimensions(s *string) *ArtifactUpdate {
+	if s != nil {
+		au.SetDimensions(*s)
+	}
+	return au
+}
+
+// ClearDimensions clears the value of the "dimensions" field.
+func (au *ArtifactUpdate) ClearDimensions() *ArtifactUpdate {
+	au.mutation.ClearDimensions()
+	return au
+}
+
+// SetWeight sets the "weight" field.
+func (au *ArtifactUpdate) SetWeight(s string) *ArtifactUpdate {
+	au.mutation.SetWeight(s)
+	return au
+}
+
+// SetNillableWeight sets the "weight" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableWeight(s *string) *ArtifactUpdate {
+	if s != nil {
+		au.SetWeight(*s)
+	}
+	return au
+}
+
+// ClearWeight clears the value of the "weight" field.
+func (au *ArtifactUpdate) ClearWeight() *ArtifactUpdate {
+	au.mutation.ClearWeight()
+	return au
+}
+
+// SetChemicalComposition sets the "chemical_composition" field.
+func (au *ArtifactUpdate) SetChemicalComposition(s string) *ArtifactUpdate {
+	au.mutation.SetChemicalComposition(s)
+	return au
+}
+
+// SetNillableChemicalComposition sets the "chemical_composition" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableChemicalComposition(s *string) *ArtifactUpdate {
+	if s != nil {
+		au.SetChemicalComposition(*s)
+	}
+	return au
+}
+
+// ClearChemicalComposition clears the value of the "chemical_composition" field.
+func (au *ArtifactUpdate) ClearChemicalComposition() *ArtifactUpdate {
+	au.mutation.ClearChemicalComposition()
+	return au
+}
+
+// SetTypology sets the "typology" field.
+func (au *ArtifactUpdate) SetTypology(s string) *ArtifactUpdate {
+	au.mutation.SetTypology(s)
+	return au
+}
+
+// SetNillableTypology sets the "typology" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableTypology(s *string) *ArtifactUpdate {
+	if s != nil {
+		au.SetTypology(*s)
+	}
+	return au
+}
+
+// ClearTypology clears the value of the "typology" field.
+func (au *ArtifactUpdate) ClearTypology() *ArtifactUpdate {
+	au.mutation.ClearTypology()
+	return au
+}
+
+// SetAdmissionDate sets the "admission_date" field.
+func (au *ArtifactUpdate) SetAdmissionDate(t time.Time) *ArtifactUpdate {
+	au.mutation.SetAdmissionDate(t)
+	return au
+}
+
+// SetNillableAdmissionDate sets the "admission_date" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableAdmissionDate(t *time.Time) *ArtifactUpdate {
+	if t != nil {
+		au.SetAdmissionDate(*t)
+	}
+	return au
+}
+
+// ClearAdmissionDate clears the value of the "admission_date" field.
+func (au *ArtifactUpdate) ClearAdmissionDate() *ArtifactUpdate {
+	au.mutation.ClearAdmissionDate()
+	return au
+}
+
 // AddAuthorIDs adds the "authors" edge to the Person entity by IDs.
 func (au *ArtifactUpdate) AddAuthorIDs(ids ...int) *ArtifactUpdate {
 	au.mutation.AddAuthorIDs(ids...)
@@ -763,6 +863,36 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if au.mutation.DeletedByCleared() {
 		_spec.ClearField(artifact.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := au.mutation.Dimensions(); ok {
+		_spec.SetField(artifact.FieldDimensions, field.TypeString, value)
+	}
+	if au.mutation.DimensionsCleared() {
+		_spec.ClearField(artifact.FieldDimensions, field.TypeString)
+	}
+	if value, ok := au.mutation.Weight(); ok {
+		_spec.SetField(artifact.FieldWeight, field.TypeString, value)
+	}
+	if au.mutation.WeightCleared() {
+		_spec.ClearField(artifact.FieldWeight, field.TypeString)
+	}
+	if value, ok := au.mutation.ChemicalComposition(); ok {
+		_spec.SetField(artifact.FieldChemicalComposition, field.TypeString, value)
+	}
+	if au.mutation.ChemicalCompositionCleared() {
+		_spec.ClearField(artifact.FieldChemicalComposition, field.TypeString)
+	}
+	if value, ok := au.mutation.Typology(); ok {
+		_spec.SetField(artifact.FieldTypology, field.TypeString, value)
+	}
+	if au.mutation.TypologyCleared() {
+		_spec.ClearField(artifact.FieldTypology, field.TypeString)
+	}
+	if value, ok := au.mutation.AdmissionDate(); ok {
+		_spec.SetField(artifact.FieldAdmissionDate, field.TypeTime, value)
+	}
+	if au.mutation.AdmissionDateCleared() {
+		_spec.ClearField(artifact.FieldAdmissionDate, field.TypeTime)
 	}
 	if au.mutation.AuthorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1468,6 +1598,106 @@ func (auo *ArtifactUpdateOne) ClearDeletedBy() *ArtifactUpdateOne {
 	return auo
 }
 
+// SetDimensions sets the "dimensions" field.
+func (auo *ArtifactUpdateOne) SetDimensions(s string) *ArtifactUpdateOne {
+	auo.mutation.SetDimensions(s)
+	return auo
+}
+
+// SetNillableDimensions sets the "dimensions" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableDimensions(s *string) *ArtifactUpdateOne {
+	if s != nil {
+		auo.SetDimensions(*s)
+	}
+	return auo
+}
+
+// ClearDimensions clears the value of the "dimensions" field.
+func (auo *ArtifactUpdateOne) ClearDimensions() *ArtifactUpdateOne {
+	auo.mutation.ClearDimensions()
+	return auo
+}
+
+// SetWeight sets the "weight" field.
+func (auo *ArtifactUpdateOne) SetWeight(s string) *ArtifactUpdateOne {
+	auo.mutation.SetWeight(s)
+	return auo
+}
+
+// SetNillableWeight sets the "weight" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableWeight(s *string) *ArtifactUpdateOne {
+	if s != nil {
+		auo.SetWeight(*s)
+	}
+	return auo
+}
+
+// ClearWeight clears the value of the "weight" field.
+func (auo *ArtifactUpdateOne) ClearWeight() *ArtifactUpdateOne {
+	auo.mutation.ClearWeight()
+	return auo
+}
+
+// SetChemicalComposition sets the "chemical_composition" field.
+func (auo *ArtifactUpdateOne) SetChemicalComposition(s string) *ArtifactUpdateOne {
+	auo.mutation.SetChemicalComposition(s)
+	return auo
+}
+
+// SetNillableChemicalComposition sets the "chemical_composition" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableChemicalComposition(s *string) *ArtifactUpdateOne {
+	if s != nil {
+		auo.SetChemicalComposition(*s)
+	}
+	return auo
+}
+
+// ClearChemicalComposition clears the value of the "chemical_composition" field.
+func (auo *ArtifactUpdateOne) ClearChemicalComposition() *ArtifactUpdateOne {
+	auo.mutation.ClearChemicalComposition()
+	return auo
+}
+
+// SetTypology sets the "typology" field.
+func (auo *ArtifactUpdateOne) SetTypology(s string) *ArtifactUpdateOne {
+	auo.mutation.SetTypology(s)
+	return auo
+}
+
+// SetNillableTypology sets the "typology" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableTypology(s *string) *ArtifactUpdateOne {
+	if s != nil {
+		auo.SetTypology(*s)
+	}
+	return auo
+}
+
+// ClearTypology clears the value of the "typology" field.
+func (auo *ArtifactUpdateOne) ClearTypology() *ArtifactUpdateOne {
+	auo.mutation.ClearTypology()
+	return auo
+}
+
+// SetAdmissionDate sets the "admission_date" field.
+func (auo *ArtifactUpdateOne) SetAdmissionDate(t time.Time) *ArtifactUpdateOne {
+	auo.mutation.SetAdmissionDate(t)
+	return auo
+}
+
+// SetNillableAdmissionDate sets the "admission_date" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableAdmissionDate(t *time.Time) *ArtifactUpdateOne {
+	if t != nil {
+		auo.SetAdmissionDate(*t)
+	}
+	return auo
+}
+
+// ClearAdmissionDate clears the value of the "admission_date" field.
+func (auo *ArtifactUpdateOne) ClearAdmissionDate() *ArtifactUpdateOne {
+	auo.mutation.ClearAdmissionDate()
+	return auo
+}
+
 // AddAuthorIDs adds the "authors" edge to the Person entity by IDs.
 func (auo *ArtifactUpdateOne) AddAuthorIDs(ids ...int) *ArtifactUpdateOne {
 	auo.mutation.AddAuthorIDs(ids...)
@@ -2036,6 +2266,36 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 	}
 	if auo.mutation.DeletedByCleared() {
 		_spec.ClearField(artifact.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := auo.mutation.Dimensions(); ok {
+		_spec.SetField(artifact.FieldDimensions, field.TypeString, value)
+	}
+	if auo.mutation.DimensionsCleared() {
+		_spec.ClearField(artifact.FieldDimensions, field.TypeString)
+	}
+	if value, ok := auo.mutation.Weight(); ok {
+		_spec.SetField(artifact.FieldWeight, field.TypeString, value)
+	}
+	if auo.mutation.WeightCleared() {
+		_spec.ClearField(artifact.FieldWeight, field.TypeString)
+	}
+	if value, ok := auo.mutation.ChemicalComposition(); ok {
+		_spec.SetField(artifact.FieldChemicalComposition, field.TypeString, value)
+	}
+	if auo.mutation.ChemicalCompositionCleared() {
+		_spec.ClearField(artifact.FieldChemicalComposition, field.TypeString)
+	}
+	if value, ok := auo.mutation.Typology(); ok {
+		_spec.SetField(artifact.FieldTypology, field.TypeString, value)
+	}
+	if auo.mutation.TypologyCleared() {
+		_spec.ClearField(artifact.FieldTypology, field.TypeString)
+	}
+	if value, ok := auo.mutation.AdmissionDate(); ok {
+		_spec.SetField(artifact.FieldAdmissionDate, field.TypeTime, value)
+	}
+	if auo.mutation.AdmissionDateCleared() {
+		_spec.ClearField(artifact.FieldAdmissionDate, field.TypeTime)
 	}
 	if auo.mutation.AuthorsCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -401,6 +401,31 @@ func (a *ArtifactQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				selectedFields = append(selectedFields, artifact.FieldDeletedBy)
 				fieldSeen[artifact.FieldDeletedBy] = struct{}{}
 			}
+		case "dimensions":
+			if _, ok := fieldSeen[artifact.FieldDimensions]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldDimensions)
+				fieldSeen[artifact.FieldDimensions] = struct{}{}
+			}
+		case "weight":
+			if _, ok := fieldSeen[artifact.FieldWeight]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldWeight)
+				fieldSeen[artifact.FieldWeight] = struct{}{}
+			}
+		case "chemicalComposition":
+			if _, ok := fieldSeen[artifact.FieldChemicalComposition]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldChemicalComposition)
+				fieldSeen[artifact.FieldChemicalComposition] = struct{}{}
+			}
+		case "typology":
+			if _, ok := fieldSeen[artifact.FieldTypology]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldTypology)
+				fieldSeen[artifact.FieldTypology] = struct{}{}
+			}
+		case "admissionDate":
+			if _, ok := fieldSeen[artifact.FieldAdmissionDate]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldAdmissionDate)
+				fieldSeen[artifact.FieldAdmissionDate] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

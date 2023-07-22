@@ -21,6 +21,11 @@ type CreateArtifactInput struct {
 	AdditionalImagesUrls  []string
 	DeletedAt             *time.Time
 	DeletedBy             *string
+	Dimensions            *string
+	Weight                *string
+	ChemicalComposition   *string
+	Typology              *string
+	AdmissionDate         *time.Time
 	AuthorIDs             []int
 	MediumIDs             []int
 	TechniqueIDs          []int
@@ -71,6 +76,21 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	}
 	if v := i.DeletedBy; v != nil {
 		m.SetDeletedBy(*v)
+	}
+	if v := i.Dimensions; v != nil {
+		m.SetDimensions(*v)
+	}
+	if v := i.Weight; v != nil {
+		m.SetWeight(*v)
+	}
+	if v := i.ChemicalComposition; v != nil {
+		m.SetChemicalComposition(*v)
+	}
+	if v := i.Typology; v != nil {
+		m.SetTypology(*v)
+	}
+	if v := i.AdmissionDate; v != nil {
+		m.SetAdmissionDate(*v)
 	}
 	if v := i.AuthorIDs; len(v) > 0 {
 		m.AddAuthorIDs(v...)
@@ -145,6 +165,16 @@ type UpdateArtifactInput struct {
 	DeletedAt                  *time.Time
 	ClearDeletedBy             bool
 	DeletedBy                  *string
+	ClearDimensions            bool
+	Dimensions                 *string
+	ClearWeight                bool
+	Weight                     *string
+	ClearChemicalComposition   bool
+	ChemicalComposition        *string
+	ClearTypology              bool
+	Typology                   *string
+	ClearAdmissionDate         bool
+	AdmissionDate              *time.Time
 	ClearAuthors               bool
 	AddAuthorIDs               []int
 	RemoveAuthorIDs            []int
@@ -245,6 +275,36 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	}
 	if v := i.DeletedBy; v != nil {
 		m.SetDeletedBy(*v)
+	}
+	if i.ClearDimensions {
+		m.ClearDimensions()
+	}
+	if v := i.Dimensions; v != nil {
+		m.SetDimensions(*v)
+	}
+	if i.ClearWeight {
+		m.ClearWeight()
+	}
+	if v := i.Weight; v != nil {
+		m.SetWeight(*v)
+	}
+	if i.ClearChemicalComposition {
+		m.ClearChemicalComposition()
+	}
+	if v := i.ChemicalComposition; v != nil {
+		m.SetChemicalComposition(*v)
+	}
+	if i.ClearTypology {
+		m.ClearTypology()
+	}
+	if v := i.Typology; v != nil {
+		m.SetTypology(*v)
+	}
+	if i.ClearAdmissionDate {
+		m.ClearAdmissionDate()
+	}
+	if v := i.AdmissionDate; v != nil {
+		m.SetAdmissionDate(*v)
 	}
 	if i.ClearAuthors {
 		m.ClearAuthors()

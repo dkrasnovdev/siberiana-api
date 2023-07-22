@@ -62,7 +62,9 @@ type ComplexityRoot struct {
 
 	Artifact struct {
 		AdditionalImagesUrls func(childComplexity int) int
+		AdmissionDate        func(childComplexity int) int
 		Authors              func(childComplexity int) int
+		ChemicalComposition  func(childComplexity int) int
 		Collection           func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
@@ -70,6 +72,7 @@ type ComplexityRoot struct {
 		DeletedAt            func(childComplexity int) int
 		DeletedBy            func(childComplexity int) int
 		Description          func(childComplexity int) int
+		Dimensions           func(childComplexity int) int
 		DisplayName          func(childComplexity int) int
 		ExternalLinks        func(childComplexity int) int
 		Holders              func(childComplexity int) int
@@ -85,8 +88,10 @@ type ComplexityRoot struct {
 		Publications         func(childComplexity int) int
 		Set                  func(childComplexity int) int
 		Techniques           func(childComplexity int) int
+		Typology             func(childComplexity int) int
 		UpdatedAt            func(childComplexity int) int
 		UpdatedBy            func(childComplexity int) int
+		Weight               func(childComplexity int) int
 	}
 
 	ArtifactConnection struct {
@@ -853,12 +858,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Artifact.AdditionalImagesUrls(childComplexity), true
 
+	case "Artifact.admissionDate":
+		if e.complexity.Artifact.AdmissionDate == nil {
+			break
+		}
+
+		return e.complexity.Artifact.AdmissionDate(childComplexity), true
+
 	case "Artifact.authors":
 		if e.complexity.Artifact.Authors == nil {
 			break
 		}
 
 		return e.complexity.Artifact.Authors(childComplexity), true
+
+	case "Artifact.chemicalComposition":
+		if e.complexity.Artifact.ChemicalComposition == nil {
+			break
+		}
+
+		return e.complexity.Artifact.ChemicalComposition(childComplexity), true
 
 	case "Artifact.collection":
 		if e.complexity.Artifact.Collection == nil {
@@ -908,6 +927,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Artifact.Description(childComplexity), true
+
+	case "Artifact.dimensions":
+		if e.complexity.Artifact.Dimensions == nil {
+			break
+		}
+
+		return e.complexity.Artifact.Dimensions(childComplexity), true
 
 	case "Artifact.displayName":
 		if e.complexity.Artifact.DisplayName == nil {
@@ -1014,6 +1040,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Artifact.Techniques(childComplexity), true
 
+	case "Artifact.typology":
+		if e.complexity.Artifact.Typology == nil {
+			break
+		}
+
+		return e.complexity.Artifact.Typology(childComplexity), true
+
 	case "Artifact.updatedAt":
 		if e.complexity.Artifact.UpdatedAt == nil {
 			break
@@ -1027,6 +1060,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Artifact.UpdatedBy(childComplexity), true
+
+	case "Artifact.weight":
+		if e.complexity.Artifact.Weight == nil {
+			break
+		}
+
+		return e.complexity.Artifact.Weight(childComplexity), true
 
 	case "ArtifactConnection.edges":
 		if e.complexity.ArtifactConnection.Edges == nil {
@@ -7219,6 +7259,211 @@ func (ec *executionContext) fieldContext_Artifact_deletedBy(ctx context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _Artifact_dimensions(ctx context.Context, field graphql.CollectedField, obj *ent.Artifact) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Artifact_dimensions(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Dimensions, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Artifact_dimensions(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Artifact",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Artifact_weight(ctx context.Context, field graphql.CollectedField, obj *ent.Artifact) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Artifact_weight(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Weight, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Artifact_weight(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Artifact",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Artifact_chemicalComposition(ctx context.Context, field graphql.CollectedField, obj *ent.Artifact) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Artifact_chemicalComposition(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ChemicalComposition, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Artifact_chemicalComposition(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Artifact",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Artifact_typology(ctx context.Context, field graphql.CollectedField, obj *ent.Artifact) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Artifact_typology(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Typology, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Artifact_typology(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Artifact",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Artifact_admissionDate(ctx context.Context, field graphql.CollectedField, obj *ent.Artifact) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Artifact_admissionDate(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AdmissionDate, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(time.Time)
+	fc.Result = res
+	return ec.marshalOTime2timeᚐTime(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Artifact_admissionDate(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Artifact",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Time does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Artifact_authors(ctx context.Context, field graphql.CollectedField, obj *ent.Artifact) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Artifact_authors(ctx, field)
 	if err != nil {
@@ -8340,6 +8585,16 @@ func (ec *executionContext) fieldContext_ArtifactEdge_node(ctx context.Context, 
 				return ec.fieldContext_Artifact_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Artifact_deletedBy(ctx, field)
+			case "dimensions":
+				return ec.fieldContext_Artifact_dimensions(ctx, field)
+			case "weight":
+				return ec.fieldContext_Artifact_weight(ctx, field)
+			case "chemicalComposition":
+				return ec.fieldContext_Artifact_chemicalComposition(ctx, field)
+			case "typology":
+				return ec.fieldContext_Artifact_typology(ctx, field)
+			case "admissionDate":
+				return ec.fieldContext_Artifact_admissionDate(ctx, field)
 			case "authors":
 				return ec.fieldContext_Artifact_authors(ctx, field)
 			case "mediums":
@@ -10224,6 +10479,16 @@ func (ec *executionContext) fieldContext_Collection_artifacts(ctx context.Contex
 				return ec.fieldContext_Artifact_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Artifact_deletedBy(ctx, field)
+			case "dimensions":
+				return ec.fieldContext_Artifact_dimensions(ctx, field)
+			case "weight":
+				return ec.fieldContext_Artifact_weight(ctx, field)
+			case "chemicalComposition":
+				return ec.fieldContext_Artifact_chemicalComposition(ctx, field)
+			case "typology":
+				return ec.fieldContext_Artifact_typology(ctx, field)
+			case "admissionDate":
+				return ec.fieldContext_Artifact_admissionDate(ctx, field)
 			case "authors":
 				return ec.fieldContext_Artifact_authors(ctx, field)
 			case "mediums":
@@ -11066,6 +11331,16 @@ func (ec *executionContext) fieldContext_Culture_artifacts(ctx context.Context, 
 				return ec.fieldContext_Artifact_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Artifact_deletedBy(ctx, field)
+			case "dimensions":
+				return ec.fieldContext_Artifact_dimensions(ctx, field)
+			case "weight":
+				return ec.fieldContext_Artifact_weight(ctx, field)
+			case "chemicalComposition":
+				return ec.fieldContext_Artifact_chemicalComposition(ctx, field)
+			case "typology":
+				return ec.fieldContext_Artifact_typology(ctx, field)
+			case "admissionDate":
+				return ec.fieldContext_Artifact_admissionDate(ctx, field)
 			case "authors":
 				return ec.fieldContext_Artifact_authors(ctx, field)
 			case "mediums":
@@ -12364,6 +12639,16 @@ func (ec *executionContext) fieldContext_Holder_artifacts(ctx context.Context, f
 				return ec.fieldContext_Artifact_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Artifact_deletedBy(ctx, field)
+			case "dimensions":
+				return ec.fieldContext_Artifact_dimensions(ctx, field)
+			case "weight":
+				return ec.fieldContext_Artifact_weight(ctx, field)
+			case "chemicalComposition":
+				return ec.fieldContext_Artifact_chemicalComposition(ctx, field)
+			case "typology":
+				return ec.fieldContext_Artifact_typology(ctx, field)
+			case "admissionDate":
+				return ec.fieldContext_Artifact_admissionDate(ctx, field)
 			case "authors":
 				return ec.fieldContext_Artifact_authors(ctx, field)
 			case "mediums":
@@ -13777,6 +14062,16 @@ func (ec *executionContext) fieldContext_License_artifacts(ctx context.Context, 
 				return ec.fieldContext_Artifact_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Artifact_deletedBy(ctx, field)
+			case "dimensions":
+				return ec.fieldContext_Artifact_dimensions(ctx, field)
+			case "weight":
+				return ec.fieldContext_Artifact_weight(ctx, field)
+			case "chemicalComposition":
+				return ec.fieldContext_Artifact_chemicalComposition(ctx, field)
+			case "typology":
+				return ec.fieldContext_Artifact_typology(ctx, field)
+			case "admissionDate":
+				return ec.fieldContext_Artifact_admissionDate(ctx, field)
 			case "authors":
 				return ec.fieldContext_Artifact_authors(ctx, field)
 			case "mediums":
@@ -14459,6 +14754,16 @@ func (ec *executionContext) fieldContext_Location_artifacts(ctx context.Context,
 				return ec.fieldContext_Artifact_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Artifact_deletedBy(ctx, field)
+			case "dimensions":
+				return ec.fieldContext_Artifact_dimensions(ctx, field)
+			case "weight":
+				return ec.fieldContext_Artifact_weight(ctx, field)
+			case "chemicalComposition":
+				return ec.fieldContext_Artifact_chemicalComposition(ctx, field)
+			case "typology":
+				return ec.fieldContext_Artifact_typology(ctx, field)
+			case "admissionDate":
+				return ec.fieldContext_Artifact_admissionDate(ctx, field)
 			case "authors":
 				return ec.fieldContext_Artifact_authors(ctx, field)
 			case "mediums":
@@ -15330,6 +15635,16 @@ func (ec *executionContext) fieldContext_Medium_artifacts(ctx context.Context, f
 				return ec.fieldContext_Artifact_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Artifact_deletedBy(ctx, field)
+			case "dimensions":
+				return ec.fieldContext_Artifact_dimensions(ctx, field)
+			case "weight":
+				return ec.fieldContext_Artifact_weight(ctx, field)
+			case "chemicalComposition":
+				return ec.fieldContext_Artifact_chemicalComposition(ctx, field)
+			case "typology":
+				return ec.fieldContext_Artifact_typology(ctx, field)
+			case "admissionDate":
+				return ec.fieldContext_Artifact_admissionDate(ctx, field)
 			case "authors":
 				return ec.fieldContext_Artifact_authors(ctx, field)
 			case "mediums":
@@ -16012,6 +16327,16 @@ func (ec *executionContext) fieldContext_Model_artifacts(ctx context.Context, fi
 				return ec.fieldContext_Artifact_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Artifact_deletedBy(ctx, field)
+			case "dimensions":
+				return ec.fieldContext_Artifact_dimensions(ctx, field)
+			case "weight":
+				return ec.fieldContext_Artifact_weight(ctx, field)
+			case "chemicalComposition":
+				return ec.fieldContext_Artifact_chemicalComposition(ctx, field)
+			case "typology":
+				return ec.fieldContext_Artifact_typology(ctx, field)
+			case "admissionDate":
+				return ec.fieldContext_Artifact_admissionDate(ctx, field)
 			case "authors":
 				return ec.fieldContext_Artifact_authors(ctx, field)
 			case "mediums":
@@ -16694,6 +17019,16 @@ func (ec *executionContext) fieldContext_Monument_artifacts(ctx context.Context,
 				return ec.fieldContext_Artifact_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Artifact_deletedBy(ctx, field)
+			case "dimensions":
+				return ec.fieldContext_Artifact_dimensions(ctx, field)
+			case "weight":
+				return ec.fieldContext_Artifact_weight(ctx, field)
+			case "chemicalComposition":
+				return ec.fieldContext_Artifact_chemicalComposition(ctx, field)
+			case "typology":
+				return ec.fieldContext_Artifact_typology(ctx, field)
+			case "admissionDate":
+				return ec.fieldContext_Artifact_admissionDate(ctx, field)
 			case "authors":
 				return ec.fieldContext_Artifact_authors(ctx, field)
 			case "mediums":
@@ -17107,6 +17442,16 @@ func (ec *executionContext) fieldContext_Mutation_createArtifact(ctx context.Con
 				return ec.fieldContext_Artifact_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Artifact_deletedBy(ctx, field)
+			case "dimensions":
+				return ec.fieldContext_Artifact_dimensions(ctx, field)
+			case "weight":
+				return ec.fieldContext_Artifact_weight(ctx, field)
+			case "chemicalComposition":
+				return ec.fieldContext_Artifact_chemicalComposition(ctx, field)
+			case "typology":
+				return ec.fieldContext_Artifact_typology(ctx, field)
+			case "admissionDate":
+				return ec.fieldContext_Artifact_admissionDate(ctx, field)
 			case "authors":
 				return ec.fieldContext_Artifact_authors(ctx, field)
 			case "mediums":
@@ -17216,6 +17561,16 @@ func (ec *executionContext) fieldContext_Mutation_updateArtifact(ctx context.Con
 				return ec.fieldContext_Artifact_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Artifact_deletedBy(ctx, field)
+			case "dimensions":
+				return ec.fieldContext_Artifact_dimensions(ctx, field)
+			case "weight":
+				return ec.fieldContext_Artifact_weight(ctx, field)
+			case "chemicalComposition":
+				return ec.fieldContext_Artifact_chemicalComposition(ctx, field)
+			case "typology":
+				return ec.fieldContext_Artifact_typology(ctx, field)
+			case "admissionDate":
+				return ec.fieldContext_Artifact_admissionDate(ctx, field)
 			case "authors":
 				return ec.fieldContext_Artifact_authors(ctx, field)
 			case "mediums":
@@ -22267,6 +22622,16 @@ func (ec *executionContext) fieldContext_Period_artifacts(ctx context.Context, f
 				return ec.fieldContext_Artifact_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Artifact_deletedBy(ctx, field)
+			case "dimensions":
+				return ec.fieldContext_Artifact_dimensions(ctx, field)
+			case "weight":
+				return ec.fieldContext_Artifact_weight(ctx, field)
+			case "chemicalComposition":
+				return ec.fieldContext_Artifact_chemicalComposition(ctx, field)
+			case "typology":
+				return ec.fieldContext_Artifact_typology(ctx, field)
+			case "admissionDate":
+				return ec.fieldContext_Artifact_admissionDate(ctx, field)
 			case "authors":
 				return ec.fieldContext_Artifact_authors(ctx, field)
 			case "mediums":
@@ -23153,6 +23518,16 @@ func (ec *executionContext) fieldContext_Person_artifacts(ctx context.Context, f
 				return ec.fieldContext_Artifact_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Artifact_deletedBy(ctx, field)
+			case "dimensions":
+				return ec.fieldContext_Artifact_dimensions(ctx, field)
+			case "weight":
+				return ec.fieldContext_Artifact_weight(ctx, field)
+			case "chemicalComposition":
+				return ec.fieldContext_Artifact_chemicalComposition(ctx, field)
+			case "typology":
+				return ec.fieldContext_Artifact_typology(ctx, field)
+			case "admissionDate":
+				return ec.fieldContext_Artifact_admissionDate(ctx, field)
 			case "authors":
 				return ec.fieldContext_Artifact_authors(ctx, field)
 			case "mediums":
@@ -24787,6 +25162,16 @@ func (ec *executionContext) fieldContext_Project_artifacts(ctx context.Context, 
 				return ec.fieldContext_Artifact_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Artifact_deletedBy(ctx, field)
+			case "dimensions":
+				return ec.fieldContext_Artifact_dimensions(ctx, field)
+			case "weight":
+				return ec.fieldContext_Artifact_weight(ctx, field)
+			case "chemicalComposition":
+				return ec.fieldContext_Artifact_chemicalComposition(ctx, field)
+			case "typology":
+				return ec.fieldContext_Artifact_typology(ctx, field)
+			case "admissionDate":
+				return ec.fieldContext_Artifact_admissionDate(ctx, field)
 			case "authors":
 				return ec.fieldContext_Artifact_authors(ctx, field)
 			case "mediums":
@@ -26171,6 +26556,16 @@ func (ec *executionContext) fieldContext_Publication_artifacts(ctx context.Conte
 				return ec.fieldContext_Artifact_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Artifact_deletedBy(ctx, field)
+			case "dimensions":
+				return ec.fieldContext_Artifact_dimensions(ctx, field)
+			case "weight":
+				return ec.fieldContext_Artifact_weight(ctx, field)
+			case "chemicalComposition":
+				return ec.fieldContext_Artifact_chemicalComposition(ctx, field)
+			case "typology":
+				return ec.fieldContext_Artifact_typology(ctx, field)
+			case "admissionDate":
+				return ec.fieldContext_Artifact_admissionDate(ctx, field)
 			case "authors":
 				return ec.fieldContext_Artifact_authors(ctx, field)
 			case "mediums":
@@ -29144,6 +29539,16 @@ func (ec *executionContext) fieldContext_Set_artifacts(ctx context.Context, fiel
 				return ec.fieldContext_Artifact_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Artifact_deletedBy(ctx, field)
+			case "dimensions":
+				return ec.fieldContext_Artifact_dimensions(ctx, field)
+			case "weight":
+				return ec.fieldContext_Artifact_weight(ctx, field)
+			case "chemicalComposition":
+				return ec.fieldContext_Artifact_chemicalComposition(ctx, field)
+			case "typology":
+				return ec.fieldContext_Artifact_typology(ctx, field)
+			case "admissionDate":
+				return ec.fieldContext_Artifact_admissionDate(ctx, field)
 			case "authors":
 				return ec.fieldContext_Artifact_authors(ctx, field)
 			case "mediums":
@@ -30545,6 +30950,16 @@ func (ec *executionContext) fieldContext_Technique_artifacts(ctx context.Context
 				return ec.fieldContext_Artifact_deletedAt(ctx, field)
 			case "deletedBy":
 				return ec.fieldContext_Artifact_deletedBy(ctx, field)
+			case "dimensions":
+				return ec.fieldContext_Artifact_dimensions(ctx, field)
+			case "weight":
+				return ec.fieldContext_Artifact_weight(ctx, field)
+			case "chemicalComposition":
+				return ec.fieldContext_Artifact_chemicalComposition(ctx, field)
+			case "typology":
+				return ec.fieldContext_Artifact_typology(ctx, field)
+			case "admissionDate":
+				return ec.fieldContext_Artifact_admissionDate(ctx, field)
 			case "authors":
 				return ec.fieldContext_Artifact_authors(ctx, field)
 			case "mediums":
@@ -33009,7 +33424,7 @@ func (ec *executionContext) unmarshalInputArtifactWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "deletedAt", "deletedAtNEQ", "deletedAtIn", "deletedAtNotIn", "deletedAtGT", "deletedAtGTE", "deletedAtLT", "deletedAtLTE", "deletedAtIsNil", "deletedAtNotNil", "deletedBy", "deletedByNEQ", "deletedByIn", "deletedByNotIn", "deletedByGT", "deletedByGTE", "deletedByLT", "deletedByLTE", "deletedByContains", "deletedByHasPrefix", "deletedByHasSuffix", "deletedByIsNil", "deletedByNotNil", "deletedByEqualFold", "deletedByContainsFold", "hasAuthors", "hasAuthorsWith", "hasMediums", "hasMediumsWith", "hasTechniques", "hasTechniquesWith", "hasProjects", "hasProjectsWith", "hasPublications", "hasPublicationsWith", "hasHolders", "hasHoldersWith", "hasCulturalAffiliation", "hasCulturalAffiliationWith", "hasMonument", "hasMonumentWith", "hasModel", "hasModelWith", "hasSet", "hasSetWith", "hasPeriod", "hasPeriodWith", "hasLocation", "hasLocationWith", "hasCollection", "hasCollectionWith", "hasLicense", "hasLicenseWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "deletedAt", "deletedAtNEQ", "deletedAtIn", "deletedAtNotIn", "deletedAtGT", "deletedAtGTE", "deletedAtLT", "deletedAtLTE", "deletedAtIsNil", "deletedAtNotNil", "deletedBy", "deletedByNEQ", "deletedByIn", "deletedByNotIn", "deletedByGT", "deletedByGTE", "deletedByLT", "deletedByLTE", "deletedByContains", "deletedByHasPrefix", "deletedByHasSuffix", "deletedByIsNil", "deletedByNotNil", "deletedByEqualFold", "deletedByContainsFold", "dimensions", "dimensionsNEQ", "dimensionsIn", "dimensionsNotIn", "dimensionsGT", "dimensionsGTE", "dimensionsLT", "dimensionsLTE", "dimensionsContains", "dimensionsHasPrefix", "dimensionsHasSuffix", "dimensionsIsNil", "dimensionsNotNil", "dimensionsEqualFold", "dimensionsContainsFold", "weight", "weightNEQ", "weightIn", "weightNotIn", "weightGT", "weightGTE", "weightLT", "weightLTE", "weightContains", "weightHasPrefix", "weightHasSuffix", "weightIsNil", "weightNotNil", "weightEqualFold", "weightContainsFold", "chemicalComposition", "chemicalCompositionNEQ", "chemicalCompositionIn", "chemicalCompositionNotIn", "chemicalCompositionGT", "chemicalCompositionGTE", "chemicalCompositionLT", "chemicalCompositionLTE", "chemicalCompositionContains", "chemicalCompositionHasPrefix", "chemicalCompositionHasSuffix", "chemicalCompositionIsNil", "chemicalCompositionNotNil", "chemicalCompositionEqualFold", "chemicalCompositionContainsFold", "typology", "typologyNEQ", "typologyIn", "typologyNotIn", "typologyGT", "typologyGTE", "typologyLT", "typologyLTE", "typologyContains", "typologyHasPrefix", "typologyHasSuffix", "typologyIsNil", "typologyNotNil", "typologyEqualFold", "typologyContainsFold", "admissionDate", "admissionDateNEQ", "admissionDateIn", "admissionDateNotIn", "admissionDateGT", "admissionDateGTE", "admissionDateLT", "admissionDateLTE", "admissionDateIsNil", "admissionDateNotNil", "hasAuthors", "hasAuthorsWith", "hasMediums", "hasMediumsWith", "hasTechniques", "hasTechniquesWith", "hasProjects", "hasProjectsWith", "hasPublications", "hasPublicationsWith", "hasHolders", "hasHoldersWith", "hasCulturalAffiliation", "hasCulturalAffiliationWith", "hasMonument", "hasMonumentWith", "hasModel", "hasModelWith", "hasSet", "hasSetWith", "hasPeriod", "hasPeriodWith", "hasLocation", "hasLocationWith", "hasCollection", "hasCollectionWith", "hasLicense", "hasLicenseWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -34159,6 +34574,636 @@ func (ec *executionContext) unmarshalInputArtifactWhereInput(ctx context.Context
 				return it, err
 			}
 			it.DeletedByContainsFold = data
+		case "dimensions":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dimensions"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Dimensions = data
+		case "dimensionsNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dimensionsNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DimensionsNEQ = data
+		case "dimensionsIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dimensionsIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DimensionsIn = data
+		case "dimensionsNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dimensionsNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DimensionsNotIn = data
+		case "dimensionsGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dimensionsGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DimensionsGT = data
+		case "dimensionsGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dimensionsGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DimensionsGTE = data
+		case "dimensionsLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dimensionsLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DimensionsLT = data
+		case "dimensionsLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dimensionsLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DimensionsLTE = data
+		case "dimensionsContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dimensionsContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DimensionsContains = data
+		case "dimensionsHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dimensionsHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DimensionsHasPrefix = data
+		case "dimensionsHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dimensionsHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DimensionsHasSuffix = data
+		case "dimensionsIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dimensionsIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DimensionsIsNil = data
+		case "dimensionsNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dimensionsNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DimensionsNotNil = data
+		case "dimensionsEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dimensionsEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DimensionsEqualFold = data
+		case "dimensionsContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dimensionsContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DimensionsContainsFold = data
+		case "weight":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weight"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Weight = data
+		case "weightNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weightNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WeightNEQ = data
+		case "weightIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weightIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WeightIn = data
+		case "weightNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weightNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WeightNotIn = data
+		case "weightGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weightGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WeightGT = data
+		case "weightGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weightGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WeightGTE = data
+		case "weightLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weightLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WeightLT = data
+		case "weightLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weightLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WeightLTE = data
+		case "weightContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weightContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WeightContains = data
+		case "weightHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weightHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WeightHasPrefix = data
+		case "weightHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weightHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WeightHasSuffix = data
+		case "weightIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weightIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WeightIsNil = data
+		case "weightNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weightNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WeightNotNil = data
+		case "weightEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weightEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WeightEqualFold = data
+		case "weightContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weightContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WeightContainsFold = data
+		case "chemicalComposition":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chemicalComposition"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ChemicalComposition = data
+		case "chemicalCompositionNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chemicalCompositionNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ChemicalCompositionNEQ = data
+		case "chemicalCompositionIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chemicalCompositionIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ChemicalCompositionIn = data
+		case "chemicalCompositionNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chemicalCompositionNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ChemicalCompositionNotIn = data
+		case "chemicalCompositionGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chemicalCompositionGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ChemicalCompositionGT = data
+		case "chemicalCompositionGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chemicalCompositionGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ChemicalCompositionGTE = data
+		case "chemicalCompositionLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chemicalCompositionLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ChemicalCompositionLT = data
+		case "chemicalCompositionLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chemicalCompositionLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ChemicalCompositionLTE = data
+		case "chemicalCompositionContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chemicalCompositionContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ChemicalCompositionContains = data
+		case "chemicalCompositionHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chemicalCompositionHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ChemicalCompositionHasPrefix = data
+		case "chemicalCompositionHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chemicalCompositionHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ChemicalCompositionHasSuffix = data
+		case "chemicalCompositionIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chemicalCompositionIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ChemicalCompositionIsNil = data
+		case "chemicalCompositionNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chemicalCompositionNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ChemicalCompositionNotNil = data
+		case "chemicalCompositionEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chemicalCompositionEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ChemicalCompositionEqualFold = data
+		case "chemicalCompositionContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chemicalCompositionContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ChemicalCompositionContainsFold = data
+		case "typology":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typology"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Typology = data
+		case "typologyNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typologyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypologyNEQ = data
+		case "typologyIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typologyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypologyIn = data
+		case "typologyNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typologyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypologyNotIn = data
+		case "typologyGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typologyGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypologyGT = data
+		case "typologyGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typologyGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypologyGTE = data
+		case "typologyLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typologyLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypologyLT = data
+		case "typologyLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typologyLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypologyLTE = data
+		case "typologyContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typologyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypologyContains = data
+		case "typologyHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typologyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypologyHasPrefix = data
+		case "typologyHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typologyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypologyHasSuffix = data
+		case "typologyIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typologyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypologyIsNil = data
+		case "typologyNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typologyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypologyNotNil = data
+		case "typologyEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typologyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypologyEqualFold = data
+		case "typologyContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typologyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypologyContainsFold = data
+		case "admissionDate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("admissionDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AdmissionDate = data
+		case "admissionDateNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("admissionDateNEQ"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AdmissionDateNEQ = data
+		case "admissionDateIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("admissionDateIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AdmissionDateIn = data
+		case "admissionDateNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("admissionDateNotIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AdmissionDateNotIn = data
+		case "admissionDateGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("admissionDateGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AdmissionDateGT = data
+		case "admissionDateGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("admissionDateGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AdmissionDateGTE = data
+		case "admissionDateLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("admissionDateLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AdmissionDateLT = data
+		case "admissionDateLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("admissionDateLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AdmissionDateLTE = data
+		case "admissionDateIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("admissionDateIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AdmissionDateIsNil = data
+		case "admissionDateNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("admissionDateNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AdmissionDateNotNil = data
 		case "hasAuthors":
 			var err error
 
@@ -37152,7 +38197,7 @@ func (ec *executionContext) unmarshalInputCreateArtifactInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "deletedAt", "deletedBy", "authorIDs", "mediumIDs", "techniqueIDs", "projectIDs", "publicationIDs", "holderIDs", "culturalAffiliationID", "monumentID", "modelID", "setID", "periodID", "locationID", "collectionID", "licenseID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "deletedAt", "deletedBy", "dimensions", "weight", "chemicalComposition", "typology", "admissionDate", "authorIDs", "mediumIDs", "techniqueIDs", "projectIDs", "publicationIDs", "holderIDs", "culturalAffiliationID", "monumentID", "modelID", "setID", "periodID", "locationID", "collectionID", "licenseID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -37258,6 +38303,51 @@ func (ec *executionContext) unmarshalInputCreateArtifactInput(ctx context.Contex
 				return it, err
 			}
 			it.DeletedBy = data
+		case "dimensions":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dimensions"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Dimensions = data
+		case "weight":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weight"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Weight = data
+		case "chemicalComposition":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chemicalComposition"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ChemicalComposition = data
+		case "typology":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typology"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Typology = data
+		case "admissionDate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("admissionDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AdmissionDate = data
 		case "authorIDs":
 			var err error
 
@@ -60005,7 +61095,7 @@ func (ec *executionContext) unmarshalInputUpdateArtifactInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "deletedAt", "clearDeletedAt", "deletedBy", "clearDeletedBy", "addAuthorIDs", "removeAuthorIDs", "clearAuthors", "addMediumIDs", "removeMediumIDs", "clearMediums", "addTechniqueIDs", "removeTechniqueIDs", "clearTechniques", "addProjectIDs", "removeProjectIDs", "clearProjects", "addPublicationIDs", "removePublicationIDs", "clearPublications", "addHolderIDs", "removeHolderIDs", "clearHolders", "culturalAffiliationID", "clearCulturalAffiliation", "monumentID", "clearMonument", "modelID", "clearModel", "setID", "clearSet", "periodID", "clearPeriod", "locationID", "clearLocation", "collectionID", "clearCollection", "licenseID", "clearLicense"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "deletedAt", "clearDeletedAt", "deletedBy", "clearDeletedBy", "dimensions", "clearDimensions", "weight", "clearWeight", "chemicalComposition", "clearChemicalComposition", "typology", "clearTypology", "admissionDate", "clearAdmissionDate", "addAuthorIDs", "removeAuthorIDs", "clearAuthors", "addMediumIDs", "removeMediumIDs", "clearMediums", "addTechniqueIDs", "removeTechniqueIDs", "clearTechniques", "addProjectIDs", "removeProjectIDs", "clearProjects", "addPublicationIDs", "removePublicationIDs", "clearPublications", "addHolderIDs", "removeHolderIDs", "clearHolders", "culturalAffiliationID", "clearCulturalAffiliation", "monumentID", "clearMonument", "modelID", "clearModel", "setID", "clearSet", "periodID", "clearPeriod", "locationID", "clearLocation", "collectionID", "clearCollection", "licenseID", "clearLicense"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -60201,6 +61291,96 @@ func (ec *executionContext) unmarshalInputUpdateArtifactInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearDeletedBy = data
+		case "dimensions":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dimensions"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Dimensions = data
+		case "clearDimensions":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearDimensions"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearDimensions = data
+		case "weight":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weight"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Weight = data
+		case "clearWeight":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearWeight"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearWeight = data
+		case "chemicalComposition":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chemicalComposition"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ChemicalComposition = data
+		case "clearChemicalComposition":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearChemicalComposition"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearChemicalComposition = data
+		case "typology":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typology"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Typology = data
+		case "clearTypology":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearTypology"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearTypology = data
+		case "admissionDate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("admissionDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AdmissionDate = data
+		case "clearAdmissionDate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAdmissionDate"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAdmissionDate = data
 		case "addAuthorIDs":
 			var err error
 
@@ -64489,6 +65669,16 @@ func (ec *executionContext) _Artifact(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._Artifact_deletedAt(ctx, field, obj)
 		case "deletedBy":
 			out.Values[i] = ec._Artifact_deletedBy(ctx, field, obj)
+		case "dimensions":
+			out.Values[i] = ec._Artifact_dimensions(ctx, field, obj)
+		case "weight":
+			out.Values[i] = ec._Artifact_weight(ctx, field, obj)
+		case "chemicalComposition":
+			out.Values[i] = ec._Artifact_chemicalComposition(ctx, field, obj)
+		case "typology":
+			out.Values[i] = ec._Artifact_typology(ctx, field, obj)
+		case "admissionDate":
+			out.Values[i] = ec._Artifact_admissionDate(ctx, field, obj)
 		case "authors":
 			field := field
 

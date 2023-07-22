@@ -172,6 +172,76 @@ func (ac *ArtifactCreate) SetNillableDeletedBy(s *string) *ArtifactCreate {
 	return ac
 }
 
+// SetDimensions sets the "dimensions" field.
+func (ac *ArtifactCreate) SetDimensions(s string) *ArtifactCreate {
+	ac.mutation.SetDimensions(s)
+	return ac
+}
+
+// SetNillableDimensions sets the "dimensions" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableDimensions(s *string) *ArtifactCreate {
+	if s != nil {
+		ac.SetDimensions(*s)
+	}
+	return ac
+}
+
+// SetWeight sets the "weight" field.
+func (ac *ArtifactCreate) SetWeight(s string) *ArtifactCreate {
+	ac.mutation.SetWeight(s)
+	return ac
+}
+
+// SetNillableWeight sets the "weight" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableWeight(s *string) *ArtifactCreate {
+	if s != nil {
+		ac.SetWeight(*s)
+	}
+	return ac
+}
+
+// SetChemicalComposition sets the "chemical_composition" field.
+func (ac *ArtifactCreate) SetChemicalComposition(s string) *ArtifactCreate {
+	ac.mutation.SetChemicalComposition(s)
+	return ac
+}
+
+// SetNillableChemicalComposition sets the "chemical_composition" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableChemicalComposition(s *string) *ArtifactCreate {
+	if s != nil {
+		ac.SetChemicalComposition(*s)
+	}
+	return ac
+}
+
+// SetTypology sets the "typology" field.
+func (ac *ArtifactCreate) SetTypology(s string) *ArtifactCreate {
+	ac.mutation.SetTypology(s)
+	return ac
+}
+
+// SetNillableTypology sets the "typology" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableTypology(s *string) *ArtifactCreate {
+	if s != nil {
+		ac.SetTypology(*s)
+	}
+	return ac
+}
+
+// SetAdmissionDate sets the "admission_date" field.
+func (ac *ArtifactCreate) SetAdmissionDate(t time.Time) *ArtifactCreate {
+	ac.mutation.SetAdmissionDate(t)
+	return ac
+}
+
+// SetNillableAdmissionDate sets the "admission_date" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableAdmissionDate(t *time.Time) *ArtifactCreate {
+	if t != nil {
+		ac.SetAdmissionDate(*t)
+	}
+	return ac
+}
+
 // AddAuthorIDs adds the "authors" edge to the Person entity by IDs.
 func (ac *ArtifactCreate) AddAuthorIDs(ids ...int) *ArtifactCreate {
 	ac.mutation.AddAuthorIDs(ids...)
@@ -545,6 +615,26 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.DeletedBy(); ok {
 		_spec.SetField(artifact.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := ac.mutation.Dimensions(); ok {
+		_spec.SetField(artifact.FieldDimensions, field.TypeString, value)
+		_node.Dimensions = value
+	}
+	if value, ok := ac.mutation.Weight(); ok {
+		_spec.SetField(artifact.FieldWeight, field.TypeString, value)
+		_node.Weight = value
+	}
+	if value, ok := ac.mutation.ChemicalComposition(); ok {
+		_spec.SetField(artifact.FieldChemicalComposition, field.TypeString, value)
+		_node.ChemicalComposition = value
+	}
+	if value, ok := ac.mutation.Typology(); ok {
+		_spec.SetField(artifact.FieldTypology, field.TypeString, value)
+		_node.Typology = value
+	}
+	if value, ok := ac.mutation.AdmissionDate(); ok {
+		_spec.SetField(artifact.FieldAdmissionDate, field.TypeTime, value)
+		_node.AdmissionDate = value
 	}
 	if nodes := ac.mutation.AuthorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -569,6 +569,86 @@ type ArtifactWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
+	// "dimensions" field predicates.
+	Dimensions             *string  `json:"dimensions,omitempty"`
+	DimensionsNEQ          *string  `json:"dimensionsNEQ,omitempty"`
+	DimensionsIn           []string `json:"dimensionsIn,omitempty"`
+	DimensionsNotIn        []string `json:"dimensionsNotIn,omitempty"`
+	DimensionsGT           *string  `json:"dimensionsGT,omitempty"`
+	DimensionsGTE          *string  `json:"dimensionsGTE,omitempty"`
+	DimensionsLT           *string  `json:"dimensionsLT,omitempty"`
+	DimensionsLTE          *string  `json:"dimensionsLTE,omitempty"`
+	DimensionsContains     *string  `json:"dimensionsContains,omitempty"`
+	DimensionsHasPrefix    *string  `json:"dimensionsHasPrefix,omitempty"`
+	DimensionsHasSuffix    *string  `json:"dimensionsHasSuffix,omitempty"`
+	DimensionsIsNil        bool     `json:"dimensionsIsNil,omitempty"`
+	DimensionsNotNil       bool     `json:"dimensionsNotNil,omitempty"`
+	DimensionsEqualFold    *string  `json:"dimensionsEqualFold,omitempty"`
+	DimensionsContainsFold *string  `json:"dimensionsContainsFold,omitempty"`
+
+	// "weight" field predicates.
+	Weight             *string  `json:"weight,omitempty"`
+	WeightNEQ          *string  `json:"weightNEQ,omitempty"`
+	WeightIn           []string `json:"weightIn,omitempty"`
+	WeightNotIn        []string `json:"weightNotIn,omitempty"`
+	WeightGT           *string  `json:"weightGT,omitempty"`
+	WeightGTE          *string  `json:"weightGTE,omitempty"`
+	WeightLT           *string  `json:"weightLT,omitempty"`
+	WeightLTE          *string  `json:"weightLTE,omitempty"`
+	WeightContains     *string  `json:"weightContains,omitempty"`
+	WeightHasPrefix    *string  `json:"weightHasPrefix,omitempty"`
+	WeightHasSuffix    *string  `json:"weightHasSuffix,omitempty"`
+	WeightIsNil        bool     `json:"weightIsNil,omitempty"`
+	WeightNotNil       bool     `json:"weightNotNil,omitempty"`
+	WeightEqualFold    *string  `json:"weightEqualFold,omitempty"`
+	WeightContainsFold *string  `json:"weightContainsFold,omitempty"`
+
+	// "chemical_composition" field predicates.
+	ChemicalComposition             *string  `json:"chemicalComposition,omitempty"`
+	ChemicalCompositionNEQ          *string  `json:"chemicalCompositionNEQ,omitempty"`
+	ChemicalCompositionIn           []string `json:"chemicalCompositionIn,omitempty"`
+	ChemicalCompositionNotIn        []string `json:"chemicalCompositionNotIn,omitempty"`
+	ChemicalCompositionGT           *string  `json:"chemicalCompositionGT,omitempty"`
+	ChemicalCompositionGTE          *string  `json:"chemicalCompositionGTE,omitempty"`
+	ChemicalCompositionLT           *string  `json:"chemicalCompositionLT,omitempty"`
+	ChemicalCompositionLTE          *string  `json:"chemicalCompositionLTE,omitempty"`
+	ChemicalCompositionContains     *string  `json:"chemicalCompositionContains,omitempty"`
+	ChemicalCompositionHasPrefix    *string  `json:"chemicalCompositionHasPrefix,omitempty"`
+	ChemicalCompositionHasSuffix    *string  `json:"chemicalCompositionHasSuffix,omitempty"`
+	ChemicalCompositionIsNil        bool     `json:"chemicalCompositionIsNil,omitempty"`
+	ChemicalCompositionNotNil       bool     `json:"chemicalCompositionNotNil,omitempty"`
+	ChemicalCompositionEqualFold    *string  `json:"chemicalCompositionEqualFold,omitempty"`
+	ChemicalCompositionContainsFold *string  `json:"chemicalCompositionContainsFold,omitempty"`
+
+	// "typology" field predicates.
+	Typology             *string  `json:"typology,omitempty"`
+	TypologyNEQ          *string  `json:"typologyNEQ,omitempty"`
+	TypologyIn           []string `json:"typologyIn,omitempty"`
+	TypologyNotIn        []string `json:"typologyNotIn,omitempty"`
+	TypologyGT           *string  `json:"typologyGT,omitempty"`
+	TypologyGTE          *string  `json:"typologyGTE,omitempty"`
+	TypologyLT           *string  `json:"typologyLT,omitempty"`
+	TypologyLTE          *string  `json:"typologyLTE,omitempty"`
+	TypologyContains     *string  `json:"typologyContains,omitempty"`
+	TypologyHasPrefix    *string  `json:"typologyHasPrefix,omitempty"`
+	TypologyHasSuffix    *string  `json:"typologyHasSuffix,omitempty"`
+	TypologyIsNil        bool     `json:"typologyIsNil,omitempty"`
+	TypologyNotNil       bool     `json:"typologyNotNil,omitempty"`
+	TypologyEqualFold    *string  `json:"typologyEqualFold,omitempty"`
+	TypologyContainsFold *string  `json:"typologyContainsFold,omitempty"`
+
+	// "admission_date" field predicates.
+	AdmissionDate       *time.Time  `json:"admissionDate,omitempty"`
+	AdmissionDateNEQ    *time.Time  `json:"admissionDateNEQ,omitempty"`
+	AdmissionDateIn     []time.Time `json:"admissionDateIn,omitempty"`
+	AdmissionDateNotIn  []time.Time `json:"admissionDateNotIn,omitempty"`
+	AdmissionDateGT     *time.Time  `json:"admissionDateGT,omitempty"`
+	AdmissionDateGTE    *time.Time  `json:"admissionDateGTE,omitempty"`
+	AdmissionDateLT     *time.Time  `json:"admissionDateLT,omitempty"`
+	AdmissionDateLTE    *time.Time  `json:"admissionDateLTE,omitempty"`
+	AdmissionDateIsNil  bool        `json:"admissionDateIsNil,omitempty"`
+	AdmissionDateNotNil bool        `json:"admissionDateNotNil,omitempty"`
+
 	// "authors" edge predicates.
 	HasAuthors     *bool               `json:"hasAuthors,omitempty"`
 	HasAuthorsWith []*PersonWhereInput `json:"hasAuthorsWith,omitempty"`
@@ -1068,6 +1148,216 @@ func (i *ArtifactWhereInput) P() (predicate.Artifact, error) {
 	}
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, artifact.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.Dimensions != nil {
+		predicates = append(predicates, artifact.DimensionsEQ(*i.Dimensions))
+	}
+	if i.DimensionsNEQ != nil {
+		predicates = append(predicates, artifact.DimensionsNEQ(*i.DimensionsNEQ))
+	}
+	if len(i.DimensionsIn) > 0 {
+		predicates = append(predicates, artifact.DimensionsIn(i.DimensionsIn...))
+	}
+	if len(i.DimensionsNotIn) > 0 {
+		predicates = append(predicates, artifact.DimensionsNotIn(i.DimensionsNotIn...))
+	}
+	if i.DimensionsGT != nil {
+		predicates = append(predicates, artifact.DimensionsGT(*i.DimensionsGT))
+	}
+	if i.DimensionsGTE != nil {
+		predicates = append(predicates, artifact.DimensionsGTE(*i.DimensionsGTE))
+	}
+	if i.DimensionsLT != nil {
+		predicates = append(predicates, artifact.DimensionsLT(*i.DimensionsLT))
+	}
+	if i.DimensionsLTE != nil {
+		predicates = append(predicates, artifact.DimensionsLTE(*i.DimensionsLTE))
+	}
+	if i.DimensionsContains != nil {
+		predicates = append(predicates, artifact.DimensionsContains(*i.DimensionsContains))
+	}
+	if i.DimensionsHasPrefix != nil {
+		predicates = append(predicates, artifact.DimensionsHasPrefix(*i.DimensionsHasPrefix))
+	}
+	if i.DimensionsHasSuffix != nil {
+		predicates = append(predicates, artifact.DimensionsHasSuffix(*i.DimensionsHasSuffix))
+	}
+	if i.DimensionsIsNil {
+		predicates = append(predicates, artifact.DimensionsIsNil())
+	}
+	if i.DimensionsNotNil {
+		predicates = append(predicates, artifact.DimensionsNotNil())
+	}
+	if i.DimensionsEqualFold != nil {
+		predicates = append(predicates, artifact.DimensionsEqualFold(*i.DimensionsEqualFold))
+	}
+	if i.DimensionsContainsFold != nil {
+		predicates = append(predicates, artifact.DimensionsContainsFold(*i.DimensionsContainsFold))
+	}
+	if i.Weight != nil {
+		predicates = append(predicates, artifact.WeightEQ(*i.Weight))
+	}
+	if i.WeightNEQ != nil {
+		predicates = append(predicates, artifact.WeightNEQ(*i.WeightNEQ))
+	}
+	if len(i.WeightIn) > 0 {
+		predicates = append(predicates, artifact.WeightIn(i.WeightIn...))
+	}
+	if len(i.WeightNotIn) > 0 {
+		predicates = append(predicates, artifact.WeightNotIn(i.WeightNotIn...))
+	}
+	if i.WeightGT != nil {
+		predicates = append(predicates, artifact.WeightGT(*i.WeightGT))
+	}
+	if i.WeightGTE != nil {
+		predicates = append(predicates, artifact.WeightGTE(*i.WeightGTE))
+	}
+	if i.WeightLT != nil {
+		predicates = append(predicates, artifact.WeightLT(*i.WeightLT))
+	}
+	if i.WeightLTE != nil {
+		predicates = append(predicates, artifact.WeightLTE(*i.WeightLTE))
+	}
+	if i.WeightContains != nil {
+		predicates = append(predicates, artifact.WeightContains(*i.WeightContains))
+	}
+	if i.WeightHasPrefix != nil {
+		predicates = append(predicates, artifact.WeightHasPrefix(*i.WeightHasPrefix))
+	}
+	if i.WeightHasSuffix != nil {
+		predicates = append(predicates, artifact.WeightHasSuffix(*i.WeightHasSuffix))
+	}
+	if i.WeightIsNil {
+		predicates = append(predicates, artifact.WeightIsNil())
+	}
+	if i.WeightNotNil {
+		predicates = append(predicates, artifact.WeightNotNil())
+	}
+	if i.WeightEqualFold != nil {
+		predicates = append(predicates, artifact.WeightEqualFold(*i.WeightEqualFold))
+	}
+	if i.WeightContainsFold != nil {
+		predicates = append(predicates, artifact.WeightContainsFold(*i.WeightContainsFold))
+	}
+	if i.ChemicalComposition != nil {
+		predicates = append(predicates, artifact.ChemicalCompositionEQ(*i.ChemicalComposition))
+	}
+	if i.ChemicalCompositionNEQ != nil {
+		predicates = append(predicates, artifact.ChemicalCompositionNEQ(*i.ChemicalCompositionNEQ))
+	}
+	if len(i.ChemicalCompositionIn) > 0 {
+		predicates = append(predicates, artifact.ChemicalCompositionIn(i.ChemicalCompositionIn...))
+	}
+	if len(i.ChemicalCompositionNotIn) > 0 {
+		predicates = append(predicates, artifact.ChemicalCompositionNotIn(i.ChemicalCompositionNotIn...))
+	}
+	if i.ChemicalCompositionGT != nil {
+		predicates = append(predicates, artifact.ChemicalCompositionGT(*i.ChemicalCompositionGT))
+	}
+	if i.ChemicalCompositionGTE != nil {
+		predicates = append(predicates, artifact.ChemicalCompositionGTE(*i.ChemicalCompositionGTE))
+	}
+	if i.ChemicalCompositionLT != nil {
+		predicates = append(predicates, artifact.ChemicalCompositionLT(*i.ChemicalCompositionLT))
+	}
+	if i.ChemicalCompositionLTE != nil {
+		predicates = append(predicates, artifact.ChemicalCompositionLTE(*i.ChemicalCompositionLTE))
+	}
+	if i.ChemicalCompositionContains != nil {
+		predicates = append(predicates, artifact.ChemicalCompositionContains(*i.ChemicalCompositionContains))
+	}
+	if i.ChemicalCompositionHasPrefix != nil {
+		predicates = append(predicates, artifact.ChemicalCompositionHasPrefix(*i.ChemicalCompositionHasPrefix))
+	}
+	if i.ChemicalCompositionHasSuffix != nil {
+		predicates = append(predicates, artifact.ChemicalCompositionHasSuffix(*i.ChemicalCompositionHasSuffix))
+	}
+	if i.ChemicalCompositionIsNil {
+		predicates = append(predicates, artifact.ChemicalCompositionIsNil())
+	}
+	if i.ChemicalCompositionNotNil {
+		predicates = append(predicates, artifact.ChemicalCompositionNotNil())
+	}
+	if i.ChemicalCompositionEqualFold != nil {
+		predicates = append(predicates, artifact.ChemicalCompositionEqualFold(*i.ChemicalCompositionEqualFold))
+	}
+	if i.ChemicalCompositionContainsFold != nil {
+		predicates = append(predicates, artifact.ChemicalCompositionContainsFold(*i.ChemicalCompositionContainsFold))
+	}
+	if i.Typology != nil {
+		predicates = append(predicates, artifact.TypologyEQ(*i.Typology))
+	}
+	if i.TypologyNEQ != nil {
+		predicates = append(predicates, artifact.TypologyNEQ(*i.TypologyNEQ))
+	}
+	if len(i.TypologyIn) > 0 {
+		predicates = append(predicates, artifact.TypologyIn(i.TypologyIn...))
+	}
+	if len(i.TypologyNotIn) > 0 {
+		predicates = append(predicates, artifact.TypologyNotIn(i.TypologyNotIn...))
+	}
+	if i.TypologyGT != nil {
+		predicates = append(predicates, artifact.TypologyGT(*i.TypologyGT))
+	}
+	if i.TypologyGTE != nil {
+		predicates = append(predicates, artifact.TypologyGTE(*i.TypologyGTE))
+	}
+	if i.TypologyLT != nil {
+		predicates = append(predicates, artifact.TypologyLT(*i.TypologyLT))
+	}
+	if i.TypologyLTE != nil {
+		predicates = append(predicates, artifact.TypologyLTE(*i.TypologyLTE))
+	}
+	if i.TypologyContains != nil {
+		predicates = append(predicates, artifact.TypologyContains(*i.TypologyContains))
+	}
+	if i.TypologyHasPrefix != nil {
+		predicates = append(predicates, artifact.TypologyHasPrefix(*i.TypologyHasPrefix))
+	}
+	if i.TypologyHasSuffix != nil {
+		predicates = append(predicates, artifact.TypologyHasSuffix(*i.TypologyHasSuffix))
+	}
+	if i.TypologyIsNil {
+		predicates = append(predicates, artifact.TypologyIsNil())
+	}
+	if i.TypologyNotNil {
+		predicates = append(predicates, artifact.TypologyNotNil())
+	}
+	if i.TypologyEqualFold != nil {
+		predicates = append(predicates, artifact.TypologyEqualFold(*i.TypologyEqualFold))
+	}
+	if i.TypologyContainsFold != nil {
+		predicates = append(predicates, artifact.TypologyContainsFold(*i.TypologyContainsFold))
+	}
+	if i.AdmissionDate != nil {
+		predicates = append(predicates, artifact.AdmissionDateEQ(*i.AdmissionDate))
+	}
+	if i.AdmissionDateNEQ != nil {
+		predicates = append(predicates, artifact.AdmissionDateNEQ(*i.AdmissionDateNEQ))
+	}
+	if len(i.AdmissionDateIn) > 0 {
+		predicates = append(predicates, artifact.AdmissionDateIn(i.AdmissionDateIn...))
+	}
+	if len(i.AdmissionDateNotIn) > 0 {
+		predicates = append(predicates, artifact.AdmissionDateNotIn(i.AdmissionDateNotIn...))
+	}
+	if i.AdmissionDateGT != nil {
+		predicates = append(predicates, artifact.AdmissionDateGT(*i.AdmissionDateGT))
+	}
+	if i.AdmissionDateGTE != nil {
+		predicates = append(predicates, artifact.AdmissionDateGTE(*i.AdmissionDateGTE))
+	}
+	if i.AdmissionDateLT != nil {
+		predicates = append(predicates, artifact.AdmissionDateLT(*i.AdmissionDateLT))
+	}
+	if i.AdmissionDateLTE != nil {
+		predicates = append(predicates, artifact.AdmissionDateLTE(*i.AdmissionDateLTE))
+	}
+	if i.AdmissionDateIsNil {
+		predicates = append(predicates, artifact.AdmissionDateIsNil())
+	}
+	if i.AdmissionDateNotNil {
+		predicates = append(predicates, artifact.AdmissionDateNotNil())
 	}
 
 	if i.HasAuthors != nil {

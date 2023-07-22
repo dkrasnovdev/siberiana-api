@@ -897,6 +897,11 @@ type ArtifactMutation struct {
 	appendadditional_images_urls []string
 	deleted_at                   *time.Time
 	deleted_by                   *string
+	dimensions                   *string
+	weight                       *string
+	chemical_composition         *string
+	typology                     *string
+	admission_date               *time.Time
 	clearedFields                map[string]struct{}
 	authors                      map[int]struct{}
 	removedauthors               map[int]struct{}
@@ -1580,6 +1585,251 @@ func (m *ArtifactMutation) ResetDeletedBy() {
 	delete(m.clearedFields, artifact.FieldDeletedBy)
 }
 
+// SetDimensions sets the "dimensions" field.
+func (m *ArtifactMutation) SetDimensions(s string) {
+	m.dimensions = &s
+}
+
+// Dimensions returns the value of the "dimensions" field in the mutation.
+func (m *ArtifactMutation) Dimensions() (r string, exists bool) {
+	v := m.dimensions
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDimensions returns the old "dimensions" field's value of the Artifact entity.
+// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtifactMutation) OldDimensions(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDimensions is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDimensions requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDimensions: %w", err)
+	}
+	return oldValue.Dimensions, nil
+}
+
+// ClearDimensions clears the value of the "dimensions" field.
+func (m *ArtifactMutation) ClearDimensions() {
+	m.dimensions = nil
+	m.clearedFields[artifact.FieldDimensions] = struct{}{}
+}
+
+// DimensionsCleared returns if the "dimensions" field was cleared in this mutation.
+func (m *ArtifactMutation) DimensionsCleared() bool {
+	_, ok := m.clearedFields[artifact.FieldDimensions]
+	return ok
+}
+
+// ResetDimensions resets all changes to the "dimensions" field.
+func (m *ArtifactMutation) ResetDimensions() {
+	m.dimensions = nil
+	delete(m.clearedFields, artifact.FieldDimensions)
+}
+
+// SetWeight sets the "weight" field.
+func (m *ArtifactMutation) SetWeight(s string) {
+	m.weight = &s
+}
+
+// Weight returns the value of the "weight" field in the mutation.
+func (m *ArtifactMutation) Weight() (r string, exists bool) {
+	v := m.weight
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldWeight returns the old "weight" field's value of the Artifact entity.
+// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtifactMutation) OldWeight(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldWeight is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldWeight requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldWeight: %w", err)
+	}
+	return oldValue.Weight, nil
+}
+
+// ClearWeight clears the value of the "weight" field.
+func (m *ArtifactMutation) ClearWeight() {
+	m.weight = nil
+	m.clearedFields[artifact.FieldWeight] = struct{}{}
+}
+
+// WeightCleared returns if the "weight" field was cleared in this mutation.
+func (m *ArtifactMutation) WeightCleared() bool {
+	_, ok := m.clearedFields[artifact.FieldWeight]
+	return ok
+}
+
+// ResetWeight resets all changes to the "weight" field.
+func (m *ArtifactMutation) ResetWeight() {
+	m.weight = nil
+	delete(m.clearedFields, artifact.FieldWeight)
+}
+
+// SetChemicalComposition sets the "chemical_composition" field.
+func (m *ArtifactMutation) SetChemicalComposition(s string) {
+	m.chemical_composition = &s
+}
+
+// ChemicalComposition returns the value of the "chemical_composition" field in the mutation.
+func (m *ArtifactMutation) ChemicalComposition() (r string, exists bool) {
+	v := m.chemical_composition
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldChemicalComposition returns the old "chemical_composition" field's value of the Artifact entity.
+// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtifactMutation) OldChemicalComposition(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldChemicalComposition is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldChemicalComposition requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldChemicalComposition: %w", err)
+	}
+	return oldValue.ChemicalComposition, nil
+}
+
+// ClearChemicalComposition clears the value of the "chemical_composition" field.
+func (m *ArtifactMutation) ClearChemicalComposition() {
+	m.chemical_composition = nil
+	m.clearedFields[artifact.FieldChemicalComposition] = struct{}{}
+}
+
+// ChemicalCompositionCleared returns if the "chemical_composition" field was cleared in this mutation.
+func (m *ArtifactMutation) ChemicalCompositionCleared() bool {
+	_, ok := m.clearedFields[artifact.FieldChemicalComposition]
+	return ok
+}
+
+// ResetChemicalComposition resets all changes to the "chemical_composition" field.
+func (m *ArtifactMutation) ResetChemicalComposition() {
+	m.chemical_composition = nil
+	delete(m.clearedFields, artifact.FieldChemicalComposition)
+}
+
+// SetTypology sets the "typology" field.
+func (m *ArtifactMutation) SetTypology(s string) {
+	m.typology = &s
+}
+
+// Typology returns the value of the "typology" field in the mutation.
+func (m *ArtifactMutation) Typology() (r string, exists bool) {
+	v := m.typology
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTypology returns the old "typology" field's value of the Artifact entity.
+// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtifactMutation) OldTypology(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTypology is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTypology requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTypology: %w", err)
+	}
+	return oldValue.Typology, nil
+}
+
+// ClearTypology clears the value of the "typology" field.
+func (m *ArtifactMutation) ClearTypology() {
+	m.typology = nil
+	m.clearedFields[artifact.FieldTypology] = struct{}{}
+}
+
+// TypologyCleared returns if the "typology" field was cleared in this mutation.
+func (m *ArtifactMutation) TypologyCleared() bool {
+	_, ok := m.clearedFields[artifact.FieldTypology]
+	return ok
+}
+
+// ResetTypology resets all changes to the "typology" field.
+func (m *ArtifactMutation) ResetTypology() {
+	m.typology = nil
+	delete(m.clearedFields, artifact.FieldTypology)
+}
+
+// SetAdmissionDate sets the "admission_date" field.
+func (m *ArtifactMutation) SetAdmissionDate(t time.Time) {
+	m.admission_date = &t
+}
+
+// AdmissionDate returns the value of the "admission_date" field in the mutation.
+func (m *ArtifactMutation) AdmissionDate() (r time.Time, exists bool) {
+	v := m.admission_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAdmissionDate returns the old "admission_date" field's value of the Artifact entity.
+// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtifactMutation) OldAdmissionDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAdmissionDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAdmissionDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAdmissionDate: %w", err)
+	}
+	return oldValue.AdmissionDate, nil
+}
+
+// ClearAdmissionDate clears the value of the "admission_date" field.
+func (m *ArtifactMutation) ClearAdmissionDate() {
+	m.admission_date = nil
+	m.clearedFields[artifact.FieldAdmissionDate] = struct{}{}
+}
+
+// AdmissionDateCleared returns if the "admission_date" field was cleared in this mutation.
+func (m *ArtifactMutation) AdmissionDateCleared() bool {
+	_, ok := m.clearedFields[artifact.FieldAdmissionDate]
+	return ok
+}
+
+// ResetAdmissionDate resets all changes to the "admission_date" field.
+func (m *ArtifactMutation) ResetAdmissionDate() {
+	m.admission_date = nil
+	delete(m.clearedFields, artifact.FieldAdmissionDate)
+}
+
 // AddAuthorIDs adds the "authors" edge to the Person entity by ids.
 func (m *ArtifactMutation) AddAuthorIDs(ids ...int) {
 	if m.authors == nil {
@@ -2250,7 +2500,7 @@ func (m *ArtifactMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArtifactMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 16)
 	if m.created_at != nil {
 		fields = append(fields, artifact.FieldCreatedAt)
 	}
@@ -2284,6 +2534,21 @@ func (m *ArtifactMutation) Fields() []string {
 	if m.deleted_by != nil {
 		fields = append(fields, artifact.FieldDeletedBy)
 	}
+	if m.dimensions != nil {
+		fields = append(fields, artifact.FieldDimensions)
+	}
+	if m.weight != nil {
+		fields = append(fields, artifact.FieldWeight)
+	}
+	if m.chemical_composition != nil {
+		fields = append(fields, artifact.FieldChemicalComposition)
+	}
+	if m.typology != nil {
+		fields = append(fields, artifact.FieldTypology)
+	}
+	if m.admission_date != nil {
+		fields = append(fields, artifact.FieldAdmissionDate)
+	}
 	return fields
 }
 
@@ -2314,6 +2579,16 @@ func (m *ArtifactMutation) Field(name string) (ent.Value, bool) {
 		return m.DeletedAt()
 	case artifact.FieldDeletedBy:
 		return m.DeletedBy()
+	case artifact.FieldDimensions:
+		return m.Dimensions()
+	case artifact.FieldWeight:
+		return m.Weight()
+	case artifact.FieldChemicalComposition:
+		return m.ChemicalComposition()
+	case artifact.FieldTypology:
+		return m.Typology()
+	case artifact.FieldAdmissionDate:
+		return m.AdmissionDate()
 	}
 	return nil, false
 }
@@ -2345,6 +2620,16 @@ func (m *ArtifactMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldDeletedAt(ctx)
 	case artifact.FieldDeletedBy:
 		return m.OldDeletedBy(ctx)
+	case artifact.FieldDimensions:
+		return m.OldDimensions(ctx)
+	case artifact.FieldWeight:
+		return m.OldWeight(ctx)
+	case artifact.FieldChemicalComposition:
+		return m.OldChemicalComposition(ctx)
+	case artifact.FieldTypology:
+		return m.OldTypology(ctx)
+	case artifact.FieldAdmissionDate:
+		return m.OldAdmissionDate(ctx)
 	}
 	return nil, fmt.Errorf("unknown Artifact field %s", name)
 }
@@ -2431,6 +2716,41 @@ func (m *ArtifactMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDeletedBy(v)
 		return nil
+	case artifact.FieldDimensions:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDimensions(v)
+		return nil
+	case artifact.FieldWeight:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetWeight(v)
+		return nil
+	case artifact.FieldChemicalComposition:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetChemicalComposition(v)
+		return nil
+	case artifact.FieldTypology:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTypology(v)
+		return nil
+	case artifact.FieldAdmissionDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAdmissionDate(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Artifact field %s", name)
 }
@@ -2488,6 +2808,21 @@ func (m *ArtifactMutation) ClearedFields() []string {
 	if m.FieldCleared(artifact.FieldDeletedBy) {
 		fields = append(fields, artifact.FieldDeletedBy)
 	}
+	if m.FieldCleared(artifact.FieldDimensions) {
+		fields = append(fields, artifact.FieldDimensions)
+	}
+	if m.FieldCleared(artifact.FieldWeight) {
+		fields = append(fields, artifact.FieldWeight)
+	}
+	if m.FieldCleared(artifact.FieldChemicalComposition) {
+		fields = append(fields, artifact.FieldChemicalComposition)
+	}
+	if m.FieldCleared(artifact.FieldTypology) {
+		fields = append(fields, artifact.FieldTypology)
+	}
+	if m.FieldCleared(artifact.FieldAdmissionDate) {
+		fields = append(fields, artifact.FieldAdmissionDate)
+	}
 	return fields
 }
 
@@ -2529,6 +2864,21 @@ func (m *ArtifactMutation) ClearField(name string) error {
 	case artifact.FieldDeletedBy:
 		m.ClearDeletedBy()
 		return nil
+	case artifact.FieldDimensions:
+		m.ClearDimensions()
+		return nil
+	case artifact.FieldWeight:
+		m.ClearWeight()
+		return nil
+	case artifact.FieldChemicalComposition:
+		m.ClearChemicalComposition()
+		return nil
+	case artifact.FieldTypology:
+		m.ClearTypology()
+		return nil
+	case artifact.FieldAdmissionDate:
+		m.ClearAdmissionDate()
+		return nil
 	}
 	return fmt.Errorf("unknown Artifact nullable field %s", name)
 }
@@ -2569,6 +2919,21 @@ func (m *ArtifactMutation) ResetField(name string) error {
 		return nil
 	case artifact.FieldDeletedBy:
 		m.ResetDeletedBy()
+		return nil
+	case artifact.FieldDimensions:
+		m.ResetDimensions()
+		return nil
+	case artifact.FieldWeight:
+		m.ResetWeight()
+		return nil
+	case artifact.FieldChemicalComposition:
+		m.ResetChemicalComposition()
+		return nil
+	case artifact.FieldTypology:
+		m.ResetTypology()
+		return nil
+	case artifact.FieldAdmissionDate:
+		m.ResetAdmissionDate()
 		return nil
 	}
 	return fmt.Errorf("unknown Artifact field %s", name)
