@@ -2307,6 +2307,8 @@ type CreateProjectInput struct {
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
+	BeginData     *time.Time
+	EndDate       *time.Time
 	ArtifactIDs   []int
 	TeamIDs       []int
 	ProjectTypeID *int
@@ -2334,6 +2336,12 @@ func (i *CreateProjectInput) Mutate(m *ProjectMutation) {
 	}
 	if v := i.ExternalLinks; v != nil {
 		m.SetExternalLinks(v)
+	}
+	if v := i.BeginData; v != nil {
+		m.SetBeginData(*v)
+	}
+	if v := i.EndDate; v != nil {
+		m.SetEndDate(*v)
 	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
@@ -2366,6 +2374,10 @@ type UpdateProjectInput struct {
 	ClearExternalLinks  bool
 	ExternalLinks       []string
 	AppendExternalLinks []string
+	ClearBeginData      bool
+	BeginData           *time.Time
+	ClearEndDate        bool
+	EndDate             *time.Time
 	ClearArtifacts      bool
 	AddArtifactIDs      []int
 	RemoveArtifactIDs   []int
@@ -2413,6 +2425,18 @@ func (i *UpdateProjectInput) Mutate(m *ProjectMutation) {
 	}
 	if i.AppendExternalLinks != nil {
 		m.AppendExternalLinks(i.ExternalLinks)
+	}
+	if i.ClearBeginData {
+		m.ClearBeginData()
+	}
+	if v := i.BeginData; v != nil {
+		m.SetBeginData(*v)
+	}
+	if i.ClearEndDate {
+		m.ClearEndDate()
+	}
+	if v := i.EndDate; v != nil {
+		m.SetEndDate(*v)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()

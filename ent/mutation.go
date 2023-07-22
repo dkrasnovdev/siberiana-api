@@ -20245,6 +20245,8 @@ type ProjectMutation struct {
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
+	begin_data           *time.Time
+	end_date             *time.Time
 	clearedFields        map[string]struct{}
 	artifacts            map[int]struct{}
 	removedartifacts     map[int]struct{}
@@ -20690,6 +20692,104 @@ func (m *ProjectMutation) ResetExternalLinks() {
 	delete(m.clearedFields, project.FieldExternalLinks)
 }
 
+// SetBeginData sets the "begin_data" field.
+func (m *ProjectMutation) SetBeginData(t time.Time) {
+	m.begin_data = &t
+}
+
+// BeginData returns the value of the "begin_data" field in the mutation.
+func (m *ProjectMutation) BeginData() (r time.Time, exists bool) {
+	v := m.begin_data
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBeginData returns the old "begin_data" field's value of the Project entity.
+// If the Project object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProjectMutation) OldBeginData(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBeginData is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBeginData requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBeginData: %w", err)
+	}
+	return oldValue.BeginData, nil
+}
+
+// ClearBeginData clears the value of the "begin_data" field.
+func (m *ProjectMutation) ClearBeginData() {
+	m.begin_data = nil
+	m.clearedFields[project.FieldBeginData] = struct{}{}
+}
+
+// BeginDataCleared returns if the "begin_data" field was cleared in this mutation.
+func (m *ProjectMutation) BeginDataCleared() bool {
+	_, ok := m.clearedFields[project.FieldBeginData]
+	return ok
+}
+
+// ResetBeginData resets all changes to the "begin_data" field.
+func (m *ProjectMutation) ResetBeginData() {
+	m.begin_data = nil
+	delete(m.clearedFields, project.FieldBeginData)
+}
+
+// SetEndDate sets the "end_date" field.
+func (m *ProjectMutation) SetEndDate(t time.Time) {
+	m.end_date = &t
+}
+
+// EndDate returns the value of the "end_date" field in the mutation.
+func (m *ProjectMutation) EndDate() (r time.Time, exists bool) {
+	v := m.end_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEndDate returns the old "end_date" field's value of the Project entity.
+// If the Project object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProjectMutation) OldEndDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEndDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEndDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEndDate: %w", err)
+	}
+	return oldValue.EndDate, nil
+}
+
+// ClearEndDate clears the value of the "end_date" field.
+func (m *ProjectMutation) ClearEndDate() {
+	m.end_date = nil
+	m.clearedFields[project.FieldEndDate] = struct{}{}
+}
+
+// EndDateCleared returns if the "end_date" field was cleared in this mutation.
+func (m *ProjectMutation) EndDateCleared() bool {
+	_, ok := m.clearedFields[project.FieldEndDate]
+	return ok
+}
+
+// ResetEndDate resets all changes to the "end_date" field.
+func (m *ProjectMutation) ResetEndDate() {
+	m.end_date = nil
+	delete(m.clearedFields, project.FieldEndDate)
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
 func (m *ProjectMutation) AddArtifactIDs(ids ...int) {
 	if m.artifacts == nil {
@@ -20871,7 +20971,7 @@ func (m *ProjectMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProjectMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, project.FieldCreatedAt)
 	}
@@ -20892,6 +20992,12 @@ func (m *ProjectMutation) Fields() []string {
 	}
 	if m.external_links != nil {
 		fields = append(fields, project.FieldExternalLinks)
+	}
+	if m.begin_data != nil {
+		fields = append(fields, project.FieldBeginData)
+	}
+	if m.end_date != nil {
+		fields = append(fields, project.FieldEndDate)
 	}
 	return fields
 }
@@ -20915,6 +21021,10 @@ func (m *ProjectMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case project.FieldExternalLinks:
 		return m.ExternalLinks()
+	case project.FieldBeginData:
+		return m.BeginData()
+	case project.FieldEndDate:
+		return m.EndDate()
 	}
 	return nil, false
 }
@@ -20938,6 +21048,10 @@ func (m *ProjectMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldDescription(ctx)
 	case project.FieldExternalLinks:
 		return m.OldExternalLinks(ctx)
+	case project.FieldBeginData:
+		return m.OldBeginData(ctx)
+	case project.FieldEndDate:
+		return m.OldEndDate(ctx)
 	}
 	return nil, fmt.Errorf("unknown Project field %s", name)
 }
@@ -20996,6 +21110,20 @@ func (m *ProjectMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLinks(v)
 		return nil
+	case project.FieldBeginData:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBeginData(v)
+		return nil
+	case project.FieldEndDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEndDate(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Project field %s", name)
 }
@@ -21041,6 +21169,12 @@ func (m *ProjectMutation) ClearedFields() []string {
 	if m.FieldCleared(project.FieldExternalLinks) {
 		fields = append(fields, project.FieldExternalLinks)
 	}
+	if m.FieldCleared(project.FieldBeginData) {
+		fields = append(fields, project.FieldBeginData)
+	}
+	if m.FieldCleared(project.FieldEndDate) {
+		fields = append(fields, project.FieldEndDate)
+	}
 	return fields
 }
 
@@ -21070,6 +21204,12 @@ func (m *ProjectMutation) ClearField(name string) error {
 	case project.FieldExternalLinks:
 		m.ClearExternalLinks()
 		return nil
+	case project.FieldBeginData:
+		m.ClearBeginData()
+		return nil
+	case project.FieldEndDate:
+		m.ClearEndDate()
+		return nil
 	}
 	return fmt.Errorf("unknown Project nullable field %s", name)
 }
@@ -21098,6 +21238,12 @@ func (m *ProjectMutation) ResetField(name string) error {
 		return nil
 	case project.FieldExternalLinks:
 		m.ResetExternalLinks()
+		return nil
+	case project.FieldBeginData:
+		m.ResetBeginData()
+		return nil
+	case project.FieldEndDate:
+		m.ResetEndDate()
 		return nil
 	}
 	return fmt.Errorf("unknown Project field %s", name)

@@ -509,6 +509,8 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "begin_data", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "end_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
 		{Name: "project_type_projects", Type: field.TypeInt, Nullable: true},
 	}
 	// ProjectsTable holds the schema information for the "projects" table.
@@ -519,7 +521,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "projects_project_types_projects",
-				Columns:    []*schema.Column{ProjectsColumns[8]},
+				Columns:    []*schema.Column{ProjectsColumns[10]},
 				RefColumns: []*schema.Column{ProjectTypesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

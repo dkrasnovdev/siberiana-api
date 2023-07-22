@@ -136,6 +136,46 @@ func (pu *ProjectUpdate) ClearExternalLinks() *ProjectUpdate {
 	return pu
 }
 
+// SetBeginData sets the "begin_data" field.
+func (pu *ProjectUpdate) SetBeginData(t time.Time) *ProjectUpdate {
+	pu.mutation.SetBeginData(t)
+	return pu
+}
+
+// SetNillableBeginData sets the "begin_data" field if the given value is not nil.
+func (pu *ProjectUpdate) SetNillableBeginData(t *time.Time) *ProjectUpdate {
+	if t != nil {
+		pu.SetBeginData(*t)
+	}
+	return pu
+}
+
+// ClearBeginData clears the value of the "begin_data" field.
+func (pu *ProjectUpdate) ClearBeginData() *ProjectUpdate {
+	pu.mutation.ClearBeginData()
+	return pu
+}
+
+// SetEndDate sets the "end_date" field.
+func (pu *ProjectUpdate) SetEndDate(t time.Time) *ProjectUpdate {
+	pu.mutation.SetEndDate(t)
+	return pu
+}
+
+// SetNillableEndDate sets the "end_date" field if the given value is not nil.
+func (pu *ProjectUpdate) SetNillableEndDate(t *time.Time) *ProjectUpdate {
+	if t != nil {
+		pu.SetEndDate(*t)
+	}
+	return pu
+}
+
+// ClearEndDate clears the value of the "end_date" field.
+func (pu *ProjectUpdate) ClearEndDate() *ProjectUpdate {
+	pu.mutation.ClearEndDate()
+	return pu
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (pu *ProjectUpdate) AddArtifactIDs(ids ...int) *ProjectUpdate {
 	pu.mutation.AddArtifactIDs(ids...)
@@ -326,6 +366,18 @@ func (pu *ProjectUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.ExternalLinksCleared() {
 		_spec.ClearField(project.FieldExternalLinks, field.TypeJSON)
+	}
+	if value, ok := pu.mutation.BeginData(); ok {
+		_spec.SetField(project.FieldBeginData, field.TypeTime, value)
+	}
+	if pu.mutation.BeginDataCleared() {
+		_spec.ClearField(project.FieldBeginData, field.TypeTime)
+	}
+	if value, ok := pu.mutation.EndDate(); ok {
+		_spec.SetField(project.FieldEndDate, field.TypeTime, value)
+	}
+	if pu.mutation.EndDateCleared() {
+		_spec.ClearField(project.FieldEndDate, field.TypeTime)
 	}
 	if pu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -570,6 +622,46 @@ func (puo *ProjectUpdateOne) ClearExternalLinks() *ProjectUpdateOne {
 	return puo
 }
 
+// SetBeginData sets the "begin_data" field.
+func (puo *ProjectUpdateOne) SetBeginData(t time.Time) *ProjectUpdateOne {
+	puo.mutation.SetBeginData(t)
+	return puo
+}
+
+// SetNillableBeginData sets the "begin_data" field if the given value is not nil.
+func (puo *ProjectUpdateOne) SetNillableBeginData(t *time.Time) *ProjectUpdateOne {
+	if t != nil {
+		puo.SetBeginData(*t)
+	}
+	return puo
+}
+
+// ClearBeginData clears the value of the "begin_data" field.
+func (puo *ProjectUpdateOne) ClearBeginData() *ProjectUpdateOne {
+	puo.mutation.ClearBeginData()
+	return puo
+}
+
+// SetEndDate sets the "end_date" field.
+func (puo *ProjectUpdateOne) SetEndDate(t time.Time) *ProjectUpdateOne {
+	puo.mutation.SetEndDate(t)
+	return puo
+}
+
+// SetNillableEndDate sets the "end_date" field if the given value is not nil.
+func (puo *ProjectUpdateOne) SetNillableEndDate(t *time.Time) *ProjectUpdateOne {
+	if t != nil {
+		puo.SetEndDate(*t)
+	}
+	return puo
+}
+
+// ClearEndDate clears the value of the "end_date" field.
+func (puo *ProjectUpdateOne) ClearEndDate() *ProjectUpdateOne {
+	puo.mutation.ClearEndDate()
+	return puo
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (puo *ProjectUpdateOne) AddArtifactIDs(ids ...int) *ProjectUpdateOne {
 	puo.mutation.AddArtifactIDs(ids...)
@@ -790,6 +882,18 @@ func (puo *ProjectUpdateOne) sqlSave(ctx context.Context) (_node *Project, err e
 	}
 	if puo.mutation.ExternalLinksCleared() {
 		_spec.ClearField(project.FieldExternalLinks, field.TypeJSON)
+	}
+	if value, ok := puo.mutation.BeginData(); ok {
+		_spec.SetField(project.FieldBeginData, field.TypeTime, value)
+	}
+	if puo.mutation.BeginDataCleared() {
+		_spec.ClearField(project.FieldBeginData, field.TypeTime)
+	}
+	if value, ok := puo.mutation.EndDate(); ok {
+		_spec.SetField(project.FieldEndDate, field.TypeTime, value)
+	}
+	if puo.mutation.EndDateCleared() {
+		_spec.ClearField(project.FieldEndDate, field.TypeTime)
 	}
 	if puo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

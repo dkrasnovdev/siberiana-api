@@ -10146,6 +10146,30 @@ type ProjectWhereInput struct {
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 
+	// "begin_data" field predicates.
+	BeginData       *time.Time  `json:"beginData,omitempty"`
+	BeginDataNEQ    *time.Time  `json:"beginDataNEQ,omitempty"`
+	BeginDataIn     []time.Time `json:"beginDataIn,omitempty"`
+	BeginDataNotIn  []time.Time `json:"beginDataNotIn,omitempty"`
+	BeginDataGT     *time.Time  `json:"beginDataGT,omitempty"`
+	BeginDataGTE    *time.Time  `json:"beginDataGTE,omitempty"`
+	BeginDataLT     *time.Time  `json:"beginDataLT,omitempty"`
+	BeginDataLTE    *time.Time  `json:"beginDataLTE,omitempty"`
+	BeginDataIsNil  bool        `json:"beginDataIsNil,omitempty"`
+	BeginDataNotNil bool        `json:"beginDataNotNil,omitempty"`
+
+	// "end_date" field predicates.
+	EndDate       *time.Time  `json:"endDate,omitempty"`
+	EndDateNEQ    *time.Time  `json:"endDateNEQ,omitempty"`
+	EndDateIn     []time.Time `json:"endDateIn,omitempty"`
+	EndDateNotIn  []time.Time `json:"endDateNotIn,omitempty"`
+	EndDateGT     *time.Time  `json:"endDateGT,omitempty"`
+	EndDateGTE    *time.Time  `json:"endDateGTE,omitempty"`
+	EndDateLT     *time.Time  `json:"endDateLT,omitempty"`
+	EndDateLTE    *time.Time  `json:"endDateLTE,omitempty"`
+	EndDateIsNil  bool        `json:"endDateIsNil,omitempty"`
+	EndDateNotNil bool        `json:"endDateNotNil,omitempty"`
+
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
@@ -10481,6 +10505,66 @@ func (i *ProjectWhereInput) P() (predicate.Project, error) {
 	}
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, project.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.BeginData != nil {
+		predicates = append(predicates, project.BeginDataEQ(*i.BeginData))
+	}
+	if i.BeginDataNEQ != nil {
+		predicates = append(predicates, project.BeginDataNEQ(*i.BeginDataNEQ))
+	}
+	if len(i.BeginDataIn) > 0 {
+		predicates = append(predicates, project.BeginDataIn(i.BeginDataIn...))
+	}
+	if len(i.BeginDataNotIn) > 0 {
+		predicates = append(predicates, project.BeginDataNotIn(i.BeginDataNotIn...))
+	}
+	if i.BeginDataGT != nil {
+		predicates = append(predicates, project.BeginDataGT(*i.BeginDataGT))
+	}
+	if i.BeginDataGTE != nil {
+		predicates = append(predicates, project.BeginDataGTE(*i.BeginDataGTE))
+	}
+	if i.BeginDataLT != nil {
+		predicates = append(predicates, project.BeginDataLT(*i.BeginDataLT))
+	}
+	if i.BeginDataLTE != nil {
+		predicates = append(predicates, project.BeginDataLTE(*i.BeginDataLTE))
+	}
+	if i.BeginDataIsNil {
+		predicates = append(predicates, project.BeginDataIsNil())
+	}
+	if i.BeginDataNotNil {
+		predicates = append(predicates, project.BeginDataNotNil())
+	}
+	if i.EndDate != nil {
+		predicates = append(predicates, project.EndDateEQ(*i.EndDate))
+	}
+	if i.EndDateNEQ != nil {
+		predicates = append(predicates, project.EndDateNEQ(*i.EndDateNEQ))
+	}
+	if len(i.EndDateIn) > 0 {
+		predicates = append(predicates, project.EndDateIn(i.EndDateIn...))
+	}
+	if len(i.EndDateNotIn) > 0 {
+		predicates = append(predicates, project.EndDateNotIn(i.EndDateNotIn...))
+	}
+	if i.EndDateGT != nil {
+		predicates = append(predicates, project.EndDateGT(*i.EndDateGT))
+	}
+	if i.EndDateGTE != nil {
+		predicates = append(predicates, project.EndDateGTE(*i.EndDateGTE))
+	}
+	if i.EndDateLT != nil {
+		predicates = append(predicates, project.EndDateLT(*i.EndDateLT))
+	}
+	if i.EndDateLTE != nil {
+		predicates = append(predicates, project.EndDateLTE(*i.EndDateLTE))
+	}
+	if i.EndDateIsNil {
+		predicates = append(predicates, project.EndDateIsNil())
+	}
+	if i.EndDateNotNil {
+		predicates = append(predicates, project.EndDateNotNil())
 	}
 
 	if i.HasArtifacts != nil {

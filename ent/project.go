@@ -33,6 +33,10 @@ type Project struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLinks holds the value of the "external_links" field.
 	ExternalLinks []string `json:"external_links,omitempty"`
+	// BeginData holds the value of the "begin_data" field.
+	BeginData time.Time `json:"begin_data,omitempty"`
+	// EndDate holds the value of the "end_date" field.
+	EndDate time.Time `json:"end_date,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProjectQuery when eager-loading is set.
 	Edges                 ProjectEdges `json:"edges"`
@@ -100,7 +104,7 @@ func (*Project) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case project.FieldCreatedBy, project.FieldUpdatedBy, project.FieldDisplayName, project.FieldDescription:
 			values[i] = new(sql.NullString)
-		case project.FieldCreatedAt, project.FieldUpdatedAt:
+		case project.FieldCreatedAt, project.FieldUpdatedAt, project.FieldBeginData, project.FieldEndDate:
 			values[i] = new(sql.NullTime)
 		case project.ForeignKeys[0]: // project_type_projects
 			values[i] = new(sql.NullInt64)
@@ -168,6 +172,18 @@ func (pr *Project) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &pr.ExternalLinks); err != nil {
 					return fmt.Errorf("unmarshal field external_links: %w", err)
 				}
+			}
+		case project.FieldBeginData:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field begin_data", values[i])
+			} else if value.Valid {
+				pr.BeginData = value.Time
+			}
+		case project.FieldEndDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field end_date", values[i])
+			} else if value.Valid {
+				pr.EndDate = value.Time
 			}
 		case project.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -247,6 +263,12 @@ func (pr *Project) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_links=")
 	builder.WriteString(fmt.Sprintf("%v", pr.ExternalLinks))
+	builder.WriteString(", ")
+	builder.WriteString("begin_data=")
+	builder.WriteString(pr.BeginData.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("end_date=")
+	builder.WriteString(pr.EndDate.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

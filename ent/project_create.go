@@ -113,6 +113,34 @@ func (pc *ProjectCreate) SetExternalLinks(s []string) *ProjectCreate {
 	return pc
 }
 
+// SetBeginData sets the "begin_data" field.
+func (pc *ProjectCreate) SetBeginData(t time.Time) *ProjectCreate {
+	pc.mutation.SetBeginData(t)
+	return pc
+}
+
+// SetNillableBeginData sets the "begin_data" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableBeginData(t *time.Time) *ProjectCreate {
+	if t != nil {
+		pc.SetBeginData(*t)
+	}
+	return pc
+}
+
+// SetEndDate sets the "end_date" field.
+func (pc *ProjectCreate) SetEndDate(t time.Time) *ProjectCreate {
+	pc.mutation.SetEndDate(t)
+	return pc
+}
+
+// SetNillableEndDate sets the "end_date" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableEndDate(t *time.Time) *ProjectCreate {
+	if t != nil {
+		pc.SetEndDate(*t)
+	}
+	return pc
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (pc *ProjectCreate) AddArtifactIDs(ids ...int) *ProjectCreate {
 	pc.mutation.AddArtifactIDs(ids...)
@@ -277,6 +305,14 @@ func (pc *ProjectCreate) createSpec() (*Project, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.ExternalLinks(); ok {
 		_spec.SetField(project.FieldExternalLinks, field.TypeJSON, value)
 		_node.ExternalLinks = value
+	}
+	if value, ok := pc.mutation.BeginData(); ok {
+		_spec.SetField(project.FieldBeginData, field.TypeTime, value)
+		_node.BeginData = value
+	}
+	if value, ok := pc.mutation.EndDate(); ok {
+		_spec.SetField(project.FieldEndDate, field.TypeTime, value)
+		_node.EndDate = value
 	}
 	if nodes := pc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

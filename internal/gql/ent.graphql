@@ -1003,6 +1003,8 @@ input CreateProjectInput {
   displayName: String
   description: String
   externalLinks: [String!]
+  beginData: Time
+  endDate: Time
   artifactIDs: [ID!]
   teamIDs: [ID!]
   projectTypeID: ID
@@ -3188,6 +3190,8 @@ type Project implements Node {
   displayName: String
   description: String
   externalLinks: [String!]
+  beginData: Time
+  endDate: Time
   artifacts: [Artifact!]
   team: [Person!]
   projectType: ProjectType
@@ -3445,6 +3449,28 @@ input ProjectWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """begin_data field predicates"""
+  beginData: Time
+  beginDataNEQ: Time
+  beginDataIn: [Time!]
+  beginDataNotIn: [Time!]
+  beginDataGT: Time
+  beginDataGTE: Time
+  beginDataLT: Time
+  beginDataLTE: Time
+  beginDataIsNil: Boolean
+  beginDataNotNil: Boolean
+  """end_date field predicates"""
+  endDate: Time
+  endDateNEQ: Time
+  endDateIn: [Time!]
+  endDateNotIn: [Time!]
+  endDateGT: Time
+  endDateGTE: Time
+  endDateLT: Time
+  endDateLTE: Time
+  endDateIsNil: Boolean
+  endDateNotNil: Boolean
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -5051,6 +5077,10 @@ input UpdateProjectInput {
   externalLinks: [String!]
   appendExternalLinks: [String!]
   clearExternalLinks: Boolean
+  beginData: Time
+  clearBeginData: Boolean
+  endDate: Time
+  clearEndDate: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean

@@ -535,10 +535,12 @@ type ComplexityRoot struct {
 
 	Project struct {
 		Artifacts     func(childComplexity int) int
+		BeginData     func(childComplexity int) int
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
 		Description   func(childComplexity int) int
 		DisplayName   func(childComplexity int) int
+		EndDate       func(childComplexity int) int
 		ExternalLinks func(childComplexity int) int
 		ID            func(childComplexity int) int
 		ProjectType   func(childComplexity int) int
@@ -3266,6 +3268,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Project.Artifacts(childComplexity), true
 
+	case "Project.beginData":
+		if e.complexity.Project.BeginData == nil {
+			break
+		}
+
+		return e.complexity.Project.BeginData(childComplexity), true
+
 	case "Project.createdAt":
 		if e.complexity.Project.CreatedAt == nil {
 			break
@@ -3293,6 +3302,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Project.DisplayName(childComplexity), true
+
+	case "Project.endDate":
+		if e.complexity.Project.EndDate == nil {
+			break
+		}
+
+		return e.complexity.Project.EndDate(childComplexity), true
 
 	case "Project.externalLinks":
 		if e.complexity.Project.ExternalLinks == nil {
@@ -7371,6 +7387,10 @@ func (ec *executionContext) fieldContext_Artifact_projects(ctx context.Context, 
 				return ec.fieldContext_Project_description(ctx, field)
 			case "externalLinks":
 				return ec.fieldContext_Project_externalLinks(ctx, field)
+			case "beginData":
+				return ec.fieldContext_Project_beginData(ctx, field)
+			case "endDate":
+				return ec.fieldContext_Project_endDate(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Project_artifacts(ctx, field)
 			case "team":
@@ -18980,6 +19000,10 @@ func (ec *executionContext) fieldContext_Mutation_createProject(ctx context.Cont
 				return ec.fieldContext_Project_description(ctx, field)
 			case "externalLinks":
 				return ec.fieldContext_Project_externalLinks(ctx, field)
+			case "beginData":
+				return ec.fieldContext_Project_beginData(ctx, field)
+			case "endDate":
+				return ec.fieldContext_Project_endDate(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Project_artifacts(ctx, field)
 			case "team":
@@ -19059,6 +19083,10 @@ func (ec *executionContext) fieldContext_Mutation_updateProject(ctx context.Cont
 				return ec.fieldContext_Project_description(ctx, field)
 			case "externalLinks":
 				return ec.fieldContext_Project_externalLinks(ctx, field)
+			case "beginData":
+				return ec.fieldContext_Project_beginData(ctx, field)
+			case "endDate":
+				return ec.fieldContext_Project_endDate(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Project_artifacts(ctx, field)
 			case "team":
@@ -22517,6 +22545,10 @@ func (ec *executionContext) fieldContext_Person_projects(ctx context.Context, fi
 				return ec.fieldContext_Project_description(ctx, field)
 			case "externalLinks":
 				return ec.fieldContext_Project_externalLinks(ctx, field)
+			case "beginData":
+				return ec.fieldContext_Project_beginData(ctx, field)
+			case "endDate":
+				return ec.fieldContext_Project_endDate(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Project_artifacts(ctx, field)
 			case "team":
@@ -23918,6 +23950,88 @@ func (ec *executionContext) fieldContext_Project_externalLinks(ctx context.Conte
 	return fc, nil
 }
 
+func (ec *executionContext) _Project_beginData(ctx context.Context, field graphql.CollectedField, obj *ent.Project) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Project_beginData(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.BeginData, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(time.Time)
+	fc.Result = res
+	return ec.marshalOTime2timeᚐTime(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Project_beginData(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Project",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Time does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Project_endDate(ctx context.Context, field graphql.CollectedField, obj *ent.Project) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Project_endDate(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EndDate, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(time.Time)
+	fc.Result = res
+	return ec.marshalOTime2timeᚐTime(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Project_endDate(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Project",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Time does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Project_artifacts(ctx context.Context, field graphql.CollectedField, obj *ent.Project) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Project_artifacts(ctx, field)
 	if err != nil {
@@ -24364,6 +24478,10 @@ func (ec *executionContext) fieldContext_ProjectEdge_node(ctx context.Context, f
 				return ec.fieldContext_Project_description(ctx, field)
 			case "externalLinks":
 				return ec.fieldContext_Project_externalLinks(ctx, field)
+			case "beginData":
+				return ec.fieldContext_Project_beginData(ctx, field)
+			case "endDate":
+				return ec.fieldContext_Project_endDate(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Project_artifacts(ctx, field)
 			case "team":
@@ -24810,6 +24928,10 @@ func (ec *executionContext) fieldContext_ProjectType_projects(ctx context.Contex
 				return ec.fieldContext_Project_description(ctx, field)
 			case "externalLinks":
 				return ec.fieldContext_Project_externalLinks(ctx, field)
+			case "beginData":
+				return ec.fieldContext_Project_beginData(ctx, field)
+			case "endDate":
+				return ec.fieldContext_Project_endDate(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Project_artifacts(ctx, field)
 			case "team":
@@ -37890,7 +38012,7 @@ func (ec *executionContext) unmarshalInputCreateProjectInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "description", "externalLinks", "artifactIDs", "teamIDs", "projectTypeID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "description", "externalLinks", "beginData", "endDate", "artifactIDs", "teamIDs", "projectTypeID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -37960,6 +38082,24 @@ func (ec *executionContext) unmarshalInputCreateProjectInput(ctx context.Context
 				return it, err
 			}
 			it.ExternalLinks = data
+		case "beginData":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginData"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BeginData = data
+		case "endDate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndDate = data
 		case "artifactIDs":
 			var err error
 
@@ -52307,7 +52447,7 @@ func (ec *executionContext) unmarshalInputProjectWhereInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasTeam", "hasTeamWith", "hasProjectType", "hasProjectTypeWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "beginData", "beginDataNEQ", "beginDataIn", "beginDataNotIn", "beginDataGT", "beginDataGTE", "beginDataLT", "beginDataLTE", "beginDataIsNil", "beginDataNotNil", "endDate", "endDateNEQ", "endDateIn", "endDateNotIn", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "hasArtifacts", "hasArtifactsWith", "hasTeam", "hasTeamWith", "hasProjectType", "hasProjectTypeWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -53097,6 +53237,186 @@ func (ec *executionContext) unmarshalInputProjectWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "beginData":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginData"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BeginData = data
+		case "beginDataNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDataNEQ"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BeginDataNEQ = data
+		case "beginDataIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDataIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BeginDataIn = data
+		case "beginDataNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDataNotIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BeginDataNotIn = data
+		case "beginDataGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDataGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BeginDataGT = data
+		case "beginDataGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDataGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BeginDataGTE = data
+		case "beginDataLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDataLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BeginDataLT = data
+		case "beginDataLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDataLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BeginDataLTE = data
+		case "beginDataIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDataIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BeginDataIsNil = data
+		case "beginDataNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDataNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BeginDataNotNil = data
+		case "endDate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndDate = data
+		case "endDateNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endDateNEQ"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndDateNEQ = data
+		case "endDateIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endDateIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndDateIn = data
+		case "endDateNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endDateNotIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndDateNotIn = data
+		case "endDateGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endDateGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndDateGT = data
+		case "endDateGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endDateGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndDateGTE = data
+		case "endDateLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endDateLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndDateLT = data
+		case "endDateLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endDateLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndDateLTE = data
+		case "endDateIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endDateIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndDateIsNil = data
+		case "endDateNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endDateNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndDateNotNil = data
 		case "hasArtifacts":
 			var err error
 
@@ -61014,7 +61334,7 @@ func (ec *executionContext) unmarshalInputUpdateProjectInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addTeamIDs", "removeTeamIDs", "clearTeam", "projectTypeID", "clearProjectType"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "beginData", "clearBeginData", "endDate", "clearEndDate", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addTeamIDs", "removeTeamIDs", "clearTeam", "projectTypeID", "clearProjectType"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -61129,6 +61449,42 @@ func (ec *executionContext) unmarshalInputUpdateProjectInput(ctx context.Context
 				return it, err
 			}
 			it.ClearExternalLinks = data
+		case "beginData":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginData"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BeginData = data
+		case "clearBeginData":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearBeginData"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearBeginData = data
+		case "endDate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndDate = data
+		case "clearEndDate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearEndDate"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearEndDate = data
 		case "addArtifactIDs":
 			var err error
 
@@ -66572,6 +66928,10 @@ func (ec *executionContext) _Project(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = ec._Project_description(ctx, field, obj)
 		case "externalLinks":
 			out.Values[i] = ec._Project_externalLinks(ctx, field, obj)
+		case "beginData":
+			out.Values[i] = ec._Project_beginData(ctx, field, obj)
+		case "endDate":
+			out.Values[i] = ec._Project_endDate(ctx, field, obj)
 		case "artifacts":
 			field := field
 

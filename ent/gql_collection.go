@@ -3157,6 +3157,16 @@ func (pr *ProjectQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				selectedFields = append(selectedFields, project.FieldExternalLinks)
 				fieldSeen[project.FieldExternalLinks] = struct{}{}
 			}
+		case "beginData":
+			if _, ok := fieldSeen[project.FieldBeginData]; !ok {
+				selectedFields = append(selectedFields, project.FieldBeginData)
+				fieldSeen[project.FieldBeginData] = struct{}{}
+			}
+		case "endDate":
+			if _, ok := fieldSeen[project.FieldEndDate]; !ok {
+				selectedFields = append(selectedFields, project.FieldEndDate)
+				fieldSeen[project.FieldEndDate] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

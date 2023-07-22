@@ -3,8 +3,10 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
+	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/privacy"
 	"github.com/dkrasnovdev/heritage-api/internal/ent/mixin"
 	rule "github.com/dkrasnovdev/heritage-api/internal/ent/privacy"
@@ -50,7 +52,18 @@ func (Project) Annotations() []schema.Annotation {
 
 // Fields of the Project.
 func (Project) Fields() []ent.Field {
-	return nil
+	return []ent.Field{
+		field.Time("begin_data").
+			Optional().
+			SchemaType(map[string]string{
+				dialect.Postgres: "date",
+			}),
+		field.Time("end_date").
+			Optional().
+			SchemaType(map[string]string{
+				dialect.Postgres: "date",
+			}),
+	}
 }
 
 // Edges of the Project.

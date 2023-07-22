@@ -85,6 +85,16 @@ func Description(v string) predicate.Project {
 	return predicate.Project(sql.FieldEQ(FieldDescription, v))
 }
 
+// BeginData applies equality check predicate on the "begin_data" field. It's identical to BeginDataEQ.
+func BeginData(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldEQ(FieldBeginData, v))
+}
+
+// EndDate applies equality check predicate on the "end_date" field. It's identical to EndDateEQ.
+func EndDate(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldEQ(FieldEndDate, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Project {
 	return predicate.Project(sql.FieldEQ(FieldCreatedAt, v))
@@ -473,6 +483,106 @@ func ExternalLinksIsNil() predicate.Project {
 // ExternalLinksNotNil applies the NotNil predicate on the "external_links" field.
 func ExternalLinksNotNil() predicate.Project {
 	return predicate.Project(sql.FieldNotNull(FieldExternalLinks))
+}
+
+// BeginDataEQ applies the EQ predicate on the "begin_data" field.
+func BeginDataEQ(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldEQ(FieldBeginData, v))
+}
+
+// BeginDataNEQ applies the NEQ predicate on the "begin_data" field.
+func BeginDataNEQ(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldNEQ(FieldBeginData, v))
+}
+
+// BeginDataIn applies the In predicate on the "begin_data" field.
+func BeginDataIn(vs ...time.Time) predicate.Project {
+	return predicate.Project(sql.FieldIn(FieldBeginData, vs...))
+}
+
+// BeginDataNotIn applies the NotIn predicate on the "begin_data" field.
+func BeginDataNotIn(vs ...time.Time) predicate.Project {
+	return predicate.Project(sql.FieldNotIn(FieldBeginData, vs...))
+}
+
+// BeginDataGT applies the GT predicate on the "begin_data" field.
+func BeginDataGT(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldGT(FieldBeginData, v))
+}
+
+// BeginDataGTE applies the GTE predicate on the "begin_data" field.
+func BeginDataGTE(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldGTE(FieldBeginData, v))
+}
+
+// BeginDataLT applies the LT predicate on the "begin_data" field.
+func BeginDataLT(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldLT(FieldBeginData, v))
+}
+
+// BeginDataLTE applies the LTE predicate on the "begin_data" field.
+func BeginDataLTE(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldLTE(FieldBeginData, v))
+}
+
+// BeginDataIsNil applies the IsNil predicate on the "begin_data" field.
+func BeginDataIsNil() predicate.Project {
+	return predicate.Project(sql.FieldIsNull(FieldBeginData))
+}
+
+// BeginDataNotNil applies the NotNil predicate on the "begin_data" field.
+func BeginDataNotNil() predicate.Project {
+	return predicate.Project(sql.FieldNotNull(FieldBeginData))
+}
+
+// EndDateEQ applies the EQ predicate on the "end_date" field.
+func EndDateEQ(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldEQ(FieldEndDate, v))
+}
+
+// EndDateNEQ applies the NEQ predicate on the "end_date" field.
+func EndDateNEQ(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldNEQ(FieldEndDate, v))
+}
+
+// EndDateIn applies the In predicate on the "end_date" field.
+func EndDateIn(vs ...time.Time) predicate.Project {
+	return predicate.Project(sql.FieldIn(FieldEndDate, vs...))
+}
+
+// EndDateNotIn applies the NotIn predicate on the "end_date" field.
+func EndDateNotIn(vs ...time.Time) predicate.Project {
+	return predicate.Project(sql.FieldNotIn(FieldEndDate, vs...))
+}
+
+// EndDateGT applies the GT predicate on the "end_date" field.
+func EndDateGT(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldGT(FieldEndDate, v))
+}
+
+// EndDateGTE applies the GTE predicate on the "end_date" field.
+func EndDateGTE(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldGTE(FieldEndDate, v))
+}
+
+// EndDateLT applies the LT predicate on the "end_date" field.
+func EndDateLT(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldLT(FieldEndDate, v))
+}
+
+// EndDateLTE applies the LTE predicate on the "end_date" field.
+func EndDateLTE(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldLTE(FieldEndDate, v))
+}
+
+// EndDateIsNil applies the IsNil predicate on the "end_date" field.
+func EndDateIsNil() predicate.Project {
+	return predicate.Project(sql.FieldIsNull(FieldEndDate))
+}
+
+// EndDateNotNil applies the NotNil predicate on the "end_date" field.
+func EndDateNotNil() predicate.Project {
+	return predicate.Project(sql.FieldNotNull(FieldEndDate))
 }
 
 // HasArtifacts applies the HasEdge predicate on the "artifacts" edge.

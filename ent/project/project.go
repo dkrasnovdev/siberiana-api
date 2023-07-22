@@ -29,6 +29,10 @@ const (
 	FieldDescription = "description"
 	// FieldExternalLinks holds the string denoting the external_links field in the database.
 	FieldExternalLinks = "external_links"
+	// FieldBeginData holds the string denoting the begin_data field in the database.
+	FieldBeginData = "begin_data"
+	// FieldEndDate holds the string denoting the end_date field in the database.
+	FieldEndDate = "end_date"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
 	// EdgeTeam holds the string denoting the team edge name in mutations.
@@ -66,6 +70,8 @@ var Columns = []string{
 	FieldDisplayName,
 	FieldDescription,
 	FieldExternalLinks,
+	FieldBeginData,
+	FieldEndDate,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "projects"
@@ -150,6 +156,16 @@ func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByBeginData orders the results by the begin_data field.
+func ByBeginData(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBeginData, opts...).ToFunc()
+}
+
+// ByEndDate orders the results by the end_date field.
+func ByEndDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEndDate, opts...).ToFunc()
 }
 
 // ByArtifactsCount orders the results by artifacts count.
