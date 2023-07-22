@@ -21,6 +21,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/medium"
 	"github.com/dkrasnovdev/heritage-api/ent/model"
 	"github.com/dkrasnovdev/heritage-api/ent/monument"
+	"github.com/dkrasnovdev/heritage-api/ent/period"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
@@ -46,6 +47,7 @@ type ArtifactQuery struct {
 	withMonument            *MonumentQuery
 	withModel               *ModelQuery
 	withSet                 *SetQuery
+	withPeriod              *PeriodQuery
 	withLocation            *LocationQuery
 	withCollection          *CollectionQuery
 	withLicense             *LicenseQuery
@@ -307,6 +309,28 @@ func (aq *ArtifactQuery) QuerySet() *SetQuery {
 			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
 			sqlgraph.To(set.Table, set.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, artifact.SetTable, artifact.SetColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPeriod chains the current query on the "period" edge.
+func (aq *ArtifactQuery) QueryPeriod() *PeriodQuery {
+	query := (&PeriodClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
+			sqlgraph.To(period.Table, period.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.PeriodTable, artifact.PeriodColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
 		return fromU, nil
@@ -582,6 +606,7 @@ func (aq *ArtifactQuery) Clone() *ArtifactQuery {
 		withMonument:            aq.withMonument.Clone(),
 		withModel:               aq.withModel.Clone(),
 		withSet:                 aq.withSet.Clone(),
+		withPeriod:              aq.withPeriod.Clone(),
 		withLocation:            aq.withLocation.Clone(),
 		withCollection:          aq.withCollection.Clone(),
 		withLicense:             aq.withLicense.Clone(),
@@ -698,6 +723,17 @@ func (aq *ArtifactQuery) WithSet(opts ...func(*SetQuery)) *ArtifactQuery {
 		opt(query)
 	}
 	aq.withSet = query
+	return aq
+}
+
+// WithPeriod tells the query-builder to eager-load the nodes that are connected to
+// the "period" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithPeriod(opts ...func(*PeriodQuery)) *ArtifactQuery {
+	query := (&PeriodClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withPeriod = query
 	return aq
 }
 
@@ -819,7 +855,7 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 		nodes       = []*Artifact{}
 		withFKs     = aq.withFKs
 		_spec       = aq.querySpec()
-		loadedTypes = [13]bool{
+		loadedTypes = [14]bool{
 			aq.withAuthors != nil,
 			aq.withMediums != nil,
 			aq.withTechniques != nil,
@@ -830,12 +866,13 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 			aq.withMonument != nil,
 			aq.withModel != nil,
 			aq.withSet != nil,
+			aq.withPeriod != nil,
 			aq.withLocation != nil,
 			aq.withCollection != nil,
 			aq.withLicense != nil,
 		}
 	)
-	if aq.withCulturalAffiliation != nil || aq.withMonument != nil || aq.withModel != nil || aq.withSet != nil || aq.withLocation != nil || aq.withCollection != nil || aq.withLicense != nil {
+	if aq.withCulturalAffiliation != nil || aq.withMonument != nil || aq.withModel != nil || aq.withSet != nil || aq.withPeriod != nil || aq.withLocation != nil || aq.withCollection != nil || aq.withLicense != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -925,6 +962,12 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 	if query := aq.withSet; query != nil {
 		if err := aq.loadSet(ctx, query, nodes, nil,
 			func(n *Artifact, e *Set) { n.Edges.Set = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withPeriod; query != nil {
+		if err := aq.loadPeriod(ctx, query, nodes, nil,
+			func(n *Artifact, e *Period) { n.Edges.Period = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1483,6 +1526,38 @@ func (aq *ArtifactQuery) loadSet(ctx context.Context, query *SetQuery, nodes []*
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "set_artifacts" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (aq *ArtifactQuery) loadPeriod(ctx context.Context, query *PeriodQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *Period)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Artifact)
+	for i := range nodes {
+		if nodes[i].period_artifacts == nil {
+			continue
+		}
+		fk := *nodes[i].period_artifacts
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(period.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "period_artifacts" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

@@ -36,6 +36,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/monument"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/organizationtype"
+	"github.com/dkrasnovdev/heritage-api/ent/period"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
@@ -100,6 +101,8 @@ type Client struct {
 	Organization *OrganizationClient
 	// OrganizationType is the client for interacting with the OrganizationType builders.
 	OrganizationType *OrganizationTypeClient
+	// Period is the client for interacting with the Period builders.
+	Period *PeriodClient
 	// Person is the client for interacting with the Person builders.
 	Person *PersonClient
 	// PersonRole is the client for interacting with the PersonRole builders.
@@ -163,6 +166,7 @@ func (c *Client) init() {
 	c.Monument = NewMonumentClient(c.config)
 	c.Organization = NewOrganizationClient(c.config)
 	c.OrganizationType = NewOrganizationTypeClient(c.config)
+	c.Period = NewPeriodClient(c.config)
 	c.Person = NewPersonClient(c.config)
 	c.PersonRole = NewPersonRoleClient(c.config)
 	c.Project = NewProjectClient(c.config)
@@ -280,6 +284,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Monument:              NewMonumentClient(cfg),
 		Organization:          NewOrganizationClient(cfg),
 		OrganizationType:      NewOrganizationTypeClient(cfg),
+		Period:                NewPeriodClient(cfg),
 		Person:                NewPersonClient(cfg),
 		PersonRole:            NewPersonRoleClient(cfg),
 		Project:               NewProjectClient(cfg),
@@ -334,6 +339,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Monument:              NewMonumentClient(cfg),
 		Organization:          NewOrganizationClient(cfg),
 		OrganizationType:      NewOrganizationTypeClient(cfg),
+		Period:                NewPeriodClient(cfg),
 		Person:                NewPersonClient(cfg),
 		PersonRole:            NewPersonRoleClient(cfg),
 		Project:               NewProjectClient(cfg),
@@ -379,7 +385,7 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
 		c.Category, c.Collection, c.Culture, c.District, c.Holder,
 		c.HolderResponsibility, c.Keyword, c.Library, c.License, c.Location, c.Medium,
-		c.Model, c.Monument, c.Organization, c.OrganizationType, c.Person,
+		c.Model, c.Monument, c.Organization, c.OrganizationType, c.Period, c.Person,
 		c.PersonRole, c.Project, c.ProjectType, c.ProtectedArea,
 		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Publication, c.Publisher,
 		c.Region, c.Set, c.Settlement, c.Technique,
@@ -395,7 +401,7 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
 		c.Category, c.Collection, c.Culture, c.District, c.Holder,
 		c.HolderResponsibility, c.Keyword, c.Library, c.License, c.Location, c.Medium,
-		c.Model, c.Monument, c.Organization, c.OrganizationType, c.Person,
+		c.Model, c.Monument, c.Organization, c.OrganizationType, c.Period, c.Person,
 		c.PersonRole, c.Project, c.ProjectType, c.ProtectedArea,
 		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Publication, c.Publisher,
 		c.Region, c.Set, c.Settlement, c.Technique,
@@ -451,6 +457,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Organization.mutate(ctx, m)
 	case *OrganizationTypeMutation:
 		return c.OrganizationType.mutate(ctx, m)
+	case *PeriodMutation:
+		return c.Period.mutate(ctx, m)
 	case *PersonMutation:
 		return c.Person.mutate(ctx, m)
 	case *PersonRoleMutation:
@@ -1082,6 +1090,22 @@ func (c *ArtifactClient) QuerySet(a *Artifact) *SetQuery {
 			sqlgraph.From(artifact.Table, artifact.FieldID, id),
 			sqlgraph.To(set.Table, set.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, artifact.SetTable, artifact.SetColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPeriod queries the period edge of a Artifact.
+func (c *ArtifactClient) QueryPeriod(a *Artifact) *PeriodQuery {
+	query := (&PeriodClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, id),
+			sqlgraph.To(period.Table, period.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.PeriodTable, artifact.PeriodColumn),
 		)
 		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
 		return fromV, nil
@@ -3686,6 +3710,141 @@ func (c *OrganizationTypeClient) mutate(ctx context.Context, m *OrganizationType
 	}
 }
 
+// PeriodClient is a client for the Period schema.
+type PeriodClient struct {
+	config
+}
+
+// NewPeriodClient returns a client for the Period from the given config.
+func NewPeriodClient(c config) *PeriodClient {
+	return &PeriodClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `period.Hooks(f(g(h())))`.
+func (c *PeriodClient) Use(hooks ...Hook) {
+	c.hooks.Period = append(c.hooks.Period, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `period.Intercept(f(g(h())))`.
+func (c *PeriodClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Period = append(c.inters.Period, interceptors...)
+}
+
+// Create returns a builder for creating a Period entity.
+func (c *PeriodClient) Create() *PeriodCreate {
+	mutation := newPeriodMutation(c.config, OpCreate)
+	return &PeriodCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Period entities.
+func (c *PeriodClient) CreateBulk(builders ...*PeriodCreate) *PeriodCreateBulk {
+	return &PeriodCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Period.
+func (c *PeriodClient) Update() *PeriodUpdate {
+	mutation := newPeriodMutation(c.config, OpUpdate)
+	return &PeriodUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *PeriodClient) UpdateOne(pe *Period) *PeriodUpdateOne {
+	mutation := newPeriodMutation(c.config, OpUpdateOne, withPeriod(pe))
+	return &PeriodUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *PeriodClient) UpdateOneID(id int) *PeriodUpdateOne {
+	mutation := newPeriodMutation(c.config, OpUpdateOne, withPeriodID(id))
+	return &PeriodUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Period.
+func (c *PeriodClient) Delete() *PeriodDelete {
+	mutation := newPeriodMutation(c.config, OpDelete)
+	return &PeriodDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *PeriodClient) DeleteOne(pe *Period) *PeriodDeleteOne {
+	return c.DeleteOneID(pe.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *PeriodClient) DeleteOneID(id int) *PeriodDeleteOne {
+	builder := c.Delete().Where(period.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &PeriodDeleteOne{builder}
+}
+
+// Query returns a query builder for Period.
+func (c *PeriodClient) Query() *PeriodQuery {
+	return &PeriodQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypePeriod},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Period entity by its id.
+func (c *PeriodClient) Get(ctx context.Context, id int) (*Period, error) {
+	return c.Query().Where(period.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *PeriodClient) GetX(ctx context.Context, id int) *Period {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryArtifacts queries the artifacts edge of a Period.
+func (c *PeriodClient) QueryArtifacts(pe *Period) *ArtifactQuery {
+	query := (&ArtifactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(period.Table, period.FieldID, id),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, period.ArtifactsTable, period.ArtifactsColumn),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *PeriodClient) Hooks() []Hook {
+	hooks := c.hooks.Period
+	return append(hooks[:len(hooks):len(hooks)], period.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *PeriodClient) Interceptors() []Interceptor {
+	return c.inters.Period
+}
+
+func (c *PeriodClient) mutate(ctx context.Context, m *PeriodMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&PeriodCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&PeriodUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&PeriodUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&PeriodDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Period mutation op: %q", m.Op())
+	}
+}
+
 // PersonClient is a client for the Person schema.
 type PersonClient struct {
 	config
@@ -5539,16 +5698,16 @@ type (
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
 		Collection, Culture, District, Holder, HolderResponsibility, Keyword, Library,
 		License, Location, Medium, Model, Monument, Organization, OrganizationType,
-		Person, PersonRole, Project, ProjectType, ProtectedArea, ProtectedAreaCategory,
-		ProtectedAreaPicture, Publication, Publisher, Region, Set, Settlement,
-		Technique []ent.Hook
+		Period, Person, PersonRole, Project, ProjectType, ProtectedArea,
+		ProtectedAreaCategory, ProtectedAreaPicture, Publication, Publisher, Region,
+		Set, Settlement, Technique []ent.Hook
 	}
 	inters struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
 		Collection, Culture, District, Holder, HolderResponsibility, Keyword, Library,
 		License, Location, Medium, Model, Monument, Organization, OrganizationType,
-		Person, PersonRole, Project, ProjectType, ProtectedArea, ProtectedAreaCategory,
-		ProtectedAreaPicture, Publication, Publisher, Region, Set, Settlement,
-		Technique []ent.Interceptor
+		Period, Person, PersonRole, Project, ProjectType, ProtectedArea,
+		ProtectedAreaCategory, ProtectedAreaPicture, Publication, Publisher, Region,
+		Set, Settlement, Technique []ent.Interceptor
 	}
 )

@@ -31,6 +31,7 @@ type CreateArtifactInput struct {
 	MonumentID            *int
 	ModelID               *int
 	SetID                 *int
+	PeriodID              *int
 	LocationID            *int
 	CollectionID          *int
 	LicenseID             *int
@@ -101,6 +102,9 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.SetID; v != nil {
 		m.SetSetID(*v)
 	}
+	if v := i.PeriodID; v != nil {
+		m.SetPeriodID(*v)
+	}
 	if v := i.LocationID; v != nil {
 		m.SetLocationID(*v)
 	}
@@ -167,6 +171,8 @@ type UpdateArtifactInput struct {
 	ModelID                    *int
 	ClearSet                   bool
 	SetID                      *int
+	ClearPeriod                bool
+	PeriodID                   *int
 	ClearLocation              bool
 	LocationID                 *int
 	ClearCollection            bool
@@ -317,6 +323,12 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	}
 	if v := i.SetID; v != nil {
 		m.SetSetID(*v)
+	}
+	if i.ClearPeriod {
+		m.ClearPeriod()
+	}
+	if v := i.PeriodID; v != nil {
+		m.SetPeriodID(*v)
 	}
 	if i.ClearLocation {
 		m.ClearLocation()

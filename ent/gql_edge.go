@@ -112,6 +112,14 @@ func (a *Artifact) Set(ctx context.Context) (*Set, error) {
 	return result, MaskNotFound(err)
 }
 
+func (a *Artifact) Period(ctx context.Context) (*Period, error) {
+	result, err := a.Edges.PeriodOrErr()
+	if IsNotLoaded(err) {
+		result, err = a.QueryPeriod().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (a *Artifact) Location(ctx context.Context) (*Location, error) {
 	result, err := a.Edges.LocationOrErr()
 	if IsNotLoaded(err) {
@@ -384,6 +392,18 @@ func (ot *OrganizationType) Organizations(ctx context.Context) (result []*Organi
 	}
 	if IsNotLoaded(err) {
 		result, err = ot.QueryOrganizations().All(ctx)
+	}
+	return result, err
+}
+
+func (pe *Period) Artifacts(ctx context.Context) (result []*Artifact, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pe.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pe.Edges.ArtifactsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pe.QueryArtifacts().All(ctx)
 	}
 	return result, err
 }

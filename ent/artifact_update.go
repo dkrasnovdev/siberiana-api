@@ -21,6 +21,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/medium"
 	"github.com/dkrasnovdev/heritage-api/ent/model"
 	"github.com/dkrasnovdev/heritage-api/ent/monument"
+	"github.com/dkrasnovdev/heritage-api/ent/period"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
@@ -390,6 +391,25 @@ func (au *ArtifactUpdate) SetSet(s *Set) *ArtifactUpdate {
 	return au.SetSetID(s.ID)
 }
 
+// SetPeriodID sets the "period" edge to the Period entity by ID.
+func (au *ArtifactUpdate) SetPeriodID(id int) *ArtifactUpdate {
+	au.mutation.SetPeriodID(id)
+	return au
+}
+
+// SetNillablePeriodID sets the "period" edge to the Period entity by ID if the given value is not nil.
+func (au *ArtifactUpdate) SetNillablePeriodID(id *int) *ArtifactUpdate {
+	if id != nil {
+		au = au.SetPeriodID(*id)
+	}
+	return au
+}
+
+// SetPeriod sets the "period" edge to the Period entity.
+func (au *ArtifactUpdate) SetPeriod(p *Period) *ArtifactUpdate {
+	return au.SetPeriodID(p.ID)
+}
+
 // SetLocationID sets the "location" edge to the Location entity by ID.
 func (au *ArtifactUpdate) SetLocationID(id int) *ArtifactUpdate {
 	au.mutation.SetLocationID(id)
@@ -599,6 +619,12 @@ func (au *ArtifactUpdate) ClearModel() *ArtifactUpdate {
 // ClearSet clears the "set" edge to the Set entity.
 func (au *ArtifactUpdate) ClearSet() *ArtifactUpdate {
 	au.mutation.ClearSet()
+	return au
+}
+
+// ClearPeriod clears the "period" edge to the Period entity.
+func (au *ArtifactUpdate) ClearPeriod() *ArtifactUpdate {
+	au.mutation.ClearPeriod()
 	return au
 }
 
@@ -1124,6 +1150,35 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if au.mutation.PeriodCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.PeriodTable,
+			Columns: []string{artifact.PeriodColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(period.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.PeriodIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.PeriodTable,
+			Columns: []string{artifact.PeriodColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(period.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if au.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1579,6 +1634,25 @@ func (auo *ArtifactUpdateOne) SetSet(s *Set) *ArtifactUpdateOne {
 	return auo.SetSetID(s.ID)
 }
 
+// SetPeriodID sets the "period" edge to the Period entity by ID.
+func (auo *ArtifactUpdateOne) SetPeriodID(id int) *ArtifactUpdateOne {
+	auo.mutation.SetPeriodID(id)
+	return auo
+}
+
+// SetNillablePeriodID sets the "period" edge to the Period entity by ID if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillablePeriodID(id *int) *ArtifactUpdateOne {
+	if id != nil {
+		auo = auo.SetPeriodID(*id)
+	}
+	return auo
+}
+
+// SetPeriod sets the "period" edge to the Period entity.
+func (auo *ArtifactUpdateOne) SetPeriod(p *Period) *ArtifactUpdateOne {
+	return auo.SetPeriodID(p.ID)
+}
+
 // SetLocationID sets the "location" edge to the Location entity by ID.
 func (auo *ArtifactUpdateOne) SetLocationID(id int) *ArtifactUpdateOne {
 	auo.mutation.SetLocationID(id)
@@ -1788,6 +1862,12 @@ func (auo *ArtifactUpdateOne) ClearModel() *ArtifactUpdateOne {
 // ClearSet clears the "set" edge to the Set entity.
 func (auo *ArtifactUpdateOne) ClearSet() *ArtifactUpdateOne {
 	auo.mutation.ClearSet()
+	return auo
+}
+
+// ClearPeriod clears the "period" edge to the Period entity.
+func (auo *ArtifactUpdateOne) ClearPeriod() *ArtifactUpdateOne {
+	auo.mutation.ClearPeriod()
 	return auo
 }
 
@@ -2336,6 +2416,35 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(set.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.PeriodCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.PeriodTable,
+			Columns: []string{artifact.PeriodColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(period.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.PeriodIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.PeriodTable,
+			Columns: []string{artifact.PeriodColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(period.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

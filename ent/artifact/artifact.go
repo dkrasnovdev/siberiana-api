@@ -57,6 +57,8 @@ const (
 	EdgeModel = "model"
 	// EdgeSet holds the string denoting the set edge name in mutations.
 	EdgeSet = "set"
+	// EdgePeriod holds the string denoting the period edge name in mutations.
+	EdgePeriod = "period"
 	// EdgeLocation holds the string denoting the location edge name in mutations.
 	EdgeLocation = "location"
 	// EdgeCollection holds the string denoting the collection edge name in mutations.
@@ -123,6 +125,13 @@ const (
 	SetInverseTable = "sets"
 	// SetColumn is the table column denoting the set relation/edge.
 	SetColumn = "set_artifacts"
+	// PeriodTable is the table that holds the period relation/edge.
+	PeriodTable = "artifacts"
+	// PeriodInverseTable is the table name for the Period entity.
+	// It exists in this package in order to avoid circular dependency with the "period" package.
+	PeriodInverseTable = "periods"
+	// PeriodColumn is the table column denoting the period relation/edge.
+	PeriodColumn = "period_artifacts"
 	// LocationTable is the table that holds the location relation/edge.
 	LocationTable = "artifacts"
 	// LocationInverseTable is the table name for the Location entity.
@@ -171,6 +180,7 @@ var ForeignKeys = []string{
 	"location_artifacts",
 	"model_artifacts",
 	"monument_artifacts",
+	"period_artifacts",
 	"set_artifacts",
 }
 
@@ -392,6 +402,13 @@ func BySetField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
+// ByPeriodField orders the results by period field.
+func ByPeriodField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPeriodStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByLocationField orders the results by location field.
 func ByLocationField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -480,6 +497,13 @@ func newSetStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SetInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, SetTable, SetColumn),
+	)
+}
+func newPeriodStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PeriodInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, PeriodTable, PeriodColumn),
 	)
 }
 func newLocationStep() *sqlgraph.Step {

@@ -17,6 +17,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/model"
 	"github.com/dkrasnovdev/heritage-api/ent/monument"
+	"github.com/dkrasnovdev/heritage-api/ent/period"
 	"github.com/dkrasnovdev/heritage-api/ent/set"
 )
 
@@ -56,6 +57,7 @@ type Artifact struct {
 	location_artifacts   *int
 	model_artifacts      *int
 	monument_artifacts   *int
+	period_artifacts     *int
 	set_artifacts        *int
 	selectValues         sql.SelectValues
 }
@@ -82,6 +84,8 @@ type ArtifactEdges struct {
 	Model *Model `json:"model,omitempty"`
 	// Set holds the value of the set edge.
 	Set *Set `json:"set,omitempty"`
+	// Period holds the value of the period edge.
+	Period *Period `json:"period,omitempty"`
 	// Location holds the value of the location edge.
 	Location *Location `json:"location,omitempty"`
 	// Collection holds the value of the collection edge.
@@ -90,9 +94,9 @@ type ArtifactEdges struct {
 	License *License `json:"license,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [13]bool
+	loadedTypes [14]bool
 	// totalCount holds the count of the edges above.
-	totalCount [13]map[string]int
+	totalCount [14]map[string]int
 
 	namedAuthors      map[string][]*Person
 	namedMediums      map[string][]*Medium
@@ -208,10 +212,23 @@ func (e ArtifactEdges) SetOrErr() (*Set, error) {
 	return nil, &NotLoadedError{edge: "set"}
 }
 
+// PeriodOrErr returns the Period value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ArtifactEdges) PeriodOrErr() (*Period, error) {
+	if e.loadedTypes[10] {
+		if e.Period == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: period.Label}
+		}
+		return e.Period, nil
+	}
+	return nil, &NotLoadedError{edge: "period"}
+}
+
 // LocationOrErr returns the Location value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) LocationOrErr() (*Location, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[11] {
 		if e.Location == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: location.Label}
@@ -224,7 +241,7 @@ func (e ArtifactEdges) LocationOrErr() (*Location, error) {
 // CollectionOrErr returns the Collection value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) CollectionOrErr() (*Collection, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[12] {
 		if e.Collection == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: collection.Label}
@@ -237,7 +254,7 @@ func (e ArtifactEdges) CollectionOrErr() (*Collection, error) {
 // LicenseOrErr returns the License value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) LicenseOrErr() (*License, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[13] {
 		if e.License == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: license.Label}
@@ -272,7 +289,9 @@ func (*Artifact) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case artifact.ForeignKeys[5]: // monument_artifacts
 			values[i] = new(sql.NullInt64)
-		case artifact.ForeignKeys[6]: // set_artifacts
+		case artifact.ForeignKeys[6]: // period_artifacts
+			values[i] = new(sql.NullInt64)
+		case artifact.ForeignKeys[7]: // set_artifacts
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -409,6 +428,13 @@ func (a *Artifact) assignValues(columns []string, values []any) error {
 			}
 		case artifact.ForeignKeys[6]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field period_artifacts", value)
+			} else if value.Valid {
+				a.period_artifacts = new(int)
+				*a.period_artifacts = int(value.Int64)
+			}
+		case artifact.ForeignKeys[7]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field set_artifacts", value)
 			} else if value.Valid {
 				a.set_artifacts = new(int)
@@ -475,6 +501,11 @@ func (a *Artifact) QueryModel() *ModelQuery {
 // QuerySet queries the "set" edge of the Artifact entity.
 func (a *Artifact) QuerySet() *SetQuery {
 	return NewArtifactClient(a.config).QuerySet(a)
+}
+
+// QueryPeriod queries the "period" edge of the Artifact entity.
+func (a *Artifact) QueryPeriod() *PeriodQuery {
+	return NewArtifactClient(a.config).QueryPeriod(a)
 }
 
 // QueryLocation queries the "location" edge of the Artifact entity.

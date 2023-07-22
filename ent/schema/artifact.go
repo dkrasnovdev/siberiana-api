@@ -68,6 +68,7 @@ func (Artifact) Edges() []ent.Edge {
 		edge.From("monument", Monument.Type).Ref("artifacts").Unique(),
 		edge.From("model", Model.Type).Ref("artifacts").Unique(),
 		edge.From("set", Set.Type).Ref("artifacts").Unique(),
+		edge.From("period", Period.Type).Ref("artifacts").Unique(),
 		edge.From("location", Location.Type).Ref("artifacts").Unique(),
 		edge.From("collection", Collection.Type).Ref("artifacts").Unique(),
 		edge.From("license", License.Type).Ref("artifacts").Unique(),

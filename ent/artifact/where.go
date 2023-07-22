@@ -930,6 +930,29 @@ func HasSetWith(preds ...predicate.Set) predicate.Artifact {
 	})
 }
 
+// HasPeriod applies the HasEdge predicate on the "period" edge.
+func HasPeriod() predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, PeriodTable, PeriodColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPeriodWith applies the HasEdge predicate on the "period" edge with a given conditions (other predicates).
+func HasPeriodWith(preds ...predicate.Period) predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := newPeriodStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasLocation applies the HasEdge predicate on the "location" edge.
 func HasLocation() predicate.Artifact {
 	return predicate.Artifact(func(s *sql.Selector) {

@@ -56,6 +56,8 @@ type Tx struct {
 	Organization *OrganizationClient
 	// OrganizationType is the client for interacting with the OrganizationType builders.
 	OrganizationType *OrganizationTypeClient
+	// Period is the client for interacting with the Period builders.
+	Period *PeriodClient
 	// Person is the client for interacting with the Person builders.
 	Person *PersonClient
 	// PersonRole is the client for interacting with the PersonRole builders.
@@ -235,6 +237,7 @@ func (tx *Tx) init() {
 	tx.Monument = NewMonumentClient(tx.config)
 	tx.Organization = NewOrganizationClient(tx.config)
 	tx.OrganizationType = NewOrganizationTypeClient(tx.config)
+	tx.Period = NewPeriodClient(tx.config)
 	tx.Person = NewPersonClient(tx.config)
 	tx.PersonRole = NewPersonRoleClient(tx.config)
 	tx.Project = NewProjectClient(tx.config)

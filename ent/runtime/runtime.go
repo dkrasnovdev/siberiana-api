@@ -21,6 +21,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/monument"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/organizationtype"
+	"github.com/dkrasnovdev/heritage-api/ent/period"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
@@ -418,6 +419,23 @@ func init() {
 	organizationtype.DefaultUpdatedAt = organizationtypeDescUpdatedAt.Default.(func() time.Time)
 	// organizationtype.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	organizationtype.UpdateDefaultUpdatedAt = organizationtypeDescUpdatedAt.UpdateDefault.(func() time.Time)
+	periodMixin := schema.Period{}.Mixin()
+	periodMixinHooks0 := periodMixin[0].Hooks()
+	period.Hooks[0] = periodMixinHooks0[0]
+	periodMixinFields0 := periodMixin[0].Fields()
+	_ = periodMixinFields0
+	periodFields := schema.Period{}.Fields()
+	_ = periodFields
+	// periodDescCreatedAt is the schema descriptor for created_at field.
+	periodDescCreatedAt := periodMixinFields0[0].Descriptor()
+	// period.DefaultCreatedAt holds the default value on creation for the created_at field.
+	period.DefaultCreatedAt = periodDescCreatedAt.Default.(func() time.Time)
+	// periodDescUpdatedAt is the schema descriptor for updated_at field.
+	periodDescUpdatedAt := periodMixinFields0[2].Descriptor()
+	// period.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	period.DefaultUpdatedAt = periodDescUpdatedAt.Default.(func() time.Time)
+	// period.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	period.UpdateDefaultUpdatedAt = periodDescUpdatedAt.UpdateDefault.(func() time.Time)
 	personMixin := schema.Person{}.Mixin()
 	person.Policy = privacy.NewPolicies(schema.Person{})
 	person.Hooks[0] = func(next ent.Mutator) ent.Mutator {

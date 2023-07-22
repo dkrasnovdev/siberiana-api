@@ -58,6 +58,7 @@ var (
 		{Name: "location_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "model_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "monument_artifacts", Type: field.TypeInt, Nullable: true},
+		{Name: "period_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "set_artifacts", Type: field.TypeInt, Nullable: true},
 	}
 	// ArtifactsTable holds the schema information for the "artifacts" table.
@@ -103,8 +104,14 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "artifacts_sets_artifacts",
+				Symbol:     "artifacts_periods_artifacts",
 				Columns:    []*schema.Column{ArtifactsColumns[18]},
+				RefColumns: []*schema.Column{PeriodsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "artifacts_sets_artifacts",
+				Columns:    []*schema.Column{ArtifactsColumns[19]},
 				RefColumns: []*schema.Column{SetsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -430,6 +437,23 @@ var (
 		Name:       "organization_types",
 		Columns:    OrganizationTypesColumns,
 		PrimaryKey: []*schema.Column{OrganizationTypesColumns[0]},
+	}
+	// PeriodsColumns holds the columns for the "periods" table.
+	PeriodsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+	}
+	// PeriodsTable holds the schema information for the "periods" table.
+	PeriodsTable = &schema.Table{
+		Name:       "periods",
+		Columns:    PeriodsColumns,
+		PrimaryKey: []*schema.Column{PeriodsColumns[0]},
 	}
 	// PersonsColumns holds the columns for the "persons" table.
 	PersonsColumns = []*schema.Column{
@@ -986,6 +1010,7 @@ var (
 		MonumentsTable,
 		OrganizationsTable,
 		OrganizationTypesTable,
+		PeriodsTable,
 		PersonsTable,
 		PersonRolesTable,
 		ProjectsTable,
@@ -1020,7 +1045,8 @@ func init() {
 	ArtifactsTable.ForeignKeys[3].RefTable = LocationsTable
 	ArtifactsTable.ForeignKeys[4].RefTable = ModelsTable
 	ArtifactsTable.ForeignKeys[5].RefTable = MonumentsTable
-	ArtifactsTable.ForeignKeys[6].RefTable = SetsTable
+	ArtifactsTable.ForeignKeys[6].RefTable = PeriodsTable
+	ArtifactsTable.ForeignKeys[7].RefTable = SetsTable
 	CollectionsTable.ForeignKeys[0].RefTable = CategoriesTable
 	DistrictsTable.ForeignKeys[0].RefTable = LocationsTable
 	OrganizationsTable.ForeignKeys[0].RefTable = HoldersTable

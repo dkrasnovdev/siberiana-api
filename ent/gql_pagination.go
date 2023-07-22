@@ -36,6 +36,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/monument"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/organizationtype"
+	"github.com/dkrasnovdev/heritage-api/ent/period"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
@@ -6974,6 +6975,319 @@ func (ot *OrganizationType) ToEdge(order *OrganizationTypeOrder) *OrganizationTy
 	return &OrganizationTypeEdge{
 		Node:   ot,
 		Cursor: order.Field.toCursor(ot),
+	}
+}
+
+// PeriodEdge is the edge representation of Period.
+type PeriodEdge struct {
+	Node   *Period `json:"node"`
+	Cursor Cursor  `json:"cursor"`
+}
+
+// PeriodConnection is the connection containing edges to Period.
+type PeriodConnection struct {
+	Edges      []*PeriodEdge `json:"edges"`
+	PageInfo   PageInfo      `json:"pageInfo"`
+	TotalCount int           `json:"totalCount"`
+}
+
+func (c *PeriodConnection) build(nodes []*Period, pager *periodPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *Period
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Period {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Period {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*PeriodEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &PeriodEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// PeriodPaginateOption enables pagination customization.
+type PeriodPaginateOption func(*periodPager) error
+
+// WithPeriodOrder configures pagination ordering.
+func WithPeriodOrder(order *PeriodOrder) PeriodPaginateOption {
+	if order == nil {
+		order = DefaultPeriodOrder
+	}
+	o := *order
+	return func(pager *periodPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultPeriodOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithPeriodFilter configures pagination filter.
+func WithPeriodFilter(filter func(*PeriodQuery) (*PeriodQuery, error)) PeriodPaginateOption {
+	return func(pager *periodPager) error {
+		if filter == nil {
+			return errors.New("PeriodQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type periodPager struct {
+	reverse bool
+	order   *PeriodOrder
+	filter  func(*PeriodQuery) (*PeriodQuery, error)
+}
+
+func newPeriodPager(opts []PeriodPaginateOption, reverse bool) (*periodPager, error) {
+	pager := &periodPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultPeriodOrder
+	}
+	return pager, nil
+}
+
+func (p *periodPager) applyFilter(query *PeriodQuery) (*PeriodQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *periodPager) toCursor(pe *Period) Cursor {
+	return p.order.Field.toCursor(pe)
+}
+
+func (p *periodPager) applyCursors(query *PeriodQuery, after, before *Cursor) (*PeriodQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultPeriodOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *periodPager) applyOrder(query *PeriodQuery) *PeriodQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultPeriodOrder.Field {
+		query = query.Order(DefaultPeriodOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *periodPager) orderExpr(query *PeriodQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultPeriodOrder.Field {
+			b.Comma().Ident(DefaultPeriodOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Period.
+func (pe *PeriodQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...PeriodPaginateOption,
+) (*PeriodConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newPeriodPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if pe, err = pager.applyFilter(pe); err != nil {
+		return nil, err
+	}
+	conn := &PeriodConnection{Edges: []*PeriodEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := pe.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if pe, err = pager.applyCursors(pe, after, before); err != nil {
+		return nil, err
+	}
+	if limit := paginateLimit(first, last); limit != 0 {
+		pe.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := pe.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	pe = pager.applyOrder(pe)
+	nodes, err := pe.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// PeriodOrderFieldCreatedAt orders Period by created_at.
+	PeriodOrderFieldCreatedAt = &PeriodOrderField{
+		Value: func(pe *Period) (ent.Value, error) {
+			return pe.CreatedAt, nil
+		},
+		column: period.FieldCreatedAt,
+		toTerm: period.ByCreatedAt,
+		toCursor: func(pe *Period) Cursor {
+			return Cursor{
+				ID:    pe.ID,
+				Value: pe.CreatedAt,
+			}
+		},
+	}
+	// PeriodOrderFieldUpdatedAt orders Period by updated_at.
+	PeriodOrderFieldUpdatedAt = &PeriodOrderField{
+		Value: func(pe *Period) (ent.Value, error) {
+			return pe.UpdatedAt, nil
+		},
+		column: period.FieldUpdatedAt,
+		toTerm: period.ByUpdatedAt,
+		toCursor: func(pe *Period) Cursor {
+			return Cursor{
+				ID:    pe.ID,
+				Value: pe.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f PeriodOrderField) String() string {
+	var str string
+	switch f.column {
+	case PeriodOrderFieldCreatedAt.column:
+		str = "CREATED_AT"
+	case PeriodOrderFieldUpdatedAt.column:
+		str = "UPDATED_AT"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f PeriodOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *PeriodOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("PeriodOrderField %T must be a string", v)
+	}
+	switch str {
+	case "CREATED_AT":
+		*f = *PeriodOrderFieldCreatedAt
+	case "UPDATED_AT":
+		*f = *PeriodOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid PeriodOrderField", str)
+	}
+	return nil
+}
+
+// PeriodOrderField defines the ordering field of Period.
+type PeriodOrderField struct {
+	// Value extracts the ordering value from the given Period.
+	Value    func(*Period) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) period.OrderOption
+	toCursor func(*Period) Cursor
+}
+
+// PeriodOrder defines the ordering of Period.
+type PeriodOrder struct {
+	Direction OrderDirection    `json:"direction"`
+	Field     *PeriodOrderField `json:"field"`
+}
+
+// DefaultPeriodOrder is the default ordering of Period.
+var DefaultPeriodOrder = &PeriodOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &PeriodOrderField{
+		Value: func(pe *Period) (ent.Value, error) {
+			return pe.ID, nil
+		},
+		column: period.FieldID,
+		toTerm: period.ByID,
+		toCursor: func(pe *Period) Cursor {
+			return Cursor{ID: pe.ID}
+		},
+	},
+}
+
+// ToEdge converts Period into PeriodEdge.
+func (pe *Period) ToEdge(order *PeriodOrder) *PeriodEdge {
+	if order == nil {
+		order = DefaultPeriodOrder
+	}
+	return &PeriodEdge{
+		Node:   pe,
+		Cursor: order.Field.toCursor(pe),
 	}
 }
 

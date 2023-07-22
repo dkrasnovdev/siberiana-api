@@ -34,6 +34,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/monument"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/organizationtype"
+	"github.com/dkrasnovdev/heritage-api/ent/period"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
@@ -129,6 +130,7 @@ func checkColumn(table, column string) error {
 			monument.Table:              monument.ValidColumn,
 			organization.Table:          organization.ValidColumn,
 			organizationtype.Table:      organizationtype.ValidColumn,
+			period.Table:                period.ValidColumn,
 			person.Table:                person.ValidColumn,
 			personrole.Table:            personrole.ValidColumn,
 			project.Table:               project.ValidColumn,

@@ -19,6 +19,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/medium"
 	"github.com/dkrasnovdev/heritage-api/ent/model"
 	"github.com/dkrasnovdev/heritage-api/ent/monument"
+	"github.com/dkrasnovdev/heritage-api/ent/period"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
@@ -335,6 +336,25 @@ func (ac *ArtifactCreate) SetNillableSetID(id *int) *ArtifactCreate {
 // SetSet sets the "set" edge to the Set entity.
 func (ac *ArtifactCreate) SetSet(s *Set) *ArtifactCreate {
 	return ac.SetSetID(s.ID)
+}
+
+// SetPeriodID sets the "period" edge to the Period entity by ID.
+func (ac *ArtifactCreate) SetPeriodID(id int) *ArtifactCreate {
+	ac.mutation.SetPeriodID(id)
+	return ac
+}
+
+// SetNillablePeriodID sets the "period" edge to the Period entity by ID if the given value is not nil.
+func (ac *ArtifactCreate) SetNillablePeriodID(id *int) *ArtifactCreate {
+	if id != nil {
+		ac = ac.SetPeriodID(*id)
+	}
+	return ac
+}
+
+// SetPeriod sets the "period" edge to the Period entity.
+func (ac *ArtifactCreate) SetPeriod(p *Period) *ArtifactCreate {
+	return ac.SetPeriodID(p.ID)
 }
 
 // SetLocationID sets the "location" edge to the Location entity by ID.
@@ -688,6 +708,23 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.set_artifacts = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.PeriodIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.PeriodTable,
+			Columns: []string{artifact.PeriodColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(period.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.period_artifacts = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := ac.mutation.LocationIDs(); len(nodes) > 0 {
