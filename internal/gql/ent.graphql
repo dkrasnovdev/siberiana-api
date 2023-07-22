@@ -5,6 +5,41 @@ type Art implements Node {
 }
 type ArtGenre implements Node {
   id: ID!
+  createdAt: Time!
+  createdBy: String
+  updatedAt: Time!
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
+}
+"""A connection to a list of items."""
+type ArtGenreConnection {
+  """A list of edges."""
+  edges: [ArtGenreEdge]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+"""An edge in a connection."""
+type ArtGenreEdge {
+  """The item at the end of the edge."""
+  node: ArtGenre
+  """A cursor for use in pagination."""
+  cursor: Cursor!
+}
+"""Ordering options for ArtGenre connections"""
+input ArtGenreOrder {
+  """The ordering direction."""
+  direction: OrderDirection! = ASC
+  """The field by which to order ArtGenres."""
+  field: ArtGenreOrderField!
+}
+"""Properties by which ArtGenre connections can be ordered."""
+enum ArtGenreOrderField {
+  CREATED_AT
+  UPDATED_AT
 }
 """
 ArtGenreWhereInput is used for filtering ArtGenre objects.
@@ -23,9 +58,126 @@ input ArtGenreWhereInput {
   idGTE: ID
   idLT: ID
   idLTE: ID
+  """created_at field predicates"""
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  """created_by field predicates"""
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """updated_at field predicates"""
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  """updated_by field predicates"""
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """display_name field predicates"""
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
+  """description field predicates"""
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
 }
 type ArtStyle implements Node {
   id: ID!
+  createdAt: Time!
+  createdBy: String
+  updatedAt: Time!
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
+}
+"""A connection to a list of items."""
+type ArtStyleConnection {
+  """A list of edges."""
+  edges: [ArtStyleEdge]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+"""An edge in a connection."""
+type ArtStyleEdge {
+  """The item at the end of the edge."""
+  node: ArtStyle
+  """A cursor for use in pagination."""
+  cursor: Cursor!
+}
+"""Ordering options for ArtStyle connections"""
+input ArtStyleOrder {
+  """The ordering direction."""
+  direction: OrderDirection! = ASC
+  """The field by which to order ArtStyles."""
+  field: ArtStyleOrderField!
+}
+"""Properties by which ArtStyle connections can be ordered."""
+enum ArtStyleOrderField {
+  CREATED_AT
+  UPDATED_AT
 }
 """
 ArtStyleWhereInput is used for filtering ArtStyle objects.
@@ -44,6 +196,88 @@ input ArtStyleWhereInput {
   idGTE: ID
   idLT: ID
   idLTE: ID
+  """created_at field predicates"""
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  """created_by field predicates"""
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """updated_at field predicates"""
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  """updated_by field predicates"""
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """display_name field predicates"""
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
+  """description field predicates"""
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
 }
 """
 ArtWhereInput is used for filtering Art objects.
@@ -511,9 +745,67 @@ input AuditLogWhereInput {
 }
 type Book implements Node {
   id: ID!
+  createdAt: Time!
+  createdBy: String
+  updatedAt: Time!
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
+}
+"""A connection to a list of items."""
+type BookConnection {
+  """A list of edges."""
+  edges: [BookEdge]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+"""An edge in a connection."""
+type BookEdge {
+  """The item at the end of the edge."""
+  node: Book
+  """A cursor for use in pagination."""
+  cursor: Cursor!
 }
 type BookGenre implements Node {
   id: ID!
+  createdAt: Time!
+  createdBy: String
+  updatedAt: Time!
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
+}
+"""A connection to a list of items."""
+type BookGenreConnection {
+  """A list of edges."""
+  edges: [BookGenreEdge]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+"""An edge in a connection."""
+type BookGenreEdge {
+  """The item at the end of the edge."""
+  node: BookGenre
+  """A cursor for use in pagination."""
+  cursor: Cursor!
+}
+"""Ordering options for BookGenre connections"""
+input BookGenreOrder {
+  """The ordering direction."""
+  direction: OrderDirection! = ASC
+  """The field by which to order BookGenres."""
+  field: BookGenreOrderField!
+}
+"""Properties by which BookGenre connections can be ordered."""
+enum BookGenreOrderField {
+  CREATED_AT
+  UPDATED_AT
 }
 """
 BookGenreWhereInput is used for filtering BookGenre objects.
@@ -532,6 +824,100 @@ input BookGenreWhereInput {
   idGTE: ID
   idLT: ID
   idLTE: ID
+  """created_at field predicates"""
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  """created_by field predicates"""
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """updated_at field predicates"""
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  """updated_by field predicates"""
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """display_name field predicates"""
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
+  """description field predicates"""
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+}
+"""Ordering options for Book connections"""
+input BookOrder {
+  """The ordering direction."""
+  direction: OrderDirection! = ASC
+  """The field by which to order Books."""
+  field: BookOrderField!
+}
+"""Properties by which Book connections can be ordered."""
+enum BookOrderField {
+  CREATED_AT
+  UPDATED_AT
 }
 """
 BookWhereInput is used for filtering Book objects.
@@ -550,6 +936,88 @@ input BookWhereInput {
   idGTE: ID
   idLT: ID
   idLTE: ID
+  """created_at field predicates"""
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  """created_by field predicates"""
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """updated_at field predicates"""
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  """updated_by field predicates"""
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """display_name field predicates"""
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
+  """description field predicates"""
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
 }
 type Category implements Node {
   id: ID!
@@ -844,6 +1312,32 @@ input CollectionWhereInput {
   hasCategoryWith: [CategoryWhereInput!]
 }
 """
+CreateArtGenreInput is used for create ArtGenre object.
+Input was generated by ent.
+"""
+input CreateArtGenreInput {
+  createdAt: Time
+  createdBy: String
+  updatedAt: Time
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
+}
+"""
+CreateArtStyleInput is used for create ArtStyle object.
+Input was generated by ent.
+"""
+input CreateArtStyleInput {
+  createdAt: Time
+  createdBy: String
+  updatedAt: Time
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
+}
+"""
 CreateArtifactInput is used for create Artifact object.
 Input was generated by ent.
 """
@@ -878,6 +1372,32 @@ input CreateArtifactInput {
   locationID: ID
   collectionID: ID
   licenseID: ID
+}
+"""
+CreateBookGenreInput is used for create BookGenre object.
+Input was generated by ent.
+"""
+input CreateBookGenreInput {
+  createdAt: Time
+  createdBy: String
+  updatedAt: Time
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
+}
+"""
+CreateBookInput is used for create Book object.
+Input was generated by ent.
+"""
+input CreateBookInput {
+  createdAt: Time
+  createdBy: String
+  updatedAt: Time
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
 }
 """
 CreateCategoryInput is used for create Category object.
@@ -952,6 +1472,33 @@ input CreateHolderInput {
   holderResponsibilityIDs: [ID!]
   personID: ID
   organizationID: ID
+}
+"""
+CreateHolderResponsibilityInput is used for create HolderResponsibility object.
+Input was generated by ent.
+"""
+input CreateHolderResponsibilityInput {
+  createdAt: Time
+  createdBy: String
+  updatedAt: Time
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
+  holderIDs: [ID!]
+}
+"""
+CreateLibraryInput is used for create Library object.
+Input was generated by ent.
+"""
+input CreateLibraryInput {
+  createdAt: Time
+  createdBy: String
+  updatedAt: Time
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
 }
 """
 CreateLicenseInput is used for create License object.
@@ -1052,6 +1599,34 @@ input CreateOrganizationInput {
   organizationTypeID: ID
 }
 """
+CreateOrganizationTypeInput is used for create OrganizationType object.
+Input was generated by ent.
+"""
+input CreateOrganizationTypeInput {
+  createdAt: Time
+  createdBy: String
+  updatedAt: Time
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
+  organizationIDs: [ID!]
+}
+"""
+CreatePeriodInput is used for create Period object.
+Input was generated by ent.
+"""
+input CreatePeriodInput {
+  createdAt: Time
+  createdBy: String
+  updatedAt: Time
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
+  artifactIDs: [ID!]
+}
+"""
 CreatePersonInput is used for create Person object.
 Input was generated by ent.
 """
@@ -1083,6 +1658,20 @@ input CreatePersonInput {
   collectionsID: ID
 }
 """
+CreatePersonRoleInput is used for create PersonRole object.
+Input was generated by ent.
+"""
+input CreatePersonRoleInput {
+  createdAt: Time
+  createdBy: String
+  updatedAt: Time
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
+  personIDs: [ID!]
+}
+"""
 CreateProjectInput is used for create Project object.
 Input was generated by ent.
 """
@@ -1101,6 +1690,59 @@ input CreateProjectInput {
   projectTypeID: ID
 }
 """
+CreateProjectTypeInput is used for create ProjectType object.
+Input was generated by ent.
+"""
+input CreateProjectTypeInput {
+  createdAt: Time
+  createdBy: String
+  updatedAt: Time
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
+  projectIDs: [ID!]
+}
+"""
+CreateProtectedAreaCategoryInput is used for create ProtectedAreaCategory object.
+Input was generated by ent.
+"""
+input CreateProtectedAreaCategoryInput {
+  createdAt: Time
+  createdBy: String
+  updatedAt: Time
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
+}
+"""
+CreateProtectedAreaInput is used for create ProtectedArea object.
+Input was generated by ent.
+"""
+input CreateProtectedAreaInput {
+  createdAt: Time
+  createdBy: String
+  updatedAt: Time
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
+}
+"""
+CreateProtectedAreaPictureInput is used for create ProtectedAreaPicture object.
+Input was generated by ent.
+"""
+input CreateProtectedAreaPictureInput {
+  createdAt: Time
+  createdBy: String
+  updatedAt: Time
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
+}
+"""
 CreatePublicationInput is used for create Publication object.
 Input was generated by ent.
 """
@@ -1114,6 +1756,19 @@ input CreatePublicationInput {
   externalLinks: [String!]
   artifactIDs: [ID!]
   authorIDs: [ID!]
+}
+"""
+CreatePublisherInput is used for create Publisher object.
+Input was generated by ent.
+"""
+input CreatePublisherInput {
+  createdAt: Time
+  createdBy: String
+  updatedAt: Time
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
 }
 """
 CreateRegionInput is used for create Region object.
@@ -1513,6 +2168,22 @@ type HolderResponsibility implements Node {
   externalLinks: [String!]
   holder: [Holder!]
 }
+"""A connection to a list of items."""
+type HolderResponsibilityConnection {
+  """A list of edges."""
+  edges: [HolderResponsibilityEdge]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+"""An edge in a connection."""
+type HolderResponsibilityEdge {
+  """The item at the end of the edge."""
+  node: HolderResponsibility
+  """A cursor for use in pagination."""
+  cursor: Cursor!
+}
 """Ordering options for HolderResponsibility connections"""
 input HolderResponsibilityOrder {
   """The ordering direction."""
@@ -1751,6 +2422,41 @@ input KeywordWhereInput {
 }
 type Library implements Node {
   id: ID!
+  createdAt: Time!
+  createdBy: String
+  updatedAt: Time!
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
+}
+"""A connection to a list of items."""
+type LibraryConnection {
+  """A list of edges."""
+  edges: [LibraryEdge]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+"""An edge in a connection."""
+type LibraryEdge {
+  """The item at the end of the edge."""
+  node: Library
+  """A cursor for use in pagination."""
+  cursor: Cursor!
+}
+"""Ordering options for Library connections"""
+input LibraryOrder {
+  """The ordering direction."""
+  direction: OrderDirection! = ASC
+  """The field by which to order Libraries."""
+  field: LibraryOrderField!
+}
+"""Properties by which Library connections can be ordered."""
+enum LibraryOrderField {
+  CREATED_AT
+  UPDATED_AT
 }
 """
 LibraryWhereInput is used for filtering Library objects.
@@ -1769,6 +2475,88 @@ input LibraryWhereInput {
   idGTE: ID
   idLT: ID
   idLTE: ID
+  """created_at field predicates"""
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  """created_by field predicates"""
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """updated_at field predicates"""
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  """updated_by field predicates"""
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """display_name field predicates"""
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
+  """description field predicates"""
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
 }
 type License implements Node {
   id: ID!
@@ -2571,6 +3359,22 @@ type OrganizationType implements Node {
   externalLinks: [String!]
   organizations: [Organization!]
 }
+"""A connection to a list of items."""
+type OrganizationTypeConnection {
+  """A list of edges."""
+  edges: [OrganizationTypeEdge]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+"""An edge in a connection."""
+type OrganizationTypeEdge {
+  """The item at the end of the edge."""
+  node: OrganizationType
+  """A cursor for use in pagination."""
+  cursor: Cursor!
+}
 """Ordering options for OrganizationType connections"""
 input OrganizationTypeOrder {
   """The ordering direction."""
@@ -2873,6 +3677,22 @@ type Period implements Node {
   externalLinks: [String!]
   artifacts: [Artifact!]
 }
+"""A connection to a list of items."""
+type PeriodConnection {
+  """A list of edges."""
+  edges: [PeriodEdge]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+"""An edge in a connection."""
+type PeriodEdge {
+  """The item at the end of the edge."""
+  node: Period
+  """A cursor for use in pagination."""
+  cursor: Cursor!
+}
 """Ordering options for Period connections"""
 input PeriodOrder {
   """The ordering direction."""
@@ -3059,6 +3879,22 @@ type PersonRole implements Node {
   description: String
   externalLinks: [String!]
   person: [Person!]
+}
+"""A connection to a list of items."""
+type PersonRoleConnection {
+  """A list of edges."""
+  edges: [PersonRoleEdge]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+"""An edge in a connection."""
+type PersonRoleEdge {
+  """The item at the end of the edge."""
+  node: PersonRole
+  """A cursor for use in pagination."""
+  cursor: Cursor!
 }
 """Ordering options for PersonRole connections"""
 input PersonRoleOrder {
@@ -3457,6 +4293,22 @@ type ProjectType implements Node {
   externalLinks: [String!]
   projects: [Project!]
 }
+"""A connection to a list of items."""
+type ProjectTypeConnection {
+  """A list of edges."""
+  edges: [ProjectTypeEdge]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+"""An edge in a connection."""
+type ProjectTypeEdge {
+  """The item at the end of the edge."""
+  node: ProjectType
+  """A cursor for use in pagination."""
+  cursor: Cursor!
+}
 """Ordering options for ProjectType connections"""
 input ProjectTypeOrder {
   """The ordering direction."""
@@ -3705,9 +4557,51 @@ input ProjectWhereInput {
 }
 type ProtectedArea implements Node {
   id: ID!
+  createdAt: Time!
+  createdBy: String
+  updatedAt: Time!
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
 }
 type ProtectedAreaCategory implements Node {
   id: ID!
+  createdAt: Time!
+  createdBy: String
+  updatedAt: Time!
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
+}
+"""A connection to a list of items."""
+type ProtectedAreaCategoryConnection {
+  """A list of edges."""
+  edges: [ProtectedAreaCategoryEdge]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+"""An edge in a connection."""
+type ProtectedAreaCategoryEdge {
+  """The item at the end of the edge."""
+  node: ProtectedAreaCategory
+  """A cursor for use in pagination."""
+  cursor: Cursor!
+}
+"""Ordering options for ProtectedAreaCategory connections"""
+input ProtectedAreaCategoryOrder {
+  """The ordering direction."""
+  direction: OrderDirection! = ASC
+  """The field by which to order ProtectedAreaCategories."""
+  field: ProtectedAreaCategoryOrderField!
+}
+"""Properties by which ProtectedAreaCategory connections can be ordered."""
+enum ProtectedAreaCategoryOrderField {
+  CREATED_AT
+  UPDATED_AT
 }
 """
 ProtectedAreaCategoryWhereInput is used for filtering ProtectedAreaCategory objects.
@@ -3726,9 +4620,154 @@ input ProtectedAreaCategoryWhereInput {
   idGTE: ID
   idLT: ID
   idLTE: ID
+  """created_at field predicates"""
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  """created_by field predicates"""
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """updated_at field predicates"""
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  """updated_by field predicates"""
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """display_name field predicates"""
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
+  """description field predicates"""
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+}
+"""A connection to a list of items."""
+type ProtectedAreaConnection {
+  """A list of edges."""
+  edges: [ProtectedAreaEdge]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+"""An edge in a connection."""
+type ProtectedAreaEdge {
+  """The item at the end of the edge."""
+  node: ProtectedArea
+  """A cursor for use in pagination."""
+  cursor: Cursor!
+}
+"""Ordering options for ProtectedArea connections"""
+input ProtectedAreaOrder {
+  """The ordering direction."""
+  direction: OrderDirection! = ASC
+  """The field by which to order ProtectedAreas."""
+  field: ProtectedAreaOrderField!
+}
+"""Properties by which ProtectedArea connections can be ordered."""
+enum ProtectedAreaOrderField {
+  CREATED_AT
+  UPDATED_AT
 }
 type ProtectedAreaPicture implements Node {
   id: ID!
+  createdAt: Time!
+  createdBy: String
+  updatedAt: Time!
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
+}
+"""A connection to a list of items."""
+type ProtectedAreaPictureConnection {
+  """A list of edges."""
+  edges: [ProtectedAreaPictureEdge]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+"""An edge in a connection."""
+type ProtectedAreaPictureEdge {
+  """The item at the end of the edge."""
+  node: ProtectedAreaPicture
+  """A cursor for use in pagination."""
+  cursor: Cursor!
+}
+"""Ordering options for ProtectedAreaPicture connections"""
+input ProtectedAreaPictureOrder {
+  """The ordering direction."""
+  direction: OrderDirection! = ASC
+  """The field by which to order ProtectedAreaPictures."""
+  field: ProtectedAreaPictureOrderField!
+}
+"""Properties by which ProtectedAreaPicture connections can be ordered."""
+enum ProtectedAreaPictureOrderField {
+  CREATED_AT
+  UPDATED_AT
 }
 """
 ProtectedAreaPictureWhereInput is used for filtering ProtectedAreaPicture objects.
@@ -3747,6 +4786,88 @@ input ProtectedAreaPictureWhereInput {
   idGTE: ID
   idLT: ID
   idLTE: ID
+  """created_at field predicates"""
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  """created_by field predicates"""
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """updated_at field predicates"""
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  """updated_by field predicates"""
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """display_name field predicates"""
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
+  """description field predicates"""
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
 }
 """
 ProtectedAreaWhereInput is used for filtering ProtectedArea objects.
@@ -3765,6 +4886,88 @@ input ProtectedAreaWhereInput {
   idGTE: ID
   idLT: ID
   idLTE: ID
+  """created_at field predicates"""
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  """created_by field predicates"""
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """updated_at field predicates"""
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  """updated_by field predicates"""
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """display_name field predicates"""
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
+  """description field predicates"""
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
 }
 type Publication implements Node {
   id: ID!
@@ -3914,6 +5117,41 @@ input PublicationWhereInput {
 }
 type Publisher implements Node {
   id: ID!
+  createdAt: Time!
+  createdBy: String
+  updatedAt: Time!
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
+}
+"""A connection to a list of items."""
+type PublisherConnection {
+  """A list of edges."""
+  edges: [PublisherEdge]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+"""An edge in a connection."""
+type PublisherEdge {
+  """The item at the end of the edge."""
+  node: Publisher
+  """A cursor for use in pagination."""
+  cursor: Cursor!
+}
+"""Ordering options for Publisher connections"""
+input PublisherOrder {
+  """The ordering direction."""
+  direction: OrderDirection! = ASC
+  """The field by which to order Publishers."""
+  field: PublisherOrderField!
+}
+"""Properties by which Publisher connections can be ordered."""
+enum PublisherOrderField {
+  CREATED_AT
+  UPDATED_AT
 }
 """
 PublisherWhereInput is used for filtering Publisher objects.
@@ -3932,6 +5170,88 @@ input PublisherWhereInput {
   idGTE: ID
   idLT: ID
   idLTE: ID
+  """created_at field predicates"""
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  """created_by field predicates"""
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """updated_at field predicates"""
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  """updated_by field predicates"""
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """display_name field predicates"""
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
+  """description field predicates"""
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
 }
 type Query {
   """Fetches an object given its ID."""
@@ -3944,6 +5264,44 @@ type Query {
     """The list of node IDs."""
     ids: [ID!]!
   ): [Node]!
+  artGenres(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Ordering options for ArtGenres returned from the connection."""
+    orderBy: [ArtGenreOrder!]
+
+    """Filtering options for ArtGenres returned from the connection."""
+    where: ArtGenreWhereInput
+  ): ArtGenreConnection!
+  artStyles(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Ordering options for ArtStyles returned from the connection."""
+    orderBy: [ArtStyleOrder!]
+
+    """Filtering options for ArtStyles returned from the connection."""
+    where: ArtStyleWhereInput
+  ): ArtStyleConnection!
   artifacts(
     """Returns the elements in the list that come after the specified cursor."""
     after: Cursor
@@ -3982,6 +5340,44 @@ type Query {
     """Filtering options for AuditLogs returned from the connection."""
     where: AuditLogWhereInput
   ): AuditLogConnection!
+  books(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Ordering options for Books returned from the connection."""
+    orderBy: [BookOrder!]
+
+    """Filtering options for Books returned from the connection."""
+    where: BookWhereInput
+  ): BookConnection!
+  bookGenres(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Ordering options for BookGenres returned from the connection."""
+    orderBy: [BookGenreOrder!]
+
+    """Filtering options for BookGenres returned from the connection."""
+    where: BookGenreWhereInput
+  ): BookGenreConnection!
   categories(
     """Returns the elements in the list that come after the specified cursor."""
     after: Cursor
@@ -4077,6 +5473,44 @@ type Query {
     """Filtering options for Holders returned from the connection."""
     where: HolderWhereInput
   ): HolderConnection!
+  holderResponsibilities(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Ordering options for HolderResponsibilities returned from the connection."""
+    orderBy: [HolderResponsibilityOrder!]
+
+    """Filtering options for HolderResponsibilities returned from the connection."""
+    where: HolderResponsibilityWhereInput
+  ): HolderResponsibilityConnection!
+  libraries(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Ordering options for Libraries returned from the connection."""
+    orderBy: [LibraryOrder!]
+
+    """Filtering options for Libraries returned from the connection."""
+    where: LibraryWhereInput
+  ): LibraryConnection!
   licenses(
     """Returns the elements in the list that come after the specified cursor."""
     after: Cursor
@@ -4191,6 +5625,44 @@ type Query {
     """Filtering options for Organizations returned from the connection."""
     where: OrganizationWhereInput
   ): OrganizationConnection!
+  organizationTypes(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Ordering options for OrganizationTypes returned from the connection."""
+    orderBy: [OrganizationTypeOrder!]
+
+    """Filtering options for OrganizationTypes returned from the connection."""
+    where: OrganizationTypeWhereInput
+  ): OrganizationTypeConnection!
+  periods(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Ordering options for Periods returned from the connection."""
+    orderBy: [PeriodOrder!]
+
+    """Filtering options for Periods returned from the connection."""
+    where: PeriodWhereInput
+  ): PeriodConnection!
   persons(
     """Returns the elements in the list that come after the specified cursor."""
     after: Cursor
@@ -4210,6 +5682,25 @@ type Query {
     """Filtering options for Persons returned from the connection."""
     where: PersonWhereInput
   ): PersonConnection!
+  personRoles(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Ordering options for PersonRoles returned from the connection."""
+    orderBy: [PersonRoleOrder!]
+
+    """Filtering options for PersonRoles returned from the connection."""
+    where: PersonRoleWhereInput
+  ): PersonRoleConnection!
   projects(
     """Returns the elements in the list that come after the specified cursor."""
     after: Cursor
@@ -4229,6 +5720,82 @@ type Query {
     """Filtering options for Projects returned from the connection."""
     where: ProjectWhereInput
   ): ProjectConnection!
+  projectTypes(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Ordering options for ProjectTypes returned from the connection."""
+    orderBy: [ProjectTypeOrder!]
+
+    """Filtering options for ProjectTypes returned from the connection."""
+    where: ProjectTypeWhereInput
+  ): ProjectTypeConnection!
+  protectedAreas(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Ordering options for ProtectedAreas returned from the connection."""
+    orderBy: [ProtectedAreaOrder!]
+
+    """Filtering options for ProtectedAreas returned from the connection."""
+    where: ProtectedAreaWhereInput
+  ): ProtectedAreaConnection!
+  protectedAreaCategories(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Ordering options for ProtectedAreaCategories returned from the connection."""
+    orderBy: [ProtectedAreaCategoryOrder!]
+
+    """Filtering options for ProtectedAreaCategories returned from the connection."""
+    where: ProtectedAreaCategoryWhereInput
+  ): ProtectedAreaCategoryConnection!
+  protectedAreaPictures(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Ordering options for ProtectedAreaPictures returned from the connection."""
+    orderBy: [ProtectedAreaPictureOrder!]
+
+    """Filtering options for ProtectedAreaPictures returned from the connection."""
+    where: ProtectedAreaPictureWhereInput
+  ): ProtectedAreaPictureConnection!
   publications(
     """Returns the elements in the list that come after the specified cursor."""
     after: Cursor
@@ -4248,6 +5815,25 @@ type Query {
     """Filtering options for Publications returned from the connection."""
     where: PublicationWhereInput
   ): PublicationConnection!
+  publishers(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Ordering options for Publishers returned from the connection."""
+    orderBy: [PublisherOrder!]
+
+    """Filtering options for Publishers returned from the connection."""
+    where: PublisherWhereInput
+  ): PublisherConnection!
   regions(
     """Returns the elements in the list that come after the specified cursor."""
     after: Cursor
@@ -4900,6 +6486,42 @@ input TechniqueWhereInput {
 """The builtin Time type"""
 scalar Time
 """
+UpdateArtGenreInput is used for update ArtGenre object.
+Input was generated by ent.
+"""
+input UpdateArtGenreInput {
+  createdBy: String
+  clearCreatedBy: Boolean
+  updatedAt: Time
+  updatedBy: String
+  clearUpdatedBy: Boolean
+  displayName: String
+  clearDisplayName: Boolean
+  description: String
+  clearDescription: Boolean
+  externalLinks: [String!]
+  appendExternalLinks: [String!]
+  clearExternalLinks: Boolean
+}
+"""
+UpdateArtStyleInput is used for update ArtStyle object.
+Input was generated by ent.
+"""
+input UpdateArtStyleInput {
+  createdBy: String
+  clearCreatedBy: Boolean
+  updatedAt: Time
+  updatedBy: String
+  clearUpdatedBy: Boolean
+  displayName: String
+  clearDisplayName: Boolean
+  description: String
+  clearDescription: Boolean
+  externalLinks: [String!]
+  appendExternalLinks: [String!]
+  clearExternalLinks: Boolean
+}
+"""
 UpdateArtifactInput is used for update Artifact object.
 Input was generated by ent.
 """
@@ -4969,6 +6591,42 @@ input UpdateArtifactInput {
   clearCollection: Boolean
   licenseID: ID
   clearLicense: Boolean
+}
+"""
+UpdateBookGenreInput is used for update BookGenre object.
+Input was generated by ent.
+"""
+input UpdateBookGenreInput {
+  createdBy: String
+  clearCreatedBy: Boolean
+  updatedAt: Time
+  updatedBy: String
+  clearUpdatedBy: Boolean
+  displayName: String
+  clearDisplayName: Boolean
+  description: String
+  clearDescription: Boolean
+  externalLinks: [String!]
+  appendExternalLinks: [String!]
+  clearExternalLinks: Boolean
+}
+"""
+UpdateBookInput is used for update Book object.
+Input was generated by ent.
+"""
+input UpdateBookInput {
+  createdBy: String
+  clearCreatedBy: Boolean
+  updatedAt: Time
+  updatedBy: String
+  clearUpdatedBy: Boolean
+  displayName: String
+  clearDisplayName: Boolean
+  description: String
+  clearDescription: Boolean
+  externalLinks: [String!]
+  appendExternalLinks: [String!]
+  clearExternalLinks: Boolean
 }
 """
 UpdateCategoryInput is used for update Category object.
@@ -5081,6 +6739,45 @@ input UpdateHolderInput {
   clearPerson: Boolean
   organizationID: ID
   clearOrganization: Boolean
+}
+"""
+UpdateHolderResponsibilityInput is used for update HolderResponsibility object.
+Input was generated by ent.
+"""
+input UpdateHolderResponsibilityInput {
+  createdBy: String
+  clearCreatedBy: Boolean
+  updatedAt: Time
+  updatedBy: String
+  clearUpdatedBy: Boolean
+  displayName: String
+  clearDisplayName: Boolean
+  description: String
+  clearDescription: Boolean
+  externalLinks: [String!]
+  appendExternalLinks: [String!]
+  clearExternalLinks: Boolean
+  addHolderIDs: [ID!]
+  removeHolderIDs: [ID!]
+  clearHolder: Boolean
+}
+"""
+UpdateLibraryInput is used for update Library object.
+Input was generated by ent.
+"""
+input UpdateLibraryInput {
+  createdBy: String
+  clearCreatedBy: Boolean
+  updatedAt: Time
+  updatedBy: String
+  clearUpdatedBy: Boolean
+  displayName: String
+  clearDisplayName: Boolean
+  description: String
+  clearDescription: Boolean
+  externalLinks: [String!]
+  appendExternalLinks: [String!]
+  clearExternalLinks: Boolean
 }
 """
 UpdateLicenseInput is used for update License object.
@@ -5242,6 +6939,48 @@ input UpdateOrganizationInput {
   clearOrganizationType: Boolean
 }
 """
+UpdateOrganizationTypeInput is used for update OrganizationType object.
+Input was generated by ent.
+"""
+input UpdateOrganizationTypeInput {
+  createdBy: String
+  clearCreatedBy: Boolean
+  updatedAt: Time
+  updatedBy: String
+  clearUpdatedBy: Boolean
+  displayName: String
+  clearDisplayName: Boolean
+  description: String
+  clearDescription: Boolean
+  externalLinks: [String!]
+  appendExternalLinks: [String!]
+  clearExternalLinks: Boolean
+  addOrganizationIDs: [ID!]
+  removeOrganizationIDs: [ID!]
+  clearOrganizations: Boolean
+}
+"""
+UpdatePeriodInput is used for update Period object.
+Input was generated by ent.
+"""
+input UpdatePeriodInput {
+  createdBy: String
+  clearCreatedBy: Boolean
+  updatedAt: Time
+  updatedBy: String
+  clearUpdatedBy: Boolean
+  displayName: String
+  clearDisplayName: Boolean
+  description: String
+  clearDescription: Boolean
+  externalLinks: [String!]
+  appendExternalLinks: [String!]
+  clearExternalLinks: Boolean
+  addArtifactIDs: [ID!]
+  removeArtifactIDs: [ID!]
+  clearArtifacts: Boolean
+}
+"""
 UpdatePersonInput is used for update Person object.
 Input was generated by ent.
 """
@@ -5302,6 +7041,27 @@ input UpdatePersonInput {
   clearCollections: Boolean
 }
 """
+UpdatePersonRoleInput is used for update PersonRole object.
+Input was generated by ent.
+"""
+input UpdatePersonRoleInput {
+  createdBy: String
+  clearCreatedBy: Boolean
+  updatedAt: Time
+  updatedBy: String
+  clearUpdatedBy: Boolean
+  displayName: String
+  clearDisplayName: Boolean
+  description: String
+  clearDescription: Boolean
+  externalLinks: [String!]
+  appendExternalLinks: [String!]
+  clearExternalLinks: Boolean
+  addPersonIDs: [ID!]
+  removePersonIDs: [ID!]
+  clearPerson: Boolean
+}
+"""
 UpdateProjectInput is used for update Project object.
 Input was generated by ent.
 """
@@ -5332,6 +7092,81 @@ input UpdateProjectInput {
   clearProjectType: Boolean
 }
 """
+UpdateProjectTypeInput is used for update ProjectType object.
+Input was generated by ent.
+"""
+input UpdateProjectTypeInput {
+  createdBy: String
+  clearCreatedBy: Boolean
+  updatedAt: Time
+  updatedBy: String
+  clearUpdatedBy: Boolean
+  displayName: String
+  clearDisplayName: Boolean
+  description: String
+  clearDescription: Boolean
+  externalLinks: [String!]
+  appendExternalLinks: [String!]
+  clearExternalLinks: Boolean
+  addProjectIDs: [ID!]
+  removeProjectIDs: [ID!]
+  clearProjects: Boolean
+}
+"""
+UpdateProtectedAreaCategoryInput is used for update ProtectedAreaCategory object.
+Input was generated by ent.
+"""
+input UpdateProtectedAreaCategoryInput {
+  createdBy: String
+  clearCreatedBy: Boolean
+  updatedAt: Time
+  updatedBy: String
+  clearUpdatedBy: Boolean
+  displayName: String
+  clearDisplayName: Boolean
+  description: String
+  clearDescription: Boolean
+  externalLinks: [String!]
+  appendExternalLinks: [String!]
+  clearExternalLinks: Boolean
+}
+"""
+UpdateProtectedAreaInput is used for update ProtectedArea object.
+Input was generated by ent.
+"""
+input UpdateProtectedAreaInput {
+  createdBy: String
+  clearCreatedBy: Boolean
+  updatedAt: Time
+  updatedBy: String
+  clearUpdatedBy: Boolean
+  displayName: String
+  clearDisplayName: Boolean
+  description: String
+  clearDescription: Boolean
+  externalLinks: [String!]
+  appendExternalLinks: [String!]
+  clearExternalLinks: Boolean
+}
+"""
+UpdateProtectedAreaPictureInput is used for update ProtectedAreaPicture object.
+Input was generated by ent.
+"""
+input UpdateProtectedAreaPictureInput {
+  createdBy: String
+  clearCreatedBy: Boolean
+  updatedAt: Time
+  updatedBy: String
+  clearUpdatedBy: Boolean
+  displayName: String
+  clearDisplayName: Boolean
+  description: String
+  clearDescription: Boolean
+  externalLinks: [String!]
+  appendExternalLinks: [String!]
+  clearExternalLinks: Boolean
+}
+"""
 UpdatePublicationInput is used for update Publication object.
 Input was generated by ent.
 """
@@ -5354,6 +7189,24 @@ input UpdatePublicationInput {
   addAuthorIDs: [ID!]
   removeAuthorIDs: [ID!]
   clearAuthors: Boolean
+}
+"""
+UpdatePublisherInput is used for update Publisher object.
+Input was generated by ent.
+"""
+input UpdatePublisherInput {
+  createdBy: String
+  clearCreatedBy: Boolean
+  updatedAt: Time
+  updatedBy: String
+  clearUpdatedBy: Boolean
+  displayName: String
+  clearDisplayName: Boolean
+  description: String
+  clearDescription: Boolean
+  externalLinks: [String!]
+  appendExternalLinks: [String!]
+  clearExternalLinks: Boolean
 }
 """
 UpdateRegionInput is used for update Region object.

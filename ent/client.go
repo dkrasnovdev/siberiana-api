@@ -703,7 +703,8 @@ func (c *ArtGenreClient) GetX(ctx context.Context, id int) *ArtGenre {
 
 // Hooks returns the client hooks.
 func (c *ArtGenreClient) Hooks() []Hook {
-	return c.hooks.ArtGenre
+	hooks := c.hooks.ArtGenre
+	return append(hooks[:len(hooks):len(hooks)], artgenre.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -821,7 +822,8 @@ func (c *ArtStyleClient) GetX(ctx context.Context, id int) *ArtStyle {
 
 // Hooks returns the client hooks.
 func (c *ArtStyleClient) Hooks() []Hook {
-	return c.hooks.ArtStyle
+	hooks := c.hooks.ArtStyle
+	return append(hooks[:len(hooks):len(hooks)], artstyle.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -1402,7 +1404,8 @@ func (c *BookClient) GetX(ctx context.Context, id int) *Book {
 
 // Hooks returns the client hooks.
 func (c *BookClient) Hooks() []Hook {
-	return c.hooks.Book
+	hooks := c.hooks.Book
+	return append(hooks[:len(hooks):len(hooks)], book.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -1520,7 +1523,8 @@ func (c *BookGenreClient) GetX(ctx context.Context, id int) *BookGenre {
 
 // Hooks returns the client hooks.
 func (c *BookGenreClient) Hooks() []Hook {
-	return c.hooks.BookGenre
+	hooks := c.hooks.BookGenre
+	return append(hooks[:len(hooks):len(hooks)], bookgenre.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -2646,7 +2650,8 @@ func (c *LibraryClient) GetX(ctx context.Context, id int) *Library {
 
 // Hooks returns the client hooks.
 func (c *LibraryClient) Hooks() []Hook {
-	return c.hooks.Library
+	hooks := c.hooks.Library
+	return append(hooks[:len(hooks):len(hooks)], library.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -4608,7 +4613,8 @@ func (c *ProtectedAreaClient) GetX(ctx context.Context, id int) *ProtectedArea {
 
 // Hooks returns the client hooks.
 func (c *ProtectedAreaClient) Hooks() []Hook {
-	return c.hooks.ProtectedArea
+	hooks := c.hooks.ProtectedArea
+	return append(hooks[:len(hooks):len(hooks)], protectedarea.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -4726,7 +4732,8 @@ func (c *ProtectedAreaCategoryClient) GetX(ctx context.Context, id int) *Protect
 
 // Hooks returns the client hooks.
 func (c *ProtectedAreaCategoryClient) Hooks() []Hook {
-	return c.hooks.ProtectedAreaCategory
+	hooks := c.hooks.ProtectedAreaCategory
+	return append(hooks[:len(hooks):len(hooks)], protectedareacategory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -4844,7 +4851,8 @@ func (c *ProtectedAreaPictureClient) GetX(ctx context.Context, id int) *Protecte
 
 // Hooks returns the client hooks.
 func (c *ProtectedAreaPictureClient) Hooks() []Hook {
-	return c.hooks.ProtectedAreaPicture
+	hooks := c.hooks.ProtectedAreaPicture
+	return append(hooks[:len(hooks):len(hooks)], protectedareapicture.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -5113,7 +5121,8 @@ func (c *PublisherClient) GetX(ctx context.Context, id int) *Publisher {
 
 // Hooks returns the client hooks.
 func (c *PublisherClient) Hooks() []Hook {
-	return c.hooks.Publisher
+	hooks := c.hooks.Publisher
+	return append(hooks[:len(hooks):len(hooks)], publisher.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.

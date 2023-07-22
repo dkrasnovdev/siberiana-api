@@ -6,9 +6,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
@@ -27,6 +29,110 @@ func (papu *ProtectedAreaPictureUpdate) Where(ps ...predicate.ProtectedAreaPictu
 	return papu
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (papu *ProtectedAreaPictureUpdate) SetCreatedBy(s string) *ProtectedAreaPictureUpdate {
+	papu.mutation.SetCreatedBy(s)
+	return papu
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (papu *ProtectedAreaPictureUpdate) SetNillableCreatedBy(s *string) *ProtectedAreaPictureUpdate {
+	if s != nil {
+		papu.SetCreatedBy(*s)
+	}
+	return papu
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (papu *ProtectedAreaPictureUpdate) ClearCreatedBy() *ProtectedAreaPictureUpdate {
+	papu.mutation.ClearCreatedBy()
+	return papu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (papu *ProtectedAreaPictureUpdate) SetUpdatedAt(t time.Time) *ProtectedAreaPictureUpdate {
+	papu.mutation.SetUpdatedAt(t)
+	return papu
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (papu *ProtectedAreaPictureUpdate) SetUpdatedBy(s string) *ProtectedAreaPictureUpdate {
+	papu.mutation.SetUpdatedBy(s)
+	return papu
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (papu *ProtectedAreaPictureUpdate) SetNillableUpdatedBy(s *string) *ProtectedAreaPictureUpdate {
+	if s != nil {
+		papu.SetUpdatedBy(*s)
+	}
+	return papu
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (papu *ProtectedAreaPictureUpdate) ClearUpdatedBy() *ProtectedAreaPictureUpdate {
+	papu.mutation.ClearUpdatedBy()
+	return papu
+}
+
+// SetDisplayName sets the "display_name" field.
+func (papu *ProtectedAreaPictureUpdate) SetDisplayName(s string) *ProtectedAreaPictureUpdate {
+	papu.mutation.SetDisplayName(s)
+	return papu
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (papu *ProtectedAreaPictureUpdate) SetNillableDisplayName(s *string) *ProtectedAreaPictureUpdate {
+	if s != nil {
+		papu.SetDisplayName(*s)
+	}
+	return papu
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (papu *ProtectedAreaPictureUpdate) ClearDisplayName() *ProtectedAreaPictureUpdate {
+	papu.mutation.ClearDisplayName()
+	return papu
+}
+
+// SetDescription sets the "description" field.
+func (papu *ProtectedAreaPictureUpdate) SetDescription(s string) *ProtectedAreaPictureUpdate {
+	papu.mutation.SetDescription(s)
+	return papu
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (papu *ProtectedAreaPictureUpdate) SetNillableDescription(s *string) *ProtectedAreaPictureUpdate {
+	if s != nil {
+		papu.SetDescription(*s)
+	}
+	return papu
+}
+
+// ClearDescription clears the value of the "description" field.
+func (papu *ProtectedAreaPictureUpdate) ClearDescription() *ProtectedAreaPictureUpdate {
+	papu.mutation.ClearDescription()
+	return papu
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (papu *ProtectedAreaPictureUpdate) SetExternalLinks(s []string) *ProtectedAreaPictureUpdate {
+	papu.mutation.SetExternalLinks(s)
+	return papu
+}
+
+// AppendExternalLinks appends s to the "external_links" field.
+func (papu *ProtectedAreaPictureUpdate) AppendExternalLinks(s []string) *ProtectedAreaPictureUpdate {
+	papu.mutation.AppendExternalLinks(s)
+	return papu
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (papu *ProtectedAreaPictureUpdate) ClearExternalLinks() *ProtectedAreaPictureUpdate {
+	papu.mutation.ClearExternalLinks()
+	return papu
+}
+
 // Mutation returns the ProtectedAreaPictureMutation object of the builder.
 func (papu *ProtectedAreaPictureUpdate) Mutation() *ProtectedAreaPictureMutation {
 	return papu.mutation
@@ -34,6 +140,9 @@ func (papu *ProtectedAreaPictureUpdate) Mutation() *ProtectedAreaPictureMutation
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (papu *ProtectedAreaPictureUpdate) Save(ctx context.Context) (int, error) {
+	if err := papu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, papu.sqlSave, papu.mutation, papu.hooks)
 }
 
@@ -59,6 +168,18 @@ func (papu *ProtectedAreaPictureUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (papu *ProtectedAreaPictureUpdate) defaults() error {
+	if _, ok := papu.mutation.UpdatedAt(); !ok {
+		if protectedareapicture.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized protectedareapicture.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := protectedareapicture.UpdateDefaultUpdatedAt()
+		papu.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 func (papu *ProtectedAreaPictureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(protectedareapicture.Table, protectedareapicture.Columns, sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt))
 	if ps := papu.mutation.predicates; len(ps) > 0 {
@@ -67,6 +188,44 @@ func (papu *ProtectedAreaPictureUpdate) sqlSave(ctx context.Context) (n int, err
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := papu.mutation.CreatedBy(); ok {
+		_spec.SetField(protectedareapicture.FieldCreatedBy, field.TypeString, value)
+	}
+	if papu.mutation.CreatedByCleared() {
+		_spec.ClearField(protectedareapicture.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := papu.mutation.UpdatedAt(); ok {
+		_spec.SetField(protectedareapicture.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := papu.mutation.UpdatedBy(); ok {
+		_spec.SetField(protectedareapicture.FieldUpdatedBy, field.TypeString, value)
+	}
+	if papu.mutation.UpdatedByCleared() {
+		_spec.ClearField(protectedareapicture.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := papu.mutation.DisplayName(); ok {
+		_spec.SetField(protectedareapicture.FieldDisplayName, field.TypeString, value)
+	}
+	if papu.mutation.DisplayNameCleared() {
+		_spec.ClearField(protectedareapicture.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := papu.mutation.Description(); ok {
+		_spec.SetField(protectedareapicture.FieldDescription, field.TypeString, value)
+	}
+	if papu.mutation.DescriptionCleared() {
+		_spec.ClearField(protectedareapicture.FieldDescription, field.TypeString)
+	}
+	if value, ok := papu.mutation.ExternalLinks(); ok {
+		_spec.SetField(protectedareapicture.FieldExternalLinks, field.TypeJSON, value)
+	}
+	if value, ok := papu.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, protectedareapicture.FieldExternalLinks, value)
+		})
+	}
+	if papu.mutation.ExternalLinksCleared() {
+		_spec.ClearField(protectedareapicture.FieldExternalLinks, field.TypeJSON)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, papu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -86,6 +245,110 @@ type ProtectedAreaPictureUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *ProtectedAreaPictureMutation
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (papuo *ProtectedAreaPictureUpdateOne) SetCreatedBy(s string) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.SetCreatedBy(s)
+	return papuo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (papuo *ProtectedAreaPictureUpdateOne) SetNillableCreatedBy(s *string) *ProtectedAreaPictureUpdateOne {
+	if s != nil {
+		papuo.SetCreatedBy(*s)
+	}
+	return papuo
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (papuo *ProtectedAreaPictureUpdateOne) ClearCreatedBy() *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.ClearCreatedBy()
+	return papuo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (papuo *ProtectedAreaPictureUpdateOne) SetUpdatedAt(t time.Time) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.SetUpdatedAt(t)
+	return papuo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (papuo *ProtectedAreaPictureUpdateOne) SetUpdatedBy(s string) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.SetUpdatedBy(s)
+	return papuo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (papuo *ProtectedAreaPictureUpdateOne) SetNillableUpdatedBy(s *string) *ProtectedAreaPictureUpdateOne {
+	if s != nil {
+		papuo.SetUpdatedBy(*s)
+	}
+	return papuo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (papuo *ProtectedAreaPictureUpdateOne) ClearUpdatedBy() *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.ClearUpdatedBy()
+	return papuo
+}
+
+// SetDisplayName sets the "display_name" field.
+func (papuo *ProtectedAreaPictureUpdateOne) SetDisplayName(s string) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.SetDisplayName(s)
+	return papuo
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (papuo *ProtectedAreaPictureUpdateOne) SetNillableDisplayName(s *string) *ProtectedAreaPictureUpdateOne {
+	if s != nil {
+		papuo.SetDisplayName(*s)
+	}
+	return papuo
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (papuo *ProtectedAreaPictureUpdateOne) ClearDisplayName() *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.ClearDisplayName()
+	return papuo
+}
+
+// SetDescription sets the "description" field.
+func (papuo *ProtectedAreaPictureUpdateOne) SetDescription(s string) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.SetDescription(s)
+	return papuo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (papuo *ProtectedAreaPictureUpdateOne) SetNillableDescription(s *string) *ProtectedAreaPictureUpdateOne {
+	if s != nil {
+		papuo.SetDescription(*s)
+	}
+	return papuo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (papuo *ProtectedAreaPictureUpdateOne) ClearDescription() *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.ClearDescription()
+	return papuo
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (papuo *ProtectedAreaPictureUpdateOne) SetExternalLinks(s []string) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.SetExternalLinks(s)
+	return papuo
+}
+
+// AppendExternalLinks appends s to the "external_links" field.
+func (papuo *ProtectedAreaPictureUpdateOne) AppendExternalLinks(s []string) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.AppendExternalLinks(s)
+	return papuo
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (papuo *ProtectedAreaPictureUpdateOne) ClearExternalLinks() *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.ClearExternalLinks()
+	return papuo
 }
 
 // Mutation returns the ProtectedAreaPictureMutation object of the builder.
@@ -108,6 +371,9 @@ func (papuo *ProtectedAreaPictureUpdateOne) Select(field string, fields ...strin
 
 // Save executes the query and returns the updated ProtectedAreaPicture entity.
 func (papuo *ProtectedAreaPictureUpdateOne) Save(ctx context.Context) (*ProtectedAreaPicture, error) {
+	if err := papuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, papuo.sqlSave, papuo.mutation, papuo.hooks)
 }
 
@@ -131,6 +397,18 @@ func (papuo *ProtectedAreaPictureUpdateOne) ExecX(ctx context.Context) {
 	if err := papuo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (papuo *ProtectedAreaPictureUpdateOne) defaults() error {
+	if _, ok := papuo.mutation.UpdatedAt(); !ok {
+		if protectedareapicture.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized protectedareapicture.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := protectedareapicture.UpdateDefaultUpdatedAt()
+		papuo.mutation.SetUpdatedAt(v)
+	}
+	return nil
 }
 
 func (papuo *ProtectedAreaPictureUpdateOne) sqlSave(ctx context.Context) (_node *ProtectedAreaPicture, err error) {
@@ -158,6 +436,44 @@ func (papuo *ProtectedAreaPictureUpdateOne) sqlSave(ctx context.Context) (_node 
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := papuo.mutation.CreatedBy(); ok {
+		_spec.SetField(protectedareapicture.FieldCreatedBy, field.TypeString, value)
+	}
+	if papuo.mutation.CreatedByCleared() {
+		_spec.ClearField(protectedareapicture.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := papuo.mutation.UpdatedAt(); ok {
+		_spec.SetField(protectedareapicture.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := papuo.mutation.UpdatedBy(); ok {
+		_spec.SetField(protectedareapicture.FieldUpdatedBy, field.TypeString, value)
+	}
+	if papuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(protectedareapicture.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := papuo.mutation.DisplayName(); ok {
+		_spec.SetField(protectedareapicture.FieldDisplayName, field.TypeString, value)
+	}
+	if papuo.mutation.DisplayNameCleared() {
+		_spec.ClearField(protectedareapicture.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := papuo.mutation.Description(); ok {
+		_spec.SetField(protectedareapicture.FieldDescription, field.TypeString, value)
+	}
+	if papuo.mutation.DescriptionCleared() {
+		_spec.ClearField(protectedareapicture.FieldDescription, field.TypeString)
+	}
+	if value, ok := papuo.mutation.ExternalLinks(); ok {
+		_spec.SetField(protectedareapicture.FieldExternalLinks, field.TypeJSON, value)
+	}
+	if value, ok := papuo.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, protectedareapicture.FieldExternalLinks, value)
+		})
+	}
+	if papuo.mutation.ExternalLinksCleared() {
+		_spec.ClearField(protectedareapicture.FieldExternalLinks, field.TypeJSON)
 	}
 	_node = &ProtectedAreaPicture{config: papuo.config}
 	_spec.Assign = _node.assignValues

@@ -3,8 +3,10 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -13,10 +15,24 @@ import (
 
 // ArtStyle is the model entity for the ArtStyle schema.
 type ArtStyle struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
-	selectValues sql.SelectValues
+	ID int `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// CreatedBy holds the value of the "created_by" field.
+	CreatedBy string `json:"created_by,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy string `json:"updated_by,omitempty"`
+	// DisplayName holds the value of the "display_name" field.
+	DisplayName string `json:"display_name,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
+	// ExternalLinks holds the value of the "external_links" field.
+	ExternalLinks []string `json:"external_links,omitempty"`
+	selectValues  sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -24,8 +40,14 @@ func (*ArtStyle) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case artstyle.FieldExternalLinks:
+			values[i] = new([]byte)
 		case artstyle.FieldID:
 			values[i] = new(sql.NullInt64)
+		case artstyle.FieldCreatedBy, artstyle.FieldUpdatedBy, artstyle.FieldDisplayName, artstyle.FieldDescription:
+			values[i] = new(sql.NullString)
+		case artstyle.FieldCreatedAt, artstyle.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -47,6 +69,50 @@ func (as *ArtStyle) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			as.ID = int(value.Int64)
+		case artstyle.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				as.CreatedAt = value.Time
+			}
+		case artstyle.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				as.CreatedBy = value.String
+			}
+		case artstyle.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				as.UpdatedAt = value.Time
+			}
+		case artstyle.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				as.UpdatedBy = value.String
+			}
+		case artstyle.FieldDisplayName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field display_name", values[i])
+			} else if value.Valid {
+				as.DisplayName = value.String
+			}
+		case artstyle.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				as.Description = value.String
+			}
+		case artstyle.FieldExternalLinks:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field external_links", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &as.ExternalLinks); err != nil {
+					return fmt.Errorf("unmarshal field external_links: %w", err)
+				}
+			}
 		default:
 			as.selectValues.Set(columns[i], values[i])
 		}
@@ -82,7 +148,27 @@ func (as *ArtStyle) Unwrap() *ArtStyle {
 func (as *ArtStyle) String() string {
 	var builder strings.Builder
 	builder.WriteString("ArtStyle(")
-	builder.WriteString(fmt.Sprintf("id=%v", as.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", as.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(as.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("created_by=")
+	builder.WriteString(as.CreatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(as.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_by=")
+	builder.WriteString(as.UpdatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("display_name=")
+	builder.WriteString(as.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(as.Description)
+	builder.WriteString(", ")
+	builder.WriteString("external_links=")
+	builder.WriteString(fmt.Sprintf("%v", as.ExternalLinks))
 	builder.WriteByte(')')
 	return builder.String()
 }

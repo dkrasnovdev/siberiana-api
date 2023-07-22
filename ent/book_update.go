@@ -6,9 +6,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
@@ -27,6 +29,110 @@ func (bu *BookUpdate) Where(ps ...predicate.Book) *BookUpdate {
 	return bu
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (bu *BookUpdate) SetCreatedBy(s string) *BookUpdate {
+	bu.mutation.SetCreatedBy(s)
+	return bu
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (bu *BookUpdate) SetNillableCreatedBy(s *string) *BookUpdate {
+	if s != nil {
+		bu.SetCreatedBy(*s)
+	}
+	return bu
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (bu *BookUpdate) ClearCreatedBy() *BookUpdate {
+	bu.mutation.ClearCreatedBy()
+	return bu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (bu *BookUpdate) SetUpdatedAt(t time.Time) *BookUpdate {
+	bu.mutation.SetUpdatedAt(t)
+	return bu
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (bu *BookUpdate) SetUpdatedBy(s string) *BookUpdate {
+	bu.mutation.SetUpdatedBy(s)
+	return bu
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (bu *BookUpdate) SetNillableUpdatedBy(s *string) *BookUpdate {
+	if s != nil {
+		bu.SetUpdatedBy(*s)
+	}
+	return bu
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (bu *BookUpdate) ClearUpdatedBy() *BookUpdate {
+	bu.mutation.ClearUpdatedBy()
+	return bu
+}
+
+// SetDisplayName sets the "display_name" field.
+func (bu *BookUpdate) SetDisplayName(s string) *BookUpdate {
+	bu.mutation.SetDisplayName(s)
+	return bu
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (bu *BookUpdate) SetNillableDisplayName(s *string) *BookUpdate {
+	if s != nil {
+		bu.SetDisplayName(*s)
+	}
+	return bu
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (bu *BookUpdate) ClearDisplayName() *BookUpdate {
+	bu.mutation.ClearDisplayName()
+	return bu
+}
+
+// SetDescription sets the "description" field.
+func (bu *BookUpdate) SetDescription(s string) *BookUpdate {
+	bu.mutation.SetDescription(s)
+	return bu
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (bu *BookUpdate) SetNillableDescription(s *string) *BookUpdate {
+	if s != nil {
+		bu.SetDescription(*s)
+	}
+	return bu
+}
+
+// ClearDescription clears the value of the "description" field.
+func (bu *BookUpdate) ClearDescription() *BookUpdate {
+	bu.mutation.ClearDescription()
+	return bu
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (bu *BookUpdate) SetExternalLinks(s []string) *BookUpdate {
+	bu.mutation.SetExternalLinks(s)
+	return bu
+}
+
+// AppendExternalLinks appends s to the "external_links" field.
+func (bu *BookUpdate) AppendExternalLinks(s []string) *BookUpdate {
+	bu.mutation.AppendExternalLinks(s)
+	return bu
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (bu *BookUpdate) ClearExternalLinks() *BookUpdate {
+	bu.mutation.ClearExternalLinks()
+	return bu
+}
+
 // Mutation returns the BookMutation object of the builder.
 func (bu *BookUpdate) Mutation() *BookMutation {
 	return bu.mutation
@@ -34,6 +140,9 @@ func (bu *BookUpdate) Mutation() *BookMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (bu *BookUpdate) Save(ctx context.Context) (int, error) {
+	if err := bu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, bu.sqlSave, bu.mutation, bu.hooks)
 }
 
@@ -59,6 +168,18 @@ func (bu *BookUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (bu *BookUpdate) defaults() error {
+	if _, ok := bu.mutation.UpdatedAt(); !ok {
+		if book.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized book.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := book.UpdateDefaultUpdatedAt()
+		bu.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 func (bu *BookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(book.Table, book.Columns, sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt))
 	if ps := bu.mutation.predicates; len(ps) > 0 {
@@ -67,6 +188,44 @@ func (bu *BookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := bu.mutation.CreatedBy(); ok {
+		_spec.SetField(book.FieldCreatedBy, field.TypeString, value)
+	}
+	if bu.mutation.CreatedByCleared() {
+		_spec.ClearField(book.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := bu.mutation.UpdatedAt(); ok {
+		_spec.SetField(book.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := bu.mutation.UpdatedBy(); ok {
+		_spec.SetField(book.FieldUpdatedBy, field.TypeString, value)
+	}
+	if bu.mutation.UpdatedByCleared() {
+		_spec.ClearField(book.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := bu.mutation.DisplayName(); ok {
+		_spec.SetField(book.FieldDisplayName, field.TypeString, value)
+	}
+	if bu.mutation.DisplayNameCleared() {
+		_spec.ClearField(book.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := bu.mutation.Description(); ok {
+		_spec.SetField(book.FieldDescription, field.TypeString, value)
+	}
+	if bu.mutation.DescriptionCleared() {
+		_spec.ClearField(book.FieldDescription, field.TypeString)
+	}
+	if value, ok := bu.mutation.ExternalLinks(); ok {
+		_spec.SetField(book.FieldExternalLinks, field.TypeJSON, value)
+	}
+	if value, ok := bu.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, book.FieldExternalLinks, value)
+		})
+	}
+	if bu.mutation.ExternalLinksCleared() {
+		_spec.ClearField(book.FieldExternalLinks, field.TypeJSON)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, bu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -86,6 +245,110 @@ type BookUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *BookMutation
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (buo *BookUpdateOne) SetCreatedBy(s string) *BookUpdateOne {
+	buo.mutation.SetCreatedBy(s)
+	return buo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (buo *BookUpdateOne) SetNillableCreatedBy(s *string) *BookUpdateOne {
+	if s != nil {
+		buo.SetCreatedBy(*s)
+	}
+	return buo
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (buo *BookUpdateOne) ClearCreatedBy() *BookUpdateOne {
+	buo.mutation.ClearCreatedBy()
+	return buo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (buo *BookUpdateOne) SetUpdatedAt(t time.Time) *BookUpdateOne {
+	buo.mutation.SetUpdatedAt(t)
+	return buo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (buo *BookUpdateOne) SetUpdatedBy(s string) *BookUpdateOne {
+	buo.mutation.SetUpdatedBy(s)
+	return buo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (buo *BookUpdateOne) SetNillableUpdatedBy(s *string) *BookUpdateOne {
+	if s != nil {
+		buo.SetUpdatedBy(*s)
+	}
+	return buo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (buo *BookUpdateOne) ClearUpdatedBy() *BookUpdateOne {
+	buo.mutation.ClearUpdatedBy()
+	return buo
+}
+
+// SetDisplayName sets the "display_name" field.
+func (buo *BookUpdateOne) SetDisplayName(s string) *BookUpdateOne {
+	buo.mutation.SetDisplayName(s)
+	return buo
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (buo *BookUpdateOne) SetNillableDisplayName(s *string) *BookUpdateOne {
+	if s != nil {
+		buo.SetDisplayName(*s)
+	}
+	return buo
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (buo *BookUpdateOne) ClearDisplayName() *BookUpdateOne {
+	buo.mutation.ClearDisplayName()
+	return buo
+}
+
+// SetDescription sets the "description" field.
+func (buo *BookUpdateOne) SetDescription(s string) *BookUpdateOne {
+	buo.mutation.SetDescription(s)
+	return buo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (buo *BookUpdateOne) SetNillableDescription(s *string) *BookUpdateOne {
+	if s != nil {
+		buo.SetDescription(*s)
+	}
+	return buo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (buo *BookUpdateOne) ClearDescription() *BookUpdateOne {
+	buo.mutation.ClearDescription()
+	return buo
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (buo *BookUpdateOne) SetExternalLinks(s []string) *BookUpdateOne {
+	buo.mutation.SetExternalLinks(s)
+	return buo
+}
+
+// AppendExternalLinks appends s to the "external_links" field.
+func (buo *BookUpdateOne) AppendExternalLinks(s []string) *BookUpdateOne {
+	buo.mutation.AppendExternalLinks(s)
+	return buo
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (buo *BookUpdateOne) ClearExternalLinks() *BookUpdateOne {
+	buo.mutation.ClearExternalLinks()
+	return buo
 }
 
 // Mutation returns the BookMutation object of the builder.
@@ -108,6 +371,9 @@ func (buo *BookUpdateOne) Select(field string, fields ...string) *BookUpdateOne 
 
 // Save executes the query and returns the updated Book entity.
 func (buo *BookUpdateOne) Save(ctx context.Context) (*Book, error) {
+	if err := buo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, buo.sqlSave, buo.mutation, buo.hooks)
 }
 
@@ -131,6 +397,18 @@ func (buo *BookUpdateOne) ExecX(ctx context.Context) {
 	if err := buo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (buo *BookUpdateOne) defaults() error {
+	if _, ok := buo.mutation.UpdatedAt(); !ok {
+		if book.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized book.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := book.UpdateDefaultUpdatedAt()
+		buo.mutation.SetUpdatedAt(v)
+	}
+	return nil
 }
 
 func (buo *BookUpdateOne) sqlSave(ctx context.Context) (_node *Book, err error) {
@@ -158,6 +436,44 @@ func (buo *BookUpdateOne) sqlSave(ctx context.Context) (_node *Book, err error) 
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := buo.mutation.CreatedBy(); ok {
+		_spec.SetField(book.FieldCreatedBy, field.TypeString, value)
+	}
+	if buo.mutation.CreatedByCleared() {
+		_spec.ClearField(book.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := buo.mutation.UpdatedAt(); ok {
+		_spec.SetField(book.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := buo.mutation.UpdatedBy(); ok {
+		_spec.SetField(book.FieldUpdatedBy, field.TypeString, value)
+	}
+	if buo.mutation.UpdatedByCleared() {
+		_spec.ClearField(book.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := buo.mutation.DisplayName(); ok {
+		_spec.SetField(book.FieldDisplayName, field.TypeString, value)
+	}
+	if buo.mutation.DisplayNameCleared() {
+		_spec.ClearField(book.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := buo.mutation.Description(); ok {
+		_spec.SetField(book.FieldDescription, field.TypeString, value)
+	}
+	if buo.mutation.DescriptionCleared() {
+		_spec.ClearField(book.FieldDescription, field.TypeString)
+	}
+	if value, ok := buo.mutation.ExternalLinks(); ok {
+		_spec.SetField(book.FieldExternalLinks, field.TypeJSON, value)
+	}
+	if value, ok := buo.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, book.FieldExternalLinks, value)
+		})
+	}
+	if buo.mutation.ExternalLinksCleared() {
+		_spec.ClearField(book.FieldExternalLinks, field.TypeJSON)
 	}
 	_node = &Book{config: buo.config}
 	_spec.Assign = _node.assignValues

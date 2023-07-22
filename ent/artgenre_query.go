@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -259,6 +260,18 @@ func (agq *ArtGenreQuery) Clone() *ArtGenreQuery {
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.ArtGenre.Query().
+//		GroupBy(artgenre.FieldCreatedAt).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (agq *ArtGenreQuery) GroupBy(field string, fields ...string) *ArtGenreGroupBy {
 	agq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &ArtGenreGroupBy{build: agq}
@@ -270,6 +283,16 @@ func (agq *ArtGenreQuery) GroupBy(field string, fields ...string) *ArtGenreGroup
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//	}
+//
+//	client.ArtGenre.Query().
+//		Select(artgenre.FieldCreatedAt).
+//		Scan(ctx, &v)
 func (agq *ArtGenreQuery) Select(fields ...string) *ArtGenreSelect {
 	agq.ctx.Fields = append(agq.ctx.Fields, fields...)
 	sbuild := &ArtGenreSelect{ArtGenreQuery: agq}
@@ -305,6 +328,12 @@ func (agq *ArtGenreQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		agq.sql = prev
+	}
+	if artgenre.Policy == nil {
+		return errors.New("ent: uninitialized artgenre.Policy (forgotten import ent/runtime?)")
+	}
+	if err := artgenre.Policy.EvalQuery(ctx, agq); err != nil {
+		return err
 	}
 	return nil
 }

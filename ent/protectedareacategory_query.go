@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -259,6 +260,18 @@ func (pacq *ProtectedAreaCategoryQuery) Clone() *ProtectedAreaCategoryQuery {
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.ProtectedAreaCategory.Query().
+//		GroupBy(protectedareacategory.FieldCreatedAt).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (pacq *ProtectedAreaCategoryQuery) GroupBy(field string, fields ...string) *ProtectedAreaCategoryGroupBy {
 	pacq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &ProtectedAreaCategoryGroupBy{build: pacq}
@@ -270,6 +283,16 @@ func (pacq *ProtectedAreaCategoryQuery) GroupBy(field string, fields ...string) 
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//	}
+//
+//	client.ProtectedAreaCategory.Query().
+//		Select(protectedareacategory.FieldCreatedAt).
+//		Scan(ctx, &v)
 func (pacq *ProtectedAreaCategoryQuery) Select(fields ...string) *ProtectedAreaCategorySelect {
 	pacq.ctx.Fields = append(pacq.ctx.Fields, fields...)
 	sbuild := &ProtectedAreaCategorySelect{ProtectedAreaCategoryQuery: pacq}
@@ -305,6 +328,12 @@ func (pacq *ProtectedAreaCategoryQuery) prepareQuery(ctx context.Context) error 
 			return err
 		}
 		pacq.sql = prev
+	}
+	if protectedareacategory.Policy == nil {
+		return errors.New("ent: uninitialized protectedareacategory.Policy (forgotten import ent/runtime?)")
+	}
+	if err := protectedareacategory.Policy.EvalQuery(ctx, pacq); err != nil {
+		return err
 	}
 	return nil
 }

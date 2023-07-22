@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -259,6 +260,18 @@ func (pq *PublisherQuery) Clone() *PublisherQuery {
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Publisher.Query().
+//		GroupBy(publisher.FieldCreatedAt).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (pq *PublisherQuery) GroupBy(field string, fields ...string) *PublisherGroupBy {
 	pq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &PublisherGroupBy{build: pq}
@@ -270,6 +283,16 @@ func (pq *PublisherQuery) GroupBy(field string, fields ...string) *PublisherGrou
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//	}
+//
+//	client.Publisher.Query().
+//		Select(publisher.FieldCreatedAt).
+//		Scan(ctx, &v)
 func (pq *PublisherQuery) Select(fields ...string) *PublisherSelect {
 	pq.ctx.Fields = append(pq.ctx.Fields, fields...)
 	sbuild := &PublisherSelect{PublisherQuery: pq}
@@ -305,6 +328,12 @@ func (pq *PublisherQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		pq.sql = prev
+	}
+	if publisher.Policy == nil {
+		return errors.New("ent: uninitialized publisher.Policy (forgotten import ent/runtime?)")
+	}
+	if err := publisher.Policy.EvalQuery(ctx, pq); err != nil {
+		return err
 	}
 	return nil
 }

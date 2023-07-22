@@ -5,6 +5,7 @@ package ent
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -365,6 +366,12 @@ func (otq *OrganizationTypeQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		otq.sql = prev
+	}
+	if organizationtype.Policy == nil {
+		return errors.New("ent: uninitialized organizationtype.Policy (forgotten import ent/runtime?)")
+	}
+	if err := organizationtype.Policy.EvalQuery(ctx, otq); err != nil {
+		return err
 	}
 	return nil
 }

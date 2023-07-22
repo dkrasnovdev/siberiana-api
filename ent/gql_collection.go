@@ -8,14 +8,19 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/dkrasnovdev/heritage-api/ent/artgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/artstyle"
 	"github.com/dkrasnovdev/heritage-api/ent/auditlog"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
+	"github.com/dkrasnovdev/heritage-api/ent/bookgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
+	"github.com/dkrasnovdev/heritage-api/ent/library"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/medium"
@@ -28,7 +33,11 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
 	"github.com/dkrasnovdev/heritage-api/ent/projecttype"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
+	"github.com/dkrasnovdev/heritage-api/ent/publisher"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
 	"github.com/dkrasnovdev/heritage-api/ent/set"
 	"github.com/dkrasnovdev/heritage-api/ent/settlement"
@@ -95,6 +104,57 @@ func (ag *ArtGenreQuery) CollectFields(ctx context.Context, satisfies ...string)
 
 func (ag *ArtGenreQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(artgenre.Columns))
+		selectedFields = []string{artgenre.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "createdAt":
+			if _, ok := fieldSeen[artgenre.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, artgenre.FieldCreatedAt)
+				fieldSeen[artgenre.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[artgenre.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, artgenre.FieldCreatedBy)
+				fieldSeen[artgenre.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[artgenre.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, artgenre.FieldUpdatedAt)
+				fieldSeen[artgenre.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[artgenre.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, artgenre.FieldUpdatedBy)
+				fieldSeen[artgenre.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[artgenre.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, artgenre.FieldDisplayName)
+				fieldSeen[artgenre.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[artgenre.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, artgenre.FieldDescription)
+				fieldSeen[artgenre.FieldDescription] = struct{}{}
+			}
+		case "externalLinks":
+			if _, ok := fieldSeen[artgenre.FieldExternalLinks]; !ok {
+				selectedFields = append(selectedFields, artgenre.FieldExternalLinks)
+				fieldSeen[artgenre.FieldExternalLinks] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		ag.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -121,6 +181,34 @@ func newArtGenrePaginateArgs(rv map[string]any) *artgenrePaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*ArtGenreOrder:
+			args.opts = append(args.opts, WithArtGenreOrder(v))
+		case []any:
+			var orders []*ArtGenreOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &ArtGenreOrder{Field: &ArtGenreOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithArtGenreOrder(orders))
+		}
+	}
 	if v, ok := rv[whereField].(*ArtGenreWhereInput); ok {
 		args.opts = append(args.opts, WithArtGenreFilter(v.Filter))
 	}
@@ -141,6 +229,57 @@ func (as *ArtStyleQuery) CollectFields(ctx context.Context, satisfies ...string)
 
 func (as *ArtStyleQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(artstyle.Columns))
+		selectedFields = []string{artstyle.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "createdAt":
+			if _, ok := fieldSeen[artstyle.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, artstyle.FieldCreatedAt)
+				fieldSeen[artstyle.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[artstyle.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, artstyle.FieldCreatedBy)
+				fieldSeen[artstyle.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[artstyle.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, artstyle.FieldUpdatedAt)
+				fieldSeen[artstyle.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[artstyle.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, artstyle.FieldUpdatedBy)
+				fieldSeen[artstyle.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[artstyle.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, artstyle.FieldDisplayName)
+				fieldSeen[artstyle.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[artstyle.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, artstyle.FieldDescription)
+				fieldSeen[artstyle.FieldDescription] = struct{}{}
+			}
+		case "externalLinks":
+			if _, ok := fieldSeen[artstyle.FieldExternalLinks]; !ok {
+				selectedFields = append(selectedFields, artstyle.FieldExternalLinks)
+				fieldSeen[artstyle.FieldExternalLinks] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		as.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -166,6 +305,34 @@ func newArtStylePaginateArgs(rv map[string]any) *artstylePaginateArgs {
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*ArtStyleOrder:
+			args.opts = append(args.opts, WithArtStyleOrder(v))
+		case []any:
+			var orders []*ArtStyleOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &ArtStyleOrder{Field: &ArtStyleOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithArtStyleOrder(orders))
+		}
 	}
 	if v, ok := rv[whereField].(*ArtStyleWhereInput); ok {
 		args.opts = append(args.opts, WithArtStyleFilter(v.Filter))
@@ -644,6 +811,57 @@ func (b *BookQuery) CollectFields(ctx context.Context, satisfies ...string) (*Bo
 
 func (b *BookQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(book.Columns))
+		selectedFields = []string{book.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "createdAt":
+			if _, ok := fieldSeen[book.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, book.FieldCreatedAt)
+				fieldSeen[book.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[book.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, book.FieldCreatedBy)
+				fieldSeen[book.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[book.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, book.FieldUpdatedAt)
+				fieldSeen[book.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[book.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, book.FieldUpdatedBy)
+				fieldSeen[book.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[book.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, book.FieldDisplayName)
+				fieldSeen[book.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[book.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, book.FieldDescription)
+				fieldSeen[book.FieldDescription] = struct{}{}
+			}
+		case "externalLinks":
+			if _, ok := fieldSeen[book.FieldExternalLinks]; !ok {
+				selectedFields = append(selectedFields, book.FieldExternalLinks)
+				fieldSeen[book.FieldExternalLinks] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		b.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -670,6 +888,34 @@ func newBookPaginateArgs(rv map[string]any) *bookPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*BookOrder:
+			args.opts = append(args.opts, WithBookOrder(v))
+		case []any:
+			var orders []*BookOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &BookOrder{Field: &BookOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithBookOrder(orders))
+		}
+	}
 	if v, ok := rv[whereField].(*BookWhereInput); ok {
 		args.opts = append(args.opts, WithBookFilter(v.Filter))
 	}
@@ -690,6 +936,57 @@ func (bg *BookGenreQuery) CollectFields(ctx context.Context, satisfies ...string
 
 func (bg *BookGenreQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(bookgenre.Columns))
+		selectedFields = []string{bookgenre.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "createdAt":
+			if _, ok := fieldSeen[bookgenre.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, bookgenre.FieldCreatedAt)
+				fieldSeen[bookgenre.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[bookgenre.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, bookgenre.FieldCreatedBy)
+				fieldSeen[bookgenre.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[bookgenre.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, bookgenre.FieldUpdatedAt)
+				fieldSeen[bookgenre.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[bookgenre.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, bookgenre.FieldUpdatedBy)
+				fieldSeen[bookgenre.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[bookgenre.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, bookgenre.FieldDisplayName)
+				fieldSeen[bookgenre.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[bookgenre.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, bookgenre.FieldDescription)
+				fieldSeen[bookgenre.FieldDescription] = struct{}{}
+			}
+		case "externalLinks":
+			if _, ok := fieldSeen[bookgenre.FieldExternalLinks]; !ok {
+				selectedFields = append(selectedFields, bookgenre.FieldExternalLinks)
+				fieldSeen[bookgenre.FieldExternalLinks] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		bg.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -715,6 +1012,34 @@ func newBookGenrePaginateArgs(rv map[string]any) *bookgenrePaginateArgs {
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*BookGenreOrder:
+			args.opts = append(args.opts, WithBookGenreOrder(v))
+		case []any:
+			var orders []*BookGenreOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &BookGenreOrder{Field: &BookGenreOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithBookGenreOrder(orders))
+		}
 	}
 	if v, ok := rv[whereField].(*BookGenreWhereInput); ok {
 		args.opts = append(args.opts, WithBookGenreFilter(v.Filter))
@@ -1559,24 +1884,30 @@ func newHolderResponsibilityPaginateArgs(rv map[string]any) *holderresponsibilit
 	}
 	if v, ok := rv[orderByField]; ok {
 		switch v := v.(type) {
-		case map[string]any:
-			var (
-				err1, err2 error
-				order      = &HolderResponsibilityOrder{Field: &HolderResponsibilityOrderField{}, Direction: entgql.OrderDirectionAsc}
-			)
-			if d, ok := v[directionField]; ok {
-				err1 = order.Direction.UnmarshalGQL(d)
+		case []*HolderResponsibilityOrder:
+			args.opts = append(args.opts, WithHolderResponsibilityOrder(v))
+		case []any:
+			var orders []*HolderResponsibilityOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &HolderResponsibilityOrder{Field: &HolderResponsibilityOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
 			}
-			if f, ok := v[fieldField]; ok {
-				err2 = order.Field.UnmarshalGQL(f)
-			}
-			if err1 == nil && err2 == nil {
-				args.opts = append(args.opts, WithHolderResponsibilityOrder(order))
-			}
-		case *HolderResponsibilityOrder:
-			if v != nil {
-				args.opts = append(args.opts, WithHolderResponsibilityOrder(v))
-			}
+			args.opts = append(args.opts, WithHolderResponsibilityOrder(orders))
 		}
 	}
 	if v, ok := rv[whereField].(*HolderResponsibilityWhereInput); ok {
@@ -1645,6 +1976,57 @@ func (l *LibraryQuery) CollectFields(ctx context.Context, satisfies ...string) (
 
 func (l *LibraryQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(library.Columns))
+		selectedFields = []string{library.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "createdAt":
+			if _, ok := fieldSeen[library.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, library.FieldCreatedAt)
+				fieldSeen[library.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[library.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, library.FieldCreatedBy)
+				fieldSeen[library.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[library.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, library.FieldUpdatedAt)
+				fieldSeen[library.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[library.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, library.FieldUpdatedBy)
+				fieldSeen[library.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[library.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, library.FieldDisplayName)
+				fieldSeen[library.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[library.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, library.FieldDescription)
+				fieldSeen[library.FieldDescription] = struct{}{}
+			}
+		case "externalLinks":
+			if _, ok := fieldSeen[library.FieldExternalLinks]; !ok {
+				selectedFields = append(selectedFields, library.FieldExternalLinks)
+				fieldSeen[library.FieldExternalLinks] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		l.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -1670,6 +2052,34 @@ func newLibraryPaginateArgs(rv map[string]any) *libraryPaginateArgs {
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*LibraryOrder:
+			args.opts = append(args.opts, WithLibraryOrder(v))
+		case []any:
+			var orders []*LibraryOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &LibraryOrder{Field: &LibraryOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithLibraryOrder(orders))
+		}
 	}
 	if v, ok := rv[whereField].(*LibraryWhereInput); ok {
 		args.opts = append(args.opts, WithLibraryFilter(v.Filter))
@@ -2700,24 +3110,30 @@ func newOrganizationTypePaginateArgs(rv map[string]any) *organizationtypePaginat
 	}
 	if v, ok := rv[orderByField]; ok {
 		switch v := v.(type) {
-		case map[string]any:
-			var (
-				err1, err2 error
-				order      = &OrganizationTypeOrder{Field: &OrganizationTypeOrderField{}, Direction: entgql.OrderDirectionAsc}
-			)
-			if d, ok := v[directionField]; ok {
-				err1 = order.Direction.UnmarshalGQL(d)
+		case []*OrganizationTypeOrder:
+			args.opts = append(args.opts, WithOrganizationTypeOrder(v))
+		case []any:
+			var orders []*OrganizationTypeOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &OrganizationTypeOrder{Field: &OrganizationTypeOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
 			}
-			if f, ok := v[fieldField]; ok {
-				err2 = order.Field.UnmarshalGQL(f)
-			}
-			if err1 == nil && err2 == nil {
-				args.opts = append(args.opts, WithOrganizationTypeOrder(order))
-			}
-		case *OrganizationTypeOrder:
-			if v != nil {
-				args.opts = append(args.opts, WithOrganizationTypeOrder(v))
-			}
+			args.opts = append(args.opts, WithOrganizationTypeOrder(orders))
 		}
 	}
 	if v, ok := rv[whereField].(*OrganizationTypeWhereInput); ok {
@@ -2831,24 +3247,30 @@ func newPeriodPaginateArgs(rv map[string]any) *periodPaginateArgs {
 	}
 	if v, ok := rv[orderByField]; ok {
 		switch v := v.(type) {
-		case map[string]any:
-			var (
-				err1, err2 error
-				order      = &PeriodOrder{Field: &PeriodOrderField{}, Direction: entgql.OrderDirectionAsc}
-			)
-			if d, ok := v[directionField]; ok {
-				err1 = order.Direction.UnmarshalGQL(d)
+		case []*PeriodOrder:
+			args.opts = append(args.opts, WithPeriodOrder(v))
+		case []any:
+			var orders []*PeriodOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &PeriodOrder{Field: &PeriodOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
 			}
-			if f, ok := v[fieldField]; ok {
-				err2 = order.Field.UnmarshalGQL(f)
-			}
-			if err1 == nil && err2 == nil {
-				args.opts = append(args.opts, WithPeriodOrder(order))
-			}
-		case *PeriodOrder:
-			if v != nil {
-				args.opts = append(args.opts, WithPeriodOrder(v))
-			}
+			args.opts = append(args.opts, WithPeriodOrder(orders))
 		}
 	}
 	if v, ok := rv[whereField].(*PeriodWhereInput); ok {
@@ -3220,24 +3642,30 @@ func newPersonRolePaginateArgs(rv map[string]any) *personrolePaginateArgs {
 	}
 	if v, ok := rv[orderByField]; ok {
 		switch v := v.(type) {
-		case map[string]any:
-			var (
-				err1, err2 error
-				order      = &PersonRoleOrder{Field: &PersonRoleOrderField{}, Direction: entgql.OrderDirectionAsc}
-			)
-			if d, ok := v[directionField]; ok {
-				err1 = order.Direction.UnmarshalGQL(d)
+		case []*PersonRoleOrder:
+			args.opts = append(args.opts, WithPersonRoleOrder(v))
+		case []any:
+			var orders []*PersonRoleOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &PersonRoleOrder{Field: &PersonRoleOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
 			}
-			if f, ok := v[fieldField]; ok {
-				err2 = order.Field.UnmarshalGQL(f)
-			}
-			if err1 == nil && err2 == nil {
-				args.opts = append(args.opts, WithPersonRoleOrder(order))
-			}
-		case *PersonRoleOrder:
-			if v != nil {
-				args.opts = append(args.opts, WithPersonRoleOrder(v))
-			}
+			args.opts = append(args.opts, WithPersonRoleOrder(orders))
 		}
 	}
 	if v, ok := rv[whereField].(*PersonRoleWhereInput); ok {
@@ -3520,24 +3948,30 @@ func newProjectTypePaginateArgs(rv map[string]any) *projecttypePaginateArgs {
 	}
 	if v, ok := rv[orderByField]; ok {
 		switch v := v.(type) {
-		case map[string]any:
-			var (
-				err1, err2 error
-				order      = &ProjectTypeOrder{Field: &ProjectTypeOrderField{}, Direction: entgql.OrderDirectionAsc}
-			)
-			if d, ok := v[directionField]; ok {
-				err1 = order.Direction.UnmarshalGQL(d)
+		case []*ProjectTypeOrder:
+			args.opts = append(args.opts, WithProjectTypeOrder(v))
+		case []any:
+			var orders []*ProjectTypeOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &ProjectTypeOrder{Field: &ProjectTypeOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
 			}
-			if f, ok := v[fieldField]; ok {
-				err2 = order.Field.UnmarshalGQL(f)
-			}
-			if err1 == nil && err2 == nil {
-				args.opts = append(args.opts, WithProjectTypeOrder(order))
-			}
-		case *ProjectTypeOrder:
-			if v != nil {
-				args.opts = append(args.opts, WithProjectTypeOrder(v))
-			}
+			args.opts = append(args.opts, WithProjectTypeOrder(orders))
 		}
 	}
 	if v, ok := rv[whereField].(*ProjectTypeWhereInput); ok {
@@ -3560,6 +3994,57 @@ func (pa *ProtectedAreaQuery) CollectFields(ctx context.Context, satisfies ...st
 
 func (pa *ProtectedAreaQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(protectedarea.Columns))
+		selectedFields = []string{protectedarea.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "createdAt":
+			if _, ok := fieldSeen[protectedarea.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, protectedarea.FieldCreatedAt)
+				fieldSeen[protectedarea.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[protectedarea.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, protectedarea.FieldCreatedBy)
+				fieldSeen[protectedarea.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[protectedarea.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, protectedarea.FieldUpdatedAt)
+				fieldSeen[protectedarea.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[protectedarea.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, protectedarea.FieldUpdatedBy)
+				fieldSeen[protectedarea.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[protectedarea.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, protectedarea.FieldDisplayName)
+				fieldSeen[protectedarea.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[protectedarea.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, protectedarea.FieldDescription)
+				fieldSeen[protectedarea.FieldDescription] = struct{}{}
+			}
+		case "externalLinks":
+			if _, ok := fieldSeen[protectedarea.FieldExternalLinks]; !ok {
+				selectedFields = append(selectedFields, protectedarea.FieldExternalLinks)
+				fieldSeen[protectedarea.FieldExternalLinks] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		pa.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -3586,6 +4071,34 @@ func newProtectedAreaPaginateArgs(rv map[string]any) *protectedareaPaginateArgs 
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*ProtectedAreaOrder:
+			args.opts = append(args.opts, WithProtectedAreaOrder(v))
+		case []any:
+			var orders []*ProtectedAreaOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &ProtectedAreaOrder{Field: &ProtectedAreaOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithProtectedAreaOrder(orders))
+		}
+	}
 	if v, ok := rv[whereField].(*ProtectedAreaWhereInput); ok {
 		args.opts = append(args.opts, WithProtectedAreaFilter(v.Filter))
 	}
@@ -3606,6 +4119,57 @@ func (pac *ProtectedAreaCategoryQuery) CollectFields(ctx context.Context, satisf
 
 func (pac *ProtectedAreaCategoryQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(protectedareacategory.Columns))
+		selectedFields = []string{protectedareacategory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "createdAt":
+			if _, ok := fieldSeen[protectedareacategory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, protectedareacategory.FieldCreatedAt)
+				fieldSeen[protectedareacategory.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[protectedareacategory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, protectedareacategory.FieldCreatedBy)
+				fieldSeen[protectedareacategory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[protectedareacategory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, protectedareacategory.FieldUpdatedAt)
+				fieldSeen[protectedareacategory.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[protectedareacategory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, protectedareacategory.FieldUpdatedBy)
+				fieldSeen[protectedareacategory.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[protectedareacategory.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, protectedareacategory.FieldDisplayName)
+				fieldSeen[protectedareacategory.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[protectedareacategory.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, protectedareacategory.FieldDescription)
+				fieldSeen[protectedareacategory.FieldDescription] = struct{}{}
+			}
+		case "externalLinks":
+			if _, ok := fieldSeen[protectedareacategory.FieldExternalLinks]; !ok {
+				selectedFields = append(selectedFields, protectedareacategory.FieldExternalLinks)
+				fieldSeen[protectedareacategory.FieldExternalLinks] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		pac.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -3632,6 +4196,34 @@ func newProtectedAreaCategoryPaginateArgs(rv map[string]any) *protectedareacateg
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*ProtectedAreaCategoryOrder:
+			args.opts = append(args.opts, WithProtectedAreaCategoryOrder(v))
+		case []any:
+			var orders []*ProtectedAreaCategoryOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &ProtectedAreaCategoryOrder{Field: &ProtectedAreaCategoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithProtectedAreaCategoryOrder(orders))
+		}
+	}
 	if v, ok := rv[whereField].(*ProtectedAreaCategoryWhereInput); ok {
 		args.opts = append(args.opts, WithProtectedAreaCategoryFilter(v.Filter))
 	}
@@ -3652,6 +4244,57 @@ func (pap *ProtectedAreaPictureQuery) CollectFields(ctx context.Context, satisfi
 
 func (pap *ProtectedAreaPictureQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(protectedareapicture.Columns))
+		selectedFields = []string{protectedareapicture.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "createdAt":
+			if _, ok := fieldSeen[protectedareapicture.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, protectedareapicture.FieldCreatedAt)
+				fieldSeen[protectedareapicture.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[protectedareapicture.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, protectedareapicture.FieldCreatedBy)
+				fieldSeen[protectedareapicture.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[protectedareapicture.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, protectedareapicture.FieldUpdatedAt)
+				fieldSeen[protectedareapicture.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[protectedareapicture.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, protectedareapicture.FieldUpdatedBy)
+				fieldSeen[protectedareapicture.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[protectedareapicture.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, protectedareapicture.FieldDisplayName)
+				fieldSeen[protectedareapicture.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[protectedareapicture.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, protectedareapicture.FieldDescription)
+				fieldSeen[protectedareapicture.FieldDescription] = struct{}{}
+			}
+		case "externalLinks":
+			if _, ok := fieldSeen[protectedareapicture.FieldExternalLinks]; !ok {
+				selectedFields = append(selectedFields, protectedareapicture.FieldExternalLinks)
+				fieldSeen[protectedareapicture.FieldExternalLinks] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		pap.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -3677,6 +4320,34 @@ func newProtectedAreaPicturePaginateArgs(rv map[string]any) *protectedareapictur
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*ProtectedAreaPictureOrder:
+			args.opts = append(args.opts, WithProtectedAreaPictureOrder(v))
+		case []any:
+			var orders []*ProtectedAreaPictureOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &ProtectedAreaPictureOrder{Field: &ProtectedAreaPictureOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithProtectedAreaPictureOrder(orders))
+		}
 	}
 	if v, ok := rv[whereField].(*ProtectedAreaPictureWhereInput); ok {
 		args.opts = append(args.opts, WithProtectedAreaPictureFilter(v.Filter))
@@ -3847,6 +4518,57 @@ func (pu *PublisherQuery) CollectFields(ctx context.Context, satisfies ...string
 
 func (pu *PublisherQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(publisher.Columns))
+		selectedFields = []string{publisher.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "createdAt":
+			if _, ok := fieldSeen[publisher.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, publisher.FieldCreatedAt)
+				fieldSeen[publisher.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[publisher.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, publisher.FieldCreatedBy)
+				fieldSeen[publisher.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[publisher.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, publisher.FieldUpdatedAt)
+				fieldSeen[publisher.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[publisher.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, publisher.FieldUpdatedBy)
+				fieldSeen[publisher.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[publisher.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, publisher.FieldDisplayName)
+				fieldSeen[publisher.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[publisher.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, publisher.FieldDescription)
+				fieldSeen[publisher.FieldDescription] = struct{}{}
+			}
+		case "externalLinks":
+			if _, ok := fieldSeen[publisher.FieldExternalLinks]; !ok {
+				selectedFields = append(selectedFields, publisher.FieldExternalLinks)
+				fieldSeen[publisher.FieldExternalLinks] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		pu.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -3872,6 +4594,34 @@ func newPublisherPaginateArgs(rv map[string]any) *publisherPaginateArgs {
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*PublisherOrder:
+			args.opts = append(args.opts, WithPublisherOrder(v))
+		case []any:
+			var orders []*PublisherOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &PublisherOrder{Field: &PublisherOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithPublisherOrder(orders))
+		}
 	}
 	if v, ok := rv[whereField].(*PublisherWhereInput); ok {
 		args.opts = append(args.opts, WithPublisherFilter(v.Filter))

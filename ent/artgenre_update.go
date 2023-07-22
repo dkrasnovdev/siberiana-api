@@ -6,9 +6,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
@@ -27,6 +29,110 @@ func (agu *ArtGenreUpdate) Where(ps ...predicate.ArtGenre) *ArtGenreUpdate {
 	return agu
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (agu *ArtGenreUpdate) SetCreatedBy(s string) *ArtGenreUpdate {
+	agu.mutation.SetCreatedBy(s)
+	return agu
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (agu *ArtGenreUpdate) SetNillableCreatedBy(s *string) *ArtGenreUpdate {
+	if s != nil {
+		agu.SetCreatedBy(*s)
+	}
+	return agu
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (agu *ArtGenreUpdate) ClearCreatedBy() *ArtGenreUpdate {
+	agu.mutation.ClearCreatedBy()
+	return agu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (agu *ArtGenreUpdate) SetUpdatedAt(t time.Time) *ArtGenreUpdate {
+	agu.mutation.SetUpdatedAt(t)
+	return agu
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (agu *ArtGenreUpdate) SetUpdatedBy(s string) *ArtGenreUpdate {
+	agu.mutation.SetUpdatedBy(s)
+	return agu
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (agu *ArtGenreUpdate) SetNillableUpdatedBy(s *string) *ArtGenreUpdate {
+	if s != nil {
+		agu.SetUpdatedBy(*s)
+	}
+	return agu
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (agu *ArtGenreUpdate) ClearUpdatedBy() *ArtGenreUpdate {
+	agu.mutation.ClearUpdatedBy()
+	return agu
+}
+
+// SetDisplayName sets the "display_name" field.
+func (agu *ArtGenreUpdate) SetDisplayName(s string) *ArtGenreUpdate {
+	agu.mutation.SetDisplayName(s)
+	return agu
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (agu *ArtGenreUpdate) SetNillableDisplayName(s *string) *ArtGenreUpdate {
+	if s != nil {
+		agu.SetDisplayName(*s)
+	}
+	return agu
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (agu *ArtGenreUpdate) ClearDisplayName() *ArtGenreUpdate {
+	agu.mutation.ClearDisplayName()
+	return agu
+}
+
+// SetDescription sets the "description" field.
+func (agu *ArtGenreUpdate) SetDescription(s string) *ArtGenreUpdate {
+	agu.mutation.SetDescription(s)
+	return agu
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (agu *ArtGenreUpdate) SetNillableDescription(s *string) *ArtGenreUpdate {
+	if s != nil {
+		agu.SetDescription(*s)
+	}
+	return agu
+}
+
+// ClearDescription clears the value of the "description" field.
+func (agu *ArtGenreUpdate) ClearDescription() *ArtGenreUpdate {
+	agu.mutation.ClearDescription()
+	return agu
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (agu *ArtGenreUpdate) SetExternalLinks(s []string) *ArtGenreUpdate {
+	agu.mutation.SetExternalLinks(s)
+	return agu
+}
+
+// AppendExternalLinks appends s to the "external_links" field.
+func (agu *ArtGenreUpdate) AppendExternalLinks(s []string) *ArtGenreUpdate {
+	agu.mutation.AppendExternalLinks(s)
+	return agu
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (agu *ArtGenreUpdate) ClearExternalLinks() *ArtGenreUpdate {
+	agu.mutation.ClearExternalLinks()
+	return agu
+}
+
 // Mutation returns the ArtGenreMutation object of the builder.
 func (agu *ArtGenreUpdate) Mutation() *ArtGenreMutation {
 	return agu.mutation
@@ -34,6 +140,9 @@ func (agu *ArtGenreUpdate) Mutation() *ArtGenreMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (agu *ArtGenreUpdate) Save(ctx context.Context) (int, error) {
+	if err := agu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, agu.sqlSave, agu.mutation, agu.hooks)
 }
 
@@ -59,6 +168,18 @@ func (agu *ArtGenreUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (agu *ArtGenreUpdate) defaults() error {
+	if _, ok := agu.mutation.UpdatedAt(); !ok {
+		if artgenre.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized artgenre.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := artgenre.UpdateDefaultUpdatedAt()
+		agu.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 func (agu *ArtGenreUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(artgenre.Table, artgenre.Columns, sqlgraph.NewFieldSpec(artgenre.FieldID, field.TypeInt))
 	if ps := agu.mutation.predicates; len(ps) > 0 {
@@ -67,6 +188,44 @@ func (agu *ArtGenreUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := agu.mutation.CreatedBy(); ok {
+		_spec.SetField(artgenre.FieldCreatedBy, field.TypeString, value)
+	}
+	if agu.mutation.CreatedByCleared() {
+		_spec.ClearField(artgenre.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := agu.mutation.UpdatedAt(); ok {
+		_spec.SetField(artgenre.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := agu.mutation.UpdatedBy(); ok {
+		_spec.SetField(artgenre.FieldUpdatedBy, field.TypeString, value)
+	}
+	if agu.mutation.UpdatedByCleared() {
+		_spec.ClearField(artgenre.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := agu.mutation.DisplayName(); ok {
+		_spec.SetField(artgenre.FieldDisplayName, field.TypeString, value)
+	}
+	if agu.mutation.DisplayNameCleared() {
+		_spec.ClearField(artgenre.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := agu.mutation.Description(); ok {
+		_spec.SetField(artgenre.FieldDescription, field.TypeString, value)
+	}
+	if agu.mutation.DescriptionCleared() {
+		_spec.ClearField(artgenre.FieldDescription, field.TypeString)
+	}
+	if value, ok := agu.mutation.ExternalLinks(); ok {
+		_spec.SetField(artgenre.FieldExternalLinks, field.TypeJSON, value)
+	}
+	if value, ok := agu.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, artgenre.FieldExternalLinks, value)
+		})
+	}
+	if agu.mutation.ExternalLinksCleared() {
+		_spec.ClearField(artgenre.FieldExternalLinks, field.TypeJSON)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, agu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -86,6 +245,110 @@ type ArtGenreUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *ArtGenreMutation
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (aguo *ArtGenreUpdateOne) SetCreatedBy(s string) *ArtGenreUpdateOne {
+	aguo.mutation.SetCreatedBy(s)
+	return aguo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (aguo *ArtGenreUpdateOne) SetNillableCreatedBy(s *string) *ArtGenreUpdateOne {
+	if s != nil {
+		aguo.SetCreatedBy(*s)
+	}
+	return aguo
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (aguo *ArtGenreUpdateOne) ClearCreatedBy() *ArtGenreUpdateOne {
+	aguo.mutation.ClearCreatedBy()
+	return aguo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (aguo *ArtGenreUpdateOne) SetUpdatedAt(t time.Time) *ArtGenreUpdateOne {
+	aguo.mutation.SetUpdatedAt(t)
+	return aguo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (aguo *ArtGenreUpdateOne) SetUpdatedBy(s string) *ArtGenreUpdateOne {
+	aguo.mutation.SetUpdatedBy(s)
+	return aguo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (aguo *ArtGenreUpdateOne) SetNillableUpdatedBy(s *string) *ArtGenreUpdateOne {
+	if s != nil {
+		aguo.SetUpdatedBy(*s)
+	}
+	return aguo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (aguo *ArtGenreUpdateOne) ClearUpdatedBy() *ArtGenreUpdateOne {
+	aguo.mutation.ClearUpdatedBy()
+	return aguo
+}
+
+// SetDisplayName sets the "display_name" field.
+func (aguo *ArtGenreUpdateOne) SetDisplayName(s string) *ArtGenreUpdateOne {
+	aguo.mutation.SetDisplayName(s)
+	return aguo
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (aguo *ArtGenreUpdateOne) SetNillableDisplayName(s *string) *ArtGenreUpdateOne {
+	if s != nil {
+		aguo.SetDisplayName(*s)
+	}
+	return aguo
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (aguo *ArtGenreUpdateOne) ClearDisplayName() *ArtGenreUpdateOne {
+	aguo.mutation.ClearDisplayName()
+	return aguo
+}
+
+// SetDescription sets the "description" field.
+func (aguo *ArtGenreUpdateOne) SetDescription(s string) *ArtGenreUpdateOne {
+	aguo.mutation.SetDescription(s)
+	return aguo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (aguo *ArtGenreUpdateOne) SetNillableDescription(s *string) *ArtGenreUpdateOne {
+	if s != nil {
+		aguo.SetDescription(*s)
+	}
+	return aguo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (aguo *ArtGenreUpdateOne) ClearDescription() *ArtGenreUpdateOne {
+	aguo.mutation.ClearDescription()
+	return aguo
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (aguo *ArtGenreUpdateOne) SetExternalLinks(s []string) *ArtGenreUpdateOne {
+	aguo.mutation.SetExternalLinks(s)
+	return aguo
+}
+
+// AppendExternalLinks appends s to the "external_links" field.
+func (aguo *ArtGenreUpdateOne) AppendExternalLinks(s []string) *ArtGenreUpdateOne {
+	aguo.mutation.AppendExternalLinks(s)
+	return aguo
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (aguo *ArtGenreUpdateOne) ClearExternalLinks() *ArtGenreUpdateOne {
+	aguo.mutation.ClearExternalLinks()
+	return aguo
 }
 
 // Mutation returns the ArtGenreMutation object of the builder.
@@ -108,6 +371,9 @@ func (aguo *ArtGenreUpdateOne) Select(field string, fields ...string) *ArtGenreU
 
 // Save executes the query and returns the updated ArtGenre entity.
 func (aguo *ArtGenreUpdateOne) Save(ctx context.Context) (*ArtGenre, error) {
+	if err := aguo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, aguo.sqlSave, aguo.mutation, aguo.hooks)
 }
 
@@ -131,6 +397,18 @@ func (aguo *ArtGenreUpdateOne) ExecX(ctx context.Context) {
 	if err := aguo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (aguo *ArtGenreUpdateOne) defaults() error {
+	if _, ok := aguo.mutation.UpdatedAt(); !ok {
+		if artgenre.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized artgenre.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := artgenre.UpdateDefaultUpdatedAt()
+		aguo.mutation.SetUpdatedAt(v)
+	}
+	return nil
 }
 
 func (aguo *ArtGenreUpdateOne) sqlSave(ctx context.Context) (_node *ArtGenre, err error) {
@@ -158,6 +436,44 @@ func (aguo *ArtGenreUpdateOne) sqlSave(ctx context.Context) (_node *ArtGenre, er
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := aguo.mutation.CreatedBy(); ok {
+		_spec.SetField(artgenre.FieldCreatedBy, field.TypeString, value)
+	}
+	if aguo.mutation.CreatedByCleared() {
+		_spec.ClearField(artgenre.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := aguo.mutation.UpdatedAt(); ok {
+		_spec.SetField(artgenre.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := aguo.mutation.UpdatedBy(); ok {
+		_spec.SetField(artgenre.FieldUpdatedBy, field.TypeString, value)
+	}
+	if aguo.mutation.UpdatedByCleared() {
+		_spec.ClearField(artgenre.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := aguo.mutation.DisplayName(); ok {
+		_spec.SetField(artgenre.FieldDisplayName, field.TypeString, value)
+	}
+	if aguo.mutation.DisplayNameCleared() {
+		_spec.ClearField(artgenre.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := aguo.mutation.Description(); ok {
+		_spec.SetField(artgenre.FieldDescription, field.TypeString, value)
+	}
+	if aguo.mutation.DescriptionCleared() {
+		_spec.ClearField(artgenre.FieldDescription, field.TypeString)
+	}
+	if value, ok := aguo.mutation.ExternalLinks(); ok {
+		_spec.SetField(artgenre.FieldExternalLinks, field.TypeJSON, value)
+	}
+	if value, ok := aguo.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, artgenre.FieldExternalLinks, value)
+		})
+	}
+	if aguo.mutation.ExternalLinksCleared() {
+		_spec.ClearField(artgenre.FieldExternalLinks, field.TypeJSON)
 	}
 	_node = &ArtGenre{config: aguo.config}
 	_spec.Assign = _node.assignValues

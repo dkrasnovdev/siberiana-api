@@ -4,7 +4,9 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -18,6 +20,96 @@ type PublisherCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (pc *PublisherCreate) SetCreatedAt(t time.Time) *PublisherCreate {
+	pc.mutation.SetCreatedAt(t)
+	return pc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (pc *PublisherCreate) SetNillableCreatedAt(t *time.Time) *PublisherCreate {
+	if t != nil {
+		pc.SetCreatedAt(*t)
+	}
+	return pc
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (pc *PublisherCreate) SetCreatedBy(s string) *PublisherCreate {
+	pc.mutation.SetCreatedBy(s)
+	return pc
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (pc *PublisherCreate) SetNillableCreatedBy(s *string) *PublisherCreate {
+	if s != nil {
+		pc.SetCreatedBy(*s)
+	}
+	return pc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (pc *PublisherCreate) SetUpdatedAt(t time.Time) *PublisherCreate {
+	pc.mutation.SetUpdatedAt(t)
+	return pc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (pc *PublisherCreate) SetNillableUpdatedAt(t *time.Time) *PublisherCreate {
+	if t != nil {
+		pc.SetUpdatedAt(*t)
+	}
+	return pc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (pc *PublisherCreate) SetUpdatedBy(s string) *PublisherCreate {
+	pc.mutation.SetUpdatedBy(s)
+	return pc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (pc *PublisherCreate) SetNillableUpdatedBy(s *string) *PublisherCreate {
+	if s != nil {
+		pc.SetUpdatedBy(*s)
+	}
+	return pc
+}
+
+// SetDisplayName sets the "display_name" field.
+func (pc *PublisherCreate) SetDisplayName(s string) *PublisherCreate {
+	pc.mutation.SetDisplayName(s)
+	return pc
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (pc *PublisherCreate) SetNillableDisplayName(s *string) *PublisherCreate {
+	if s != nil {
+		pc.SetDisplayName(*s)
+	}
+	return pc
+}
+
+// SetDescription sets the "description" field.
+func (pc *PublisherCreate) SetDescription(s string) *PublisherCreate {
+	pc.mutation.SetDescription(s)
+	return pc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (pc *PublisherCreate) SetNillableDescription(s *string) *PublisherCreate {
+	if s != nil {
+		pc.SetDescription(*s)
+	}
+	return pc
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (pc *PublisherCreate) SetExternalLinks(s []string) *PublisherCreate {
+	pc.mutation.SetExternalLinks(s)
+	return pc
+}
+
 // Mutation returns the PublisherMutation object of the builder.
 func (pc *PublisherCreate) Mutation() *PublisherMutation {
 	return pc.mutation
@@ -25,6 +117,9 @@ func (pc *PublisherCreate) Mutation() *PublisherMutation {
 
 // Save creates the Publisher in the database.
 func (pc *PublisherCreate) Save(ctx context.Context) (*Publisher, error) {
+	if err := pc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, pc.sqlSave, pc.mutation, pc.hooks)
 }
 
@@ -50,8 +145,33 @@ func (pc *PublisherCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (pc *PublisherCreate) defaults() error {
+	if _, ok := pc.mutation.CreatedAt(); !ok {
+		if publisher.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized publisher.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := publisher.DefaultCreatedAt()
+		pc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := pc.mutation.UpdatedAt(); !ok {
+		if publisher.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized publisher.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := publisher.DefaultUpdatedAt()
+		pc.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (pc *PublisherCreate) check() error {
+	if _, ok := pc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Publisher.created_at"`)}
+	}
+	if _, ok := pc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Publisher.updated_at"`)}
+	}
 	return nil
 }
 
@@ -78,6 +198,34 @@ func (pc *PublisherCreate) createSpec() (*Publisher, *sqlgraph.CreateSpec) {
 		_node = &Publisher{config: pc.config}
 		_spec = sqlgraph.NewCreateSpec(publisher.Table, sqlgraph.NewFieldSpec(publisher.FieldID, field.TypeInt))
 	)
+	if value, ok := pc.mutation.CreatedAt(); ok {
+		_spec.SetField(publisher.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := pc.mutation.CreatedBy(); ok {
+		_spec.SetField(publisher.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := pc.mutation.UpdatedAt(); ok {
+		_spec.SetField(publisher.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := pc.mutation.UpdatedBy(); ok {
+		_spec.SetField(publisher.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
+	if value, ok := pc.mutation.DisplayName(); ok {
+		_spec.SetField(publisher.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
+	}
+	if value, ok := pc.mutation.Description(); ok {
+		_spec.SetField(publisher.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if value, ok := pc.mutation.ExternalLinks(); ok {
+		_spec.SetField(publisher.FieldExternalLinks, field.TypeJSON, value)
+		_node.ExternalLinks = value
+	}
 	return _node, _spec
 }
 
@@ -95,6 +243,7 @@ func (pcb *PublisherCreateBulk) Save(ctx context.Context) ([]*Publisher, error) 
 	for i := range pcb.builders {
 		func(i int, root context.Context) {
 			builder := pcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*PublisherMutation)
 				if !ok {

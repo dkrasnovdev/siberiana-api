@@ -6,9 +6,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
@@ -27,6 +29,110 @@ func (pacu *ProtectedAreaCategoryUpdate) Where(ps ...predicate.ProtectedAreaCate
 	return pacu
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (pacu *ProtectedAreaCategoryUpdate) SetCreatedBy(s string) *ProtectedAreaCategoryUpdate {
+	pacu.mutation.SetCreatedBy(s)
+	return pacu
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (pacu *ProtectedAreaCategoryUpdate) SetNillableCreatedBy(s *string) *ProtectedAreaCategoryUpdate {
+	if s != nil {
+		pacu.SetCreatedBy(*s)
+	}
+	return pacu
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (pacu *ProtectedAreaCategoryUpdate) ClearCreatedBy() *ProtectedAreaCategoryUpdate {
+	pacu.mutation.ClearCreatedBy()
+	return pacu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (pacu *ProtectedAreaCategoryUpdate) SetUpdatedAt(t time.Time) *ProtectedAreaCategoryUpdate {
+	pacu.mutation.SetUpdatedAt(t)
+	return pacu
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (pacu *ProtectedAreaCategoryUpdate) SetUpdatedBy(s string) *ProtectedAreaCategoryUpdate {
+	pacu.mutation.SetUpdatedBy(s)
+	return pacu
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (pacu *ProtectedAreaCategoryUpdate) SetNillableUpdatedBy(s *string) *ProtectedAreaCategoryUpdate {
+	if s != nil {
+		pacu.SetUpdatedBy(*s)
+	}
+	return pacu
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (pacu *ProtectedAreaCategoryUpdate) ClearUpdatedBy() *ProtectedAreaCategoryUpdate {
+	pacu.mutation.ClearUpdatedBy()
+	return pacu
+}
+
+// SetDisplayName sets the "display_name" field.
+func (pacu *ProtectedAreaCategoryUpdate) SetDisplayName(s string) *ProtectedAreaCategoryUpdate {
+	pacu.mutation.SetDisplayName(s)
+	return pacu
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (pacu *ProtectedAreaCategoryUpdate) SetNillableDisplayName(s *string) *ProtectedAreaCategoryUpdate {
+	if s != nil {
+		pacu.SetDisplayName(*s)
+	}
+	return pacu
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (pacu *ProtectedAreaCategoryUpdate) ClearDisplayName() *ProtectedAreaCategoryUpdate {
+	pacu.mutation.ClearDisplayName()
+	return pacu
+}
+
+// SetDescription sets the "description" field.
+func (pacu *ProtectedAreaCategoryUpdate) SetDescription(s string) *ProtectedAreaCategoryUpdate {
+	pacu.mutation.SetDescription(s)
+	return pacu
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (pacu *ProtectedAreaCategoryUpdate) SetNillableDescription(s *string) *ProtectedAreaCategoryUpdate {
+	if s != nil {
+		pacu.SetDescription(*s)
+	}
+	return pacu
+}
+
+// ClearDescription clears the value of the "description" field.
+func (pacu *ProtectedAreaCategoryUpdate) ClearDescription() *ProtectedAreaCategoryUpdate {
+	pacu.mutation.ClearDescription()
+	return pacu
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (pacu *ProtectedAreaCategoryUpdate) SetExternalLinks(s []string) *ProtectedAreaCategoryUpdate {
+	pacu.mutation.SetExternalLinks(s)
+	return pacu
+}
+
+// AppendExternalLinks appends s to the "external_links" field.
+func (pacu *ProtectedAreaCategoryUpdate) AppendExternalLinks(s []string) *ProtectedAreaCategoryUpdate {
+	pacu.mutation.AppendExternalLinks(s)
+	return pacu
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (pacu *ProtectedAreaCategoryUpdate) ClearExternalLinks() *ProtectedAreaCategoryUpdate {
+	pacu.mutation.ClearExternalLinks()
+	return pacu
+}
+
 // Mutation returns the ProtectedAreaCategoryMutation object of the builder.
 func (pacu *ProtectedAreaCategoryUpdate) Mutation() *ProtectedAreaCategoryMutation {
 	return pacu.mutation
@@ -34,6 +140,9 @@ func (pacu *ProtectedAreaCategoryUpdate) Mutation() *ProtectedAreaCategoryMutati
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (pacu *ProtectedAreaCategoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := pacu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, pacu.sqlSave, pacu.mutation, pacu.hooks)
 }
 
@@ -59,6 +168,18 @@ func (pacu *ProtectedAreaCategoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (pacu *ProtectedAreaCategoryUpdate) defaults() error {
+	if _, ok := pacu.mutation.UpdatedAt(); !ok {
+		if protectedareacategory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized protectedareacategory.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := protectedareacategory.UpdateDefaultUpdatedAt()
+		pacu.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 func (pacu *ProtectedAreaCategoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(protectedareacategory.Table, protectedareacategory.Columns, sqlgraph.NewFieldSpec(protectedareacategory.FieldID, field.TypeInt))
 	if ps := pacu.mutation.predicates; len(ps) > 0 {
@@ -67,6 +188,44 @@ func (pacu *ProtectedAreaCategoryUpdate) sqlSave(ctx context.Context) (n int, er
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := pacu.mutation.CreatedBy(); ok {
+		_spec.SetField(protectedareacategory.FieldCreatedBy, field.TypeString, value)
+	}
+	if pacu.mutation.CreatedByCleared() {
+		_spec.ClearField(protectedareacategory.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := pacu.mutation.UpdatedAt(); ok {
+		_spec.SetField(protectedareacategory.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := pacu.mutation.UpdatedBy(); ok {
+		_spec.SetField(protectedareacategory.FieldUpdatedBy, field.TypeString, value)
+	}
+	if pacu.mutation.UpdatedByCleared() {
+		_spec.ClearField(protectedareacategory.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := pacu.mutation.DisplayName(); ok {
+		_spec.SetField(protectedareacategory.FieldDisplayName, field.TypeString, value)
+	}
+	if pacu.mutation.DisplayNameCleared() {
+		_spec.ClearField(protectedareacategory.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := pacu.mutation.Description(); ok {
+		_spec.SetField(protectedareacategory.FieldDescription, field.TypeString, value)
+	}
+	if pacu.mutation.DescriptionCleared() {
+		_spec.ClearField(protectedareacategory.FieldDescription, field.TypeString)
+	}
+	if value, ok := pacu.mutation.ExternalLinks(); ok {
+		_spec.SetField(protectedareacategory.FieldExternalLinks, field.TypeJSON, value)
+	}
+	if value, ok := pacu.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, protectedareacategory.FieldExternalLinks, value)
+		})
+	}
+	if pacu.mutation.ExternalLinksCleared() {
+		_spec.ClearField(protectedareacategory.FieldExternalLinks, field.TypeJSON)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, pacu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -86,6 +245,110 @@ type ProtectedAreaCategoryUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *ProtectedAreaCategoryMutation
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (pacuo *ProtectedAreaCategoryUpdateOne) SetCreatedBy(s string) *ProtectedAreaCategoryUpdateOne {
+	pacuo.mutation.SetCreatedBy(s)
+	return pacuo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (pacuo *ProtectedAreaCategoryUpdateOne) SetNillableCreatedBy(s *string) *ProtectedAreaCategoryUpdateOne {
+	if s != nil {
+		pacuo.SetCreatedBy(*s)
+	}
+	return pacuo
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (pacuo *ProtectedAreaCategoryUpdateOne) ClearCreatedBy() *ProtectedAreaCategoryUpdateOne {
+	pacuo.mutation.ClearCreatedBy()
+	return pacuo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (pacuo *ProtectedAreaCategoryUpdateOne) SetUpdatedAt(t time.Time) *ProtectedAreaCategoryUpdateOne {
+	pacuo.mutation.SetUpdatedAt(t)
+	return pacuo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (pacuo *ProtectedAreaCategoryUpdateOne) SetUpdatedBy(s string) *ProtectedAreaCategoryUpdateOne {
+	pacuo.mutation.SetUpdatedBy(s)
+	return pacuo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (pacuo *ProtectedAreaCategoryUpdateOne) SetNillableUpdatedBy(s *string) *ProtectedAreaCategoryUpdateOne {
+	if s != nil {
+		pacuo.SetUpdatedBy(*s)
+	}
+	return pacuo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (pacuo *ProtectedAreaCategoryUpdateOne) ClearUpdatedBy() *ProtectedAreaCategoryUpdateOne {
+	pacuo.mutation.ClearUpdatedBy()
+	return pacuo
+}
+
+// SetDisplayName sets the "display_name" field.
+func (pacuo *ProtectedAreaCategoryUpdateOne) SetDisplayName(s string) *ProtectedAreaCategoryUpdateOne {
+	pacuo.mutation.SetDisplayName(s)
+	return pacuo
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (pacuo *ProtectedAreaCategoryUpdateOne) SetNillableDisplayName(s *string) *ProtectedAreaCategoryUpdateOne {
+	if s != nil {
+		pacuo.SetDisplayName(*s)
+	}
+	return pacuo
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (pacuo *ProtectedAreaCategoryUpdateOne) ClearDisplayName() *ProtectedAreaCategoryUpdateOne {
+	pacuo.mutation.ClearDisplayName()
+	return pacuo
+}
+
+// SetDescription sets the "description" field.
+func (pacuo *ProtectedAreaCategoryUpdateOne) SetDescription(s string) *ProtectedAreaCategoryUpdateOne {
+	pacuo.mutation.SetDescription(s)
+	return pacuo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (pacuo *ProtectedAreaCategoryUpdateOne) SetNillableDescription(s *string) *ProtectedAreaCategoryUpdateOne {
+	if s != nil {
+		pacuo.SetDescription(*s)
+	}
+	return pacuo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (pacuo *ProtectedAreaCategoryUpdateOne) ClearDescription() *ProtectedAreaCategoryUpdateOne {
+	pacuo.mutation.ClearDescription()
+	return pacuo
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (pacuo *ProtectedAreaCategoryUpdateOne) SetExternalLinks(s []string) *ProtectedAreaCategoryUpdateOne {
+	pacuo.mutation.SetExternalLinks(s)
+	return pacuo
+}
+
+// AppendExternalLinks appends s to the "external_links" field.
+func (pacuo *ProtectedAreaCategoryUpdateOne) AppendExternalLinks(s []string) *ProtectedAreaCategoryUpdateOne {
+	pacuo.mutation.AppendExternalLinks(s)
+	return pacuo
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (pacuo *ProtectedAreaCategoryUpdateOne) ClearExternalLinks() *ProtectedAreaCategoryUpdateOne {
+	pacuo.mutation.ClearExternalLinks()
+	return pacuo
 }
 
 // Mutation returns the ProtectedAreaCategoryMutation object of the builder.
@@ -108,6 +371,9 @@ func (pacuo *ProtectedAreaCategoryUpdateOne) Select(field string, fields ...stri
 
 // Save executes the query and returns the updated ProtectedAreaCategory entity.
 func (pacuo *ProtectedAreaCategoryUpdateOne) Save(ctx context.Context) (*ProtectedAreaCategory, error) {
+	if err := pacuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, pacuo.sqlSave, pacuo.mutation, pacuo.hooks)
 }
 
@@ -131,6 +397,18 @@ func (pacuo *ProtectedAreaCategoryUpdateOne) ExecX(ctx context.Context) {
 	if err := pacuo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (pacuo *ProtectedAreaCategoryUpdateOne) defaults() error {
+	if _, ok := pacuo.mutation.UpdatedAt(); !ok {
+		if protectedareacategory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized protectedareacategory.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := protectedareacategory.UpdateDefaultUpdatedAt()
+		pacuo.mutation.SetUpdatedAt(v)
+	}
+	return nil
 }
 
 func (pacuo *ProtectedAreaCategoryUpdateOne) sqlSave(ctx context.Context) (_node *ProtectedAreaCategory, err error) {
@@ -158,6 +436,44 @@ func (pacuo *ProtectedAreaCategoryUpdateOne) sqlSave(ctx context.Context) (_node
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := pacuo.mutation.CreatedBy(); ok {
+		_spec.SetField(protectedareacategory.FieldCreatedBy, field.TypeString, value)
+	}
+	if pacuo.mutation.CreatedByCleared() {
+		_spec.ClearField(protectedareacategory.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := pacuo.mutation.UpdatedAt(); ok {
+		_spec.SetField(protectedareacategory.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := pacuo.mutation.UpdatedBy(); ok {
+		_spec.SetField(protectedareacategory.FieldUpdatedBy, field.TypeString, value)
+	}
+	if pacuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(protectedareacategory.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := pacuo.mutation.DisplayName(); ok {
+		_spec.SetField(protectedareacategory.FieldDisplayName, field.TypeString, value)
+	}
+	if pacuo.mutation.DisplayNameCleared() {
+		_spec.ClearField(protectedareacategory.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := pacuo.mutation.Description(); ok {
+		_spec.SetField(protectedareacategory.FieldDescription, field.TypeString, value)
+	}
+	if pacuo.mutation.DescriptionCleared() {
+		_spec.ClearField(protectedareacategory.FieldDescription, field.TypeString)
+	}
+	if value, ok := pacuo.mutation.ExternalLinks(); ok {
+		_spec.SetField(protectedareacategory.FieldExternalLinks, field.TypeJSON, value)
+	}
+	if value, ok := pacuo.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, protectedareacategory.FieldExternalLinks, value)
+		})
+	}
+	if pacuo.mutation.ExternalLinksCleared() {
+		_spec.ClearField(protectedareacategory.FieldExternalLinks, field.TypeJSON)
 	}
 	_node = &ProtectedAreaCategory{config: pacuo.config}
 	_spec.Assign = _node.assignValues

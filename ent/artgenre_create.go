@@ -4,7 +4,9 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -18,6 +20,96 @@ type ArtGenreCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (agc *ArtGenreCreate) SetCreatedAt(t time.Time) *ArtGenreCreate {
+	agc.mutation.SetCreatedAt(t)
+	return agc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (agc *ArtGenreCreate) SetNillableCreatedAt(t *time.Time) *ArtGenreCreate {
+	if t != nil {
+		agc.SetCreatedAt(*t)
+	}
+	return agc
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (agc *ArtGenreCreate) SetCreatedBy(s string) *ArtGenreCreate {
+	agc.mutation.SetCreatedBy(s)
+	return agc
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (agc *ArtGenreCreate) SetNillableCreatedBy(s *string) *ArtGenreCreate {
+	if s != nil {
+		agc.SetCreatedBy(*s)
+	}
+	return agc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (agc *ArtGenreCreate) SetUpdatedAt(t time.Time) *ArtGenreCreate {
+	agc.mutation.SetUpdatedAt(t)
+	return agc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (agc *ArtGenreCreate) SetNillableUpdatedAt(t *time.Time) *ArtGenreCreate {
+	if t != nil {
+		agc.SetUpdatedAt(*t)
+	}
+	return agc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (agc *ArtGenreCreate) SetUpdatedBy(s string) *ArtGenreCreate {
+	agc.mutation.SetUpdatedBy(s)
+	return agc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (agc *ArtGenreCreate) SetNillableUpdatedBy(s *string) *ArtGenreCreate {
+	if s != nil {
+		agc.SetUpdatedBy(*s)
+	}
+	return agc
+}
+
+// SetDisplayName sets the "display_name" field.
+func (agc *ArtGenreCreate) SetDisplayName(s string) *ArtGenreCreate {
+	agc.mutation.SetDisplayName(s)
+	return agc
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (agc *ArtGenreCreate) SetNillableDisplayName(s *string) *ArtGenreCreate {
+	if s != nil {
+		agc.SetDisplayName(*s)
+	}
+	return agc
+}
+
+// SetDescription sets the "description" field.
+func (agc *ArtGenreCreate) SetDescription(s string) *ArtGenreCreate {
+	agc.mutation.SetDescription(s)
+	return agc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (agc *ArtGenreCreate) SetNillableDescription(s *string) *ArtGenreCreate {
+	if s != nil {
+		agc.SetDescription(*s)
+	}
+	return agc
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (agc *ArtGenreCreate) SetExternalLinks(s []string) *ArtGenreCreate {
+	agc.mutation.SetExternalLinks(s)
+	return agc
+}
+
 // Mutation returns the ArtGenreMutation object of the builder.
 func (agc *ArtGenreCreate) Mutation() *ArtGenreMutation {
 	return agc.mutation
@@ -25,6 +117,9 @@ func (agc *ArtGenreCreate) Mutation() *ArtGenreMutation {
 
 // Save creates the ArtGenre in the database.
 func (agc *ArtGenreCreate) Save(ctx context.Context) (*ArtGenre, error) {
+	if err := agc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, agc.sqlSave, agc.mutation, agc.hooks)
 }
 
@@ -50,8 +145,33 @@ func (agc *ArtGenreCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (agc *ArtGenreCreate) defaults() error {
+	if _, ok := agc.mutation.CreatedAt(); !ok {
+		if artgenre.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized artgenre.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := artgenre.DefaultCreatedAt()
+		agc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := agc.mutation.UpdatedAt(); !ok {
+		if artgenre.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized artgenre.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := artgenre.DefaultUpdatedAt()
+		agc.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (agc *ArtGenreCreate) check() error {
+	if _, ok := agc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "ArtGenre.created_at"`)}
+	}
+	if _, ok := agc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "ArtGenre.updated_at"`)}
+	}
 	return nil
 }
 
@@ -78,6 +198,34 @@ func (agc *ArtGenreCreate) createSpec() (*ArtGenre, *sqlgraph.CreateSpec) {
 		_node = &ArtGenre{config: agc.config}
 		_spec = sqlgraph.NewCreateSpec(artgenre.Table, sqlgraph.NewFieldSpec(artgenre.FieldID, field.TypeInt))
 	)
+	if value, ok := agc.mutation.CreatedAt(); ok {
+		_spec.SetField(artgenre.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := agc.mutation.CreatedBy(); ok {
+		_spec.SetField(artgenre.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := agc.mutation.UpdatedAt(); ok {
+		_spec.SetField(artgenre.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := agc.mutation.UpdatedBy(); ok {
+		_spec.SetField(artgenre.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
+	if value, ok := agc.mutation.DisplayName(); ok {
+		_spec.SetField(artgenre.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
+	}
+	if value, ok := agc.mutation.Description(); ok {
+		_spec.SetField(artgenre.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if value, ok := agc.mutation.ExternalLinks(); ok {
+		_spec.SetField(artgenre.FieldExternalLinks, field.TypeJSON, value)
+		_node.ExternalLinks = value
+	}
 	return _node, _spec
 }
 
@@ -95,6 +243,7 @@ func (agcb *ArtGenreCreateBulk) Save(ctx context.Context) ([]*ArtGenre, error) {
 	for i := range agcb.builders {
 		func(i int, root context.Context) {
 			builder := agcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ArtGenreMutation)
 				if !ok {

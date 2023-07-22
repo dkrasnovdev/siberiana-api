@@ -6,9 +6,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/library"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
@@ -27,6 +29,110 @@ func (lu *LibraryUpdate) Where(ps ...predicate.Library) *LibraryUpdate {
 	return lu
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (lu *LibraryUpdate) SetCreatedBy(s string) *LibraryUpdate {
+	lu.mutation.SetCreatedBy(s)
+	return lu
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (lu *LibraryUpdate) SetNillableCreatedBy(s *string) *LibraryUpdate {
+	if s != nil {
+		lu.SetCreatedBy(*s)
+	}
+	return lu
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (lu *LibraryUpdate) ClearCreatedBy() *LibraryUpdate {
+	lu.mutation.ClearCreatedBy()
+	return lu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (lu *LibraryUpdate) SetUpdatedAt(t time.Time) *LibraryUpdate {
+	lu.mutation.SetUpdatedAt(t)
+	return lu
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (lu *LibraryUpdate) SetUpdatedBy(s string) *LibraryUpdate {
+	lu.mutation.SetUpdatedBy(s)
+	return lu
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (lu *LibraryUpdate) SetNillableUpdatedBy(s *string) *LibraryUpdate {
+	if s != nil {
+		lu.SetUpdatedBy(*s)
+	}
+	return lu
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (lu *LibraryUpdate) ClearUpdatedBy() *LibraryUpdate {
+	lu.mutation.ClearUpdatedBy()
+	return lu
+}
+
+// SetDisplayName sets the "display_name" field.
+func (lu *LibraryUpdate) SetDisplayName(s string) *LibraryUpdate {
+	lu.mutation.SetDisplayName(s)
+	return lu
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (lu *LibraryUpdate) SetNillableDisplayName(s *string) *LibraryUpdate {
+	if s != nil {
+		lu.SetDisplayName(*s)
+	}
+	return lu
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (lu *LibraryUpdate) ClearDisplayName() *LibraryUpdate {
+	lu.mutation.ClearDisplayName()
+	return lu
+}
+
+// SetDescription sets the "description" field.
+func (lu *LibraryUpdate) SetDescription(s string) *LibraryUpdate {
+	lu.mutation.SetDescription(s)
+	return lu
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (lu *LibraryUpdate) SetNillableDescription(s *string) *LibraryUpdate {
+	if s != nil {
+		lu.SetDescription(*s)
+	}
+	return lu
+}
+
+// ClearDescription clears the value of the "description" field.
+func (lu *LibraryUpdate) ClearDescription() *LibraryUpdate {
+	lu.mutation.ClearDescription()
+	return lu
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (lu *LibraryUpdate) SetExternalLinks(s []string) *LibraryUpdate {
+	lu.mutation.SetExternalLinks(s)
+	return lu
+}
+
+// AppendExternalLinks appends s to the "external_links" field.
+func (lu *LibraryUpdate) AppendExternalLinks(s []string) *LibraryUpdate {
+	lu.mutation.AppendExternalLinks(s)
+	return lu
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (lu *LibraryUpdate) ClearExternalLinks() *LibraryUpdate {
+	lu.mutation.ClearExternalLinks()
+	return lu
+}
+
 // Mutation returns the LibraryMutation object of the builder.
 func (lu *LibraryUpdate) Mutation() *LibraryMutation {
 	return lu.mutation
@@ -34,6 +140,9 @@ func (lu *LibraryUpdate) Mutation() *LibraryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (lu *LibraryUpdate) Save(ctx context.Context) (int, error) {
+	if err := lu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, lu.sqlSave, lu.mutation, lu.hooks)
 }
 
@@ -59,6 +168,18 @@ func (lu *LibraryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (lu *LibraryUpdate) defaults() error {
+	if _, ok := lu.mutation.UpdatedAt(); !ok {
+		if library.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized library.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := library.UpdateDefaultUpdatedAt()
+		lu.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 func (lu *LibraryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(library.Table, library.Columns, sqlgraph.NewFieldSpec(library.FieldID, field.TypeInt))
 	if ps := lu.mutation.predicates; len(ps) > 0 {
@@ -67,6 +188,44 @@ func (lu *LibraryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := lu.mutation.CreatedBy(); ok {
+		_spec.SetField(library.FieldCreatedBy, field.TypeString, value)
+	}
+	if lu.mutation.CreatedByCleared() {
+		_spec.ClearField(library.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := lu.mutation.UpdatedAt(); ok {
+		_spec.SetField(library.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := lu.mutation.UpdatedBy(); ok {
+		_spec.SetField(library.FieldUpdatedBy, field.TypeString, value)
+	}
+	if lu.mutation.UpdatedByCleared() {
+		_spec.ClearField(library.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := lu.mutation.DisplayName(); ok {
+		_spec.SetField(library.FieldDisplayName, field.TypeString, value)
+	}
+	if lu.mutation.DisplayNameCleared() {
+		_spec.ClearField(library.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := lu.mutation.Description(); ok {
+		_spec.SetField(library.FieldDescription, field.TypeString, value)
+	}
+	if lu.mutation.DescriptionCleared() {
+		_spec.ClearField(library.FieldDescription, field.TypeString)
+	}
+	if value, ok := lu.mutation.ExternalLinks(); ok {
+		_spec.SetField(library.FieldExternalLinks, field.TypeJSON, value)
+	}
+	if value, ok := lu.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, library.FieldExternalLinks, value)
+		})
+	}
+	if lu.mutation.ExternalLinksCleared() {
+		_spec.ClearField(library.FieldExternalLinks, field.TypeJSON)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, lu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -86,6 +245,110 @@ type LibraryUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *LibraryMutation
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (luo *LibraryUpdateOne) SetCreatedBy(s string) *LibraryUpdateOne {
+	luo.mutation.SetCreatedBy(s)
+	return luo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (luo *LibraryUpdateOne) SetNillableCreatedBy(s *string) *LibraryUpdateOne {
+	if s != nil {
+		luo.SetCreatedBy(*s)
+	}
+	return luo
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (luo *LibraryUpdateOne) ClearCreatedBy() *LibraryUpdateOne {
+	luo.mutation.ClearCreatedBy()
+	return luo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (luo *LibraryUpdateOne) SetUpdatedAt(t time.Time) *LibraryUpdateOne {
+	luo.mutation.SetUpdatedAt(t)
+	return luo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (luo *LibraryUpdateOne) SetUpdatedBy(s string) *LibraryUpdateOne {
+	luo.mutation.SetUpdatedBy(s)
+	return luo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (luo *LibraryUpdateOne) SetNillableUpdatedBy(s *string) *LibraryUpdateOne {
+	if s != nil {
+		luo.SetUpdatedBy(*s)
+	}
+	return luo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (luo *LibraryUpdateOne) ClearUpdatedBy() *LibraryUpdateOne {
+	luo.mutation.ClearUpdatedBy()
+	return luo
+}
+
+// SetDisplayName sets the "display_name" field.
+func (luo *LibraryUpdateOne) SetDisplayName(s string) *LibraryUpdateOne {
+	luo.mutation.SetDisplayName(s)
+	return luo
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (luo *LibraryUpdateOne) SetNillableDisplayName(s *string) *LibraryUpdateOne {
+	if s != nil {
+		luo.SetDisplayName(*s)
+	}
+	return luo
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (luo *LibraryUpdateOne) ClearDisplayName() *LibraryUpdateOne {
+	luo.mutation.ClearDisplayName()
+	return luo
+}
+
+// SetDescription sets the "description" field.
+func (luo *LibraryUpdateOne) SetDescription(s string) *LibraryUpdateOne {
+	luo.mutation.SetDescription(s)
+	return luo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (luo *LibraryUpdateOne) SetNillableDescription(s *string) *LibraryUpdateOne {
+	if s != nil {
+		luo.SetDescription(*s)
+	}
+	return luo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (luo *LibraryUpdateOne) ClearDescription() *LibraryUpdateOne {
+	luo.mutation.ClearDescription()
+	return luo
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (luo *LibraryUpdateOne) SetExternalLinks(s []string) *LibraryUpdateOne {
+	luo.mutation.SetExternalLinks(s)
+	return luo
+}
+
+// AppendExternalLinks appends s to the "external_links" field.
+func (luo *LibraryUpdateOne) AppendExternalLinks(s []string) *LibraryUpdateOne {
+	luo.mutation.AppendExternalLinks(s)
+	return luo
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (luo *LibraryUpdateOne) ClearExternalLinks() *LibraryUpdateOne {
+	luo.mutation.ClearExternalLinks()
+	return luo
 }
 
 // Mutation returns the LibraryMutation object of the builder.
@@ -108,6 +371,9 @@ func (luo *LibraryUpdateOne) Select(field string, fields ...string) *LibraryUpda
 
 // Save executes the query and returns the updated Library entity.
 func (luo *LibraryUpdateOne) Save(ctx context.Context) (*Library, error) {
+	if err := luo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, luo.sqlSave, luo.mutation, luo.hooks)
 }
 
@@ -131,6 +397,18 @@ func (luo *LibraryUpdateOne) ExecX(ctx context.Context) {
 	if err := luo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (luo *LibraryUpdateOne) defaults() error {
+	if _, ok := luo.mutation.UpdatedAt(); !ok {
+		if library.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized library.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := library.UpdateDefaultUpdatedAt()
+		luo.mutation.SetUpdatedAt(v)
+	}
+	return nil
 }
 
 func (luo *LibraryUpdateOne) sqlSave(ctx context.Context) (_node *Library, err error) {
@@ -158,6 +436,44 @@ func (luo *LibraryUpdateOne) sqlSave(ctx context.Context) (_node *Library, err e
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := luo.mutation.CreatedBy(); ok {
+		_spec.SetField(library.FieldCreatedBy, field.TypeString, value)
+	}
+	if luo.mutation.CreatedByCleared() {
+		_spec.ClearField(library.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := luo.mutation.UpdatedAt(); ok {
+		_spec.SetField(library.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := luo.mutation.UpdatedBy(); ok {
+		_spec.SetField(library.FieldUpdatedBy, field.TypeString, value)
+	}
+	if luo.mutation.UpdatedByCleared() {
+		_spec.ClearField(library.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := luo.mutation.DisplayName(); ok {
+		_spec.SetField(library.FieldDisplayName, field.TypeString, value)
+	}
+	if luo.mutation.DisplayNameCleared() {
+		_spec.ClearField(library.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := luo.mutation.Description(); ok {
+		_spec.SetField(library.FieldDescription, field.TypeString, value)
+	}
+	if luo.mutation.DescriptionCleared() {
+		_spec.ClearField(library.FieldDescription, field.TypeString)
+	}
+	if value, ok := luo.mutation.ExternalLinks(); ok {
+		_spec.SetField(library.FieldExternalLinks, field.TypeJSON, value)
+	}
+	if value, ok := luo.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, library.FieldExternalLinks, value)
+		})
+	}
+	if luo.mutation.ExternalLinksCleared() {
+		_spec.ClearField(library.FieldExternalLinks, field.TypeJSON)
 	}
 	_node = &Library{config: luo.config}
 	_spec.Assign = _node.assignValues

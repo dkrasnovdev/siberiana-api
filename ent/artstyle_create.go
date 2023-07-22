@@ -4,7 +4,9 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -18,6 +20,96 @@ type ArtStyleCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (asc *ArtStyleCreate) SetCreatedAt(t time.Time) *ArtStyleCreate {
+	asc.mutation.SetCreatedAt(t)
+	return asc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (asc *ArtStyleCreate) SetNillableCreatedAt(t *time.Time) *ArtStyleCreate {
+	if t != nil {
+		asc.SetCreatedAt(*t)
+	}
+	return asc
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (asc *ArtStyleCreate) SetCreatedBy(s string) *ArtStyleCreate {
+	asc.mutation.SetCreatedBy(s)
+	return asc
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (asc *ArtStyleCreate) SetNillableCreatedBy(s *string) *ArtStyleCreate {
+	if s != nil {
+		asc.SetCreatedBy(*s)
+	}
+	return asc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (asc *ArtStyleCreate) SetUpdatedAt(t time.Time) *ArtStyleCreate {
+	asc.mutation.SetUpdatedAt(t)
+	return asc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (asc *ArtStyleCreate) SetNillableUpdatedAt(t *time.Time) *ArtStyleCreate {
+	if t != nil {
+		asc.SetUpdatedAt(*t)
+	}
+	return asc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (asc *ArtStyleCreate) SetUpdatedBy(s string) *ArtStyleCreate {
+	asc.mutation.SetUpdatedBy(s)
+	return asc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (asc *ArtStyleCreate) SetNillableUpdatedBy(s *string) *ArtStyleCreate {
+	if s != nil {
+		asc.SetUpdatedBy(*s)
+	}
+	return asc
+}
+
+// SetDisplayName sets the "display_name" field.
+func (asc *ArtStyleCreate) SetDisplayName(s string) *ArtStyleCreate {
+	asc.mutation.SetDisplayName(s)
+	return asc
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (asc *ArtStyleCreate) SetNillableDisplayName(s *string) *ArtStyleCreate {
+	if s != nil {
+		asc.SetDisplayName(*s)
+	}
+	return asc
+}
+
+// SetDescription sets the "description" field.
+func (asc *ArtStyleCreate) SetDescription(s string) *ArtStyleCreate {
+	asc.mutation.SetDescription(s)
+	return asc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (asc *ArtStyleCreate) SetNillableDescription(s *string) *ArtStyleCreate {
+	if s != nil {
+		asc.SetDescription(*s)
+	}
+	return asc
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (asc *ArtStyleCreate) SetExternalLinks(s []string) *ArtStyleCreate {
+	asc.mutation.SetExternalLinks(s)
+	return asc
+}
+
 // Mutation returns the ArtStyleMutation object of the builder.
 func (asc *ArtStyleCreate) Mutation() *ArtStyleMutation {
 	return asc.mutation
@@ -25,6 +117,9 @@ func (asc *ArtStyleCreate) Mutation() *ArtStyleMutation {
 
 // Save creates the ArtStyle in the database.
 func (asc *ArtStyleCreate) Save(ctx context.Context) (*ArtStyle, error) {
+	if err := asc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, asc.sqlSave, asc.mutation, asc.hooks)
 }
 
@@ -50,8 +145,33 @@ func (asc *ArtStyleCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (asc *ArtStyleCreate) defaults() error {
+	if _, ok := asc.mutation.CreatedAt(); !ok {
+		if artstyle.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized artstyle.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := artstyle.DefaultCreatedAt()
+		asc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := asc.mutation.UpdatedAt(); !ok {
+		if artstyle.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized artstyle.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := artstyle.DefaultUpdatedAt()
+		asc.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (asc *ArtStyleCreate) check() error {
+	if _, ok := asc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "ArtStyle.created_at"`)}
+	}
+	if _, ok := asc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "ArtStyle.updated_at"`)}
+	}
 	return nil
 }
 
@@ -78,6 +198,34 @@ func (asc *ArtStyleCreate) createSpec() (*ArtStyle, *sqlgraph.CreateSpec) {
 		_node = &ArtStyle{config: asc.config}
 		_spec = sqlgraph.NewCreateSpec(artstyle.Table, sqlgraph.NewFieldSpec(artstyle.FieldID, field.TypeInt))
 	)
+	if value, ok := asc.mutation.CreatedAt(); ok {
+		_spec.SetField(artstyle.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := asc.mutation.CreatedBy(); ok {
+		_spec.SetField(artstyle.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := asc.mutation.UpdatedAt(); ok {
+		_spec.SetField(artstyle.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := asc.mutation.UpdatedBy(); ok {
+		_spec.SetField(artstyle.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
+	if value, ok := asc.mutation.DisplayName(); ok {
+		_spec.SetField(artstyle.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
+	}
+	if value, ok := asc.mutation.Description(); ok {
+		_spec.SetField(artstyle.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if value, ok := asc.mutation.ExternalLinks(); ok {
+		_spec.SetField(artstyle.FieldExternalLinks, field.TypeJSON, value)
+		_node.ExternalLinks = value
+	}
 	return _node, _spec
 }
 
@@ -95,6 +243,7 @@ func (ascb *ArtStyleCreateBulk) Save(ctx context.Context) ([]*ArtStyle, error) {
 	for i := range ascb.builders {
 		func(i int, root context.Context) {
 			builder := ascb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ArtStyleMutation)
 				if !ok {

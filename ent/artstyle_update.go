@@ -6,9 +6,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artstyle"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
@@ -27,6 +29,110 @@ func (asu *ArtStyleUpdate) Where(ps ...predicate.ArtStyle) *ArtStyleUpdate {
 	return asu
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (asu *ArtStyleUpdate) SetCreatedBy(s string) *ArtStyleUpdate {
+	asu.mutation.SetCreatedBy(s)
+	return asu
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (asu *ArtStyleUpdate) SetNillableCreatedBy(s *string) *ArtStyleUpdate {
+	if s != nil {
+		asu.SetCreatedBy(*s)
+	}
+	return asu
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (asu *ArtStyleUpdate) ClearCreatedBy() *ArtStyleUpdate {
+	asu.mutation.ClearCreatedBy()
+	return asu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (asu *ArtStyleUpdate) SetUpdatedAt(t time.Time) *ArtStyleUpdate {
+	asu.mutation.SetUpdatedAt(t)
+	return asu
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (asu *ArtStyleUpdate) SetUpdatedBy(s string) *ArtStyleUpdate {
+	asu.mutation.SetUpdatedBy(s)
+	return asu
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (asu *ArtStyleUpdate) SetNillableUpdatedBy(s *string) *ArtStyleUpdate {
+	if s != nil {
+		asu.SetUpdatedBy(*s)
+	}
+	return asu
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (asu *ArtStyleUpdate) ClearUpdatedBy() *ArtStyleUpdate {
+	asu.mutation.ClearUpdatedBy()
+	return asu
+}
+
+// SetDisplayName sets the "display_name" field.
+func (asu *ArtStyleUpdate) SetDisplayName(s string) *ArtStyleUpdate {
+	asu.mutation.SetDisplayName(s)
+	return asu
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (asu *ArtStyleUpdate) SetNillableDisplayName(s *string) *ArtStyleUpdate {
+	if s != nil {
+		asu.SetDisplayName(*s)
+	}
+	return asu
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (asu *ArtStyleUpdate) ClearDisplayName() *ArtStyleUpdate {
+	asu.mutation.ClearDisplayName()
+	return asu
+}
+
+// SetDescription sets the "description" field.
+func (asu *ArtStyleUpdate) SetDescription(s string) *ArtStyleUpdate {
+	asu.mutation.SetDescription(s)
+	return asu
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (asu *ArtStyleUpdate) SetNillableDescription(s *string) *ArtStyleUpdate {
+	if s != nil {
+		asu.SetDescription(*s)
+	}
+	return asu
+}
+
+// ClearDescription clears the value of the "description" field.
+func (asu *ArtStyleUpdate) ClearDescription() *ArtStyleUpdate {
+	asu.mutation.ClearDescription()
+	return asu
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (asu *ArtStyleUpdate) SetExternalLinks(s []string) *ArtStyleUpdate {
+	asu.mutation.SetExternalLinks(s)
+	return asu
+}
+
+// AppendExternalLinks appends s to the "external_links" field.
+func (asu *ArtStyleUpdate) AppendExternalLinks(s []string) *ArtStyleUpdate {
+	asu.mutation.AppendExternalLinks(s)
+	return asu
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (asu *ArtStyleUpdate) ClearExternalLinks() *ArtStyleUpdate {
+	asu.mutation.ClearExternalLinks()
+	return asu
+}
+
 // Mutation returns the ArtStyleMutation object of the builder.
 func (asu *ArtStyleUpdate) Mutation() *ArtStyleMutation {
 	return asu.mutation
@@ -34,6 +140,9 @@ func (asu *ArtStyleUpdate) Mutation() *ArtStyleMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (asu *ArtStyleUpdate) Save(ctx context.Context) (int, error) {
+	if err := asu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, asu.sqlSave, asu.mutation, asu.hooks)
 }
 
@@ -59,6 +168,18 @@ func (asu *ArtStyleUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (asu *ArtStyleUpdate) defaults() error {
+	if _, ok := asu.mutation.UpdatedAt(); !ok {
+		if artstyle.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized artstyle.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := artstyle.UpdateDefaultUpdatedAt()
+		asu.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 func (asu *ArtStyleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(artstyle.Table, artstyle.Columns, sqlgraph.NewFieldSpec(artstyle.FieldID, field.TypeInt))
 	if ps := asu.mutation.predicates; len(ps) > 0 {
@@ -67,6 +188,44 @@ func (asu *ArtStyleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := asu.mutation.CreatedBy(); ok {
+		_spec.SetField(artstyle.FieldCreatedBy, field.TypeString, value)
+	}
+	if asu.mutation.CreatedByCleared() {
+		_spec.ClearField(artstyle.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := asu.mutation.UpdatedAt(); ok {
+		_spec.SetField(artstyle.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := asu.mutation.UpdatedBy(); ok {
+		_spec.SetField(artstyle.FieldUpdatedBy, field.TypeString, value)
+	}
+	if asu.mutation.UpdatedByCleared() {
+		_spec.ClearField(artstyle.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := asu.mutation.DisplayName(); ok {
+		_spec.SetField(artstyle.FieldDisplayName, field.TypeString, value)
+	}
+	if asu.mutation.DisplayNameCleared() {
+		_spec.ClearField(artstyle.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := asu.mutation.Description(); ok {
+		_spec.SetField(artstyle.FieldDescription, field.TypeString, value)
+	}
+	if asu.mutation.DescriptionCleared() {
+		_spec.ClearField(artstyle.FieldDescription, field.TypeString)
+	}
+	if value, ok := asu.mutation.ExternalLinks(); ok {
+		_spec.SetField(artstyle.FieldExternalLinks, field.TypeJSON, value)
+	}
+	if value, ok := asu.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, artstyle.FieldExternalLinks, value)
+		})
+	}
+	if asu.mutation.ExternalLinksCleared() {
+		_spec.ClearField(artstyle.FieldExternalLinks, field.TypeJSON)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, asu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -86,6 +245,110 @@ type ArtStyleUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *ArtStyleMutation
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (asuo *ArtStyleUpdateOne) SetCreatedBy(s string) *ArtStyleUpdateOne {
+	asuo.mutation.SetCreatedBy(s)
+	return asuo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (asuo *ArtStyleUpdateOne) SetNillableCreatedBy(s *string) *ArtStyleUpdateOne {
+	if s != nil {
+		asuo.SetCreatedBy(*s)
+	}
+	return asuo
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (asuo *ArtStyleUpdateOne) ClearCreatedBy() *ArtStyleUpdateOne {
+	asuo.mutation.ClearCreatedBy()
+	return asuo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (asuo *ArtStyleUpdateOne) SetUpdatedAt(t time.Time) *ArtStyleUpdateOne {
+	asuo.mutation.SetUpdatedAt(t)
+	return asuo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (asuo *ArtStyleUpdateOne) SetUpdatedBy(s string) *ArtStyleUpdateOne {
+	asuo.mutation.SetUpdatedBy(s)
+	return asuo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (asuo *ArtStyleUpdateOne) SetNillableUpdatedBy(s *string) *ArtStyleUpdateOne {
+	if s != nil {
+		asuo.SetUpdatedBy(*s)
+	}
+	return asuo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (asuo *ArtStyleUpdateOne) ClearUpdatedBy() *ArtStyleUpdateOne {
+	asuo.mutation.ClearUpdatedBy()
+	return asuo
+}
+
+// SetDisplayName sets the "display_name" field.
+func (asuo *ArtStyleUpdateOne) SetDisplayName(s string) *ArtStyleUpdateOne {
+	asuo.mutation.SetDisplayName(s)
+	return asuo
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (asuo *ArtStyleUpdateOne) SetNillableDisplayName(s *string) *ArtStyleUpdateOne {
+	if s != nil {
+		asuo.SetDisplayName(*s)
+	}
+	return asuo
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (asuo *ArtStyleUpdateOne) ClearDisplayName() *ArtStyleUpdateOne {
+	asuo.mutation.ClearDisplayName()
+	return asuo
+}
+
+// SetDescription sets the "description" field.
+func (asuo *ArtStyleUpdateOne) SetDescription(s string) *ArtStyleUpdateOne {
+	asuo.mutation.SetDescription(s)
+	return asuo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (asuo *ArtStyleUpdateOne) SetNillableDescription(s *string) *ArtStyleUpdateOne {
+	if s != nil {
+		asuo.SetDescription(*s)
+	}
+	return asuo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (asuo *ArtStyleUpdateOne) ClearDescription() *ArtStyleUpdateOne {
+	asuo.mutation.ClearDescription()
+	return asuo
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (asuo *ArtStyleUpdateOne) SetExternalLinks(s []string) *ArtStyleUpdateOne {
+	asuo.mutation.SetExternalLinks(s)
+	return asuo
+}
+
+// AppendExternalLinks appends s to the "external_links" field.
+func (asuo *ArtStyleUpdateOne) AppendExternalLinks(s []string) *ArtStyleUpdateOne {
+	asuo.mutation.AppendExternalLinks(s)
+	return asuo
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (asuo *ArtStyleUpdateOne) ClearExternalLinks() *ArtStyleUpdateOne {
+	asuo.mutation.ClearExternalLinks()
+	return asuo
 }
 
 // Mutation returns the ArtStyleMutation object of the builder.
@@ -108,6 +371,9 @@ func (asuo *ArtStyleUpdateOne) Select(field string, fields ...string) *ArtStyleU
 
 // Save executes the query and returns the updated ArtStyle entity.
 func (asuo *ArtStyleUpdateOne) Save(ctx context.Context) (*ArtStyle, error) {
+	if err := asuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, asuo.sqlSave, asuo.mutation, asuo.hooks)
 }
 
@@ -131,6 +397,18 @@ func (asuo *ArtStyleUpdateOne) ExecX(ctx context.Context) {
 	if err := asuo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (asuo *ArtStyleUpdateOne) defaults() error {
+	if _, ok := asuo.mutation.UpdatedAt(); !ok {
+		if artstyle.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized artstyle.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := artstyle.UpdateDefaultUpdatedAt()
+		asuo.mutation.SetUpdatedAt(v)
+	}
+	return nil
 }
 
 func (asuo *ArtStyleUpdateOne) sqlSave(ctx context.Context) (_node *ArtStyle, err error) {
@@ -158,6 +436,44 @@ func (asuo *ArtStyleUpdateOne) sqlSave(ctx context.Context) (_node *ArtStyle, er
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := asuo.mutation.CreatedBy(); ok {
+		_spec.SetField(artstyle.FieldCreatedBy, field.TypeString, value)
+	}
+	if asuo.mutation.CreatedByCleared() {
+		_spec.ClearField(artstyle.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := asuo.mutation.UpdatedAt(); ok {
+		_spec.SetField(artstyle.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := asuo.mutation.UpdatedBy(); ok {
+		_spec.SetField(artstyle.FieldUpdatedBy, field.TypeString, value)
+	}
+	if asuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(artstyle.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := asuo.mutation.DisplayName(); ok {
+		_spec.SetField(artstyle.FieldDisplayName, field.TypeString, value)
+	}
+	if asuo.mutation.DisplayNameCleared() {
+		_spec.ClearField(artstyle.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := asuo.mutation.Description(); ok {
+		_spec.SetField(artstyle.FieldDescription, field.TypeString, value)
+	}
+	if asuo.mutation.DescriptionCleared() {
+		_spec.ClearField(artstyle.FieldDescription, field.TypeString)
+	}
+	if value, ok := asuo.mutation.ExternalLinks(); ok {
+		_spec.SetField(artstyle.FieldExternalLinks, field.TypeJSON, value)
+	}
+	if value, ok := asuo.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, artstyle.FieldExternalLinks, value)
+		})
+	}
+	if asuo.mutation.ExternalLinksCleared() {
+		_spec.ClearField(artstyle.FieldExternalLinks, field.TypeJSON)
 	}
 	_node = &ArtStyle{config: asuo.config}
 	_spec.Assign = _node.assignValues

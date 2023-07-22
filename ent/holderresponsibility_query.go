@@ -5,6 +5,7 @@ package ent
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -365,6 +366,12 @@ func (hrq *HolderResponsibilityQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		hrq.sql = prev
+	}
+	if holderresponsibility.Policy == nil {
+		return errors.New("ent: uninitialized holderresponsibility.Policy (forgotten import ent/runtime?)")
+	}
+	if err := holderresponsibility.Policy.EvalQuery(ctx, hrq); err != nil {
+		return err
 	}
 	return nil
 }

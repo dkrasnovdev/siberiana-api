@@ -3,8 +3,10 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -13,10 +15,24 @@ import (
 
 // ProtectedAreaCategory is the model entity for the ProtectedAreaCategory schema.
 type ProtectedAreaCategory struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
-	selectValues sql.SelectValues
+	ID int `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// CreatedBy holds the value of the "created_by" field.
+	CreatedBy string `json:"created_by,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy string `json:"updated_by,omitempty"`
+	// DisplayName holds the value of the "display_name" field.
+	DisplayName string `json:"display_name,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
+	// ExternalLinks holds the value of the "external_links" field.
+	ExternalLinks []string `json:"external_links,omitempty"`
+	selectValues  sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -24,8 +40,14 @@ func (*ProtectedAreaCategory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case protectedareacategory.FieldExternalLinks:
+			values[i] = new([]byte)
 		case protectedareacategory.FieldID:
 			values[i] = new(sql.NullInt64)
+		case protectedareacategory.FieldCreatedBy, protectedareacategory.FieldUpdatedBy, protectedareacategory.FieldDisplayName, protectedareacategory.FieldDescription:
+			values[i] = new(sql.NullString)
+		case protectedareacategory.FieldCreatedAt, protectedareacategory.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -47,6 +69,50 @@ func (pac *ProtectedAreaCategory) assignValues(columns []string, values []any) e
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			pac.ID = int(value.Int64)
+		case protectedareacategory.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				pac.CreatedAt = value.Time
+			}
+		case protectedareacategory.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				pac.CreatedBy = value.String
+			}
+		case protectedareacategory.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				pac.UpdatedAt = value.Time
+			}
+		case protectedareacategory.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				pac.UpdatedBy = value.String
+			}
+		case protectedareacategory.FieldDisplayName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field display_name", values[i])
+			} else if value.Valid {
+				pac.DisplayName = value.String
+			}
+		case protectedareacategory.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				pac.Description = value.String
+			}
+		case protectedareacategory.FieldExternalLinks:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field external_links", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &pac.ExternalLinks); err != nil {
+					return fmt.Errorf("unmarshal field external_links: %w", err)
+				}
+			}
 		default:
 			pac.selectValues.Set(columns[i], values[i])
 		}
@@ -82,7 +148,27 @@ func (pac *ProtectedAreaCategory) Unwrap() *ProtectedAreaCategory {
 func (pac *ProtectedAreaCategory) String() string {
 	var builder strings.Builder
 	builder.WriteString("ProtectedAreaCategory(")
-	builder.WriteString(fmt.Sprintf("id=%v", pac.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", pac.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(pac.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("created_by=")
+	builder.WriteString(pac.CreatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(pac.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_by=")
+	builder.WriteString(pac.UpdatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("display_name=")
+	builder.WriteString(pac.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(pac.Description)
+	builder.WriteString(", ")
+	builder.WriteString("external_links=")
+	builder.WriteString(fmt.Sprintf("%v", pac.ExternalLinks))
 	builder.WriteByte(')')
 	return builder.String()
 }

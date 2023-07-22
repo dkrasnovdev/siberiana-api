@@ -3,8 +3,10 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -13,10 +15,24 @@ import (
 
 // Publisher is the model entity for the Publisher schema.
 type Publisher struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
-	selectValues sql.SelectValues
+	ID int `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// CreatedBy holds the value of the "created_by" field.
+	CreatedBy string `json:"created_by,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy string `json:"updated_by,omitempty"`
+	// DisplayName holds the value of the "display_name" field.
+	DisplayName string `json:"display_name,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
+	// ExternalLinks holds the value of the "external_links" field.
+	ExternalLinks []string `json:"external_links,omitempty"`
+	selectValues  sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -24,8 +40,14 @@ func (*Publisher) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case publisher.FieldExternalLinks:
+			values[i] = new([]byte)
 		case publisher.FieldID:
 			values[i] = new(sql.NullInt64)
+		case publisher.FieldCreatedBy, publisher.FieldUpdatedBy, publisher.FieldDisplayName, publisher.FieldDescription:
+			values[i] = new(sql.NullString)
+		case publisher.FieldCreatedAt, publisher.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -47,6 +69,50 @@ func (pu *Publisher) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			pu.ID = int(value.Int64)
+		case publisher.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				pu.CreatedAt = value.Time
+			}
+		case publisher.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				pu.CreatedBy = value.String
+			}
+		case publisher.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				pu.UpdatedAt = value.Time
+			}
+		case publisher.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				pu.UpdatedBy = value.String
+			}
+		case publisher.FieldDisplayName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field display_name", values[i])
+			} else if value.Valid {
+				pu.DisplayName = value.String
+			}
+		case publisher.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				pu.Description = value.String
+			}
+		case publisher.FieldExternalLinks:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field external_links", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &pu.ExternalLinks); err != nil {
+					return fmt.Errorf("unmarshal field external_links: %w", err)
+				}
+			}
 		default:
 			pu.selectValues.Set(columns[i], values[i])
 		}
@@ -82,7 +148,27 @@ func (pu *Publisher) Unwrap() *Publisher {
 func (pu *Publisher) String() string {
 	var builder strings.Builder
 	builder.WriteString("Publisher(")
-	builder.WriteString(fmt.Sprintf("id=%v", pu.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", pu.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(pu.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("created_by=")
+	builder.WriteString(pu.CreatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(pu.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_by=")
+	builder.WriteString(pu.UpdatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("display_name=")
+	builder.WriteString(pu.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(pu.Description)
+	builder.WriteString(", ")
+	builder.WriteString("external_links=")
+	builder.WriteString(fmt.Sprintf("%v", pu.ExternalLinks))
 	builder.WriteByte(')')
 	return builder.String()
 }

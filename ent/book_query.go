@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -259,6 +260,18 @@ func (bq *BookQuery) Clone() *BookQuery {
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Book.Query().
+//		GroupBy(book.FieldCreatedAt).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (bq *BookQuery) GroupBy(field string, fields ...string) *BookGroupBy {
 	bq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &BookGroupBy{build: bq}
@@ -270,6 +283,16 @@ func (bq *BookQuery) GroupBy(field string, fields ...string) *BookGroupBy {
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//	}
+//
+//	client.Book.Query().
+//		Select(book.FieldCreatedAt).
+//		Scan(ctx, &v)
 func (bq *BookQuery) Select(fields ...string) *BookSelect {
 	bq.ctx.Fields = append(bq.ctx.Fields, fields...)
 	sbuild := &BookSelect{BookQuery: bq}
@@ -305,6 +328,12 @@ func (bq *BookQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		bq.sql = prev
+	}
+	if book.Policy == nil {
+		return errors.New("ent: uninitialized book.Policy (forgotten import ent/runtime?)")
+	}
+	if err := book.Policy.EvalQuery(ctx, bq); err != nil {
+		return err
 	}
 	return nil
 }

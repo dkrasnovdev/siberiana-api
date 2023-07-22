@@ -8,6 +8,226 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 )
 
+// CreateArtGenreInput represents a mutation input for creating artgenres.
+type CreateArtGenreInput struct {
+	CreatedAt     *time.Time
+	CreatedBy     *string
+	UpdatedAt     *time.Time
+	UpdatedBy     *string
+	DisplayName   *string
+	Description   *string
+	ExternalLinks []string
+}
+
+// Mutate applies the CreateArtGenreInput on the ArtGenreMutation builder.
+func (i *CreateArtGenreInput) Mutate(m *ArtGenreMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+}
+
+// SetInput applies the change-set in the CreateArtGenreInput on the ArtGenreCreate builder.
+func (c *ArtGenreCreate) SetInput(i CreateArtGenreInput) *ArtGenreCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateArtGenreInput represents a mutation input for updating artgenres.
+type UpdateArtGenreInput struct {
+	ClearCreatedBy      bool
+	CreatedBy           *string
+	UpdatedAt           *time.Time
+	ClearUpdatedBy      bool
+	UpdatedBy           *string
+	ClearDisplayName    bool
+	DisplayName         *string
+	ClearDescription    bool
+	Description         *string
+	ClearExternalLinks  bool
+	ExternalLinks       []string
+	AppendExternalLinks []string
+}
+
+// Mutate applies the UpdateArtGenreInput on the ArtGenreMutation builder.
+func (i *UpdateArtGenreInput) Mutate(m *ArtGenreMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLinks {
+		m.ClearExternalLinks()
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+	if i.AppendExternalLinks != nil {
+		m.AppendExternalLinks(i.ExternalLinks)
+	}
+}
+
+// SetInput applies the change-set in the UpdateArtGenreInput on the ArtGenreUpdate builder.
+func (c *ArtGenreUpdate) SetInput(i UpdateArtGenreInput) *ArtGenreUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateArtGenreInput on the ArtGenreUpdateOne builder.
+func (c *ArtGenreUpdateOne) SetInput(i UpdateArtGenreInput) *ArtGenreUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateArtStyleInput represents a mutation input for creating artstyles.
+type CreateArtStyleInput struct {
+	CreatedAt     *time.Time
+	CreatedBy     *string
+	UpdatedAt     *time.Time
+	UpdatedBy     *string
+	DisplayName   *string
+	Description   *string
+	ExternalLinks []string
+}
+
+// Mutate applies the CreateArtStyleInput on the ArtStyleMutation builder.
+func (i *CreateArtStyleInput) Mutate(m *ArtStyleMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+}
+
+// SetInput applies the change-set in the CreateArtStyleInput on the ArtStyleCreate builder.
+func (c *ArtStyleCreate) SetInput(i CreateArtStyleInput) *ArtStyleCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateArtStyleInput represents a mutation input for updating artstyles.
+type UpdateArtStyleInput struct {
+	ClearCreatedBy      bool
+	CreatedBy           *string
+	UpdatedAt           *time.Time
+	ClearUpdatedBy      bool
+	UpdatedBy           *string
+	ClearDisplayName    bool
+	DisplayName         *string
+	ClearDescription    bool
+	Description         *string
+	ClearExternalLinks  bool
+	ExternalLinks       []string
+	AppendExternalLinks []string
+}
+
+// Mutate applies the UpdateArtStyleInput on the ArtStyleMutation builder.
+func (i *UpdateArtStyleInput) Mutate(m *ArtStyleMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLinks {
+		m.ClearExternalLinks()
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+	if i.AppendExternalLinks != nil {
+		m.AppendExternalLinks(i.ExternalLinks)
+	}
+}
+
+// SetInput applies the change-set in the UpdateArtStyleInput on the ArtStyleUpdate builder.
+func (c *ArtStyleUpdate) SetInput(i UpdateArtStyleInput) *ArtStyleUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateArtStyleInput on the ArtStyleUpdateOne builder.
+func (c *ArtStyleUpdateOne) SetInput(i UpdateArtStyleInput) *ArtStyleUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateArtifactInput represents a mutation input for creating artifacts.
 type CreateArtifactInput struct {
 	CreatedAt             *time.Time
@@ -418,6 +638,226 @@ func (c *ArtifactUpdate) SetInput(i UpdateArtifactInput) *ArtifactUpdate {
 
 // SetInput applies the change-set in the UpdateArtifactInput on the ArtifactUpdateOne builder.
 func (c *ArtifactUpdateOne) SetInput(i UpdateArtifactInput) *ArtifactUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateBookInput represents a mutation input for creating books.
+type CreateBookInput struct {
+	CreatedAt     *time.Time
+	CreatedBy     *string
+	UpdatedAt     *time.Time
+	UpdatedBy     *string
+	DisplayName   *string
+	Description   *string
+	ExternalLinks []string
+}
+
+// Mutate applies the CreateBookInput on the BookMutation builder.
+func (i *CreateBookInput) Mutate(m *BookMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+}
+
+// SetInput applies the change-set in the CreateBookInput on the BookCreate builder.
+func (c *BookCreate) SetInput(i CreateBookInput) *BookCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateBookInput represents a mutation input for updating books.
+type UpdateBookInput struct {
+	ClearCreatedBy      bool
+	CreatedBy           *string
+	UpdatedAt           *time.Time
+	ClearUpdatedBy      bool
+	UpdatedBy           *string
+	ClearDisplayName    bool
+	DisplayName         *string
+	ClearDescription    bool
+	Description         *string
+	ClearExternalLinks  bool
+	ExternalLinks       []string
+	AppendExternalLinks []string
+}
+
+// Mutate applies the UpdateBookInput on the BookMutation builder.
+func (i *UpdateBookInput) Mutate(m *BookMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLinks {
+		m.ClearExternalLinks()
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+	if i.AppendExternalLinks != nil {
+		m.AppendExternalLinks(i.ExternalLinks)
+	}
+}
+
+// SetInput applies the change-set in the UpdateBookInput on the BookUpdate builder.
+func (c *BookUpdate) SetInput(i UpdateBookInput) *BookUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateBookInput on the BookUpdateOne builder.
+func (c *BookUpdateOne) SetInput(i UpdateBookInput) *BookUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateBookGenreInput represents a mutation input for creating bookgenres.
+type CreateBookGenreInput struct {
+	CreatedAt     *time.Time
+	CreatedBy     *string
+	UpdatedAt     *time.Time
+	UpdatedBy     *string
+	DisplayName   *string
+	Description   *string
+	ExternalLinks []string
+}
+
+// Mutate applies the CreateBookGenreInput on the BookGenreMutation builder.
+func (i *CreateBookGenreInput) Mutate(m *BookGenreMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+}
+
+// SetInput applies the change-set in the CreateBookGenreInput on the BookGenreCreate builder.
+func (c *BookGenreCreate) SetInput(i CreateBookGenreInput) *BookGenreCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateBookGenreInput represents a mutation input for updating bookgenres.
+type UpdateBookGenreInput struct {
+	ClearCreatedBy      bool
+	CreatedBy           *string
+	UpdatedAt           *time.Time
+	ClearUpdatedBy      bool
+	UpdatedBy           *string
+	ClearDisplayName    bool
+	DisplayName         *string
+	ClearDescription    bool
+	Description         *string
+	ClearExternalLinks  bool
+	ExternalLinks       []string
+	AppendExternalLinks []string
+}
+
+// Mutate applies the UpdateBookGenreInput on the BookGenreMutation builder.
+func (i *UpdateBookGenreInput) Mutate(m *BookGenreMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLinks {
+		m.ClearExternalLinks()
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+	if i.AppendExternalLinks != nil {
+		m.AppendExternalLinks(i.ExternalLinks)
+	}
+}
+
+// SetInput applies the change-set in the UpdateBookGenreInput on the BookGenreUpdate builder.
+func (c *BookGenreUpdate) SetInput(i UpdateBookGenreInput) *BookGenreUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateBookGenreInput on the BookGenreUpdateOne builder.
+func (c *BookGenreUpdateOne) SetInput(i UpdateBookGenreInput) *BookGenreUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -1090,6 +1530,242 @@ func (c *HolderUpdate) SetInput(i UpdateHolderInput) *HolderUpdate {
 
 // SetInput applies the change-set in the UpdateHolderInput on the HolderUpdateOne builder.
 func (c *HolderUpdateOne) SetInput(i UpdateHolderInput) *HolderUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateHolderResponsibilityInput represents a mutation input for creating holderresponsibilities.
+type CreateHolderResponsibilityInput struct {
+	CreatedAt     *time.Time
+	CreatedBy     *string
+	UpdatedAt     *time.Time
+	UpdatedBy     *string
+	DisplayName   *string
+	Description   *string
+	ExternalLinks []string
+	HolderIDs     []int
+}
+
+// Mutate applies the CreateHolderResponsibilityInput on the HolderResponsibilityMutation builder.
+func (i *CreateHolderResponsibilityInput) Mutate(m *HolderResponsibilityMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+	if v := i.HolderIDs; len(v) > 0 {
+		m.AddHolderIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateHolderResponsibilityInput on the HolderResponsibilityCreate builder.
+func (c *HolderResponsibilityCreate) SetInput(i CreateHolderResponsibilityInput) *HolderResponsibilityCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateHolderResponsibilityInput represents a mutation input for updating holderresponsibilities.
+type UpdateHolderResponsibilityInput struct {
+	ClearCreatedBy      bool
+	CreatedBy           *string
+	UpdatedAt           *time.Time
+	ClearUpdatedBy      bool
+	UpdatedBy           *string
+	ClearDisplayName    bool
+	DisplayName         *string
+	ClearDescription    bool
+	Description         *string
+	ClearExternalLinks  bool
+	ExternalLinks       []string
+	AppendExternalLinks []string
+	ClearHolder         bool
+	AddHolderIDs        []int
+	RemoveHolderIDs     []int
+}
+
+// Mutate applies the UpdateHolderResponsibilityInput on the HolderResponsibilityMutation builder.
+func (i *UpdateHolderResponsibilityInput) Mutate(m *HolderResponsibilityMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLinks {
+		m.ClearExternalLinks()
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+	if i.AppendExternalLinks != nil {
+		m.AppendExternalLinks(i.ExternalLinks)
+	}
+	if i.ClearHolder {
+		m.ClearHolder()
+	}
+	if v := i.AddHolderIDs; len(v) > 0 {
+		m.AddHolderIDs(v...)
+	}
+	if v := i.RemoveHolderIDs; len(v) > 0 {
+		m.RemoveHolderIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateHolderResponsibilityInput on the HolderResponsibilityUpdate builder.
+func (c *HolderResponsibilityUpdate) SetInput(i UpdateHolderResponsibilityInput) *HolderResponsibilityUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateHolderResponsibilityInput on the HolderResponsibilityUpdateOne builder.
+func (c *HolderResponsibilityUpdateOne) SetInput(i UpdateHolderResponsibilityInput) *HolderResponsibilityUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateLibraryInput represents a mutation input for creating libraries.
+type CreateLibraryInput struct {
+	CreatedAt     *time.Time
+	CreatedBy     *string
+	UpdatedAt     *time.Time
+	UpdatedBy     *string
+	DisplayName   *string
+	Description   *string
+	ExternalLinks []string
+}
+
+// Mutate applies the CreateLibraryInput on the LibraryMutation builder.
+func (i *CreateLibraryInput) Mutate(m *LibraryMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+}
+
+// SetInput applies the change-set in the CreateLibraryInput on the LibraryCreate builder.
+func (c *LibraryCreate) SetInput(i CreateLibraryInput) *LibraryCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateLibraryInput represents a mutation input for updating libraries.
+type UpdateLibraryInput struct {
+	ClearCreatedBy      bool
+	CreatedBy           *string
+	UpdatedAt           *time.Time
+	ClearUpdatedBy      bool
+	UpdatedBy           *string
+	ClearDisplayName    bool
+	DisplayName         *string
+	ClearDescription    bool
+	Description         *string
+	ClearExternalLinks  bool
+	ExternalLinks       []string
+	AppendExternalLinks []string
+}
+
+// Mutate applies the UpdateLibraryInput on the LibraryMutation builder.
+func (i *UpdateLibraryInput) Mutate(m *LibraryMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLinks {
+		m.ClearExternalLinks()
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+	if i.AppendExternalLinks != nil {
+		m.AppendExternalLinks(i.ExternalLinks)
+	}
+}
+
+// SetInput applies the change-set in the UpdateLibraryInput on the LibraryUpdate builder.
+func (c *LibraryUpdate) SetInput(i UpdateLibraryInput) *LibraryUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateLibraryInput on the LibraryUpdateOne builder.
+func (c *LibraryUpdateOne) SetInput(i UpdateLibraryInput) *LibraryUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -2038,6 +2714,258 @@ func (c *OrganizationUpdateOne) SetInput(i UpdateOrganizationInput) *Organizatio
 	return c
 }
 
+// CreateOrganizationTypeInput represents a mutation input for creating organizationtypes.
+type CreateOrganizationTypeInput struct {
+	CreatedAt       *time.Time
+	CreatedBy       *string
+	UpdatedAt       *time.Time
+	UpdatedBy       *string
+	DisplayName     *string
+	Description     *string
+	ExternalLinks   []string
+	OrganizationIDs []int
+}
+
+// Mutate applies the CreateOrganizationTypeInput on the OrganizationTypeMutation builder.
+func (i *CreateOrganizationTypeInput) Mutate(m *OrganizationTypeMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+	if v := i.OrganizationIDs; len(v) > 0 {
+		m.AddOrganizationIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateOrganizationTypeInput on the OrganizationTypeCreate builder.
+func (c *OrganizationTypeCreate) SetInput(i CreateOrganizationTypeInput) *OrganizationTypeCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateOrganizationTypeInput represents a mutation input for updating organizationtypes.
+type UpdateOrganizationTypeInput struct {
+	ClearCreatedBy        bool
+	CreatedBy             *string
+	UpdatedAt             *time.Time
+	ClearUpdatedBy        bool
+	UpdatedBy             *string
+	ClearDisplayName      bool
+	DisplayName           *string
+	ClearDescription      bool
+	Description           *string
+	ClearExternalLinks    bool
+	ExternalLinks         []string
+	AppendExternalLinks   []string
+	ClearOrganizations    bool
+	AddOrganizationIDs    []int
+	RemoveOrganizationIDs []int
+}
+
+// Mutate applies the UpdateOrganizationTypeInput on the OrganizationTypeMutation builder.
+func (i *UpdateOrganizationTypeInput) Mutate(m *OrganizationTypeMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLinks {
+		m.ClearExternalLinks()
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+	if i.AppendExternalLinks != nil {
+		m.AppendExternalLinks(i.ExternalLinks)
+	}
+	if i.ClearOrganizations {
+		m.ClearOrganizations()
+	}
+	if v := i.AddOrganizationIDs; len(v) > 0 {
+		m.AddOrganizationIDs(v...)
+	}
+	if v := i.RemoveOrganizationIDs; len(v) > 0 {
+		m.RemoveOrganizationIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateOrganizationTypeInput on the OrganizationTypeUpdate builder.
+func (c *OrganizationTypeUpdate) SetInput(i UpdateOrganizationTypeInput) *OrganizationTypeUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateOrganizationTypeInput on the OrganizationTypeUpdateOne builder.
+func (c *OrganizationTypeUpdateOne) SetInput(i UpdateOrganizationTypeInput) *OrganizationTypeUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreatePeriodInput represents a mutation input for creating periods.
+type CreatePeriodInput struct {
+	CreatedAt     *time.Time
+	CreatedBy     *string
+	UpdatedAt     *time.Time
+	UpdatedBy     *string
+	DisplayName   *string
+	Description   *string
+	ExternalLinks []string
+	ArtifactIDs   []int
+}
+
+// Mutate applies the CreatePeriodInput on the PeriodMutation builder.
+func (i *CreatePeriodInput) Mutate(m *PeriodMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+	if v := i.ArtifactIDs; len(v) > 0 {
+		m.AddArtifactIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreatePeriodInput on the PeriodCreate builder.
+func (c *PeriodCreate) SetInput(i CreatePeriodInput) *PeriodCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdatePeriodInput represents a mutation input for updating periods.
+type UpdatePeriodInput struct {
+	ClearCreatedBy      bool
+	CreatedBy           *string
+	UpdatedAt           *time.Time
+	ClearUpdatedBy      bool
+	UpdatedBy           *string
+	ClearDisplayName    bool
+	DisplayName         *string
+	ClearDescription    bool
+	Description         *string
+	ClearExternalLinks  bool
+	ExternalLinks       []string
+	AppendExternalLinks []string
+	ClearArtifacts      bool
+	AddArtifactIDs      []int
+	RemoveArtifactIDs   []int
+}
+
+// Mutate applies the UpdatePeriodInput on the PeriodMutation builder.
+func (i *UpdatePeriodInput) Mutate(m *PeriodMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLinks {
+		m.ClearExternalLinks()
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+	if i.AppendExternalLinks != nil {
+		m.AppendExternalLinks(i.ExternalLinks)
+	}
+	if i.ClearArtifacts {
+		m.ClearArtifacts()
+	}
+	if v := i.AddArtifactIDs; len(v) > 0 {
+		m.AddArtifactIDs(v...)
+	}
+	if v := i.RemoveArtifactIDs; len(v) > 0 {
+		m.RemoveArtifactIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdatePeriodInput on the PeriodUpdate builder.
+func (c *PeriodUpdate) SetInput(i UpdatePeriodInput) *PeriodUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdatePeriodInput on the PeriodUpdateOne builder.
+func (c *PeriodUpdateOne) SetInput(i UpdatePeriodInput) *PeriodUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreatePersonInput represents a mutation input for creating persons.
 type CreatePersonInput struct {
 	CreatedAt            *time.Time
@@ -2386,6 +3314,132 @@ func (c *PersonUpdateOne) SetInput(i UpdatePersonInput) *PersonUpdateOne {
 	return c
 }
 
+// CreatePersonRoleInput represents a mutation input for creating personroles.
+type CreatePersonRoleInput struct {
+	CreatedAt     *time.Time
+	CreatedBy     *string
+	UpdatedAt     *time.Time
+	UpdatedBy     *string
+	DisplayName   *string
+	Description   *string
+	ExternalLinks []string
+	PersonIDs     []int
+}
+
+// Mutate applies the CreatePersonRoleInput on the PersonRoleMutation builder.
+func (i *CreatePersonRoleInput) Mutate(m *PersonRoleMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+	if v := i.PersonIDs; len(v) > 0 {
+		m.AddPersonIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreatePersonRoleInput on the PersonRoleCreate builder.
+func (c *PersonRoleCreate) SetInput(i CreatePersonRoleInput) *PersonRoleCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdatePersonRoleInput represents a mutation input for updating personroles.
+type UpdatePersonRoleInput struct {
+	ClearCreatedBy      bool
+	CreatedBy           *string
+	UpdatedAt           *time.Time
+	ClearUpdatedBy      bool
+	UpdatedBy           *string
+	ClearDisplayName    bool
+	DisplayName         *string
+	ClearDescription    bool
+	Description         *string
+	ClearExternalLinks  bool
+	ExternalLinks       []string
+	AppendExternalLinks []string
+	ClearPerson         bool
+	AddPersonIDs        []int
+	RemovePersonIDs     []int
+}
+
+// Mutate applies the UpdatePersonRoleInput on the PersonRoleMutation builder.
+func (i *UpdatePersonRoleInput) Mutate(m *PersonRoleMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLinks {
+		m.ClearExternalLinks()
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+	if i.AppendExternalLinks != nil {
+		m.AppendExternalLinks(i.ExternalLinks)
+	}
+	if i.ClearPerson {
+		m.ClearPerson()
+	}
+	if v := i.AddPersonIDs; len(v) > 0 {
+		m.AddPersonIDs(v...)
+	}
+	if v := i.RemovePersonIDs; len(v) > 0 {
+		m.RemovePersonIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdatePersonRoleInput on the PersonRoleUpdate builder.
+func (c *PersonRoleUpdate) SetInput(i UpdatePersonRoleInput) *PersonRoleUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdatePersonRoleInput on the PersonRoleUpdateOne builder.
+func (c *PersonRoleUpdateOne) SetInput(i UpdatePersonRoleInput) *PersonRoleUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateProjectInput represents a mutation input for creating projects.
 type CreateProjectInput struct {
 	CreatedAt     *time.Time
@@ -2564,6 +3618,462 @@ func (c *ProjectUpdateOne) SetInput(i UpdateProjectInput) *ProjectUpdateOne {
 	return c
 }
 
+// CreateProjectTypeInput represents a mutation input for creating projecttypes.
+type CreateProjectTypeInput struct {
+	CreatedAt     *time.Time
+	CreatedBy     *string
+	UpdatedAt     *time.Time
+	UpdatedBy     *string
+	DisplayName   *string
+	Description   *string
+	ExternalLinks []string
+	ProjectIDs    []int
+}
+
+// Mutate applies the CreateProjectTypeInput on the ProjectTypeMutation builder.
+func (i *CreateProjectTypeInput) Mutate(m *ProjectTypeMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+	if v := i.ProjectIDs; len(v) > 0 {
+		m.AddProjectIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateProjectTypeInput on the ProjectTypeCreate builder.
+func (c *ProjectTypeCreate) SetInput(i CreateProjectTypeInput) *ProjectTypeCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateProjectTypeInput represents a mutation input for updating projecttypes.
+type UpdateProjectTypeInput struct {
+	ClearCreatedBy      bool
+	CreatedBy           *string
+	UpdatedAt           *time.Time
+	ClearUpdatedBy      bool
+	UpdatedBy           *string
+	ClearDisplayName    bool
+	DisplayName         *string
+	ClearDescription    bool
+	Description         *string
+	ClearExternalLinks  bool
+	ExternalLinks       []string
+	AppendExternalLinks []string
+	ClearProjects       bool
+	AddProjectIDs       []int
+	RemoveProjectIDs    []int
+}
+
+// Mutate applies the UpdateProjectTypeInput on the ProjectTypeMutation builder.
+func (i *UpdateProjectTypeInput) Mutate(m *ProjectTypeMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLinks {
+		m.ClearExternalLinks()
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+	if i.AppendExternalLinks != nil {
+		m.AppendExternalLinks(i.ExternalLinks)
+	}
+	if i.ClearProjects {
+		m.ClearProjects()
+	}
+	if v := i.AddProjectIDs; len(v) > 0 {
+		m.AddProjectIDs(v...)
+	}
+	if v := i.RemoveProjectIDs; len(v) > 0 {
+		m.RemoveProjectIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateProjectTypeInput on the ProjectTypeUpdate builder.
+func (c *ProjectTypeUpdate) SetInput(i UpdateProjectTypeInput) *ProjectTypeUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateProjectTypeInput on the ProjectTypeUpdateOne builder.
+func (c *ProjectTypeUpdateOne) SetInput(i UpdateProjectTypeInput) *ProjectTypeUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateProtectedAreaInput represents a mutation input for creating protectedareas.
+type CreateProtectedAreaInput struct {
+	CreatedAt     *time.Time
+	CreatedBy     *string
+	UpdatedAt     *time.Time
+	UpdatedBy     *string
+	DisplayName   *string
+	Description   *string
+	ExternalLinks []string
+}
+
+// Mutate applies the CreateProtectedAreaInput on the ProtectedAreaMutation builder.
+func (i *CreateProtectedAreaInput) Mutate(m *ProtectedAreaMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+}
+
+// SetInput applies the change-set in the CreateProtectedAreaInput on the ProtectedAreaCreate builder.
+func (c *ProtectedAreaCreate) SetInput(i CreateProtectedAreaInput) *ProtectedAreaCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateProtectedAreaInput represents a mutation input for updating protectedareas.
+type UpdateProtectedAreaInput struct {
+	ClearCreatedBy      bool
+	CreatedBy           *string
+	UpdatedAt           *time.Time
+	ClearUpdatedBy      bool
+	UpdatedBy           *string
+	ClearDisplayName    bool
+	DisplayName         *string
+	ClearDescription    bool
+	Description         *string
+	ClearExternalLinks  bool
+	ExternalLinks       []string
+	AppendExternalLinks []string
+}
+
+// Mutate applies the UpdateProtectedAreaInput on the ProtectedAreaMutation builder.
+func (i *UpdateProtectedAreaInput) Mutate(m *ProtectedAreaMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLinks {
+		m.ClearExternalLinks()
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+	if i.AppendExternalLinks != nil {
+		m.AppendExternalLinks(i.ExternalLinks)
+	}
+}
+
+// SetInput applies the change-set in the UpdateProtectedAreaInput on the ProtectedAreaUpdate builder.
+func (c *ProtectedAreaUpdate) SetInput(i UpdateProtectedAreaInput) *ProtectedAreaUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateProtectedAreaInput on the ProtectedAreaUpdateOne builder.
+func (c *ProtectedAreaUpdateOne) SetInput(i UpdateProtectedAreaInput) *ProtectedAreaUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateProtectedAreaCategoryInput represents a mutation input for creating protectedareacategories.
+type CreateProtectedAreaCategoryInput struct {
+	CreatedAt     *time.Time
+	CreatedBy     *string
+	UpdatedAt     *time.Time
+	UpdatedBy     *string
+	DisplayName   *string
+	Description   *string
+	ExternalLinks []string
+}
+
+// Mutate applies the CreateProtectedAreaCategoryInput on the ProtectedAreaCategoryMutation builder.
+func (i *CreateProtectedAreaCategoryInput) Mutate(m *ProtectedAreaCategoryMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+}
+
+// SetInput applies the change-set in the CreateProtectedAreaCategoryInput on the ProtectedAreaCategoryCreate builder.
+func (c *ProtectedAreaCategoryCreate) SetInput(i CreateProtectedAreaCategoryInput) *ProtectedAreaCategoryCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateProtectedAreaCategoryInput represents a mutation input for updating protectedareacategories.
+type UpdateProtectedAreaCategoryInput struct {
+	ClearCreatedBy      bool
+	CreatedBy           *string
+	UpdatedAt           *time.Time
+	ClearUpdatedBy      bool
+	UpdatedBy           *string
+	ClearDisplayName    bool
+	DisplayName         *string
+	ClearDescription    bool
+	Description         *string
+	ClearExternalLinks  bool
+	ExternalLinks       []string
+	AppendExternalLinks []string
+}
+
+// Mutate applies the UpdateProtectedAreaCategoryInput on the ProtectedAreaCategoryMutation builder.
+func (i *UpdateProtectedAreaCategoryInput) Mutate(m *ProtectedAreaCategoryMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLinks {
+		m.ClearExternalLinks()
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+	if i.AppendExternalLinks != nil {
+		m.AppendExternalLinks(i.ExternalLinks)
+	}
+}
+
+// SetInput applies the change-set in the UpdateProtectedAreaCategoryInput on the ProtectedAreaCategoryUpdate builder.
+func (c *ProtectedAreaCategoryUpdate) SetInput(i UpdateProtectedAreaCategoryInput) *ProtectedAreaCategoryUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateProtectedAreaCategoryInput on the ProtectedAreaCategoryUpdateOne builder.
+func (c *ProtectedAreaCategoryUpdateOne) SetInput(i UpdateProtectedAreaCategoryInput) *ProtectedAreaCategoryUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateProtectedAreaPictureInput represents a mutation input for creating protectedareapictures.
+type CreateProtectedAreaPictureInput struct {
+	CreatedAt     *time.Time
+	CreatedBy     *string
+	UpdatedAt     *time.Time
+	UpdatedBy     *string
+	DisplayName   *string
+	Description   *string
+	ExternalLinks []string
+}
+
+// Mutate applies the CreateProtectedAreaPictureInput on the ProtectedAreaPictureMutation builder.
+func (i *CreateProtectedAreaPictureInput) Mutate(m *ProtectedAreaPictureMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+}
+
+// SetInput applies the change-set in the CreateProtectedAreaPictureInput on the ProtectedAreaPictureCreate builder.
+func (c *ProtectedAreaPictureCreate) SetInput(i CreateProtectedAreaPictureInput) *ProtectedAreaPictureCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateProtectedAreaPictureInput represents a mutation input for updating protectedareapictures.
+type UpdateProtectedAreaPictureInput struct {
+	ClearCreatedBy      bool
+	CreatedBy           *string
+	UpdatedAt           *time.Time
+	ClearUpdatedBy      bool
+	UpdatedBy           *string
+	ClearDisplayName    bool
+	DisplayName         *string
+	ClearDescription    bool
+	Description         *string
+	ClearExternalLinks  bool
+	ExternalLinks       []string
+	AppendExternalLinks []string
+}
+
+// Mutate applies the UpdateProtectedAreaPictureInput on the ProtectedAreaPictureMutation builder.
+func (i *UpdateProtectedAreaPictureInput) Mutate(m *ProtectedAreaPictureMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLinks {
+		m.ClearExternalLinks()
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+	if i.AppendExternalLinks != nil {
+		m.AppendExternalLinks(i.ExternalLinks)
+	}
+}
+
+// SetInput applies the change-set in the UpdateProtectedAreaPictureInput on the ProtectedAreaPictureUpdate builder.
+func (c *ProtectedAreaPictureUpdate) SetInput(i UpdateProtectedAreaPictureInput) *ProtectedAreaPictureUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateProtectedAreaPictureInput on the ProtectedAreaPictureUpdateOne builder.
+func (c *ProtectedAreaPictureUpdateOne) SetInput(i UpdateProtectedAreaPictureInput) *ProtectedAreaPictureUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreatePublicationInput represents a mutation input for creating publications.
 type CreatePublicationInput struct {
 	CreatedAt     *time.Time
@@ -2702,6 +4212,116 @@ func (c *PublicationUpdate) SetInput(i UpdatePublicationInput) *PublicationUpdat
 
 // SetInput applies the change-set in the UpdatePublicationInput on the PublicationUpdateOne builder.
 func (c *PublicationUpdateOne) SetInput(i UpdatePublicationInput) *PublicationUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreatePublisherInput represents a mutation input for creating publishers.
+type CreatePublisherInput struct {
+	CreatedAt     *time.Time
+	CreatedBy     *string
+	UpdatedAt     *time.Time
+	UpdatedBy     *string
+	DisplayName   *string
+	Description   *string
+	ExternalLinks []string
+}
+
+// Mutate applies the CreatePublisherInput on the PublisherMutation builder.
+func (i *CreatePublisherInput) Mutate(m *PublisherMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+}
+
+// SetInput applies the change-set in the CreatePublisherInput on the PublisherCreate builder.
+func (c *PublisherCreate) SetInput(i CreatePublisherInput) *PublisherCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdatePublisherInput represents a mutation input for updating publishers.
+type UpdatePublisherInput struct {
+	ClearCreatedBy      bool
+	CreatedBy           *string
+	UpdatedAt           *time.Time
+	ClearUpdatedBy      bool
+	UpdatedBy           *string
+	ClearDisplayName    bool
+	DisplayName         *string
+	ClearDescription    bool
+	Description         *string
+	ClearExternalLinks  bool
+	ExternalLinks       []string
+	AppendExternalLinks []string
+}
+
+// Mutate applies the UpdatePublisherInput on the PublisherMutation builder.
+func (i *UpdatePublisherInput) Mutate(m *PublisherMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLinks {
+		m.ClearExternalLinks()
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+	if i.AppendExternalLinks != nil {
+		m.AppendExternalLinks(i.ExternalLinks)
+	}
+}
+
+// SetInput applies the change-set in the UpdatePublisherInput on the PublisherUpdate builder.
+func (c *PublisherUpdate) SetInput(i UpdatePublisherInput) *PublisherUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdatePublisherInput on the PublisherUpdateOne builder.
+func (c *PublisherUpdateOne) SetInput(i UpdatePublisherInput) *PublisherUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

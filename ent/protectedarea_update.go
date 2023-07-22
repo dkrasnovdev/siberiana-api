@@ -6,9 +6,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
@@ -27,6 +29,110 @@ func (pau *ProtectedAreaUpdate) Where(ps ...predicate.ProtectedArea) *ProtectedA
 	return pau
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (pau *ProtectedAreaUpdate) SetCreatedBy(s string) *ProtectedAreaUpdate {
+	pau.mutation.SetCreatedBy(s)
+	return pau
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (pau *ProtectedAreaUpdate) SetNillableCreatedBy(s *string) *ProtectedAreaUpdate {
+	if s != nil {
+		pau.SetCreatedBy(*s)
+	}
+	return pau
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (pau *ProtectedAreaUpdate) ClearCreatedBy() *ProtectedAreaUpdate {
+	pau.mutation.ClearCreatedBy()
+	return pau
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (pau *ProtectedAreaUpdate) SetUpdatedAt(t time.Time) *ProtectedAreaUpdate {
+	pau.mutation.SetUpdatedAt(t)
+	return pau
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (pau *ProtectedAreaUpdate) SetUpdatedBy(s string) *ProtectedAreaUpdate {
+	pau.mutation.SetUpdatedBy(s)
+	return pau
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (pau *ProtectedAreaUpdate) SetNillableUpdatedBy(s *string) *ProtectedAreaUpdate {
+	if s != nil {
+		pau.SetUpdatedBy(*s)
+	}
+	return pau
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (pau *ProtectedAreaUpdate) ClearUpdatedBy() *ProtectedAreaUpdate {
+	pau.mutation.ClearUpdatedBy()
+	return pau
+}
+
+// SetDisplayName sets the "display_name" field.
+func (pau *ProtectedAreaUpdate) SetDisplayName(s string) *ProtectedAreaUpdate {
+	pau.mutation.SetDisplayName(s)
+	return pau
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (pau *ProtectedAreaUpdate) SetNillableDisplayName(s *string) *ProtectedAreaUpdate {
+	if s != nil {
+		pau.SetDisplayName(*s)
+	}
+	return pau
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (pau *ProtectedAreaUpdate) ClearDisplayName() *ProtectedAreaUpdate {
+	pau.mutation.ClearDisplayName()
+	return pau
+}
+
+// SetDescription sets the "description" field.
+func (pau *ProtectedAreaUpdate) SetDescription(s string) *ProtectedAreaUpdate {
+	pau.mutation.SetDescription(s)
+	return pau
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (pau *ProtectedAreaUpdate) SetNillableDescription(s *string) *ProtectedAreaUpdate {
+	if s != nil {
+		pau.SetDescription(*s)
+	}
+	return pau
+}
+
+// ClearDescription clears the value of the "description" field.
+func (pau *ProtectedAreaUpdate) ClearDescription() *ProtectedAreaUpdate {
+	pau.mutation.ClearDescription()
+	return pau
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (pau *ProtectedAreaUpdate) SetExternalLinks(s []string) *ProtectedAreaUpdate {
+	pau.mutation.SetExternalLinks(s)
+	return pau
+}
+
+// AppendExternalLinks appends s to the "external_links" field.
+func (pau *ProtectedAreaUpdate) AppendExternalLinks(s []string) *ProtectedAreaUpdate {
+	pau.mutation.AppendExternalLinks(s)
+	return pau
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (pau *ProtectedAreaUpdate) ClearExternalLinks() *ProtectedAreaUpdate {
+	pau.mutation.ClearExternalLinks()
+	return pau
+}
+
 // Mutation returns the ProtectedAreaMutation object of the builder.
 func (pau *ProtectedAreaUpdate) Mutation() *ProtectedAreaMutation {
 	return pau.mutation
@@ -34,6 +140,9 @@ func (pau *ProtectedAreaUpdate) Mutation() *ProtectedAreaMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (pau *ProtectedAreaUpdate) Save(ctx context.Context) (int, error) {
+	if err := pau.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, pau.sqlSave, pau.mutation, pau.hooks)
 }
 
@@ -59,6 +168,18 @@ func (pau *ProtectedAreaUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (pau *ProtectedAreaUpdate) defaults() error {
+	if _, ok := pau.mutation.UpdatedAt(); !ok {
+		if protectedarea.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized protectedarea.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := protectedarea.UpdateDefaultUpdatedAt()
+		pau.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 func (pau *ProtectedAreaUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(protectedarea.Table, protectedarea.Columns, sqlgraph.NewFieldSpec(protectedarea.FieldID, field.TypeInt))
 	if ps := pau.mutation.predicates; len(ps) > 0 {
@@ -67,6 +188,44 @@ func (pau *ProtectedAreaUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := pau.mutation.CreatedBy(); ok {
+		_spec.SetField(protectedarea.FieldCreatedBy, field.TypeString, value)
+	}
+	if pau.mutation.CreatedByCleared() {
+		_spec.ClearField(protectedarea.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := pau.mutation.UpdatedAt(); ok {
+		_spec.SetField(protectedarea.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := pau.mutation.UpdatedBy(); ok {
+		_spec.SetField(protectedarea.FieldUpdatedBy, field.TypeString, value)
+	}
+	if pau.mutation.UpdatedByCleared() {
+		_spec.ClearField(protectedarea.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := pau.mutation.DisplayName(); ok {
+		_spec.SetField(protectedarea.FieldDisplayName, field.TypeString, value)
+	}
+	if pau.mutation.DisplayNameCleared() {
+		_spec.ClearField(protectedarea.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := pau.mutation.Description(); ok {
+		_spec.SetField(protectedarea.FieldDescription, field.TypeString, value)
+	}
+	if pau.mutation.DescriptionCleared() {
+		_spec.ClearField(protectedarea.FieldDescription, field.TypeString)
+	}
+	if value, ok := pau.mutation.ExternalLinks(); ok {
+		_spec.SetField(protectedarea.FieldExternalLinks, field.TypeJSON, value)
+	}
+	if value, ok := pau.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, protectedarea.FieldExternalLinks, value)
+		})
+	}
+	if pau.mutation.ExternalLinksCleared() {
+		_spec.ClearField(protectedarea.FieldExternalLinks, field.TypeJSON)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, pau.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -86,6 +245,110 @@ type ProtectedAreaUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *ProtectedAreaMutation
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (pauo *ProtectedAreaUpdateOne) SetCreatedBy(s string) *ProtectedAreaUpdateOne {
+	pauo.mutation.SetCreatedBy(s)
+	return pauo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (pauo *ProtectedAreaUpdateOne) SetNillableCreatedBy(s *string) *ProtectedAreaUpdateOne {
+	if s != nil {
+		pauo.SetCreatedBy(*s)
+	}
+	return pauo
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (pauo *ProtectedAreaUpdateOne) ClearCreatedBy() *ProtectedAreaUpdateOne {
+	pauo.mutation.ClearCreatedBy()
+	return pauo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (pauo *ProtectedAreaUpdateOne) SetUpdatedAt(t time.Time) *ProtectedAreaUpdateOne {
+	pauo.mutation.SetUpdatedAt(t)
+	return pauo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (pauo *ProtectedAreaUpdateOne) SetUpdatedBy(s string) *ProtectedAreaUpdateOne {
+	pauo.mutation.SetUpdatedBy(s)
+	return pauo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (pauo *ProtectedAreaUpdateOne) SetNillableUpdatedBy(s *string) *ProtectedAreaUpdateOne {
+	if s != nil {
+		pauo.SetUpdatedBy(*s)
+	}
+	return pauo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (pauo *ProtectedAreaUpdateOne) ClearUpdatedBy() *ProtectedAreaUpdateOne {
+	pauo.mutation.ClearUpdatedBy()
+	return pauo
+}
+
+// SetDisplayName sets the "display_name" field.
+func (pauo *ProtectedAreaUpdateOne) SetDisplayName(s string) *ProtectedAreaUpdateOne {
+	pauo.mutation.SetDisplayName(s)
+	return pauo
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (pauo *ProtectedAreaUpdateOne) SetNillableDisplayName(s *string) *ProtectedAreaUpdateOne {
+	if s != nil {
+		pauo.SetDisplayName(*s)
+	}
+	return pauo
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (pauo *ProtectedAreaUpdateOne) ClearDisplayName() *ProtectedAreaUpdateOne {
+	pauo.mutation.ClearDisplayName()
+	return pauo
+}
+
+// SetDescription sets the "description" field.
+func (pauo *ProtectedAreaUpdateOne) SetDescription(s string) *ProtectedAreaUpdateOne {
+	pauo.mutation.SetDescription(s)
+	return pauo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (pauo *ProtectedAreaUpdateOne) SetNillableDescription(s *string) *ProtectedAreaUpdateOne {
+	if s != nil {
+		pauo.SetDescription(*s)
+	}
+	return pauo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (pauo *ProtectedAreaUpdateOne) ClearDescription() *ProtectedAreaUpdateOne {
+	pauo.mutation.ClearDescription()
+	return pauo
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (pauo *ProtectedAreaUpdateOne) SetExternalLinks(s []string) *ProtectedAreaUpdateOne {
+	pauo.mutation.SetExternalLinks(s)
+	return pauo
+}
+
+// AppendExternalLinks appends s to the "external_links" field.
+func (pauo *ProtectedAreaUpdateOne) AppendExternalLinks(s []string) *ProtectedAreaUpdateOne {
+	pauo.mutation.AppendExternalLinks(s)
+	return pauo
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (pauo *ProtectedAreaUpdateOne) ClearExternalLinks() *ProtectedAreaUpdateOne {
+	pauo.mutation.ClearExternalLinks()
+	return pauo
 }
 
 // Mutation returns the ProtectedAreaMutation object of the builder.
@@ -108,6 +371,9 @@ func (pauo *ProtectedAreaUpdateOne) Select(field string, fields ...string) *Prot
 
 // Save executes the query and returns the updated ProtectedArea entity.
 func (pauo *ProtectedAreaUpdateOne) Save(ctx context.Context) (*ProtectedArea, error) {
+	if err := pauo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, pauo.sqlSave, pauo.mutation, pauo.hooks)
 }
 
@@ -131,6 +397,18 @@ func (pauo *ProtectedAreaUpdateOne) ExecX(ctx context.Context) {
 	if err := pauo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (pauo *ProtectedAreaUpdateOne) defaults() error {
+	if _, ok := pauo.mutation.UpdatedAt(); !ok {
+		if protectedarea.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized protectedarea.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := protectedarea.UpdateDefaultUpdatedAt()
+		pauo.mutation.SetUpdatedAt(v)
+	}
+	return nil
 }
 
 func (pauo *ProtectedAreaUpdateOne) sqlSave(ctx context.Context) (_node *ProtectedArea, err error) {
@@ -158,6 +436,44 @@ func (pauo *ProtectedAreaUpdateOne) sqlSave(ctx context.Context) (_node *Protect
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := pauo.mutation.CreatedBy(); ok {
+		_spec.SetField(protectedarea.FieldCreatedBy, field.TypeString, value)
+	}
+	if pauo.mutation.CreatedByCleared() {
+		_spec.ClearField(protectedarea.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := pauo.mutation.UpdatedAt(); ok {
+		_spec.SetField(protectedarea.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := pauo.mutation.UpdatedBy(); ok {
+		_spec.SetField(protectedarea.FieldUpdatedBy, field.TypeString, value)
+	}
+	if pauo.mutation.UpdatedByCleared() {
+		_spec.ClearField(protectedarea.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := pauo.mutation.DisplayName(); ok {
+		_spec.SetField(protectedarea.FieldDisplayName, field.TypeString, value)
+	}
+	if pauo.mutation.DisplayNameCleared() {
+		_spec.ClearField(protectedarea.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := pauo.mutation.Description(); ok {
+		_spec.SetField(protectedarea.FieldDescription, field.TypeString, value)
+	}
+	if pauo.mutation.DescriptionCleared() {
+		_spec.ClearField(protectedarea.FieldDescription, field.TypeString)
+	}
+	if value, ok := pauo.mutation.ExternalLinks(); ok {
+		_spec.SetField(protectedarea.FieldExternalLinks, field.TypeJSON, value)
+	}
+	if value, ok := pauo.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, protectedarea.FieldExternalLinks, value)
+		})
+	}
+	if pauo.mutation.ExternalLinksCleared() {
+		_spec.ClearField(protectedarea.FieldExternalLinks, field.TypeJSON)
 	}
 	_node = &ProtectedArea{config: pauo.config}
 	_spec.Assign = _node.assignValues

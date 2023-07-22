@@ -55,7 +55,7 @@ func (Artifact) Annotations() []schema.Annotation {
 // Fields of the Artifact.
 func (Artifact) Fields() []ent.Field {
 	return []ent.Field{
-		// TODO: Add 'Номер по КП'
+
 		field.String("dimensions").Optional(),
 		field.String("weight").Optional(),
 		field.String("chemical_composition").Optional(),

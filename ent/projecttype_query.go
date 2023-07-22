@@ -5,6 +5,7 @@ package ent
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -365,6 +366,12 @@ func (ptq *ProjectTypeQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		ptq.sql = prev
+	}
+	if projecttype.Policy == nil {
+		return errors.New("ent: uninitialized projecttype.Policy (forgotten import ent/runtime?)")
+	}
+	if err := projecttype.Policy.EvalQuery(ctx, ptq); err != nil {
+		return err
 	}
 	return nil
 }

@@ -4,7 +4,9 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -18,6 +20,96 @@ type ProtectedAreaPictureCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (papc *ProtectedAreaPictureCreate) SetCreatedAt(t time.Time) *ProtectedAreaPictureCreate {
+	papc.mutation.SetCreatedAt(t)
+	return papc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (papc *ProtectedAreaPictureCreate) SetNillableCreatedAt(t *time.Time) *ProtectedAreaPictureCreate {
+	if t != nil {
+		papc.SetCreatedAt(*t)
+	}
+	return papc
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (papc *ProtectedAreaPictureCreate) SetCreatedBy(s string) *ProtectedAreaPictureCreate {
+	papc.mutation.SetCreatedBy(s)
+	return papc
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (papc *ProtectedAreaPictureCreate) SetNillableCreatedBy(s *string) *ProtectedAreaPictureCreate {
+	if s != nil {
+		papc.SetCreatedBy(*s)
+	}
+	return papc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (papc *ProtectedAreaPictureCreate) SetUpdatedAt(t time.Time) *ProtectedAreaPictureCreate {
+	papc.mutation.SetUpdatedAt(t)
+	return papc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (papc *ProtectedAreaPictureCreate) SetNillableUpdatedAt(t *time.Time) *ProtectedAreaPictureCreate {
+	if t != nil {
+		papc.SetUpdatedAt(*t)
+	}
+	return papc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (papc *ProtectedAreaPictureCreate) SetUpdatedBy(s string) *ProtectedAreaPictureCreate {
+	papc.mutation.SetUpdatedBy(s)
+	return papc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (papc *ProtectedAreaPictureCreate) SetNillableUpdatedBy(s *string) *ProtectedAreaPictureCreate {
+	if s != nil {
+		papc.SetUpdatedBy(*s)
+	}
+	return papc
+}
+
+// SetDisplayName sets the "display_name" field.
+func (papc *ProtectedAreaPictureCreate) SetDisplayName(s string) *ProtectedAreaPictureCreate {
+	papc.mutation.SetDisplayName(s)
+	return papc
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (papc *ProtectedAreaPictureCreate) SetNillableDisplayName(s *string) *ProtectedAreaPictureCreate {
+	if s != nil {
+		papc.SetDisplayName(*s)
+	}
+	return papc
+}
+
+// SetDescription sets the "description" field.
+func (papc *ProtectedAreaPictureCreate) SetDescription(s string) *ProtectedAreaPictureCreate {
+	papc.mutation.SetDescription(s)
+	return papc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (papc *ProtectedAreaPictureCreate) SetNillableDescription(s *string) *ProtectedAreaPictureCreate {
+	if s != nil {
+		papc.SetDescription(*s)
+	}
+	return papc
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (papc *ProtectedAreaPictureCreate) SetExternalLinks(s []string) *ProtectedAreaPictureCreate {
+	papc.mutation.SetExternalLinks(s)
+	return papc
+}
+
 // Mutation returns the ProtectedAreaPictureMutation object of the builder.
 func (papc *ProtectedAreaPictureCreate) Mutation() *ProtectedAreaPictureMutation {
 	return papc.mutation
@@ -25,6 +117,9 @@ func (papc *ProtectedAreaPictureCreate) Mutation() *ProtectedAreaPictureMutation
 
 // Save creates the ProtectedAreaPicture in the database.
 func (papc *ProtectedAreaPictureCreate) Save(ctx context.Context) (*ProtectedAreaPicture, error) {
+	if err := papc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, papc.sqlSave, papc.mutation, papc.hooks)
 }
 
@@ -50,8 +145,33 @@ func (papc *ProtectedAreaPictureCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (papc *ProtectedAreaPictureCreate) defaults() error {
+	if _, ok := papc.mutation.CreatedAt(); !ok {
+		if protectedareapicture.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized protectedareapicture.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := protectedareapicture.DefaultCreatedAt()
+		papc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := papc.mutation.UpdatedAt(); !ok {
+		if protectedareapicture.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized protectedareapicture.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := protectedareapicture.DefaultUpdatedAt()
+		papc.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (papc *ProtectedAreaPictureCreate) check() error {
+	if _, ok := papc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "ProtectedAreaPicture.created_at"`)}
+	}
+	if _, ok := papc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "ProtectedAreaPicture.updated_at"`)}
+	}
 	return nil
 }
 
@@ -78,6 +198,34 @@ func (papc *ProtectedAreaPictureCreate) createSpec() (*ProtectedAreaPicture, *sq
 		_node = &ProtectedAreaPicture{config: papc.config}
 		_spec = sqlgraph.NewCreateSpec(protectedareapicture.Table, sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt))
 	)
+	if value, ok := papc.mutation.CreatedAt(); ok {
+		_spec.SetField(protectedareapicture.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := papc.mutation.CreatedBy(); ok {
+		_spec.SetField(protectedareapicture.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := papc.mutation.UpdatedAt(); ok {
+		_spec.SetField(protectedareapicture.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := papc.mutation.UpdatedBy(); ok {
+		_spec.SetField(protectedareapicture.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
+	if value, ok := papc.mutation.DisplayName(); ok {
+		_spec.SetField(protectedareapicture.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
+	}
+	if value, ok := papc.mutation.Description(); ok {
+		_spec.SetField(protectedareapicture.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if value, ok := papc.mutation.ExternalLinks(); ok {
+		_spec.SetField(protectedareapicture.FieldExternalLinks, field.TypeJSON, value)
+		_node.ExternalLinks = value
+	}
 	return _node, _spec
 }
 
@@ -95,6 +243,7 @@ func (papcb *ProtectedAreaPictureCreateBulk) Save(ctx context.Context) ([]*Prote
 	for i := range papcb.builders {
 		func(i int, root context.Context) {
 			builder := papcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ProtectedAreaPictureMutation)
 				if !ok {

@@ -21,6 +21,13 @@ var (
 	// ArtGenresColumns holds the columns for the "art_genres" table.
 	ArtGenresColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
 	// ArtGenresTable holds the schema information for the "art_genres" table.
 	ArtGenresTable = &schema.Table{
@@ -31,6 +38,13 @@ var (
 	// ArtStylesColumns holds the columns for the "art_styles" table.
 	ArtStylesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
 	// ArtStylesTable holds the schema information for the "art_styles" table.
 	ArtStylesTable = &schema.Table{
@@ -144,6 +158,13 @@ var (
 	// BooksColumns holds the columns for the "books" table.
 	BooksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
 	// BooksTable holds the schema information for the "books" table.
 	BooksTable = &schema.Table{
@@ -154,6 +175,13 @@ var (
 	// BookGenresColumns holds the columns for the "book_genres" table.
 	BookGenresColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
 	// BookGenresTable holds the schema information for the "book_genres" table.
 	BookGenresTable = &schema.Table{
@@ -293,6 +321,13 @@ var (
 	// LibrariesColumns holds the columns for the "libraries" table.
 	LibrariesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
 	// LibrariesTable holds the schema information for the "libraries" table.
 	LibrariesTable = &schema.Table{
@@ -576,6 +611,13 @@ var (
 	// ProtectedAreasColumns holds the columns for the "protected_areas" table.
 	ProtectedAreasColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
 	// ProtectedAreasTable holds the schema information for the "protected_areas" table.
 	ProtectedAreasTable = &schema.Table{
@@ -586,6 +628,13 @@ var (
 	// ProtectedAreaCategoriesColumns holds the columns for the "protected_area_categories" table.
 	ProtectedAreaCategoriesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
 	// ProtectedAreaCategoriesTable holds the schema information for the "protected_area_categories" table.
 	ProtectedAreaCategoriesTable = &schema.Table{
@@ -596,6 +645,13 @@ var (
 	// ProtectedAreaPicturesColumns holds the columns for the "protected_area_pictures" table.
 	ProtectedAreaPicturesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
 	// ProtectedAreaPicturesTable holds the schema information for the "protected_area_pictures" table.
 	ProtectedAreaPicturesTable = &schema.Table{
@@ -623,6 +679,13 @@ var (
 	// PublishersColumns holds the columns for the "publishers" table.
 	PublishersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
 	// PublishersTable holds the schema information for the "publishers" table.
 	PublishersTable = &schema.Table{

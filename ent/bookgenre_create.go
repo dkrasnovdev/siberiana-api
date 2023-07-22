@@ -4,7 +4,9 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -18,6 +20,96 @@ type BookGenreCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (bgc *BookGenreCreate) SetCreatedAt(t time.Time) *BookGenreCreate {
+	bgc.mutation.SetCreatedAt(t)
+	return bgc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (bgc *BookGenreCreate) SetNillableCreatedAt(t *time.Time) *BookGenreCreate {
+	if t != nil {
+		bgc.SetCreatedAt(*t)
+	}
+	return bgc
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (bgc *BookGenreCreate) SetCreatedBy(s string) *BookGenreCreate {
+	bgc.mutation.SetCreatedBy(s)
+	return bgc
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (bgc *BookGenreCreate) SetNillableCreatedBy(s *string) *BookGenreCreate {
+	if s != nil {
+		bgc.SetCreatedBy(*s)
+	}
+	return bgc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (bgc *BookGenreCreate) SetUpdatedAt(t time.Time) *BookGenreCreate {
+	bgc.mutation.SetUpdatedAt(t)
+	return bgc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (bgc *BookGenreCreate) SetNillableUpdatedAt(t *time.Time) *BookGenreCreate {
+	if t != nil {
+		bgc.SetUpdatedAt(*t)
+	}
+	return bgc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (bgc *BookGenreCreate) SetUpdatedBy(s string) *BookGenreCreate {
+	bgc.mutation.SetUpdatedBy(s)
+	return bgc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (bgc *BookGenreCreate) SetNillableUpdatedBy(s *string) *BookGenreCreate {
+	if s != nil {
+		bgc.SetUpdatedBy(*s)
+	}
+	return bgc
+}
+
+// SetDisplayName sets the "display_name" field.
+func (bgc *BookGenreCreate) SetDisplayName(s string) *BookGenreCreate {
+	bgc.mutation.SetDisplayName(s)
+	return bgc
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (bgc *BookGenreCreate) SetNillableDisplayName(s *string) *BookGenreCreate {
+	if s != nil {
+		bgc.SetDisplayName(*s)
+	}
+	return bgc
+}
+
+// SetDescription sets the "description" field.
+func (bgc *BookGenreCreate) SetDescription(s string) *BookGenreCreate {
+	bgc.mutation.SetDescription(s)
+	return bgc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (bgc *BookGenreCreate) SetNillableDescription(s *string) *BookGenreCreate {
+	if s != nil {
+		bgc.SetDescription(*s)
+	}
+	return bgc
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (bgc *BookGenreCreate) SetExternalLinks(s []string) *BookGenreCreate {
+	bgc.mutation.SetExternalLinks(s)
+	return bgc
+}
+
 // Mutation returns the BookGenreMutation object of the builder.
 func (bgc *BookGenreCreate) Mutation() *BookGenreMutation {
 	return bgc.mutation
@@ -25,6 +117,9 @@ func (bgc *BookGenreCreate) Mutation() *BookGenreMutation {
 
 // Save creates the BookGenre in the database.
 func (bgc *BookGenreCreate) Save(ctx context.Context) (*BookGenre, error) {
+	if err := bgc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, bgc.sqlSave, bgc.mutation, bgc.hooks)
 }
 
@@ -50,8 +145,33 @@ func (bgc *BookGenreCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (bgc *BookGenreCreate) defaults() error {
+	if _, ok := bgc.mutation.CreatedAt(); !ok {
+		if bookgenre.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized bookgenre.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := bookgenre.DefaultCreatedAt()
+		bgc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := bgc.mutation.UpdatedAt(); !ok {
+		if bookgenre.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized bookgenre.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := bookgenre.DefaultUpdatedAt()
+		bgc.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (bgc *BookGenreCreate) check() error {
+	if _, ok := bgc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "BookGenre.created_at"`)}
+	}
+	if _, ok := bgc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "BookGenre.updated_at"`)}
+	}
 	return nil
 }
 
@@ -78,6 +198,34 @@ func (bgc *BookGenreCreate) createSpec() (*BookGenre, *sqlgraph.CreateSpec) {
 		_node = &BookGenre{config: bgc.config}
 		_spec = sqlgraph.NewCreateSpec(bookgenre.Table, sqlgraph.NewFieldSpec(bookgenre.FieldID, field.TypeInt))
 	)
+	if value, ok := bgc.mutation.CreatedAt(); ok {
+		_spec.SetField(bookgenre.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := bgc.mutation.CreatedBy(); ok {
+		_spec.SetField(bookgenre.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := bgc.mutation.UpdatedAt(); ok {
+		_spec.SetField(bookgenre.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := bgc.mutation.UpdatedBy(); ok {
+		_spec.SetField(bookgenre.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
+	if value, ok := bgc.mutation.DisplayName(); ok {
+		_spec.SetField(bookgenre.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
+	}
+	if value, ok := bgc.mutation.Description(); ok {
+		_spec.SetField(bookgenre.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if value, ok := bgc.mutation.ExternalLinks(); ok {
+		_spec.SetField(bookgenre.FieldExternalLinks, field.TypeJSON, value)
+		_node.ExternalLinks = value
+	}
 	return _node, _spec
 }
 
@@ -95,6 +243,7 @@ func (bgcb *BookGenreCreateBulk) Save(ctx context.Context) ([]*BookGenre, error)
 	for i := range bgcb.builders {
 		func(i int, root context.Context) {
 			builder := bgcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*BookGenreMutation)
 				if !ok {

@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -259,6 +260,18 @@ func (lq *LibraryQuery) Clone() *LibraryQuery {
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Library.Query().
+//		GroupBy(library.FieldCreatedAt).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (lq *LibraryQuery) GroupBy(field string, fields ...string) *LibraryGroupBy {
 	lq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &LibraryGroupBy{build: lq}
@@ -270,6 +283,16 @@ func (lq *LibraryQuery) GroupBy(field string, fields ...string) *LibraryGroupBy 
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//	}
+//
+//	client.Library.Query().
+//		Select(library.FieldCreatedAt).
+//		Scan(ctx, &v)
 func (lq *LibraryQuery) Select(fields ...string) *LibrarySelect {
 	lq.ctx.Fields = append(lq.ctx.Fields, fields...)
 	sbuild := &LibrarySelect{LibraryQuery: lq}
@@ -305,6 +328,12 @@ func (lq *LibraryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		lq.sql = prev
+	}
+	if library.Policy == nil {
+		return errors.New("ent: uninitialized library.Policy (forgotten import ent/runtime?)")
+	}
+	if err := library.Policy.EvalQuery(ctx, lq); err != nil {
+		return err
 	}
 	return nil
 }

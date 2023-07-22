@@ -4,7 +4,9 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -18,6 +20,96 @@ type ProtectedAreaCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (pac *ProtectedAreaCreate) SetCreatedAt(t time.Time) *ProtectedAreaCreate {
+	pac.mutation.SetCreatedAt(t)
+	return pac
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (pac *ProtectedAreaCreate) SetNillableCreatedAt(t *time.Time) *ProtectedAreaCreate {
+	if t != nil {
+		pac.SetCreatedAt(*t)
+	}
+	return pac
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (pac *ProtectedAreaCreate) SetCreatedBy(s string) *ProtectedAreaCreate {
+	pac.mutation.SetCreatedBy(s)
+	return pac
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (pac *ProtectedAreaCreate) SetNillableCreatedBy(s *string) *ProtectedAreaCreate {
+	if s != nil {
+		pac.SetCreatedBy(*s)
+	}
+	return pac
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (pac *ProtectedAreaCreate) SetUpdatedAt(t time.Time) *ProtectedAreaCreate {
+	pac.mutation.SetUpdatedAt(t)
+	return pac
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (pac *ProtectedAreaCreate) SetNillableUpdatedAt(t *time.Time) *ProtectedAreaCreate {
+	if t != nil {
+		pac.SetUpdatedAt(*t)
+	}
+	return pac
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (pac *ProtectedAreaCreate) SetUpdatedBy(s string) *ProtectedAreaCreate {
+	pac.mutation.SetUpdatedBy(s)
+	return pac
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (pac *ProtectedAreaCreate) SetNillableUpdatedBy(s *string) *ProtectedAreaCreate {
+	if s != nil {
+		pac.SetUpdatedBy(*s)
+	}
+	return pac
+}
+
+// SetDisplayName sets the "display_name" field.
+func (pac *ProtectedAreaCreate) SetDisplayName(s string) *ProtectedAreaCreate {
+	pac.mutation.SetDisplayName(s)
+	return pac
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (pac *ProtectedAreaCreate) SetNillableDisplayName(s *string) *ProtectedAreaCreate {
+	if s != nil {
+		pac.SetDisplayName(*s)
+	}
+	return pac
+}
+
+// SetDescription sets the "description" field.
+func (pac *ProtectedAreaCreate) SetDescription(s string) *ProtectedAreaCreate {
+	pac.mutation.SetDescription(s)
+	return pac
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (pac *ProtectedAreaCreate) SetNillableDescription(s *string) *ProtectedAreaCreate {
+	if s != nil {
+		pac.SetDescription(*s)
+	}
+	return pac
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (pac *ProtectedAreaCreate) SetExternalLinks(s []string) *ProtectedAreaCreate {
+	pac.mutation.SetExternalLinks(s)
+	return pac
+}
+
 // Mutation returns the ProtectedAreaMutation object of the builder.
 func (pac *ProtectedAreaCreate) Mutation() *ProtectedAreaMutation {
 	return pac.mutation
@@ -25,6 +117,9 @@ func (pac *ProtectedAreaCreate) Mutation() *ProtectedAreaMutation {
 
 // Save creates the ProtectedArea in the database.
 func (pac *ProtectedAreaCreate) Save(ctx context.Context) (*ProtectedArea, error) {
+	if err := pac.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, pac.sqlSave, pac.mutation, pac.hooks)
 }
 
@@ -50,8 +145,33 @@ func (pac *ProtectedAreaCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (pac *ProtectedAreaCreate) defaults() error {
+	if _, ok := pac.mutation.CreatedAt(); !ok {
+		if protectedarea.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized protectedarea.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := protectedarea.DefaultCreatedAt()
+		pac.mutation.SetCreatedAt(v)
+	}
+	if _, ok := pac.mutation.UpdatedAt(); !ok {
+		if protectedarea.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized protectedarea.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := protectedarea.DefaultUpdatedAt()
+		pac.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (pac *ProtectedAreaCreate) check() error {
+	if _, ok := pac.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "ProtectedArea.created_at"`)}
+	}
+	if _, ok := pac.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "ProtectedArea.updated_at"`)}
+	}
 	return nil
 }
 
@@ -78,6 +198,34 @@ func (pac *ProtectedAreaCreate) createSpec() (*ProtectedArea, *sqlgraph.CreateSp
 		_node = &ProtectedArea{config: pac.config}
 		_spec = sqlgraph.NewCreateSpec(protectedarea.Table, sqlgraph.NewFieldSpec(protectedarea.FieldID, field.TypeInt))
 	)
+	if value, ok := pac.mutation.CreatedAt(); ok {
+		_spec.SetField(protectedarea.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := pac.mutation.CreatedBy(); ok {
+		_spec.SetField(protectedarea.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := pac.mutation.UpdatedAt(); ok {
+		_spec.SetField(protectedarea.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := pac.mutation.UpdatedBy(); ok {
+		_spec.SetField(protectedarea.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
+	if value, ok := pac.mutation.DisplayName(); ok {
+		_spec.SetField(protectedarea.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
+	}
+	if value, ok := pac.mutation.Description(); ok {
+		_spec.SetField(protectedarea.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if value, ok := pac.mutation.ExternalLinks(); ok {
+		_spec.SetField(protectedarea.FieldExternalLinks, field.TypeJSON, value)
+		_node.ExternalLinks = value
+	}
 	return _node, _spec
 }
 
@@ -95,6 +243,7 @@ func (pacb *ProtectedAreaCreateBulk) Save(ctx context.Context) ([]*ProtectedArea
 	for i := range pacb.builders {
 		func(i int, root context.Context) {
 			builder := pacb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ProtectedAreaMutation)
 				if !ok {

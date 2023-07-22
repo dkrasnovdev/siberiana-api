@@ -5,6 +5,7 @@ package ent
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -365,6 +366,12 @@ func (pq *PeriodQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		pq.sql = prev
+	}
+	if period.Policy == nil {
+		return errors.New("ent: uninitialized period.Policy (forgotten import ent/runtime?)")
+	}
+	if err := period.Policy.EvalQuery(ctx, pq); err != nil {
+		return err
 	}
 	return nil
 }

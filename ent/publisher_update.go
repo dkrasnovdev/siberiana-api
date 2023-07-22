@@ -6,9 +6,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/publisher"
@@ -27,6 +29,110 @@ func (pu *PublisherUpdate) Where(ps ...predicate.Publisher) *PublisherUpdate {
 	return pu
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (pu *PublisherUpdate) SetCreatedBy(s string) *PublisherUpdate {
+	pu.mutation.SetCreatedBy(s)
+	return pu
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (pu *PublisherUpdate) SetNillableCreatedBy(s *string) *PublisherUpdate {
+	if s != nil {
+		pu.SetCreatedBy(*s)
+	}
+	return pu
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (pu *PublisherUpdate) ClearCreatedBy() *PublisherUpdate {
+	pu.mutation.ClearCreatedBy()
+	return pu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (pu *PublisherUpdate) SetUpdatedAt(t time.Time) *PublisherUpdate {
+	pu.mutation.SetUpdatedAt(t)
+	return pu
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (pu *PublisherUpdate) SetUpdatedBy(s string) *PublisherUpdate {
+	pu.mutation.SetUpdatedBy(s)
+	return pu
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (pu *PublisherUpdate) SetNillableUpdatedBy(s *string) *PublisherUpdate {
+	if s != nil {
+		pu.SetUpdatedBy(*s)
+	}
+	return pu
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (pu *PublisherUpdate) ClearUpdatedBy() *PublisherUpdate {
+	pu.mutation.ClearUpdatedBy()
+	return pu
+}
+
+// SetDisplayName sets the "display_name" field.
+func (pu *PublisherUpdate) SetDisplayName(s string) *PublisherUpdate {
+	pu.mutation.SetDisplayName(s)
+	return pu
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (pu *PublisherUpdate) SetNillableDisplayName(s *string) *PublisherUpdate {
+	if s != nil {
+		pu.SetDisplayName(*s)
+	}
+	return pu
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (pu *PublisherUpdate) ClearDisplayName() *PublisherUpdate {
+	pu.mutation.ClearDisplayName()
+	return pu
+}
+
+// SetDescription sets the "description" field.
+func (pu *PublisherUpdate) SetDescription(s string) *PublisherUpdate {
+	pu.mutation.SetDescription(s)
+	return pu
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (pu *PublisherUpdate) SetNillableDescription(s *string) *PublisherUpdate {
+	if s != nil {
+		pu.SetDescription(*s)
+	}
+	return pu
+}
+
+// ClearDescription clears the value of the "description" field.
+func (pu *PublisherUpdate) ClearDescription() *PublisherUpdate {
+	pu.mutation.ClearDescription()
+	return pu
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (pu *PublisherUpdate) SetExternalLinks(s []string) *PublisherUpdate {
+	pu.mutation.SetExternalLinks(s)
+	return pu
+}
+
+// AppendExternalLinks appends s to the "external_links" field.
+func (pu *PublisherUpdate) AppendExternalLinks(s []string) *PublisherUpdate {
+	pu.mutation.AppendExternalLinks(s)
+	return pu
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (pu *PublisherUpdate) ClearExternalLinks() *PublisherUpdate {
+	pu.mutation.ClearExternalLinks()
+	return pu
+}
+
 // Mutation returns the PublisherMutation object of the builder.
 func (pu *PublisherUpdate) Mutation() *PublisherMutation {
 	return pu.mutation
@@ -34,6 +140,9 @@ func (pu *PublisherUpdate) Mutation() *PublisherMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (pu *PublisherUpdate) Save(ctx context.Context) (int, error) {
+	if err := pu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, pu.sqlSave, pu.mutation, pu.hooks)
 }
 
@@ -59,6 +168,18 @@ func (pu *PublisherUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (pu *PublisherUpdate) defaults() error {
+	if _, ok := pu.mutation.UpdatedAt(); !ok {
+		if publisher.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized publisher.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := publisher.UpdateDefaultUpdatedAt()
+		pu.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 func (pu *PublisherUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(publisher.Table, publisher.Columns, sqlgraph.NewFieldSpec(publisher.FieldID, field.TypeInt))
 	if ps := pu.mutation.predicates; len(ps) > 0 {
@@ -67,6 +188,44 @@ func (pu *PublisherUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := pu.mutation.CreatedBy(); ok {
+		_spec.SetField(publisher.FieldCreatedBy, field.TypeString, value)
+	}
+	if pu.mutation.CreatedByCleared() {
+		_spec.ClearField(publisher.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := pu.mutation.UpdatedAt(); ok {
+		_spec.SetField(publisher.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := pu.mutation.UpdatedBy(); ok {
+		_spec.SetField(publisher.FieldUpdatedBy, field.TypeString, value)
+	}
+	if pu.mutation.UpdatedByCleared() {
+		_spec.ClearField(publisher.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := pu.mutation.DisplayName(); ok {
+		_spec.SetField(publisher.FieldDisplayName, field.TypeString, value)
+	}
+	if pu.mutation.DisplayNameCleared() {
+		_spec.ClearField(publisher.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := pu.mutation.Description(); ok {
+		_spec.SetField(publisher.FieldDescription, field.TypeString, value)
+	}
+	if pu.mutation.DescriptionCleared() {
+		_spec.ClearField(publisher.FieldDescription, field.TypeString)
+	}
+	if value, ok := pu.mutation.ExternalLinks(); ok {
+		_spec.SetField(publisher.FieldExternalLinks, field.TypeJSON, value)
+	}
+	if value, ok := pu.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, publisher.FieldExternalLinks, value)
+		})
+	}
+	if pu.mutation.ExternalLinksCleared() {
+		_spec.ClearField(publisher.FieldExternalLinks, field.TypeJSON)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, pu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -86,6 +245,110 @@ type PublisherUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *PublisherMutation
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (puo *PublisherUpdateOne) SetCreatedBy(s string) *PublisherUpdateOne {
+	puo.mutation.SetCreatedBy(s)
+	return puo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (puo *PublisherUpdateOne) SetNillableCreatedBy(s *string) *PublisherUpdateOne {
+	if s != nil {
+		puo.SetCreatedBy(*s)
+	}
+	return puo
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (puo *PublisherUpdateOne) ClearCreatedBy() *PublisherUpdateOne {
+	puo.mutation.ClearCreatedBy()
+	return puo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (puo *PublisherUpdateOne) SetUpdatedAt(t time.Time) *PublisherUpdateOne {
+	puo.mutation.SetUpdatedAt(t)
+	return puo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (puo *PublisherUpdateOne) SetUpdatedBy(s string) *PublisherUpdateOne {
+	puo.mutation.SetUpdatedBy(s)
+	return puo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (puo *PublisherUpdateOne) SetNillableUpdatedBy(s *string) *PublisherUpdateOne {
+	if s != nil {
+		puo.SetUpdatedBy(*s)
+	}
+	return puo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (puo *PublisherUpdateOne) ClearUpdatedBy() *PublisherUpdateOne {
+	puo.mutation.ClearUpdatedBy()
+	return puo
+}
+
+// SetDisplayName sets the "display_name" field.
+func (puo *PublisherUpdateOne) SetDisplayName(s string) *PublisherUpdateOne {
+	puo.mutation.SetDisplayName(s)
+	return puo
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (puo *PublisherUpdateOne) SetNillableDisplayName(s *string) *PublisherUpdateOne {
+	if s != nil {
+		puo.SetDisplayName(*s)
+	}
+	return puo
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (puo *PublisherUpdateOne) ClearDisplayName() *PublisherUpdateOne {
+	puo.mutation.ClearDisplayName()
+	return puo
+}
+
+// SetDescription sets the "description" field.
+func (puo *PublisherUpdateOne) SetDescription(s string) *PublisherUpdateOne {
+	puo.mutation.SetDescription(s)
+	return puo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (puo *PublisherUpdateOne) SetNillableDescription(s *string) *PublisherUpdateOne {
+	if s != nil {
+		puo.SetDescription(*s)
+	}
+	return puo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (puo *PublisherUpdateOne) ClearDescription() *PublisherUpdateOne {
+	puo.mutation.ClearDescription()
+	return puo
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (puo *PublisherUpdateOne) SetExternalLinks(s []string) *PublisherUpdateOne {
+	puo.mutation.SetExternalLinks(s)
+	return puo
+}
+
+// AppendExternalLinks appends s to the "external_links" field.
+func (puo *PublisherUpdateOne) AppendExternalLinks(s []string) *PublisherUpdateOne {
+	puo.mutation.AppendExternalLinks(s)
+	return puo
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (puo *PublisherUpdateOne) ClearExternalLinks() *PublisherUpdateOne {
+	puo.mutation.ClearExternalLinks()
+	return puo
 }
 
 // Mutation returns the PublisherMutation object of the builder.
@@ -108,6 +371,9 @@ func (puo *PublisherUpdateOne) Select(field string, fields ...string) *Publisher
 
 // Save executes the query and returns the updated Publisher entity.
 func (puo *PublisherUpdateOne) Save(ctx context.Context) (*Publisher, error) {
+	if err := puo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, puo.sqlSave, puo.mutation, puo.hooks)
 }
 
@@ -131,6 +397,18 @@ func (puo *PublisherUpdateOne) ExecX(ctx context.Context) {
 	if err := puo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (puo *PublisherUpdateOne) defaults() error {
+	if _, ok := puo.mutation.UpdatedAt(); !ok {
+		if publisher.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized publisher.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := publisher.UpdateDefaultUpdatedAt()
+		puo.mutation.SetUpdatedAt(v)
+	}
+	return nil
 }
 
 func (puo *PublisherUpdateOne) sqlSave(ctx context.Context) (_node *Publisher, err error) {
@@ -158,6 +436,44 @@ func (puo *PublisherUpdateOne) sqlSave(ctx context.Context) (_node *Publisher, e
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := puo.mutation.CreatedBy(); ok {
+		_spec.SetField(publisher.FieldCreatedBy, field.TypeString, value)
+	}
+	if puo.mutation.CreatedByCleared() {
+		_spec.ClearField(publisher.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := puo.mutation.UpdatedAt(); ok {
+		_spec.SetField(publisher.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := puo.mutation.UpdatedBy(); ok {
+		_spec.SetField(publisher.FieldUpdatedBy, field.TypeString, value)
+	}
+	if puo.mutation.UpdatedByCleared() {
+		_spec.ClearField(publisher.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := puo.mutation.DisplayName(); ok {
+		_spec.SetField(publisher.FieldDisplayName, field.TypeString, value)
+	}
+	if puo.mutation.DisplayNameCleared() {
+		_spec.ClearField(publisher.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := puo.mutation.Description(); ok {
+		_spec.SetField(publisher.FieldDescription, field.TypeString, value)
+	}
+	if puo.mutation.DescriptionCleared() {
+		_spec.ClearField(publisher.FieldDescription, field.TypeString)
+	}
+	if value, ok := puo.mutation.ExternalLinks(); ok {
+		_spec.SetField(publisher.FieldExternalLinks, field.TypeJSON, value)
+	}
+	if value, ok := puo.mutation.AppendedExternalLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, publisher.FieldExternalLinks, value)
+		})
+	}
+	if puo.mutation.ExternalLinksCleared() {
+		_spec.ClearField(publisher.FieldExternalLinks, field.TypeJSON)
 	}
 	_node = &Publisher{config: puo.config}
 	_spec.Assign = _node.assignValues

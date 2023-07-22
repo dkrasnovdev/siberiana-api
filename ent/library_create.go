@@ -4,7 +4,9 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -18,6 +20,96 @@ type LibraryCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (lc *LibraryCreate) SetCreatedAt(t time.Time) *LibraryCreate {
+	lc.mutation.SetCreatedAt(t)
+	return lc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (lc *LibraryCreate) SetNillableCreatedAt(t *time.Time) *LibraryCreate {
+	if t != nil {
+		lc.SetCreatedAt(*t)
+	}
+	return lc
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (lc *LibraryCreate) SetCreatedBy(s string) *LibraryCreate {
+	lc.mutation.SetCreatedBy(s)
+	return lc
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (lc *LibraryCreate) SetNillableCreatedBy(s *string) *LibraryCreate {
+	if s != nil {
+		lc.SetCreatedBy(*s)
+	}
+	return lc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (lc *LibraryCreate) SetUpdatedAt(t time.Time) *LibraryCreate {
+	lc.mutation.SetUpdatedAt(t)
+	return lc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (lc *LibraryCreate) SetNillableUpdatedAt(t *time.Time) *LibraryCreate {
+	if t != nil {
+		lc.SetUpdatedAt(*t)
+	}
+	return lc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (lc *LibraryCreate) SetUpdatedBy(s string) *LibraryCreate {
+	lc.mutation.SetUpdatedBy(s)
+	return lc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (lc *LibraryCreate) SetNillableUpdatedBy(s *string) *LibraryCreate {
+	if s != nil {
+		lc.SetUpdatedBy(*s)
+	}
+	return lc
+}
+
+// SetDisplayName sets the "display_name" field.
+func (lc *LibraryCreate) SetDisplayName(s string) *LibraryCreate {
+	lc.mutation.SetDisplayName(s)
+	return lc
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (lc *LibraryCreate) SetNillableDisplayName(s *string) *LibraryCreate {
+	if s != nil {
+		lc.SetDisplayName(*s)
+	}
+	return lc
+}
+
+// SetDescription sets the "description" field.
+func (lc *LibraryCreate) SetDescription(s string) *LibraryCreate {
+	lc.mutation.SetDescription(s)
+	return lc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (lc *LibraryCreate) SetNillableDescription(s *string) *LibraryCreate {
+	if s != nil {
+		lc.SetDescription(*s)
+	}
+	return lc
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (lc *LibraryCreate) SetExternalLinks(s []string) *LibraryCreate {
+	lc.mutation.SetExternalLinks(s)
+	return lc
+}
+
 // Mutation returns the LibraryMutation object of the builder.
 func (lc *LibraryCreate) Mutation() *LibraryMutation {
 	return lc.mutation
@@ -25,6 +117,9 @@ func (lc *LibraryCreate) Mutation() *LibraryMutation {
 
 // Save creates the Library in the database.
 func (lc *LibraryCreate) Save(ctx context.Context) (*Library, error) {
+	if err := lc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, lc.sqlSave, lc.mutation, lc.hooks)
 }
 
@@ -50,8 +145,33 @@ func (lc *LibraryCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (lc *LibraryCreate) defaults() error {
+	if _, ok := lc.mutation.CreatedAt(); !ok {
+		if library.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized library.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := library.DefaultCreatedAt()
+		lc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := lc.mutation.UpdatedAt(); !ok {
+		if library.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized library.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := library.DefaultUpdatedAt()
+		lc.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (lc *LibraryCreate) check() error {
+	if _, ok := lc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Library.created_at"`)}
+	}
+	if _, ok := lc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Library.updated_at"`)}
+	}
 	return nil
 }
 
@@ -78,6 +198,34 @@ func (lc *LibraryCreate) createSpec() (*Library, *sqlgraph.CreateSpec) {
 		_node = &Library{config: lc.config}
 		_spec = sqlgraph.NewCreateSpec(library.Table, sqlgraph.NewFieldSpec(library.FieldID, field.TypeInt))
 	)
+	if value, ok := lc.mutation.CreatedAt(); ok {
+		_spec.SetField(library.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := lc.mutation.CreatedBy(); ok {
+		_spec.SetField(library.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := lc.mutation.UpdatedAt(); ok {
+		_spec.SetField(library.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := lc.mutation.UpdatedBy(); ok {
+		_spec.SetField(library.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
+	if value, ok := lc.mutation.DisplayName(); ok {
+		_spec.SetField(library.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
+	}
+	if value, ok := lc.mutation.Description(); ok {
+		_spec.SetField(library.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if value, ok := lc.mutation.ExternalLinks(); ok {
+		_spec.SetField(library.FieldExternalLinks, field.TypeJSON, value)
+		_node.ExternalLinks = value
+	}
 	return _node, _spec
 }
 
@@ -95,6 +243,7 @@ func (lcb *LibraryCreateBulk) Save(ctx context.Context) ([]*Library, error) {
 	for i := range lcb.builders {
 		func(i int, root context.Context) {
 			builder := lcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*LibraryMutation)
 				if !ok {

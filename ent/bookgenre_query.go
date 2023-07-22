@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -259,6 +260,18 @@ func (bgq *BookGenreQuery) Clone() *BookGenreQuery {
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.BookGenre.Query().
+//		GroupBy(bookgenre.FieldCreatedAt).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (bgq *BookGenreQuery) GroupBy(field string, fields ...string) *BookGenreGroupBy {
 	bgq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &BookGenreGroupBy{build: bgq}
@@ -270,6 +283,16 @@ func (bgq *BookGenreQuery) GroupBy(field string, fields ...string) *BookGenreGro
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//	}
+//
+//	client.BookGenre.Query().
+//		Select(bookgenre.FieldCreatedAt).
+//		Scan(ctx, &v)
 func (bgq *BookGenreQuery) Select(fields ...string) *BookGenreSelect {
 	bgq.ctx.Fields = append(bgq.ctx.Fields, fields...)
 	sbuild := &BookGenreSelect{BookGenreQuery: bgq}
@@ -305,6 +328,12 @@ func (bgq *BookGenreQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		bgq.sql = prev
+	}
+	if bookgenre.Policy == nil {
+		return errors.New("ent: uninitialized bookgenre.Policy (forgotten import ent/runtime?)")
+	}
+	if err := bookgenre.Policy.EvalQuery(ctx, bgq); err != nil {
+		return err
 	}
 	return nil
 }

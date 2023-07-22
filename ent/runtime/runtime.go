@@ -6,14 +6,19 @@ import (
 	"context"
 	"time"
 
+	"github.com/dkrasnovdev/heritage-api/ent/artgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/artstyle"
 	"github.com/dkrasnovdev/heritage-api/ent/auditlog"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
+	"github.com/dkrasnovdev/heritage-api/ent/bookgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
+	"github.com/dkrasnovdev/heritage-api/ent/library"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/medium"
@@ -26,7 +31,11 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
 	"github.com/dkrasnovdev/heritage-api/ent/projecttype"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
+	"github.com/dkrasnovdev/heritage-api/ent/publisher"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
 	"github.com/dkrasnovdev/heritage-api/ent/schema"
 	"github.com/dkrasnovdev/heritage-api/ent/set"
@@ -41,6 +50,60 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	artgenreMixin := schema.ArtGenre{}.Mixin()
+	artgenre.Policy = privacy.NewPolicies(schema.ArtGenre{})
+	artgenre.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := artgenre.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	artgenreMixinHooks0 := artgenreMixin[0].Hooks()
+
+	artgenre.Hooks[1] = artgenreMixinHooks0[0]
+	artgenreMixinFields0 := artgenreMixin[0].Fields()
+	_ = artgenreMixinFields0
+	artgenreFields := schema.ArtGenre{}.Fields()
+	_ = artgenreFields
+	// artgenreDescCreatedAt is the schema descriptor for created_at field.
+	artgenreDescCreatedAt := artgenreMixinFields0[0].Descriptor()
+	// artgenre.DefaultCreatedAt holds the default value on creation for the created_at field.
+	artgenre.DefaultCreatedAt = artgenreDescCreatedAt.Default.(func() time.Time)
+	// artgenreDescUpdatedAt is the schema descriptor for updated_at field.
+	artgenreDescUpdatedAt := artgenreMixinFields0[2].Descriptor()
+	// artgenre.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	artgenre.DefaultUpdatedAt = artgenreDescUpdatedAt.Default.(func() time.Time)
+	// artgenre.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	artgenre.UpdateDefaultUpdatedAt = artgenreDescUpdatedAt.UpdateDefault.(func() time.Time)
+	artstyleMixin := schema.ArtStyle{}.Mixin()
+	artstyle.Policy = privacy.NewPolicies(schema.ArtStyle{})
+	artstyle.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := artstyle.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	artstyleMixinHooks0 := artstyleMixin[0].Hooks()
+
+	artstyle.Hooks[1] = artstyleMixinHooks0[0]
+	artstyleMixinFields0 := artstyleMixin[0].Fields()
+	_ = artstyleMixinFields0
+	artstyleFields := schema.ArtStyle{}.Fields()
+	_ = artstyleFields
+	// artstyleDescCreatedAt is the schema descriptor for created_at field.
+	artstyleDescCreatedAt := artstyleMixinFields0[0].Descriptor()
+	// artstyle.DefaultCreatedAt holds the default value on creation for the created_at field.
+	artstyle.DefaultCreatedAt = artstyleDescCreatedAt.Default.(func() time.Time)
+	// artstyleDescUpdatedAt is the schema descriptor for updated_at field.
+	artstyleDescUpdatedAt := artstyleMixinFields0[2].Descriptor()
+	// artstyle.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	artstyle.DefaultUpdatedAt = artstyleDescUpdatedAt.Default.(func() time.Time)
+	// artstyle.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	artstyle.UpdateDefaultUpdatedAt = artstyleDescUpdatedAt.UpdateDefault.(func() time.Time)
 	artifactMixin := schema.Artifact{}.Mixin()
 	artifact.Policy = privacy.NewPolicies(schema.Artifact{})
 	artifact.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -88,6 +151,60 @@ func init() {
 	auditlogDescCreatedAt := auditlogFields[8].Descriptor()
 	// auditlog.DefaultCreatedAt holds the default value on creation for the created_at field.
 	auditlog.DefaultCreatedAt = auditlogDescCreatedAt.Default.(func() time.Time)
+	bookMixin := schema.Book{}.Mixin()
+	book.Policy = privacy.NewPolicies(schema.Book{})
+	book.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := book.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	bookMixinHooks0 := bookMixin[0].Hooks()
+
+	book.Hooks[1] = bookMixinHooks0[0]
+	bookMixinFields0 := bookMixin[0].Fields()
+	_ = bookMixinFields0
+	bookFields := schema.Book{}.Fields()
+	_ = bookFields
+	// bookDescCreatedAt is the schema descriptor for created_at field.
+	bookDescCreatedAt := bookMixinFields0[0].Descriptor()
+	// book.DefaultCreatedAt holds the default value on creation for the created_at field.
+	book.DefaultCreatedAt = bookDescCreatedAt.Default.(func() time.Time)
+	// bookDescUpdatedAt is the schema descriptor for updated_at field.
+	bookDescUpdatedAt := bookMixinFields0[2].Descriptor()
+	// book.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	book.DefaultUpdatedAt = bookDescUpdatedAt.Default.(func() time.Time)
+	// book.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	book.UpdateDefaultUpdatedAt = bookDescUpdatedAt.UpdateDefault.(func() time.Time)
+	bookgenreMixin := schema.BookGenre{}.Mixin()
+	bookgenre.Policy = privacy.NewPolicies(schema.BookGenre{})
+	bookgenre.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := bookgenre.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	bookgenreMixinHooks0 := bookgenreMixin[0].Hooks()
+
+	bookgenre.Hooks[1] = bookgenreMixinHooks0[0]
+	bookgenreMixinFields0 := bookgenreMixin[0].Fields()
+	_ = bookgenreMixinFields0
+	bookgenreFields := schema.BookGenre{}.Fields()
+	_ = bookgenreFields
+	// bookgenreDescCreatedAt is the schema descriptor for created_at field.
+	bookgenreDescCreatedAt := bookgenreMixinFields0[0].Descriptor()
+	// bookgenre.DefaultCreatedAt holds the default value on creation for the created_at field.
+	bookgenre.DefaultCreatedAt = bookgenreDescCreatedAt.Default.(func() time.Time)
+	// bookgenreDescUpdatedAt is the schema descriptor for updated_at field.
+	bookgenreDescUpdatedAt := bookgenreMixinFields0[2].Descriptor()
+	// bookgenre.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	bookgenre.DefaultUpdatedAt = bookgenreDescUpdatedAt.Default.(func() time.Time)
+	// bookgenre.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	bookgenre.UpdateDefaultUpdatedAt = bookgenreDescUpdatedAt.UpdateDefault.(func() time.Time)
 	categoryMixin := schema.Category{}.Mixin()
 	category.Policy = privacy.NewPolicies(schema.Category{})
 	category.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -224,8 +341,18 @@ func init() {
 	// holder.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	holder.UpdateDefaultUpdatedAt = holderDescUpdatedAt.UpdateDefault.(func() time.Time)
 	holderresponsibilityMixin := schema.HolderResponsibility{}.Mixin()
+	holderresponsibility.Policy = privacy.NewPolicies(schema.HolderResponsibility{})
+	holderresponsibility.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := holderresponsibility.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	holderresponsibilityMixinHooks0 := holderresponsibilityMixin[0].Hooks()
-	holderresponsibility.Hooks[0] = holderresponsibilityMixinHooks0[0]
+
+	holderresponsibility.Hooks[1] = holderresponsibilityMixinHooks0[0]
 	holderresponsibilityMixinFields0 := holderresponsibilityMixin[0].Fields()
 	_ = holderresponsibilityMixinFields0
 	holderresponsibilityFields := schema.HolderResponsibility{}.Fields()
@@ -240,6 +367,33 @@ func init() {
 	holderresponsibility.DefaultUpdatedAt = holderresponsibilityDescUpdatedAt.Default.(func() time.Time)
 	// holderresponsibility.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	holderresponsibility.UpdateDefaultUpdatedAt = holderresponsibilityDescUpdatedAt.UpdateDefault.(func() time.Time)
+	libraryMixin := schema.Library{}.Mixin()
+	library.Policy = privacy.NewPolicies(schema.Library{})
+	library.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := library.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	libraryMixinHooks0 := libraryMixin[0].Hooks()
+
+	library.Hooks[1] = libraryMixinHooks0[0]
+	libraryMixinFields0 := libraryMixin[0].Fields()
+	_ = libraryMixinFields0
+	libraryFields := schema.Library{}.Fields()
+	_ = libraryFields
+	// libraryDescCreatedAt is the schema descriptor for created_at field.
+	libraryDescCreatedAt := libraryMixinFields0[0].Descriptor()
+	// library.DefaultCreatedAt holds the default value on creation for the created_at field.
+	library.DefaultCreatedAt = libraryDescCreatedAt.Default.(func() time.Time)
+	// libraryDescUpdatedAt is the schema descriptor for updated_at field.
+	libraryDescUpdatedAt := libraryMixinFields0[2].Descriptor()
+	// library.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	library.DefaultUpdatedAt = libraryDescUpdatedAt.Default.(func() time.Time)
+	// library.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	library.UpdateDefaultUpdatedAt = libraryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	licenseMixin := schema.License{}.Mixin()
 	license.Policy = privacy.NewPolicies(schema.License{})
 	license.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -403,8 +557,18 @@ func init() {
 	// organization.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	organization.UpdateDefaultUpdatedAt = organizationDescUpdatedAt.UpdateDefault.(func() time.Time)
 	organizationtypeMixin := schema.OrganizationType{}.Mixin()
+	organizationtype.Policy = privacy.NewPolicies(schema.OrganizationType{})
+	organizationtype.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := organizationtype.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	organizationtypeMixinHooks0 := organizationtypeMixin[0].Hooks()
-	organizationtype.Hooks[0] = organizationtypeMixinHooks0[0]
+
+	organizationtype.Hooks[1] = organizationtypeMixinHooks0[0]
 	organizationtypeMixinFields0 := organizationtypeMixin[0].Fields()
 	_ = organizationtypeMixinFields0
 	organizationtypeFields := schema.OrganizationType{}.Fields()
@@ -420,8 +584,18 @@ func init() {
 	// organizationtype.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	organizationtype.UpdateDefaultUpdatedAt = organizationtypeDescUpdatedAt.UpdateDefault.(func() time.Time)
 	periodMixin := schema.Period{}.Mixin()
+	period.Policy = privacy.NewPolicies(schema.Period{})
+	period.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := period.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	periodMixinHooks0 := periodMixin[0].Hooks()
-	period.Hooks[0] = periodMixinHooks0[0]
+
+	period.Hooks[1] = periodMixinHooks0[0]
 	periodMixinFields0 := periodMixin[0].Fields()
 	_ = periodMixinFields0
 	periodFields := schema.Period{}.Fields()
@@ -464,8 +638,18 @@ func init() {
 	// person.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	person.UpdateDefaultUpdatedAt = personDescUpdatedAt.UpdateDefault.(func() time.Time)
 	personroleMixin := schema.PersonRole{}.Mixin()
+	personrole.Policy = privacy.NewPolicies(schema.PersonRole{})
+	personrole.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := personrole.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	personroleMixinHooks0 := personroleMixin[0].Hooks()
-	personrole.Hooks[0] = personroleMixinHooks0[0]
+
+	personrole.Hooks[1] = personroleMixinHooks0[0]
 	personroleMixinFields0 := personroleMixin[0].Fields()
 	_ = personroleMixinFields0
 	personroleFields := schema.PersonRole{}.Fields()
@@ -508,8 +692,18 @@ func init() {
 	// project.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	project.UpdateDefaultUpdatedAt = projectDescUpdatedAt.UpdateDefault.(func() time.Time)
 	projecttypeMixin := schema.ProjectType{}.Mixin()
+	projecttype.Policy = privacy.NewPolicies(schema.ProjectType{})
+	projecttype.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := projecttype.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	projecttypeMixinHooks0 := projecttypeMixin[0].Hooks()
-	projecttype.Hooks[0] = projecttypeMixinHooks0[0]
+
+	projecttype.Hooks[1] = projecttypeMixinHooks0[0]
 	projecttypeMixinFields0 := projecttypeMixin[0].Fields()
 	_ = projecttypeMixinFields0
 	projecttypeFields := schema.ProjectType{}.Fields()
@@ -524,6 +718,87 @@ func init() {
 	projecttype.DefaultUpdatedAt = projecttypeDescUpdatedAt.Default.(func() time.Time)
 	// projecttype.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	projecttype.UpdateDefaultUpdatedAt = projecttypeDescUpdatedAt.UpdateDefault.(func() time.Time)
+	protectedareaMixin := schema.ProtectedArea{}.Mixin()
+	protectedarea.Policy = privacy.NewPolicies(schema.ProtectedArea{})
+	protectedarea.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := protectedarea.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	protectedareaMixinHooks0 := protectedareaMixin[0].Hooks()
+
+	protectedarea.Hooks[1] = protectedareaMixinHooks0[0]
+	protectedareaMixinFields0 := protectedareaMixin[0].Fields()
+	_ = protectedareaMixinFields0
+	protectedareaFields := schema.ProtectedArea{}.Fields()
+	_ = protectedareaFields
+	// protectedareaDescCreatedAt is the schema descriptor for created_at field.
+	protectedareaDescCreatedAt := protectedareaMixinFields0[0].Descriptor()
+	// protectedarea.DefaultCreatedAt holds the default value on creation for the created_at field.
+	protectedarea.DefaultCreatedAt = protectedareaDescCreatedAt.Default.(func() time.Time)
+	// protectedareaDescUpdatedAt is the schema descriptor for updated_at field.
+	protectedareaDescUpdatedAt := protectedareaMixinFields0[2].Descriptor()
+	// protectedarea.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	protectedarea.DefaultUpdatedAt = protectedareaDescUpdatedAt.Default.(func() time.Time)
+	// protectedarea.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	protectedarea.UpdateDefaultUpdatedAt = protectedareaDescUpdatedAt.UpdateDefault.(func() time.Time)
+	protectedareacategoryMixin := schema.ProtectedAreaCategory{}.Mixin()
+	protectedareacategory.Policy = privacy.NewPolicies(schema.ProtectedAreaCategory{})
+	protectedareacategory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := protectedareacategory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	protectedareacategoryMixinHooks0 := protectedareacategoryMixin[0].Hooks()
+
+	protectedareacategory.Hooks[1] = protectedareacategoryMixinHooks0[0]
+	protectedareacategoryMixinFields0 := protectedareacategoryMixin[0].Fields()
+	_ = protectedareacategoryMixinFields0
+	protectedareacategoryFields := schema.ProtectedAreaCategory{}.Fields()
+	_ = protectedareacategoryFields
+	// protectedareacategoryDescCreatedAt is the schema descriptor for created_at field.
+	protectedareacategoryDescCreatedAt := protectedareacategoryMixinFields0[0].Descriptor()
+	// protectedareacategory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	protectedareacategory.DefaultCreatedAt = protectedareacategoryDescCreatedAt.Default.(func() time.Time)
+	// protectedareacategoryDescUpdatedAt is the schema descriptor for updated_at field.
+	protectedareacategoryDescUpdatedAt := protectedareacategoryMixinFields0[2].Descriptor()
+	// protectedareacategory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	protectedareacategory.DefaultUpdatedAt = protectedareacategoryDescUpdatedAt.Default.(func() time.Time)
+	// protectedareacategory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	protectedareacategory.UpdateDefaultUpdatedAt = protectedareacategoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	protectedareapictureMixin := schema.ProtectedAreaPicture{}.Mixin()
+	protectedareapicture.Policy = privacy.NewPolicies(schema.ProtectedAreaPicture{})
+	protectedareapicture.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := protectedareapicture.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	protectedareapictureMixinHooks0 := protectedareapictureMixin[0].Hooks()
+
+	protectedareapicture.Hooks[1] = protectedareapictureMixinHooks0[0]
+	protectedareapictureMixinFields0 := protectedareapictureMixin[0].Fields()
+	_ = protectedareapictureMixinFields0
+	protectedareapictureFields := schema.ProtectedAreaPicture{}.Fields()
+	_ = protectedareapictureFields
+	// protectedareapictureDescCreatedAt is the schema descriptor for created_at field.
+	protectedareapictureDescCreatedAt := protectedareapictureMixinFields0[0].Descriptor()
+	// protectedareapicture.DefaultCreatedAt holds the default value on creation for the created_at field.
+	protectedareapicture.DefaultCreatedAt = protectedareapictureDescCreatedAt.Default.(func() time.Time)
+	// protectedareapictureDescUpdatedAt is the schema descriptor for updated_at field.
+	protectedareapictureDescUpdatedAt := protectedareapictureMixinFields0[2].Descriptor()
+	// protectedareapicture.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	protectedareapicture.DefaultUpdatedAt = protectedareapictureDescUpdatedAt.Default.(func() time.Time)
+	// protectedareapicture.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	protectedareapicture.UpdateDefaultUpdatedAt = protectedareapictureDescUpdatedAt.UpdateDefault.(func() time.Time)
 	publicationMixin := schema.Publication{}.Mixin()
 	publication.Policy = privacy.NewPolicies(schema.Publication{})
 	publication.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -551,6 +826,33 @@ func init() {
 	publication.DefaultUpdatedAt = publicationDescUpdatedAt.Default.(func() time.Time)
 	// publication.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	publication.UpdateDefaultUpdatedAt = publicationDescUpdatedAt.UpdateDefault.(func() time.Time)
+	publisherMixin := schema.Publisher{}.Mixin()
+	publisher.Policy = privacy.NewPolicies(schema.Publisher{})
+	publisher.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := publisher.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	publisherMixinHooks0 := publisherMixin[0].Hooks()
+
+	publisher.Hooks[1] = publisherMixinHooks0[0]
+	publisherMixinFields0 := publisherMixin[0].Fields()
+	_ = publisherMixinFields0
+	publisherFields := schema.Publisher{}.Fields()
+	_ = publisherFields
+	// publisherDescCreatedAt is the schema descriptor for created_at field.
+	publisherDescCreatedAt := publisherMixinFields0[0].Descriptor()
+	// publisher.DefaultCreatedAt holds the default value on creation for the created_at field.
+	publisher.DefaultCreatedAt = publisherDescCreatedAt.Default.(func() time.Time)
+	// publisherDescUpdatedAt is the schema descriptor for updated_at field.
+	publisherDescUpdatedAt := publisherMixinFields0[2].Descriptor()
+	// publisher.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	publisher.DefaultUpdatedAt = publisherDescUpdatedAt.Default.(func() time.Time)
+	// publisher.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	publisher.UpdateDefaultUpdatedAt = publisherDescUpdatedAt.UpdateDefault.(func() time.Time)
 	regionMixin := schema.Region{}.Mixin()
 	region.Policy = privacy.NewPolicies(schema.Region{})
 	region.Hooks[0] = func(next ent.Mutator) ent.Mutator {

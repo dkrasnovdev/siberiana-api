@@ -11,14 +11,19 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/dkrasnovdev/heritage-api/ent/artgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/artstyle"
 	"github.com/dkrasnovdev/heritage-api/ent/auditlog"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
+	"github.com/dkrasnovdev/heritage-api/ent/bookgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
+	"github.com/dkrasnovdev/heritage-api/ent/library"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/medium"
@@ -32,7 +37,11 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
 	"github.com/dkrasnovdev/heritage-api/ent/projecttype"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
+	"github.com/dkrasnovdev/heritage-api/ent/publisher"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
 	"github.com/dkrasnovdev/heritage-api/ent/set"
 	"github.com/dkrasnovdev/heritage-api/ent/settlement"
@@ -353,13 +362,21 @@ func (m *ArtMutation) ResetEdge(name string) error {
 // ArtGenreMutation represents an operation that mutates the ArtGenre nodes in the graph.
 type ArtGenreMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*ArtGenre, error)
-	predicates    []predicate.ArtGenre
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	done                 bool
+	oldValue             func(context.Context) (*ArtGenre, error)
+	predicates           []predicate.ArtGenre
 }
 
 var _ ent.Mutation = (*ArtGenreMutation)(nil)
@@ -460,6 +477,339 @@ func (m *ArtGenreMutation) IDs(ctx context.Context) ([]int, error) {
 	}
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (m *ArtGenreMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *ArtGenreMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the ArtGenre entity.
+// If the ArtGenre object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtGenreMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *ArtGenreMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *ArtGenreMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *ArtGenreMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the ArtGenre entity.
+// If the ArtGenre object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtGenreMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *ArtGenreMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[artgenre.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *ArtGenreMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[artgenre.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *ArtGenreMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, artgenre.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *ArtGenreMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *ArtGenreMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the ArtGenre entity.
+// If the ArtGenre object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtGenreMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *ArtGenreMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *ArtGenreMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *ArtGenreMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the ArtGenre entity.
+// If the ArtGenre object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtGenreMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *ArtGenreMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[artgenre.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *ArtGenreMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[artgenre.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *ArtGenreMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, artgenre.FieldUpdatedBy)
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *ArtGenreMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *ArtGenreMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the ArtGenre entity.
+// If the ArtGenre object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtGenreMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (m *ArtGenreMutation) ClearDisplayName() {
+	m.display_name = nil
+	m.clearedFields[artgenre.FieldDisplayName] = struct{}{}
+}
+
+// DisplayNameCleared returns if the "display_name" field was cleared in this mutation.
+func (m *ArtGenreMutation) DisplayNameCleared() bool {
+	_, ok := m.clearedFields[artgenre.FieldDisplayName]
+	return ok
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *ArtGenreMutation) ResetDisplayName() {
+	m.display_name = nil
+	delete(m.clearedFields, artgenre.FieldDisplayName)
+}
+
+// SetDescription sets the "description" field.
+func (m *ArtGenreMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *ArtGenreMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the ArtGenre entity.
+// If the ArtGenre object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtGenreMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *ArtGenreMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[artgenre.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *ArtGenreMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[artgenre.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *ArtGenreMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, artgenre.FieldDescription)
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (m *ArtGenreMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
+}
+
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *ArtGenreMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalLinks returns the old "external_links" field's value of the ArtGenre entity.
+// If the ArtGenre object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtGenreMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
+	}
+	return oldValue.ExternalLinks, nil
+}
+
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *ArtGenreMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
+}
+
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *ArtGenreMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *ArtGenreMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[artgenre.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *ArtGenreMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[artgenre.FieldExternalLinks]
+	return ok
+}
+
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *ArtGenreMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, artgenre.FieldExternalLinks)
+}
+
 // Where appends a list predicates to the ArtGenreMutation builder.
 func (m *ArtGenreMutation) Where(ps ...predicate.ArtGenre) {
 	m.predicates = append(m.predicates, ps...)
@@ -494,7 +844,28 @@ func (m *ArtGenreMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArtGenreMutation) Fields() []string {
-	fields := make([]string, 0, 0)
+	fields := make([]string, 0, 7)
+	if m.created_at != nil {
+		fields = append(fields, artgenre.FieldCreatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, artgenre.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, artgenre.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, artgenre.FieldUpdatedBy)
+	}
+	if m.display_name != nil {
+		fields = append(fields, artgenre.FieldDisplayName)
+	}
+	if m.description != nil {
+		fields = append(fields, artgenre.FieldDescription)
+	}
+	if m.external_links != nil {
+		fields = append(fields, artgenre.FieldExternalLinks)
+	}
 	return fields
 }
 
@@ -502,6 +873,22 @@ func (m *ArtGenreMutation) Fields() []string {
 // return value indicates that this field was not set, or was not defined in the
 // schema.
 func (m *ArtGenreMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case artgenre.FieldCreatedAt:
+		return m.CreatedAt()
+	case artgenre.FieldCreatedBy:
+		return m.CreatedBy()
+	case artgenre.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case artgenre.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case artgenre.FieldDisplayName:
+		return m.DisplayName()
+	case artgenre.FieldDescription:
+		return m.Description()
+	case artgenre.FieldExternalLinks:
+		return m.ExternalLinks()
+	}
 	return nil, false
 }
 
@@ -509,6 +896,22 @@ func (m *ArtGenreMutation) Field(name string) (ent.Value, bool) {
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
 func (m *ArtGenreMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case artgenre.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case artgenre.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case artgenre.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case artgenre.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case artgenre.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case artgenre.FieldDescription:
+		return m.OldDescription(ctx)
+	case artgenre.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
+	}
 	return nil, fmt.Errorf("unknown ArtGenre field %s", name)
 }
 
@@ -517,6 +920,55 @@ func (m *ArtGenreMutation) OldField(ctx context.Context, name string) (ent.Value
 // type.
 func (m *ArtGenreMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case artgenre.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case artgenre.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case artgenre.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case artgenre.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case artgenre.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case artgenre.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case artgenre.FieldExternalLinks:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalLinks(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ArtGenre field %s", name)
 }
@@ -538,13 +990,31 @@ func (m *ArtGenreMutation) AddedField(name string) (ent.Value, bool) {
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
 func (m *ArtGenreMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown ArtGenre numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *ArtGenreMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(artgenre.FieldCreatedBy) {
+		fields = append(fields, artgenre.FieldCreatedBy)
+	}
+	if m.FieldCleared(artgenre.FieldUpdatedBy) {
+		fields = append(fields, artgenre.FieldUpdatedBy)
+	}
+	if m.FieldCleared(artgenre.FieldDisplayName) {
+		fields = append(fields, artgenre.FieldDisplayName)
+	}
+	if m.FieldCleared(artgenre.FieldDescription) {
+		fields = append(fields, artgenre.FieldDescription)
+	}
+	if m.FieldCleared(artgenre.FieldExternalLinks) {
+		fields = append(fields, artgenre.FieldExternalLinks)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -557,12 +1027,52 @@ func (m *ArtGenreMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *ArtGenreMutation) ClearField(name string) error {
+	switch name {
+	case artgenre.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case artgenre.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case artgenre.FieldDisplayName:
+		m.ClearDisplayName()
+		return nil
+	case artgenre.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case artgenre.FieldExternalLinks:
+		m.ClearExternalLinks()
+		return nil
+	}
 	return fmt.Errorf("unknown ArtGenre nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
 func (m *ArtGenreMutation) ResetField(name string) error {
+	switch name {
+	case artgenre.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case artgenre.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case artgenre.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case artgenre.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case artgenre.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case artgenre.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case artgenre.FieldExternalLinks:
+		m.ResetExternalLinks()
+		return nil
+	}
 	return fmt.Errorf("unknown ArtGenre field %s", name)
 }
 
@@ -617,13 +1127,21 @@ func (m *ArtGenreMutation) ResetEdge(name string) error {
 // ArtStyleMutation represents an operation that mutates the ArtStyle nodes in the graph.
 type ArtStyleMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*ArtStyle, error)
-	predicates    []predicate.ArtStyle
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	done                 bool
+	oldValue             func(context.Context) (*ArtStyle, error)
+	predicates           []predicate.ArtStyle
 }
 
 var _ ent.Mutation = (*ArtStyleMutation)(nil)
@@ -724,6 +1242,339 @@ func (m *ArtStyleMutation) IDs(ctx context.Context) ([]int, error) {
 	}
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (m *ArtStyleMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *ArtStyleMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the ArtStyle entity.
+// If the ArtStyle object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtStyleMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *ArtStyleMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *ArtStyleMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *ArtStyleMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the ArtStyle entity.
+// If the ArtStyle object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtStyleMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *ArtStyleMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[artstyle.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *ArtStyleMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[artstyle.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *ArtStyleMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, artstyle.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *ArtStyleMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *ArtStyleMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the ArtStyle entity.
+// If the ArtStyle object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtStyleMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *ArtStyleMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *ArtStyleMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *ArtStyleMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the ArtStyle entity.
+// If the ArtStyle object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtStyleMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *ArtStyleMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[artstyle.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *ArtStyleMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[artstyle.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *ArtStyleMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, artstyle.FieldUpdatedBy)
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *ArtStyleMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *ArtStyleMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the ArtStyle entity.
+// If the ArtStyle object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtStyleMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (m *ArtStyleMutation) ClearDisplayName() {
+	m.display_name = nil
+	m.clearedFields[artstyle.FieldDisplayName] = struct{}{}
+}
+
+// DisplayNameCleared returns if the "display_name" field was cleared in this mutation.
+func (m *ArtStyleMutation) DisplayNameCleared() bool {
+	_, ok := m.clearedFields[artstyle.FieldDisplayName]
+	return ok
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *ArtStyleMutation) ResetDisplayName() {
+	m.display_name = nil
+	delete(m.clearedFields, artstyle.FieldDisplayName)
+}
+
+// SetDescription sets the "description" field.
+func (m *ArtStyleMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *ArtStyleMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the ArtStyle entity.
+// If the ArtStyle object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtStyleMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *ArtStyleMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[artstyle.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *ArtStyleMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[artstyle.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *ArtStyleMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, artstyle.FieldDescription)
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (m *ArtStyleMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
+}
+
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *ArtStyleMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalLinks returns the old "external_links" field's value of the ArtStyle entity.
+// If the ArtStyle object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtStyleMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
+	}
+	return oldValue.ExternalLinks, nil
+}
+
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *ArtStyleMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
+}
+
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *ArtStyleMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *ArtStyleMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[artstyle.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *ArtStyleMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[artstyle.FieldExternalLinks]
+	return ok
+}
+
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *ArtStyleMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, artstyle.FieldExternalLinks)
+}
+
 // Where appends a list predicates to the ArtStyleMutation builder.
 func (m *ArtStyleMutation) Where(ps ...predicate.ArtStyle) {
 	m.predicates = append(m.predicates, ps...)
@@ -758,7 +1609,28 @@ func (m *ArtStyleMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArtStyleMutation) Fields() []string {
-	fields := make([]string, 0, 0)
+	fields := make([]string, 0, 7)
+	if m.created_at != nil {
+		fields = append(fields, artstyle.FieldCreatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, artstyle.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, artstyle.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, artstyle.FieldUpdatedBy)
+	}
+	if m.display_name != nil {
+		fields = append(fields, artstyle.FieldDisplayName)
+	}
+	if m.description != nil {
+		fields = append(fields, artstyle.FieldDescription)
+	}
+	if m.external_links != nil {
+		fields = append(fields, artstyle.FieldExternalLinks)
+	}
 	return fields
 }
 
@@ -766,6 +1638,22 @@ func (m *ArtStyleMutation) Fields() []string {
 // return value indicates that this field was not set, or was not defined in the
 // schema.
 func (m *ArtStyleMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case artstyle.FieldCreatedAt:
+		return m.CreatedAt()
+	case artstyle.FieldCreatedBy:
+		return m.CreatedBy()
+	case artstyle.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case artstyle.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case artstyle.FieldDisplayName:
+		return m.DisplayName()
+	case artstyle.FieldDescription:
+		return m.Description()
+	case artstyle.FieldExternalLinks:
+		return m.ExternalLinks()
+	}
 	return nil, false
 }
 
@@ -773,6 +1661,22 @@ func (m *ArtStyleMutation) Field(name string) (ent.Value, bool) {
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
 func (m *ArtStyleMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case artstyle.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case artstyle.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case artstyle.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case artstyle.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case artstyle.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case artstyle.FieldDescription:
+		return m.OldDescription(ctx)
+	case artstyle.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
+	}
 	return nil, fmt.Errorf("unknown ArtStyle field %s", name)
 }
 
@@ -781,6 +1685,55 @@ func (m *ArtStyleMutation) OldField(ctx context.Context, name string) (ent.Value
 // type.
 func (m *ArtStyleMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case artstyle.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case artstyle.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case artstyle.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case artstyle.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case artstyle.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case artstyle.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case artstyle.FieldExternalLinks:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalLinks(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ArtStyle field %s", name)
 }
@@ -802,13 +1755,31 @@ func (m *ArtStyleMutation) AddedField(name string) (ent.Value, bool) {
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
 func (m *ArtStyleMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown ArtStyle numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *ArtStyleMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(artstyle.FieldCreatedBy) {
+		fields = append(fields, artstyle.FieldCreatedBy)
+	}
+	if m.FieldCleared(artstyle.FieldUpdatedBy) {
+		fields = append(fields, artstyle.FieldUpdatedBy)
+	}
+	if m.FieldCleared(artstyle.FieldDisplayName) {
+		fields = append(fields, artstyle.FieldDisplayName)
+	}
+	if m.FieldCleared(artstyle.FieldDescription) {
+		fields = append(fields, artstyle.FieldDescription)
+	}
+	if m.FieldCleared(artstyle.FieldExternalLinks) {
+		fields = append(fields, artstyle.FieldExternalLinks)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -821,12 +1792,52 @@ func (m *ArtStyleMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *ArtStyleMutation) ClearField(name string) error {
+	switch name {
+	case artstyle.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case artstyle.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case artstyle.FieldDisplayName:
+		m.ClearDisplayName()
+		return nil
+	case artstyle.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case artstyle.FieldExternalLinks:
+		m.ClearExternalLinks()
+		return nil
+	}
 	return fmt.Errorf("unknown ArtStyle nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
 func (m *ArtStyleMutation) ResetField(name string) error {
+	switch name {
+	case artstyle.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case artstyle.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case artstyle.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case artstyle.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case artstyle.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case artstyle.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case artstyle.FieldExternalLinks:
+		m.ResetExternalLinks()
+		return nil
+	}
 	return fmt.Errorf("unknown ArtStyle field %s", name)
 }
 
@@ -4318,13 +5329,21 @@ func (m *AuditLogMutation) ResetEdge(name string) error {
 // BookMutation represents an operation that mutates the Book nodes in the graph.
 type BookMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*Book, error)
-	predicates    []predicate.Book
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	done                 bool
+	oldValue             func(context.Context) (*Book, error)
+	predicates           []predicate.Book
 }
 
 var _ ent.Mutation = (*BookMutation)(nil)
@@ -4425,6 +5444,339 @@ func (m *BookMutation) IDs(ctx context.Context) ([]int, error) {
 	}
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (m *BookMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *BookMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Book entity.
+// If the Book object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BookMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *BookMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *BookMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *BookMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Book entity.
+// If the Book object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BookMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *BookMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[book.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *BookMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[book.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *BookMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, book.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *BookMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *BookMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Book entity.
+// If the Book object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BookMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *BookMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *BookMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *BookMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Book entity.
+// If the Book object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BookMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *BookMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[book.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *BookMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[book.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *BookMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, book.FieldUpdatedBy)
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *BookMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *BookMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the Book entity.
+// If the Book object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BookMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (m *BookMutation) ClearDisplayName() {
+	m.display_name = nil
+	m.clearedFields[book.FieldDisplayName] = struct{}{}
+}
+
+// DisplayNameCleared returns if the "display_name" field was cleared in this mutation.
+func (m *BookMutation) DisplayNameCleared() bool {
+	_, ok := m.clearedFields[book.FieldDisplayName]
+	return ok
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *BookMutation) ResetDisplayName() {
+	m.display_name = nil
+	delete(m.clearedFields, book.FieldDisplayName)
+}
+
+// SetDescription sets the "description" field.
+func (m *BookMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *BookMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the Book entity.
+// If the Book object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BookMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *BookMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[book.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *BookMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[book.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *BookMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, book.FieldDescription)
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (m *BookMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
+}
+
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *BookMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalLinks returns the old "external_links" field's value of the Book entity.
+// If the Book object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BookMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
+	}
+	return oldValue.ExternalLinks, nil
+}
+
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *BookMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
+}
+
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *BookMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *BookMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[book.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *BookMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[book.FieldExternalLinks]
+	return ok
+}
+
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *BookMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, book.FieldExternalLinks)
+}
+
 // Where appends a list predicates to the BookMutation builder.
 func (m *BookMutation) Where(ps ...predicate.Book) {
 	m.predicates = append(m.predicates, ps...)
@@ -4459,7 +5811,28 @@ func (m *BookMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *BookMutation) Fields() []string {
-	fields := make([]string, 0, 0)
+	fields := make([]string, 0, 7)
+	if m.created_at != nil {
+		fields = append(fields, book.FieldCreatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, book.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, book.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, book.FieldUpdatedBy)
+	}
+	if m.display_name != nil {
+		fields = append(fields, book.FieldDisplayName)
+	}
+	if m.description != nil {
+		fields = append(fields, book.FieldDescription)
+	}
+	if m.external_links != nil {
+		fields = append(fields, book.FieldExternalLinks)
+	}
 	return fields
 }
 
@@ -4467,6 +5840,22 @@ func (m *BookMutation) Fields() []string {
 // return value indicates that this field was not set, or was not defined in the
 // schema.
 func (m *BookMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case book.FieldCreatedAt:
+		return m.CreatedAt()
+	case book.FieldCreatedBy:
+		return m.CreatedBy()
+	case book.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case book.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case book.FieldDisplayName:
+		return m.DisplayName()
+	case book.FieldDescription:
+		return m.Description()
+	case book.FieldExternalLinks:
+		return m.ExternalLinks()
+	}
 	return nil, false
 }
 
@@ -4474,6 +5863,22 @@ func (m *BookMutation) Field(name string) (ent.Value, bool) {
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
 func (m *BookMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case book.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case book.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case book.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case book.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case book.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case book.FieldDescription:
+		return m.OldDescription(ctx)
+	case book.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
+	}
 	return nil, fmt.Errorf("unknown Book field %s", name)
 }
 
@@ -4482,6 +5887,55 @@ func (m *BookMutation) OldField(ctx context.Context, name string) (ent.Value, er
 // type.
 func (m *BookMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case book.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case book.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case book.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case book.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case book.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case book.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case book.FieldExternalLinks:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalLinks(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Book field %s", name)
 }
@@ -4503,13 +5957,31 @@ func (m *BookMutation) AddedField(name string) (ent.Value, bool) {
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
 func (m *BookMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown Book numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *BookMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(book.FieldCreatedBy) {
+		fields = append(fields, book.FieldCreatedBy)
+	}
+	if m.FieldCleared(book.FieldUpdatedBy) {
+		fields = append(fields, book.FieldUpdatedBy)
+	}
+	if m.FieldCleared(book.FieldDisplayName) {
+		fields = append(fields, book.FieldDisplayName)
+	}
+	if m.FieldCleared(book.FieldDescription) {
+		fields = append(fields, book.FieldDescription)
+	}
+	if m.FieldCleared(book.FieldExternalLinks) {
+		fields = append(fields, book.FieldExternalLinks)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -4522,12 +5994,52 @@ func (m *BookMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *BookMutation) ClearField(name string) error {
+	switch name {
+	case book.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case book.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case book.FieldDisplayName:
+		m.ClearDisplayName()
+		return nil
+	case book.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case book.FieldExternalLinks:
+		m.ClearExternalLinks()
+		return nil
+	}
 	return fmt.Errorf("unknown Book nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
 func (m *BookMutation) ResetField(name string) error {
+	switch name {
+	case book.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case book.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case book.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case book.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case book.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case book.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case book.FieldExternalLinks:
+		m.ResetExternalLinks()
+		return nil
+	}
 	return fmt.Errorf("unknown Book field %s", name)
 }
 
@@ -4582,13 +6094,21 @@ func (m *BookMutation) ResetEdge(name string) error {
 // BookGenreMutation represents an operation that mutates the BookGenre nodes in the graph.
 type BookGenreMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*BookGenre, error)
-	predicates    []predicate.BookGenre
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	done                 bool
+	oldValue             func(context.Context) (*BookGenre, error)
+	predicates           []predicate.BookGenre
 }
 
 var _ ent.Mutation = (*BookGenreMutation)(nil)
@@ -4689,6 +6209,339 @@ func (m *BookGenreMutation) IDs(ctx context.Context) ([]int, error) {
 	}
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (m *BookGenreMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *BookGenreMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the BookGenre entity.
+// If the BookGenre object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BookGenreMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *BookGenreMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *BookGenreMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *BookGenreMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the BookGenre entity.
+// If the BookGenre object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BookGenreMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *BookGenreMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[bookgenre.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *BookGenreMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[bookgenre.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *BookGenreMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, bookgenre.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *BookGenreMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *BookGenreMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the BookGenre entity.
+// If the BookGenre object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BookGenreMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *BookGenreMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *BookGenreMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *BookGenreMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the BookGenre entity.
+// If the BookGenre object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BookGenreMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *BookGenreMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[bookgenre.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *BookGenreMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[bookgenre.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *BookGenreMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, bookgenre.FieldUpdatedBy)
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *BookGenreMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *BookGenreMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the BookGenre entity.
+// If the BookGenre object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BookGenreMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (m *BookGenreMutation) ClearDisplayName() {
+	m.display_name = nil
+	m.clearedFields[bookgenre.FieldDisplayName] = struct{}{}
+}
+
+// DisplayNameCleared returns if the "display_name" field was cleared in this mutation.
+func (m *BookGenreMutation) DisplayNameCleared() bool {
+	_, ok := m.clearedFields[bookgenre.FieldDisplayName]
+	return ok
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *BookGenreMutation) ResetDisplayName() {
+	m.display_name = nil
+	delete(m.clearedFields, bookgenre.FieldDisplayName)
+}
+
+// SetDescription sets the "description" field.
+func (m *BookGenreMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *BookGenreMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the BookGenre entity.
+// If the BookGenre object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BookGenreMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *BookGenreMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[bookgenre.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *BookGenreMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[bookgenre.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *BookGenreMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, bookgenre.FieldDescription)
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (m *BookGenreMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
+}
+
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *BookGenreMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalLinks returns the old "external_links" field's value of the BookGenre entity.
+// If the BookGenre object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BookGenreMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
+	}
+	return oldValue.ExternalLinks, nil
+}
+
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *BookGenreMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
+}
+
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *BookGenreMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *BookGenreMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[bookgenre.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *BookGenreMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[bookgenre.FieldExternalLinks]
+	return ok
+}
+
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *BookGenreMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, bookgenre.FieldExternalLinks)
+}
+
 // Where appends a list predicates to the BookGenreMutation builder.
 func (m *BookGenreMutation) Where(ps ...predicate.BookGenre) {
 	m.predicates = append(m.predicates, ps...)
@@ -4723,7 +6576,28 @@ func (m *BookGenreMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *BookGenreMutation) Fields() []string {
-	fields := make([]string, 0, 0)
+	fields := make([]string, 0, 7)
+	if m.created_at != nil {
+		fields = append(fields, bookgenre.FieldCreatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, bookgenre.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, bookgenre.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, bookgenre.FieldUpdatedBy)
+	}
+	if m.display_name != nil {
+		fields = append(fields, bookgenre.FieldDisplayName)
+	}
+	if m.description != nil {
+		fields = append(fields, bookgenre.FieldDescription)
+	}
+	if m.external_links != nil {
+		fields = append(fields, bookgenre.FieldExternalLinks)
+	}
 	return fields
 }
 
@@ -4731,6 +6605,22 @@ func (m *BookGenreMutation) Fields() []string {
 // return value indicates that this field was not set, or was not defined in the
 // schema.
 func (m *BookGenreMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case bookgenre.FieldCreatedAt:
+		return m.CreatedAt()
+	case bookgenre.FieldCreatedBy:
+		return m.CreatedBy()
+	case bookgenre.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case bookgenre.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case bookgenre.FieldDisplayName:
+		return m.DisplayName()
+	case bookgenre.FieldDescription:
+		return m.Description()
+	case bookgenre.FieldExternalLinks:
+		return m.ExternalLinks()
+	}
 	return nil, false
 }
 
@@ -4738,6 +6628,22 @@ func (m *BookGenreMutation) Field(name string) (ent.Value, bool) {
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
 func (m *BookGenreMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case bookgenre.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case bookgenre.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case bookgenre.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case bookgenre.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case bookgenre.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case bookgenre.FieldDescription:
+		return m.OldDescription(ctx)
+	case bookgenre.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
+	}
 	return nil, fmt.Errorf("unknown BookGenre field %s", name)
 }
 
@@ -4746,6 +6652,55 @@ func (m *BookGenreMutation) OldField(ctx context.Context, name string) (ent.Valu
 // type.
 func (m *BookGenreMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case bookgenre.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case bookgenre.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case bookgenre.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case bookgenre.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case bookgenre.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case bookgenre.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case bookgenre.FieldExternalLinks:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalLinks(v)
+		return nil
 	}
 	return fmt.Errorf("unknown BookGenre field %s", name)
 }
@@ -4767,13 +6722,31 @@ func (m *BookGenreMutation) AddedField(name string) (ent.Value, bool) {
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
 func (m *BookGenreMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown BookGenre numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *BookGenreMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(bookgenre.FieldCreatedBy) {
+		fields = append(fields, bookgenre.FieldCreatedBy)
+	}
+	if m.FieldCleared(bookgenre.FieldUpdatedBy) {
+		fields = append(fields, bookgenre.FieldUpdatedBy)
+	}
+	if m.FieldCleared(bookgenre.FieldDisplayName) {
+		fields = append(fields, bookgenre.FieldDisplayName)
+	}
+	if m.FieldCleared(bookgenre.FieldDescription) {
+		fields = append(fields, bookgenre.FieldDescription)
+	}
+	if m.FieldCleared(bookgenre.FieldExternalLinks) {
+		fields = append(fields, bookgenre.FieldExternalLinks)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -4786,12 +6759,52 @@ func (m *BookGenreMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *BookGenreMutation) ClearField(name string) error {
+	switch name {
+	case bookgenre.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case bookgenre.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case bookgenre.FieldDisplayName:
+		m.ClearDisplayName()
+		return nil
+	case bookgenre.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case bookgenre.FieldExternalLinks:
+		m.ClearExternalLinks()
+		return nil
+	}
 	return fmt.Errorf("unknown BookGenre nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
 func (m *BookGenreMutation) ResetField(name string) error {
+	switch name {
+	case bookgenre.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case bookgenre.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case bookgenre.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case bookgenre.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case bookgenre.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case bookgenre.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case bookgenre.FieldExternalLinks:
+		m.ResetExternalLinks()
+		return nil
+	}
 	return fmt.Errorf("unknown BookGenre field %s", name)
 }
 
@@ -10466,13 +12479,21 @@ func (m *KeywordMutation) ResetEdge(name string) error {
 // LibraryMutation represents an operation that mutates the Library nodes in the graph.
 type LibraryMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*Library, error)
-	predicates    []predicate.Library
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	done                 bool
+	oldValue             func(context.Context) (*Library, error)
+	predicates           []predicate.Library
 }
 
 var _ ent.Mutation = (*LibraryMutation)(nil)
@@ -10573,6 +12594,339 @@ func (m *LibraryMutation) IDs(ctx context.Context) ([]int, error) {
 	}
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (m *LibraryMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *LibraryMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Library entity.
+// If the Library object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LibraryMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *LibraryMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *LibraryMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *LibraryMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Library entity.
+// If the Library object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LibraryMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *LibraryMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[library.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *LibraryMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[library.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *LibraryMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, library.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *LibraryMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *LibraryMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Library entity.
+// If the Library object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LibraryMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *LibraryMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *LibraryMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *LibraryMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Library entity.
+// If the Library object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LibraryMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *LibraryMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[library.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *LibraryMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[library.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *LibraryMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, library.FieldUpdatedBy)
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *LibraryMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *LibraryMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the Library entity.
+// If the Library object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LibraryMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (m *LibraryMutation) ClearDisplayName() {
+	m.display_name = nil
+	m.clearedFields[library.FieldDisplayName] = struct{}{}
+}
+
+// DisplayNameCleared returns if the "display_name" field was cleared in this mutation.
+func (m *LibraryMutation) DisplayNameCleared() bool {
+	_, ok := m.clearedFields[library.FieldDisplayName]
+	return ok
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *LibraryMutation) ResetDisplayName() {
+	m.display_name = nil
+	delete(m.clearedFields, library.FieldDisplayName)
+}
+
+// SetDescription sets the "description" field.
+func (m *LibraryMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *LibraryMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the Library entity.
+// If the Library object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LibraryMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *LibraryMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[library.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *LibraryMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[library.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *LibraryMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, library.FieldDescription)
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (m *LibraryMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
+}
+
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *LibraryMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalLinks returns the old "external_links" field's value of the Library entity.
+// If the Library object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LibraryMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
+	}
+	return oldValue.ExternalLinks, nil
+}
+
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *LibraryMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
+}
+
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *LibraryMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *LibraryMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[library.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *LibraryMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[library.FieldExternalLinks]
+	return ok
+}
+
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *LibraryMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, library.FieldExternalLinks)
+}
+
 // Where appends a list predicates to the LibraryMutation builder.
 func (m *LibraryMutation) Where(ps ...predicate.Library) {
 	m.predicates = append(m.predicates, ps...)
@@ -10607,7 +12961,28 @@ func (m *LibraryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *LibraryMutation) Fields() []string {
-	fields := make([]string, 0, 0)
+	fields := make([]string, 0, 7)
+	if m.created_at != nil {
+		fields = append(fields, library.FieldCreatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, library.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, library.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, library.FieldUpdatedBy)
+	}
+	if m.display_name != nil {
+		fields = append(fields, library.FieldDisplayName)
+	}
+	if m.description != nil {
+		fields = append(fields, library.FieldDescription)
+	}
+	if m.external_links != nil {
+		fields = append(fields, library.FieldExternalLinks)
+	}
 	return fields
 }
 
@@ -10615,6 +12990,22 @@ func (m *LibraryMutation) Fields() []string {
 // return value indicates that this field was not set, or was not defined in the
 // schema.
 func (m *LibraryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case library.FieldCreatedAt:
+		return m.CreatedAt()
+	case library.FieldCreatedBy:
+		return m.CreatedBy()
+	case library.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case library.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case library.FieldDisplayName:
+		return m.DisplayName()
+	case library.FieldDescription:
+		return m.Description()
+	case library.FieldExternalLinks:
+		return m.ExternalLinks()
+	}
 	return nil, false
 }
 
@@ -10622,6 +13013,22 @@ func (m *LibraryMutation) Field(name string) (ent.Value, bool) {
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
 func (m *LibraryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case library.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case library.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case library.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case library.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case library.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case library.FieldDescription:
+		return m.OldDescription(ctx)
+	case library.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
+	}
 	return nil, fmt.Errorf("unknown Library field %s", name)
 }
 
@@ -10630,6 +13037,55 @@ func (m *LibraryMutation) OldField(ctx context.Context, name string) (ent.Value,
 // type.
 func (m *LibraryMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case library.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case library.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case library.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case library.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case library.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case library.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case library.FieldExternalLinks:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalLinks(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Library field %s", name)
 }
@@ -10651,13 +13107,31 @@ func (m *LibraryMutation) AddedField(name string) (ent.Value, bool) {
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
 func (m *LibraryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown Library numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *LibraryMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(library.FieldCreatedBy) {
+		fields = append(fields, library.FieldCreatedBy)
+	}
+	if m.FieldCleared(library.FieldUpdatedBy) {
+		fields = append(fields, library.FieldUpdatedBy)
+	}
+	if m.FieldCleared(library.FieldDisplayName) {
+		fields = append(fields, library.FieldDisplayName)
+	}
+	if m.FieldCleared(library.FieldDescription) {
+		fields = append(fields, library.FieldDescription)
+	}
+	if m.FieldCleared(library.FieldExternalLinks) {
+		fields = append(fields, library.FieldExternalLinks)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -10670,12 +13144,52 @@ func (m *LibraryMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *LibraryMutation) ClearField(name string) error {
+	switch name {
+	case library.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case library.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case library.FieldDisplayName:
+		m.ClearDisplayName()
+		return nil
+	case library.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case library.FieldExternalLinks:
+		m.ClearExternalLinks()
+		return nil
+	}
 	return fmt.Errorf("unknown Library nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
 func (m *LibraryMutation) ResetField(name string) error {
+	switch name {
+	case library.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case library.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case library.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case library.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case library.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case library.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case library.FieldExternalLinks:
+		m.ResetExternalLinks()
+		return nil
+	}
 	return fmt.Errorf("unknown Library field %s", name)
 }
 
@@ -23605,13 +26119,21 @@ func (m *ProjectTypeMutation) ResetEdge(name string) error {
 // ProtectedAreaMutation represents an operation that mutates the ProtectedArea nodes in the graph.
 type ProtectedAreaMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*ProtectedArea, error)
-	predicates    []predicate.ProtectedArea
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	done                 bool
+	oldValue             func(context.Context) (*ProtectedArea, error)
+	predicates           []predicate.ProtectedArea
 }
 
 var _ ent.Mutation = (*ProtectedAreaMutation)(nil)
@@ -23712,6 +26234,339 @@ func (m *ProtectedAreaMutation) IDs(ctx context.Context) ([]int, error) {
 	}
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (m *ProtectedAreaMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *ProtectedAreaMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the ProtectedArea entity.
+// If the ProtectedArea object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *ProtectedAreaMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *ProtectedAreaMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *ProtectedAreaMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the ProtectedArea entity.
+// If the ProtectedArea object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *ProtectedAreaMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[protectedarea.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *ProtectedAreaMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[protectedarea.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *ProtectedAreaMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, protectedarea.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *ProtectedAreaMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *ProtectedAreaMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the ProtectedArea entity.
+// If the ProtectedArea object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *ProtectedAreaMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *ProtectedAreaMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *ProtectedAreaMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the ProtectedArea entity.
+// If the ProtectedArea object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *ProtectedAreaMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[protectedarea.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *ProtectedAreaMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[protectedarea.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *ProtectedAreaMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, protectedarea.FieldUpdatedBy)
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *ProtectedAreaMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *ProtectedAreaMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the ProtectedArea entity.
+// If the ProtectedArea object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (m *ProtectedAreaMutation) ClearDisplayName() {
+	m.display_name = nil
+	m.clearedFields[protectedarea.FieldDisplayName] = struct{}{}
+}
+
+// DisplayNameCleared returns if the "display_name" field was cleared in this mutation.
+func (m *ProtectedAreaMutation) DisplayNameCleared() bool {
+	_, ok := m.clearedFields[protectedarea.FieldDisplayName]
+	return ok
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *ProtectedAreaMutation) ResetDisplayName() {
+	m.display_name = nil
+	delete(m.clearedFields, protectedarea.FieldDisplayName)
+}
+
+// SetDescription sets the "description" field.
+func (m *ProtectedAreaMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *ProtectedAreaMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the ProtectedArea entity.
+// If the ProtectedArea object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *ProtectedAreaMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[protectedarea.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *ProtectedAreaMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[protectedarea.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *ProtectedAreaMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, protectedarea.FieldDescription)
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (m *ProtectedAreaMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
+}
+
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *ProtectedAreaMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalLinks returns the old "external_links" field's value of the ProtectedArea entity.
+// If the ProtectedArea object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
+	}
+	return oldValue.ExternalLinks, nil
+}
+
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *ProtectedAreaMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
+}
+
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *ProtectedAreaMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *ProtectedAreaMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[protectedarea.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *ProtectedAreaMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[protectedarea.FieldExternalLinks]
+	return ok
+}
+
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *ProtectedAreaMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, protectedarea.FieldExternalLinks)
+}
+
 // Where appends a list predicates to the ProtectedAreaMutation builder.
 func (m *ProtectedAreaMutation) Where(ps ...predicate.ProtectedArea) {
 	m.predicates = append(m.predicates, ps...)
@@ -23746,7 +26601,28 @@ func (m *ProtectedAreaMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProtectedAreaMutation) Fields() []string {
-	fields := make([]string, 0, 0)
+	fields := make([]string, 0, 7)
+	if m.created_at != nil {
+		fields = append(fields, protectedarea.FieldCreatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, protectedarea.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, protectedarea.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, protectedarea.FieldUpdatedBy)
+	}
+	if m.display_name != nil {
+		fields = append(fields, protectedarea.FieldDisplayName)
+	}
+	if m.description != nil {
+		fields = append(fields, protectedarea.FieldDescription)
+	}
+	if m.external_links != nil {
+		fields = append(fields, protectedarea.FieldExternalLinks)
+	}
 	return fields
 }
 
@@ -23754,6 +26630,22 @@ func (m *ProtectedAreaMutation) Fields() []string {
 // return value indicates that this field was not set, or was not defined in the
 // schema.
 func (m *ProtectedAreaMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case protectedarea.FieldCreatedAt:
+		return m.CreatedAt()
+	case protectedarea.FieldCreatedBy:
+		return m.CreatedBy()
+	case protectedarea.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case protectedarea.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case protectedarea.FieldDisplayName:
+		return m.DisplayName()
+	case protectedarea.FieldDescription:
+		return m.Description()
+	case protectedarea.FieldExternalLinks:
+		return m.ExternalLinks()
+	}
 	return nil, false
 }
 
@@ -23761,6 +26653,22 @@ func (m *ProtectedAreaMutation) Field(name string) (ent.Value, bool) {
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
 func (m *ProtectedAreaMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case protectedarea.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case protectedarea.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case protectedarea.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case protectedarea.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case protectedarea.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case protectedarea.FieldDescription:
+		return m.OldDescription(ctx)
+	case protectedarea.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
+	}
 	return nil, fmt.Errorf("unknown ProtectedArea field %s", name)
 }
 
@@ -23769,6 +26677,55 @@ func (m *ProtectedAreaMutation) OldField(ctx context.Context, name string) (ent.
 // type.
 func (m *ProtectedAreaMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case protectedarea.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case protectedarea.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case protectedarea.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case protectedarea.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case protectedarea.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case protectedarea.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case protectedarea.FieldExternalLinks:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalLinks(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ProtectedArea field %s", name)
 }
@@ -23790,13 +26747,31 @@ func (m *ProtectedAreaMutation) AddedField(name string) (ent.Value, bool) {
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
 func (m *ProtectedAreaMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown ProtectedArea numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *ProtectedAreaMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(protectedarea.FieldCreatedBy) {
+		fields = append(fields, protectedarea.FieldCreatedBy)
+	}
+	if m.FieldCleared(protectedarea.FieldUpdatedBy) {
+		fields = append(fields, protectedarea.FieldUpdatedBy)
+	}
+	if m.FieldCleared(protectedarea.FieldDisplayName) {
+		fields = append(fields, protectedarea.FieldDisplayName)
+	}
+	if m.FieldCleared(protectedarea.FieldDescription) {
+		fields = append(fields, protectedarea.FieldDescription)
+	}
+	if m.FieldCleared(protectedarea.FieldExternalLinks) {
+		fields = append(fields, protectedarea.FieldExternalLinks)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -23809,12 +26784,52 @@ func (m *ProtectedAreaMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *ProtectedAreaMutation) ClearField(name string) error {
+	switch name {
+	case protectedarea.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case protectedarea.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case protectedarea.FieldDisplayName:
+		m.ClearDisplayName()
+		return nil
+	case protectedarea.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case protectedarea.FieldExternalLinks:
+		m.ClearExternalLinks()
+		return nil
+	}
 	return fmt.Errorf("unknown ProtectedArea nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
 func (m *ProtectedAreaMutation) ResetField(name string) error {
+	switch name {
+	case protectedarea.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case protectedarea.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case protectedarea.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case protectedarea.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case protectedarea.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case protectedarea.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case protectedarea.FieldExternalLinks:
+		m.ResetExternalLinks()
+		return nil
+	}
 	return fmt.Errorf("unknown ProtectedArea field %s", name)
 }
 
@@ -23869,13 +26884,21 @@ func (m *ProtectedAreaMutation) ResetEdge(name string) error {
 // ProtectedAreaCategoryMutation represents an operation that mutates the ProtectedAreaCategory nodes in the graph.
 type ProtectedAreaCategoryMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*ProtectedAreaCategory, error)
-	predicates    []predicate.ProtectedAreaCategory
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	done                 bool
+	oldValue             func(context.Context) (*ProtectedAreaCategory, error)
+	predicates           []predicate.ProtectedAreaCategory
 }
 
 var _ ent.Mutation = (*ProtectedAreaCategoryMutation)(nil)
@@ -23976,6 +26999,339 @@ func (m *ProtectedAreaCategoryMutation) IDs(ctx context.Context) ([]int, error) 
 	}
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (m *ProtectedAreaCategoryMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *ProtectedAreaCategoryMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the ProtectedAreaCategory entity.
+// If the ProtectedAreaCategory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaCategoryMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *ProtectedAreaCategoryMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *ProtectedAreaCategoryMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *ProtectedAreaCategoryMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the ProtectedAreaCategory entity.
+// If the ProtectedAreaCategory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaCategoryMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *ProtectedAreaCategoryMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[protectedareacategory.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *ProtectedAreaCategoryMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[protectedareacategory.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *ProtectedAreaCategoryMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, protectedareacategory.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *ProtectedAreaCategoryMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *ProtectedAreaCategoryMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the ProtectedAreaCategory entity.
+// If the ProtectedAreaCategory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaCategoryMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *ProtectedAreaCategoryMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *ProtectedAreaCategoryMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *ProtectedAreaCategoryMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the ProtectedAreaCategory entity.
+// If the ProtectedAreaCategory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaCategoryMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *ProtectedAreaCategoryMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[protectedareacategory.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *ProtectedAreaCategoryMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[protectedareacategory.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *ProtectedAreaCategoryMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, protectedareacategory.FieldUpdatedBy)
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *ProtectedAreaCategoryMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *ProtectedAreaCategoryMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the ProtectedAreaCategory entity.
+// If the ProtectedAreaCategory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaCategoryMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (m *ProtectedAreaCategoryMutation) ClearDisplayName() {
+	m.display_name = nil
+	m.clearedFields[protectedareacategory.FieldDisplayName] = struct{}{}
+}
+
+// DisplayNameCleared returns if the "display_name" field was cleared in this mutation.
+func (m *ProtectedAreaCategoryMutation) DisplayNameCleared() bool {
+	_, ok := m.clearedFields[protectedareacategory.FieldDisplayName]
+	return ok
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *ProtectedAreaCategoryMutation) ResetDisplayName() {
+	m.display_name = nil
+	delete(m.clearedFields, protectedareacategory.FieldDisplayName)
+}
+
+// SetDescription sets the "description" field.
+func (m *ProtectedAreaCategoryMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *ProtectedAreaCategoryMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the ProtectedAreaCategory entity.
+// If the ProtectedAreaCategory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaCategoryMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *ProtectedAreaCategoryMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[protectedareacategory.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *ProtectedAreaCategoryMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[protectedareacategory.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *ProtectedAreaCategoryMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, protectedareacategory.FieldDescription)
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (m *ProtectedAreaCategoryMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
+}
+
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *ProtectedAreaCategoryMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalLinks returns the old "external_links" field's value of the ProtectedAreaCategory entity.
+// If the ProtectedAreaCategory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaCategoryMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
+	}
+	return oldValue.ExternalLinks, nil
+}
+
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *ProtectedAreaCategoryMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
+}
+
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *ProtectedAreaCategoryMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *ProtectedAreaCategoryMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[protectedareacategory.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *ProtectedAreaCategoryMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[protectedareacategory.FieldExternalLinks]
+	return ok
+}
+
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *ProtectedAreaCategoryMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, protectedareacategory.FieldExternalLinks)
+}
+
 // Where appends a list predicates to the ProtectedAreaCategoryMutation builder.
 func (m *ProtectedAreaCategoryMutation) Where(ps ...predicate.ProtectedAreaCategory) {
 	m.predicates = append(m.predicates, ps...)
@@ -24010,7 +27366,28 @@ func (m *ProtectedAreaCategoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProtectedAreaCategoryMutation) Fields() []string {
-	fields := make([]string, 0, 0)
+	fields := make([]string, 0, 7)
+	if m.created_at != nil {
+		fields = append(fields, protectedareacategory.FieldCreatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, protectedareacategory.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, protectedareacategory.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, protectedareacategory.FieldUpdatedBy)
+	}
+	if m.display_name != nil {
+		fields = append(fields, protectedareacategory.FieldDisplayName)
+	}
+	if m.description != nil {
+		fields = append(fields, protectedareacategory.FieldDescription)
+	}
+	if m.external_links != nil {
+		fields = append(fields, protectedareacategory.FieldExternalLinks)
+	}
 	return fields
 }
 
@@ -24018,6 +27395,22 @@ func (m *ProtectedAreaCategoryMutation) Fields() []string {
 // return value indicates that this field was not set, or was not defined in the
 // schema.
 func (m *ProtectedAreaCategoryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case protectedareacategory.FieldCreatedAt:
+		return m.CreatedAt()
+	case protectedareacategory.FieldCreatedBy:
+		return m.CreatedBy()
+	case protectedareacategory.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case protectedareacategory.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case protectedareacategory.FieldDisplayName:
+		return m.DisplayName()
+	case protectedareacategory.FieldDescription:
+		return m.Description()
+	case protectedareacategory.FieldExternalLinks:
+		return m.ExternalLinks()
+	}
 	return nil, false
 }
 
@@ -24025,6 +27418,22 @@ func (m *ProtectedAreaCategoryMutation) Field(name string) (ent.Value, bool) {
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
 func (m *ProtectedAreaCategoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case protectedareacategory.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case protectedareacategory.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case protectedareacategory.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case protectedareacategory.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case protectedareacategory.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case protectedareacategory.FieldDescription:
+		return m.OldDescription(ctx)
+	case protectedareacategory.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
+	}
 	return nil, fmt.Errorf("unknown ProtectedAreaCategory field %s", name)
 }
 
@@ -24033,6 +27442,55 @@ func (m *ProtectedAreaCategoryMutation) OldField(ctx context.Context, name strin
 // type.
 func (m *ProtectedAreaCategoryMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case protectedareacategory.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case protectedareacategory.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case protectedareacategory.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case protectedareacategory.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case protectedareacategory.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case protectedareacategory.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case protectedareacategory.FieldExternalLinks:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalLinks(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ProtectedAreaCategory field %s", name)
 }
@@ -24054,13 +27512,31 @@ func (m *ProtectedAreaCategoryMutation) AddedField(name string) (ent.Value, bool
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
 func (m *ProtectedAreaCategoryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown ProtectedAreaCategory numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *ProtectedAreaCategoryMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(protectedareacategory.FieldCreatedBy) {
+		fields = append(fields, protectedareacategory.FieldCreatedBy)
+	}
+	if m.FieldCleared(protectedareacategory.FieldUpdatedBy) {
+		fields = append(fields, protectedareacategory.FieldUpdatedBy)
+	}
+	if m.FieldCleared(protectedareacategory.FieldDisplayName) {
+		fields = append(fields, protectedareacategory.FieldDisplayName)
+	}
+	if m.FieldCleared(protectedareacategory.FieldDescription) {
+		fields = append(fields, protectedareacategory.FieldDescription)
+	}
+	if m.FieldCleared(protectedareacategory.FieldExternalLinks) {
+		fields = append(fields, protectedareacategory.FieldExternalLinks)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -24073,12 +27549,52 @@ func (m *ProtectedAreaCategoryMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *ProtectedAreaCategoryMutation) ClearField(name string) error {
+	switch name {
+	case protectedareacategory.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case protectedareacategory.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case protectedareacategory.FieldDisplayName:
+		m.ClearDisplayName()
+		return nil
+	case protectedareacategory.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case protectedareacategory.FieldExternalLinks:
+		m.ClearExternalLinks()
+		return nil
+	}
 	return fmt.Errorf("unknown ProtectedAreaCategory nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
 func (m *ProtectedAreaCategoryMutation) ResetField(name string) error {
+	switch name {
+	case protectedareacategory.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case protectedareacategory.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case protectedareacategory.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case protectedareacategory.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case protectedareacategory.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case protectedareacategory.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case protectedareacategory.FieldExternalLinks:
+		m.ResetExternalLinks()
+		return nil
+	}
 	return fmt.Errorf("unknown ProtectedAreaCategory field %s", name)
 }
 
@@ -24133,13 +27649,21 @@ func (m *ProtectedAreaCategoryMutation) ResetEdge(name string) error {
 // ProtectedAreaPictureMutation represents an operation that mutates the ProtectedAreaPicture nodes in the graph.
 type ProtectedAreaPictureMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*ProtectedAreaPicture, error)
-	predicates    []predicate.ProtectedAreaPicture
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	done                 bool
+	oldValue             func(context.Context) (*ProtectedAreaPicture, error)
+	predicates           []predicate.ProtectedAreaPicture
 }
 
 var _ ent.Mutation = (*ProtectedAreaPictureMutation)(nil)
@@ -24240,6 +27764,339 @@ func (m *ProtectedAreaPictureMutation) IDs(ctx context.Context) ([]int, error) {
 	}
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (m *ProtectedAreaPictureMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *ProtectedAreaPictureMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the ProtectedAreaPicture entity.
+// If the ProtectedAreaPicture object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaPictureMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *ProtectedAreaPictureMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *ProtectedAreaPictureMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *ProtectedAreaPictureMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the ProtectedAreaPicture entity.
+// If the ProtectedAreaPicture object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaPictureMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *ProtectedAreaPictureMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[protectedareapicture.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *ProtectedAreaPictureMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[protectedareapicture.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *ProtectedAreaPictureMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, protectedareapicture.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *ProtectedAreaPictureMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *ProtectedAreaPictureMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the ProtectedAreaPicture entity.
+// If the ProtectedAreaPicture object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaPictureMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *ProtectedAreaPictureMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *ProtectedAreaPictureMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *ProtectedAreaPictureMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the ProtectedAreaPicture entity.
+// If the ProtectedAreaPicture object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaPictureMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *ProtectedAreaPictureMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[protectedareapicture.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *ProtectedAreaPictureMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[protectedareapicture.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *ProtectedAreaPictureMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, protectedareapicture.FieldUpdatedBy)
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *ProtectedAreaPictureMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *ProtectedAreaPictureMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the ProtectedAreaPicture entity.
+// If the ProtectedAreaPicture object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaPictureMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (m *ProtectedAreaPictureMutation) ClearDisplayName() {
+	m.display_name = nil
+	m.clearedFields[protectedareapicture.FieldDisplayName] = struct{}{}
+}
+
+// DisplayNameCleared returns if the "display_name" field was cleared in this mutation.
+func (m *ProtectedAreaPictureMutation) DisplayNameCleared() bool {
+	_, ok := m.clearedFields[protectedareapicture.FieldDisplayName]
+	return ok
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *ProtectedAreaPictureMutation) ResetDisplayName() {
+	m.display_name = nil
+	delete(m.clearedFields, protectedareapicture.FieldDisplayName)
+}
+
+// SetDescription sets the "description" field.
+func (m *ProtectedAreaPictureMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *ProtectedAreaPictureMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the ProtectedAreaPicture entity.
+// If the ProtectedAreaPicture object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaPictureMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *ProtectedAreaPictureMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[protectedareapicture.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *ProtectedAreaPictureMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[protectedareapicture.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *ProtectedAreaPictureMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, protectedareapicture.FieldDescription)
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (m *ProtectedAreaPictureMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
+}
+
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *ProtectedAreaPictureMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalLinks returns the old "external_links" field's value of the ProtectedAreaPicture entity.
+// If the ProtectedAreaPicture object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaPictureMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
+	}
+	return oldValue.ExternalLinks, nil
+}
+
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *ProtectedAreaPictureMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
+}
+
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *ProtectedAreaPictureMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *ProtectedAreaPictureMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[protectedareapicture.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *ProtectedAreaPictureMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[protectedareapicture.FieldExternalLinks]
+	return ok
+}
+
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *ProtectedAreaPictureMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, protectedareapicture.FieldExternalLinks)
+}
+
 // Where appends a list predicates to the ProtectedAreaPictureMutation builder.
 func (m *ProtectedAreaPictureMutation) Where(ps ...predicate.ProtectedAreaPicture) {
 	m.predicates = append(m.predicates, ps...)
@@ -24274,7 +28131,28 @@ func (m *ProtectedAreaPictureMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProtectedAreaPictureMutation) Fields() []string {
-	fields := make([]string, 0, 0)
+	fields := make([]string, 0, 7)
+	if m.created_at != nil {
+		fields = append(fields, protectedareapicture.FieldCreatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, protectedareapicture.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, protectedareapicture.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, protectedareapicture.FieldUpdatedBy)
+	}
+	if m.display_name != nil {
+		fields = append(fields, protectedareapicture.FieldDisplayName)
+	}
+	if m.description != nil {
+		fields = append(fields, protectedareapicture.FieldDescription)
+	}
+	if m.external_links != nil {
+		fields = append(fields, protectedareapicture.FieldExternalLinks)
+	}
 	return fields
 }
 
@@ -24282,6 +28160,22 @@ func (m *ProtectedAreaPictureMutation) Fields() []string {
 // return value indicates that this field was not set, or was not defined in the
 // schema.
 func (m *ProtectedAreaPictureMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case protectedareapicture.FieldCreatedAt:
+		return m.CreatedAt()
+	case protectedareapicture.FieldCreatedBy:
+		return m.CreatedBy()
+	case protectedareapicture.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case protectedareapicture.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case protectedareapicture.FieldDisplayName:
+		return m.DisplayName()
+	case protectedareapicture.FieldDescription:
+		return m.Description()
+	case protectedareapicture.FieldExternalLinks:
+		return m.ExternalLinks()
+	}
 	return nil, false
 }
 
@@ -24289,6 +28183,22 @@ func (m *ProtectedAreaPictureMutation) Field(name string) (ent.Value, bool) {
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
 func (m *ProtectedAreaPictureMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case protectedareapicture.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case protectedareapicture.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case protectedareapicture.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case protectedareapicture.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case protectedareapicture.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case protectedareapicture.FieldDescription:
+		return m.OldDescription(ctx)
+	case protectedareapicture.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
+	}
 	return nil, fmt.Errorf("unknown ProtectedAreaPicture field %s", name)
 }
 
@@ -24297,6 +28207,55 @@ func (m *ProtectedAreaPictureMutation) OldField(ctx context.Context, name string
 // type.
 func (m *ProtectedAreaPictureMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case protectedareapicture.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case protectedareapicture.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case protectedareapicture.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case protectedareapicture.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case protectedareapicture.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case protectedareapicture.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case protectedareapicture.FieldExternalLinks:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalLinks(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ProtectedAreaPicture field %s", name)
 }
@@ -24318,13 +28277,31 @@ func (m *ProtectedAreaPictureMutation) AddedField(name string) (ent.Value, bool)
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
 func (m *ProtectedAreaPictureMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown ProtectedAreaPicture numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *ProtectedAreaPictureMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(protectedareapicture.FieldCreatedBy) {
+		fields = append(fields, protectedareapicture.FieldCreatedBy)
+	}
+	if m.FieldCleared(protectedareapicture.FieldUpdatedBy) {
+		fields = append(fields, protectedareapicture.FieldUpdatedBy)
+	}
+	if m.FieldCleared(protectedareapicture.FieldDisplayName) {
+		fields = append(fields, protectedareapicture.FieldDisplayName)
+	}
+	if m.FieldCleared(protectedareapicture.FieldDescription) {
+		fields = append(fields, protectedareapicture.FieldDescription)
+	}
+	if m.FieldCleared(protectedareapicture.FieldExternalLinks) {
+		fields = append(fields, protectedareapicture.FieldExternalLinks)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -24337,12 +28314,52 @@ func (m *ProtectedAreaPictureMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *ProtectedAreaPictureMutation) ClearField(name string) error {
+	switch name {
+	case protectedareapicture.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case protectedareapicture.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case protectedareapicture.FieldDisplayName:
+		m.ClearDisplayName()
+		return nil
+	case protectedareapicture.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case protectedareapicture.FieldExternalLinks:
+		m.ClearExternalLinks()
+		return nil
+	}
 	return fmt.Errorf("unknown ProtectedAreaPicture nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
 func (m *ProtectedAreaPictureMutation) ResetField(name string) error {
+	switch name {
+	case protectedareapicture.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case protectedareapicture.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case protectedareapicture.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case protectedareapicture.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case protectedareapicture.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case protectedareapicture.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case protectedareapicture.FieldExternalLinks:
+		m.ResetExternalLinks()
+		return nil
+	}
 	return fmt.Errorf("unknown ProtectedAreaPicture field %s", name)
 }
 
@@ -25338,13 +29355,21 @@ func (m *PublicationMutation) ResetEdge(name string) error {
 // PublisherMutation represents an operation that mutates the Publisher nodes in the graph.
 type PublisherMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*Publisher, error)
-	predicates    []predicate.Publisher
+	op                   Op
+	typ                  string
+	id                   *int
+	created_at           *time.Time
+	created_by           *string
+	updated_at           *time.Time
+	updated_by           *string
+	display_name         *string
+	description          *string
+	external_links       *[]string
+	appendexternal_links []string
+	clearedFields        map[string]struct{}
+	done                 bool
+	oldValue             func(context.Context) (*Publisher, error)
+	predicates           []predicate.Publisher
 }
 
 var _ ent.Mutation = (*PublisherMutation)(nil)
@@ -25445,6 +29470,339 @@ func (m *PublisherMutation) IDs(ctx context.Context) ([]int, error) {
 	}
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (m *PublisherMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *PublisherMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Publisher entity.
+// If the Publisher object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PublisherMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *PublisherMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *PublisherMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *PublisherMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Publisher entity.
+// If the Publisher object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PublisherMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *PublisherMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[publisher.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *PublisherMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[publisher.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *PublisherMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, publisher.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *PublisherMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *PublisherMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Publisher entity.
+// If the Publisher object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PublisherMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *PublisherMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *PublisherMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *PublisherMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Publisher entity.
+// If the Publisher object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PublisherMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *PublisherMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[publisher.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *PublisherMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[publisher.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *PublisherMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, publisher.FieldUpdatedBy)
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *PublisherMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *PublisherMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the Publisher entity.
+// If the Publisher object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PublisherMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (m *PublisherMutation) ClearDisplayName() {
+	m.display_name = nil
+	m.clearedFields[publisher.FieldDisplayName] = struct{}{}
+}
+
+// DisplayNameCleared returns if the "display_name" field was cleared in this mutation.
+func (m *PublisherMutation) DisplayNameCleared() bool {
+	_, ok := m.clearedFields[publisher.FieldDisplayName]
+	return ok
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *PublisherMutation) ResetDisplayName() {
+	m.display_name = nil
+	delete(m.clearedFields, publisher.FieldDisplayName)
+}
+
+// SetDescription sets the "description" field.
+func (m *PublisherMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *PublisherMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the Publisher entity.
+// If the Publisher object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PublisherMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *PublisherMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[publisher.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *PublisherMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[publisher.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *PublisherMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, publisher.FieldDescription)
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (m *PublisherMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
+}
+
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *PublisherMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalLinks returns the old "external_links" field's value of the Publisher entity.
+// If the Publisher object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PublisherMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
+	}
+	return oldValue.ExternalLinks, nil
+}
+
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *PublisherMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
+}
+
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *PublisherMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *PublisherMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[publisher.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *PublisherMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[publisher.FieldExternalLinks]
+	return ok
+}
+
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *PublisherMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, publisher.FieldExternalLinks)
+}
+
 // Where appends a list predicates to the PublisherMutation builder.
 func (m *PublisherMutation) Where(ps ...predicate.Publisher) {
 	m.predicates = append(m.predicates, ps...)
@@ -25479,7 +29837,28 @@ func (m *PublisherMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PublisherMutation) Fields() []string {
-	fields := make([]string, 0, 0)
+	fields := make([]string, 0, 7)
+	if m.created_at != nil {
+		fields = append(fields, publisher.FieldCreatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, publisher.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, publisher.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, publisher.FieldUpdatedBy)
+	}
+	if m.display_name != nil {
+		fields = append(fields, publisher.FieldDisplayName)
+	}
+	if m.description != nil {
+		fields = append(fields, publisher.FieldDescription)
+	}
+	if m.external_links != nil {
+		fields = append(fields, publisher.FieldExternalLinks)
+	}
 	return fields
 }
 
@@ -25487,6 +29866,22 @@ func (m *PublisherMutation) Fields() []string {
 // return value indicates that this field was not set, or was not defined in the
 // schema.
 func (m *PublisherMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case publisher.FieldCreatedAt:
+		return m.CreatedAt()
+	case publisher.FieldCreatedBy:
+		return m.CreatedBy()
+	case publisher.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case publisher.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case publisher.FieldDisplayName:
+		return m.DisplayName()
+	case publisher.FieldDescription:
+		return m.Description()
+	case publisher.FieldExternalLinks:
+		return m.ExternalLinks()
+	}
 	return nil, false
 }
 
@@ -25494,6 +29889,22 @@ func (m *PublisherMutation) Field(name string) (ent.Value, bool) {
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
 func (m *PublisherMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case publisher.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case publisher.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case publisher.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case publisher.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case publisher.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case publisher.FieldDescription:
+		return m.OldDescription(ctx)
+	case publisher.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
+	}
 	return nil, fmt.Errorf("unknown Publisher field %s", name)
 }
 
@@ -25502,6 +29913,55 @@ func (m *PublisherMutation) OldField(ctx context.Context, name string) (ent.Valu
 // type.
 func (m *PublisherMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case publisher.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case publisher.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case publisher.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case publisher.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case publisher.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case publisher.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case publisher.FieldExternalLinks:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalLinks(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Publisher field %s", name)
 }
@@ -25523,13 +29983,31 @@ func (m *PublisherMutation) AddedField(name string) (ent.Value, bool) {
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
 func (m *PublisherMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown Publisher numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *PublisherMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(publisher.FieldCreatedBy) {
+		fields = append(fields, publisher.FieldCreatedBy)
+	}
+	if m.FieldCleared(publisher.FieldUpdatedBy) {
+		fields = append(fields, publisher.FieldUpdatedBy)
+	}
+	if m.FieldCleared(publisher.FieldDisplayName) {
+		fields = append(fields, publisher.FieldDisplayName)
+	}
+	if m.FieldCleared(publisher.FieldDescription) {
+		fields = append(fields, publisher.FieldDescription)
+	}
+	if m.FieldCleared(publisher.FieldExternalLinks) {
+		fields = append(fields, publisher.FieldExternalLinks)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -25542,12 +30020,52 @@ func (m *PublisherMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *PublisherMutation) ClearField(name string) error {
+	switch name {
+	case publisher.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case publisher.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case publisher.FieldDisplayName:
+		m.ClearDisplayName()
+		return nil
+	case publisher.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case publisher.FieldExternalLinks:
+		m.ClearExternalLinks()
+		return nil
+	}
 	return fmt.Errorf("unknown Publisher nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
 func (m *PublisherMutation) ResetField(name string) error {
+	switch name {
+	case publisher.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case publisher.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case publisher.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case publisher.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case publisher.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case publisher.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case publisher.FieldExternalLinks:
+		m.ResetExternalLinks()
+		return nil
+	}
 	return fmt.Errorf("unknown Publisher field %s", name)
 }
 

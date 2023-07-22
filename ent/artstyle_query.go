@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -259,6 +260,18 @@ func (asq *ArtStyleQuery) Clone() *ArtStyleQuery {
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.ArtStyle.Query().
+//		GroupBy(artstyle.FieldCreatedAt).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (asq *ArtStyleQuery) GroupBy(field string, fields ...string) *ArtStyleGroupBy {
 	asq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &ArtStyleGroupBy{build: asq}
@@ -270,6 +283,16 @@ func (asq *ArtStyleQuery) GroupBy(field string, fields ...string) *ArtStyleGroup
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//	}
+//
+//	client.ArtStyle.Query().
+//		Select(artstyle.FieldCreatedAt).
+//		Scan(ctx, &v)
 func (asq *ArtStyleQuery) Select(fields ...string) *ArtStyleSelect {
 	asq.ctx.Fields = append(asq.ctx.Fields, fields...)
 	sbuild := &ArtStyleSelect{ArtStyleQuery: asq}
@@ -305,6 +328,12 @@ func (asq *ArtStyleQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		asq.sql = prev
+	}
+	if artstyle.Policy == nil {
+		return errors.New("ent: uninitialized artstyle.Policy (forgotten import ent/runtime?)")
+	}
+	if err := artstyle.Policy.EvalQuery(ctx, asq); err != nil {
+		return err
 	}
 	return nil
 }
