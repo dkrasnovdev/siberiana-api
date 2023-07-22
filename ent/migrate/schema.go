@@ -242,8 +242,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "begin_date", Type: field.TypeTime},
-		{Name: "end_date", Type: field.TypeTime, Nullable: true},
+		{Name: "begin_data", Type: field.TypeTime, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "end_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
 	}
 	// HoldersTable holds the schema information for the "holders" table.
 	HoldersTable = &schema.Table{
@@ -449,8 +449,8 @@ var (
 		{Name: "given_name", Type: field.TypeString, Nullable: true},
 		{Name: "family_name", Type: field.TypeString, Nullable: true},
 		{Name: "patronymic_name", Type: field.TypeString, Nullable: true},
-		{Name: "begin_data", Type: field.TypeTime, Nullable: true},
-		{Name: "end_date", Type: field.TypeTime, Nullable: true},
+		{Name: "begin_data", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "end_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
 		{Name: "gender", Type: field.TypeEnum, Enums: []string{"female", "male"}},
 		{Name: "collection_people", Type: field.TypeInt, Nullable: true},
 		{Name: "holder_person", Type: field.TypeInt, Unique: true, Nullable: true},

@@ -23,8 +23,8 @@ const (
 	FieldUpdatedAt = "updated_at"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
-	// FieldBeginDate holds the string denoting the begin_date field in the database.
-	FieldBeginDate = "begin_date"
+	// FieldBeginData holds the string denoting the begin_data field in the database.
+	FieldBeginData = "begin_data"
 	// FieldEndDate holds the string denoting the end_date field in the database.
 	FieldEndDate = "end_date"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
@@ -70,7 +70,7 @@ var Columns = []string{
 	FieldCreatedBy,
 	FieldUpdatedAt,
 	FieldUpdatedBy,
-	FieldBeginDate,
+	FieldBeginData,
 	FieldEndDate,
 }
 
@@ -137,9 +137,9 @@ func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
 }
 
-// ByBeginDate orders the results by the begin_date field.
-func ByBeginDate(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldBeginDate, opts...).ToFunc()
+// ByBeginData orders the results by the begin_data field.
+func ByBeginData(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBeginData, opts...).ToFunc()
 }
 
 // ByEndDate orders the results by the end_date field.

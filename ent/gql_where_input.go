@@ -3905,15 +3905,15 @@ type HolderWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "begin_date" field predicates.
-	BeginDate      *time.Time  `json:"beginDate,omitempty"`
-	BeginDateNEQ   *time.Time  `json:"beginDateNEQ,omitempty"`
-	BeginDateIn    []time.Time `json:"beginDateIn,omitempty"`
-	BeginDateNotIn []time.Time `json:"beginDateNotIn,omitempty"`
-	BeginDateGT    *time.Time  `json:"beginDateGT,omitempty"`
-	BeginDateGTE   *time.Time  `json:"beginDateGTE,omitempty"`
-	BeginDateLT    *time.Time  `json:"beginDateLT,omitempty"`
-	BeginDateLTE   *time.Time  `json:"beginDateLTE,omitempty"`
+	// "begin_data" field predicates.
+	BeginData      *time.Time  `json:"beginData,omitempty"`
+	BeginDataNEQ   *time.Time  `json:"beginDataNEQ,omitempty"`
+	BeginDataIn    []time.Time `json:"beginDataIn,omitempty"`
+	BeginDataNotIn []time.Time `json:"beginDataNotIn,omitempty"`
+	BeginDataGT    *time.Time  `json:"beginDataGT,omitempty"`
+	BeginDataGTE   *time.Time  `json:"beginDataGTE,omitempty"`
+	BeginDataLT    *time.Time  `json:"beginDataLT,omitempty"`
+	BeginDataLTE   *time.Time  `json:"beginDataLTE,omitempty"`
 
 	// "end_date" field predicates.
 	EndDate       *time.Time  `json:"endDate,omitempty"`
@@ -4177,29 +4177,29 @@ func (i *HolderWhereInput) P() (predicate.Holder, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, holder.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.BeginDate != nil {
-		predicates = append(predicates, holder.BeginDateEQ(*i.BeginDate))
+	if i.BeginData != nil {
+		predicates = append(predicates, holder.BeginDataEQ(*i.BeginData))
 	}
-	if i.BeginDateNEQ != nil {
-		predicates = append(predicates, holder.BeginDateNEQ(*i.BeginDateNEQ))
+	if i.BeginDataNEQ != nil {
+		predicates = append(predicates, holder.BeginDataNEQ(*i.BeginDataNEQ))
 	}
-	if len(i.BeginDateIn) > 0 {
-		predicates = append(predicates, holder.BeginDateIn(i.BeginDateIn...))
+	if len(i.BeginDataIn) > 0 {
+		predicates = append(predicates, holder.BeginDataIn(i.BeginDataIn...))
 	}
-	if len(i.BeginDateNotIn) > 0 {
-		predicates = append(predicates, holder.BeginDateNotIn(i.BeginDateNotIn...))
+	if len(i.BeginDataNotIn) > 0 {
+		predicates = append(predicates, holder.BeginDataNotIn(i.BeginDataNotIn...))
 	}
-	if i.BeginDateGT != nil {
-		predicates = append(predicates, holder.BeginDateGT(*i.BeginDateGT))
+	if i.BeginDataGT != nil {
+		predicates = append(predicates, holder.BeginDataGT(*i.BeginDataGT))
 	}
-	if i.BeginDateGTE != nil {
-		predicates = append(predicates, holder.BeginDateGTE(*i.BeginDateGTE))
+	if i.BeginDataGTE != nil {
+		predicates = append(predicates, holder.BeginDataGTE(*i.BeginDataGTE))
 	}
-	if i.BeginDateLT != nil {
-		predicates = append(predicates, holder.BeginDateLT(*i.BeginDateLT))
+	if i.BeginDataLT != nil {
+		predicates = append(predicates, holder.BeginDataLT(*i.BeginDataLT))
 	}
-	if i.BeginDateLTE != nil {
-		predicates = append(predicates, holder.BeginDateLTE(*i.BeginDateLTE))
+	if i.BeginDataLTE != nil {
+		predicates = append(predicates, holder.BeginDataLTE(*i.BeginDataLTE))
 	}
 	if i.EndDate != nil {
 		predicates = append(predicates, holder.EndDateEQ(*i.EndDate))

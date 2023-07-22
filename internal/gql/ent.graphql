@@ -856,7 +856,7 @@ input CreateHolderInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  beginDate: Time!
+  beginData: Time!
   endDate: Time
   artifactIDs: [ID!]
   holderResponsibilityIDs: [ID!]
@@ -1372,7 +1372,7 @@ type Holder implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  beginDate: Time!
+  beginData: Time!
   endDate: Time
   artifacts: [Artifact!]
   holderResponsibilities: [HolderResponsibility!]
@@ -1600,15 +1600,15 @@ input HolderWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """begin_date field predicates"""
-  beginDate: Time
-  beginDateNEQ: Time
-  beginDateIn: [Time!]
-  beginDateNotIn: [Time!]
-  beginDateGT: Time
-  beginDateGTE: Time
-  beginDateLT: Time
-  beginDateLTE: Time
+  """begin_data field predicates"""
+  beginData: Time
+  beginDataNEQ: Time
+  beginDataIn: [Time!]
+  beginDataNotIn: [Time!]
+  beginDataGT: Time
+  beginDataGTE: Time
+  beginDataLT: Time
+  beginDataLTE: Time
   """end_date field predicates"""
   endDate: Time
   endDateNEQ: Time
@@ -4673,7 +4673,7 @@ input UpdateHolderInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  beginDate: Time
+  beginData: Time
   endDate: Time
   clearEndDate: Boolean
   addArtifactIDs: [ID!]

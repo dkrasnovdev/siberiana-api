@@ -75,9 +75,9 @@ func UpdatedBy(v string) predicate.Holder {
 	return predicate.Holder(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
-// BeginDate applies equality check predicate on the "begin_date" field. It's identical to BeginDateEQ.
-func BeginDate(v time.Time) predicate.Holder {
-	return predicate.Holder(sql.FieldEQ(FieldBeginDate, v))
+// BeginData applies equality check predicate on the "begin_data" field. It's identical to BeginDataEQ.
+func BeginData(v time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldEQ(FieldBeginData, v))
 }
 
 // EndDate applies equality check predicate on the "end_date" field. It's identical to EndDateEQ.
@@ -315,44 +315,44 @@ func UpdatedByContainsFold(v string) predicate.Holder {
 	return predicate.Holder(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
-// BeginDateEQ applies the EQ predicate on the "begin_date" field.
-func BeginDateEQ(v time.Time) predicate.Holder {
-	return predicate.Holder(sql.FieldEQ(FieldBeginDate, v))
+// BeginDataEQ applies the EQ predicate on the "begin_data" field.
+func BeginDataEQ(v time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldEQ(FieldBeginData, v))
 }
 
-// BeginDateNEQ applies the NEQ predicate on the "begin_date" field.
-func BeginDateNEQ(v time.Time) predicate.Holder {
-	return predicate.Holder(sql.FieldNEQ(FieldBeginDate, v))
+// BeginDataNEQ applies the NEQ predicate on the "begin_data" field.
+func BeginDataNEQ(v time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldNEQ(FieldBeginData, v))
 }
 
-// BeginDateIn applies the In predicate on the "begin_date" field.
-func BeginDateIn(vs ...time.Time) predicate.Holder {
-	return predicate.Holder(sql.FieldIn(FieldBeginDate, vs...))
+// BeginDataIn applies the In predicate on the "begin_data" field.
+func BeginDataIn(vs ...time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldIn(FieldBeginData, vs...))
 }
 
-// BeginDateNotIn applies the NotIn predicate on the "begin_date" field.
-func BeginDateNotIn(vs ...time.Time) predicate.Holder {
-	return predicate.Holder(sql.FieldNotIn(FieldBeginDate, vs...))
+// BeginDataNotIn applies the NotIn predicate on the "begin_data" field.
+func BeginDataNotIn(vs ...time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldNotIn(FieldBeginData, vs...))
 }
 
-// BeginDateGT applies the GT predicate on the "begin_date" field.
-func BeginDateGT(v time.Time) predicate.Holder {
-	return predicate.Holder(sql.FieldGT(FieldBeginDate, v))
+// BeginDataGT applies the GT predicate on the "begin_data" field.
+func BeginDataGT(v time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldGT(FieldBeginData, v))
 }
 
-// BeginDateGTE applies the GTE predicate on the "begin_date" field.
-func BeginDateGTE(v time.Time) predicate.Holder {
-	return predicate.Holder(sql.FieldGTE(FieldBeginDate, v))
+// BeginDataGTE applies the GTE predicate on the "begin_data" field.
+func BeginDataGTE(v time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldGTE(FieldBeginData, v))
 }
 
-// BeginDateLT applies the LT predicate on the "begin_date" field.
-func BeginDateLT(v time.Time) predicate.Holder {
-	return predicate.Holder(sql.FieldLT(FieldBeginDate, v))
+// BeginDataLT applies the LT predicate on the "begin_data" field.
+func BeginDataLT(v time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldLT(FieldBeginData, v))
 }
 
-// BeginDateLTE applies the LTE predicate on the "begin_date" field.
-func BeginDateLTE(v time.Time) predicate.Holder {
-	return predicate.Holder(sql.FieldLTE(FieldBeginDate, v))
+// BeginDataLTE applies the LTE predicate on the "begin_data" field.
+func BeginDataLTE(v time.Time) predicate.Holder {
+	return predicate.Holder(sql.FieldLTE(FieldBeginData, v))
 }
 
 // EndDateEQ applies the EQ predicate on the "end_date" field.

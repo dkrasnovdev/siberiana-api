@@ -884,7 +884,7 @@ type CreateHolderInput struct {
 	CreatedBy               *string
 	UpdatedAt               *time.Time
 	UpdatedBy               *string
-	BeginDate               time.Time
+	BeginData               time.Time
 	EndDate                 *time.Time
 	ArtifactIDs             []int
 	HolderResponsibilityIDs []int
@@ -906,7 +906,7 @@ func (i *CreateHolderInput) Mutate(m *HolderMutation) {
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
 	}
-	m.SetBeginDate(i.BeginDate)
+	m.SetBeginData(i.BeginData)
 	if v := i.EndDate; v != nil {
 		m.SetEndDate(*v)
 	}
@@ -937,7 +937,7 @@ type UpdateHolderInput struct {
 	UpdatedAt                     *time.Time
 	ClearUpdatedBy                bool
 	UpdatedBy                     *string
-	BeginDate                     *time.Time
+	BeginData                     *time.Time
 	ClearEndDate                  bool
 	EndDate                       *time.Time
 	ClearArtifacts                bool
@@ -969,8 +969,8 @@ func (i *UpdateHolderInput) Mutate(m *HolderMutation) {
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
 	}
-	if v := i.BeginDate; v != nil {
-		m.SetBeginDate(*v)
+	if v := i.BeginData; v != nil {
+		m.SetBeginData(*v)
 	}
 	if i.ClearEndDate {
 		m.ClearEndDate()

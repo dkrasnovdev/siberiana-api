@@ -227,7 +227,7 @@ type ComplexityRoot struct {
 
 	Holder struct {
 		Artifacts              func(childComplexity int) int
-		BeginDate              func(childComplexity int) int
+		BeginData              func(childComplexity int) int
 		CreatedAt              func(childComplexity int) int
 		CreatedBy              func(childComplexity int) int
 		EndDate                func(childComplexity int) int
@@ -1558,12 +1558,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Holder.Artifacts(childComplexity), true
 
-	case "Holder.beginDate":
-		if e.complexity.Holder.BeginDate == nil {
+	case "Holder.beginData":
+		if e.complexity.Holder.BeginData == nil {
 			break
 		}
 
-		return e.complexity.Holder.BeginDate(childComplexity), true
+		return e.complexity.Holder.BeginData(childComplexity), true
 
 	case "Holder.createdAt":
 		if e.complexity.Holder.CreatedAt == nil {
@@ -7406,8 +7406,8 @@ func (ec *executionContext) fieldContext_Artifact_holders(ctx context.Context, f
 				return ec.fieldContext_Holder_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Holder_updatedBy(ctx, field)
-			case "beginDate":
-				return ec.fieldContext_Holder_beginDate(ctx, field)
+			case "beginData":
+				return ec.fieldContext_Holder_beginData(ctx, field)
 			case "endDate":
 				return ec.fieldContext_Holder_endDate(ctx, field)
 			case "artifacts":
@@ -11940,8 +11940,8 @@ func (ec *executionContext) fieldContext_Holder_updatedBy(ctx context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _Holder_beginDate(ctx context.Context, field graphql.CollectedField, obj *ent.Holder) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Holder_beginDate(ctx, field)
+func (ec *executionContext) _Holder_beginData(ctx context.Context, field graphql.CollectedField, obj *ent.Holder) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Holder_beginData(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -11954,7 +11954,7 @@ func (ec *executionContext) _Holder_beginDate(ctx context.Context, field graphql
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.BeginDate, nil
+		return obj.BeginData, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -11971,7 +11971,7 @@ func (ec *executionContext) _Holder_beginDate(ctx context.Context, field graphql
 	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Holder_beginDate(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Holder_beginData(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Holder",
 		Field:      field,
@@ -12546,8 +12546,8 @@ func (ec *executionContext) fieldContext_HolderEdge_node(ctx context.Context, fi
 				return ec.fieldContext_Holder_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Holder_updatedBy(ctx, field)
-			case "beginDate":
-				return ec.fieldContext_Holder_beginDate(ctx, field)
+			case "beginData":
+				return ec.fieldContext_Holder_beginData(ctx, field)
 			case "endDate":
 				return ec.fieldContext_Holder_endDate(ctx, field)
 			case "artifacts":
@@ -12992,8 +12992,8 @@ func (ec *executionContext) fieldContext_HolderResponsibility_holder(ctx context
 				return ec.fieldContext_Holder_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Holder_updatedBy(ctx, field)
-			case "beginDate":
-				return ec.fieldContext_Holder_beginDate(ctx, field)
+			case "beginData":
+				return ec.fieldContext_Holder_beginData(ctx, field)
 			case "endDate":
 				return ec.fieldContext_Holder_endDate(ctx, field)
 			case "artifacts":
@@ -17559,8 +17559,8 @@ func (ec *executionContext) fieldContext_Mutation_createHolder(ctx context.Conte
 				return ec.fieldContext_Holder_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Holder_updatedBy(ctx, field)
-			case "beginDate":
-				return ec.fieldContext_Holder_beginDate(ctx, field)
+			case "beginData":
+				return ec.fieldContext_Holder_beginData(ctx, field)
 			case "endDate":
 				return ec.fieldContext_Holder_endDate(ctx, field)
 			case "artifacts":
@@ -17638,8 +17638,8 @@ func (ec *executionContext) fieldContext_Mutation_updateHolder(ctx context.Conte
 				return ec.fieldContext_Holder_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Holder_updatedBy(ctx, field)
-			case "beginDate":
-				return ec.fieldContext_Holder_beginDate(ctx, field)
+			case "beginData":
+				return ec.fieldContext_Holder_beginData(ctx, field)
 			case "endDate":
 				return ec.fieldContext_Holder_endDate(ctx, field)
 			case "artifacts":
@@ -20552,8 +20552,8 @@ func (ec *executionContext) fieldContext_Organization_holder(ctx context.Context
 				return ec.fieldContext_Holder_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Holder_updatedBy(ctx, field)
-			case "beginDate":
-				return ec.fieldContext_Holder_beginDate(ctx, field)
+			case "beginData":
+				return ec.fieldContext_Holder_beginData(ctx, field)
 			case "endDate":
 				return ec.fieldContext_Holder_endDate(ctx, field)
 			case "artifacts":
@@ -22607,8 +22607,8 @@ func (ec *executionContext) fieldContext_Person_holder(ctx context.Context, fiel
 				return ec.fieldContext_Holder_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Holder_updatedBy(ctx, field)
-			case "beginDate":
-				return ec.fieldContext_Holder_beginDate(ctx, field)
+			case "beginData":
+				return ec.fieldContext_Holder_beginData(ctx, field)
 			case "endDate":
 				return ec.fieldContext_Holder_endDate(ctx, field)
 			case "artifacts":
@@ -36308,7 +36308,7 @@ func (ec *executionContext) unmarshalInputCreateHolderInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "beginDate", "endDate", "artifactIDs", "holderResponsibilityIDs", "personID", "organizationID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "beginData", "endDate", "artifactIDs", "holderResponsibilityIDs", "personID", "organizationID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -36351,15 +36351,15 @@ func (ec *executionContext) unmarshalInputCreateHolderInput(ctx context.Context,
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "beginDate":
+		case "beginData":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDate"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginData"))
 			data, err := ec.unmarshalNTime2timeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.BeginDate = data
+			it.BeginData = data
 		case "endDate":
 			var err error
 
@@ -40533,7 +40533,7 @@ func (ec *executionContext) unmarshalInputHolderWhereInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "beginDate", "beginDateNEQ", "beginDateIn", "beginDateNotIn", "beginDateGT", "beginDateGTE", "beginDateLT", "beginDateLTE", "endDate", "endDateNEQ", "endDateIn", "endDateNotIn", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "hasArtifacts", "hasArtifactsWith", "hasHolderResponsibilities", "hasHolderResponsibilitiesWith", "hasPerson", "hasPersonWith", "hasOrganization", "hasOrganizationWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "beginData", "beginDataNEQ", "beginDataIn", "beginDataNotIn", "beginDataGT", "beginDataGTE", "beginDataLT", "beginDataLTE", "endDate", "endDateNEQ", "endDateIn", "endDateNotIn", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "hasArtifacts", "hasArtifactsWith", "hasHolderResponsibilities", "hasHolderResponsibilitiesWith", "hasPerson", "hasPersonWith", "hasOrganization", "hasOrganizationWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -41053,78 +41053,78 @@ func (ec *executionContext) unmarshalInputHolderWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "beginDate":
+		case "beginData":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDate"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginData"))
 			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.BeginDate = data
-		case "beginDateNEQ":
+			it.BeginData = data
+		case "beginDataNEQ":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDateNEQ"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDataNEQ"))
 			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.BeginDateNEQ = data
-		case "beginDateIn":
+			it.BeginDataNEQ = data
+		case "beginDataIn":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDateIn"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDataIn"))
 			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.BeginDateIn = data
-		case "beginDateNotIn":
+			it.BeginDataIn = data
+		case "beginDataNotIn":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDateNotIn"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDataNotIn"))
 			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.BeginDateNotIn = data
-		case "beginDateGT":
+			it.BeginDataNotIn = data
+		case "beginDataGT":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDateGT"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDataGT"))
 			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.BeginDateGT = data
-		case "beginDateGTE":
+			it.BeginDataGT = data
+		case "beginDataGTE":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDateGTE"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDataGTE"))
 			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.BeginDateGTE = data
-		case "beginDateLT":
+			it.BeginDataGTE = data
+		case "beginDataLT":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDateLT"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDataLT"))
 			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.BeginDateLT = data
-		case "beginDateLTE":
+			it.BeginDataLT = data
+		case "beginDataLTE":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDateLTE"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDataLTE"))
 			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.BeginDateLTE = data
+			it.BeginDataLTE = data
 		case "endDate":
 			var err error
 
@@ -57678,7 +57678,7 @@ func (ec *executionContext) unmarshalInputUpdateHolderInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "beginDate", "endDate", "clearEndDate", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addHolderResponsibilityIDs", "removeHolderResponsibilityIDs", "clearHolderResponsibilities", "personID", "clearPerson", "organizationID", "clearOrganization"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "beginData", "endDate", "clearEndDate", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addHolderResponsibilityIDs", "removeHolderResponsibilityIDs", "clearHolderResponsibilities", "personID", "clearPerson", "organizationID", "clearOrganization"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -57730,15 +57730,15 @@ func (ec *executionContext) unmarshalInputUpdateHolderInput(ctx context.Context,
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "beginDate":
+		case "beginData":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginDate"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginData"))
 			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.BeginDate = data
+			it.BeginData = data
 		case "endDate":
 			var err error
 
@@ -62449,8 +62449,8 @@ func (ec *executionContext) _Holder(ctx context.Context, sel ast.SelectionSet, o
 			}
 		case "updatedBy":
 			out.Values[i] = ec._Holder_updatedBy(ctx, field, obj)
-		case "beginDate":
-			out.Values[i] = ec._Holder_beginDate(ctx, field, obj)
+		case "beginData":
+			out.Values[i] = ec._Holder_beginData(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&out.Invalids, 1)
 			}

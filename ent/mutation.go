@@ -7973,7 +7973,7 @@ type HolderMutation struct {
 	created_by                     *string
 	updated_at                     *time.Time
 	updated_by                     *string
-	begin_date                     *time.Time
+	begin_data                     *time.Time
 	end_date                       *time.Time
 	clearedFields                  map[string]struct{}
 	artifacts                      map[int]struct{}
@@ -8259,40 +8259,40 @@ func (m *HolderMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, holder.FieldUpdatedBy)
 }
 
-// SetBeginDate sets the "begin_date" field.
-func (m *HolderMutation) SetBeginDate(t time.Time) {
-	m.begin_date = &t
+// SetBeginData sets the "begin_data" field.
+func (m *HolderMutation) SetBeginData(t time.Time) {
+	m.begin_data = &t
 }
 
-// BeginDate returns the value of the "begin_date" field in the mutation.
-func (m *HolderMutation) BeginDate() (r time.Time, exists bool) {
-	v := m.begin_date
+// BeginData returns the value of the "begin_data" field in the mutation.
+func (m *HolderMutation) BeginData() (r time.Time, exists bool) {
+	v := m.begin_data
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldBeginDate returns the old "begin_date" field's value of the Holder entity.
+// OldBeginData returns the old "begin_data" field's value of the Holder entity.
 // If the Holder object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *HolderMutation) OldBeginDate(ctx context.Context) (v time.Time, err error) {
+func (m *HolderMutation) OldBeginData(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldBeginDate is only allowed on UpdateOne operations")
+		return v, errors.New("OldBeginData is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldBeginDate requires an ID field in the mutation")
+		return v, errors.New("OldBeginData requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldBeginDate: %w", err)
+		return v, fmt.Errorf("querying old value for OldBeginData: %w", err)
 	}
-	return oldValue.BeginDate, nil
+	return oldValue.BeginData, nil
 }
 
-// ResetBeginDate resets all changes to the "begin_date" field.
-func (m *HolderMutation) ResetBeginDate() {
-	m.begin_date = nil
+// ResetBeginData resets all changes to the "begin_data" field.
+func (m *HolderMutation) ResetBeginData() {
+	m.begin_data = nil
 }
 
 // SetEndDate sets the "end_date" field.
@@ -8577,8 +8577,8 @@ func (m *HolderMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, holder.FieldUpdatedBy)
 	}
-	if m.begin_date != nil {
-		fields = append(fields, holder.FieldBeginDate)
+	if m.begin_data != nil {
+		fields = append(fields, holder.FieldBeginData)
 	}
 	if m.end_date != nil {
 		fields = append(fields, holder.FieldEndDate)
@@ -8599,8 +8599,8 @@ func (m *HolderMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case holder.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case holder.FieldBeginDate:
-		return m.BeginDate()
+	case holder.FieldBeginData:
+		return m.BeginData()
 	case holder.FieldEndDate:
 		return m.EndDate()
 	}
@@ -8620,8 +8620,8 @@ func (m *HolderMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldUpdatedAt(ctx)
 	case holder.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case holder.FieldBeginDate:
-		return m.OldBeginDate(ctx)
+	case holder.FieldBeginData:
+		return m.OldBeginData(ctx)
 	case holder.FieldEndDate:
 		return m.OldEndDate(ctx)
 	}
@@ -8661,12 +8661,12 @@ func (m *HolderMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case holder.FieldBeginDate:
+	case holder.FieldBeginData:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetBeginDate(v)
+		m.SetBeginData(v)
 		return nil
 	case holder.FieldEndDate:
 		v, ok := value.(time.Time)
@@ -8757,8 +8757,8 @@ func (m *HolderMutation) ResetField(name string) error {
 	case holder.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case holder.FieldBeginDate:
-		m.ResetBeginDate()
+	case holder.FieldBeginData:
+		m.ResetBeginData()
 		return nil
 	case holder.FieldEndDate:
 		m.ResetEndDate()

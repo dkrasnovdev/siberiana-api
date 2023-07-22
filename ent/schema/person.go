@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
@@ -61,9 +62,15 @@ func (Person) Fields() []ent.Field {
 		field.String("patronymic_name").
 			Optional(),
 		field.Time("begin_data").
-			Optional(),
+			Optional().
+			SchemaType(map[string]string{
+				dialect.Postgres: "date",
+			}),
 		field.Time("end_date").
-			Optional(),
+			Optional().
+			SchemaType(map[string]string{
+				dialect.Postgres: "date",
+			}),
 		field.Enum("gender").
 			Values("female", "male"),
 	}

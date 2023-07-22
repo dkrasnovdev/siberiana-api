@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
@@ -51,8 +52,15 @@ func (Holder) Annotations() []schema.Annotation {
 // Fields of the Holder.
 func (Holder) Fields() []ent.Field {
 	return []ent.Field{
-		field.Time("begin_date"),
-		field.Time("end_date").Optional(),
+		field.Time("begin_data").
+			SchemaType(map[string]string{
+				dialect.Postgres: "date",
+			}),
+		field.Time("end_date").
+			Optional().
+			SchemaType(map[string]string{
+				dialect.Postgres: "date",
+			}),
 	}
 }
 

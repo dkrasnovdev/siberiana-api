@@ -80,9 +80,9 @@ func (hc *HolderCreate) SetNillableUpdatedBy(s *string) *HolderCreate {
 	return hc
 }
 
-// SetBeginDate sets the "begin_date" field.
-func (hc *HolderCreate) SetBeginDate(t time.Time) *HolderCreate {
-	hc.mutation.SetBeginDate(t)
+// SetBeginData sets the "begin_data" field.
+func (hc *HolderCreate) SetBeginData(t time.Time) *HolderCreate {
+	hc.mutation.SetBeginData(t)
 	return hc
 }
 
@@ -230,8 +230,8 @@ func (hc *HolderCreate) check() error {
 	if _, ok := hc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Holder.updated_at"`)}
 	}
-	if _, ok := hc.mutation.BeginDate(); !ok {
-		return &ValidationError{Name: "begin_date", err: errors.New(`ent: missing required field "Holder.begin_date"`)}
+	if _, ok := hc.mutation.BeginData(); !ok {
+		return &ValidationError{Name: "begin_data", err: errors.New(`ent: missing required field "Holder.begin_data"`)}
 	}
 	return nil
 }
@@ -275,9 +275,9 @@ func (hc *HolderCreate) createSpec() (*Holder, *sqlgraph.CreateSpec) {
 		_spec.SetField(holder.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := hc.mutation.BeginDate(); ok {
-		_spec.SetField(holder.FieldBeginDate, field.TypeTime, value)
-		_node.BeginDate = value
+	if value, ok := hc.mutation.BeginData(); ok {
+		_spec.SetField(holder.FieldBeginData, field.TypeTime, value)
+		_node.BeginData = value
 	}
 	if value, ok := hc.mutation.EndDate(); ok {
 		_spec.SetField(holder.FieldEndDate, field.TypeTime, value)

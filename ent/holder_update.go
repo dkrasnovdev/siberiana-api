@@ -78,9 +78,9 @@ func (hu *HolderUpdate) ClearUpdatedBy() *HolderUpdate {
 	return hu
 }
 
-// SetBeginDate sets the "begin_date" field.
-func (hu *HolderUpdate) SetBeginDate(t time.Time) *HolderUpdate {
-	hu.mutation.SetBeginDate(t)
+// SetBeginData sets the "begin_data" field.
+func (hu *HolderUpdate) SetBeginData(t time.Time) *HolderUpdate {
+	hu.mutation.SetBeginData(t)
 	return hu
 }
 
@@ -297,8 +297,8 @@ func (hu *HolderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if hu.mutation.UpdatedByCleared() {
 		_spec.ClearField(holder.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := hu.mutation.BeginDate(); ok {
-		_spec.SetField(holder.FieldBeginDate, field.TypeTime, value)
+	if value, ok := hu.mutation.BeginData(); ok {
+		_spec.SetField(holder.FieldBeginData, field.TypeTime, value)
 	}
 	if value, ok := hu.mutation.EndDate(); ok {
 		_spec.SetField(holder.FieldEndDate, field.TypeTime, value)
@@ -520,9 +520,9 @@ func (huo *HolderUpdateOne) ClearUpdatedBy() *HolderUpdateOne {
 	return huo
 }
 
-// SetBeginDate sets the "begin_date" field.
-func (huo *HolderUpdateOne) SetBeginDate(t time.Time) *HolderUpdateOne {
-	huo.mutation.SetBeginDate(t)
+// SetBeginData sets the "begin_data" field.
+func (huo *HolderUpdateOne) SetBeginData(t time.Time) *HolderUpdateOne {
+	huo.mutation.SetBeginData(t)
 	return huo
 }
 
@@ -769,8 +769,8 @@ func (huo *HolderUpdateOne) sqlSave(ctx context.Context) (_node *Holder, err err
 	if huo.mutation.UpdatedByCleared() {
 		_spec.ClearField(holder.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := huo.mutation.BeginDate(); ok {
-		_spec.SetField(holder.FieldBeginDate, field.TypeTime, value)
+	if value, ok := huo.mutation.BeginData(); ok {
+		_spec.SetField(holder.FieldBeginData, field.TypeTime, value)
 	}
 	if value, ok := huo.mutation.EndDate(); ok {
 		_spec.SetField(holder.FieldEndDate, field.TypeTime, value)

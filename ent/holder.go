@@ -27,8 +27,8 @@ type Holder struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// BeginDate holds the value of the "begin_date" field.
-	BeginDate time.Time `json:"begin_date,omitempty"`
+	// BeginData holds the value of the "begin_data" field.
+	BeginData time.Time `json:"begin_data,omitempty"`
 	// EndDate holds the value of the "end_date" field.
 	EndDate time.Time `json:"end_date,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -110,7 +110,7 @@ func (*Holder) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case holder.FieldCreatedBy, holder.FieldUpdatedBy:
 			values[i] = new(sql.NullString)
-		case holder.FieldCreatedAt, holder.FieldUpdatedAt, holder.FieldBeginDate, holder.FieldEndDate:
+		case holder.FieldCreatedAt, holder.FieldUpdatedAt, holder.FieldBeginData, holder.FieldEndDate:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -157,11 +157,11 @@ func (h *Holder) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				h.UpdatedBy = value.String
 			}
-		case holder.FieldBeginDate:
+		case holder.FieldBeginData:
 			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field begin_date", values[i])
+				return fmt.Errorf("unexpected type %T for field begin_data", values[i])
 			} else if value.Valid {
-				h.BeginDate = value.Time
+				h.BeginData = value.Time
 			}
 		case holder.FieldEndDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -237,8 +237,8 @@ func (h *Holder) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(h.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("begin_date=")
-	builder.WriteString(h.BeginDate.Format(time.ANSIC))
+	builder.WriteString("begin_data=")
+	builder.WriteString(h.BeginData.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("end_date=")
 	builder.WriteString(h.EndDate.Format(time.ANSIC))

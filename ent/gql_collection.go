@@ -1338,10 +1338,10 @@ func (h *HolderQuery) collectField(ctx context.Context, opCtx *graphql.Operation
 				selectedFields = append(selectedFields, holder.FieldUpdatedBy)
 				fieldSeen[holder.FieldUpdatedBy] = struct{}{}
 			}
-		case "beginDate":
-			if _, ok := fieldSeen[holder.FieldBeginDate]; !ok {
-				selectedFields = append(selectedFields, holder.FieldBeginDate)
-				fieldSeen[holder.FieldBeginDate] = struct{}{}
+		case "beginData":
+			if _, ok := fieldSeen[holder.FieldBeginData]; !ok {
+				selectedFields = append(selectedFields, holder.FieldBeginData)
+				fieldSeen[holder.FieldBeginData] = struct{}{}
 			}
 		case "endDate":
 			if _, ok := fieldSeen[holder.FieldEndDate]; !ok {
