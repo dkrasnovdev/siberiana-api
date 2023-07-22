@@ -42,13 +42,16 @@ type Set struct {
 type SetEdges struct {
 	// Artifacts holds the value of the artifacts edge.
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
+	// Monuments holds the value of the monuments edge.
+	Monuments []*Monument `json:"monuments,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [2]map[string]int
 
 	namedArtifacts map[string][]*Artifact
+	namedMonuments map[string][]*Monument
 }
 
 // ArtifactsOrErr returns the Artifacts value or an error if the edge
@@ -58,6 +61,15 @@ func (e SetEdges) ArtifactsOrErr() ([]*Artifact, error) {
 		return e.Artifacts, nil
 	}
 	return nil, &NotLoadedError{edge: "artifacts"}
+}
+
+// MonumentsOrErr returns the Monuments value or an error if the edge
+// was not loaded in eager-loading.
+func (e SetEdges) MonumentsOrErr() ([]*Monument, error) {
+	if e.loadedTypes[1] {
+		return e.Monuments, nil
+	}
+	return nil, &NotLoadedError{edge: "monuments"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -156,6 +168,11 @@ func (s *Set) QueryArtifacts() *ArtifactQuery {
 	return NewSetClient(s.config).QueryArtifacts(s)
 }
 
+// QueryMonuments queries the "monuments" edge of the Set entity.
+func (s *Set) QueryMonuments() *MonumentQuery {
+	return NewSetClient(s.config).QueryMonuments(s)
+}
+
 // Update returns a builder for updating this Set.
 // Note that you need to call Set.Unwrap() before calling this method if this Set
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -224,6 +241,30 @@ func (s *Set) appendNamedArtifacts(name string, edges ...*Artifact) {
 		s.Edges.namedArtifacts[name] = []*Artifact{}
 	} else {
 		s.Edges.namedArtifacts[name] = append(s.Edges.namedArtifacts[name], edges...)
+	}
+}
+
+// NamedMonuments returns the Monuments named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Set) NamedMonuments(name string) ([]*Monument, error) {
+	if s.Edges.namedMonuments == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedMonuments[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Set) appendNamedMonuments(name string, edges ...*Monument) {
+	if s.Edges.namedMonuments == nil {
+		s.Edges.namedMonuments = make(map[string][]*Monument)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedMonuments[name] = []*Monument{}
+	} else {
+		s.Edges.namedMonuments[name] = append(s.Edges.namedMonuments[name], edges...)
 	}
 }
 

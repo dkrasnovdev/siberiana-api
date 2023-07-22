@@ -13928,6 +13928,9 @@ type MonumentMutation struct {
 	artifacts            map[int]struct{}
 	removedartifacts     map[int]struct{}
 	clearedartifacts     bool
+	sets                 map[int]struct{}
+	removedsets          map[int]struct{}
+	clearedsets          bool
 	done                 bool
 	oldValue             func(context.Context) (*Monument, error)
 	predicates           []predicate.Monument
@@ -14418,6 +14421,60 @@ func (m *MonumentMutation) ResetArtifacts() {
 	m.removedartifacts = nil
 }
 
+// AddSetIDs adds the "sets" edge to the Set entity by ids.
+func (m *MonumentMutation) AddSetIDs(ids ...int) {
+	if m.sets == nil {
+		m.sets = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.sets[ids[i]] = struct{}{}
+	}
+}
+
+// ClearSets clears the "sets" edge to the Set entity.
+func (m *MonumentMutation) ClearSets() {
+	m.clearedsets = true
+}
+
+// SetsCleared reports if the "sets" edge to the Set entity was cleared.
+func (m *MonumentMutation) SetsCleared() bool {
+	return m.clearedsets
+}
+
+// RemoveSetIDs removes the "sets" edge to the Set entity by IDs.
+func (m *MonumentMutation) RemoveSetIDs(ids ...int) {
+	if m.removedsets == nil {
+		m.removedsets = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.sets, ids[i])
+		m.removedsets[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedSets returns the removed IDs of the "sets" edge to the Set entity.
+func (m *MonumentMutation) RemovedSetsIDs() (ids []int) {
+	for id := range m.removedsets {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// SetsIDs returns the "sets" edge IDs in the mutation.
+func (m *MonumentMutation) SetsIDs() (ids []int) {
+	for id := range m.sets {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetSets resets all changes to the "sets" edge.
+func (m *MonumentMutation) ResetSets() {
+	m.sets = nil
+	m.clearedsets = false
+	m.removedsets = nil
+}
+
 // Where appends a list predicates to the MonumentMutation builder.
 func (m *MonumentMutation) Where(ps ...predicate.Monument) {
 	m.predicates = append(m.predicates, ps...)
@@ -14686,9 +14743,12 @@ func (m *MonumentMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *MonumentMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.artifacts != nil {
 		edges = append(edges, monument.EdgeArtifacts)
+	}
+	if m.sets != nil {
+		edges = append(edges, monument.EdgeSets)
 	}
 	return edges
 }
@@ -14703,15 +14763,24 @@ func (m *MonumentMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case monument.EdgeSets:
+		ids := make([]ent.Value, 0, len(m.sets))
+		for id := range m.sets {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *MonumentMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.removedartifacts != nil {
 		edges = append(edges, monument.EdgeArtifacts)
+	}
+	if m.removedsets != nil {
+		edges = append(edges, monument.EdgeSets)
 	}
 	return edges
 }
@@ -14726,15 +14795,24 @@ func (m *MonumentMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case monument.EdgeSets:
+		ids := make([]ent.Value, 0, len(m.removedsets))
+		for id := range m.removedsets {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *MonumentMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.clearedartifacts {
 		edges = append(edges, monument.EdgeArtifacts)
+	}
+	if m.clearedsets {
+		edges = append(edges, monument.EdgeSets)
 	}
 	return edges
 }
@@ -14745,6 +14823,8 @@ func (m *MonumentMutation) EdgeCleared(name string) bool {
 	switch name {
 	case monument.EdgeArtifacts:
 		return m.clearedartifacts
+	case monument.EdgeSets:
+		return m.clearedsets
 	}
 	return false
 }
@@ -14763,6 +14843,9 @@ func (m *MonumentMutation) ResetEdge(name string) error {
 	switch name {
 	case monument.EdgeArtifacts:
 		m.ResetArtifacts()
+		return nil
+	case monument.EdgeSets:
+		m.ResetSets()
 		return nil
 	}
 	return fmt.Errorf("unknown Monument edge %s", name)
@@ -25082,6 +25165,9 @@ type SetMutation struct {
 	artifacts            map[int]struct{}
 	removedartifacts     map[int]struct{}
 	clearedartifacts     bool
+	monuments            map[int]struct{}
+	removedmonuments     map[int]struct{}
+	clearedmonuments     bool
 	done                 bool
 	oldValue             func(context.Context) (*Set, error)
 	predicates           []predicate.Set
@@ -25572,6 +25658,60 @@ func (m *SetMutation) ResetArtifacts() {
 	m.removedartifacts = nil
 }
 
+// AddMonumentIDs adds the "monuments" edge to the Monument entity by ids.
+func (m *SetMutation) AddMonumentIDs(ids ...int) {
+	if m.monuments == nil {
+		m.monuments = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.monuments[ids[i]] = struct{}{}
+	}
+}
+
+// ClearMonuments clears the "monuments" edge to the Monument entity.
+func (m *SetMutation) ClearMonuments() {
+	m.clearedmonuments = true
+}
+
+// MonumentsCleared reports if the "monuments" edge to the Monument entity was cleared.
+func (m *SetMutation) MonumentsCleared() bool {
+	return m.clearedmonuments
+}
+
+// RemoveMonumentIDs removes the "monuments" edge to the Monument entity by IDs.
+func (m *SetMutation) RemoveMonumentIDs(ids ...int) {
+	if m.removedmonuments == nil {
+		m.removedmonuments = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.monuments, ids[i])
+		m.removedmonuments[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedMonuments returns the removed IDs of the "monuments" edge to the Monument entity.
+func (m *SetMutation) RemovedMonumentsIDs() (ids []int) {
+	for id := range m.removedmonuments {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// MonumentsIDs returns the "monuments" edge IDs in the mutation.
+func (m *SetMutation) MonumentsIDs() (ids []int) {
+	for id := range m.monuments {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetMonuments resets all changes to the "monuments" edge.
+func (m *SetMutation) ResetMonuments() {
+	m.monuments = nil
+	m.clearedmonuments = false
+	m.removedmonuments = nil
+}
+
 // Where appends a list predicates to the SetMutation builder.
 func (m *SetMutation) Where(ps ...predicate.Set) {
 	m.predicates = append(m.predicates, ps...)
@@ -25840,9 +25980,12 @@ func (m *SetMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *SetMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.artifacts != nil {
 		edges = append(edges, set.EdgeArtifacts)
+	}
+	if m.monuments != nil {
+		edges = append(edges, set.EdgeMonuments)
 	}
 	return edges
 }
@@ -25857,15 +26000,24 @@ func (m *SetMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case set.EdgeMonuments:
+		ids := make([]ent.Value, 0, len(m.monuments))
+		for id := range m.monuments {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *SetMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.removedartifacts != nil {
 		edges = append(edges, set.EdgeArtifacts)
+	}
+	if m.removedmonuments != nil {
+		edges = append(edges, set.EdgeMonuments)
 	}
 	return edges
 }
@@ -25880,15 +26032,24 @@ func (m *SetMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case set.EdgeMonuments:
+		ids := make([]ent.Value, 0, len(m.removedmonuments))
+		for id := range m.removedmonuments {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *SetMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.clearedartifacts {
 		edges = append(edges, set.EdgeArtifacts)
+	}
+	if m.clearedmonuments {
+		edges = append(edges, set.EdgeMonuments)
 	}
 	return edges
 }
@@ -25899,6 +26060,8 @@ func (m *SetMutation) EdgeCleared(name string) bool {
 	switch name {
 	case set.EdgeArtifacts:
 		return m.clearedartifacts
+	case set.EdgeMonuments:
+		return m.clearedmonuments
 	}
 	return false
 }
@@ -25917,6 +26080,9 @@ func (m *SetMutation) ResetEdge(name string) error {
 	switch name {
 	case set.EdgeArtifacts:
 		m.ResetArtifacts()
+		return nil
+	case set.EdgeMonuments:
+		m.ResetMonuments()
 		return nil
 	}
 	return fmt.Errorf("unknown Set edge %s", name)

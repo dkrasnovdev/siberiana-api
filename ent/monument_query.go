@@ -15,6 +15,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/monument"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/heritage-api/ent/set"
 )
 
 // MonumentQuery is the builder for querying Monument entities.
@@ -25,9 +26,11 @@ type MonumentQuery struct {
 	inters             []Interceptor
 	predicates         []predicate.Monument
 	withArtifacts      *ArtifactQuery
+	withSets           *SetQuery
 	modifiers          []func(*sql.Selector)
 	loadTotal          []func(context.Context, []*Monument) error
 	withNamedArtifacts map[string]*ArtifactQuery
+	withNamedSets      map[string]*SetQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -79,6 +82,28 @@ func (mq *MonumentQuery) QueryArtifacts() *ArtifactQuery {
 			sqlgraph.From(monument.Table, monument.FieldID, selector),
 			sqlgraph.To(artifact.Table, artifact.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, monument.ArtifactsTable, monument.ArtifactsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySets chains the current query on the "sets" edge.
+func (mq *MonumentQuery) QuerySets() *SetQuery {
+	query := (&SetClient{config: mq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := mq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := mq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(monument.Table, monument.FieldID, selector),
+			sqlgraph.To(set.Table, set.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, monument.SetsTable, monument.SetsPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
 		return fromU, nil
@@ -279,6 +304,7 @@ func (mq *MonumentQuery) Clone() *MonumentQuery {
 		inters:        append([]Interceptor{}, mq.inters...),
 		predicates:    append([]predicate.Monument{}, mq.predicates...),
 		withArtifacts: mq.withArtifacts.Clone(),
+		withSets:      mq.withSets.Clone(),
 		// clone intermediate query.
 		sql:  mq.sql.Clone(),
 		path: mq.path,
@@ -293,6 +319,17 @@ func (mq *MonumentQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *MonumentQu
 		opt(query)
 	}
 	mq.withArtifacts = query
+	return mq
+}
+
+// WithSets tells the query-builder to eager-load the nodes that are connected to
+// the "sets" edge. The optional arguments are used to configure the query builder of the edge.
+func (mq *MonumentQuery) WithSets(opts ...func(*SetQuery)) *MonumentQuery {
+	query := (&SetClient{config: mq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	mq.withSets = query
 	return mq
 }
 
@@ -380,8 +417,9 @@ func (mq *MonumentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Mon
 	var (
 		nodes       = []*Monument{}
 		_spec       = mq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [2]bool{
 			mq.withArtifacts != nil,
+			mq.withSets != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -412,10 +450,24 @@ func (mq *MonumentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Mon
 			return nil, err
 		}
 	}
+	if query := mq.withSets; query != nil {
+		if err := mq.loadSets(ctx, query, nodes,
+			func(n *Monument) { n.Edges.Sets = []*Set{} },
+			func(n *Monument, e *Set) { n.Edges.Sets = append(n.Edges.Sets, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range mq.withNamedArtifacts {
 		if err := mq.loadArtifacts(ctx, query, nodes,
 			func(n *Monument) { n.appendNamedArtifacts(name) },
 			func(n *Monument, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range mq.withNamedSets {
+		if err := mq.loadSets(ctx, query, nodes,
+			func(n *Monument) { n.appendNamedSets(name) },
+			func(n *Monument, e *Set) { n.appendNamedSets(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -455,6 +507,67 @@ func (mq *MonumentQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery
 			return fmt.Errorf(`unexpected referenced foreign-key "monument_artifacts" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
+	}
+	return nil
+}
+func (mq *MonumentQuery) loadSets(ctx context.Context, query *SetQuery, nodes []*Monument, init func(*Monument), assign func(*Monument, *Set)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Monument)
+	nids := make(map[int]map[*Monument]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(monument.SetsTable)
+		s.Join(joinT).On(s.C(set.FieldID), joinT.C(monument.SetsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(monument.SetsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(monument.SetsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Monument]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Set](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "sets" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
@@ -554,6 +667,20 @@ func (mq *MonumentQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQ
 		mq.withNamedArtifacts = make(map[string]*ArtifactQuery)
 	}
 	mq.withNamedArtifacts[name] = query
+	return mq
+}
+
+// WithNamedSets tells the query-builder to eager-load the nodes that are connected to the "sets"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (mq *MonumentQuery) WithNamedSets(name string, opts ...func(*SetQuery)) *MonumentQuery {
+	query := (&SetClient{config: mq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if mq.withNamedSets == nil {
+		mq.withNamedSets = make(map[string]*SetQuery)
+	}
+	mq.withNamedSets[name] = query
 	return mq
 }
 

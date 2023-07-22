@@ -336,6 +336,18 @@ func (m *Monument) Artifacts(ctx context.Context) (result []*Artifact, err error
 	return result, err
 }
 
+func (m *Monument) Sets(ctx context.Context) (result []*Set, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = m.NamedSets(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = m.Edges.SetsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = m.QuerySets().All(ctx)
+	}
+	return result, err
+}
+
 func (o *Organization) People(ctx context.Context) (result []*Person, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = o.NamedPeople(graphql.GetFieldContext(ctx).Field.Alias)
@@ -544,6 +556,18 @@ func (s *Set) Artifacts(ctx context.Context) (result []*Artifact, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = s.QueryArtifacts().All(ctx)
+	}
+	return result, err
+}
+
+func (s *Set) Monuments(ctx context.Context) (result []*Monument, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = s.NamedMonuments(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = s.Edges.MonumentsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = s.QueryMonuments().All(ctx)
 	}
 	return result, err
 }

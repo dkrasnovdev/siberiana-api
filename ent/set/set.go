@@ -31,6 +31,8 @@ const (
 	FieldExternalLinks = "external_links"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
+	// EdgeMonuments holds the string denoting the monuments edge name in mutations.
+	EdgeMonuments = "monuments"
 	// Table holds the table name of the set in the database.
 	Table = "sets"
 	// ArtifactsTable is the table that holds the artifacts relation/edge.
@@ -40,6 +42,11 @@ const (
 	ArtifactsInverseTable = "artifacts"
 	// ArtifactsColumn is the table column denoting the artifacts relation/edge.
 	ArtifactsColumn = "set_artifacts"
+	// MonumentsTable is the table that holds the monuments relation/edge. The primary key declared below.
+	MonumentsTable = "monument_sets"
+	// MonumentsInverseTable is the table name for the Monument entity.
+	// It exists in this package in order to avoid circular dependency with the "monument" package.
+	MonumentsInverseTable = "monuments"
 )
 
 // Columns holds all SQL columns for set fields.
@@ -53,6 +60,12 @@ var Columns = []string{
 	FieldDescription,
 	FieldExternalLinks,
 }
+
+var (
+	// MonumentsPrimaryKey and MonumentsColumn2 are the table columns denoting the
+	// primary key for the monuments relation (M2M).
+	MonumentsPrimaryKey = []string{"monument_id", "set_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -131,10 +144,31 @@ func ByArtifacts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newArtifactsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByMonumentsCount orders the results by monuments count.
+func ByMonumentsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMonumentsStep(), opts...)
+	}
+}
+
+// ByMonuments orders the results by monuments terms.
+func ByMonuments(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMonumentsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newArtifactsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ArtifactsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ArtifactsTable, ArtifactsColumn),
+	)
+}
+func newMonumentsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MonumentsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, MonumentsTable, MonumentsPrimaryKey...),
 	)
 }

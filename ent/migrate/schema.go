@@ -762,6 +762,31 @@ var (
 			},
 		},
 	}
+	// MonumentSetsColumns holds the columns for the "monument_sets" table.
+	MonumentSetsColumns = []*schema.Column{
+		{Name: "monument_id", Type: field.TypeInt},
+		{Name: "set_id", Type: field.TypeInt},
+	}
+	// MonumentSetsTable holds the schema information for the "monument_sets" table.
+	MonumentSetsTable = &schema.Table{
+		Name:       "monument_sets",
+		Columns:    MonumentSetsColumns,
+		PrimaryKey: []*schema.Column{MonumentSetsColumns[0], MonumentSetsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "monument_sets_monument_id",
+				Columns:    []*schema.Column{MonumentSetsColumns[0]},
+				RefColumns: []*schema.Column{MonumentsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "monument_sets_set_id",
+				Columns:    []*schema.Column{MonumentSetsColumns[1]},
+				RefColumns: []*schema.Column{SetsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// PersonArtifactsColumns holds the columns for the "person_artifacts" table.
 	PersonArtifactsColumns = []*schema.Column{
 		{Name: "person_id", Type: field.TypeInt},
@@ -977,6 +1002,7 @@ var (
 		HolderArtifactsTable,
 		HolderHolderResponsibilitiesTable,
 		MediumArtifactsTable,
+		MonumentSetsTable,
 		PersonArtifactsTable,
 		PersonProjectsTable,
 		PersonPublicationsTable,
@@ -1011,6 +1037,8 @@ func init() {
 	HolderHolderResponsibilitiesTable.ForeignKeys[1].RefTable = HolderResponsibilitiesTable
 	MediumArtifactsTable.ForeignKeys[0].RefTable = MediaTable
 	MediumArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
+	MonumentSetsTable.ForeignKeys[0].RefTable = MonumentsTable
+	MonumentSetsTable.ForeignKeys[1].RefTable = SetsTable
 	PersonArtifactsTable.ForeignKeys[0].RefTable = PersonsTable
 	PersonArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
 	PersonProjectsTable.ForeignKeys[0].RefTable = PersonsTable

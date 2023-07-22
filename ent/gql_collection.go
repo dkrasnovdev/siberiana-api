@@ -2252,6 +2252,18 @@ func (m *MonumentQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 			m.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
 				*wq = *query
 			})
+		case "sets":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SetClient{config: m.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, setImplementors)...); err != nil {
+				return err
+			}
+			m.WithNamedSets(alias, func(wq *SetQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[monument.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, monument.FieldCreatedAt)
@@ -3866,6 +3878,18 @@ func (s *SetQuery) collectField(ctx context.Context, opCtx *graphql.OperationCon
 				return err
 			}
 			s.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
+		case "monuments":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&MonumentClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, monumentImplementors)...); err != nil {
+				return err
+			}
+			s.WithNamedMonuments(alias, func(wq *MonumentQuery) {
 				*wq = *query
 			})
 		case "createdAt":

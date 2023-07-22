@@ -31,6 +31,8 @@ const (
 	FieldExternalLinks = "external_links"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
+	// EdgeSets holds the string denoting the sets edge name in mutations.
+	EdgeSets = "sets"
 	// Table holds the table name of the monument in the database.
 	Table = "monuments"
 	// ArtifactsTable is the table that holds the artifacts relation/edge.
@@ -40,6 +42,11 @@ const (
 	ArtifactsInverseTable = "artifacts"
 	// ArtifactsColumn is the table column denoting the artifacts relation/edge.
 	ArtifactsColumn = "monument_artifacts"
+	// SetsTable is the table that holds the sets relation/edge. The primary key declared below.
+	SetsTable = "monument_sets"
+	// SetsInverseTable is the table name for the Set entity.
+	// It exists in this package in order to avoid circular dependency with the "set" package.
+	SetsInverseTable = "sets"
 )
 
 // Columns holds all SQL columns for monument fields.
@@ -53,6 +60,12 @@ var Columns = []string{
 	FieldDescription,
 	FieldExternalLinks,
 }
+
+var (
+	// SetsPrimaryKey and SetsColumn2 are the table columns denoting the
+	// primary key for the sets relation (M2M).
+	SetsPrimaryKey = []string{"monument_id", "set_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -131,10 +144,31 @@ func ByArtifacts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newArtifactsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// BySetsCount orders the results by sets count.
+func BySetsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSetsStep(), opts...)
+	}
+}
+
+// BySets orders the results by sets terms.
+func BySets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSetsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newArtifactsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ArtifactsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ArtifactsTable, ArtifactsColumn),
+	)
+}
+func newSetsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SetsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, SetsTable, SetsPrimaryKey...),
 	)
 }

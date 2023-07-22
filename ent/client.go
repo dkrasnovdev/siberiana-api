@@ -3342,6 +3342,22 @@ func (c *MonumentClient) QueryArtifacts(m *Monument) *ArtifactQuery {
 	return query
 }
 
+// QuerySets queries the sets edge of a Monument.
+func (c *MonumentClient) QuerySets(m *Monument) *SetQuery {
+	query := (&SetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(monument.Table, monument.FieldID, id),
+			sqlgraph.To(set.Table, set.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, monument.SetsTable, monument.SetsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *MonumentClient) Hooks() []Hook {
 	hooks := c.hooks.Monument
@@ -5198,6 +5214,22 @@ func (c *SetClient) QueryArtifacts(s *Set) *ArtifactQuery {
 			sqlgraph.From(set.Table, set.FieldID, id),
 			sqlgraph.To(artifact.Table, artifact.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, set.ArtifactsTable, set.ArtifactsColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMonuments queries the monuments edge of a Set.
+func (c *SetClient) QueryMonuments(s *Set) *MonumentQuery {
+	query := (&MonumentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(set.Table, set.FieldID, id),
+			sqlgraph.To(monument.Table, monument.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, set.MonumentsTable, set.MonumentsPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil

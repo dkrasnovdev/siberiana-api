@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/monument"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/set"
 )
@@ -149,6 +150,21 @@ func (su *SetUpdate) AddArtifacts(a ...*Artifact) *SetUpdate {
 	return su.AddArtifactIDs(ids...)
 }
 
+// AddMonumentIDs adds the "monuments" edge to the Monument entity by IDs.
+func (su *SetUpdate) AddMonumentIDs(ids ...int) *SetUpdate {
+	su.mutation.AddMonumentIDs(ids...)
+	return su
+}
+
+// AddMonuments adds the "monuments" edges to the Monument entity.
+func (su *SetUpdate) AddMonuments(m ...*Monument) *SetUpdate {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return su.AddMonumentIDs(ids...)
+}
+
 // Mutation returns the SetMutation object of the builder.
 func (su *SetUpdate) Mutation() *SetMutation {
 	return su.mutation
@@ -173,6 +189,27 @@ func (su *SetUpdate) RemoveArtifacts(a ...*Artifact) *SetUpdate {
 		ids[i] = a[i].ID
 	}
 	return su.RemoveArtifactIDs(ids...)
+}
+
+// ClearMonuments clears all "monuments" edges to the Monument entity.
+func (su *SetUpdate) ClearMonuments() *SetUpdate {
+	su.mutation.ClearMonuments()
+	return su
+}
+
+// RemoveMonumentIDs removes the "monuments" edge to Monument entities by IDs.
+func (su *SetUpdate) RemoveMonumentIDs(ids ...int) *SetUpdate {
+	su.mutation.RemoveMonumentIDs(ids...)
+	return su
+}
+
+// RemoveMonuments removes "monuments" edges to Monument entities.
+func (su *SetUpdate) RemoveMonuments(m ...*Monument) *SetUpdate {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return su.RemoveMonumentIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -302,6 +339,51 @@ func (su *SetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if su.mutation.MonumentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   set.MonumentsTable,
+			Columns: set.MonumentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(monument.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.RemovedMonumentsIDs(); len(nodes) > 0 && !su.mutation.MonumentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   set.MonumentsTable,
+			Columns: set.MonumentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(monument.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.MonumentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   set.MonumentsTable,
+			Columns: set.MonumentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(monument.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -448,6 +530,21 @@ func (suo *SetUpdateOne) AddArtifacts(a ...*Artifact) *SetUpdateOne {
 	return suo.AddArtifactIDs(ids...)
 }
 
+// AddMonumentIDs adds the "monuments" edge to the Monument entity by IDs.
+func (suo *SetUpdateOne) AddMonumentIDs(ids ...int) *SetUpdateOne {
+	suo.mutation.AddMonumentIDs(ids...)
+	return suo
+}
+
+// AddMonuments adds the "monuments" edges to the Monument entity.
+func (suo *SetUpdateOne) AddMonuments(m ...*Monument) *SetUpdateOne {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return suo.AddMonumentIDs(ids...)
+}
+
 // Mutation returns the SetMutation object of the builder.
 func (suo *SetUpdateOne) Mutation() *SetMutation {
 	return suo.mutation
@@ -472,6 +569,27 @@ func (suo *SetUpdateOne) RemoveArtifacts(a ...*Artifact) *SetUpdateOne {
 		ids[i] = a[i].ID
 	}
 	return suo.RemoveArtifactIDs(ids...)
+}
+
+// ClearMonuments clears all "monuments" edges to the Monument entity.
+func (suo *SetUpdateOne) ClearMonuments() *SetUpdateOne {
+	suo.mutation.ClearMonuments()
+	return suo
+}
+
+// RemoveMonumentIDs removes the "monuments" edge to Monument entities by IDs.
+func (suo *SetUpdateOne) RemoveMonumentIDs(ids ...int) *SetUpdateOne {
+	suo.mutation.RemoveMonumentIDs(ids...)
+	return suo
+}
+
+// RemoveMonuments removes "monuments" edges to Monument entities.
+func (suo *SetUpdateOne) RemoveMonuments(m ...*Monument) *SetUpdateOne {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return suo.RemoveMonumentIDs(ids...)
 }
 
 // Where appends a list predicates to the SetUpdate builder.
@@ -631,6 +749,51 @@ func (suo *SetUpdateOne) sqlSave(ctx context.Context) (_node *Set, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.MonumentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   set.MonumentsTable,
+			Columns: set.MonumentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(monument.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.RemovedMonumentsIDs(); len(nodes) > 0 && !suo.mutation.MonumentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   set.MonumentsTable,
+			Columns: set.MonumentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(monument.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.MonumentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   set.MonumentsTable,
+			Columns: set.MonumentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(monument.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

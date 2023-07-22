@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/monument"
 	"github.com/dkrasnovdev/heritage-api/ent/set"
 )
 
@@ -124,6 +125,21 @@ func (sc *SetCreate) AddArtifacts(a ...*Artifact) *SetCreate {
 		ids[i] = a[i].ID
 	}
 	return sc.AddArtifactIDs(ids...)
+}
+
+// AddMonumentIDs adds the "monuments" edge to the Monument entity by IDs.
+func (sc *SetCreate) AddMonumentIDs(ids ...int) *SetCreate {
+	sc.mutation.AddMonumentIDs(ids...)
+	return sc
+}
+
+// AddMonuments adds the "monuments" edges to the Monument entity.
+func (sc *SetCreate) AddMonuments(m ...*Monument) *SetCreate {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return sc.AddMonumentIDs(ids...)
 }
 
 // Mutation returns the SetMutation object of the builder.
@@ -251,6 +267,22 @@ func (sc *SetCreate) createSpec() (*Set, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.MonumentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   set.MonumentsTable,
+			Columns: set.MonumentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(monument.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

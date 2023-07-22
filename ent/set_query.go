@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/monument"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/set"
 )
@@ -25,9 +26,11 @@ type SetQuery struct {
 	inters             []Interceptor
 	predicates         []predicate.Set
 	withArtifacts      *ArtifactQuery
+	withMonuments      *MonumentQuery
 	modifiers          []func(*sql.Selector)
 	loadTotal          []func(context.Context, []*Set) error
 	withNamedArtifacts map[string]*ArtifactQuery
+	withNamedMonuments map[string]*MonumentQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -79,6 +82,28 @@ func (sq *SetQuery) QueryArtifacts() *ArtifactQuery {
 			sqlgraph.From(set.Table, set.FieldID, selector),
 			sqlgraph.To(artifact.Table, artifact.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, set.ArtifactsTable, set.ArtifactsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMonuments chains the current query on the "monuments" edge.
+func (sq *SetQuery) QueryMonuments() *MonumentQuery {
+	query := (&MonumentClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(set.Table, set.FieldID, selector),
+			sqlgraph.To(monument.Table, monument.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, set.MonumentsTable, set.MonumentsPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
@@ -279,6 +304,7 @@ func (sq *SetQuery) Clone() *SetQuery {
 		inters:        append([]Interceptor{}, sq.inters...),
 		predicates:    append([]predicate.Set{}, sq.predicates...),
 		withArtifacts: sq.withArtifacts.Clone(),
+		withMonuments: sq.withMonuments.Clone(),
 		// clone intermediate query.
 		sql:  sq.sql.Clone(),
 		path: sq.path,
@@ -293,6 +319,17 @@ func (sq *SetQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *SetQuery {
 		opt(query)
 	}
 	sq.withArtifacts = query
+	return sq
+}
+
+// WithMonuments tells the query-builder to eager-load the nodes that are connected to
+// the "monuments" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SetQuery) WithMonuments(opts ...func(*MonumentQuery)) *SetQuery {
+	query := (&MonumentClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withMonuments = query
 	return sq
 }
 
@@ -380,8 +417,9 @@ func (sq *SetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Set, err
 	var (
 		nodes       = []*Set{}
 		_spec       = sq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [2]bool{
 			sq.withArtifacts != nil,
+			sq.withMonuments != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -412,10 +450,24 @@ func (sq *SetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Set, err
 			return nil, err
 		}
 	}
+	if query := sq.withMonuments; query != nil {
+		if err := sq.loadMonuments(ctx, query, nodes,
+			func(n *Set) { n.Edges.Monuments = []*Monument{} },
+			func(n *Set, e *Monument) { n.Edges.Monuments = append(n.Edges.Monuments, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range sq.withNamedArtifacts {
 		if err := sq.loadArtifacts(ctx, query, nodes,
 			func(n *Set) { n.appendNamedArtifacts(name) },
 			func(n *Set, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range sq.withNamedMonuments {
+		if err := sq.loadMonuments(ctx, query, nodes,
+			func(n *Set) { n.appendNamedMonuments(name) },
+			func(n *Set, e *Monument) { n.appendNamedMonuments(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -455,6 +507,67 @@ func (sq *SetQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, nod
 			return fmt.Errorf(`unexpected referenced foreign-key "set_artifacts" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
+	}
+	return nil
+}
+func (sq *SetQuery) loadMonuments(ctx context.Context, query *MonumentQuery, nodes []*Set, init func(*Set), assign func(*Set, *Monument)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Set)
+	nids := make(map[int]map[*Set]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(set.MonumentsTable)
+		s.Join(joinT).On(s.C(monument.FieldID), joinT.C(set.MonumentsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(set.MonumentsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(set.MonumentsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Set]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Monument](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "monuments" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
@@ -554,6 +667,20 @@ func (sq *SetQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQuery)
 		sq.withNamedArtifacts = make(map[string]*ArtifactQuery)
 	}
 	sq.withNamedArtifacts[name] = query
+	return sq
+}
+
+// WithNamedMonuments tells the query-builder to eager-load the nodes that are connected to the "monuments"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (sq *SetQuery) WithNamedMonuments(name string, opts ...func(*MonumentQuery)) *SetQuery {
+	query := (&MonumentClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if sq.withNamedMonuments == nil {
+		sq.withNamedMonuments = make(map[string]*MonumentQuery)
+	}
+	sq.withNamedMonuments[name] = query
 	return sq
 }
 

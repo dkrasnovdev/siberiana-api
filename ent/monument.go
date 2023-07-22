@@ -42,13 +42,16 @@ type Monument struct {
 type MonumentEdges struct {
 	// Artifacts holds the value of the artifacts edge.
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
+	// Sets holds the value of the sets edge.
+	Sets []*Set `json:"sets,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [2]map[string]int
 
 	namedArtifacts map[string][]*Artifact
+	namedSets      map[string][]*Set
 }
 
 // ArtifactsOrErr returns the Artifacts value or an error if the edge
@@ -58,6 +61,15 @@ func (e MonumentEdges) ArtifactsOrErr() ([]*Artifact, error) {
 		return e.Artifacts, nil
 	}
 	return nil, &NotLoadedError{edge: "artifacts"}
+}
+
+// SetsOrErr returns the Sets value or an error if the edge
+// was not loaded in eager-loading.
+func (e MonumentEdges) SetsOrErr() ([]*Set, error) {
+	if e.loadedTypes[1] {
+		return e.Sets, nil
+	}
+	return nil, &NotLoadedError{edge: "sets"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -156,6 +168,11 @@ func (m *Monument) QueryArtifacts() *ArtifactQuery {
 	return NewMonumentClient(m.config).QueryArtifacts(m)
 }
 
+// QuerySets queries the "sets" edge of the Monument entity.
+func (m *Monument) QuerySets() *SetQuery {
+	return NewMonumentClient(m.config).QuerySets(m)
+}
+
 // Update returns a builder for updating this Monument.
 // Note that you need to call Monument.Unwrap() before calling this method if this Monument
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -224,6 +241,30 @@ func (m *Monument) appendNamedArtifacts(name string, edges ...*Artifact) {
 		m.Edges.namedArtifacts[name] = []*Artifact{}
 	} else {
 		m.Edges.namedArtifacts[name] = append(m.Edges.namedArtifacts[name], edges...)
+	}
+}
+
+// NamedSets returns the Sets named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (m *Monument) NamedSets(name string) ([]*Set, error) {
+	if m.Edges.namedSets == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := m.Edges.namedSets[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (m *Monument) appendNamedSets(name string, edges ...*Set) {
+	if m.Edges.namedSets == nil {
+		m.Edges.namedSets = make(map[string][]*Set)
+	}
+	if len(edges) == 0 {
+		m.Edges.namedSets[name] = []*Set{}
+	} else {
+		m.Edges.namedSets[name] = append(m.Edges.namedSets[name], edges...)
 	}
 }
 

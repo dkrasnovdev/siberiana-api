@@ -57,5 +57,6 @@ func (Monument) Fields() []ent.Field {
 func (Monument) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("artifacts", Artifact.Type),
+		edge.To("sets", Set.Type),
 	}
 }

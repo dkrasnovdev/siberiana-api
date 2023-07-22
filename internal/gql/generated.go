@@ -373,6 +373,7 @@ type ComplexityRoot struct {
 		DisplayName   func(childComplexity int) int
 		ExternalLinks func(childComplexity int) int
 		ID            func(childComplexity int) int
+		Sets          func(childComplexity int) int
 		UpdatedAt     func(childComplexity int) int
 		UpdatedBy     func(childComplexity int) int
 	}
@@ -668,6 +669,7 @@ type ComplexityRoot struct {
 		DisplayName   func(childComplexity int) int
 		ExternalLinks func(childComplexity int) int
 		ID            func(childComplexity int) int
+		Monuments     func(childComplexity int) int
 		UpdatedAt     func(childComplexity int) int
 		UpdatedBy     func(childComplexity int) int
 	}
@@ -2216,6 +2218,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Monument.ID(childComplexity), true
+
+	case "Monument.sets":
+		if e.complexity.Monument.Sets == nil {
+			break
+		}
+
+		return e.complexity.Monument.Sets(childComplexity), true
 
 	case "Monument.updatedAt":
 		if e.complexity.Monument.UpdatedAt == nil {
@@ -3993,6 +4002,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Set.ID(childComplexity), true
+
+	case "Set.monuments":
+		if e.complexity.Set.Monuments == nil {
+			break
+		}
+
+		return e.complexity.Set.Monuments(childComplexity), true
 
 	case "Set.updatedAt":
 		if e.complexity.Set.UpdatedAt == nil {
@@ -7647,6 +7663,8 @@ func (ec *executionContext) fieldContext_Artifact_monument(ctx context.Context, 
 				return ec.fieldContext_Monument_externalLinks(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Monument_artifacts(ctx, field)
+			case "sets":
+				return ec.fieldContext_Monument_sets(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Monument", field.Name)
 		},
@@ -7769,6 +7787,8 @@ func (ec *executionContext) fieldContext_Artifact_set(ctx context.Context, field
 				return ec.fieldContext_Set_externalLinks(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Set_artifacts(ctx, field)
+			case "monuments":
+				return ec.fieldContext_Set_monuments(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Set", field.Name)
 		},
@@ -16545,6 +16565,69 @@ func (ec *executionContext) fieldContext_Monument_artifacts(ctx context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _Monument_sets(ctx context.Context, field graphql.CollectedField, obj *ent.Monument) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Monument_sets(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Sets(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Set)
+	fc.Result = res
+	return ec.marshalOSet2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐSetᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Monument_sets(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Monument",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Set_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Set_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Set_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Set_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Set_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Set_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Set_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_Set_externalLinks(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Set_artifacts(ctx, field)
+			case "monuments":
+				return ec.fieldContext_Set_monuments(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Set", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _MonumentConnection_edges(ctx context.Context, field graphql.CollectedField, obj *ent.MonumentConnection) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MonumentConnection_edges(ctx, field)
 	if err != nil {
@@ -16744,6 +16827,8 @@ func (ec *executionContext) fieldContext_MonumentEdge_node(ctx context.Context, 
 				return ec.fieldContext_Monument_externalLinks(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Monument_artifacts(ctx, field)
+			case "sets":
+				return ec.fieldContext_Monument_sets(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Monument", field.Name)
 		},
@@ -18444,6 +18529,8 @@ func (ec *executionContext) fieldContext_Mutation_createMonument(ctx context.Con
 				return ec.fieldContext_Monument_externalLinks(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Monument_artifacts(ctx, field)
+			case "sets":
+				return ec.fieldContext_Monument_sets(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Monument", field.Name)
 		},
@@ -18519,6 +18606,8 @@ func (ec *executionContext) fieldContext_Mutation_updateMonument(ctx context.Con
 				return ec.fieldContext_Monument_externalLinks(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Monument_artifacts(ctx, field)
+			case "sets":
+				return ec.fieldContext_Monument_sets(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Monument", field.Name)
 		},
@@ -19472,6 +19561,8 @@ func (ec *executionContext) fieldContext_Mutation_createSet(ctx context.Context,
 				return ec.fieldContext_Set_externalLinks(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Set_artifacts(ctx, field)
+			case "monuments":
+				return ec.fieldContext_Set_monuments(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Set", field.Name)
 		},
@@ -19547,6 +19638,8 @@ func (ec *executionContext) fieldContext_Mutation_updateSet(ctx context.Context,
 				return ec.fieldContext_Set_externalLinks(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Set_artifacts(ctx, field)
+			case "monuments":
+				return ec.fieldContext_Set_monuments(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Set", field.Name)
 		},
@@ -28478,6 +28571,69 @@ func (ec *executionContext) fieldContext_Set_artifacts(ctx context.Context, fiel
 	return fc, nil
 }
 
+func (ec *executionContext) _Set_monuments(ctx context.Context, field graphql.CollectedField, obj *ent.Set) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Set_monuments(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Monuments(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Monument)
+	fc.Result = res
+	return ec.marshalOMonument2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐMonumentᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Set_monuments(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Set",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Monument_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Monument_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Monument_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Monument_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Monument_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Monument_displayName(ctx, field)
+			case "description":
+				return ec.fieldContext_Monument_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_Monument_externalLinks(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Monument_artifacts(ctx, field)
+			case "sets":
+				return ec.fieldContext_Monument_sets(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Monument", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SetConnection_edges(ctx context.Context, field graphql.CollectedField, obj *ent.SetConnection) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_SetConnection_edges(ctx, field)
 	if err != nil {
@@ -28677,6 +28833,8 @@ func (ec *executionContext) fieldContext_SetEdge_node(ctx context.Context, field
 				return ec.fieldContext_Set_externalLinks(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Set_artifacts(ctx, field)
+			case "monuments":
+				return ec.fieldContext_Set_monuments(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Set", field.Name)
 		},
@@ -37493,7 +37651,7 @@ func (ec *executionContext) unmarshalInputCreateMonumentInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "description", "externalLinks", "artifactIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "description", "externalLinks", "artifactIDs", "setIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -37572,6 +37730,15 @@ func (ec *executionContext) unmarshalInputCreateMonumentInput(ctx context.Contex
 				return it, err
 			}
 			it.ArtifactIDs = data
+		case "setIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("setIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SetIDs = data
 		}
 	}
 
@@ -38333,7 +38500,7 @@ func (ec *executionContext) unmarshalInputCreateSetInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "description", "externalLinks", "artifactIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "description", "externalLinks", "artifactIDs", "monumentIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -38412,6 +38579,15 @@ func (ec *executionContext) unmarshalInputCreateSetInput(ctx context.Context, ob
 				return it, err
 			}
 			it.ArtifactIDs = data
+		case "monumentIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("monumentIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MonumentIDs = data
 		}
 	}
 
@@ -45793,7 +45969,7 @@ func (ec *executionContext) unmarshalInputMonumentWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasSets", "hasSetsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -46601,6 +46777,24 @@ func (ec *executionContext) unmarshalInputMonumentWhereInput(ctx context.Context
 				return it, err
 			}
 			it.HasArtifactsWith = data
+		case "hasSets":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasSets"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasSets = data
+		case "hasSetsWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasSetsWith"))
+			data, err := ec.unmarshalOSetWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐSetWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasSetsWith = data
 		}
 	}
 
@@ -55746,7 +55940,7 @@ func (ec *executionContext) unmarshalInputSetWhereInput(ctx context.Context, obj
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasMonuments", "hasMonumentsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -56554,6 +56748,24 @@ func (ec *executionContext) unmarshalInputSetWhereInput(ctx context.Context, obj
 				return it, err
 			}
 			it.HasArtifactsWith = data
+		case "hasMonuments":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasMonuments"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasMonuments = data
+		case "hasMonumentsWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasMonumentsWith"))
+			data, err := ec.unmarshalOMonumentWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐMonumentWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasMonumentsWith = data
 		}
 	}
 
@@ -60302,7 +60514,7 @@ func (ec *executionContext) unmarshalInputUpdateMonumentInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addSetIDs", "removeSetIDs", "clearSets"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -60444,6 +60656,33 @@ func (ec *executionContext) unmarshalInputUpdateMonumentInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearArtifacts = data
+		case "addSetIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addSetIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddSetIDs = data
+		case "removeSetIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeSetIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveSetIDs = data
+		case "clearSets":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSets"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearSets = data
 		}
 	}
 
@@ -61898,7 +62137,7 @@ func (ec *executionContext) unmarshalInputUpdateSetInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addMonumentIDs", "removeMonumentIDs", "clearMonuments"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -62040,6 +62279,33 @@ func (ec *executionContext) unmarshalInputUpdateSetInput(ctx context.Context, ob
 				return it, err
 			}
 			it.ClearArtifacts = data
+		case "addMonumentIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addMonumentIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddMonumentIDs = data
+		case "removeMonumentIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeMonumentIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveMonumentIDs = data
+		case "clearMonuments":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearMonuments"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearMonuments = data
 		}
 	}
 
@@ -65579,6 +65845,39 @@ func (ec *executionContext) _Monument(ctx context.Context, sel ast.SelectionSet,
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "sets":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Monument_sets(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -68357,6 +68656,39 @@ func (ec *executionContext) _Set(ctx context.Context, sel ast.SelectionSet, obj 
 					}
 				}()
 				res = ec._Set_artifacts(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "monuments":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Set_monuments(ctx, field, obj)
 				return res
 			}
 
@@ -72768,6 +73100,53 @@ func (ec *executionContext) unmarshalOModelWhereInput2ᚖgithubᚗcomᚋdkrasnov
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalOMonument2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐMonumentᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Monument) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNMonument2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐMonument(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
 func (ec *executionContext) marshalOMonument2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐMonument(ctx context.Context, sel ast.SelectionSet, v *ent.Monument) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -73907,6 +74286,53 @@ func (ec *executionContext) unmarshalORegionWhereInput2ᚖgithubᚗcomᚋdkrasno
 	}
 	res, err := ec.unmarshalInputRegionWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOSet2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐSetᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Set) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNSet2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐSet(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) marshalOSet2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐSet(ctx context.Context, sel ast.SelectionSet, v *ent.Set) graphql.Marshaler {

@@ -7047,6 +7047,10 @@ type MonumentWhereInput struct {
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
+
+	// "sets" edge predicates.
+	HasSets     *bool            `json:"hasSets,omitempty"`
+	HasSetsWith []*SetWhereInput `json:"hasSetsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -7390,6 +7394,24 @@ func (i *MonumentWhereInput) P() (predicate.Monument, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, monument.HasArtifactsWith(with...))
+	}
+	if i.HasSets != nil {
+		p := monument.HasSets()
+		if !*i.HasSets {
+			p = monument.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSetsWith) > 0 {
+		with := make([]predicate.Set, 0, len(i.HasSetsWith))
+		for _, w := range i.HasSetsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSetsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, monument.HasSetsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -12643,6 +12665,10 @@ type SetWhereInput struct {
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
+
+	// "monuments" edge predicates.
+	HasMonuments     *bool                 `json:"hasMonuments,omitempty"`
+	HasMonumentsWith []*MonumentWhereInput `json:"hasMonumentsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -12986,6 +13012,24 @@ func (i *SetWhereInput) P() (predicate.Set, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, set.HasArtifactsWith(with...))
+	}
+	if i.HasMonuments != nil {
+		p := set.HasMonuments()
+		if !*i.HasMonuments {
+			p = set.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasMonumentsWith) > 0 {
+		with := make([]predicate.Monument, 0, len(i.HasMonumentsWith))
+		for _, w := range i.HasMonumentsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasMonumentsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, set.HasMonumentsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

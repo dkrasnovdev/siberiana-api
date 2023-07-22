@@ -935,6 +935,7 @@ input CreateMonumentInput {
   description: String
   externalLinks: [String!]
   artifactIDs: [ID!]
+  setIDs: [ID!]
 }
 """
 CreateOrganizationInput is used for create Organization object.
@@ -1051,6 +1052,7 @@ input CreateSetInput {
   description: String
   externalLinks: [String!]
   artifactIDs: [ID!]
+  monumentIDs: [ID!]
 }
 """
 CreateSettlementInput is used for create Settlement object.
@@ -2268,6 +2270,7 @@ type Monument implements Node {
   description: String
   externalLinks: [String!]
   artifacts: [Artifact!]
+  sets: [Set!]
 }
 """A connection to a list of items."""
 type MonumentConnection {
@@ -2399,6 +2402,9 @@ input MonumentWhereInput {
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
+  """sets edge predicates"""
+  hasSets: Boolean
+  hasSetsWith: [SetWhereInput!]
 }
 """
 An object with an ID.
@@ -4255,6 +4261,7 @@ type Set implements Node {
   description: String
   externalLinks: [String!]
   artifacts: [Artifact!]
+  monuments: [Monument!]
 }
 """A connection to a list of items."""
 type SetConnection {
@@ -4386,6 +4393,9 @@ input SetWhereInput {
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
+  """monuments edge predicates"""
+  hasMonuments: Boolean
+  hasMonumentsWith: [MonumentWhereInput!]
 }
 type Settlement implements Node {
   id: ID!
@@ -4954,6 +4964,9 @@ input UpdateMonumentInput {
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
+  addSetIDs: [ID!]
+  removeSetIDs: [ID!]
+  clearSets: Boolean
 }
 """
 UpdateOrganizationInput is used for update Organization object.
@@ -5154,6 +5167,9 @@ input UpdateSetInput {
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
+  addMonumentIDs: [ID!]
+  removeMonumentIDs: [ID!]
+  clearMonuments: Boolean
 }
 """
 UpdateSettlementInput is used for update Settlement object.

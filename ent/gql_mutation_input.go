@@ -1572,6 +1572,7 @@ type CreateMonumentInput struct {
 	Description   *string
 	ExternalLinks []string
 	ArtifactIDs   []int
+	SetIDs        []int
 }
 
 // Mutate applies the CreateMonumentInput on the MonumentMutation builder.
@@ -1600,6 +1601,9 @@ func (i *CreateMonumentInput) Mutate(m *MonumentMutation) {
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
+	if v := i.SetIDs; len(v) > 0 {
+		m.AddSetIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateMonumentInput on the MonumentCreate builder.
@@ -1625,6 +1629,9 @@ type UpdateMonumentInput struct {
 	ClearArtifacts      bool
 	AddArtifactIDs      []int
 	RemoveArtifactIDs   []int
+	ClearSets           bool
+	AddSetIDs           []int
+	RemoveSetIDs        []int
 }
 
 // Mutate applies the UpdateMonumentInput on the MonumentMutation builder.
@@ -1673,6 +1680,15 @@ func (i *UpdateMonumentInput) Mutate(m *MonumentMutation) {
 	}
 	if v := i.RemoveArtifactIDs; len(v) > 0 {
 		m.RemoveArtifactIDs(v...)
+	}
+	if i.ClearSets {
+		m.ClearSets()
+	}
+	if v := i.AddSetIDs; len(v) > 0 {
+		m.AddSetIDs(v...)
+	}
+	if v := i.RemoveSetIDs; len(v) > 0 {
+		m.RemoveSetIDs(v...)
 	}
 }
 
@@ -2750,6 +2766,7 @@ type CreateSetInput struct {
 	Description   *string
 	ExternalLinks []string
 	ArtifactIDs   []int
+	MonumentIDs   []int
 }
 
 // Mutate applies the CreateSetInput on the SetMutation builder.
@@ -2778,6 +2795,9 @@ func (i *CreateSetInput) Mutate(m *SetMutation) {
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
+	if v := i.MonumentIDs; len(v) > 0 {
+		m.AddMonumentIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateSetInput on the SetCreate builder.
@@ -2803,6 +2823,9 @@ type UpdateSetInput struct {
 	ClearArtifacts      bool
 	AddArtifactIDs      []int
 	RemoveArtifactIDs   []int
+	ClearMonuments      bool
+	AddMonumentIDs      []int
+	RemoveMonumentIDs   []int
 }
 
 // Mutate applies the UpdateSetInput on the SetMutation builder.
@@ -2851,6 +2874,15 @@ func (i *UpdateSetInput) Mutate(m *SetMutation) {
 	}
 	if v := i.RemoveArtifactIDs; len(v) > 0 {
 		m.RemoveArtifactIDs(v...)
+	}
+	if i.ClearMonuments {
+		m.ClearMonuments()
+	}
+	if v := i.AddMonumentIDs; len(v) > 0 {
+		m.AddMonumentIDs(v...)
+	}
+	if v := i.RemoveMonumentIDs; len(v) > 0 {
+		m.RemoveMonumentIDs(v...)
 	}
 }
 
