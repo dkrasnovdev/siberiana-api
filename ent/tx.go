@@ -62,6 +62,8 @@ type Tx struct {
 	PersonRole *PersonRoleClient
 	// Project is the client for interacting with the Project builders.
 	Project *ProjectClient
+	// ProjectType is the client for interacting with the ProjectType builders.
+	ProjectType *ProjectTypeClient
 	// ProtectedArea is the client for interacting with the ProtectedArea builders.
 	ProtectedArea *ProtectedAreaClient
 	// ProtectedAreaCategory is the client for interacting with the ProtectedAreaCategory builders.
@@ -236,6 +238,7 @@ func (tx *Tx) init() {
 	tx.Person = NewPersonClient(tx.config)
 	tx.PersonRole = NewPersonRoleClient(tx.config)
 	tx.Project = NewProjectClient(tx.config)
+	tx.ProjectType = NewProjectTypeClient(tx.config)
 	tx.ProtectedArea = NewProtectedAreaClient(tx.config)
 	tx.ProtectedAreaCategory = NewProtectedAreaCategoryClient(tx.config)
 	tx.ProtectedAreaPicture = NewProtectedAreaPictureClient(tx.config)

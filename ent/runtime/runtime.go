@@ -24,6 +24,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
+	"github.com/dkrasnovdev/heritage-api/ent/projecttype"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
 	"github.com/dkrasnovdev/heritage-api/ent/schema"
@@ -488,6 +489,23 @@ func init() {
 	project.DefaultUpdatedAt = projectDescUpdatedAt.Default.(func() time.Time)
 	// project.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	project.UpdateDefaultUpdatedAt = projectDescUpdatedAt.UpdateDefault.(func() time.Time)
+	projecttypeMixin := schema.ProjectType{}.Mixin()
+	projecttypeMixinHooks0 := projecttypeMixin[0].Hooks()
+	projecttype.Hooks[0] = projecttypeMixinHooks0[0]
+	projecttypeMixinFields0 := projecttypeMixin[0].Fields()
+	_ = projecttypeMixinFields0
+	projecttypeFields := schema.ProjectType{}.Fields()
+	_ = projecttypeFields
+	// projecttypeDescCreatedAt is the schema descriptor for created_at field.
+	projecttypeDescCreatedAt := projecttypeMixinFields0[0].Descriptor()
+	// projecttype.DefaultCreatedAt holds the default value on creation for the created_at field.
+	projecttype.DefaultCreatedAt = projecttypeDescCreatedAt.Default.(func() time.Time)
+	// projecttypeDescUpdatedAt is the schema descriptor for updated_at field.
+	projecttypeDescUpdatedAt := projecttypeMixinFields0[2].Descriptor()
+	// projecttype.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	projecttype.DefaultUpdatedAt = projecttypeDescUpdatedAt.Default.(func() time.Time)
+	// projecttype.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	projecttype.UpdateDefaultUpdatedAt = projecttypeDescUpdatedAt.UpdateDefault.(func() time.Time)
 	publicationMixin := schema.Publication{}.Mixin()
 	publication.Policy = privacy.NewPolicies(schema.Publication{})
 	publication.Hooks[0] = func(next ent.Mutator) ent.Mutator {

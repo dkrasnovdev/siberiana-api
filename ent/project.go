@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
+	"github.com/dkrasnovdev/heritage-api/ent/projecttype"
 )
 
 // Project is the model entity for the Project schema.
@@ -34,8 +35,9 @@ type Project struct {
 	ExternalLinks []string `json:"external_links,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProjectQuery when eager-loading is set.
-	Edges        ProjectEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                 ProjectEdges `json:"edges"`
+	project_type_projects *int
+	selectValues          sql.SelectValues
 }
 
 // ProjectEdges holds the relations/edges for other nodes in the graph.
@@ -44,11 +46,13 @@ type ProjectEdges struct {
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
 	// Team holds the value of the team edge.
 	Team []*Person `json:"team,omitempty"`
+	// ProjectType holds the value of the project_type edge.
+	ProjectType *ProjectType `json:"project_type,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [3]map[string]int
 
 	namedArtifacts map[string][]*Artifact
 	namedTeam      map[string][]*Person
@@ -72,6 +76,19 @@ func (e ProjectEdges) TeamOrErr() ([]*Person, error) {
 	return nil, &NotLoadedError{edge: "team"}
 }
 
+// ProjectTypeOrErr returns the ProjectType value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProjectEdges) ProjectTypeOrErr() (*ProjectType, error) {
+	if e.loadedTypes[2] {
+		if e.ProjectType == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: projecttype.Label}
+		}
+		return e.ProjectType, nil
+	}
+	return nil, &NotLoadedError{edge: "project_type"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Project) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -85,6 +102,8 @@ func (*Project) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case project.FieldCreatedAt, project.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
+		case project.ForeignKeys[0]: // project_type_projects
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -150,6 +169,13 @@ func (pr *Project) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field external_links: %w", err)
 				}
 			}
+		case project.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field project_type_projects", value)
+			} else if value.Valid {
+				pr.project_type_projects = new(int)
+				*pr.project_type_projects = int(value.Int64)
+			}
 		default:
 			pr.selectValues.Set(columns[i], values[i])
 		}
@@ -171,6 +197,11 @@ func (pr *Project) QueryArtifacts() *ArtifactQuery {
 // QueryTeam queries the "team" edge of the Project entity.
 func (pr *Project) QueryTeam() *PersonQuery {
 	return NewProjectClient(pr.config).QueryTeam(pr)
+}
+
+// QueryProjectType queries the "project_type" edge of the Project entity.
+func (pr *Project) QueryProjectType() *ProjectTypeQuery {
+	return NewProjectClient(pr.config).QueryProjectType(pr)
 }
 
 // Update returns a builder for updating this Project.

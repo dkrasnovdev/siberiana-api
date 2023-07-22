@@ -37,6 +37,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
+	"github.com/dkrasnovdev/heritage-api/ent/projecttype"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
@@ -131,6 +132,7 @@ func checkColumn(table, column string) error {
 			person.Table:                person.ValidColumn,
 			personrole.Table:            personrole.ValidColumn,
 			project.Table:               project.ValidColumn,
+			projecttype.Table:           projecttype.ValidColumn,
 			protectedarea.Table:         protectedarea.ValidColumn,
 			protectedareacategory.Table: protectedareacategory.ValidColumn,
 			protectedareapicture.Table:  protectedareapicture.ValidColumn,

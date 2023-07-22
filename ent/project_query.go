@@ -16,6 +16,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
+	"github.com/dkrasnovdev/heritage-api/ent/projecttype"
 )
 
 // ProjectQuery is the builder for querying Project entities.
@@ -27,6 +28,8 @@ type ProjectQuery struct {
 	predicates         []predicate.Project
 	withArtifacts      *ArtifactQuery
 	withTeam           *PersonQuery
+	withProjectType    *ProjectTypeQuery
+	withFKs            bool
 	modifiers          []func(*sql.Selector)
 	loadTotal          []func(context.Context, []*Project) error
 	withNamedArtifacts map[string]*ArtifactQuery
@@ -104,6 +107,28 @@ func (pq *ProjectQuery) QueryTeam() *PersonQuery {
 			sqlgraph.From(project.Table, project.FieldID, selector),
 			sqlgraph.To(person.Table, person.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, project.TeamTable, project.TeamPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProjectType chains the current query on the "project_type" edge.
+func (pq *ProjectQuery) QueryProjectType() *ProjectTypeQuery {
+	query := (&ProjectTypeClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(project.Table, project.FieldID, selector),
+			sqlgraph.To(projecttype.Table, projecttype.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, project.ProjectTypeTable, project.ProjectTypeColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -298,13 +323,14 @@ func (pq *ProjectQuery) Clone() *ProjectQuery {
 		return nil
 	}
 	return &ProjectQuery{
-		config:        pq.config,
-		ctx:           pq.ctx.Clone(),
-		order:         append([]project.OrderOption{}, pq.order...),
-		inters:        append([]Interceptor{}, pq.inters...),
-		predicates:    append([]predicate.Project{}, pq.predicates...),
-		withArtifacts: pq.withArtifacts.Clone(),
-		withTeam:      pq.withTeam.Clone(),
+		config:          pq.config,
+		ctx:             pq.ctx.Clone(),
+		order:           append([]project.OrderOption{}, pq.order...),
+		inters:          append([]Interceptor{}, pq.inters...),
+		predicates:      append([]predicate.Project{}, pq.predicates...),
+		withArtifacts:   pq.withArtifacts.Clone(),
+		withTeam:        pq.withTeam.Clone(),
+		withProjectType: pq.withProjectType.Clone(),
 		// clone intermediate query.
 		sql:  pq.sql.Clone(),
 		path: pq.path,
@@ -330,6 +356,17 @@ func (pq *ProjectQuery) WithTeam(opts ...func(*PersonQuery)) *ProjectQuery {
 		opt(query)
 	}
 	pq.withTeam = query
+	return pq
+}
+
+// WithProjectType tells the query-builder to eager-load the nodes that are connected to
+// the "project_type" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProjectQuery) WithProjectType(opts ...func(*ProjectTypeQuery)) *ProjectQuery {
+	query := (&ProjectTypeClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withProjectType = query
 	return pq
 }
 
@@ -416,12 +453,20 @@ func (pq *ProjectQuery) prepareQuery(ctx context.Context) error {
 func (pq *ProjectQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Project, error) {
 	var (
 		nodes       = []*Project{}
+		withFKs     = pq.withFKs
 		_spec       = pq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [3]bool{
 			pq.withArtifacts != nil,
 			pq.withTeam != nil,
+			pq.withProjectType != nil,
 		}
 	)
+	if pq.withProjectType != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, project.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Project).scanValues(nil, columns)
 	}
@@ -454,6 +499,12 @@ func (pq *ProjectQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Proj
 		if err := pq.loadTeam(ctx, query, nodes,
 			func(n *Project) { n.Edges.Team = []*Person{} },
 			func(n *Project, e *Person) { n.Edges.Team = append(n.Edges.Team, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pq.withProjectType; query != nil {
+		if err := pq.loadProjectType(ctx, query, nodes, nil,
+			func(n *Project, e *ProjectType) { n.Edges.ProjectType = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -597,6 +648,38 @@ func (pq *ProjectQuery) loadTeam(ctx context.Context, query *PersonQuery, nodes 
 		}
 		for kn := range nodes {
 			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (pq *ProjectQuery) loadProjectType(ctx context.Context, query *ProjectTypeQuery, nodes []*Project, init func(*Project), assign func(*Project, *ProjectType)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Project)
+	for i := range nodes {
+		if nodes[i].project_type_projects == nil {
+			continue
+		}
+		fk := *nodes[i].project_type_projects
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(projecttype.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "project_type_projects" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
 		}
 	}
 	return nil

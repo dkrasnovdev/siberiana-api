@@ -34,6 +34,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
+	"github.com/dkrasnovdev/heritage-api/ent/projecttype"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
@@ -776,6 +777,33 @@ func (f TraverseProject) Traverse(ctx context.Context, q ent.Query) error {
 	return fmt.Errorf("unexpected query type %T. expect *ent.ProjectQuery", q)
 }
 
+// The ProjectTypeFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ProjectTypeFunc func(context.Context, *ent.ProjectTypeQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f ProjectTypeFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.ProjectTypeQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.ProjectTypeQuery", q)
+}
+
+// The TraverseProjectType type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseProjectType func(context.Context, *ent.ProjectTypeQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseProjectType) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseProjectType) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.ProjectTypeQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.ProjectTypeQuery", q)
+}
+
 // The ProtectedAreaFunc type is an adapter to allow the use of ordinary function as a Querier.
 type ProtectedAreaFunc func(context.Context, *ent.ProtectedAreaQuery) (ent.Value, error)
 
@@ -1072,6 +1100,8 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.PersonRoleQuery, predicate.PersonRole, personrole.OrderOption]{typ: ent.TypePersonRole, tq: q}, nil
 	case *ent.ProjectQuery:
 		return &query[*ent.ProjectQuery, predicate.Project, project.OrderOption]{typ: ent.TypeProject, tq: q}, nil
+	case *ent.ProjectTypeQuery:
+		return &query[*ent.ProjectTypeQuery, predicate.ProjectType, projecttype.OrderOption]{typ: ent.TypeProjectType, tq: q}, nil
 	case *ent.ProtectedAreaQuery:
 		return &query[*ent.ProtectedAreaQuery, predicate.ProtectedArea, protectedarea.OrderOption]{typ: ent.TypeProtectedArea, tq: q}, nil
 	case *ent.ProtectedAreaCategoryQuery:

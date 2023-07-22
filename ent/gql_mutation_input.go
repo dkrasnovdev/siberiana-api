@@ -2309,6 +2309,7 @@ type CreateProjectInput struct {
 	ExternalLinks []string
 	ArtifactIDs   []int
 	TeamIDs       []int
+	ProjectTypeID *int
 }
 
 // Mutate applies the CreateProjectInput on the ProjectMutation builder.
@@ -2340,6 +2341,9 @@ func (i *CreateProjectInput) Mutate(m *ProjectMutation) {
 	if v := i.TeamIDs; len(v) > 0 {
 		m.AddTeamIDs(v...)
 	}
+	if v := i.ProjectTypeID; v != nil {
+		m.SetProjectTypeID(*v)
+	}
 }
 
 // SetInput applies the change-set in the CreateProjectInput on the ProjectCreate builder.
@@ -2368,6 +2372,8 @@ type UpdateProjectInput struct {
 	ClearTeam           bool
 	AddTeamIDs          []int
 	RemoveTeamIDs       []int
+	ClearProjectType    bool
+	ProjectTypeID       *int
 }
 
 // Mutate applies the UpdateProjectInput on the ProjectMutation builder.
@@ -2425,6 +2431,12 @@ func (i *UpdateProjectInput) Mutate(m *ProjectMutation) {
 	}
 	if v := i.RemoveTeamIDs; len(v) > 0 {
 		m.RemoveTeamIDs(v...)
+	}
+	if i.ClearProjectType {
+		m.ClearProjectType()
+	}
+	if v := i.ProjectTypeID; v != nil {
+		m.SetProjectTypeID(*v)
 	}
 }
 

@@ -26,6 +26,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
+	"github.com/dkrasnovdev/heritage-api/ent/projecttype"
 	"github.com/dkrasnovdev/heritage-api/ent/publication"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
 	"github.com/dkrasnovdev/heritage-api/ent/set"
@@ -3111,6 +3112,16 @@ func (pr *ProjectQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 			pr.WithNamedTeam(alias, func(wq *PersonQuery) {
 				*wq = *query
 			})
+		case "projectType":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProjectTypeClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, projecttypeImplementors)...); err != nil {
+				return err
+			}
+			pr.withProjectType = query
 		case "createdAt":
 			if _, ok := fieldSeen[project.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, project.FieldCreatedAt)
@@ -3211,6 +3222,137 @@ func newProjectPaginateArgs(rv map[string]any) *projectPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*ProjectWhereInput); ok {
 		args.opts = append(args.opts, WithProjectFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (pt *ProjectTypeQuery) CollectFields(ctx context.Context, satisfies ...string) (*ProjectTypeQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return pt, nil
+	}
+	if err := pt.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return pt, nil
+}
+
+func (pt *ProjectTypeQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(projecttype.Columns))
+		selectedFields = []string{projecttype.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "projects":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProjectClient{config: pt.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, projectImplementors)...); err != nil {
+				return err
+			}
+			pt.WithNamedProjects(alias, func(wq *ProjectQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[projecttype.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, projecttype.FieldCreatedAt)
+				fieldSeen[projecttype.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[projecttype.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, projecttype.FieldCreatedBy)
+				fieldSeen[projecttype.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[projecttype.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, projecttype.FieldUpdatedAt)
+				fieldSeen[projecttype.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[projecttype.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, projecttype.FieldUpdatedBy)
+				fieldSeen[projecttype.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[projecttype.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, projecttype.FieldDisplayName)
+				fieldSeen[projecttype.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[projecttype.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, projecttype.FieldDescription)
+				fieldSeen[projecttype.FieldDescription] = struct{}{}
+			}
+		case "externalLinks":
+			if _, ok := fieldSeen[projecttype.FieldExternalLinks]; !ok {
+				selectedFields = append(selectedFields, projecttype.FieldExternalLinks)
+				fieldSeen[projecttype.FieldExternalLinks] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		pt.Select(selectedFields...)
+	}
+	return nil
+}
+
+type projecttypePaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ProjectTypePaginateOption
+}
+
+func newProjectTypePaginateArgs(rv map[string]any) *projecttypePaginateArgs {
+	args := &projecttypePaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &ProjectTypeOrder{Field: &ProjectTypeOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithProjectTypeOrder(order))
+			}
+		case *ProjectTypeOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithProjectTypeOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*ProjectTypeWhereInput); ok {
+		args.opts = append(args.opts, WithProjectTypeFilter(v.Filter))
 	}
 	return args
 }

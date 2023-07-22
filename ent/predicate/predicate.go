@@ -81,6 +81,9 @@ type PersonRole func(*sql.Selector)
 // Project is the predicate function for project builders.
 type Project func(*sql.Selector)
 
+// ProjectType is the predicate function for projecttype builders.
+type ProjectType func(*sql.Selector)
+
 // ProtectedArea is the predicate function for protectedarea builders.
 type ProtectedArea func(*sql.Selector)
 

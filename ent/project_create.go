@@ -13,6 +13,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
+	"github.com/dkrasnovdev/heritage-api/ent/projecttype"
 )
 
 // ProjectCreate is the builder for creating a Project entity.
@@ -140,6 +141,25 @@ func (pc *ProjectCreate) AddTeam(p ...*Person) *ProjectCreate {
 		ids[i] = p[i].ID
 	}
 	return pc.AddTeamIDs(ids...)
+}
+
+// SetProjectTypeID sets the "project_type" edge to the ProjectType entity by ID.
+func (pc *ProjectCreate) SetProjectTypeID(id int) *ProjectCreate {
+	pc.mutation.SetProjectTypeID(id)
+	return pc
+}
+
+// SetNillableProjectTypeID sets the "project_type" edge to the ProjectType entity by ID if the given value is not nil.
+func (pc *ProjectCreate) SetNillableProjectTypeID(id *int) *ProjectCreate {
+	if id != nil {
+		pc = pc.SetProjectTypeID(*id)
+	}
+	return pc
+}
+
+// SetProjectType sets the "project_type" edge to the ProjectType entity.
+func (pc *ProjectCreate) SetProjectType(p *ProjectType) *ProjectCreate {
+	return pc.SetProjectTypeID(p.ID)
 }
 
 // Mutation returns the ProjectMutation object of the builder.
@@ -288,6 +308,23 @@ func (pc *ProjectCreate) createSpec() (*Project, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.ProjectTypeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   project.ProjectTypeTable,
+			Columns: []string{project.ProjectTypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(projecttype.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.project_type_projects = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

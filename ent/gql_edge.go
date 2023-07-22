@@ -484,6 +484,26 @@ func (pr *Project) Team(ctx context.Context) (result []*Person, err error) {
 	return result, err
 }
 
+func (pr *Project) ProjectType(ctx context.Context) (*ProjectType, error) {
+	result, err := pr.Edges.ProjectTypeOrErr()
+	if IsNotLoaded(err) {
+		result, err = pr.QueryProjectType().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pt *ProjectType) Projects(ctx context.Context) (result []*Project, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pt.NamedProjects(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pt.Edges.ProjectsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pt.QueryProjects().All(ctx)
+	}
+	return result, err
+}
+
 func (pu *Publication) Artifacts(ctx context.Context) (result []*Artifact, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = pu.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)

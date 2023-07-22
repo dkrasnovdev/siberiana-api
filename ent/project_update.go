@@ -16,6 +16,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
+	"github.com/dkrasnovdev/heritage-api/ent/projecttype"
 )
 
 // ProjectUpdate is the builder for updating Project entities.
@@ -165,6 +166,25 @@ func (pu *ProjectUpdate) AddTeam(p ...*Person) *ProjectUpdate {
 	return pu.AddTeamIDs(ids...)
 }
 
+// SetProjectTypeID sets the "project_type" edge to the ProjectType entity by ID.
+func (pu *ProjectUpdate) SetProjectTypeID(id int) *ProjectUpdate {
+	pu.mutation.SetProjectTypeID(id)
+	return pu
+}
+
+// SetNillableProjectTypeID sets the "project_type" edge to the ProjectType entity by ID if the given value is not nil.
+func (pu *ProjectUpdate) SetNillableProjectTypeID(id *int) *ProjectUpdate {
+	if id != nil {
+		pu = pu.SetProjectTypeID(*id)
+	}
+	return pu
+}
+
+// SetProjectType sets the "project_type" edge to the ProjectType entity.
+func (pu *ProjectUpdate) SetProjectType(p *ProjectType) *ProjectUpdate {
+	return pu.SetProjectTypeID(p.ID)
+}
+
 // Mutation returns the ProjectMutation object of the builder.
 func (pu *ProjectUpdate) Mutation() *ProjectMutation {
 	return pu.mutation
@@ -210,6 +230,12 @@ func (pu *ProjectUpdate) RemoveTeam(p ...*Person) *ProjectUpdate {
 		ids[i] = p[i].ID
 	}
 	return pu.RemoveTeamIDs(ids...)
+}
+
+// ClearProjectType clears the "project_type" edge to the ProjectType entity.
+func (pu *ProjectUpdate) ClearProjectType() *ProjectUpdate {
+	pu.mutation.ClearProjectType()
+	return pu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -391,6 +417,35 @@ func (pu *ProjectUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if pu.mutation.ProjectTypeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   project.ProjectTypeTable,
+			Columns: []string{project.ProjectTypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(projecttype.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.ProjectTypeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   project.ProjectTypeTable,
+			Columns: []string{project.ProjectTypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(projecttype.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, pu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{project.Label}
@@ -545,6 +600,25 @@ func (puo *ProjectUpdateOne) AddTeam(p ...*Person) *ProjectUpdateOne {
 	return puo.AddTeamIDs(ids...)
 }
 
+// SetProjectTypeID sets the "project_type" edge to the ProjectType entity by ID.
+func (puo *ProjectUpdateOne) SetProjectTypeID(id int) *ProjectUpdateOne {
+	puo.mutation.SetProjectTypeID(id)
+	return puo
+}
+
+// SetNillableProjectTypeID sets the "project_type" edge to the ProjectType entity by ID if the given value is not nil.
+func (puo *ProjectUpdateOne) SetNillableProjectTypeID(id *int) *ProjectUpdateOne {
+	if id != nil {
+		puo = puo.SetProjectTypeID(*id)
+	}
+	return puo
+}
+
+// SetProjectType sets the "project_type" edge to the ProjectType entity.
+func (puo *ProjectUpdateOne) SetProjectType(p *ProjectType) *ProjectUpdateOne {
+	return puo.SetProjectTypeID(p.ID)
+}
+
 // Mutation returns the ProjectMutation object of the builder.
 func (puo *ProjectUpdateOne) Mutation() *ProjectMutation {
 	return puo.mutation
@@ -590,6 +664,12 @@ func (puo *ProjectUpdateOne) RemoveTeam(p ...*Person) *ProjectUpdateOne {
 		ids[i] = p[i].ID
 	}
 	return puo.RemoveTeamIDs(ids...)
+}
+
+// ClearProjectType clears the "project_type" edge to the ProjectType entity.
+func (puo *ProjectUpdateOne) ClearProjectType() *ProjectUpdateOne {
+	puo.mutation.ClearProjectType()
+	return puo
 }
 
 // Where appends a list predicates to the ProjectUpdate builder.
@@ -794,6 +874,35 @@ func (puo *ProjectUpdateOne) sqlSave(ctx context.Context) (_node *Project, err e
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.ProjectTypeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   project.ProjectTypeTable,
+			Columns: []string{project.ProjectTypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(projecttype.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.ProjectTypeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   project.ProjectTypeTable,
+			Columns: []string{project.ProjectTypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(projecttype.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

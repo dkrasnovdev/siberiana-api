@@ -509,12 +509,38 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "project_type_projects", Type: field.TypeInt, Nullable: true},
 	}
 	// ProjectsTable holds the schema information for the "projects" table.
 	ProjectsTable = &schema.Table{
 		Name:       "projects",
 		Columns:    ProjectsColumns,
 		PrimaryKey: []*schema.Column{ProjectsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "projects_project_types_projects",
+				Columns:    []*schema.Column{ProjectsColumns[8]},
+				RefColumns: []*schema.Column{ProjectTypesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// ProjectTypesColumns holds the columns for the "project_types" table.
+	ProjectTypesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+	}
+	// ProjectTypesTable holds the schema information for the "project_types" table.
+	ProjectTypesTable = &schema.Table{
+		Name:       "project_types",
+		Columns:    ProjectTypesColumns,
+		PrimaryKey: []*schema.Column{ProjectTypesColumns[0]},
 	}
 	// ProtectedAreasColumns holds the columns for the "protected_areas" table.
 	ProtectedAreasColumns = []*schema.Column{
@@ -936,6 +962,7 @@ var (
 		PersonsTable,
 		PersonRolesTable,
 		ProjectsTable,
+		ProjectTypesTable,
 		ProtectedAreasTable,
 		ProtectedAreaCategoriesTable,
 		ProtectedAreaPicturesTable,
@@ -973,6 +1000,7 @@ func init() {
 	PersonsTable.ForeignKeys[0].RefTable = CollectionsTable
 	PersonsTable.ForeignKeys[1].RefTable = HoldersTable
 	PersonsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	ProjectsTable.ForeignKeys[0].RefTable = ProjectTypesTable
 	RegionsTable.ForeignKeys[0].RefTable = LocationsTable
 	SettlementsTable.ForeignKeys[0].RefTable = LocationsTable
 	HolderArtifactsTable.ForeignKeys[0].RefTable = HoldersTable

@@ -309,6 +309,18 @@ func (f ProjectFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, err
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProjectMutation", m)
 }
 
+// The ProjectTypeFunc type is an adapter to allow the use of ordinary
+// function as ProjectType mutator.
+type ProjectTypeFunc func(context.Context, *ent.ProjectTypeMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ProjectTypeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ProjectTypeMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProjectTypeMutation", m)
+}
+
 // The ProtectedAreaFunc type is an adapter to allow the use of ordinary
 // function as ProtectedArea mutator.
 type ProtectedAreaFunc func(context.Context, *ent.ProtectedAreaMutation) (ent.Value, error)

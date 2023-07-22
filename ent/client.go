@@ -39,6 +39,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/personrole"
 	"github.com/dkrasnovdev/heritage-api/ent/project"
+	"github.com/dkrasnovdev/heritage-api/ent/projecttype"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
@@ -105,6 +106,8 @@ type Client struct {
 	PersonRole *PersonRoleClient
 	// Project is the client for interacting with the Project builders.
 	Project *ProjectClient
+	// ProjectType is the client for interacting with the ProjectType builders.
+	ProjectType *ProjectTypeClient
 	// ProtectedArea is the client for interacting with the ProtectedArea builders.
 	ProtectedArea *ProtectedAreaClient
 	// ProtectedAreaCategory is the client for interacting with the ProtectedAreaCategory builders.
@@ -163,6 +166,7 @@ func (c *Client) init() {
 	c.Person = NewPersonClient(c.config)
 	c.PersonRole = NewPersonRoleClient(c.config)
 	c.Project = NewProjectClient(c.config)
+	c.ProjectType = NewProjectTypeClient(c.config)
 	c.ProtectedArea = NewProtectedAreaClient(c.config)
 	c.ProtectedAreaCategory = NewProtectedAreaCategoryClient(c.config)
 	c.ProtectedAreaPicture = NewProtectedAreaPictureClient(c.config)
@@ -279,6 +283,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Person:                NewPersonClient(cfg),
 		PersonRole:            NewPersonRoleClient(cfg),
 		Project:               NewProjectClient(cfg),
+		ProjectType:           NewProjectTypeClient(cfg),
 		ProtectedArea:         NewProtectedAreaClient(cfg),
 		ProtectedAreaCategory: NewProtectedAreaCategoryClient(cfg),
 		ProtectedAreaPicture:  NewProtectedAreaPictureClient(cfg),
@@ -332,6 +337,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Person:                NewPersonClient(cfg),
 		PersonRole:            NewPersonRoleClient(cfg),
 		Project:               NewProjectClient(cfg),
+		ProjectType:           NewProjectTypeClient(cfg),
 		ProtectedArea:         NewProtectedAreaClient(cfg),
 		ProtectedAreaCategory: NewProtectedAreaCategoryClient(cfg),
 		ProtectedAreaPicture:  NewProtectedAreaPictureClient(cfg),
@@ -374,9 +380,9 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Category, c.Collection, c.Culture, c.District, c.Holder,
 		c.HolderResponsibility, c.Keyword, c.Library, c.License, c.Location, c.Medium,
 		c.Model, c.Monument, c.Organization, c.OrganizationType, c.Person,
-		c.PersonRole, c.Project, c.ProtectedArea, c.ProtectedAreaCategory,
-		c.ProtectedAreaPicture, c.Publication, c.Publisher, c.Region, c.Set,
-		c.Settlement, c.Technique,
+		c.PersonRole, c.Project, c.ProjectType, c.ProtectedArea,
+		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Publication, c.Publisher,
+		c.Region, c.Set, c.Settlement, c.Technique,
 	} {
 		n.Use(hooks...)
 	}
@@ -390,9 +396,9 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Category, c.Collection, c.Culture, c.District, c.Holder,
 		c.HolderResponsibility, c.Keyword, c.Library, c.License, c.Location, c.Medium,
 		c.Model, c.Monument, c.Organization, c.OrganizationType, c.Person,
-		c.PersonRole, c.Project, c.ProtectedArea, c.ProtectedAreaCategory,
-		c.ProtectedAreaPicture, c.Publication, c.Publisher, c.Region, c.Set,
-		c.Settlement, c.Technique,
+		c.PersonRole, c.Project, c.ProjectType, c.ProtectedArea,
+		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Publication, c.Publisher,
+		c.Region, c.Set, c.Settlement, c.Technique,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -451,6 +457,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.PersonRole.mutate(ctx, m)
 	case *ProjectMutation:
 		return c.Project.mutate(ctx, m)
+	case *ProjectTypeMutation:
+		return c.ProjectType.mutate(ctx, m)
 	case *ProtectedAreaMutation:
 		return c.ProtectedArea.mutate(ctx, m)
 	case *ProtectedAreaCategoryMutation:
@@ -4153,6 +4161,22 @@ func (c *ProjectClient) QueryTeam(pr *Project) *PersonQuery {
 	return query
 }
 
+// QueryProjectType queries the project_type edge of a Project.
+func (c *ProjectClient) QueryProjectType(pr *Project) *ProjectTypeQuery {
+	query := (&ProjectTypeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(project.Table, project.FieldID, id),
+			sqlgraph.To(projecttype.Table, projecttype.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, project.ProjectTypeTable, project.ProjectTypeColumn),
+		)
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ProjectClient) Hooks() []Hook {
 	hooks := c.hooks.Project
@@ -4176,6 +4200,141 @@ func (c *ProjectClient) mutate(ctx context.Context, m *ProjectMutation) (Value, 
 		return (&ProjectDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Project mutation op: %q", m.Op())
+	}
+}
+
+// ProjectTypeClient is a client for the ProjectType schema.
+type ProjectTypeClient struct {
+	config
+}
+
+// NewProjectTypeClient returns a client for the ProjectType from the given config.
+func NewProjectTypeClient(c config) *ProjectTypeClient {
+	return &ProjectTypeClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `projecttype.Hooks(f(g(h())))`.
+func (c *ProjectTypeClient) Use(hooks ...Hook) {
+	c.hooks.ProjectType = append(c.hooks.ProjectType, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `projecttype.Intercept(f(g(h())))`.
+func (c *ProjectTypeClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ProjectType = append(c.inters.ProjectType, interceptors...)
+}
+
+// Create returns a builder for creating a ProjectType entity.
+func (c *ProjectTypeClient) Create() *ProjectTypeCreate {
+	mutation := newProjectTypeMutation(c.config, OpCreate)
+	return &ProjectTypeCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ProjectType entities.
+func (c *ProjectTypeClient) CreateBulk(builders ...*ProjectTypeCreate) *ProjectTypeCreateBulk {
+	return &ProjectTypeCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ProjectType.
+func (c *ProjectTypeClient) Update() *ProjectTypeUpdate {
+	mutation := newProjectTypeMutation(c.config, OpUpdate)
+	return &ProjectTypeUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ProjectTypeClient) UpdateOne(pt *ProjectType) *ProjectTypeUpdateOne {
+	mutation := newProjectTypeMutation(c.config, OpUpdateOne, withProjectType(pt))
+	return &ProjectTypeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ProjectTypeClient) UpdateOneID(id int) *ProjectTypeUpdateOne {
+	mutation := newProjectTypeMutation(c.config, OpUpdateOne, withProjectTypeID(id))
+	return &ProjectTypeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ProjectType.
+func (c *ProjectTypeClient) Delete() *ProjectTypeDelete {
+	mutation := newProjectTypeMutation(c.config, OpDelete)
+	return &ProjectTypeDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ProjectTypeClient) DeleteOne(pt *ProjectType) *ProjectTypeDeleteOne {
+	return c.DeleteOneID(pt.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ProjectTypeClient) DeleteOneID(id int) *ProjectTypeDeleteOne {
+	builder := c.Delete().Where(projecttype.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ProjectTypeDeleteOne{builder}
+}
+
+// Query returns a query builder for ProjectType.
+func (c *ProjectTypeClient) Query() *ProjectTypeQuery {
+	return &ProjectTypeQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeProjectType},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ProjectType entity by its id.
+func (c *ProjectTypeClient) Get(ctx context.Context, id int) (*ProjectType, error) {
+	return c.Query().Where(projecttype.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ProjectTypeClient) GetX(ctx context.Context, id int) *ProjectType {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryProjects queries the projects edge of a ProjectType.
+func (c *ProjectTypeClient) QueryProjects(pt *ProjectType) *ProjectQuery {
+	query := (&ProjectClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pt.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(projecttype.Table, projecttype.FieldID, id),
+			sqlgraph.To(project.Table, project.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, projecttype.ProjectsTable, projecttype.ProjectsColumn),
+		)
+		fromV = sqlgraph.Neighbors(pt.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ProjectTypeClient) Hooks() []Hook {
+	hooks := c.hooks.ProjectType
+	return append(hooks[:len(hooks):len(hooks)], projecttype.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *ProjectTypeClient) Interceptors() []Interceptor {
+	return c.inters.ProjectType
+}
+
+func (c *ProjectTypeClient) mutate(ctx context.Context, m *ProjectTypeMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ProjectTypeCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ProjectTypeUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ProjectTypeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ProjectTypeDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown ProjectType mutation op: %q", m.Op())
 	}
 }
 
@@ -5348,7 +5507,7 @@ type (
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
 		Collection, Culture, District, Holder, HolderResponsibility, Keyword, Library,
 		License, Location, Medium, Model, Monument, Organization, OrganizationType,
-		Person, PersonRole, Project, ProtectedArea, ProtectedAreaCategory,
+		Person, PersonRole, Project, ProjectType, ProtectedArea, ProtectedAreaCategory,
 		ProtectedAreaPicture, Publication, Publisher, Region, Set, Settlement,
 		Technique []ent.Hook
 	}
@@ -5356,7 +5515,7 @@ type (
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
 		Collection, Culture, District, Holder, HolderResponsibility, Keyword, Library,
 		License, Location, Medium, Model, Monument, Organization, OrganizationType,
-		Person, PersonRole, Project, ProtectedArea, ProtectedAreaCategory,
+		Person, PersonRole, Project, ProjectType, ProtectedArea, ProtectedAreaCategory,
 		ProtectedAreaPicture, Publication, Publisher, Region, Set, Settlement,
 		Technique []ent.Interceptor
 	}
