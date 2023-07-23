@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/country"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
@@ -129,6 +130,44 @@ func (lc *LocationCreate) AddArtifacts(a ...*Artifact) *LocationCreate {
 	return lc.AddArtifactIDs(ids...)
 }
 
+// SetCountryID sets the "country" edge to the Country entity by ID.
+func (lc *LocationCreate) SetCountryID(id int) *LocationCreate {
+	lc.mutation.SetCountryID(id)
+	return lc
+}
+
+// SetNillableCountryID sets the "country" edge to the Country entity by ID if the given value is not nil.
+func (lc *LocationCreate) SetNillableCountryID(id *int) *LocationCreate {
+	if id != nil {
+		lc = lc.SetCountryID(*id)
+	}
+	return lc
+}
+
+// SetCountry sets the "country" edge to the Country entity.
+func (lc *LocationCreate) SetCountry(c *Country) *LocationCreate {
+	return lc.SetCountryID(c.ID)
+}
+
+// SetDistrictID sets the "district" edge to the District entity by ID.
+func (lc *LocationCreate) SetDistrictID(id int) *LocationCreate {
+	lc.mutation.SetDistrictID(id)
+	return lc
+}
+
+// SetNillableDistrictID sets the "district" edge to the District entity by ID if the given value is not nil.
+func (lc *LocationCreate) SetNillableDistrictID(id *int) *LocationCreate {
+	if id != nil {
+		lc = lc.SetDistrictID(*id)
+	}
+	return lc
+}
+
+// SetDistrict sets the "district" edge to the District entity.
+func (lc *LocationCreate) SetDistrict(d *District) *LocationCreate {
+	return lc.SetDistrictID(d.ID)
+}
+
 // SetSettlementID sets the "settlement" edge to the Settlement entity by ID.
 func (lc *LocationCreate) SetSettlementID(id int) *LocationCreate {
 	lc.mutation.SetSettlementID(id)
@@ -165,25 +204,6 @@ func (lc *LocationCreate) SetNillableRegionID(id *int) *LocationCreate {
 // SetRegion sets the "region" edge to the Region entity.
 func (lc *LocationCreate) SetRegion(r *Region) *LocationCreate {
 	return lc.SetRegionID(r.ID)
-}
-
-// SetDistrictID sets the "district" edge to the District entity by ID.
-func (lc *LocationCreate) SetDistrictID(id int) *LocationCreate {
-	lc.mutation.SetDistrictID(id)
-	return lc
-}
-
-// SetNillableDistrictID sets the "district" edge to the District entity by ID if the given value is not nil.
-func (lc *LocationCreate) SetNillableDistrictID(id *int) *LocationCreate {
-	if id != nil {
-		lc = lc.SetDistrictID(*id)
-	}
-	return lc
-}
-
-// SetDistrict sets the "district" edge to the District entity.
-func (lc *LocationCreate) SetDistrict(d *District) *LocationCreate {
-	return lc.SetDistrictID(d.ID)
 }
 
 // Mutation returns the LocationMutation object of the builder.
@@ -318,6 +338,38 @@ func (lc *LocationCreate) createSpec() (*Location, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := lc.mutation.CountryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   location.CountryTable,
+			Columns: []string{location.CountryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := lc.mutation.DistrictIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   location.DistrictTable,
+			Columns: []string{location.DistrictColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := lc.mutation.SettlementIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
@@ -343,22 +395,6 @@ func (lc *LocationCreate) createSpec() (*Location, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := lc.mutation.DistrictIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
-			Inverse: false,
-			Table:   location.DistrictTable,
-			Columns: []string{location.DistrictColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

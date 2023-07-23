@@ -48,14 +48,18 @@ type Artifact struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// Dating holds the value of the "dating" field.
+	Dating string `json:"dating,omitempty"`
 	// Dimensions holds the value of the "dimensions" field.
 	Dimensions string `json:"dimensions,omitempty"`
-	// Weight holds the value of the "weight" field.
-	Weight string `json:"weight,omitempty"`
 	// ChemicalComposition holds the value of the "chemical_composition" field.
 	ChemicalComposition string `json:"chemical_composition,omitempty"`
+	// Number holds the value of the "number" field.
+	Number string `json:"number,omitempty"`
 	// Typology holds the value of the "typology" field.
 	Typology string `json:"typology,omitempty"`
+	// Weight holds the value of the "weight" field.
+	Weight string `json:"weight,omitempty"`
 	// AdmissionDate holds the value of the "admission_date" field.
 	AdmissionDate time.Time `json:"admission_date,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -80,6 +84,8 @@ type ArtifactEdges struct {
 	Mediums []*Medium `json:"mediums,omitempty"`
 	// Techniques holds the value of the techniques edge.
 	Techniques []*Technique `json:"techniques,omitempty"`
+	// Period holds the value of the period edge.
+	Period *Period `json:"period,omitempty"`
 	// Projects holds the value of the projects edge.
 	Projects []*Project `json:"projects,omitempty"`
 	// Publications holds the value of the publications edge.
@@ -94,8 +100,6 @@ type ArtifactEdges struct {
 	Model *Model `json:"model,omitempty"`
 	// Set holds the value of the set edge.
 	Set *Set `json:"set,omitempty"`
-	// Period holds the value of the period edge.
-	Period *Period `json:"period,omitempty"`
 	// Location holds the value of the location edge.
 	Location *Location `json:"location,omitempty"`
 	// Collection holds the value of the collection edge.
@@ -143,10 +147,23 @@ func (e ArtifactEdges) TechniquesOrErr() ([]*Technique, error) {
 	return nil, &NotLoadedError{edge: "techniques"}
 }
 
+// PeriodOrErr returns the Period value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ArtifactEdges) PeriodOrErr() (*Period, error) {
+	if e.loadedTypes[3] {
+		if e.Period == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: period.Label}
+		}
+		return e.Period, nil
+	}
+	return nil, &NotLoadedError{edge: "period"}
+}
+
 // ProjectsOrErr returns the Projects value or an error if the edge
 // was not loaded in eager-loading.
 func (e ArtifactEdges) ProjectsOrErr() ([]*Project, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Projects, nil
 	}
 	return nil, &NotLoadedError{edge: "projects"}
@@ -155,7 +172,7 @@ func (e ArtifactEdges) ProjectsOrErr() ([]*Project, error) {
 // PublicationsOrErr returns the Publications value or an error if the edge
 // was not loaded in eager-loading.
 func (e ArtifactEdges) PublicationsOrErr() ([]*Publication, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Publications, nil
 	}
 	return nil, &NotLoadedError{edge: "publications"}
@@ -164,7 +181,7 @@ func (e ArtifactEdges) PublicationsOrErr() ([]*Publication, error) {
 // HoldersOrErr returns the Holders value or an error if the edge
 // was not loaded in eager-loading.
 func (e ArtifactEdges) HoldersOrErr() ([]*Holder, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.Holders, nil
 	}
 	return nil, &NotLoadedError{edge: "holders"}
@@ -173,7 +190,7 @@ func (e ArtifactEdges) HoldersOrErr() ([]*Holder, error) {
 // CulturalAffiliationOrErr returns the CulturalAffiliation value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) CulturalAffiliationOrErr() (*Culture, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		if e.CulturalAffiliation == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: culture.Label}
@@ -186,7 +203,7 @@ func (e ArtifactEdges) CulturalAffiliationOrErr() (*Culture, error) {
 // MonumentOrErr returns the Monument value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) MonumentOrErr() (*Monument, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		if e.Monument == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: monument.Label}
@@ -199,7 +216,7 @@ func (e ArtifactEdges) MonumentOrErr() (*Monument, error) {
 // ModelOrErr returns the Model value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) ModelOrErr() (*Model, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[9] {
 		if e.Model == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: model.Label}
@@ -212,7 +229,7 @@ func (e ArtifactEdges) ModelOrErr() (*Model, error) {
 // SetOrErr returns the Set value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) SetOrErr() (*Set, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[10] {
 		if e.Set == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: set.Label}
@@ -220,19 +237,6 @@ func (e ArtifactEdges) SetOrErr() (*Set, error) {
 		return e.Set, nil
 	}
 	return nil, &NotLoadedError{edge: "set"}
-}
-
-// PeriodOrErr returns the Period value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e ArtifactEdges) PeriodOrErr() (*Period, error) {
-	if e.loadedTypes[10] {
-		if e.Period == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: period.Label}
-		}
-		return e.Period, nil
-	}
-	return nil, &NotLoadedError{edge: "period"}
 }
 
 // LocationOrErr returns the Location value or an error if the edge
@@ -283,7 +287,7 @@ func (*Artifact) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case artifact.FieldID:
 			values[i] = new(sql.NullInt64)
-		case artifact.FieldCreatedBy, artifact.FieldUpdatedBy, artifact.FieldDisplayName, artifact.FieldDescription, artifact.FieldPrimaryImageURL, artifact.FieldDeletedBy, artifact.FieldDimensions, artifact.FieldWeight, artifact.FieldChemicalComposition, artifact.FieldTypology:
+		case artifact.FieldCreatedBy, artifact.FieldUpdatedBy, artifact.FieldDisplayName, artifact.FieldDescription, artifact.FieldPrimaryImageURL, artifact.FieldDeletedBy, artifact.FieldDating, artifact.FieldDimensions, artifact.FieldChemicalComposition, artifact.FieldNumber, artifact.FieldTypology, artifact.FieldWeight:
 			values[i] = new(sql.NullString)
 		case artifact.FieldCreatedAt, artifact.FieldUpdatedAt, artifact.FieldDeletedAt, artifact.FieldAdmissionDate:
 			values[i] = new(sql.NullTime)
@@ -394,17 +398,17 @@ func (a *Artifact) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				a.DeletedBy = value.String
 			}
+		case artifact.FieldDating:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field dating", values[i])
+			} else if value.Valid {
+				a.Dating = value.String
+			}
 		case artifact.FieldDimensions:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field dimensions", values[i])
 			} else if value.Valid {
 				a.Dimensions = value.String
-			}
-		case artifact.FieldWeight:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field weight", values[i])
-			} else if value.Valid {
-				a.Weight = value.String
 			}
 		case artifact.FieldChemicalComposition:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -412,11 +416,23 @@ func (a *Artifact) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				a.ChemicalComposition = value.String
 			}
+		case artifact.FieldNumber:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field number", values[i])
+			} else if value.Valid {
+				a.Number = value.String
+			}
 		case artifact.FieldTypology:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field typology", values[i])
 			} else if value.Valid {
 				a.Typology = value.String
+			}
+		case artifact.FieldWeight:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field weight", values[i])
+			} else if value.Valid {
+				a.Weight = value.String
 			}
 		case artifact.FieldAdmissionDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -508,6 +524,11 @@ func (a *Artifact) QueryTechniques() *TechniqueQuery {
 	return NewArtifactClient(a.config).QueryTechniques(a)
 }
 
+// QueryPeriod queries the "period" edge of the Artifact entity.
+func (a *Artifact) QueryPeriod() *PeriodQuery {
+	return NewArtifactClient(a.config).QueryPeriod(a)
+}
+
 // QueryProjects queries the "projects" edge of the Artifact entity.
 func (a *Artifact) QueryProjects() *ProjectQuery {
 	return NewArtifactClient(a.config).QueryProjects(a)
@@ -541,11 +562,6 @@ func (a *Artifact) QueryModel() *ModelQuery {
 // QuerySet queries the "set" edge of the Artifact entity.
 func (a *Artifact) QuerySet() *SetQuery {
 	return NewArtifactClient(a.config).QuerySet(a)
-}
-
-// QueryPeriod queries the "period" edge of the Artifact entity.
-func (a *Artifact) QueryPeriod() *PeriodQuery {
-	return NewArtifactClient(a.config).QueryPeriod(a)
 }
 
 // QueryLocation queries the "location" edge of the Artifact entity.
@@ -619,17 +635,23 @@ func (a *Artifact) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(a.DeletedBy)
 	builder.WriteString(", ")
+	builder.WriteString("dating=")
+	builder.WriteString(a.Dating)
+	builder.WriteString(", ")
 	builder.WriteString("dimensions=")
 	builder.WriteString(a.Dimensions)
-	builder.WriteString(", ")
-	builder.WriteString("weight=")
-	builder.WriteString(a.Weight)
 	builder.WriteString(", ")
 	builder.WriteString("chemical_composition=")
 	builder.WriteString(a.ChemicalComposition)
 	builder.WriteString(", ")
+	builder.WriteString("number=")
+	builder.WriteString(a.Number)
+	builder.WriteString(", ")
 	builder.WriteString("typology=")
 	builder.WriteString(a.Typology)
+	builder.WriteString(", ")
+	builder.WriteString("weight=")
+	builder.WriteString(a.Weight)
 	builder.WriteString(", ")
 	builder.WriteString("admission_date=")
 	builder.WriteString(a.AdmissionDate.Format(time.ANSIC))

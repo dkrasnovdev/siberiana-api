@@ -365,6 +365,30 @@ func (f CollectionMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Muta
 	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.CollectionMutation", m)
 }
 
+// The CountryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type CountryQueryRuleFunc func(context.Context, *ent.CountryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f CountryQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.CountryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("ent/privacy: unexpected query type %T, expect *ent.CountryQuery", q)
+}
+
+// The CountryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type CountryMutationRuleFunc func(context.Context, *ent.CountryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f CountryMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
+	if m, ok := m.(*ent.CountryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.CountryMutation", m)
+}
+
 // The CultureQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type CultureQueryRuleFunc func(context.Context, *ent.CultureQuery) error

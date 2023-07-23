@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/country"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
@@ -28,9 +29,10 @@ type LocationQuery struct {
 	inters             []Interceptor
 	predicates         []predicate.Location
 	withArtifacts      *ArtifactQuery
+	withCountry        *CountryQuery
+	withDistrict       *DistrictQuery
 	withSettlement     *SettlementQuery
 	withRegion         *RegionQuery
-	withDistrict       *DistrictQuery
 	modifiers          []func(*sql.Selector)
 	loadTotal          []func(context.Context, []*Location) error
 	withNamedArtifacts map[string]*ArtifactQuery
@@ -92,6 +94,50 @@ func (lq *LocationQuery) QueryArtifacts() *ArtifactQuery {
 	return query
 }
 
+// QueryCountry chains the current query on the "country" edge.
+func (lq *LocationQuery) QueryCountry() *CountryQuery {
+	query := (&CountryClient{config: lq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := lq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := lq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(location.Table, location.FieldID, selector),
+			sqlgraph.To(country.Table, country.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, location.CountryTable, location.CountryColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(lq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDistrict chains the current query on the "district" edge.
+func (lq *LocationQuery) QueryDistrict() *DistrictQuery {
+	query := (&DistrictClient{config: lq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := lq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := lq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(location.Table, location.FieldID, selector),
+			sqlgraph.To(district.Table, district.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, location.DistrictTable, location.DistrictColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(lq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QuerySettlement chains the current query on the "settlement" edge.
 func (lq *LocationQuery) QuerySettlement() *SettlementQuery {
 	query := (&SettlementClient{config: lq.config}).Query()
@@ -129,28 +175,6 @@ func (lq *LocationQuery) QueryRegion() *RegionQuery {
 			sqlgraph.From(location.Table, location.FieldID, selector),
 			sqlgraph.To(region.Table, region.FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, false, location.RegionTable, location.RegionColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(lq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryDistrict chains the current query on the "district" edge.
-func (lq *LocationQuery) QueryDistrict() *DistrictQuery {
-	query := (&DistrictClient{config: lq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := lq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := lq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(location.Table, location.FieldID, selector),
-			sqlgraph.To(district.Table, district.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, location.DistrictTable, location.DistrictColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(lq.driver.Dialect(), step)
 		return fromU, nil
@@ -351,9 +375,10 @@ func (lq *LocationQuery) Clone() *LocationQuery {
 		inters:         append([]Interceptor{}, lq.inters...),
 		predicates:     append([]predicate.Location{}, lq.predicates...),
 		withArtifacts:  lq.withArtifacts.Clone(),
+		withCountry:    lq.withCountry.Clone(),
+		withDistrict:   lq.withDistrict.Clone(),
 		withSettlement: lq.withSettlement.Clone(),
 		withRegion:     lq.withRegion.Clone(),
-		withDistrict:   lq.withDistrict.Clone(),
 		// clone intermediate query.
 		sql:  lq.sql.Clone(),
 		path: lq.path,
@@ -368,6 +393,28 @@ func (lq *LocationQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *LocationQu
 		opt(query)
 	}
 	lq.withArtifacts = query
+	return lq
+}
+
+// WithCountry tells the query-builder to eager-load the nodes that are connected to
+// the "country" edge. The optional arguments are used to configure the query builder of the edge.
+func (lq *LocationQuery) WithCountry(opts ...func(*CountryQuery)) *LocationQuery {
+	query := (&CountryClient{config: lq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	lq.withCountry = query
+	return lq
+}
+
+// WithDistrict tells the query-builder to eager-load the nodes that are connected to
+// the "district" edge. The optional arguments are used to configure the query builder of the edge.
+func (lq *LocationQuery) WithDistrict(opts ...func(*DistrictQuery)) *LocationQuery {
+	query := (&DistrictClient{config: lq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	lq.withDistrict = query
 	return lq
 }
 
@@ -390,17 +437,6 @@ func (lq *LocationQuery) WithRegion(opts ...func(*RegionQuery)) *LocationQuery {
 		opt(query)
 	}
 	lq.withRegion = query
-	return lq
-}
-
-// WithDistrict tells the query-builder to eager-load the nodes that are connected to
-// the "district" edge. The optional arguments are used to configure the query builder of the edge.
-func (lq *LocationQuery) WithDistrict(opts ...func(*DistrictQuery)) *LocationQuery {
-	query := (&DistrictClient{config: lq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	lq.withDistrict = query
 	return lq
 }
 
@@ -488,11 +524,12 @@ func (lq *LocationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Loc
 	var (
 		nodes       = []*Location{}
 		_spec       = lq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [5]bool{
 			lq.withArtifacts != nil,
+			lq.withCountry != nil,
+			lq.withDistrict != nil,
 			lq.withSettlement != nil,
 			lq.withRegion != nil,
-			lq.withDistrict != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -523,6 +560,18 @@ func (lq *LocationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Loc
 			return nil, err
 		}
 	}
+	if query := lq.withCountry; query != nil {
+		if err := lq.loadCountry(ctx, query, nodes, nil,
+			func(n *Location, e *Country) { n.Edges.Country = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := lq.withDistrict; query != nil {
+		if err := lq.loadDistrict(ctx, query, nodes, nil,
+			func(n *Location, e *District) { n.Edges.District = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := lq.withSettlement; query != nil {
 		if err := lq.loadSettlement(ctx, query, nodes, nil,
 			func(n *Location, e *Settlement) { n.Edges.Settlement = e }); err != nil {
@@ -532,12 +581,6 @@ func (lq *LocationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Loc
 	if query := lq.withRegion; query != nil {
 		if err := lq.loadRegion(ctx, query, nodes, nil,
 			func(n *Location, e *Region) { n.Edges.Region = e }); err != nil {
-			return nil, err
-		}
-	}
-	if query := lq.withDistrict; query != nil {
-		if err := lq.loadDistrict(ctx, query, nodes, nil,
-			func(n *Location, e *District) { n.Edges.District = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -582,6 +625,62 @@ func (lq *LocationQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "location_artifacts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (lq *LocationQuery) loadCountry(ctx context.Context, query *CountryQuery, nodes []*Location, init func(*Location), assign func(*Location, *Country)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Location)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+	}
+	query.withFKs = true
+	query.Where(predicate.Country(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(location.CountryColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.location_country
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "location_country" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "location_country" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (lq *LocationQuery) loadDistrict(ctx context.Context, query *DistrictQuery, nodes []*Location, init func(*Location), assign func(*Location, *District)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Location)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+	}
+	query.withFKs = true
+	query.Where(predicate.District(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(location.DistrictColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.location_district
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "location_district" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "location_district" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -638,34 +737,6 @@ func (lq *LocationQuery) loadRegion(ctx context.Context, query *RegionQuery, nod
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "location_region" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (lq *LocationQuery) loadDistrict(ctx context.Context, query *DistrictQuery, nodes []*Location, init func(*Location), assign func(*Location, *District)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*Location)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-	}
-	query.withFKs = true
-	query.Where(predicate.District(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(location.DistrictColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.location_district
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "location_district" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "location_district" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}

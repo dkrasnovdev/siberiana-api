@@ -23,6 +23,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/bookgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
+	"github.com/dkrasnovdev/heritage-api/ent/country"
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
@@ -3150,6 +3151,355 @@ func (c *Collection) ToEdge(order *CollectionOrder) *CollectionEdge {
 		order = DefaultCollectionOrder
 	}
 	return &CollectionEdge{
+		Node:   c,
+		Cursor: order.Field.toCursor(c),
+	}
+}
+
+// CountryEdge is the edge representation of Country.
+type CountryEdge struct {
+	Node   *Country `json:"node"`
+	Cursor Cursor   `json:"cursor"`
+}
+
+// CountryConnection is the connection containing edges to Country.
+type CountryConnection struct {
+	Edges      []*CountryEdge `json:"edges"`
+	PageInfo   PageInfo       `json:"pageInfo"`
+	TotalCount int            `json:"totalCount"`
+}
+
+func (c *CountryConnection) build(nodes []*Country, pager *countryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *Country
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Country {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Country {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*CountryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &CountryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// CountryPaginateOption enables pagination customization.
+type CountryPaginateOption func(*countryPager) error
+
+// WithCountryOrder configures pagination ordering.
+func WithCountryOrder(order []*CountryOrder) CountryPaginateOption {
+	return func(pager *countryPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithCountryFilter configures pagination filter.
+func WithCountryFilter(filter func(*CountryQuery) (*CountryQuery, error)) CountryPaginateOption {
+	return func(pager *countryPager) error {
+		if filter == nil {
+			return errors.New("CountryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type countryPager struct {
+	reverse bool
+	order   []*CountryOrder
+	filter  func(*CountryQuery) (*CountryQuery, error)
+}
+
+func newCountryPager(opts []CountryPaginateOption, reverse bool) (*countryPager, error) {
+	pager := &countryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *countryPager) applyFilter(query *CountryQuery) (*CountryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *countryPager) toCursor(c *Country) Cursor {
+	cs := make([]any, 0, len(p.order))
+	for _, o := range p.order {
+		cs = append(cs, o.Field.toCursor(c).Value)
+	}
+	return Cursor{ID: c.ID, Value: cs}
+}
+
+func (p *countryPager) applyCursors(query *CountryQuery, after, before *Cursor) (*CountryQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultCountryOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *countryPager) applyOrder(query *CountryQuery) *CountryQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultCountryOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultCountryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *countryPager) orderExpr(query *CountryQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultCountryOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Country.
+func (c *CountryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...CountryPaginateOption,
+) (*CountryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newCountryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if c, err = pager.applyFilter(c); err != nil {
+		return nil, err
+	}
+	conn := &CountryConnection{Edges: []*CountryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := c.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if c, err = pager.applyCursors(c, after, before); err != nil {
+		return nil, err
+	}
+	if limit := paginateLimit(first, last); limit != 0 {
+		c.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := c.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	c = pager.applyOrder(c)
+	nodes, err := c.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// CountryOrderFieldCreatedAt orders Country by created_at.
+	CountryOrderFieldCreatedAt = &CountryOrderField{
+		Value: func(c *Country) (ent.Value, error) {
+			return c.CreatedAt, nil
+		},
+		column: country.FieldCreatedAt,
+		toTerm: country.ByCreatedAt,
+		toCursor: func(c *Country) Cursor {
+			return Cursor{
+				ID:    c.ID,
+				Value: c.CreatedAt,
+			}
+		},
+	}
+	// CountryOrderFieldUpdatedAt orders Country by updated_at.
+	CountryOrderFieldUpdatedAt = &CountryOrderField{
+		Value: func(c *Country) (ent.Value, error) {
+			return c.UpdatedAt, nil
+		},
+		column: country.FieldUpdatedAt,
+		toTerm: country.ByUpdatedAt,
+		toCursor: func(c *Country) Cursor {
+			return Cursor{
+				ID:    c.ID,
+				Value: c.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f CountryOrderField) String() string {
+	var str string
+	switch f.column {
+	case CountryOrderFieldCreatedAt.column:
+		str = "CREATED_AT"
+	case CountryOrderFieldUpdatedAt.column:
+		str = "UPDATED_AT"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f CountryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *CountryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("CountryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "CREATED_AT":
+		*f = *CountryOrderFieldCreatedAt
+	case "UPDATED_AT":
+		*f = *CountryOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid CountryOrderField", str)
+	}
+	return nil
+}
+
+// CountryOrderField defines the ordering field of Country.
+type CountryOrderField struct {
+	// Value extracts the ordering value from the given Country.
+	Value    func(*Country) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) country.OrderOption
+	toCursor func(*Country) Cursor
+}
+
+// CountryOrder defines the ordering of Country.
+type CountryOrder struct {
+	Direction OrderDirection     `json:"direction"`
+	Field     *CountryOrderField `json:"field"`
+}
+
+// DefaultCountryOrder is the default ordering of Country.
+var DefaultCountryOrder = &CountryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &CountryOrderField{
+		Value: func(c *Country) (ent.Value, error) {
+			return c.ID, nil
+		},
+		column: country.FieldID,
+		toTerm: country.ByID,
+		toCursor: func(c *Country) Cursor {
+			return Cursor{ID: c.ID}
+		},
+	},
+}
+
+// ToEdge converts Country into CountryEdge.
+func (c *Country) ToEdge(order *CountryOrder) *CountryEdge {
+	if order == nil {
+		order = DefaultCountryOrder
+	}
+	return &CountryEdge{
 		Node:   c,
 		Cursor: order.Field.toCursor(c),
 	}

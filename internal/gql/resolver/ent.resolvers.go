@@ -63,6 +63,11 @@ func (r *queryResolver) Collections(ctx context.Context, after *entgql.Cursor[in
 	panic(fmt.Errorf("not implemented: Collections - collections"))
 }
 
+// Countries is the resolver for the countries field.
+func (r *queryResolver) Countries(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.CountryOrder, where *ent.CountryWhereInput) (*ent.CountryConnection, error) {
+	panic(fmt.Errorf("not implemented: Countries - countries"))
+}
+
 // Cultures is the resolver for the cultures field.
 func (r *queryResolver) Cultures(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.CultureOrder, where *ent.CultureWhereInput) (*ent.CultureConnection, error) {
 	panic(fmt.Errorf("not implemented: Cultures - cultures"))

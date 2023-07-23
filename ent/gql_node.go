@@ -22,6 +22,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/bookgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
+	"github.com/dkrasnovdev/heritage-api/ent/country"
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
@@ -102,6 +103,11 @@ var collectionImplementors = []string{"Collection", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Collection) IsNode() {}
+
+var countryImplementors = []string{"Country", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Country) IsNode() {}
 
 var cultureImplementors = []string{"Culture", "Node"}
 
@@ -396,6 +402,18 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 		query := c.Collection.Query().
 			Where(collection.ID(id))
 		query, err := query.CollectFields(ctx, collectionImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case country.Table:
+		query := c.Country.Query().
+			Where(country.ID(id))
+		query, err := query.CollectFields(ctx, countryImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -933,6 +951,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 		query := c.Collection.Query().
 			Where(collection.IDIn(ids...))
 		query, err := query.CollectFields(ctx, collectionImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case country.Table:
+		query := c.Country.Query().
+			Where(country.IDIn(ids...))
+		query, err := query.CollectFields(ctx, countryImplementors...)
 		if err != nil {
 			return nil, err
 		}

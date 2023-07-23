@@ -10,13 +10,13 @@ import (
 	rule "github.com/dkrasnovdev/heritage-api/internal/ent/privacy"
 )
 
-// Location holds the schema definition for the Location entity.
-type Location struct {
+// Country holds the schema definition for the Country entity.
+type Country struct {
 	ent.Schema
 }
 
-// Privacy policy of the Location.
-func (Location) Policy() ent.Policy {
+// Privacy policy of the Country.
+func (Country) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
 			rule.DenyIfNoViewer(),
@@ -30,16 +30,16 @@ func (Location) Policy() ent.Policy {
 	}
 }
 
-// Mixin of the Location.
-func (Location) Mixin() []ent.Mixin {
+// Mixin of the Country.
+func (Country) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixin.AuditMixin{},
 		mixin.DetailsMixin{},
 	}
 }
 
-// Annotations of the Location.
-func (Location) Annotations() []schema.Annotation {
+// Annotations of the Country.
+func (Country) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.RelayConnection(),
 		entgql.QueryField(),
@@ -48,18 +48,14 @@ func (Location) Annotations() []schema.Annotation {
 	}
 }
 
-// Fields of the Location.
-func (Location) Fields() []ent.Field {
+// Fields of the Country.
+func (Country) Fields() []ent.Field {
 	return nil
 }
 
-// Edges of the Location.
-func (Location) Edges() []ent.Edge {
+// Edges of the Country.
+func (Country) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("artifacts", Artifact.Type),
-		edge.To("country", Country.Type).Unique(),
-		edge.To("district", District.Type).Unique(),
-		edge.To("settlement", Settlement.Type).Unique(),
-		edge.To("region", Region.Type).Unique(),
+		edge.From("location", Location.Type).Ref("country").Unique(),
 	}
 }

@@ -30,6 +30,8 @@ type Tx struct {
 	Category *CategoryClient
 	// Collection is the client for interacting with the Collection builders.
 	Collection *CollectionClient
+	// Country is the client for interacting with the Country builders.
+	Country *CountryClient
 	// Culture is the client for interacting with the Culture builders.
 	Culture *CultureClient
 	// District is the client for interacting with the District builders.
@@ -224,6 +226,7 @@ func (tx *Tx) init() {
 	tx.BookGenre = NewBookGenreClient(tx.config)
 	tx.Category = NewCategoryClient(tx.config)
 	tx.Collection = NewCollectionClient(tx.config)
+	tx.Country = NewCountryClient(tx.config)
 	tx.Culture = NewCultureClient(tx.config)
 	tx.District = NewDistrictClient(tx.config)
 	tx.Holder = NewHolderClient(tx.config)

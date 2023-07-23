@@ -33,6 +33,9 @@ type Category func(*sql.Selector)
 // Collection is the predicate function for collection builders.
 type Collection func(*sql.Selector)
 
+// Country is the predicate function for country builders.
+type Country func(*sql.Selector)
+
 // Culture is the predicate function for culture builders.
 type Culture func(*sql.Selector)
 

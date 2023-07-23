@@ -66,10 +66,12 @@ var (
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "dating", Type: field.TypeString, Nullable: true},
 		{Name: "dimensions", Type: field.TypeString, Nullable: true},
-		{Name: "weight", Type: field.TypeString, Nullable: true},
 		{Name: "chemical_composition", Type: field.TypeString, Nullable: true},
+		{Name: "number", Type: field.TypeString, Nullable: true},
 		{Name: "typology", Type: field.TypeString, Nullable: true},
+		{Name: "weight", Type: field.TypeString, Nullable: true},
 		{Name: "admission_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
 		{Name: "collection_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "culture_artifacts", Type: field.TypeInt, Nullable: true},
@@ -88,49 +90,49 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "artifacts_collections_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[17]},
+				Columns:    []*schema.Column{ArtifactsColumns[19]},
 				RefColumns: []*schema.Column{CollectionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_cultures_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[18]},
+				Columns:    []*schema.Column{ArtifactsColumns[20]},
 				RefColumns: []*schema.Column{CulturesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_licenses_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[19]},
+				Columns:    []*schema.Column{ArtifactsColumns[21]},
 				RefColumns: []*schema.Column{LicensesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_locations_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[20]},
+				Columns:    []*schema.Column{ArtifactsColumns[22]},
 				RefColumns: []*schema.Column{LocationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_models_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[21]},
+				Columns:    []*schema.Column{ArtifactsColumns[23]},
 				RefColumns: []*schema.Column{ModelsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_monuments_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[22]},
+				Columns:    []*schema.Column{ArtifactsColumns[24]},
 				RefColumns: []*schema.Column{MonumentsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_periods_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[23]},
+				Columns:    []*schema.Column{ArtifactsColumns[25]},
 				RefColumns: []*schema.Column{PeriodsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_sets_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[24]},
+				Columns:    []*schema.Column{ArtifactsColumns[26]},
 				RefColumns: []*schema.Column{SetsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -228,6 +230,32 @@ var (
 				Symbol:     "collections_categories_collections",
 				Columns:    []*schema.Column{CollectionsColumns[8]},
 				RefColumns: []*schema.Column{CategoriesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// CountriesColumns holds the columns for the "countries" table.
+	CountriesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "location_country", Type: field.TypeInt, Unique: true, Nullable: true},
+	}
+	// CountriesTable holds the schema information for the "countries" table.
+	CountriesTable = &schema.Table{
+		Name:       "countries",
+		Columns:    CountriesColumns,
+		PrimaryKey: []*schema.Column{CountriesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "countries_locations_country",
+				Columns:    []*schema.Column{CountriesColumns[8]},
+				RefColumns: []*schema.Column{LocationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -1065,6 +1093,7 @@ var (
 		BookGenresTable,
 		CategoriesTable,
 		CollectionsTable,
+		CountriesTable,
 		CulturesTable,
 		DistrictsTable,
 		HoldersTable,
@@ -1116,6 +1145,7 @@ func init() {
 	ArtifactsTable.ForeignKeys[6].RefTable = PeriodsTable
 	ArtifactsTable.ForeignKeys[7].RefTable = SetsTable
 	CollectionsTable.ForeignKeys[0].RefTable = CategoriesTable
+	CountriesTable.ForeignKeys[0].RefTable = LocationsTable
 	DistrictsTable.ForeignKeys[0].RefTable = LocationsTable
 	OrganizationsTable.ForeignKeys[0].RefTable = HoldersTable
 	OrganizationsTable.ForeignKeys[1].RefTable = OrganizationTypesTable

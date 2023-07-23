@@ -241,14 +241,17 @@ type CreateArtifactInput struct {
 	AdditionalImagesUrls  []string
 	DeletedAt             *time.Time
 	DeletedBy             *string
+	Dating                *string
 	Dimensions            *string
-	Weight                *string
 	ChemicalComposition   *string
+	Number                *string
 	Typology              *string
+	Weight                *string
 	AdmissionDate         *time.Time
 	AuthorIDs             []int
 	MediumIDs             []int
 	TechniqueIDs          []int
+	PeriodID              *int
 	ProjectIDs            []int
 	PublicationIDs        []int
 	HolderIDs             []int
@@ -256,7 +259,6 @@ type CreateArtifactInput struct {
 	MonumentID            *int
 	ModelID               *int
 	SetID                 *int
-	PeriodID              *int
 	LocationID            *int
 	CollectionID          *int
 	LicenseID             *int
@@ -297,17 +299,23 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.DeletedBy; v != nil {
 		m.SetDeletedBy(*v)
 	}
+	if v := i.Dating; v != nil {
+		m.SetDating(*v)
+	}
 	if v := i.Dimensions; v != nil {
 		m.SetDimensions(*v)
-	}
-	if v := i.Weight; v != nil {
-		m.SetWeight(*v)
 	}
 	if v := i.ChemicalComposition; v != nil {
 		m.SetChemicalComposition(*v)
 	}
+	if v := i.Number; v != nil {
+		m.SetNumber(*v)
+	}
 	if v := i.Typology; v != nil {
 		m.SetTypology(*v)
+	}
+	if v := i.Weight; v != nil {
+		m.SetWeight(*v)
 	}
 	if v := i.AdmissionDate; v != nil {
 		m.SetAdmissionDate(*v)
@@ -320,6 +328,9 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	}
 	if v := i.TechniqueIDs; len(v) > 0 {
 		m.AddTechniqueIDs(v...)
+	}
+	if v := i.PeriodID; v != nil {
+		m.SetPeriodID(*v)
 	}
 	if v := i.ProjectIDs; len(v) > 0 {
 		m.AddProjectIDs(v...)
@@ -341,9 +352,6 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	}
 	if v := i.SetID; v != nil {
 		m.SetSetID(*v)
-	}
-	if v := i.PeriodID; v != nil {
-		m.SetPeriodID(*v)
 	}
 	if v := i.LocationID; v != nil {
 		m.SetLocationID(*v)
@@ -385,14 +393,18 @@ type UpdateArtifactInput struct {
 	DeletedAt                  *time.Time
 	ClearDeletedBy             bool
 	DeletedBy                  *string
+	ClearDating                bool
+	Dating                     *string
 	ClearDimensions            bool
 	Dimensions                 *string
-	ClearWeight                bool
-	Weight                     *string
 	ClearChemicalComposition   bool
 	ChemicalComposition        *string
+	ClearNumber                bool
+	Number                     *string
 	ClearTypology              bool
 	Typology                   *string
+	ClearWeight                bool
+	Weight                     *string
 	ClearAdmissionDate         bool
 	AdmissionDate              *time.Time
 	ClearAuthors               bool
@@ -404,6 +416,8 @@ type UpdateArtifactInput struct {
 	ClearTechniques            bool
 	AddTechniqueIDs            []int
 	RemoveTechniqueIDs         []int
+	ClearPeriod                bool
+	PeriodID                   *int
 	ClearProjects              bool
 	AddProjectIDs              []int
 	RemoveProjectIDs           []int
@@ -421,8 +435,6 @@ type UpdateArtifactInput struct {
 	ModelID                    *int
 	ClearSet                   bool
 	SetID                      *int
-	ClearPeriod                bool
-	PeriodID                   *int
 	ClearLocation              bool
 	LocationID                 *int
 	ClearCollection            bool
@@ -496,17 +508,17 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.DeletedBy; v != nil {
 		m.SetDeletedBy(*v)
 	}
+	if i.ClearDating {
+		m.ClearDating()
+	}
+	if v := i.Dating; v != nil {
+		m.SetDating(*v)
+	}
 	if i.ClearDimensions {
 		m.ClearDimensions()
 	}
 	if v := i.Dimensions; v != nil {
 		m.SetDimensions(*v)
-	}
-	if i.ClearWeight {
-		m.ClearWeight()
-	}
-	if v := i.Weight; v != nil {
-		m.SetWeight(*v)
 	}
 	if i.ClearChemicalComposition {
 		m.ClearChemicalComposition()
@@ -514,11 +526,23 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.ChemicalComposition; v != nil {
 		m.SetChemicalComposition(*v)
 	}
+	if i.ClearNumber {
+		m.ClearNumber()
+	}
+	if v := i.Number; v != nil {
+		m.SetNumber(*v)
+	}
 	if i.ClearTypology {
 		m.ClearTypology()
 	}
 	if v := i.Typology; v != nil {
 		m.SetTypology(*v)
+	}
+	if i.ClearWeight {
+		m.ClearWeight()
+	}
+	if v := i.Weight; v != nil {
+		m.SetWeight(*v)
 	}
 	if i.ClearAdmissionDate {
 		m.ClearAdmissionDate()
@@ -552,6 +576,12 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	}
 	if v := i.RemoveTechniqueIDs; len(v) > 0 {
 		m.RemoveTechniqueIDs(v...)
+	}
+	if i.ClearPeriod {
+		m.ClearPeriod()
+	}
+	if v := i.PeriodID; v != nil {
+		m.SetPeriodID(*v)
 	}
 	if i.ClearProjects {
 		m.ClearProjects()
@@ -603,12 +633,6 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	}
 	if v := i.SetID; v != nil {
 		m.SetSetID(*v)
-	}
-	if i.ClearPeriod {
-		m.ClearPeriod()
-	}
-	if v := i.PeriodID; v != nil {
-		m.SetPeriodID(*v)
 	}
 	if i.ClearLocation {
 		m.ClearLocation()
@@ -1138,6 +1162,128 @@ func (c *CollectionUpdate) SetInput(i UpdateCollectionInput) *CollectionUpdate {
 
 // SetInput applies the change-set in the UpdateCollectionInput on the CollectionUpdateOne builder.
 func (c *CollectionUpdateOne) SetInput(i UpdateCollectionInput) *CollectionUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateCountryInput represents a mutation input for creating countries.
+type CreateCountryInput struct {
+	CreatedAt     *time.Time
+	CreatedBy     *string
+	UpdatedAt     *time.Time
+	UpdatedBy     *string
+	DisplayName   *string
+	Description   *string
+	ExternalLinks []string
+	LocationID    *int
+}
+
+// Mutate applies the CreateCountryInput on the CountryMutation builder.
+func (i *CreateCountryInput) Mutate(m *CountryMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+	if v := i.LocationID; v != nil {
+		m.SetLocationID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateCountryInput on the CountryCreate builder.
+func (c *CountryCreate) SetInput(i CreateCountryInput) *CountryCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateCountryInput represents a mutation input for updating countries.
+type UpdateCountryInput struct {
+	ClearCreatedBy      bool
+	CreatedBy           *string
+	UpdatedAt           *time.Time
+	ClearUpdatedBy      bool
+	UpdatedBy           *string
+	ClearDisplayName    bool
+	DisplayName         *string
+	ClearDescription    bool
+	Description         *string
+	ClearExternalLinks  bool
+	ExternalLinks       []string
+	AppendExternalLinks []string
+	ClearLocation       bool
+	LocationID          *int
+}
+
+// Mutate applies the UpdateCountryInput on the CountryMutation builder.
+func (i *UpdateCountryInput) Mutate(m *CountryMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLinks {
+		m.ClearExternalLinks()
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+	if i.AppendExternalLinks != nil {
+		m.AppendExternalLinks(i.ExternalLinks)
+	}
+	if i.ClearLocation {
+		m.ClearLocation()
+	}
+	if v := i.LocationID; v != nil {
+		m.SetLocationID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateCountryInput on the CountryUpdate builder.
+func (c *CountryUpdate) SetInput(i UpdateCountryInput) *CountryUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateCountryInput on the CountryUpdateOne builder.
+func (c *CountryUpdateOne) SetInput(i UpdateCountryInput) *CountryUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -1906,9 +2052,10 @@ type CreateLocationInput struct {
 	Description   *string
 	ExternalLinks []string
 	ArtifactIDs   []int
+	CountryID     *int
+	DistrictID    *int
 	SettlementID  *int
 	RegionID      *int
-	DistrictID    *int
 }
 
 // Mutate applies the CreateLocationInput on the LocationMutation builder.
@@ -1937,14 +2084,17 @@ func (i *CreateLocationInput) Mutate(m *LocationMutation) {
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
+	if v := i.CountryID; v != nil {
+		m.SetCountryID(*v)
+	}
+	if v := i.DistrictID; v != nil {
+		m.SetDistrictID(*v)
+	}
 	if v := i.SettlementID; v != nil {
 		m.SetSettlementID(*v)
 	}
 	if v := i.RegionID; v != nil {
 		m.SetRegionID(*v)
-	}
-	if v := i.DistrictID; v != nil {
-		m.SetDistrictID(*v)
 	}
 }
 
@@ -1971,12 +2121,14 @@ type UpdateLocationInput struct {
 	ClearArtifacts      bool
 	AddArtifactIDs      []int
 	RemoveArtifactIDs   []int
+	ClearCountry        bool
+	CountryID           *int
+	ClearDistrict       bool
+	DistrictID          *int
 	ClearSettlement     bool
 	SettlementID        *int
 	ClearRegion         bool
 	RegionID            *int
-	ClearDistrict       bool
-	DistrictID          *int
 }
 
 // Mutate applies the UpdateLocationInput on the LocationMutation builder.
@@ -2026,6 +2178,18 @@ func (i *UpdateLocationInput) Mutate(m *LocationMutation) {
 	if v := i.RemoveArtifactIDs; len(v) > 0 {
 		m.RemoveArtifactIDs(v...)
 	}
+	if i.ClearCountry {
+		m.ClearCountry()
+	}
+	if v := i.CountryID; v != nil {
+		m.SetCountryID(*v)
+	}
+	if i.ClearDistrict {
+		m.ClearDistrict()
+	}
+	if v := i.DistrictID; v != nil {
+		m.SetDistrictID(*v)
+	}
 	if i.ClearSettlement {
 		m.ClearSettlement()
 	}
@@ -2037,12 +2201,6 @@ func (i *UpdateLocationInput) Mutate(m *LocationMutation) {
 	}
 	if v := i.RegionID; v != nil {
 		m.SetRegionID(*v)
-	}
-	if i.ClearDistrict {
-		m.ClearDistrict()
-	}
-	if v := i.DistrictID; v != nil {
-		m.SetDistrictID(*v)
 	}
 }
 

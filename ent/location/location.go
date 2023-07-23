@@ -31,12 +31,14 @@ const (
 	FieldExternalLinks = "external_links"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
+	// EdgeCountry holds the string denoting the country edge name in mutations.
+	EdgeCountry = "country"
+	// EdgeDistrict holds the string denoting the district edge name in mutations.
+	EdgeDistrict = "district"
 	// EdgeSettlement holds the string denoting the settlement edge name in mutations.
 	EdgeSettlement = "settlement"
 	// EdgeRegion holds the string denoting the region edge name in mutations.
 	EdgeRegion = "region"
-	// EdgeDistrict holds the string denoting the district edge name in mutations.
-	EdgeDistrict = "district"
 	// Table holds the table name of the location in the database.
 	Table = "locations"
 	// ArtifactsTable is the table that holds the artifacts relation/edge.
@@ -46,6 +48,20 @@ const (
 	ArtifactsInverseTable = "artifacts"
 	// ArtifactsColumn is the table column denoting the artifacts relation/edge.
 	ArtifactsColumn = "location_artifacts"
+	// CountryTable is the table that holds the country relation/edge.
+	CountryTable = "countries"
+	// CountryInverseTable is the table name for the Country entity.
+	// It exists in this package in order to avoid circular dependency with the "country" package.
+	CountryInverseTable = "countries"
+	// CountryColumn is the table column denoting the country relation/edge.
+	CountryColumn = "location_country"
+	// DistrictTable is the table that holds the district relation/edge.
+	DistrictTable = "districts"
+	// DistrictInverseTable is the table name for the District entity.
+	// It exists in this package in order to avoid circular dependency with the "district" package.
+	DistrictInverseTable = "districts"
+	// DistrictColumn is the table column denoting the district relation/edge.
+	DistrictColumn = "location_district"
 	// SettlementTable is the table that holds the settlement relation/edge.
 	SettlementTable = "settlements"
 	// SettlementInverseTable is the table name for the Settlement entity.
@@ -60,13 +76,6 @@ const (
 	RegionInverseTable = "regions"
 	// RegionColumn is the table column denoting the region relation/edge.
 	RegionColumn = "location_region"
-	// DistrictTable is the table that holds the district relation/edge.
-	DistrictTable = "districts"
-	// DistrictInverseTable is the table name for the District entity.
-	// It exists in this package in order to avoid circular dependency with the "district" package.
-	DistrictInverseTable = "districts"
-	// DistrictColumn is the table column denoting the district relation/edge.
-	DistrictColumn = "location_district"
 )
 
 // Columns holds all SQL columns for location fields.
@@ -159,6 +168,20 @@ func ByArtifacts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByCountryField orders the results by country field.
+func ByCountryField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCountryStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByDistrictField orders the results by district field.
+func ByDistrictField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDistrictStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // BySettlementField orders the results by settlement field.
 func BySettlementField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -172,18 +195,25 @@ func ByRegionField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newRegionStep(), sql.OrderByField(field, opts...))
 	}
 }
-
-// ByDistrictField orders the results by district field.
-func ByDistrictField(field string, opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newDistrictStep(), sql.OrderByField(field, opts...))
-	}
-}
 func newArtifactsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ArtifactsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ArtifactsTable, ArtifactsColumn),
+	)
+}
+func newCountryStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CountryInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, false, CountryTable, CountryColumn),
+	)
+}
+func newDistrictStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DistrictInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, false, DistrictTable, DistrictColumn),
 	)
 }
 func newSettlementStep() *sqlgraph.Step {
@@ -198,12 +228,5 @@ func newRegionStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RegionInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2O, false, RegionTable, RegionColumn),
-	)
-}
-func newDistrictStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(DistrictInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2O, false, DistrictTable, DistrictColumn),
 	)
 }

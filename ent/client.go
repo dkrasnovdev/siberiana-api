@@ -23,6 +23,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/bookgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
+	"github.com/dkrasnovdev/heritage-api/ent/country"
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
@@ -75,6 +76,8 @@ type Client struct {
 	Category *CategoryClient
 	// Collection is the client for interacting with the Collection builders.
 	Collection *CollectionClient
+	// Country is the client for interacting with the Country builders.
+	Country *CountryClient
 	// Culture is the client for interacting with the Culture builders.
 	Culture *CultureClient
 	// District is the client for interacting with the District builders.
@@ -153,6 +156,7 @@ func (c *Client) init() {
 	c.BookGenre = NewBookGenreClient(c.config)
 	c.Category = NewCategoryClient(c.config)
 	c.Collection = NewCollectionClient(c.config)
+	c.Country = NewCountryClient(c.config)
 	c.Culture = NewCultureClient(c.config)
 	c.District = NewDistrictClient(c.config)
 	c.Holder = NewHolderClient(c.config)
@@ -271,6 +275,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		BookGenre:             NewBookGenreClient(cfg),
 		Category:              NewCategoryClient(cfg),
 		Collection:            NewCollectionClient(cfg),
+		Country:               NewCountryClient(cfg),
 		Culture:               NewCultureClient(cfg),
 		District:              NewDistrictClient(cfg),
 		Holder:                NewHolderClient(cfg),
@@ -326,6 +331,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		BookGenre:             NewBookGenreClient(cfg),
 		Category:              NewCategoryClient(cfg),
 		Collection:            NewCollectionClient(cfg),
+		Country:               NewCountryClient(cfg),
 		Culture:               NewCultureClient(cfg),
 		District:              NewDistrictClient(cfg),
 		Holder:                NewHolderClient(cfg),
@@ -383,7 +389,7 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
-		c.Category, c.Collection, c.Culture, c.District, c.Holder,
+		c.Category, c.Collection, c.Country, c.Culture, c.District, c.Holder,
 		c.HolderResponsibility, c.Keyword, c.Library, c.License, c.Location, c.Medium,
 		c.Model, c.Monument, c.Organization, c.OrganizationType, c.Period, c.Person,
 		c.PersonRole, c.Project, c.ProjectType, c.ProtectedArea,
@@ -399,7 +405,7 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
-		c.Category, c.Collection, c.Culture, c.District, c.Holder,
+		c.Category, c.Collection, c.Country, c.Culture, c.District, c.Holder,
 		c.HolderResponsibility, c.Keyword, c.Library, c.License, c.Location, c.Medium,
 		c.Model, c.Monument, c.Organization, c.OrganizationType, c.Period, c.Person,
 		c.PersonRole, c.Project, c.ProjectType, c.ProtectedArea,
@@ -431,6 +437,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Category.mutate(ctx, m)
 	case *CollectionMutation:
 		return c.Collection.mutate(ctx, m)
+	case *CountryMutation:
+		return c.Country.mutate(ctx, m)
 	case *CultureMutation:
 		return c.Culture.mutate(ctx, m)
 	case *DistrictMutation:
@@ -987,6 +995,22 @@ func (c *ArtifactClient) QueryTechniques(a *Artifact) *TechniqueQuery {
 	return query
 }
 
+// QueryPeriod queries the period edge of a Artifact.
+func (c *ArtifactClient) QueryPeriod(a *Artifact) *PeriodQuery {
+	query := (&PeriodClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, id),
+			sqlgraph.To(period.Table, period.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.PeriodTable, artifact.PeriodColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryProjects queries the projects edge of a Artifact.
 func (c *ArtifactClient) QueryProjects(a *Artifact) *ProjectQuery {
 	query := (&ProjectClient{config: c.config}).Query()
@@ -1092,22 +1116,6 @@ func (c *ArtifactClient) QuerySet(a *Artifact) *SetQuery {
 			sqlgraph.From(artifact.Table, artifact.FieldID, id),
 			sqlgraph.To(set.Table, set.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, artifact.SetTable, artifact.SetColumn),
-		)
-		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryPeriod queries the period edge of a Artifact.
-func (c *ArtifactClient) QueryPeriod(a *Artifact) *PeriodQuery {
-	query := (&PeriodClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := a.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(artifact.Table, artifact.FieldID, id),
-			sqlgraph.To(period.Table, period.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, artifact.PeriodTable, artifact.PeriodColumn),
 		)
 		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
 		return fromV, nil
@@ -1846,6 +1854,141 @@ func (c *CollectionClient) mutate(ctx context.Context, m *CollectionMutation) (V
 		return (&CollectionDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Collection mutation op: %q", m.Op())
+	}
+}
+
+// CountryClient is a client for the Country schema.
+type CountryClient struct {
+	config
+}
+
+// NewCountryClient returns a client for the Country from the given config.
+func NewCountryClient(c config) *CountryClient {
+	return &CountryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `country.Hooks(f(g(h())))`.
+func (c *CountryClient) Use(hooks ...Hook) {
+	c.hooks.Country = append(c.hooks.Country, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `country.Intercept(f(g(h())))`.
+func (c *CountryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Country = append(c.inters.Country, interceptors...)
+}
+
+// Create returns a builder for creating a Country entity.
+func (c *CountryClient) Create() *CountryCreate {
+	mutation := newCountryMutation(c.config, OpCreate)
+	return &CountryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Country entities.
+func (c *CountryClient) CreateBulk(builders ...*CountryCreate) *CountryCreateBulk {
+	return &CountryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Country.
+func (c *CountryClient) Update() *CountryUpdate {
+	mutation := newCountryMutation(c.config, OpUpdate)
+	return &CountryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *CountryClient) UpdateOne(co *Country) *CountryUpdateOne {
+	mutation := newCountryMutation(c.config, OpUpdateOne, withCountry(co))
+	return &CountryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *CountryClient) UpdateOneID(id int) *CountryUpdateOne {
+	mutation := newCountryMutation(c.config, OpUpdateOne, withCountryID(id))
+	return &CountryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Country.
+func (c *CountryClient) Delete() *CountryDelete {
+	mutation := newCountryMutation(c.config, OpDelete)
+	return &CountryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *CountryClient) DeleteOne(co *Country) *CountryDeleteOne {
+	return c.DeleteOneID(co.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *CountryClient) DeleteOneID(id int) *CountryDeleteOne {
+	builder := c.Delete().Where(country.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &CountryDeleteOne{builder}
+}
+
+// Query returns a query builder for Country.
+func (c *CountryClient) Query() *CountryQuery {
+	return &CountryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeCountry},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Country entity by its id.
+func (c *CountryClient) Get(ctx context.Context, id int) (*Country, error) {
+	return c.Query().Where(country.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *CountryClient) GetX(ctx context.Context, id int) *Country {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryLocation queries the location edge of a Country.
+func (c *CountryClient) QueryLocation(co *Country) *LocationQuery {
+	query := (&LocationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(country.Table, country.FieldID, id),
+			sqlgraph.To(location.Table, location.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, country.LocationTable, country.LocationColumn),
+		)
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *CountryClient) Hooks() []Hook {
+	hooks := c.hooks.Country
+	return append(hooks[:len(hooks):len(hooks)], country.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *CountryClient) Interceptors() []Interceptor {
+	return c.inters.Country
+}
+
+func (c *CountryClient) mutate(ctx context.Context, m *CountryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CountryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CountryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CountryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CountryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Country mutation op: %q", m.Op())
 	}
 }
 
@@ -2918,6 +3061,38 @@ func (c *LocationClient) QueryArtifacts(l *Location) *ArtifactQuery {
 	return query
 }
 
+// QueryCountry queries the country edge of a Location.
+func (c *LocationClient) QueryCountry(l *Location) *CountryQuery {
+	query := (&CountryClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := l.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(location.Table, location.FieldID, id),
+			sqlgraph.To(country.Table, country.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, location.CountryTable, location.CountryColumn),
+		)
+		fromV = sqlgraph.Neighbors(l.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDistrict queries the district edge of a Location.
+func (c *LocationClient) QueryDistrict(l *Location) *DistrictQuery {
+	query := (&DistrictClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := l.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(location.Table, location.FieldID, id),
+			sqlgraph.To(district.Table, district.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, location.DistrictTable, location.DistrictColumn),
+		)
+		fromV = sqlgraph.Neighbors(l.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QuerySettlement queries the settlement edge of a Location.
 func (c *LocationClient) QuerySettlement(l *Location) *SettlementQuery {
 	query := (&SettlementClient{config: c.config}).Query()
@@ -2943,22 +3118,6 @@ func (c *LocationClient) QueryRegion(l *Location) *RegionQuery {
 			sqlgraph.From(location.Table, location.FieldID, id),
 			sqlgraph.To(region.Table, region.FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, false, location.RegionTable, location.RegionColumn),
-		)
-		fromV = sqlgraph.Neighbors(l.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryDistrict queries the district edge of a Location.
-func (c *LocationClient) QueryDistrict(l *Location) *DistrictQuery {
-	query := (&DistrictClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := l.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(location.Table, location.FieldID, id),
-			sqlgraph.To(district.Table, district.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, location.DistrictTable, location.DistrictColumn),
 		)
 		fromV = sqlgraph.Neighbors(l.driver.Dialect(), step)
 		return fromV, nil
@@ -5705,18 +5864,18 @@ func (c *TechniqueClient) mutate(ctx context.Context, m *TechniqueMutation) (Val
 type (
 	hooks struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
-		Collection, Culture, District, Holder, HolderResponsibility, Keyword, Library,
-		License, Location, Medium, Model, Monument, Organization, OrganizationType,
-		Period, Person, PersonRole, Project, ProjectType, ProtectedArea,
-		ProtectedAreaCategory, ProtectedAreaPicture, Publication, Publisher, Region,
-		Set, Settlement, Technique []ent.Hook
+		Collection, Country, Culture, District, Holder, HolderResponsibility, Keyword,
+		Library, License, Location, Medium, Model, Monument, Organization,
+		OrganizationType, Period, Person, PersonRole, Project, ProjectType,
+		ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Publication,
+		Publisher, Region, Set, Settlement, Technique []ent.Hook
 	}
 	inters struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
-		Collection, Culture, District, Holder, HolderResponsibility, Keyword, Library,
-		License, Location, Medium, Model, Monument, Organization, OrganizationType,
-		Period, Person, PersonRole, Project, ProjectType, ProtectedArea,
-		ProtectedAreaCategory, ProtectedAreaPicture, Publication, Publisher, Region,
-		Set, Settlement, Technique []ent.Interceptor
+		Collection, Country, Culture, District, Holder, HolderResponsibility, Keyword,
+		Library, License, Location, Medium, Model, Monument, Organization,
+		OrganizationType, Period, Person, PersonRole, Project, ProjectType,
+		ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Publication,
+		Publisher, Region, Set, Settlement, Technique []ent.Interceptor
 	}
 )

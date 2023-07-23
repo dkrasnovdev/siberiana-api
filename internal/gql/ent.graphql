@@ -310,14 +310,17 @@ type Artifact implements Node {
   additionalImagesUrls: [String!]
   deletedAt: Time
   deletedBy: String
+  dating: String
   dimensions: String
-  weight: String
   chemicalComposition: String
+  number: String
   typology: String
+  weight: String
   admissionDate: Time
   authors: [Person!]
   mediums: [Medium!]
   techniques: [Technique!]
+  period: Period
   projects: [Project!]
   publications: [Publication!]
   holders: [Holder!]
@@ -325,7 +328,6 @@ type Artifact implements Node {
   monument: Monument
   model: Model
   set: Set
-  period: Period
   location: Location
   collection: Collection
   license: License
@@ -500,6 +502,22 @@ input ArtifactWhereInput {
   deletedByNotNil: Boolean
   deletedByEqualFold: String
   deletedByContainsFold: String
+  """dating field predicates"""
+  dating: String
+  datingNEQ: String
+  datingIn: [String!]
+  datingNotIn: [String!]
+  datingGT: String
+  datingGTE: String
+  datingLT: String
+  datingLTE: String
+  datingContains: String
+  datingHasPrefix: String
+  datingHasSuffix: String
+  datingIsNil: Boolean
+  datingNotNil: Boolean
+  datingEqualFold: String
+  datingContainsFold: String
   """dimensions field predicates"""
   dimensions: String
   dimensionsNEQ: String
@@ -516,22 +534,6 @@ input ArtifactWhereInput {
   dimensionsNotNil: Boolean
   dimensionsEqualFold: String
   dimensionsContainsFold: String
-  """weight field predicates"""
-  weight: String
-  weightNEQ: String
-  weightIn: [String!]
-  weightNotIn: [String!]
-  weightGT: String
-  weightGTE: String
-  weightLT: String
-  weightLTE: String
-  weightContains: String
-  weightHasPrefix: String
-  weightHasSuffix: String
-  weightIsNil: Boolean
-  weightNotNil: Boolean
-  weightEqualFold: String
-  weightContainsFold: String
   """chemical_composition field predicates"""
   chemicalComposition: String
   chemicalCompositionNEQ: String
@@ -548,6 +550,22 @@ input ArtifactWhereInput {
   chemicalCompositionNotNil: Boolean
   chemicalCompositionEqualFold: String
   chemicalCompositionContainsFold: String
+  """number field predicates"""
+  number: String
+  numberNEQ: String
+  numberIn: [String!]
+  numberNotIn: [String!]
+  numberGT: String
+  numberGTE: String
+  numberLT: String
+  numberLTE: String
+  numberContains: String
+  numberHasPrefix: String
+  numberHasSuffix: String
+  numberIsNil: Boolean
+  numberNotNil: Boolean
+  numberEqualFold: String
+  numberContainsFold: String
   """typology field predicates"""
   typology: String
   typologyNEQ: String
@@ -564,6 +582,22 @@ input ArtifactWhereInput {
   typologyNotNil: Boolean
   typologyEqualFold: String
   typologyContainsFold: String
+  """weight field predicates"""
+  weight: String
+  weightNEQ: String
+  weightIn: [String!]
+  weightNotIn: [String!]
+  weightGT: String
+  weightGTE: String
+  weightLT: String
+  weightLTE: String
+  weightContains: String
+  weightHasPrefix: String
+  weightHasSuffix: String
+  weightIsNil: Boolean
+  weightNotNil: Boolean
+  weightEqualFold: String
+  weightContainsFold: String
   """admission_date field predicates"""
   admissionDate: Time
   admissionDateNEQ: Time
@@ -584,6 +618,9 @@ input ArtifactWhereInput {
   """techniques edge predicates"""
   hasTechniques: Boolean
   hasTechniquesWith: [TechniqueWhereInput!]
+  """period edge predicates"""
+  hasPeriod: Boolean
+  hasPeriodWith: [PeriodWhereInput!]
   """projects edge predicates"""
   hasProjects: Boolean
   hasProjectsWith: [ProjectWhereInput!]
@@ -605,9 +642,6 @@ input ArtifactWhereInput {
   """set edge predicates"""
   hasSet: Boolean
   hasSetWith: [SetWhereInput!]
-  """period edge predicates"""
-  hasPeriod: Boolean
-  hasPeriodWith: [PeriodWhereInput!]
   """location edge predicates"""
   hasLocation: Boolean
   hasLocationWith: [LocationWhereInput!]
@@ -1311,6 +1345,148 @@ input CollectionWhereInput {
   hasCategory: Boolean
   hasCategoryWith: [CategoryWhereInput!]
 }
+type Country implements Node {
+  id: ID!
+  createdAt: Time!
+  createdBy: String
+  updatedAt: Time!
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
+  location: Location
+}
+"""A connection to a list of items."""
+type CountryConnection {
+  """A list of edges."""
+  edges: [CountryEdge]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+"""An edge in a connection."""
+type CountryEdge {
+  """The item at the end of the edge."""
+  node: Country
+  """A cursor for use in pagination."""
+  cursor: Cursor!
+}
+"""Ordering options for Country connections"""
+input CountryOrder {
+  """The ordering direction."""
+  direction: OrderDirection! = ASC
+  """The field by which to order Countries."""
+  field: CountryOrderField!
+}
+"""Properties by which Country connections can be ordered."""
+enum CountryOrderField {
+  CREATED_AT
+  UPDATED_AT
+}
+"""
+CountryWhereInput is used for filtering Country objects.
+Input was generated by ent.
+"""
+input CountryWhereInput {
+  not: CountryWhereInput
+  and: [CountryWhereInput!]
+  or: [CountryWhereInput!]
+  """id field predicates"""
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  """created_at field predicates"""
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  """created_by field predicates"""
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """updated_at field predicates"""
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  """updated_by field predicates"""
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """display_name field predicates"""
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
+  """description field predicates"""
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """location edge predicates"""
+  hasLocation: Boolean
+  hasLocationWith: [LocationWhereInput!]
+}
 """
 CreateArtGenreInput is used for create ArtGenre object.
 Input was generated by ent.
@@ -1353,14 +1529,17 @@ input CreateArtifactInput {
   additionalImagesUrls: [String!]
   deletedAt: Time
   deletedBy: String
+  dating: String
   dimensions: String
-  weight: String
   chemicalComposition: String
+  number: String
   typology: String
+  weight: String
   admissionDate: Time
   authorIDs: [ID!]
   mediumIDs: [ID!]
   techniqueIDs: [ID!]
+  periodID: ID
   projectIDs: [ID!]
   publicationIDs: [ID!]
   holderIDs: [ID!]
@@ -1368,7 +1547,6 @@ input CreateArtifactInput {
   monumentID: ID
   modelID: ID
   setID: ID
-  periodID: ID
   locationID: ID
   collectionID: ID
   licenseID: ID
@@ -1428,6 +1606,20 @@ input CreateCollectionInput {
   artifactIDs: [ID!]
   personIDs: [ID!]
   categoryID: ID
+}
+"""
+CreateCountryInput is used for create Country object.
+Input was generated by ent.
+"""
+input CreateCountryInput {
+  createdAt: Time
+  createdBy: String
+  updatedAt: Time
+  updatedBy: String
+  displayName: String
+  description: String
+  externalLinks: [String!]
+  locationID: ID
 }
 """
 CreateCultureInput is used for create Culture object.
@@ -1527,9 +1719,10 @@ input CreateLocationInput {
   description: String
   externalLinks: [String!]
   artifactIDs: [ID!]
+  countryID: ID
+  districtID: ID
   settlementID: ID
   regionID: ID
-  districtID: ID
 }
 """
 CreateMediumInput is used for create Medium object.
@@ -2710,9 +2903,10 @@ type Location implements Node {
   description: String
   externalLinks: [String!]
   artifacts: [Artifact!]
+  country: Country
+  district: District
   settlement: Settlement
   region: Region
-  district: District
 }
 """A connection to a list of items."""
 type LocationConnection {
@@ -2844,15 +3038,18 @@ input LocationWhereInput {
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
+  """country edge predicates"""
+  hasCountry: Boolean
+  hasCountryWith: [CountryWhereInput!]
+  """district edge predicates"""
+  hasDistrict: Boolean
+  hasDistrictWith: [DistrictWhereInput!]
   """settlement edge predicates"""
   hasSettlement: Boolean
   hasSettlementWith: [SettlementWhereInput!]
   """region edge predicates"""
   hasRegion: Boolean
   hasRegionWith: [RegionWhereInput!]
-  """district edge predicates"""
-  hasDistrict: Boolean
-  hasDistrictWith: [DistrictWhereInput!]
 }
 type Medium implements Node {
   id: ID!
@@ -5416,6 +5613,25 @@ type Query {
     """Filtering options for Collections returned from the connection."""
     where: CollectionWhereInput
   ): CollectionConnection!
+  countries(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Ordering options for Countries returned from the connection."""
+    orderBy: [CountryOrder!]
+
+    """Filtering options for Countries returned from the connection."""
+    where: CountryWhereInput
+  ): CountryConnection!
   cultures(
     """Returns the elements in the list that come after the specified cursor."""
     after: Cursor
@@ -6547,14 +6763,18 @@ input UpdateArtifactInput {
   clearDeletedAt: Boolean
   deletedBy: String
   clearDeletedBy: Boolean
+  dating: String
+  clearDating: Boolean
   dimensions: String
   clearDimensions: Boolean
-  weight: String
-  clearWeight: Boolean
   chemicalComposition: String
   clearChemicalComposition: Boolean
+  number: String
+  clearNumber: Boolean
   typology: String
   clearTypology: Boolean
+  weight: String
+  clearWeight: Boolean
   admissionDate: Time
   clearAdmissionDate: Boolean
   addAuthorIDs: [ID!]
@@ -6566,6 +6786,8 @@ input UpdateArtifactInput {
   addTechniqueIDs: [ID!]
   removeTechniqueIDs: [ID!]
   clearTechniques: Boolean
+  periodID: ID
+  clearPeriod: Boolean
   addProjectIDs: [ID!]
   removeProjectIDs: [ID!]
   clearProjects: Boolean
@@ -6583,8 +6805,6 @@ input UpdateArtifactInput {
   clearModel: Boolean
   setID: ID
   clearSet: Boolean
-  periodID: ID
-  clearPeriod: Boolean
   locationID: ID
   clearLocation: Boolean
   collectionID: ID
@@ -6674,6 +6894,26 @@ input UpdateCollectionInput {
   clearPeople: Boolean
   categoryID: ID
   clearCategory: Boolean
+}
+"""
+UpdateCountryInput is used for update Country object.
+Input was generated by ent.
+"""
+input UpdateCountryInput {
+  createdBy: String
+  clearCreatedBy: Boolean
+  updatedAt: Time
+  updatedBy: String
+  clearUpdatedBy: Boolean
+  displayName: String
+  clearDisplayName: Boolean
+  description: String
+  clearDescription: Boolean
+  externalLinks: [String!]
+  appendExternalLinks: [String!]
+  clearExternalLinks: Boolean
+  locationID: ID
+  clearLocation: Boolean
 }
 """
 UpdateCultureInput is used for update Culture object.
@@ -6820,12 +7060,14 @@ input UpdateLocationInput {
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
+  countryID: ID
+  clearCountry: Boolean
+  districtID: ID
+  clearDistrict: Boolean
   settlementID: ID
   clearSettlement: Boolean
   regionID: ID
   clearRegion: Boolean
-  districtID: ID
-  clearDistrict: Boolean
 }
 """
 UpdateMediumInput is used for update Medium object.

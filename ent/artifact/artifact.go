@@ -37,14 +37,18 @@ const (
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
+	// FieldDating holds the string denoting the dating field in the database.
+	FieldDating = "dating"
 	// FieldDimensions holds the string denoting the dimensions field in the database.
 	FieldDimensions = "dimensions"
-	// FieldWeight holds the string denoting the weight field in the database.
-	FieldWeight = "weight"
 	// FieldChemicalComposition holds the string denoting the chemical_composition field in the database.
 	FieldChemicalComposition = "chemical_composition"
+	// FieldNumber holds the string denoting the number field in the database.
+	FieldNumber = "number"
 	// FieldTypology holds the string denoting the typology field in the database.
 	FieldTypology = "typology"
+	// FieldWeight holds the string denoting the weight field in the database.
+	FieldWeight = "weight"
 	// FieldAdmissionDate holds the string denoting the admission_date field in the database.
 	FieldAdmissionDate = "admission_date"
 	// EdgeAuthors holds the string denoting the authors edge name in mutations.
@@ -53,6 +57,8 @@ const (
 	EdgeMediums = "mediums"
 	// EdgeTechniques holds the string denoting the techniques edge name in mutations.
 	EdgeTechniques = "techniques"
+	// EdgePeriod holds the string denoting the period edge name in mutations.
+	EdgePeriod = "period"
 	// EdgeProjects holds the string denoting the projects edge name in mutations.
 	EdgeProjects = "projects"
 	// EdgePublications holds the string denoting the publications edge name in mutations.
@@ -67,8 +73,6 @@ const (
 	EdgeModel = "model"
 	// EdgeSet holds the string denoting the set edge name in mutations.
 	EdgeSet = "set"
-	// EdgePeriod holds the string denoting the period edge name in mutations.
-	EdgePeriod = "period"
 	// EdgeLocation holds the string denoting the location edge name in mutations.
 	EdgeLocation = "location"
 	// EdgeCollection holds the string denoting the collection edge name in mutations.
@@ -92,6 +96,13 @@ const (
 	// TechniquesInverseTable is the table name for the Technique entity.
 	// It exists in this package in order to avoid circular dependency with the "technique" package.
 	TechniquesInverseTable = "techniques"
+	// PeriodTable is the table that holds the period relation/edge.
+	PeriodTable = "artifacts"
+	// PeriodInverseTable is the table name for the Period entity.
+	// It exists in this package in order to avoid circular dependency with the "period" package.
+	PeriodInverseTable = "periods"
+	// PeriodColumn is the table column denoting the period relation/edge.
+	PeriodColumn = "period_artifacts"
 	// ProjectsTable is the table that holds the projects relation/edge. The primary key declared below.
 	ProjectsTable = "project_artifacts"
 	// ProjectsInverseTable is the table name for the Project entity.
@@ -135,13 +146,6 @@ const (
 	SetInverseTable = "sets"
 	// SetColumn is the table column denoting the set relation/edge.
 	SetColumn = "set_artifacts"
-	// PeriodTable is the table that holds the period relation/edge.
-	PeriodTable = "artifacts"
-	// PeriodInverseTable is the table name for the Period entity.
-	// It exists in this package in order to avoid circular dependency with the "period" package.
-	PeriodInverseTable = "periods"
-	// PeriodColumn is the table column denoting the period relation/edge.
-	PeriodColumn = "period_artifacts"
 	// LocationTable is the table that holds the location relation/edge.
 	LocationTable = "artifacts"
 	// LocationInverseTable is the table name for the Location entity.
@@ -179,10 +183,12 @@ var Columns = []string{
 	FieldAdditionalImagesUrls,
 	FieldDeletedAt,
 	FieldDeletedBy,
+	FieldDating,
 	FieldDimensions,
-	FieldWeight,
 	FieldChemicalComposition,
+	FieldNumber,
 	FieldTypology,
+	FieldWeight,
 	FieldAdmissionDate,
 }
 
@@ -305,14 +311,14 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
+// ByDating orders the results by the dating field.
+func ByDating(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDating, opts...).ToFunc()
+}
+
 // ByDimensions orders the results by the dimensions field.
 func ByDimensions(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDimensions, opts...).ToFunc()
-}
-
-// ByWeight orders the results by the weight field.
-func ByWeight(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldWeight, opts...).ToFunc()
 }
 
 // ByChemicalComposition orders the results by the chemical_composition field.
@@ -320,9 +326,19 @@ func ByChemicalComposition(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldChemicalComposition, opts...).ToFunc()
 }
 
+// ByNumber orders the results by the number field.
+func ByNumber(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNumber, opts...).ToFunc()
+}
+
 // ByTypology orders the results by the typology field.
 func ByTypology(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTypology, opts...).ToFunc()
+}
+
+// ByWeight orders the results by the weight field.
+func ByWeight(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWeight, opts...).ToFunc()
 }
 
 // ByAdmissionDate orders the results by the admission_date field.
@@ -369,6 +385,13 @@ func ByTechniquesCount(opts ...sql.OrderTermOption) OrderOption {
 func ByTechniques(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newTechniquesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByPeriodField orders the results by period field.
+func ByPeriodField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPeriodStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -442,13 +465,6 @@ func BySetField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByPeriodField orders the results by period field.
-func ByPeriodField(field string, opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newPeriodStep(), sql.OrderByField(field, opts...))
-	}
-}
-
 // ByLocationField orders the results by location field.
 func ByLocationField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -488,6 +504,13 @@ func newTechniquesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TechniquesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, TechniquesTable, TechniquesPrimaryKey...),
+	)
+}
+func newPeriodStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PeriodInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, PeriodTable, PeriodColumn),
 	)
 }
 func newProjectsStep() *sqlgraph.Step {
@@ -537,13 +560,6 @@ func newSetStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SetInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, SetTable, SetColumn),
-	)
-}
-func newPeriodStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(PeriodInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, PeriodTable, PeriodColumn),
 	)
 }
 func newLocationStep() *sqlgraph.Step {

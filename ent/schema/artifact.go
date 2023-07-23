@@ -55,11 +55,12 @@ func (Artifact) Annotations() []schema.Annotation {
 // Fields of the Artifact.
 func (Artifact) Fields() []ent.Field {
 	return []ent.Field{
-
+		field.String("dating").Optional(),
 		field.String("dimensions").Optional(),
-		field.String("weight").Optional(),
 		field.String("chemical_composition").Optional(),
+		field.String("number").Optional(),
 		field.String("typology").Optional(),
+		field.String("weight").Optional(),
 		field.Time("admission_date").
 			Optional().
 			SchemaType(map[string]string{
@@ -74,6 +75,7 @@ func (Artifact) Edges() []ent.Edge {
 		edge.From("authors", Person.Type).Ref("artifacts"),
 		edge.From("mediums", Medium.Type).Ref("artifacts"),
 		edge.From("techniques", Technique.Type).Ref("artifacts"),
+		edge.From("period", Period.Type).Ref("artifacts").Unique(),
 		edge.From("projects", Project.Type).Ref("artifacts"),
 		edge.From("publications", Publication.Type).Ref("artifacts"),
 		edge.From("holders", Holder.Type).Ref("artifacts"),
@@ -81,7 +83,6 @@ func (Artifact) Edges() []ent.Edge {
 		edge.From("monument", Monument.Type).Ref("artifacts").Unique(),
 		edge.From("model", Model.Type).Ref("artifacts").Unique(),
 		edge.From("set", Set.Type).Ref("artifacts").Unique(),
-		edge.From("period", Period.Type).Ref("artifacts").Unique(),
 		edge.From("location", Location.Type).Ref("artifacts").Unique(),
 		edge.From("collection", Collection.Type).Ref("artifacts").Unique(),
 		edge.From("license", License.Type).Ref("artifacts").Unique(),

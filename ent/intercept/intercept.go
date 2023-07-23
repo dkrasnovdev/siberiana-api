@@ -17,6 +17,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/bookgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
+	"github.com/dkrasnovdev/heritage-api/ent/country"
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
@@ -344,6 +345,33 @@ func (f TraverseCollection) Traverse(ctx context.Context, q ent.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *ent.CollectionQuery", q)
+}
+
+// The CountryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type CountryFunc func(context.Context, *ent.CountryQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f CountryFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.CountryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.CountryQuery", q)
+}
+
+// The TraverseCountry type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseCountry func(context.Context, *ent.CountryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseCountry) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseCountry) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.CountryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.CountryQuery", q)
 }
 
 // The CultureFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -1096,6 +1124,8 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.CategoryQuery, predicate.Category, category.OrderOption]{typ: ent.TypeCategory, tq: q}, nil
 	case *ent.CollectionQuery:
 		return &query[*ent.CollectionQuery, predicate.Collection, collection.OrderOption]{typ: ent.TypeCollection, tq: q}, nil
+	case *ent.CountryQuery:
+		return &query[*ent.CountryQuery, predicate.Country, country.OrderOption]{typ: ent.TypeCountry, tq: q}, nil
 	case *ent.CultureQuery:
 		return &query[*ent.CultureQuery, predicate.Culture, culture.OrderOption]{typ: ent.TypeCulture, tq: q}, nil
 	case *ent.DistrictQuery:

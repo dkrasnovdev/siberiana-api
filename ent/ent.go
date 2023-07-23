@@ -21,6 +21,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/bookgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
+	"github.com/dkrasnovdev/heritage-api/ent/country"
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
@@ -117,6 +118,7 @@ func checkColumn(table, column string) error {
 			bookgenre.Table:             bookgenre.ValidColumn,
 			category.Table:              category.ValidColumn,
 			collection.Table:            collection.ValidColumn,
+			country.Table:               country.ValidColumn,
 			culture.Table:               culture.ValidColumn,
 			district.Table:              district.ValidColumn,
 			holder.Table:                holder.ValidColumn,

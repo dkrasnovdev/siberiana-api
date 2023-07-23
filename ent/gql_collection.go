@@ -16,6 +16,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/bookgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
+	"github.com/dkrasnovdev/heritage-api/ent/country"
 	"github.com/dkrasnovdev/heritage-api/ent/culture"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
@@ -397,6 +398,16 @@ func (a *ArtifactQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 			a.WithNamedTechniques(alias, func(wq *TechniqueQuery) {
 				*wq = *query
 			})
+		case "period":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PeriodClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, periodImplementors)...); err != nil {
+				return err
+			}
+			a.withPeriod = query
 		case "projects":
 			var (
 				alias = field.Alias
@@ -473,16 +484,6 @@ func (a *ArtifactQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				return err
 			}
 			a.withSet = query
-		case "period":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&PeriodClient{config: a.config}).Query()
-			)
-			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, periodImplementors)...); err != nil {
-				return err
-			}
-			a.withPeriod = query
 		case "location":
 			var (
 				alias = field.Alias
@@ -568,25 +569,35 @@ func (a *ArtifactQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				selectedFields = append(selectedFields, artifact.FieldDeletedBy)
 				fieldSeen[artifact.FieldDeletedBy] = struct{}{}
 			}
+		case "dating":
+			if _, ok := fieldSeen[artifact.FieldDating]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldDating)
+				fieldSeen[artifact.FieldDating] = struct{}{}
+			}
 		case "dimensions":
 			if _, ok := fieldSeen[artifact.FieldDimensions]; !ok {
 				selectedFields = append(selectedFields, artifact.FieldDimensions)
 				fieldSeen[artifact.FieldDimensions] = struct{}{}
-			}
-		case "weight":
-			if _, ok := fieldSeen[artifact.FieldWeight]; !ok {
-				selectedFields = append(selectedFields, artifact.FieldWeight)
-				fieldSeen[artifact.FieldWeight] = struct{}{}
 			}
 		case "chemicalComposition":
 			if _, ok := fieldSeen[artifact.FieldChemicalComposition]; !ok {
 				selectedFields = append(selectedFields, artifact.FieldChemicalComposition)
 				fieldSeen[artifact.FieldChemicalComposition] = struct{}{}
 			}
+		case "number":
+			if _, ok := fieldSeen[artifact.FieldNumber]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldNumber)
+				fieldSeen[artifact.FieldNumber] = struct{}{}
+			}
 		case "typology":
 			if _, ok := fieldSeen[artifact.FieldTypology]; !ok {
 				selectedFields = append(selectedFields, artifact.FieldTypology)
 				fieldSeen[artifact.FieldTypology] = struct{}{}
+			}
+		case "weight":
+			if _, ok := fieldSeen[artifact.FieldWeight]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldWeight)
+				fieldSeen[artifact.FieldWeight] = struct{}{}
 			}
 		case "admissionDate":
 			if _, ok := fieldSeen[artifact.FieldAdmissionDate]; !ok {
@@ -1339,6 +1350,141 @@ func newCollectionPaginateArgs(rv map[string]any) *collectionPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*CollectionWhereInput); ok {
 		args.opts = append(args.opts, WithCollectionFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (c *CountryQuery) CollectFields(ctx context.Context, satisfies ...string) (*CountryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return c, nil
+	}
+	if err := c.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return c, nil
+}
+
+func (c *CountryQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(country.Columns))
+		selectedFields = []string{country.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "location":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&LocationClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, locationImplementors)...); err != nil {
+				return err
+			}
+			c.withLocation = query
+		case "createdAt":
+			if _, ok := fieldSeen[country.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, country.FieldCreatedAt)
+				fieldSeen[country.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[country.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, country.FieldCreatedBy)
+				fieldSeen[country.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[country.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, country.FieldUpdatedAt)
+				fieldSeen[country.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[country.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, country.FieldUpdatedBy)
+				fieldSeen[country.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[country.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, country.FieldDisplayName)
+				fieldSeen[country.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[country.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, country.FieldDescription)
+				fieldSeen[country.FieldDescription] = struct{}{}
+			}
+		case "externalLinks":
+			if _, ok := fieldSeen[country.FieldExternalLinks]; !ok {
+				selectedFields = append(selectedFields, country.FieldExternalLinks)
+				fieldSeen[country.FieldExternalLinks] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		c.Select(selectedFields...)
+	}
+	return nil
+}
+
+type countryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []CountryPaginateOption
+}
+
+func newCountryPaginateArgs(rv map[string]any) *countryPaginateArgs {
+	args := &countryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*CountryOrder:
+			args.opts = append(args.opts, WithCountryOrder(v))
+		case []any:
+			var orders []*CountryOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &CountryOrder{Field: &CountryOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithCountryOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*CountryWhereInput); ok {
+		args.opts = append(args.opts, WithCountryFilter(v.Filter))
 	}
 	return args
 }
@@ -2257,6 +2403,26 @@ func (l *LocationQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 			l.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
 				*wq = *query
 			})
+		case "country":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CountryClient{config: l.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, countryImplementors)...); err != nil {
+				return err
+			}
+			l.withCountry = query
+		case "district":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DistrictClient{config: l.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, districtImplementors)...); err != nil {
+				return err
+			}
+			l.withDistrict = query
 		case "settlement":
 			var (
 				alias = field.Alias
@@ -2277,16 +2443,6 @@ func (l *LocationQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				return err
 			}
 			l.withRegion = query
-		case "district":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&DistrictClient{config: l.config}).Query()
-			)
-			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, districtImplementors)...); err != nil {
-				return err
-			}
-			l.withDistrict = query
 		case "createdAt":
 			if _, ok := fieldSeen[location.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, location.FieldCreatedAt)

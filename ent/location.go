@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/dkrasnovdev/heritage-api/ent/country"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
@@ -45,17 +46,19 @@ type Location struct {
 type LocationEdges struct {
 	// Artifacts holds the value of the artifacts edge.
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
+	// Country holds the value of the country edge.
+	Country *Country `json:"country,omitempty"`
+	// District holds the value of the district edge.
+	District *District `json:"district,omitempty"`
 	// Settlement holds the value of the settlement edge.
 	Settlement *Settlement `json:"settlement,omitempty"`
 	// Region holds the value of the region edge.
 	Region *Region `json:"region,omitempty"`
-	// District holds the value of the district edge.
-	District *District `json:"district,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [5]map[string]int
 
 	namedArtifacts map[string][]*Artifact
 }
@@ -69,10 +72,36 @@ func (e LocationEdges) ArtifactsOrErr() ([]*Artifact, error) {
 	return nil, &NotLoadedError{edge: "artifacts"}
 }
 
+// CountryOrErr returns the Country value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e LocationEdges) CountryOrErr() (*Country, error) {
+	if e.loadedTypes[1] {
+		if e.Country == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: country.Label}
+		}
+		return e.Country, nil
+	}
+	return nil, &NotLoadedError{edge: "country"}
+}
+
+// DistrictOrErr returns the District value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e LocationEdges) DistrictOrErr() (*District, error) {
+	if e.loadedTypes[2] {
+		if e.District == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: district.Label}
+		}
+		return e.District, nil
+	}
+	return nil, &NotLoadedError{edge: "district"}
+}
+
 // SettlementOrErr returns the Settlement value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e LocationEdges) SettlementOrErr() (*Settlement, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[3] {
 		if e.Settlement == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: settlement.Label}
@@ -85,7 +114,7 @@ func (e LocationEdges) SettlementOrErr() (*Settlement, error) {
 // RegionOrErr returns the Region value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e LocationEdges) RegionOrErr() (*Region, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		if e.Region == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: region.Label}
@@ -93,19 +122,6 @@ func (e LocationEdges) RegionOrErr() (*Region, error) {
 		return e.Region, nil
 	}
 	return nil, &NotLoadedError{edge: "region"}
-}
-
-// DistrictOrErr returns the District value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e LocationEdges) DistrictOrErr() (*District, error) {
-	if e.loadedTypes[3] {
-		if e.District == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: district.Label}
-		}
-		return e.District, nil
-	}
-	return nil, &NotLoadedError{edge: "district"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -204,6 +220,16 @@ func (l *Location) QueryArtifacts() *ArtifactQuery {
 	return NewLocationClient(l.config).QueryArtifacts(l)
 }
 
+// QueryCountry queries the "country" edge of the Location entity.
+func (l *Location) QueryCountry() *CountryQuery {
+	return NewLocationClient(l.config).QueryCountry(l)
+}
+
+// QueryDistrict queries the "district" edge of the Location entity.
+func (l *Location) QueryDistrict() *DistrictQuery {
+	return NewLocationClient(l.config).QueryDistrict(l)
+}
+
 // QuerySettlement queries the "settlement" edge of the Location entity.
 func (l *Location) QuerySettlement() *SettlementQuery {
 	return NewLocationClient(l.config).QuerySettlement(l)
@@ -212,11 +238,6 @@ func (l *Location) QuerySettlement() *SettlementQuery {
 // QueryRegion queries the "region" edge of the Location entity.
 func (l *Location) QueryRegion() *RegionQuery {
 	return NewLocationClient(l.config).QueryRegion(l)
-}
-
-// QueryDistrict queries the "district" edge of the Location entity.
-func (l *Location) QueryDistrict() *DistrictQuery {
-	return NewLocationClient(l.config).QueryDistrict(l)
 }
 
 // Update returns a builder for updating this Location.

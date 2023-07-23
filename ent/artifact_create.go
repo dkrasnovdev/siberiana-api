@@ -172,6 +172,20 @@ func (ac *ArtifactCreate) SetNillableDeletedBy(s *string) *ArtifactCreate {
 	return ac
 }
 
+// SetDating sets the "dating" field.
+func (ac *ArtifactCreate) SetDating(s string) *ArtifactCreate {
+	ac.mutation.SetDating(s)
+	return ac
+}
+
+// SetNillableDating sets the "dating" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableDating(s *string) *ArtifactCreate {
+	if s != nil {
+		ac.SetDating(*s)
+	}
+	return ac
+}
+
 // SetDimensions sets the "dimensions" field.
 func (ac *ArtifactCreate) SetDimensions(s string) *ArtifactCreate {
 	ac.mutation.SetDimensions(s)
@@ -182,20 +196,6 @@ func (ac *ArtifactCreate) SetDimensions(s string) *ArtifactCreate {
 func (ac *ArtifactCreate) SetNillableDimensions(s *string) *ArtifactCreate {
 	if s != nil {
 		ac.SetDimensions(*s)
-	}
-	return ac
-}
-
-// SetWeight sets the "weight" field.
-func (ac *ArtifactCreate) SetWeight(s string) *ArtifactCreate {
-	ac.mutation.SetWeight(s)
-	return ac
-}
-
-// SetNillableWeight sets the "weight" field if the given value is not nil.
-func (ac *ArtifactCreate) SetNillableWeight(s *string) *ArtifactCreate {
-	if s != nil {
-		ac.SetWeight(*s)
 	}
 	return ac
 }
@@ -214,6 +214,20 @@ func (ac *ArtifactCreate) SetNillableChemicalComposition(s *string) *ArtifactCre
 	return ac
 }
 
+// SetNumber sets the "number" field.
+func (ac *ArtifactCreate) SetNumber(s string) *ArtifactCreate {
+	ac.mutation.SetNumber(s)
+	return ac
+}
+
+// SetNillableNumber sets the "number" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableNumber(s *string) *ArtifactCreate {
+	if s != nil {
+		ac.SetNumber(*s)
+	}
+	return ac
+}
+
 // SetTypology sets the "typology" field.
 func (ac *ArtifactCreate) SetTypology(s string) *ArtifactCreate {
 	ac.mutation.SetTypology(s)
@@ -224,6 +238,20 @@ func (ac *ArtifactCreate) SetTypology(s string) *ArtifactCreate {
 func (ac *ArtifactCreate) SetNillableTypology(s *string) *ArtifactCreate {
 	if s != nil {
 		ac.SetTypology(*s)
+	}
+	return ac
+}
+
+// SetWeight sets the "weight" field.
+func (ac *ArtifactCreate) SetWeight(s string) *ArtifactCreate {
+	ac.mutation.SetWeight(s)
+	return ac
+}
+
+// SetNillableWeight sets the "weight" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableWeight(s *string) *ArtifactCreate {
+	if s != nil {
+		ac.SetWeight(*s)
 	}
 	return ac
 }
@@ -285,6 +313,25 @@ func (ac *ArtifactCreate) AddTechniques(t ...*Technique) *ArtifactCreate {
 		ids[i] = t[i].ID
 	}
 	return ac.AddTechniqueIDs(ids...)
+}
+
+// SetPeriodID sets the "period" edge to the Period entity by ID.
+func (ac *ArtifactCreate) SetPeriodID(id int) *ArtifactCreate {
+	ac.mutation.SetPeriodID(id)
+	return ac
+}
+
+// SetNillablePeriodID sets the "period" edge to the Period entity by ID if the given value is not nil.
+func (ac *ArtifactCreate) SetNillablePeriodID(id *int) *ArtifactCreate {
+	if id != nil {
+		ac = ac.SetPeriodID(*id)
+	}
+	return ac
+}
+
+// SetPeriod sets the "period" edge to the Period entity.
+func (ac *ArtifactCreate) SetPeriod(p *Period) *ArtifactCreate {
+	return ac.SetPeriodID(p.ID)
 }
 
 // AddProjectIDs adds the "projects" edge to the Project entity by IDs.
@@ -406,25 +453,6 @@ func (ac *ArtifactCreate) SetNillableSetID(id *int) *ArtifactCreate {
 // SetSet sets the "set" edge to the Set entity.
 func (ac *ArtifactCreate) SetSet(s *Set) *ArtifactCreate {
 	return ac.SetSetID(s.ID)
-}
-
-// SetPeriodID sets the "period" edge to the Period entity by ID.
-func (ac *ArtifactCreate) SetPeriodID(id int) *ArtifactCreate {
-	ac.mutation.SetPeriodID(id)
-	return ac
-}
-
-// SetNillablePeriodID sets the "period" edge to the Period entity by ID if the given value is not nil.
-func (ac *ArtifactCreate) SetNillablePeriodID(id *int) *ArtifactCreate {
-	if id != nil {
-		ac = ac.SetPeriodID(*id)
-	}
-	return ac
-}
-
-// SetPeriod sets the "period" edge to the Period entity.
-func (ac *ArtifactCreate) SetPeriod(p *Period) *ArtifactCreate {
-	return ac.SetPeriodID(p.ID)
 }
 
 // SetLocationID sets the "location" edge to the Location entity by ID.
@@ -616,21 +644,29 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 		_spec.SetField(artifact.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
+	if value, ok := ac.mutation.Dating(); ok {
+		_spec.SetField(artifact.FieldDating, field.TypeString, value)
+		_node.Dating = value
+	}
 	if value, ok := ac.mutation.Dimensions(); ok {
 		_spec.SetField(artifact.FieldDimensions, field.TypeString, value)
 		_node.Dimensions = value
-	}
-	if value, ok := ac.mutation.Weight(); ok {
-		_spec.SetField(artifact.FieldWeight, field.TypeString, value)
-		_node.Weight = value
 	}
 	if value, ok := ac.mutation.ChemicalComposition(); ok {
 		_spec.SetField(artifact.FieldChemicalComposition, field.TypeString, value)
 		_node.ChemicalComposition = value
 	}
+	if value, ok := ac.mutation.Number(); ok {
+		_spec.SetField(artifact.FieldNumber, field.TypeString, value)
+		_node.Number = value
+	}
 	if value, ok := ac.mutation.Typology(); ok {
 		_spec.SetField(artifact.FieldTypology, field.TypeString, value)
 		_node.Typology = value
+	}
+	if value, ok := ac.mutation.Weight(); ok {
+		_spec.SetField(artifact.FieldWeight, field.TypeString, value)
+		_node.Weight = value
 	}
 	if value, ok := ac.mutation.AdmissionDate(); ok {
 		_spec.SetField(artifact.FieldAdmissionDate, field.TypeTime, value)
@@ -682,6 +718,23 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.PeriodIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.PeriodTable,
+			Columns: []string{artifact.PeriodColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(period.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.period_artifacts = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := ac.mutation.ProjectsIDs(); len(nodes) > 0 {
@@ -798,23 +851,6 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.set_artifacts = &nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := ac.mutation.PeriodIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   artifact.PeriodTable,
-			Columns: []string{artifact.PeriodColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(period.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.period_artifacts = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := ac.mutation.LocationIDs(); len(nodes) > 0 {
