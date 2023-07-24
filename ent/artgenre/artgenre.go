@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -30,8 +31,15 @@ const (
 	FieldDescription = "description"
 	// FieldExternalLinks holds the string denoting the external_links field in the database.
 	FieldExternalLinks = "external_links"
+	// EdgeArt holds the string denoting the art edge name in mutations.
+	EdgeArt = "art"
 	// Table holds the table name of the artgenre in the database.
 	Table = "art_genres"
+	// ArtTable is the table that holds the art relation/edge. The primary key declared below.
+	ArtTable = "art_genre_art"
+	// ArtInverseTable is the table name for the Art entity.
+	// It exists in this package in order to avoid circular dependency with the "art" package.
+	ArtInverseTable = "arts"
 )
 
 // Columns holds all SQL columns for artgenre fields.
@@ -46,6 +54,12 @@ var Columns = []string{
 	FieldDescription,
 	FieldExternalLinks,
 }
+
+var (
+	// ArtPrimaryKey and ArtColumn2 are the table columns denoting the
+	// primary key for the art relation (M2M).
+	ArtPrimaryKey = []string{"art_genre_id", "art_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -114,4 +128,25 @@ func ByAbbreviation(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByArtCount orders the results by art count.
+func ByArtCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newArtStep(), opts...)
+	}
+}
+
+// ByArt orders the results by art terms.
+func ByArt(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newArtStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+func newArtStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ArtInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ArtTable, ArtPrimaryKey...),
+	)
 }

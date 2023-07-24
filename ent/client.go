@@ -583,9 +583,42 @@ func (c *ArtClient) GetX(ctx context.Context, id int) *Art {
 	return obj
 }
 
+// QueryArtGenre queries the art_genre edge of a Art.
+func (c *ArtClient) QueryArtGenre(a *Art) *ArtGenreQuery {
+	query := (&ArtGenreClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(art.Table, art.FieldID, id),
+			sqlgraph.To(artgenre.Table, artgenre.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, art.ArtGenreTable, art.ArtGenrePrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryArtStyle queries the art_style edge of a Art.
+func (c *ArtClient) QueryArtStyle(a *Art) *ArtStyleQuery {
+	query := (&ArtStyleClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(art.Table, art.FieldID, id),
+			sqlgraph.To(artstyle.Table, artstyle.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, art.ArtStyleTable, art.ArtStylePrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ArtClient) Hooks() []Hook {
-	return c.hooks.Art
+	hooks := c.hooks.Art
+	return append(hooks[:len(hooks):len(hooks)], art.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -699,6 +732,22 @@ func (c *ArtGenreClient) GetX(ctx context.Context, id int) *ArtGenre {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryArt queries the art edge of a ArtGenre.
+func (c *ArtGenreClient) QueryArt(ag *ArtGenre) *ArtQuery {
+	query := (&ArtClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ag.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artgenre.Table, artgenre.FieldID, id),
+			sqlgraph.To(art.Table, art.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, artgenre.ArtTable, artgenre.ArtPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(ag.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.
@@ -818,6 +867,22 @@ func (c *ArtStyleClient) GetX(ctx context.Context, id int) *ArtStyle {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryArt queries the art edge of a ArtStyle.
+func (c *ArtStyleClient) QueryArt(as *ArtStyle) *ArtQuery {
+	query := (&ArtClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := as.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artstyle.Table, artstyle.FieldID, id),
+			sqlgraph.To(art.Table, art.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, artstyle.ArtTable, artstyle.ArtPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(as.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.

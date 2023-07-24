@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/art"
 	"github.com/dkrasnovdev/heritage-api/ent/artstyle"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
@@ -153,9 +154,45 @@ func (asu *ArtStyleUpdate) ClearExternalLinks() *ArtStyleUpdate {
 	return asu
 }
 
+// AddArtIDs adds the "art" edge to the Art entity by IDs.
+func (asu *ArtStyleUpdate) AddArtIDs(ids ...int) *ArtStyleUpdate {
+	asu.mutation.AddArtIDs(ids...)
+	return asu
+}
+
+// AddArt adds the "art" edges to the Art entity.
+func (asu *ArtStyleUpdate) AddArt(a ...*Art) *ArtStyleUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return asu.AddArtIDs(ids...)
+}
+
 // Mutation returns the ArtStyleMutation object of the builder.
 func (asu *ArtStyleUpdate) Mutation() *ArtStyleMutation {
 	return asu.mutation
+}
+
+// ClearArt clears all "art" edges to the Art entity.
+func (asu *ArtStyleUpdate) ClearArt() *ArtStyleUpdate {
+	asu.mutation.ClearArt()
+	return asu
+}
+
+// RemoveArtIDs removes the "art" edge to Art entities by IDs.
+func (asu *ArtStyleUpdate) RemoveArtIDs(ids ...int) *ArtStyleUpdate {
+	asu.mutation.RemoveArtIDs(ids...)
+	return asu
+}
+
+// RemoveArt removes "art" edges to Art entities.
+func (asu *ArtStyleUpdate) RemoveArt(a ...*Art) *ArtStyleUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return asu.RemoveArtIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -252,6 +289,51 @@ func (asu *ArtStyleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if asu.mutation.ExternalLinksCleared() {
 		_spec.ClearField(artstyle.FieldExternalLinks, field.TypeJSON)
+	}
+	if asu.mutation.ArtCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   artstyle.ArtTable,
+			Columns: artstyle.ArtPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := asu.mutation.RemovedArtIDs(); len(nodes) > 0 && !asu.mutation.ArtCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   artstyle.ArtTable,
+			Columns: artstyle.ArtPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := asu.mutation.ArtIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   artstyle.ArtTable,
+			Columns: artstyle.ArtPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, asu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -397,9 +479,45 @@ func (asuo *ArtStyleUpdateOne) ClearExternalLinks() *ArtStyleUpdateOne {
 	return asuo
 }
 
+// AddArtIDs adds the "art" edge to the Art entity by IDs.
+func (asuo *ArtStyleUpdateOne) AddArtIDs(ids ...int) *ArtStyleUpdateOne {
+	asuo.mutation.AddArtIDs(ids...)
+	return asuo
+}
+
+// AddArt adds the "art" edges to the Art entity.
+func (asuo *ArtStyleUpdateOne) AddArt(a ...*Art) *ArtStyleUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return asuo.AddArtIDs(ids...)
+}
+
 // Mutation returns the ArtStyleMutation object of the builder.
 func (asuo *ArtStyleUpdateOne) Mutation() *ArtStyleMutation {
 	return asuo.mutation
+}
+
+// ClearArt clears all "art" edges to the Art entity.
+func (asuo *ArtStyleUpdateOne) ClearArt() *ArtStyleUpdateOne {
+	asuo.mutation.ClearArt()
+	return asuo
+}
+
+// RemoveArtIDs removes the "art" edge to Art entities by IDs.
+func (asuo *ArtStyleUpdateOne) RemoveArtIDs(ids ...int) *ArtStyleUpdateOne {
+	asuo.mutation.RemoveArtIDs(ids...)
+	return asuo
+}
+
+// RemoveArt removes "art" edges to Art entities.
+func (asuo *ArtStyleUpdateOne) RemoveArt(a ...*Art) *ArtStyleUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return asuo.RemoveArtIDs(ids...)
 }
 
 // Where appends a list predicates to the ArtStyleUpdate builder.
@@ -526,6 +644,51 @@ func (asuo *ArtStyleUpdateOne) sqlSave(ctx context.Context) (_node *ArtStyle, er
 	}
 	if asuo.mutation.ExternalLinksCleared() {
 		_spec.ClearField(artstyle.FieldExternalLinks, field.TypeJSON)
+	}
+	if asuo.mutation.ArtCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   artstyle.ArtTable,
+			Columns: artstyle.ArtPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := asuo.mutation.RemovedArtIDs(); len(nodes) > 0 && !asuo.mutation.ArtCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   artstyle.ArtTable,
+			Columns: artstyle.ArtPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := asuo.mutation.ArtIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   artstyle.ArtTable,
+			Columns: artstyle.ArtPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &ArtStyle{config: asuo.config}
 	_spec.Assign = _node.assignValues

@@ -8,6 +8,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/dkrasnovdev/heritage-api/ent/art"
 	"github.com/dkrasnovdev/heritage-api/ent/artgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/artstyle"
@@ -58,6 +59,96 @@ func (a *ArtQuery) CollectFields(ctx context.Context, satisfies ...string) (*Art
 
 func (a *ArtQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(art.Columns))
+		selectedFields = []string{art.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "artGenre":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtGenreClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artgenreImplementors)...); err != nil {
+				return err
+			}
+			a.WithNamedArtGenre(alias, func(wq *ArtGenreQuery) {
+				*wq = *query
+			})
+		case "artStyle":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtStyleClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artstyleImplementors)...); err != nil {
+				return err
+			}
+			a.WithNamedArtStyle(alias, func(wq *ArtStyleQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[art.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, art.FieldCreatedAt)
+				fieldSeen[art.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[art.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, art.FieldCreatedBy)
+				fieldSeen[art.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[art.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, art.FieldUpdatedAt)
+				fieldSeen[art.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[art.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, art.FieldUpdatedBy)
+				fieldSeen[art.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[art.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, art.FieldDisplayName)
+				fieldSeen[art.FieldDisplayName] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[art.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, art.FieldAbbreviation)
+				fieldSeen[art.FieldAbbreviation] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[art.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, art.FieldDescription)
+				fieldSeen[art.FieldDescription] = struct{}{}
+			}
+		case "externalLinks":
+			if _, ok := fieldSeen[art.FieldExternalLinks]; !ok {
+				selectedFields = append(selectedFields, art.FieldExternalLinks)
+				fieldSeen[art.FieldExternalLinks] = struct{}{}
+			}
+		case "primaryImageURL":
+			if _, ok := fieldSeen[art.FieldPrimaryImageURL]; !ok {
+				selectedFields = append(selectedFields, art.FieldPrimaryImageURL)
+				fieldSeen[art.FieldPrimaryImageURL] = struct{}{}
+			}
+		case "additionalImagesUrls":
+			if _, ok := fieldSeen[art.FieldAdditionalImagesUrls]; !ok {
+				selectedFields = append(selectedFields, art.FieldAdditionalImagesUrls)
+				fieldSeen[art.FieldAdditionalImagesUrls] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		a.Select(selectedFields...)
+	}
 	return nil
 }
 
@@ -83,6 +174,34 @@ func newArtPaginateArgs(rv map[string]any) *artPaginateArgs {
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*ArtOrder:
+			args.opts = append(args.opts, WithArtOrder(v))
+		case []any:
+			var orders []*ArtOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &ArtOrder{Field: &ArtOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithArtOrder(orders))
+		}
 	}
 	if v, ok := rv[whereField].(*ArtWhereInput); ok {
 		args.opts = append(args.opts, WithArtFilter(v.Filter))
@@ -111,6 +230,18 @@ func (ag *ArtGenreQuery) collectField(ctx context.Context, opCtx *graphql.Operat
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+		case "art":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtClient{config: ag.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artImplementors)...); err != nil {
+				return err
+			}
+			ag.WithNamedArt(alias, func(wq *ArtQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[artgenre.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, artgenre.FieldCreatedAt)
@@ -241,6 +372,18 @@ func (as *ArtStyleQuery) collectField(ctx context.Context, opCtx *graphql.Operat
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+		case "art":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtClient{config: as.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artImplementors)...); err != nil {
+				return err
+			}
+			as.WithNamedArt(alias, func(wq *ArtQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[artstyle.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, artstyle.FieldCreatedAt)

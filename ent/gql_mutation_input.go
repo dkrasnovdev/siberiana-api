@@ -9,6 +9,188 @@ import (
 	"github.com/dkrasnovdev/heritage-api/internal/ent/types"
 )
 
+// CreateArtInput represents a mutation input for creating arts.
+type CreateArtInput struct {
+	CreatedAt            *time.Time
+	CreatedBy            *string
+	UpdatedAt            *time.Time
+	UpdatedBy            *string
+	DisplayName          *string
+	Abbreviation         *string
+	Description          *string
+	ExternalLinks        []string
+	PrimaryImageURL      *string
+	AdditionalImagesUrls []string
+	ArtGenreIDs          []int
+	ArtStyleIDs          []int
+}
+
+// Mutate applies the CreateArtInput on the ArtMutation builder.
+func (i *CreateArtInput) Mutate(m *ArtMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
+	}
+	if v := i.ArtGenreIDs; len(v) > 0 {
+		m.AddArtGenreIDs(v...)
+	}
+	if v := i.ArtStyleIDs; len(v) > 0 {
+		m.AddArtStyleIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateArtInput on the ArtCreate builder.
+func (c *ArtCreate) SetInput(i CreateArtInput) *ArtCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateArtInput represents a mutation input for updating arts.
+type UpdateArtInput struct {
+	ClearCreatedBy             bool
+	CreatedBy                  *string
+	UpdatedAt                  *time.Time
+	ClearUpdatedBy             bool
+	UpdatedBy                  *string
+	ClearDisplayName           bool
+	DisplayName                *string
+	ClearAbbreviation          bool
+	Abbreviation               *string
+	ClearDescription           bool
+	Description                *string
+	ClearExternalLinks         bool
+	ExternalLinks              []string
+	AppendExternalLinks        []string
+	ClearPrimaryImageURL       bool
+	PrimaryImageURL            *string
+	ClearAdditionalImagesUrls  bool
+	AdditionalImagesUrls       []string
+	AppendAdditionalImagesUrls []string
+	ClearArtGenre              bool
+	AddArtGenreIDs             []int
+	RemoveArtGenreIDs          []int
+	ClearArtStyle              bool
+	AddArtStyleIDs             []int
+	RemoveArtStyleIDs          []int
+}
+
+// Mutate applies the UpdateArtInput on the ArtMutation builder.
+func (i *UpdateArtInput) Mutate(m *ArtMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLinks {
+		m.ClearExternalLinks()
+	}
+	if v := i.ExternalLinks; v != nil {
+		m.SetExternalLinks(v)
+	}
+	if i.AppendExternalLinks != nil {
+		m.AppendExternalLinks(i.ExternalLinks)
+	}
+	if i.ClearPrimaryImageURL {
+		m.ClearPrimaryImageURL()
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if i.ClearAdditionalImagesUrls {
+		m.ClearAdditionalImagesUrls()
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
+	}
+	if i.AppendAdditionalImagesUrls != nil {
+		m.AppendAdditionalImagesUrls(i.AdditionalImagesUrls)
+	}
+	if i.ClearArtGenre {
+		m.ClearArtGenre()
+	}
+	if v := i.AddArtGenreIDs; len(v) > 0 {
+		m.AddArtGenreIDs(v...)
+	}
+	if v := i.RemoveArtGenreIDs; len(v) > 0 {
+		m.RemoveArtGenreIDs(v...)
+	}
+	if i.ClearArtStyle {
+		m.ClearArtStyle()
+	}
+	if v := i.AddArtStyleIDs; len(v) > 0 {
+		m.AddArtStyleIDs(v...)
+	}
+	if v := i.RemoveArtStyleIDs; len(v) > 0 {
+		m.RemoveArtStyleIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateArtInput on the ArtUpdate builder.
+func (c *ArtUpdate) SetInput(i UpdateArtInput) *ArtUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateArtInput on the ArtUpdateOne builder.
+func (c *ArtUpdateOne) SetInput(i UpdateArtInput) *ArtUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateArtGenreInput represents a mutation input for creating artgenres.
 type CreateArtGenreInput struct {
 	CreatedAt     *time.Time
@@ -19,6 +201,7 @@ type CreateArtGenreInput struct {
 	Abbreviation  *string
 	Description   *string
 	ExternalLinks []string
+	ArtIDs        []int
 }
 
 // Mutate applies the CreateArtGenreInput on the ArtGenreMutation builder.
@@ -47,6 +230,9 @@ func (i *CreateArtGenreInput) Mutate(m *ArtGenreMutation) {
 	if v := i.ExternalLinks; v != nil {
 		m.SetExternalLinks(v)
 	}
+	if v := i.ArtIDs; len(v) > 0 {
+		m.AddArtIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateArtGenreInput on the ArtGenreCreate builder.
@@ -71,6 +257,9 @@ type UpdateArtGenreInput struct {
 	ClearExternalLinks  bool
 	ExternalLinks       []string
 	AppendExternalLinks []string
+	ClearArt            bool
+	AddArtIDs           []int
+	RemoveArtIDs        []int
 }
 
 // Mutate applies the UpdateArtGenreInput on the ArtGenreMutation builder.
@@ -117,6 +306,15 @@ func (i *UpdateArtGenreInput) Mutate(m *ArtGenreMutation) {
 	if i.AppendExternalLinks != nil {
 		m.AppendExternalLinks(i.ExternalLinks)
 	}
+	if i.ClearArt {
+		m.ClearArt()
+	}
+	if v := i.AddArtIDs; len(v) > 0 {
+		m.AddArtIDs(v...)
+	}
+	if v := i.RemoveArtIDs; len(v) > 0 {
+		m.RemoveArtIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateArtGenreInput on the ArtGenreUpdate builder.
@@ -141,6 +339,7 @@ type CreateArtStyleInput struct {
 	Abbreviation  *string
 	Description   *string
 	ExternalLinks []string
+	ArtIDs        []int
 }
 
 // Mutate applies the CreateArtStyleInput on the ArtStyleMutation builder.
@@ -169,6 +368,9 @@ func (i *CreateArtStyleInput) Mutate(m *ArtStyleMutation) {
 	if v := i.ExternalLinks; v != nil {
 		m.SetExternalLinks(v)
 	}
+	if v := i.ArtIDs; len(v) > 0 {
+		m.AddArtIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateArtStyleInput on the ArtStyleCreate builder.
@@ -193,6 +395,9 @@ type UpdateArtStyleInput struct {
 	ClearExternalLinks  bool
 	ExternalLinks       []string
 	AppendExternalLinks []string
+	ClearArt            bool
+	AddArtIDs           []int
+	RemoveArtIDs        []int
 }
 
 // Mutate applies the UpdateArtStyleInput on the ArtStyleMutation builder.
@@ -238,6 +443,15 @@ func (i *UpdateArtStyleInput) Mutate(m *ArtStyleMutation) {
 	}
 	if i.AppendExternalLinks != nil {
 		m.AppendExternalLinks(i.ExternalLinks)
+	}
+	if i.ClearArt {
+		m.ClearArt()
+	}
+	if v := i.AddArtIDs; len(v) > 0 {
+		m.AddArtIDs(v...)
+	}
+	if v := i.RemoveArtIDs; len(v) > 0 {
+		m.RemoveArtIDs(v...)
 	}
 }
 

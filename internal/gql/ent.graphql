@@ -2,6 +2,34 @@ directive @goField(forceResolver: Boolean, name: String) on FIELD_DEFINITION | I
 directive @goModel(model: String, models: [String!]) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
 type Art implements Node {
   id: ID!
+  createdAt: Time!
+  createdBy: String
+  updatedAt: Time!
+  updatedBy: String
+  displayName: String
+  abbreviation: String
+  description: String
+  externalLinks: [String!]
+  primaryImageURL: String
+  additionalImagesUrls: [String!]
+  artGenre: [ArtGenre!]
+  artStyle: [ArtStyle!]
+}
+"""A connection to a list of items."""
+type ArtConnection {
+  """A list of edges."""
+  edges: [ArtEdge]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+"""An edge in a connection."""
+type ArtEdge {
+  """The item at the end of the edge."""
+  node: Art
+  """A cursor for use in pagination."""
+  cursor: Cursor!
 }
 type ArtGenre implements Node {
   id: ID!
@@ -13,6 +41,7 @@ type ArtGenre implements Node {
   abbreviation: String
   description: String
   externalLinks: [String!]
+  art: [Art!]
 }
 """A connection to a list of items."""
 type ArtGenreConnection {
@@ -157,6 +186,21 @@ input ArtGenreWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """art edge predicates"""
+  hasArt: Boolean
+  hasArtWith: [ArtWhereInput!]
+}
+"""Ordering options for Art connections"""
+input ArtOrder {
+  """The ordering direction."""
+  direction: OrderDirection! = ASC
+  """The field by which to order Arts."""
+  field: ArtOrderField!
+}
+"""Properties by which Art connections can be ordered."""
+enum ArtOrderField {
+  CREATED_AT
+  UPDATED_AT
 }
 type ArtStyle implements Node {
   id: ID!
@@ -168,6 +212,7 @@ type ArtStyle implements Node {
   abbreviation: String
   description: String
   externalLinks: [String!]
+  art: [Art!]
 }
 """A connection to a list of items."""
 type ArtStyleConnection {
@@ -312,6 +357,9 @@ input ArtStyleWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """art edge predicates"""
+  hasArt: Boolean
+  hasArtWith: [ArtWhereInput!]
 }
 """
 ArtWhereInput is used for filtering Art objects.
@@ -330,6 +378,126 @@ input ArtWhereInput {
   idGTE: ID
   idLT: ID
   idLTE: ID
+  """created_at field predicates"""
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  """created_by field predicates"""
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """updated_at field predicates"""
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  """updated_by field predicates"""
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """display_name field predicates"""
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
+  """description field predicates"""
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """primary_image_url field predicates"""
+  primaryImageURL: String
+  primaryImageURLNEQ: String
+  primaryImageURLIn: [String!]
+  primaryImageURLNotIn: [String!]
+  primaryImageURLGT: String
+  primaryImageURLGTE: String
+  primaryImageURLLT: String
+  primaryImageURLLTE: String
+  primaryImageURLContains: String
+  primaryImageURLHasPrefix: String
+  primaryImageURLHasSuffix: String
+  primaryImageURLIsNil: Boolean
+  primaryImageURLNotNil: Boolean
+  primaryImageURLEqualFold: String
+  primaryImageURLContainsFold: String
+  """art_genre edge predicates"""
+  hasArtGenre: Boolean
+  hasArtGenreWith: [ArtGenreWhereInput!]
+  """art_style edge predicates"""
+  hasArtStyle: Boolean
+  hasArtStyleWith: [ArtStyleWhereInput!]
 }
 type Artifact implements Node {
   id: ID!
@@ -1707,6 +1875,25 @@ input CreateArtGenreInput {
   abbreviation: String
   description: String
   externalLinks: [String!]
+  artIDs: [ID!]
+}
+"""
+CreateArtInput is used for create Art object.
+Input was generated by ent.
+"""
+input CreateArtInput {
+  createdAt: Time
+  createdBy: String
+  updatedAt: Time
+  updatedBy: String
+  displayName: String
+  abbreviation: String
+  description: String
+  externalLinks: [String!]
+  primaryImageURL: String
+  additionalImagesUrls: [String!]
+  artGenreIDs: [ID!]
+  artStyleIDs: [ID!]
 }
 """
 CreateArtStyleInput is used for create ArtStyle object.
@@ -1721,6 +1908,7 @@ input CreateArtStyleInput {
   abbreviation: String
   description: String
   externalLinks: [String!]
+  artIDs: [ID!]
 }
 """
 CreateArtifactInput is used for create Artifact object.
@@ -6050,6 +6238,25 @@ type Query {
     """The list of node IDs."""
     ids: [ID!]!
   ): [Node]!
+  arts(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Ordering options for Arts returned from the connection."""
+    orderBy: [ArtOrder!]
+
+    """Filtering options for Arts returned from the connection."""
+    where: ArtWhereInput
+  ): ArtConnection!
   artGenres(
     """Returns the elements in the list that come after the specified cursor."""
     after: Cursor
@@ -7358,6 +7565,40 @@ input UpdateArtGenreInput {
   externalLinks: [String!]
   appendExternalLinks: [String!]
   clearExternalLinks: Boolean
+  addArtIDs: [ID!]
+  removeArtIDs: [ID!]
+  clearArt: Boolean
+}
+"""
+UpdateArtInput is used for update Art object.
+Input was generated by ent.
+"""
+input UpdateArtInput {
+  createdBy: String
+  clearCreatedBy: Boolean
+  updatedAt: Time
+  updatedBy: String
+  clearUpdatedBy: Boolean
+  displayName: String
+  clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
+  description: String
+  clearDescription: Boolean
+  externalLinks: [String!]
+  appendExternalLinks: [String!]
+  clearExternalLinks: Boolean
+  primaryImageURL: String
+  clearPrimaryImageURL: Boolean
+  additionalImagesUrls: [String!]
+  appendAdditionalImagesUrls: [String!]
+  clearAdditionalImagesUrls: Boolean
+  addArtGenreIDs: [ID!]
+  removeArtGenreIDs: [ID!]
+  clearArtGenre: Boolean
+  addArtStyleIDs: [ID!]
+  removeArtStyleIDs: [ID!]
+  clearArtStyle: Boolean
 }
 """
 UpdateArtStyleInput is used for update ArtStyle object.
@@ -7378,6 +7619,9 @@ input UpdateArtStyleInput {
   externalLinks: [String!]
   appendExternalLinks: [String!]
   clearExternalLinks: Boolean
+  addArtIDs: [ID!]
+  removeArtIDs: [ID!]
+  clearArt: Boolean
 }
 """
 UpdateArtifactInput is used for update Artifact object.

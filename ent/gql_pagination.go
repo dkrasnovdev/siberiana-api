@@ -188,19 +188,14 @@ func (c *ArtConnection) build(nodes []*Art, pager *artPager, after *Cursor, firs
 type ArtPaginateOption func(*artPager) error
 
 // WithArtOrder configures pagination ordering.
-func WithArtOrder(order *ArtOrder) ArtPaginateOption {
-	if order == nil {
-		order = DefaultArtOrder
-	}
-	o := *order
+func WithArtOrder(order []*ArtOrder) ArtPaginateOption {
 	return func(pager *artPager) error {
-		if err := o.Direction.Validate(); err != nil {
-			return err
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
 		}
-		if o.Field == nil {
-			o.Field = DefaultArtOrder.Field
-		}
-		pager.order = &o
+		pager.order = append(pager.order, order...)
 		return nil
 	}
 }
@@ -218,7 +213,7 @@ func WithArtFilter(filter func(*ArtQuery) (*ArtQuery, error)) ArtPaginateOption 
 
 type artPager struct {
 	reverse bool
-	order   *ArtOrder
+	order   []*ArtOrder
 	filter  func(*ArtQuery) (*ArtQuery, error)
 }
 
@@ -229,8 +224,10 @@ func newArtPager(opts []ArtPaginateOption, reverse bool) (*artPager, error) {
 			return nil, err
 		}
 	}
-	if pager.order == nil {
-		pager.order = DefaultArtOrder
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
 	}
 	return pager, nil
 }
@@ -243,48 +240,87 @@ func (p *artPager) applyFilter(query *ArtQuery) (*ArtQuery, error) {
 }
 
 func (p *artPager) toCursor(a *Art) Cursor {
-	return p.order.Field.toCursor(a)
+	cs := make([]any, 0, len(p.order))
+	for _, o := range p.order {
+		cs = append(cs, o.Field.toCursor(a).Value)
+	}
+	return Cursor{ID: a.ID, Value: cs}
 }
 
 func (p *artPager) applyCursors(query *ArtQuery, after, before *Cursor) (*ArtQuery, error) {
-	direction := p.order.Direction
+	idDirection := entgql.OrderDirectionAsc
 	if p.reverse {
-		direction = direction.Reverse()
+		idDirection = entgql.OrderDirectionDesc
 	}
-	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultArtOrder.Field.column, p.order.Field.column, direction) {
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultArtOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
 		query = query.Where(predicate)
 	}
 	return query, nil
 }
 
 func (p *artPager) applyOrder(query *ArtQuery) *ArtQuery {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultArtOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
-	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
-	if p.order.Field != DefaultArtOrder.Field {
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
 		query = query.Order(DefaultArtOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
 	}
 	return query
 }
 
 func (p *artPager) orderExpr(query *ArtQuery) sql.Querier {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
 	}
 	return sql.ExprFunc(func(b *sql.Builder) {
-		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
-		if p.order.Field != DefaultArtOrder.Field {
-			b.Comma().Ident(DefaultArtOrder.Field.column).Pad().WriteString(string(direction))
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
 		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultArtOrder.Field.column).Pad().WriteString(string(direction))
 	})
 }
 
@@ -338,6 +374,71 @@ func (a *ArtQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+var (
+	// ArtOrderFieldCreatedAt orders Art by created_at.
+	ArtOrderFieldCreatedAt = &ArtOrderField{
+		Value: func(a *Art) (ent.Value, error) {
+			return a.CreatedAt, nil
+		},
+		column: art.FieldCreatedAt,
+		toTerm: art.ByCreatedAt,
+		toCursor: func(a *Art) Cursor {
+			return Cursor{
+				ID:    a.ID,
+				Value: a.CreatedAt,
+			}
+		},
+	}
+	// ArtOrderFieldUpdatedAt orders Art by updated_at.
+	ArtOrderFieldUpdatedAt = &ArtOrderField{
+		Value: func(a *Art) (ent.Value, error) {
+			return a.UpdatedAt, nil
+		},
+		column: art.FieldUpdatedAt,
+		toTerm: art.ByUpdatedAt,
+		toCursor: func(a *Art) Cursor {
+			return Cursor{
+				ID:    a.ID,
+				Value: a.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ArtOrderField) String() string {
+	var str string
+	switch f.column {
+	case ArtOrderFieldCreatedAt.column:
+		str = "CREATED_AT"
+	case ArtOrderFieldUpdatedAt.column:
+		str = "UPDATED_AT"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ArtOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ArtOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ArtOrderField %T must be a string", v)
+	}
+	switch str {
+	case "CREATED_AT":
+		*f = *ArtOrderFieldCreatedAt
+	case "UPDATED_AT":
+		*f = *ArtOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid ArtOrderField", str)
+	}
+	return nil
 }
 
 // ArtOrderField defines the ordering field of Art.

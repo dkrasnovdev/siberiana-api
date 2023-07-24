@@ -4,6 +4,8 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -11,18 +13,24 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/art"
+	"github.com/dkrasnovdev/heritage-api/ent/artgenre"
+	"github.com/dkrasnovdev/heritage-api/ent/artstyle"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
 
 // ArtQuery is the builder for querying Art entities.
 type ArtQuery struct {
 	config
-	ctx        *QueryContext
-	order      []art.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Art
-	modifiers  []func(*sql.Selector)
-	loadTotal  []func(context.Context, []*Art) error
+	ctx               *QueryContext
+	order             []art.OrderOption
+	inters            []Interceptor
+	predicates        []predicate.Art
+	withArtGenre      *ArtGenreQuery
+	withArtStyle      *ArtStyleQuery
+	modifiers         []func(*sql.Selector)
+	loadTotal         []func(context.Context, []*Art) error
+	withNamedArtGenre map[string]*ArtGenreQuery
+	withNamedArtStyle map[string]*ArtStyleQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -57,6 +65,50 @@ func (aq *ArtQuery) Unique(unique bool) *ArtQuery {
 func (aq *ArtQuery) Order(o ...art.OrderOption) *ArtQuery {
 	aq.order = append(aq.order, o...)
 	return aq
+}
+
+// QueryArtGenre chains the current query on the "art_genre" edge.
+func (aq *ArtQuery) QueryArtGenre() *ArtGenreQuery {
+	query := (&ArtGenreClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(art.Table, art.FieldID, selector),
+			sqlgraph.To(artgenre.Table, artgenre.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, art.ArtGenreTable, art.ArtGenrePrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryArtStyle chains the current query on the "art_style" edge.
+func (aq *ArtQuery) QueryArtStyle() *ArtStyleQuery {
+	query := (&ArtStyleClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(art.Table, art.FieldID, selector),
+			sqlgraph.To(artstyle.Table, artstyle.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, art.ArtStyleTable, art.ArtStylePrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Art entity from the query.
@@ -246,19 +298,55 @@ func (aq *ArtQuery) Clone() *ArtQuery {
 		return nil
 	}
 	return &ArtQuery{
-		config:     aq.config,
-		ctx:        aq.ctx.Clone(),
-		order:      append([]art.OrderOption{}, aq.order...),
-		inters:     append([]Interceptor{}, aq.inters...),
-		predicates: append([]predicate.Art{}, aq.predicates...),
+		config:       aq.config,
+		ctx:          aq.ctx.Clone(),
+		order:        append([]art.OrderOption{}, aq.order...),
+		inters:       append([]Interceptor{}, aq.inters...),
+		predicates:   append([]predicate.Art{}, aq.predicates...),
+		withArtGenre: aq.withArtGenre.Clone(),
+		withArtStyle: aq.withArtStyle.Clone(),
 		// clone intermediate query.
 		sql:  aq.sql.Clone(),
 		path: aq.path,
 	}
 }
 
+// WithArtGenre tells the query-builder to eager-load the nodes that are connected to
+// the "art_genre" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtQuery) WithArtGenre(opts ...func(*ArtGenreQuery)) *ArtQuery {
+	query := (&ArtGenreClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withArtGenre = query
+	return aq
+}
+
+// WithArtStyle tells the query-builder to eager-load the nodes that are connected to
+// the "art_style" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtQuery) WithArtStyle(opts ...func(*ArtStyleQuery)) *ArtQuery {
+	query := (&ArtStyleClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withArtStyle = query
+	return aq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Art.Query().
+//		GroupBy(art.FieldCreatedAt).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (aq *ArtQuery) GroupBy(field string, fields ...string) *ArtGroupBy {
 	aq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &ArtGroupBy{build: aq}
@@ -270,6 +358,16 @@ func (aq *ArtQuery) GroupBy(field string, fields ...string) *ArtGroupBy {
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreatedAt time.Time `json:"created_at,omitempty"`
+//	}
+//
+//	client.Art.Query().
+//		Select(art.FieldCreatedAt).
+//		Scan(ctx, &v)
 func (aq *ArtQuery) Select(fields ...string) *ArtSelect {
 	aq.ctx.Fields = append(aq.ctx.Fields, fields...)
 	sbuild := &ArtSelect{ArtQuery: aq}
@@ -306,13 +404,23 @@ func (aq *ArtQuery) prepareQuery(ctx context.Context) error {
 		}
 		aq.sql = prev
 	}
+	if art.Policy == nil {
+		return errors.New("ent: uninitialized art.Policy (forgotten import ent/runtime?)")
+	}
+	if err := art.Policy.EvalQuery(ctx, aq); err != nil {
+		return err
+	}
 	return nil
 }
 
 func (aq *ArtQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art, error) {
 	var (
-		nodes = []*Art{}
-		_spec = aq.querySpec()
+		nodes       = []*Art{}
+		_spec       = aq.querySpec()
+		loadedTypes = [2]bool{
+			aq.withArtGenre != nil,
+			aq.withArtStyle != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Art).scanValues(nil, columns)
@@ -320,6 +428,7 @@ func (aq *ArtQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art, err
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Art{config: aq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(aq.modifiers) > 0 {
@@ -334,12 +443,163 @@ func (aq *ArtQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art, err
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := aq.withArtGenre; query != nil {
+		if err := aq.loadArtGenre(ctx, query, nodes,
+			func(n *Art) { n.Edges.ArtGenre = []*ArtGenre{} },
+			func(n *Art, e *ArtGenre) { n.Edges.ArtGenre = append(n.Edges.ArtGenre, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withArtStyle; query != nil {
+		if err := aq.loadArtStyle(ctx, query, nodes,
+			func(n *Art) { n.Edges.ArtStyle = []*ArtStyle{} },
+			func(n *Art, e *ArtStyle) { n.Edges.ArtStyle = append(n.Edges.ArtStyle, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range aq.withNamedArtGenre {
+		if err := aq.loadArtGenre(ctx, query, nodes,
+			func(n *Art) { n.appendNamedArtGenre(name) },
+			func(n *Art, e *ArtGenre) { n.appendNamedArtGenre(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range aq.withNamedArtStyle {
+		if err := aq.loadArtStyle(ctx, query, nodes,
+			func(n *Art) { n.appendNamedArtStyle(name) },
+			func(n *Art, e *ArtStyle) { n.appendNamedArtStyle(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range aq.loadTotal {
 		if err := aq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (aq *ArtQuery) loadArtGenre(ctx context.Context, query *ArtGenreQuery, nodes []*Art, init func(*Art), assign func(*Art, *ArtGenre)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Art)
+	nids := make(map[int]map[*Art]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(art.ArtGenreTable)
+		s.Join(joinT).On(s.C(artgenre.FieldID), joinT.C(art.ArtGenrePrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(art.ArtGenrePrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(art.ArtGenrePrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Art]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*ArtGenre](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "art_genre" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (aq *ArtQuery) loadArtStyle(ctx context.Context, query *ArtStyleQuery, nodes []*Art, init func(*Art), assign func(*Art, *ArtStyle)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Art)
+	nids := make(map[int]map[*Art]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(art.ArtStyleTable)
+		s.Join(joinT).On(s.C(artstyle.FieldID), joinT.C(art.ArtStylePrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(art.ArtStylePrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(art.ArtStylePrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Art]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*ArtStyle](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "art_style" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
 }
 
 func (aq *ArtQuery) sqlCount(ctx context.Context) (int, error) {
@@ -424,6 +684,34 @@ func (aq *ArtQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedArtGenre tells the query-builder to eager-load the nodes that are connected to the "art_genre"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtQuery) WithNamedArtGenre(name string, opts ...func(*ArtGenreQuery)) *ArtQuery {
+	query := (&ArtGenreClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if aq.withNamedArtGenre == nil {
+		aq.withNamedArtGenre = make(map[string]*ArtGenreQuery)
+	}
+	aq.withNamedArtGenre[name] = query
+	return aq
+}
+
+// WithNamedArtStyle tells the query-builder to eager-load the nodes that are connected to the "art_style"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtQuery) WithNamedArtStyle(name string, opts ...func(*ArtStyleQuery)) *ArtQuery {
+	query := (&ArtStyleClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if aq.withNamedArtStyle == nil {
+		aq.withNamedArtStyle = make(map[string]*ArtStyleQuery)
+	}
+	aq.withNamedArtStyle[name] = query
+	return aq
 }
 
 // ArtGroupBy is the group-by builder for Art entities.

@@ -50,11 +50,35 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Art struct {
-		ID func(childComplexity int) int
+		Abbreviation         func(childComplexity int) int
+		AdditionalImagesUrls func(childComplexity int) int
+		ArtGenre             func(childComplexity int) int
+		ArtStyle             func(childComplexity int) int
+		CreatedAt            func(childComplexity int) int
+		CreatedBy            func(childComplexity int) int
+		Description          func(childComplexity int) int
+		DisplayName          func(childComplexity int) int
+		ExternalLinks        func(childComplexity int) int
+		ID                   func(childComplexity int) int
+		PrimaryImageURL      func(childComplexity int) int
+		UpdatedAt            func(childComplexity int) int
+		UpdatedBy            func(childComplexity int) int
+	}
+
+	ArtConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	ArtEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
 	}
 
 	ArtGenre struct {
 		Abbreviation  func(childComplexity int) int
+		Art           func(childComplexity int) int
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
 		Description   func(childComplexity int) int
@@ -78,6 +102,7 @@ type ComplexityRoot struct {
 
 	ArtStyle struct {
 		Abbreviation  func(childComplexity int) int
+		Art           func(childComplexity int) int
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
 		Description   func(childComplexity int) int
@@ -538,44 +563,74 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		CreateArtifact     func(childComplexity int, input ent.CreateArtifactInput) int
-		CreateCategory     func(childComplexity int, input ent.CreateCategoryInput) int
-		CreateCollection   func(childComplexity int, input ent.CreateCollectionInput) int
-		CreateCulture      func(childComplexity int, input ent.CreateCultureInput) int
-		CreateDistrict     func(childComplexity int, input ent.CreateDistrictInput) int
-		CreateHolder       func(childComplexity int, input ent.CreateHolderInput) int
-		CreateLicense      func(childComplexity int, input ent.CreateLicenseInput) int
-		CreateLocation     func(childComplexity int, input ent.CreateLocationInput) int
-		CreateMedium       func(childComplexity int, input ent.CreateMediumInput) int
-		CreateModel        func(childComplexity int, input ent.CreateModelInput) int
-		CreateMonument     func(childComplexity int, input ent.CreateMonumentInput) int
-		CreateOrganization func(childComplexity int, input ent.CreateOrganizationInput) int
-		CreatePerson       func(childComplexity int, input ent.CreatePersonInput) int
-		CreateProject      func(childComplexity int, input ent.CreateProjectInput) int
-		CreatePublication  func(childComplexity int, input ent.CreatePublicationInput) int
-		CreateRegion       func(childComplexity int, input ent.CreateRegionInput) int
-		CreateSet          func(childComplexity int, input ent.CreateSetInput) int
-		CreateSettlement   func(childComplexity int, input ent.CreateSettlementInput) int
-		CreateTechnique    func(childComplexity int, input ent.CreateTechniqueInput) int
-		UpdateArtifact     func(childComplexity int, id int, input ent.UpdateArtifactInput) int
-		UpdateCategory     func(childComplexity int, id int, input ent.UpdateCategoryInput) int
-		UpdateCollection   func(childComplexity int, id int, input ent.UpdateCollectionInput) int
-		UpdateCulture      func(childComplexity int, id int, input ent.UpdateCultureInput) int
-		UpdateDistrict     func(childComplexity int, id int, input ent.UpdateDistrictInput) int
-		UpdateHolder       func(childComplexity int, id int, input ent.UpdateHolderInput) int
-		UpdateLicense      func(childComplexity int, id int, input ent.UpdateLicenseInput) int
-		UpdateLocation     func(childComplexity int, id int, input ent.UpdateLocationInput) int
-		UpdateMedium       func(childComplexity int, id int, input ent.UpdateMediumInput) int
-		UpdateModel        func(childComplexity int, id int, input ent.UpdateModelInput) int
-		UpdateMonument     func(childComplexity int, id int, input ent.UpdateMonumentInput) int
-		UpdateOrganization func(childComplexity int, id int, input ent.UpdateOrganizationInput) int
-		UpdatePerson       func(childComplexity int, id int, input ent.UpdatePersonInput) int
-		UpdateProject      func(childComplexity int, id int, input ent.UpdateProjectInput) int
-		UpdatePublication  func(childComplexity int, id int, input ent.UpdatePublicationInput) int
-		UpdateRegion       func(childComplexity int, id int, input ent.UpdateRegionInput) int
-		UpdateSet          func(childComplexity int, id int, input ent.UpdateSetInput) int
-		UpdateSettlement   func(childComplexity int, id int, input ent.UpdateSettlementInput) int
-		UpdateTechnique    func(childComplexity int, id int, input ent.UpdateTechniqueInput) int
+		CreateArt                   func(childComplexity int, input ent.CreateArtInput) int
+		CreateArtGenre              func(childComplexity int, input ent.CreateArtGenreInput) int
+		CreateArtStyle              func(childComplexity int, input ent.CreateArtStyleInput) int
+		CreateArtifact              func(childComplexity int, input ent.CreateArtifactInput) int
+		CreateBook                  func(childComplexity int, input ent.CreateBookInput) int
+		CreateBookGenre             func(childComplexity int, input ent.CreateBookGenreInput) int
+		CreateCategory              func(childComplexity int, input ent.CreateCategoryInput) int
+		CreateCollection            func(childComplexity int, input ent.CreateCollectionInput) int
+		CreateCountry               func(childComplexity int, input ent.CreateCountryInput) int
+		CreateCulture               func(childComplexity int, input ent.CreateCultureInput) int
+		CreateDistrict              func(childComplexity int, input ent.CreateDistrictInput) int
+		CreateHolder                func(childComplexity int, input ent.CreateHolderInput) int
+		CreateHolderResponsibility  func(childComplexity int, input ent.CreateHolderResponsibilityInput) int
+		CreateLicense               func(childComplexity int, input ent.CreateLicenseInput) int
+		CreateLocation              func(childComplexity int, input ent.CreateLocationInput) int
+		CreateMedium                func(childComplexity int, input ent.CreateMediumInput) int
+		CreateModel                 func(childComplexity int, input ent.CreateModelInput) int
+		CreateMonument              func(childComplexity int, input ent.CreateMonumentInput) int
+		CreateOrganization          func(childComplexity int, input ent.CreateOrganizationInput) int
+		CreateOrganizationType      func(childComplexity int, input ent.CreateOrganizationTypeInput) int
+		CreatePeriod                func(childComplexity int, input ent.CreatePeriodInput) int
+		CreatePerson                func(childComplexity int, input ent.CreatePersonInput) int
+		CreatePersonRole            func(childComplexity int, input ent.CreatePersonRoleInput) int
+		CreateProject               func(childComplexity int, input ent.CreateProjectInput) int
+		CreateProjectType           func(childComplexity int, input ent.CreateProjectTypeInput) int
+		CreateProtectedArea         func(childComplexity int, input ent.CreateProtectedAreaInput) int
+		CreateProtectedAreaCategory func(childComplexity int, input ent.CreateProtectedAreaCategoryInput) int
+		CreateProtectedAreaPicture  func(childComplexity int, input ent.CreateProtectedAreaPictureInput) int
+		CreatePublication           func(childComplexity int, input ent.CreatePublicationInput) int
+		CreatePublisher             func(childComplexity int, input ent.CreatePublisherInput) int
+		CreateRegion                func(childComplexity int, input ent.CreateRegionInput) int
+		CreateSet                   func(childComplexity int, input ent.CreateSetInput) int
+		CreateSettlement            func(childComplexity int, input ent.CreateSettlementInput) int
+		CreateTechnique             func(childComplexity int, input ent.CreateTechniqueInput) int
+		UpdateArt                   func(childComplexity int, id int, input ent.UpdateArtInput) int
+		UpdateArtGenre              func(childComplexity int, id int, input ent.UpdateArtGenreInput) int
+		UpdateArtStyle              func(childComplexity int, id int, input ent.UpdateArtStyleInput) int
+		UpdateArtifact              func(childComplexity int, id int, input ent.UpdateArtifactInput) int
+		UpdateBook                  func(childComplexity int, id int, input ent.UpdateBookInput) int
+		UpdateBookGenre             func(childComplexity int, id int, input ent.UpdateBookGenreInput) int
+		UpdateCategory              func(childComplexity int, id int, input ent.UpdateCategoryInput) int
+		UpdateCollection            func(childComplexity int, id int, input ent.UpdateCollectionInput) int
+		UpdateCountry               func(childComplexity int, id int, input ent.UpdateCountryInput) int
+		UpdateCulture               func(childComplexity int, id int, input ent.UpdateCultureInput) int
+		UpdateDistrict              func(childComplexity int, id int, input ent.UpdateDistrictInput) int
+		UpdateHolder                func(childComplexity int, id int, input ent.UpdateHolderInput) int
+		UpdateHolderResponsibility  func(childComplexity int, id int, input ent.UpdateHolderResponsibilityInput) int
+		UpdateLicense               func(childComplexity int, id int, input ent.UpdateLicenseInput) int
+		UpdateLocation              func(childComplexity int, id int, input ent.UpdateLocationInput) int
+		UpdateMedium                func(childComplexity int, id int, input ent.UpdateMediumInput) int
+		UpdateModel                 func(childComplexity int, id int, input ent.UpdateModelInput) int
+		UpdateMonument              func(childComplexity int, id int, input ent.UpdateMonumentInput) int
+		UpdateOrganization          func(childComplexity int, id int, input ent.UpdateOrganizationInput) int
+		UpdateOrganizationType      func(childComplexity int, id int, input ent.UpdateOrganizationTypeInput) int
+		UpdatePeriod                func(childComplexity int, id int, input ent.UpdatePeriodInput) int
+		UpdatePerson                func(childComplexity int, id int, input ent.UpdatePersonInput) int
+		UpdatePersonRole            func(childComplexity int, id int, input ent.UpdatePersonRoleInput) int
+		UpdateProject               func(childComplexity int, id int, input ent.UpdateProjectInput) int
+		UpdateProjectType           func(childComplexity int, id int, input ent.UpdateProjectTypeInput) int
+		UpdateProtectedArea         func(childComplexity int, id int, input ent.UpdateProtectedAreaInput) int
+		UpdateProtectedAreaCategory func(childComplexity int, id int, input ent.UpdateProtectedAreaCategoryInput) int
+		UpdateProtectedAreaPicture  func(childComplexity int, id int, input ent.UpdateProtectedAreaPictureInput) int
+		UpdatePublication           func(childComplexity int, id int, input ent.UpdatePublicationInput) int
+		UpdatePublisher             func(childComplexity int, id int, input ent.UpdatePublisherInput) int
+		UpdateRegion                func(childComplexity int, id int, input ent.UpdateRegionInput) int
+		UpdateSet                   func(childComplexity int, id int, input ent.UpdateSetInput) int
+		UpdateSettlement            func(childComplexity int, id int, input ent.UpdateSettlementInput) int
+		UpdateTechnique             func(childComplexity int, id int, input ent.UpdateTechniqueInput) int
 	}
 
 	Organization struct {
@@ -919,6 +974,7 @@ type ComplexityRoot struct {
 		ArtGenres               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtGenreOrder, where *ent.ArtGenreWhereInput) int
 		ArtStyles               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtStyleOrder, where *ent.ArtStyleWhereInput) int
 		Artifacts               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtifactOrder, where *ent.ArtifactWhereInput) int
+		Arts                    func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtOrder, where *ent.ArtWhereInput) int
 		AuditLogs               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.AuditLogOrder, where *ent.AuditLogWhereInput) int
 		BookGenres              func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.BookGenreOrder, where *ent.BookGenreWhereInput) int
 		Books                   func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.BookOrder, where *ent.BookWhereInput) int
@@ -1055,16 +1111,30 @@ type ComplexityRoot struct {
 type MutationResolver interface {
 	CreateArtifact(ctx context.Context, input ent.CreateArtifactInput) (*ent.Artifact, error)
 	UpdateArtifact(ctx context.Context, id int, input ent.UpdateArtifactInput) (*ent.Artifact, error)
+	CreateArt(ctx context.Context, input ent.CreateArtInput) (*ent.Art, error)
+	UpdateArt(ctx context.Context, id int, input ent.UpdateArtInput) (*ent.Art, error)
+	CreateArtGenre(ctx context.Context, input ent.CreateArtGenreInput) (*ent.ArtGenre, error)
+	UpdateArtGenre(ctx context.Context, id int, input ent.UpdateArtGenreInput) (*ent.ArtGenre, error)
+	CreateArtStyle(ctx context.Context, input ent.CreateArtStyleInput) (*ent.ArtStyle, error)
+	UpdateArtStyle(ctx context.Context, id int, input ent.UpdateArtStyleInput) (*ent.ArtStyle, error)
+	CreateBook(ctx context.Context, input ent.CreateBookInput) (*ent.Book, error)
+	UpdateBook(ctx context.Context, id int, input ent.UpdateBookInput) (*ent.Book, error)
+	CreateBookGenre(ctx context.Context, input ent.CreateBookGenreInput) (*ent.BookGenre, error)
+	UpdateBookGenre(ctx context.Context, id int, input ent.UpdateBookGenreInput) (*ent.BookGenre, error)
 	CreateCategory(ctx context.Context, input ent.CreateCategoryInput) (*ent.Category, error)
 	UpdateCategory(ctx context.Context, id int, input ent.UpdateCategoryInput) (*ent.Category, error)
 	CreateCollection(ctx context.Context, input ent.CreateCollectionInput) (*ent.Collection, error)
 	UpdateCollection(ctx context.Context, id int, input ent.UpdateCollectionInput) (*ent.Collection, error)
+	CreateCountry(ctx context.Context, input ent.CreateCountryInput) (*ent.Country, error)
+	UpdateCountry(ctx context.Context, id int, input ent.UpdateCountryInput) (*ent.Country, error)
 	CreateCulture(ctx context.Context, input ent.CreateCultureInput) (*ent.Culture, error)
 	UpdateCulture(ctx context.Context, id int, input ent.UpdateCultureInput) (*ent.Culture, error)
 	CreateDistrict(ctx context.Context, input ent.CreateDistrictInput) (*ent.District, error)
 	UpdateDistrict(ctx context.Context, id int, input ent.UpdateDistrictInput) (*ent.District, error)
 	CreateHolder(ctx context.Context, input ent.CreateHolderInput) (*ent.Holder, error)
 	UpdateHolder(ctx context.Context, id int, input ent.UpdateHolderInput) (*ent.Holder, error)
+	CreateHolderResponsibility(ctx context.Context, input ent.CreateHolderResponsibilityInput) (*ent.HolderResponsibility, error)
+	UpdateHolderResponsibility(ctx context.Context, id int, input ent.UpdateHolderResponsibilityInput) (*ent.HolderResponsibility, error)
 	CreateLicense(ctx context.Context, input ent.CreateLicenseInput) (*ent.License, error)
 	UpdateLicense(ctx context.Context, id int, input ent.UpdateLicenseInput) (*ent.License, error)
 	CreateLocation(ctx context.Context, input ent.CreateLocationInput) (*ent.Location, error)
@@ -1077,12 +1147,28 @@ type MutationResolver interface {
 	UpdateMonument(ctx context.Context, id int, input ent.UpdateMonumentInput) (*ent.Monument, error)
 	CreateOrganization(ctx context.Context, input ent.CreateOrganizationInput) (*ent.Organization, error)
 	UpdateOrganization(ctx context.Context, id int, input ent.UpdateOrganizationInput) (*ent.Organization, error)
+	CreateOrganizationType(ctx context.Context, input ent.CreateOrganizationTypeInput) (*ent.OrganizationType, error)
+	UpdateOrganizationType(ctx context.Context, id int, input ent.UpdateOrganizationTypeInput) (*ent.OrganizationType, error)
+	CreatePeriod(ctx context.Context, input ent.CreatePeriodInput) (*ent.Period, error)
+	UpdatePeriod(ctx context.Context, id int, input ent.UpdatePeriodInput) (*ent.Period, error)
 	CreatePerson(ctx context.Context, input ent.CreatePersonInput) (*ent.Person, error)
 	UpdatePerson(ctx context.Context, id int, input ent.UpdatePersonInput) (*ent.Person, error)
+	CreatePersonRole(ctx context.Context, input ent.CreatePersonRoleInput) (*ent.PersonRole, error)
+	UpdatePersonRole(ctx context.Context, id int, input ent.UpdatePersonRoleInput) (*ent.PersonRole, error)
 	CreateProject(ctx context.Context, input ent.CreateProjectInput) (*ent.Project, error)
 	UpdateProject(ctx context.Context, id int, input ent.UpdateProjectInput) (*ent.Project, error)
+	CreateProjectType(ctx context.Context, input ent.CreateProjectTypeInput) (*ent.ProjectType, error)
+	UpdateProjectType(ctx context.Context, id int, input ent.UpdateProjectTypeInput) (*ent.ProjectType, error)
+	CreateProtectedArea(ctx context.Context, input ent.CreateProtectedAreaInput) (*ent.ProtectedArea, error)
+	UpdateProtectedArea(ctx context.Context, id int, input ent.UpdateProtectedAreaInput) (*ent.ProtectedArea, error)
+	CreateProtectedAreaCategory(ctx context.Context, input ent.CreateProtectedAreaCategoryInput) (*ent.ProtectedAreaCategory, error)
+	UpdateProtectedAreaCategory(ctx context.Context, id int, input ent.UpdateProtectedAreaCategoryInput) (*ent.ProtectedAreaCategory, error)
+	CreateProtectedAreaPicture(ctx context.Context, input ent.CreateProtectedAreaPictureInput) (*ent.ProtectedAreaPicture, error)
+	UpdateProtectedAreaPicture(ctx context.Context, id int, input ent.UpdateProtectedAreaPictureInput) (*ent.ProtectedAreaPicture, error)
 	CreatePublication(ctx context.Context, input ent.CreatePublicationInput) (*ent.Publication, error)
 	UpdatePublication(ctx context.Context, id int, input ent.UpdatePublicationInput) (*ent.Publication, error)
+	CreatePublisher(ctx context.Context, input ent.CreatePublisherInput) (*ent.Publisher, error)
+	UpdatePublisher(ctx context.Context, id int, input ent.UpdatePublisherInput) (*ent.Publisher, error)
 	CreateRegion(ctx context.Context, input ent.CreateRegionInput) (*ent.Region, error)
 	UpdateRegion(ctx context.Context, id int, input ent.UpdateRegionInput) (*ent.Region, error)
 	CreateSet(ctx context.Context, input ent.CreateSetInput) (*ent.Set, error)
@@ -1095,6 +1181,7 @@ type MutationResolver interface {
 type QueryResolver interface {
 	Node(ctx context.Context, id int) (ent.Noder, error)
 	Nodes(ctx context.Context, ids []int) ([]ent.Noder, error)
+	Arts(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtOrder, where *ent.ArtWhereInput) (*ent.ArtConnection, error)
 	ArtGenres(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtGenreOrder, where *ent.ArtGenreWhereInput) (*ent.ArtGenreConnection, error)
 	ArtStyles(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtStyleOrder, where *ent.ArtStyleWhereInput) (*ent.ArtStyleConnection, error)
 	Artifacts(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtifactOrder, where *ent.ArtifactWhereInput) (*ent.ArtifactConnection, error)
@@ -1146,6 +1233,69 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	_ = ec
 	switch typeName + "." + field {
 
+	case "Art.abbreviation":
+		if e.complexity.Art.Abbreviation == nil {
+			break
+		}
+
+		return e.complexity.Art.Abbreviation(childComplexity), true
+
+	case "Art.additionalImagesUrls":
+		if e.complexity.Art.AdditionalImagesUrls == nil {
+			break
+		}
+
+		return e.complexity.Art.AdditionalImagesUrls(childComplexity), true
+
+	case "Art.artGenre":
+		if e.complexity.Art.ArtGenre == nil {
+			break
+		}
+
+		return e.complexity.Art.ArtGenre(childComplexity), true
+
+	case "Art.artStyle":
+		if e.complexity.Art.ArtStyle == nil {
+			break
+		}
+
+		return e.complexity.Art.ArtStyle(childComplexity), true
+
+	case "Art.createdAt":
+		if e.complexity.Art.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Art.CreatedAt(childComplexity), true
+
+	case "Art.createdBy":
+		if e.complexity.Art.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.Art.CreatedBy(childComplexity), true
+
+	case "Art.description":
+		if e.complexity.Art.Description == nil {
+			break
+		}
+
+		return e.complexity.Art.Description(childComplexity), true
+
+	case "Art.displayName":
+		if e.complexity.Art.DisplayName == nil {
+			break
+		}
+
+		return e.complexity.Art.DisplayName(childComplexity), true
+
+	case "Art.externalLinks":
+		if e.complexity.Art.ExternalLinks == nil {
+			break
+		}
+
+		return e.complexity.Art.ExternalLinks(childComplexity), true
+
 	case "Art.id":
 		if e.complexity.Art.ID == nil {
 			break
@@ -1153,12 +1303,75 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Art.ID(childComplexity), true
 
+	case "Art.primaryImageURL":
+		if e.complexity.Art.PrimaryImageURL == nil {
+			break
+		}
+
+		return e.complexity.Art.PrimaryImageURL(childComplexity), true
+
+	case "Art.updatedAt":
+		if e.complexity.Art.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Art.UpdatedAt(childComplexity), true
+
+	case "Art.updatedBy":
+		if e.complexity.Art.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.Art.UpdatedBy(childComplexity), true
+
+	case "ArtConnection.edges":
+		if e.complexity.ArtConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.ArtConnection.Edges(childComplexity), true
+
+	case "ArtConnection.pageInfo":
+		if e.complexity.ArtConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.ArtConnection.PageInfo(childComplexity), true
+
+	case "ArtConnection.totalCount":
+		if e.complexity.ArtConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.ArtConnection.TotalCount(childComplexity), true
+
+	case "ArtEdge.cursor":
+		if e.complexity.ArtEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.ArtEdge.Cursor(childComplexity), true
+
+	case "ArtEdge.node":
+		if e.complexity.ArtEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.ArtEdge.Node(childComplexity), true
+
 	case "ArtGenre.abbreviation":
 		if e.complexity.ArtGenre.Abbreviation == nil {
 			break
 		}
 
 		return e.complexity.ArtGenre.Abbreviation(childComplexity), true
+
+	case "ArtGenre.art":
+		if e.complexity.ArtGenre.Art == nil {
+			break
+		}
+
+		return e.complexity.ArtGenre.Art(childComplexity), true
 
 	case "ArtGenre.createdAt":
 		if e.complexity.ArtGenre.CreatedAt == nil {
@@ -1257,6 +1470,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ArtStyle.Abbreviation(childComplexity), true
+
+	case "ArtStyle.art":
+		if e.complexity.ArtStyle.Art == nil {
+			break
+		}
+
+		return e.complexity.ArtStyle.Art(childComplexity), true
 
 	case "ArtStyle.createdAt":
 		if e.complexity.ArtStyle.CreatedAt == nil {
@@ -3386,6 +3606,42 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.MonumentEdge.Node(childComplexity), true
 
+	case "Mutation.createArt":
+		if e.complexity.Mutation.CreateArt == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createArt_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateArt(childComplexity, args["input"].(ent.CreateArtInput)), true
+
+	case "Mutation.createArtGenre":
+		if e.complexity.Mutation.CreateArtGenre == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createArtGenre_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateArtGenre(childComplexity, args["input"].(ent.CreateArtGenreInput)), true
+
+	case "Mutation.createArtStyle":
+		if e.complexity.Mutation.CreateArtStyle == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createArtStyle_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateArtStyle(childComplexity, args["input"].(ent.CreateArtStyleInput)), true
+
 	case "Mutation.createArtifact":
 		if e.complexity.Mutation.CreateArtifact == nil {
 			break
@@ -3397,6 +3653,30 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateArtifact(childComplexity, args["input"].(ent.CreateArtifactInput)), true
+
+	case "Mutation.createBook":
+		if e.complexity.Mutation.CreateBook == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBook_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBook(childComplexity, args["input"].(ent.CreateBookInput)), true
+
+	case "Mutation.createBookGenre":
+		if e.complexity.Mutation.CreateBookGenre == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBookGenre_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBookGenre(childComplexity, args["input"].(ent.CreateBookGenreInput)), true
 
 	case "Mutation.createCategory":
 		if e.complexity.Mutation.CreateCategory == nil {
@@ -3421,6 +3701,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateCollection(childComplexity, args["input"].(ent.CreateCollectionInput)), true
+
+	case "Mutation.createCountry":
+		if e.complexity.Mutation.CreateCountry == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createCountry_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateCountry(childComplexity, args["input"].(ent.CreateCountryInput)), true
 
 	case "Mutation.createCulture":
 		if e.complexity.Mutation.CreateCulture == nil {
@@ -3457,6 +3749,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateHolder(childComplexity, args["input"].(ent.CreateHolderInput)), true
+
+	case "Mutation.createHolderResponsibility":
+		if e.complexity.Mutation.CreateHolderResponsibility == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createHolderResponsibility_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateHolderResponsibility(childComplexity, args["input"].(ent.CreateHolderResponsibilityInput)), true
 
 	case "Mutation.createLicense":
 		if e.complexity.Mutation.CreateLicense == nil {
@@ -3530,6 +3834,30 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateOrganization(childComplexity, args["input"].(ent.CreateOrganizationInput)), true
 
+	case "Mutation.createOrganizationType":
+		if e.complexity.Mutation.CreateOrganizationType == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createOrganizationType_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateOrganizationType(childComplexity, args["input"].(ent.CreateOrganizationTypeInput)), true
+
+	case "Mutation.createPeriod":
+		if e.complexity.Mutation.CreatePeriod == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createPeriod_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreatePeriod(childComplexity, args["input"].(ent.CreatePeriodInput)), true
+
 	case "Mutation.createPerson":
 		if e.complexity.Mutation.CreatePerson == nil {
 			break
@@ -3541,6 +3869,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreatePerson(childComplexity, args["input"].(ent.CreatePersonInput)), true
+
+	case "Mutation.createPersonRole":
+		if e.complexity.Mutation.CreatePersonRole == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createPersonRole_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreatePersonRole(childComplexity, args["input"].(ent.CreatePersonRoleInput)), true
 
 	case "Mutation.createProject":
 		if e.complexity.Mutation.CreateProject == nil {
@@ -3554,6 +3894,54 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateProject(childComplexity, args["input"].(ent.CreateProjectInput)), true
 
+	case "Mutation.createProjectType":
+		if e.complexity.Mutation.CreateProjectType == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createProjectType_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateProjectType(childComplexity, args["input"].(ent.CreateProjectTypeInput)), true
+
+	case "Mutation.createProtectedArea":
+		if e.complexity.Mutation.CreateProtectedArea == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createProtectedArea_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateProtectedArea(childComplexity, args["input"].(ent.CreateProtectedAreaInput)), true
+
+	case "Mutation.createProtectedAreaCategory":
+		if e.complexity.Mutation.CreateProtectedAreaCategory == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createProtectedAreaCategory_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateProtectedAreaCategory(childComplexity, args["input"].(ent.CreateProtectedAreaCategoryInput)), true
+
+	case "Mutation.createProtectedAreaPicture":
+		if e.complexity.Mutation.CreateProtectedAreaPicture == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createProtectedAreaPicture_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateProtectedAreaPicture(childComplexity, args["input"].(ent.CreateProtectedAreaPictureInput)), true
+
 	case "Mutation.createPublication":
 		if e.complexity.Mutation.CreatePublication == nil {
 			break
@@ -3565,6 +3953,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreatePublication(childComplexity, args["input"].(ent.CreatePublicationInput)), true
+
+	case "Mutation.createPublisher":
+		if e.complexity.Mutation.CreatePublisher == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createPublisher_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreatePublisher(childComplexity, args["input"].(ent.CreatePublisherInput)), true
 
 	case "Mutation.createRegion":
 		if e.complexity.Mutation.CreateRegion == nil {
@@ -3614,6 +4014,42 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateTechnique(childComplexity, args["input"].(ent.CreateTechniqueInput)), true
 
+	case "Mutation.updateArt":
+		if e.complexity.Mutation.UpdateArt == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateArt_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateArt(childComplexity, args["id"].(int), args["input"].(ent.UpdateArtInput)), true
+
+	case "Mutation.updateArtGenre":
+		if e.complexity.Mutation.UpdateArtGenre == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateArtGenre_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateArtGenre(childComplexity, args["id"].(int), args["input"].(ent.UpdateArtGenreInput)), true
+
+	case "Mutation.updateArtStyle":
+		if e.complexity.Mutation.UpdateArtStyle == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateArtStyle_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateArtStyle(childComplexity, args["id"].(int), args["input"].(ent.UpdateArtStyleInput)), true
+
 	case "Mutation.updateArtifact":
 		if e.complexity.Mutation.UpdateArtifact == nil {
 			break
@@ -3625,6 +4061,30 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UpdateArtifact(childComplexity, args["id"].(int), args["input"].(ent.UpdateArtifactInput)), true
+
+	case "Mutation.updateBook":
+		if e.complexity.Mutation.UpdateBook == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBook_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBook(childComplexity, args["id"].(int), args["input"].(ent.UpdateBookInput)), true
+
+	case "Mutation.updateBookGenre":
+		if e.complexity.Mutation.UpdateBookGenre == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBookGenre_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBookGenre(childComplexity, args["id"].(int), args["input"].(ent.UpdateBookGenreInput)), true
 
 	case "Mutation.updateCategory":
 		if e.complexity.Mutation.UpdateCategory == nil {
@@ -3649,6 +4109,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UpdateCollection(childComplexity, args["id"].(int), args["input"].(ent.UpdateCollectionInput)), true
+
+	case "Mutation.updateCountry":
+		if e.complexity.Mutation.UpdateCountry == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateCountry_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateCountry(childComplexity, args["id"].(int), args["input"].(ent.UpdateCountryInput)), true
 
 	case "Mutation.updateCulture":
 		if e.complexity.Mutation.UpdateCulture == nil {
@@ -3685,6 +4157,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UpdateHolder(childComplexity, args["id"].(int), args["input"].(ent.UpdateHolderInput)), true
+
+	case "Mutation.updateHolderResponsibility":
+		if e.complexity.Mutation.UpdateHolderResponsibility == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateHolderResponsibility_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateHolderResponsibility(childComplexity, args["id"].(int), args["input"].(ent.UpdateHolderResponsibilityInput)), true
 
 	case "Mutation.updateLicense":
 		if e.complexity.Mutation.UpdateLicense == nil {
@@ -3758,6 +4242,30 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.UpdateOrganization(childComplexity, args["id"].(int), args["input"].(ent.UpdateOrganizationInput)), true
 
+	case "Mutation.updateOrganizationType":
+		if e.complexity.Mutation.UpdateOrganizationType == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateOrganizationType_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateOrganizationType(childComplexity, args["id"].(int), args["input"].(ent.UpdateOrganizationTypeInput)), true
+
+	case "Mutation.updatePeriod":
+		if e.complexity.Mutation.UpdatePeriod == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updatePeriod_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdatePeriod(childComplexity, args["id"].(int), args["input"].(ent.UpdatePeriodInput)), true
+
 	case "Mutation.updatePerson":
 		if e.complexity.Mutation.UpdatePerson == nil {
 			break
@@ -3769,6 +4277,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UpdatePerson(childComplexity, args["id"].(int), args["input"].(ent.UpdatePersonInput)), true
+
+	case "Mutation.updatePersonRole":
+		if e.complexity.Mutation.UpdatePersonRole == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updatePersonRole_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdatePersonRole(childComplexity, args["id"].(int), args["input"].(ent.UpdatePersonRoleInput)), true
 
 	case "Mutation.updateProject":
 		if e.complexity.Mutation.UpdateProject == nil {
@@ -3782,6 +4302,54 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.UpdateProject(childComplexity, args["id"].(int), args["input"].(ent.UpdateProjectInput)), true
 
+	case "Mutation.updateProjectType":
+		if e.complexity.Mutation.UpdateProjectType == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateProjectType_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateProjectType(childComplexity, args["id"].(int), args["input"].(ent.UpdateProjectTypeInput)), true
+
+	case "Mutation.updateProtectedArea":
+		if e.complexity.Mutation.UpdateProtectedArea == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateProtectedArea_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateProtectedArea(childComplexity, args["id"].(int), args["input"].(ent.UpdateProtectedAreaInput)), true
+
+	case "Mutation.updateProtectedAreaCategory":
+		if e.complexity.Mutation.UpdateProtectedAreaCategory == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateProtectedAreaCategory_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateProtectedAreaCategory(childComplexity, args["id"].(int), args["input"].(ent.UpdateProtectedAreaCategoryInput)), true
+
+	case "Mutation.updateProtectedAreaPicture":
+		if e.complexity.Mutation.UpdateProtectedAreaPicture == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateProtectedAreaPicture_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateProtectedAreaPicture(childComplexity, args["id"].(int), args["input"].(ent.UpdateProtectedAreaPictureInput)), true
+
 	case "Mutation.updatePublication":
 		if e.complexity.Mutation.UpdatePublication == nil {
 			break
@@ -3793,6 +4361,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UpdatePublication(childComplexity, args["id"].(int), args["input"].(ent.UpdatePublicationInput)), true
+
+	case "Mutation.updatePublisher":
+		if e.complexity.Mutation.UpdatePublisher == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updatePublisher_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdatePublisher(childComplexity, args["id"].(int), args["input"].(ent.UpdatePublisherInput)), true
 
 	case "Mutation.updateRegion":
 		if e.complexity.Mutation.UpdateRegion == nil {
@@ -5460,6 +6040,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.Artifacts(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.ArtifactOrder), args["where"].(*ent.ArtifactWhereInput)), true
 
+	case "Query.arts":
+		if e.complexity.Query.Arts == nil {
+			break
+		}
+
+		args, err := ec.field_Query_arts_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Arts(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.ArtOrder), args["where"].(*ent.ArtWhereInput)), true
+
 	case "Query.auditLogs":
 		if e.complexity.Query.AuditLogs == nil {
 			break
@@ -6293,6 +6885,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
 		ec.unmarshalInputArtGenreOrder,
 		ec.unmarshalInputArtGenreWhereInput,
+		ec.unmarshalInputArtOrder,
 		ec.unmarshalInputArtStyleOrder,
 		ec.unmarshalInputArtStyleWhereInput,
 		ec.unmarshalInputArtWhereInput,
@@ -6311,6 +6904,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCountryOrder,
 		ec.unmarshalInputCountryWhereInput,
 		ec.unmarshalInputCreateArtGenreInput,
+		ec.unmarshalInputCreateArtInput,
 		ec.unmarshalInputCreateArtStyleInput,
 		ec.unmarshalInputCreateArtifactInput,
 		ec.unmarshalInputCreateBookGenreInput,
@@ -6395,6 +6989,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputTechniqueOrder,
 		ec.unmarshalInputTechniqueWhereInput,
 		ec.unmarshalInputUpdateArtGenreInput,
+		ec.unmarshalInputUpdateArtInput,
 		ec.unmarshalInputUpdateArtStyleInput,
 		ec.unmarshalInputUpdateArtifactInput,
 		ec.unmarshalInputUpdateBookGenreInput,
@@ -6545,6 +7140,51 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
 // region    ***************************** args.gotpl *****************************
 
+func (ec *executionContext) field_Mutation_createArtGenre_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateArtGenreInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateArtGenreInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateArtGenreInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createArtStyle_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateArtStyleInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateArtStyleInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateArtStyleInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createArt_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateArtInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateArtInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateArtInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_createArtifact_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -6552,6 +7192,36 @@ func (ec *executionContext) field_Mutation_createArtifact_args(ctx context.Conte
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNCreateArtifactInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateArtifactInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createBookGenre_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateBookGenreInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateBookGenreInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateBookGenreInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createBook_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateBookInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateBookInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateBookInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6590,6 +7260,21 @@ func (ec *executionContext) field_Mutation_createCollection_args(ctx context.Con
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_createCountry_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateCountryInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateCountryInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateCountryInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_createCulture_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -6612,6 +7297,21 @@ func (ec *executionContext) field_Mutation_createDistrict_args(ctx context.Conte
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNCreateDistrictInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateDistrictInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createHolderResponsibility_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateHolderResponsibilityInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateHolderResponsibilityInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateHolderResponsibilityInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6710,6 +7410,21 @@ func (ec *executionContext) field_Mutation_createMonument_args(ctx context.Conte
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_createOrganizationType_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateOrganizationTypeInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateOrganizationTypeInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateOrganizationTypeInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_createOrganization_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -6717,6 +7432,36 @@ func (ec *executionContext) field_Mutation_createOrganization_args(ctx context.C
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNCreateOrganizationInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateOrganizationInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createPeriod_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreatePeriodInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreatePeriodInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreatePeriodInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createPersonRole_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreatePersonRoleInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreatePersonRoleInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreatePersonRoleInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6740,6 +7485,21 @@ func (ec *executionContext) field_Mutation_createPerson_args(ctx context.Context
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_createProjectType_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateProjectTypeInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateProjectTypeInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateProjectTypeInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_createProject_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -6755,6 +7515,51 @@ func (ec *executionContext) field_Mutation_createProject_args(ctx context.Contex
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_createProtectedAreaCategory_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateProtectedAreaCategoryInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateProtectedAreaCategoryInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateProtectedAreaCategoryInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createProtectedAreaPicture_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateProtectedAreaPictureInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateProtectedAreaPictureInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateProtectedAreaPictureInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createProtectedArea_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreateProtectedAreaInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateProtectedAreaInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateProtectedAreaInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_createPublication_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -6762,6 +7567,21 @@ func (ec *executionContext) field_Mutation_createPublication_args(ctx context.Co
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNCreatePublicationInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreatePublicationInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createPublisher_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreatePublisherInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreatePublisherInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreatePublisherInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6830,6 +7650,78 @@ func (ec *executionContext) field_Mutation_createTechnique_args(ctx context.Cont
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_updateArtGenre_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateArtGenreInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateArtGenreInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateArtGenreInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateArtStyle_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateArtStyleInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateArtStyleInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateArtStyleInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateArt_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateArtInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateArtInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateArtInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updateArtifact_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -6846,6 +7738,54 @@ func (ec *executionContext) field_Mutation_updateArtifact_args(ctx context.Conte
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg1, err = ec.unmarshalNUpdateArtifactInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateArtifactInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateBookGenre_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateBookGenreInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateBookGenreInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateBookGenreInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateBook_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateBookInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateBookInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateBookInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6902,6 +7842,30 @@ func (ec *executionContext) field_Mutation_updateCollection_args(ctx context.Con
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_updateCountry_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateCountryInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateCountryInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateCountryInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updateCulture_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -6942,6 +7906,30 @@ func (ec *executionContext) field_Mutation_updateDistrict_args(ctx context.Conte
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg1, err = ec.unmarshalNUpdateDistrictInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateDistrictInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateHolderResponsibility_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateHolderResponsibilityInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateHolderResponsibilityInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateHolderResponsibilityInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -7094,6 +8082,30 @@ func (ec *executionContext) field_Mutation_updateMonument_args(ctx context.Conte
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_updateOrganizationType_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateOrganizationTypeInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateOrganizationTypeInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateOrganizationTypeInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updateOrganization_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -7110,6 +8122,54 @@ func (ec *executionContext) field_Mutation_updateOrganization_args(ctx context.C
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg1, err = ec.unmarshalNUpdateOrganizationInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateOrganizationInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updatePeriod_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdatePeriodInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdatePeriodInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdatePeriodInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updatePersonRole_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdatePersonRoleInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdatePersonRoleInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdatePersonRoleInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -7142,6 +8202,30 @@ func (ec *executionContext) field_Mutation_updatePerson_args(ctx context.Context
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_updateProjectType_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateProjectTypeInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateProjectTypeInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateProjectTypeInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updateProject_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -7166,6 +8250,78 @@ func (ec *executionContext) field_Mutation_updateProject_args(ctx context.Contex
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_updateProtectedAreaCategory_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateProtectedAreaCategoryInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateProtectedAreaCategoryInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateProtectedAreaCategoryInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateProtectedAreaPicture_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateProtectedAreaPictureInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateProtectedAreaPictureInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateProtectedAreaPictureInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateProtectedArea_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdateProtectedAreaInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateProtectedAreaInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateProtectedAreaInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updatePublication_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -7182,6 +8338,30 @@ func (ec *executionContext) field_Mutation_updatePublication_args(ctx context.Co
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg1, err = ec.unmarshalNUpdatePublicationInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdatePublicationInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updatePublisher_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdatePublisherInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdatePublisherInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdatePublisherInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -7473,6 +8653,66 @@ func (ec *executionContext) field_Query_artifacts_args(ctx context.Context, rawA
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
 		arg5, err = ec.unmarshalOArtifactWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtifactWhereInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_arts_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *entgql.Cursor[int]
+	if tmp, ok := rawArgs["after"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
+		arg0, err = ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["after"] = arg0
+	var arg1 *int
+	if tmp, ok := rawArgs["first"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("first"))
+		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["first"] = arg1
+	var arg2 *entgql.Cursor[int]
+	if tmp, ok := rawArgs["before"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
+		arg2, err = ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["before"] = arg2
+	var arg3 *int
+	if tmp, ok := rawArgs["last"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last"))
+		arg3, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["last"] = arg3
+	var arg4 []*ent.ArtOrder
+	if tmp, ok := rawArgs["orderBy"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
+		arg4, err = ec.unmarshalOArtOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtOrderᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["orderBy"] = arg4
+	var arg5 *ent.ArtWhereInput
+	if tmp, ok := rawArgs["where"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
+		arg5, err = ec.unmarshalOArtWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -9453,6 +10693,806 @@ func (ec *executionContext) fieldContext_Art_id(ctx context.Context, field graph
 	return fc, nil
 }
 
+func (ec *executionContext) _Art_createdAt(ctx context.Context, field graphql.CollectedField, obj *ent.Art) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Art_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(time.Time)
+	fc.Result = res
+	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Art_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Art",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Time does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Art_createdBy(ctx context.Context, field graphql.CollectedField, obj *ent.Art) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Art_createdBy(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedBy, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Art_createdBy(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Art",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Art_updatedAt(ctx context.Context, field graphql.CollectedField, obj *ent.Art) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Art_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(time.Time)
+	fc.Result = res
+	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Art_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Art",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Time does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Art_updatedBy(ctx context.Context, field graphql.CollectedField, obj *ent.Art) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Art_updatedBy(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedBy, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Art_updatedBy(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Art",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Art_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.Art) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Art_displayName(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.DisplayName, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Art_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Art",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Art_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Art) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Art_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Art_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Art",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Art_description(ctx context.Context, field graphql.CollectedField, obj *ent.Art) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Art_description(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Description, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Art_description(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Art",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Art_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.Art) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Art_externalLinks(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ExternalLinks, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Art_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Art",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Art_primaryImageURL(ctx context.Context, field graphql.CollectedField, obj *ent.Art) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Art_primaryImageURL(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PrimaryImageURL, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Art_primaryImageURL(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Art",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Art_additionalImagesUrls(ctx context.Context, field graphql.CollectedField, obj *ent.Art) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Art_additionalImagesUrls(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AdditionalImagesUrls, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Art_additionalImagesUrls(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Art",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Art_artGenre(ctx context.Context, field graphql.CollectedField, obj *ent.Art) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Art_artGenre(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ArtGenre(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.ArtGenre)
+	fc.Result = res
+	return ec.marshalOArtGenre2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtGenreᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Art_artGenre(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Art",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ArtGenre_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ArtGenre_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ArtGenre_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ArtGenre_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ArtGenre_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_ArtGenre_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ArtGenre_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_ArtGenre_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_ArtGenre_externalLinks(ctx, field)
+			case "art":
+				return ec.fieldContext_ArtGenre_art(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ArtGenre", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Art_artStyle(ctx context.Context, field graphql.CollectedField, obj *ent.Art) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Art_artStyle(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ArtStyle(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.ArtStyle)
+	fc.Result = res
+	return ec.marshalOArtStyle2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtStyleᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Art_artStyle(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Art",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ArtStyle_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ArtStyle_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ArtStyle_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ArtStyle_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ArtStyle_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_ArtStyle_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ArtStyle_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_ArtStyle_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_ArtStyle_externalLinks(ctx, field)
+			case "art":
+				return ec.fieldContext_ArtStyle_art(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ArtStyle", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ArtConnection_edges(ctx context.Context, field graphql.CollectedField, obj *ent.ArtConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ArtConnection_edges(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Edges, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.ArtEdge)
+	fc.Result = res
+	return ec.marshalOArtEdge2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtEdge(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ArtConnection_edges(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ArtConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "node":
+				return ec.fieldContext_ArtEdge_node(ctx, field)
+			case "cursor":
+				return ec.fieldContext_ArtEdge_cursor(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ArtEdge", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ArtConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *ent.ArtConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ArtConnection_pageInfo(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PageInfo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(entgql.PageInfo[int])
+	fc.Result = res
+	return ec.marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ArtConnection_pageInfo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ArtConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "hasNextPage":
+				return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
+			case "hasPreviousPage":
+				return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
+			case "startCursor":
+				return ec.fieldContext_PageInfo_startCursor(ctx, field)
+			case "endCursor":
+				return ec.fieldContext_PageInfo_endCursor(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ArtConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *ent.ArtConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ArtConnection_totalCount(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TotalCount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ArtConnection_totalCount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ArtConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ArtEdge_node(ctx context.Context, field graphql.CollectedField, obj *ent.ArtEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ArtEdge_node(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Art)
+	fc.Result = res
+	return ec.marshalOArt2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArt(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ArtEdge_node(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ArtEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Art_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Art_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Art_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Art_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Art_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Art_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Art_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Art_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_Art_externalLinks(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_Art_primaryImageURL(ctx, field)
+			case "additionalImagesUrls":
+				return ec.fieldContext_Art_additionalImagesUrls(ctx, field)
+			case "artGenre":
+				return ec.fieldContext_Art_artGenre(ctx, field)
+			case "artStyle":
+				return ec.fieldContext_Art_artStyle(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Art", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ArtEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *ent.ArtEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ArtEdge_cursor(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(entgql.Cursor[int])
+	fc.Result = res
+	return ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ArtEdge_cursor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ArtEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Cursor does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ArtGenre_id(ctx context.Context, field graphql.CollectedField, obj *ent.ArtGenre) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ArtGenre_id(ctx, field)
 	if err != nil {
@@ -9831,6 +11871,75 @@ func (ec *executionContext) fieldContext_ArtGenre_externalLinks(ctx context.Cont
 	return fc, nil
 }
 
+func (ec *executionContext) _ArtGenre_art(ctx context.Context, field graphql.CollectedField, obj *ent.ArtGenre) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ArtGenre_art(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Art(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Art)
+	fc.Result = res
+	return ec.marshalOArt2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ArtGenre_art(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ArtGenre",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Art_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Art_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Art_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Art_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Art_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Art_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Art_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Art_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_Art_externalLinks(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_Art_primaryImageURL(ctx, field)
+			case "additionalImagesUrls":
+				return ec.fieldContext_Art_additionalImagesUrls(ctx, field)
+			case "artGenre":
+				return ec.fieldContext_Art_artGenre(ctx, field)
+			case "artStyle":
+				return ec.fieldContext_Art_artStyle(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Art", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ArtGenreConnection_edges(ctx context.Context, field graphql.CollectedField, obj *ent.ArtGenreConnection) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ArtGenreConnection_edges(ctx, field)
 	if err != nil {
@@ -10030,6 +12139,8 @@ func (ec *executionContext) fieldContext_ArtGenreEdge_node(ctx context.Context, 
 				return ec.fieldContext_ArtGenre_description(ctx, field)
 			case "externalLinks":
 				return ec.fieldContext_ArtGenre_externalLinks(ctx, field)
+			case "art":
+				return ec.fieldContext_ArtGenre_art(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ArtGenre", field.Name)
 		},
@@ -10459,6 +12570,75 @@ func (ec *executionContext) fieldContext_ArtStyle_externalLinks(ctx context.Cont
 	return fc, nil
 }
 
+func (ec *executionContext) _ArtStyle_art(ctx context.Context, field graphql.CollectedField, obj *ent.ArtStyle) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ArtStyle_art(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Art(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Art)
+	fc.Result = res
+	return ec.marshalOArt2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ArtStyle_art(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ArtStyle",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Art_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Art_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Art_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Art_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Art_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Art_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Art_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Art_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_Art_externalLinks(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_Art_primaryImageURL(ctx, field)
+			case "additionalImagesUrls":
+				return ec.fieldContext_Art_additionalImagesUrls(ctx, field)
+			case "artGenre":
+				return ec.fieldContext_Art_artGenre(ctx, field)
+			case "artStyle":
+				return ec.fieldContext_Art_artStyle(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Art", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ArtStyleConnection_edges(ctx context.Context, field graphql.CollectedField, obj *ent.ArtStyleConnection) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ArtStyleConnection_edges(ctx, field)
 	if err != nil {
@@ -10658,6 +12838,8 @@ func (ec *executionContext) fieldContext_ArtStyleEdge_node(ctx context.Context, 
 				return ec.fieldContext_ArtStyle_description(ctx, field)
 			case "externalLinks":
 				return ec.fieldContext_ArtStyle_externalLinks(ctx, field)
+			case "art":
+				return ec.fieldContext_ArtStyle_art(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ArtStyle", field.Name)
 		},
@@ -25811,6 +27993,828 @@ func (ec *executionContext) fieldContext_Mutation_updateArtifact(ctx context.Con
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_createArt(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createArt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateArt(rctx, fc.Args["input"].(ent.CreateArtInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Art)
+	fc.Result = res
+	return ec.marshalNArt2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArt(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createArt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Art_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Art_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Art_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Art_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Art_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Art_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Art_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Art_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_Art_externalLinks(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_Art_primaryImageURL(ctx, field)
+			case "additionalImagesUrls":
+				return ec.fieldContext_Art_additionalImagesUrls(ctx, field)
+			case "artGenre":
+				return ec.fieldContext_Art_artGenre(ctx, field)
+			case "artStyle":
+				return ec.fieldContext_Art_artStyle(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Art", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createArt_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateArt(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateArt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateArt(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateArtInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Art)
+	fc.Result = res
+	return ec.marshalNArt2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArt(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateArt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Art_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Art_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Art_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Art_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Art_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Art_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Art_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Art_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_Art_externalLinks(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_Art_primaryImageURL(ctx, field)
+			case "additionalImagesUrls":
+				return ec.fieldContext_Art_additionalImagesUrls(ctx, field)
+			case "artGenre":
+				return ec.fieldContext_Art_artGenre(ctx, field)
+			case "artStyle":
+				return ec.fieldContext_Art_artStyle(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Art", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateArt_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createArtGenre(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createArtGenre(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateArtGenre(rctx, fc.Args["input"].(ent.CreateArtGenreInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.ArtGenre)
+	fc.Result = res
+	return ec.marshalNArtGenre2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtGenre(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createArtGenre(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ArtGenre_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ArtGenre_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ArtGenre_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ArtGenre_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ArtGenre_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_ArtGenre_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ArtGenre_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_ArtGenre_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_ArtGenre_externalLinks(ctx, field)
+			case "art":
+				return ec.fieldContext_ArtGenre_art(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ArtGenre", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createArtGenre_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateArtGenre(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateArtGenre(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateArtGenre(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateArtGenreInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.ArtGenre)
+	fc.Result = res
+	return ec.marshalNArtGenre2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtGenre(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateArtGenre(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ArtGenre_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ArtGenre_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ArtGenre_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ArtGenre_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ArtGenre_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_ArtGenre_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ArtGenre_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_ArtGenre_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_ArtGenre_externalLinks(ctx, field)
+			case "art":
+				return ec.fieldContext_ArtGenre_art(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ArtGenre", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateArtGenre_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createArtStyle(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createArtStyle(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateArtStyle(rctx, fc.Args["input"].(ent.CreateArtStyleInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.ArtStyle)
+	fc.Result = res
+	return ec.marshalNArtStyle2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtStyle(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createArtStyle(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ArtStyle_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ArtStyle_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ArtStyle_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ArtStyle_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ArtStyle_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_ArtStyle_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ArtStyle_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_ArtStyle_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_ArtStyle_externalLinks(ctx, field)
+			case "art":
+				return ec.fieldContext_ArtStyle_art(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ArtStyle", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createArtStyle_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateArtStyle(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateArtStyle(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateArtStyle(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateArtStyleInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.ArtStyle)
+	fc.Result = res
+	return ec.marshalNArtStyle2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtStyle(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateArtStyle(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ArtStyle_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ArtStyle_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ArtStyle_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ArtStyle_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ArtStyle_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_ArtStyle_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ArtStyle_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_ArtStyle_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_ArtStyle_externalLinks(ctx, field)
+			case "art":
+				return ec.fieldContext_ArtStyle_art(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ArtStyle", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateArtStyle_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createBook(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createBook(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateBook(rctx, fc.Args["input"].(ent.CreateBookInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Book)
+	fc.Result = res
+	return ec.marshalNBook2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐBook(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createBook(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Book_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Book_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Book_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Book_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Book_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Book_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Book_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Book_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_Book_externalLinks(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_Book_primaryImageURL(ctx, field)
+			case "additionalImagesUrls":
+				return ec.fieldContext_Book_additionalImagesUrls(ctx, field)
+			case "files":
+				return ec.fieldContext_Book_files(ctx, field)
+			case "year":
+				return ec.fieldContext_Book_year(ctx, field)
+			case "authors":
+				return ec.fieldContext_Book_authors(ctx, field)
+			case "bookGenres":
+				return ec.fieldContext_Book_bookGenres(ctx, field)
+			case "collection":
+				return ec.fieldContext_Book_collection(ctx, field)
+			case "holders":
+				return ec.fieldContext_Book_holders(ctx, field)
+			case "publisher":
+				return ec.fieldContext_Book_publisher(ctx, field)
+			case "license":
+				return ec.fieldContext_Book_license(ctx, field)
+			case "location":
+				return ec.fieldContext_Book_location(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Book", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createBook_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateBook(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateBook(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateBook(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateBookInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Book)
+	fc.Result = res
+	return ec.marshalNBook2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐBook(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateBook(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Book_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Book_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Book_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Book_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Book_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Book_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Book_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Book_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_Book_externalLinks(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_Book_primaryImageURL(ctx, field)
+			case "additionalImagesUrls":
+				return ec.fieldContext_Book_additionalImagesUrls(ctx, field)
+			case "files":
+				return ec.fieldContext_Book_files(ctx, field)
+			case "year":
+				return ec.fieldContext_Book_year(ctx, field)
+			case "authors":
+				return ec.fieldContext_Book_authors(ctx, field)
+			case "bookGenres":
+				return ec.fieldContext_Book_bookGenres(ctx, field)
+			case "collection":
+				return ec.fieldContext_Book_collection(ctx, field)
+			case "holders":
+				return ec.fieldContext_Book_holders(ctx, field)
+			case "publisher":
+				return ec.fieldContext_Book_publisher(ctx, field)
+			case "license":
+				return ec.fieldContext_Book_license(ctx, field)
+			case "location":
+				return ec.fieldContext_Book_location(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Book", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateBook_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createBookGenre(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createBookGenre(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateBookGenre(rctx, fc.Args["input"].(ent.CreateBookGenreInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.BookGenre)
+	fc.Result = res
+	return ec.marshalNBookGenre2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐBookGenre(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createBookGenre(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_BookGenre_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_BookGenre_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_BookGenre_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_BookGenre_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_BookGenre_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_BookGenre_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_BookGenre_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_BookGenre_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_BookGenre_externalLinks(ctx, field)
+			case "books":
+				return ec.fieldContext_BookGenre_books(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type BookGenre", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createBookGenre_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateBookGenre(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateBookGenre(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateBookGenre(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateBookGenreInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.BookGenre)
+	fc.Result = res
+	return ec.marshalNBookGenre2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐBookGenre(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateBookGenre(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_BookGenre_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_BookGenre_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_BookGenre_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_BookGenre_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_BookGenre_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_BookGenre_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_BookGenre_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_BookGenre_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_BookGenre_externalLinks(ctx, field)
+			case "books":
+				return ec.fieldContext_BookGenre_books(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type BookGenre", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateBookGenre_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createCategory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_createCategory(ctx, field)
 	if err != nil {
@@ -26129,6 +29133,160 @@ func (ec *executionContext) fieldContext_Mutation_updateCollection(ctx context.C
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_updateCollection_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createCountry(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createCountry(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateCountry(rctx, fc.Args["input"].(ent.CreateCountryInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Country)
+	fc.Result = res
+	return ec.marshalNCountry2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCountry(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createCountry(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Country_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Country_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Country_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Country_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Country_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Country_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Country_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Country_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_Country_externalLinks(ctx, field)
+			case "location":
+				return ec.fieldContext_Country_location(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Country", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createCountry_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateCountry(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateCountry(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateCountry(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateCountryInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Country)
+	fc.Result = res
+	return ec.marshalNCountry2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCountry(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateCountry(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Country_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Country_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Country_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Country_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Country_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Country_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Country_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Country_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_Country_externalLinks(ctx, field)
+			case "location":
+				return ec.fieldContext_Country_location(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Country", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateCountry_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -26599,6 +29757,160 @@ func (ec *executionContext) fieldContext_Mutation_updateHolder(ctx context.Conte
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_updateHolder_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createHolderResponsibility(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createHolderResponsibility(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateHolderResponsibility(rctx, fc.Args["input"].(ent.CreateHolderResponsibilityInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.HolderResponsibility)
+	fc.Result = res
+	return ec.marshalNHolderResponsibility2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolderResponsibility(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createHolderResponsibility(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_HolderResponsibility_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_HolderResponsibility_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_HolderResponsibility_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_HolderResponsibility_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_HolderResponsibility_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_HolderResponsibility_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_HolderResponsibility_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_HolderResponsibility_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_HolderResponsibility_externalLinks(ctx, field)
+			case "holder":
+				return ec.fieldContext_HolderResponsibility_holder(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type HolderResponsibility", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createHolderResponsibility_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateHolderResponsibility(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateHolderResponsibility(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateHolderResponsibility(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateHolderResponsibilityInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.HolderResponsibility)
+	fc.Result = res
+	return ec.marshalNHolderResponsibility2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolderResponsibility(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateHolderResponsibility(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_HolderResponsibility_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_HolderResponsibility_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_HolderResponsibility_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_HolderResponsibility_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_HolderResponsibility_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_HolderResponsibility_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_HolderResponsibility_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_HolderResponsibility_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_HolderResponsibility_externalLinks(ctx, field)
+			case "holder":
+				return ec.fieldContext_HolderResponsibility_holder(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type HolderResponsibility", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateHolderResponsibility_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -27609,6 +30921,314 @@ func (ec *executionContext) fieldContext_Mutation_updateOrganization(ctx context
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_createOrganizationType(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createOrganizationType(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateOrganizationType(rctx, fc.Args["input"].(ent.CreateOrganizationTypeInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.OrganizationType)
+	fc.Result = res
+	return ec.marshalNOrganizationType2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐOrganizationType(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createOrganizationType(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_OrganizationType_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_OrganizationType_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_OrganizationType_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_OrganizationType_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_OrganizationType_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_OrganizationType_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_OrganizationType_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_OrganizationType_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_OrganizationType_externalLinks(ctx, field)
+			case "organizations":
+				return ec.fieldContext_OrganizationType_organizations(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type OrganizationType", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createOrganizationType_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateOrganizationType(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateOrganizationType(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateOrganizationType(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateOrganizationTypeInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.OrganizationType)
+	fc.Result = res
+	return ec.marshalNOrganizationType2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐOrganizationType(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateOrganizationType(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_OrganizationType_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_OrganizationType_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_OrganizationType_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_OrganizationType_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_OrganizationType_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_OrganizationType_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_OrganizationType_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_OrganizationType_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_OrganizationType_externalLinks(ctx, field)
+			case "organizations":
+				return ec.fieldContext_OrganizationType_organizations(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type OrganizationType", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateOrganizationType_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createPeriod(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createPeriod(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreatePeriod(rctx, fc.Args["input"].(ent.CreatePeriodInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Period)
+	fc.Result = res
+	return ec.marshalNPeriod2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPeriod(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createPeriod(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Period_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Period_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Period_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Period_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Period_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Period_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Period_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Period_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_Period_externalLinks(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Period_artifacts(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Period", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createPeriod_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updatePeriod(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updatePeriod(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdatePeriod(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdatePeriodInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Period)
+	fc.Result = res
+	return ec.marshalNPeriod2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPeriod(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updatePeriod(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Period_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Period_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Period_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Period_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Period_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Period_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Period_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Period_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_Period_externalLinks(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Period_artifacts(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Period", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updatePeriod_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createPerson(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_createPerson(ctx, field)
 	if err != nil {
@@ -27835,6 +31455,160 @@ func (ec *executionContext) fieldContext_Mutation_updatePerson(ctx context.Conte
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_createPersonRole(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createPersonRole(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreatePersonRole(rctx, fc.Args["input"].(ent.CreatePersonRoleInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.PersonRole)
+	fc.Result = res
+	return ec.marshalNPersonRole2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPersonRole(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createPersonRole(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_PersonRole_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_PersonRole_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_PersonRole_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_PersonRole_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_PersonRole_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_PersonRole_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_PersonRole_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_PersonRole_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_PersonRole_externalLinks(ctx, field)
+			case "person":
+				return ec.fieldContext_PersonRole_person(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PersonRole", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createPersonRole_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updatePersonRole(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updatePersonRole(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdatePersonRole(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdatePersonRoleInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.PersonRole)
+	fc.Result = res
+	return ec.marshalNPersonRole2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPersonRole(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updatePersonRole(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_PersonRole_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_PersonRole_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_PersonRole_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_PersonRole_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_PersonRole_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_PersonRole_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_PersonRole_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_PersonRole_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_PersonRole_externalLinks(ctx, field)
+			case "person":
+				return ec.fieldContext_PersonRole_person(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PersonRole", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updatePersonRole_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createProject(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_createProject(ctx, field)
 	if err != nil {
@@ -28005,6 +31779,658 @@ func (ec *executionContext) fieldContext_Mutation_updateProject(ctx context.Cont
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_createProjectType(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createProjectType(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateProjectType(rctx, fc.Args["input"].(ent.CreateProjectTypeInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.ProjectType)
+	fc.Result = res
+	return ec.marshalNProjectType2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProjectType(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createProjectType(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ProjectType_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ProjectType_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ProjectType_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ProjectType_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ProjectType_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_ProjectType_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ProjectType_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_ProjectType_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_ProjectType_externalLinks(ctx, field)
+			case "projects":
+				return ec.fieldContext_ProjectType_projects(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProjectType", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createProjectType_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateProjectType(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateProjectType(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateProjectType(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateProjectTypeInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.ProjectType)
+	fc.Result = res
+	return ec.marshalNProjectType2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProjectType(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateProjectType(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ProjectType_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ProjectType_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ProjectType_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ProjectType_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ProjectType_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_ProjectType_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ProjectType_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_ProjectType_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_ProjectType_externalLinks(ctx, field)
+			case "projects":
+				return ec.fieldContext_ProjectType_projects(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProjectType", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateProjectType_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createProtectedArea(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createProtectedArea(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateProtectedArea(rctx, fc.Args["input"].(ent.CreateProtectedAreaInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.ProtectedArea)
+	fc.Result = res
+	return ec.marshalNProtectedArea2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedArea(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createProtectedArea(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ProtectedArea_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ProtectedArea_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ProtectedArea_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ProtectedArea_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ProtectedArea_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_ProtectedArea_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ProtectedArea_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_ProtectedArea_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_ProtectedArea_externalLinks(ctx, field)
+			case "area":
+				return ec.fieldContext_ProtectedArea_area(ctx, field)
+			case "establishmentDate":
+				return ec.fieldContext_ProtectedArea_establishmentDate(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_ProtectedArea_protectedAreaPictures(ctx, field)
+			case "protectedAreaCategory":
+				return ec.fieldContext_ProtectedArea_protectedAreaCategory(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProtectedArea", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createProtectedArea_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateProtectedArea(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateProtectedArea(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateProtectedArea(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateProtectedAreaInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.ProtectedArea)
+	fc.Result = res
+	return ec.marshalNProtectedArea2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedArea(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateProtectedArea(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ProtectedArea_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ProtectedArea_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ProtectedArea_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ProtectedArea_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ProtectedArea_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_ProtectedArea_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ProtectedArea_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_ProtectedArea_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_ProtectedArea_externalLinks(ctx, field)
+			case "area":
+				return ec.fieldContext_ProtectedArea_area(ctx, field)
+			case "establishmentDate":
+				return ec.fieldContext_ProtectedArea_establishmentDate(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_ProtectedArea_protectedAreaPictures(ctx, field)
+			case "protectedAreaCategory":
+				return ec.fieldContext_ProtectedArea_protectedAreaCategory(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProtectedArea", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateProtectedArea_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createProtectedAreaCategory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createProtectedAreaCategory(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateProtectedAreaCategory(rctx, fc.Args["input"].(ent.CreateProtectedAreaCategoryInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.ProtectedAreaCategory)
+	fc.Result = res
+	return ec.marshalNProtectedAreaCategory2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaCategory(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createProtectedAreaCategory(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ProtectedAreaCategory_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ProtectedAreaCategory_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ProtectedAreaCategory_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ProtectedAreaCategory_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ProtectedAreaCategory_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_ProtectedAreaCategory_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ProtectedAreaCategory_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_ProtectedAreaCategory_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_ProtectedAreaCategory_externalLinks(ctx, field)
+			case "protectedAreas":
+				return ec.fieldContext_ProtectedAreaCategory_protectedAreas(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProtectedAreaCategory", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createProtectedAreaCategory_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateProtectedAreaCategory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateProtectedAreaCategory(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateProtectedAreaCategory(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateProtectedAreaCategoryInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.ProtectedAreaCategory)
+	fc.Result = res
+	return ec.marshalNProtectedAreaCategory2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaCategory(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateProtectedAreaCategory(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ProtectedAreaCategory_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ProtectedAreaCategory_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ProtectedAreaCategory_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ProtectedAreaCategory_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ProtectedAreaCategory_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_ProtectedAreaCategory_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ProtectedAreaCategory_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_ProtectedAreaCategory_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_ProtectedAreaCategory_externalLinks(ctx, field)
+			case "protectedAreas":
+				return ec.fieldContext_ProtectedAreaCategory_protectedAreas(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProtectedAreaCategory", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateProtectedAreaCategory_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createProtectedAreaPicture(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createProtectedAreaPicture(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateProtectedAreaPicture(rctx, fc.Args["input"].(ent.CreateProtectedAreaPictureInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.ProtectedAreaPicture)
+	fc.Result = res
+	return ec.marshalNProtectedAreaPicture2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPicture(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createProtectedAreaPicture(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ProtectedAreaPicture_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ProtectedAreaPicture_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ProtectedAreaPicture_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ProtectedAreaPicture_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ProtectedAreaPicture_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_ProtectedAreaPicture_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ProtectedAreaPicture_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_ProtectedAreaPicture_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_ProtectedAreaPicture_externalLinks(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_ProtectedAreaPicture_primaryImageURL(ctx, field)
+			case "additionalImagesUrls":
+				return ec.fieldContext_ProtectedAreaPicture_additionalImagesUrls(ctx, field)
+			case "shootingDate":
+				return ec.fieldContext_ProtectedAreaPicture_shootingDate(ctx, field)
+			case "collection":
+				return ec.fieldContext_ProtectedAreaPicture_collection(ctx, field)
+			case "protectedArea":
+				return ec.fieldContext_ProtectedAreaPicture_protectedArea(ctx, field)
+			case "location":
+				return ec.fieldContext_ProtectedAreaPicture_location(ctx, field)
+			case "license":
+				return ec.fieldContext_ProtectedAreaPicture_license(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProtectedAreaPicture", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createProtectedAreaPicture_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateProtectedAreaPicture(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateProtectedAreaPicture(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateProtectedAreaPicture(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateProtectedAreaPictureInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.ProtectedAreaPicture)
+	fc.Result = res
+	return ec.marshalNProtectedAreaPicture2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPicture(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateProtectedAreaPicture(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ProtectedAreaPicture_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ProtectedAreaPicture_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ProtectedAreaPicture_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ProtectedAreaPicture_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ProtectedAreaPicture_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_ProtectedAreaPicture_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ProtectedAreaPicture_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_ProtectedAreaPicture_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_ProtectedAreaPicture_externalLinks(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_ProtectedAreaPicture_primaryImageURL(ctx, field)
+			case "additionalImagesUrls":
+				return ec.fieldContext_ProtectedAreaPicture_additionalImagesUrls(ctx, field)
+			case "shootingDate":
+				return ec.fieldContext_ProtectedAreaPicture_shootingDate(ctx, field)
+			case "collection":
+				return ec.fieldContext_ProtectedAreaPicture_collection(ctx, field)
+			case "protectedArea":
+				return ec.fieldContext_ProtectedAreaPicture_protectedArea(ctx, field)
+			case "location":
+				return ec.fieldContext_ProtectedAreaPicture_location(ctx, field)
+			case "license":
+				return ec.fieldContext_ProtectedAreaPicture_license(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProtectedAreaPicture", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateProtectedAreaPicture_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createPublication(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_createPublication(ctx, field)
 	if err != nil {
@@ -28157,6 +32583,160 @@ func (ec *executionContext) fieldContext_Mutation_updatePublication(ctx context.
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_updatePublication_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createPublisher(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createPublisher(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreatePublisher(rctx, fc.Args["input"].(ent.CreatePublisherInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Publisher)
+	fc.Result = res
+	return ec.marshalNPublisher2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPublisher(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createPublisher(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Publisher_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Publisher_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Publisher_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Publisher_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Publisher_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Publisher_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Publisher_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Publisher_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_Publisher_externalLinks(ctx, field)
+			case "books":
+				return ec.fieldContext_Publisher_books(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Publisher", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createPublisher_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updatePublisher(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updatePublisher(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdatePublisher(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdatePublisherInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Publisher)
+	fc.Result = res
+	return ec.marshalNPublisher2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPublisher(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updatePublisher(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Publisher_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Publisher_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Publisher_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Publisher_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Publisher_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Publisher_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Publisher_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Publisher_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_Publisher_externalLinks(ctx, field)
+			case "books":
+				return ec.fieldContext_Publisher_books(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Publisher", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updatePublisher_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -40037,6 +44617,69 @@ func (ec *executionContext) fieldContext_Query_nodes(ctx context.Context, field 
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_arts(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_arts(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Arts(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.ArtOrder), fc.Args["where"].(*ent.ArtWhereInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.ArtConnection)
+	fc.Result = res
+	return ec.marshalNArtConnection2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_arts(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_ArtConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_ArtConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_ArtConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ArtConnection", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_arts_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_artGenres(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_artGenres(ctx, field)
 	if err != nil {
@@ -47093,7 +51736,7 @@ func (ec *executionContext) unmarshalInputArtGenreWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArt", "hasArtWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -48018,6 +52661,66 @@ func (ec *executionContext) unmarshalInputArtGenreWhereInput(ctx context.Context
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "hasArt":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasArt"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasArt = data
+		case "hasArtWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasArtWith"))
+			data, err := ec.unmarshalOArtWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasArtWith = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputArtOrder(ctx context.Context, obj interface{}) (ent.ArtOrder, error) {
+	var it ent.ArtOrder
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	if _, present := asMap["direction"]; !present {
+		asMap["direction"] = "ASC"
+	}
+
+	fieldsInOrder := [...]string{"direction", "field"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "direction":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("direction"))
+			data, err := ec.unmarshalNOrderDirection2entgoᚗioᚋcontribᚋentgqlᚐOrderDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Direction = data
+		case "field":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("field"))
+			data, err := ec.unmarshalNArtOrderField2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtOrderField(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Field = data
 		}
 	}
 
@@ -48073,7 +52776,7 @@ func (ec *executionContext) unmarshalInputArtStyleWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArt", "hasArtWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -48998,6 +53701,24 @@ func (ec *executionContext) unmarshalInputArtStyleWhereInput(ctx context.Context
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "hasArt":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasArt"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasArt = data
+		case "hasArtWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasArtWith"))
+			data, err := ec.unmarshalOArtWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasArtWith = data
 		}
 	}
 
@@ -49011,7 +53732,7 @@ func (ec *executionContext) unmarshalInputArtWhereInput(ctx context.Context, obj
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "hasArtGenre", "hasArtGenreWith", "hasArtStyle", "hasArtStyleWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -49117,6 +53838,996 @@ func (ec *executionContext) unmarshalInputArtWhereInput(ctx context.Context, obj
 				return it, err
 			}
 			it.IDLTE = data
+		case "createdAt":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAt = data
+		case "createdAtNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtNEQ"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtNEQ = data
+		case "createdAtIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtIn = data
+		case "createdAtNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtNotIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtNotIn = data
+		case "createdAtGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtGT = data
+		case "createdAtGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtGTE = data
+		case "createdAtLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtLT = data
+		case "createdAtLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtLTE = data
+		case "createdBy":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedBy = data
+		case "createdByNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNEQ = data
+		case "createdByIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIn = data
+		case "createdByNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotIn = data
+		case "createdByGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByGT = data
+		case "createdByGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByGTE = data
+		case "createdByLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByLT = data
+		case "createdByLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByLTE = data
+		case "createdByContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
+		case "createdByHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasSuffix = data
+		case "createdByIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIsNil = data
+		case "createdByNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotNil = data
+		case "createdByEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByEqualFold = data
+		case "createdByContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByContainsFold = data
+		case "updatedAt":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAt = data
+		case "updatedAtNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtNEQ"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtNEQ = data
+		case "updatedAtIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtIn = data
+		case "updatedAtNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtNotIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtNotIn = data
+		case "updatedAtGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtGT = data
+		case "updatedAtGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtGTE = data
+		case "updatedAtLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtLT = data
+		case "updatedAtLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtLTE = data
+		case "updatedBy":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedBy = data
+		case "updatedByNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNEQ = data
+		case "updatedByIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIn = data
+		case "updatedByNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotIn = data
+		case "updatedByGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByGT = data
+		case "updatedByGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByGTE = data
+		case "updatedByLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByLT = data
+		case "updatedByLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByLTE = data
+		case "updatedByContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
+		case "updatedByHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasSuffix = data
+		case "updatedByIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIsNil = data
+		case "updatedByNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotNil = data
+		case "updatedByEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByEqualFold = data
+		case "updatedByContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByContainsFold = data
+		case "displayName":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayName = data
+		case "displayNameNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameNEQ = data
+		case "displayNameIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameIn = data
+		case "displayNameNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameNotIn = data
+		case "displayNameGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameGT = data
+		case "displayNameGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameGTE = data
+		case "displayNameLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameLT = data
+		case "displayNameLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameLTE = data
+		case "displayNameContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameContains = data
+		case "displayNameHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameHasPrefix = data
+		case "displayNameHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameHasSuffix = data
+		case "displayNameIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameIsNil = data
+		case "displayNameNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameNotNil = data
+		case "displayNameEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameEqualFold = data
+		case "displayNameContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
+		case "description":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Description = data
+		case "descriptionNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionNEQ = data
+		case "descriptionIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionIn = data
+		case "descriptionNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionNotIn = data
+		case "descriptionGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionGT = data
+		case "descriptionGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionGTE = data
+		case "descriptionLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionLT = data
+		case "descriptionLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionLTE = data
+		case "descriptionContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionContains = data
+		case "descriptionHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionHasPrefix = data
+		case "descriptionHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionHasSuffix = data
+		case "descriptionIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionIsNil = data
+		case "descriptionNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionNotNil = data
+		case "descriptionEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionEqualFold = data
+		case "descriptionContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionContainsFold = data
+		case "primaryImageURL":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURL"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURL = data
+		case "primaryImageURLNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLNEQ = data
+		case "primaryImageURLIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLIn = data
+		case "primaryImageURLNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLNotIn = data
+		case "primaryImageURLGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLGT = data
+		case "primaryImageURLGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLGTE = data
+		case "primaryImageURLLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLLT = data
+		case "primaryImageURLLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLLTE = data
+		case "primaryImageURLContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLContains = data
+		case "primaryImageURLHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLHasPrefix = data
+		case "primaryImageURLHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLHasSuffix = data
+		case "primaryImageURLIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLIsNil = data
+		case "primaryImageURLNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLNotNil = data
+		case "primaryImageURLEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLEqualFold = data
+		case "primaryImageURLContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLContainsFold = data
+		case "hasArtGenre":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasArtGenre"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasArtGenre = data
+		case "hasArtGenreWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasArtGenreWith"))
+			data, err := ec.unmarshalOArtGenreWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtGenreWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasArtGenreWith = data
+		case "hasArtStyle":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasArtStyle"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasArtStyle = data
+		case "hasArtStyleWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasArtStyleWith"))
+			data, err := ec.unmarshalOArtStyleWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtStyleWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasArtStyleWith = data
 		}
 	}
 
@@ -57745,7 +63456,7 @@ func (ec *executionContext) unmarshalInputCreateArtGenreInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -57824,6 +63535,143 @@ func (ec *executionContext) unmarshalInputCreateArtGenreInput(ctx context.Contex
 				return it, err
 			}
 			it.ExternalLinks = data
+		case "artIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("artIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ArtIDs = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateArtInput(ctx context.Context, obj interface{}) (ent.CreateArtInput, error) {
+	var it ent.CreateArtInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "artGenreIDs", "artStyleIDs"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "createdAt":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAt = data
+		case "createdBy":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedBy = data
+		case "updatedAt":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAt = data
+		case "updatedBy":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedBy = data
+		case "displayName":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "description":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Description = data
+		case "externalLinks":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinks = data
+		case "primaryImageURL":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURL"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURL = data
+		case "additionalImagesUrls":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("additionalImagesUrls"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AdditionalImagesUrls = data
+		case "artGenreIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("artGenreIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ArtGenreIDs = data
+		case "artStyleIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("artStyleIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ArtStyleIDs = data
 		}
 	}
 
@@ -57837,7 +63685,7 @@ func (ec *executionContext) unmarshalInputCreateArtStyleInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -57916,6 +63764,15 @@ func (ec *executionContext) unmarshalInputCreateArtStyleInput(ctx context.Contex
 				return it, err
 			}
 			it.ExternalLinks = data
+		case "artIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("artIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ArtIDs = data
 		}
 	}
 
@@ -89315,7 +95172,7 @@ func (ec *executionContext) unmarshalInputUpdateArtGenreInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtIDs", "removeArtIDs", "clearArt"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -89448,6 +95305,278 @@ func (ec *executionContext) unmarshalInputUpdateArtGenreInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearExternalLinks = data
+		case "addArtIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addArtIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddArtIDs = data
+		case "removeArtIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeArtIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveArtIDs = data
+		case "clearArt":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearArt"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearArt = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateArtInput(ctx context.Context, obj interface{}) (ent.UpdateArtInput, error) {
+	var it ent.UpdateArtInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "addArtGenreIDs", "removeArtGenreIDs", "clearArtGenre", "addArtStyleIDs", "removeArtStyleIDs", "clearArtStyle"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "createdBy":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedBy = data
+		case "clearCreatedBy":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearCreatedBy"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearCreatedBy = data
+		case "updatedAt":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAt = data
+		case "updatedBy":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedBy = data
+		case "clearUpdatedBy":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearUpdatedBy"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearUpdatedBy = data
+		case "displayName":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayName = data
+		case "clearDisplayName":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearDisplayName"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
+		case "description":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Description = data
+		case "clearDescription":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearDescription"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearDescription = data
+		case "externalLinks":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinks = data
+		case "appendExternalLinks":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AppendExternalLinks = data
+		case "clearExternalLinks":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearExternalLinks = data
+		case "primaryImageURL":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURL"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURL = data
+		case "clearPrimaryImageURL":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearPrimaryImageURL"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearPrimaryImageURL = data
+		case "additionalImagesUrls":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("additionalImagesUrls"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AdditionalImagesUrls = data
+		case "appendAdditionalImagesUrls":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendAdditionalImagesUrls"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AppendAdditionalImagesUrls = data
+		case "clearAdditionalImagesUrls":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAdditionalImagesUrls"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAdditionalImagesUrls = data
+		case "addArtGenreIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addArtGenreIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddArtGenreIDs = data
+		case "removeArtGenreIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeArtGenreIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveArtGenreIDs = data
+		case "clearArtGenre":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearArtGenre"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearArtGenre = data
+		case "addArtStyleIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addArtStyleIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddArtStyleIDs = data
+		case "removeArtStyleIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeArtStyleIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveArtStyleIDs = data
+		case "clearArtStyle":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearArtStyle"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearArtStyle = data
 		}
 	}
 
@@ -89461,7 +95590,7 @@ func (ec *executionContext) unmarshalInputUpdateArtStyleInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtIDs", "removeArtIDs", "clearArt"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -89594,6 +95723,33 @@ func (ec *executionContext) unmarshalInputUpdateArtStyleInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearExternalLinks = data
+		case "addArtIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addArtIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddArtIDs = data
+		case "removeArtIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeArtIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveArtIDs = data
+		case "clearArt":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearArt"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearArt = data
 		}
 	}
 
@@ -97091,6 +103247,185 @@ func (ec *executionContext) _Art(ctx context.Context, sel ast.SelectionSet, obj 
 		case "id":
 			out.Values[i] = ec._Art_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "createdAt":
+			out.Values[i] = ec._Art_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "createdBy":
+			out.Values[i] = ec._Art_createdBy(ctx, field, obj)
+		case "updatedAt":
+			out.Values[i] = ec._Art_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updatedBy":
+			out.Values[i] = ec._Art_updatedBy(ctx, field, obj)
+		case "displayName":
+			out.Values[i] = ec._Art_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._Art_abbreviation(ctx, field, obj)
+		case "description":
+			out.Values[i] = ec._Art_description(ctx, field, obj)
+		case "externalLinks":
+			out.Values[i] = ec._Art_externalLinks(ctx, field, obj)
+		case "primaryImageURL":
+			out.Values[i] = ec._Art_primaryImageURL(ctx, field, obj)
+		case "additionalImagesUrls":
+			out.Values[i] = ec._Art_additionalImagesUrls(ctx, field, obj)
+		case "artGenre":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Art_artGenre(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "artStyle":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Art_artStyle(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var artConnectionImplementors = []string{"ArtConnection"}
+
+func (ec *executionContext) _ArtConnection(ctx context.Context, sel ast.SelectionSet, obj *ent.ArtConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, artConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ArtConnection")
+		case "edges":
+			out.Values[i] = ec._ArtConnection_edges(ctx, field, obj)
+		case "pageInfo":
+			out.Values[i] = ec._ArtConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalCount":
+			out.Values[i] = ec._ArtConnection_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var artEdgeImplementors = []string{"ArtEdge"}
+
+func (ec *executionContext) _ArtEdge(ctx context.Context, sel ast.SelectionSet, obj *ent.ArtEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, artEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ArtEdge")
+		case "node":
+			out.Values[i] = ec._ArtEdge_node(ctx, field, obj)
+		case "cursor":
+			out.Values[i] = ec._ArtEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		default:
@@ -97130,19 +103465,19 @@ func (ec *executionContext) _ArtGenre(ctx context.Context, sel ast.SelectionSet,
 		case "id":
 			out.Values[i] = ec._ArtGenre_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "createdAt":
 			out.Values[i] = ec._ArtGenre_createdAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "createdBy":
 			out.Values[i] = ec._ArtGenre_createdBy(ctx, field, obj)
 		case "updatedAt":
 			out.Values[i] = ec._ArtGenre_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "updatedBy":
 			out.Values[i] = ec._ArtGenre_updatedBy(ctx, field, obj)
@@ -97154,6 +103489,39 @@ func (ec *executionContext) _ArtGenre(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._ArtGenre_description(ctx, field, obj)
 		case "externalLinks":
 			out.Values[i] = ec._ArtGenre_externalLinks(ctx, field, obj)
+		case "art":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._ArtGenre_art(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -97278,19 +103646,19 @@ func (ec *executionContext) _ArtStyle(ctx context.Context, sel ast.SelectionSet,
 		case "id":
 			out.Values[i] = ec._ArtStyle_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "createdAt":
 			out.Values[i] = ec._ArtStyle_createdAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "createdBy":
 			out.Values[i] = ec._ArtStyle_createdBy(ctx, field, obj)
 		case "updatedAt":
 			out.Values[i] = ec._ArtStyle_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "updatedBy":
 			out.Values[i] = ec._ArtStyle_updatedBy(ctx, field, obj)
@@ -97302,6 +103670,39 @@ func (ec *executionContext) _ArtStyle(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._ArtStyle_description(ctx, field, obj)
 		case "externalLinks":
 			out.Values[i] = ec._ArtStyle_externalLinks(ctx, field, obj)
+		case "art":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._ArtStyle_art(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -101565,6 +107966,76 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "createArt":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createArt(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateArt":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateArt(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createArtGenre":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createArtGenre(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateArtGenre":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateArtGenre(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createArtStyle":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createArtStyle(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateArtStyle":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateArtStyle(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createBook":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createBook(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateBook":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateBook(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createBookGenre":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createBookGenre(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateBookGenre":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateBookGenre(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createCategory":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createCategory(ctx, field)
@@ -101589,6 +108060,20 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "updateCollection":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updateCollection(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createCountry":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createCountry(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateCountry":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateCountry(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -101631,6 +108116,20 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "updateHolder":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updateHolder(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createHolderResponsibility":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createHolderResponsibility(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateHolderResponsibility":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateHolderResponsibility(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -101719,6 +108218,34 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "createOrganizationType":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createOrganizationType(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateOrganizationType":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateOrganizationType(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createPeriod":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createPeriod(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatePeriod":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updatePeriod(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createPerson":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createPerson(ctx, field)
@@ -101729,6 +108256,20 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "updatePerson":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updatePerson(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createPersonRole":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createPersonRole(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatePersonRole":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updatePersonRole(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -101747,6 +108288,62 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "createProjectType":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createProjectType(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateProjectType":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateProjectType(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createProtectedArea":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createProtectedArea(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateProtectedArea":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateProtectedArea(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createProtectedAreaCategory":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createProtectedAreaCategory(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateProtectedAreaCategory":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateProtectedAreaCategory(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createProtectedAreaPicture":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createProtectedAreaPicture(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateProtectedAreaPicture":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateProtectedAreaPicture(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createPublication":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createPublication(ctx, field)
@@ -101757,6 +108354,20 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "updatePublication":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updatePublication(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createPublisher":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createPublisher(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatePublisher":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updatePublisher(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -104703,6 +111314,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "arts":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_arts(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "artGenres":
 			field := field
 
@@ -106565,6 +113198,48 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) marshalNArt2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArt(ctx context.Context, sel ast.SelectionSet, v ent.Art) graphql.Marshaler {
+	return ec._Art(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNArt2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArt(ctx context.Context, sel ast.SelectionSet, v *ent.Art) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Art(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNArtConnection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtConnection(ctx context.Context, sel ast.SelectionSet, v ent.ArtConnection) graphql.Marshaler {
+	return ec._ArtConnection(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNArtConnection2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtConnection(ctx context.Context, sel ast.SelectionSet, v *ent.ArtConnection) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ArtConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNArtGenre2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtGenre(ctx context.Context, sel ast.SelectionSet, v ent.ArtGenre) graphql.Marshaler {
+	return ec._ArtGenre(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNArtGenre2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtGenre(ctx context.Context, sel ast.SelectionSet, v *ent.ArtGenre) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ArtGenre(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNArtGenreConnection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtGenreConnection(ctx context.Context, sel ast.SelectionSet, v ent.ArtGenreConnection) graphql.Marshaler {
 	return ec._ArtGenreConnection(ctx, sel, &v)
 }
@@ -106603,6 +113278,41 @@ func (ec *executionContext) marshalNArtGenreOrderField2ᚖgithubᚗcomᚋdkrasno
 func (ec *executionContext) unmarshalNArtGenreWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtGenreWhereInput(ctx context.Context, v interface{}) (*ent.ArtGenreWhereInput, error) {
 	res, err := ec.unmarshalInputArtGenreWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNArtOrder2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtOrder(ctx context.Context, v interface{}) (*ent.ArtOrder, error) {
+	res, err := ec.unmarshalInputArtOrder(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNArtOrderField2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtOrderField(ctx context.Context, v interface{}) (*ent.ArtOrderField, error) {
+	var res = new(ent.ArtOrderField)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNArtOrderField2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtOrderField(ctx context.Context, sel ast.SelectionSet, v *ent.ArtOrderField) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) marshalNArtStyle2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtStyle(ctx context.Context, sel ast.SelectionSet, v ent.ArtStyle) graphql.Marshaler {
+	return ec._ArtStyle(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNArtStyle2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtStyle(ctx context.Context, sel ast.SelectionSet, v *ent.ArtStyle) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ArtStyle(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNArtStyleConnection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtStyleConnection(ctx context.Context, sel ast.SelectionSet, v ent.ArtStyleConnection) graphql.Marshaler {
@@ -106744,6 +113454,10 @@ func (ec *executionContext) unmarshalNAuditLogWhereInput2ᚖgithubᚗcomᚋdkras
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalNBook2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐBook(ctx context.Context, sel ast.SelectionSet, v ent.Book) graphql.Marshaler {
+	return ec._Book(ctx, sel, &v)
+}
+
 func (ec *executionContext) marshalNBook2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐBook(ctx context.Context, sel ast.SelectionSet, v *ent.Book) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -106766,6 +113480,10 @@ func (ec *executionContext) marshalNBookConnection2ᚖgithubᚗcomᚋdkrasnovdev
 		return graphql.Null
 	}
 	return ec._BookConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNBookGenre2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐBookGenre(ctx context.Context, sel ast.SelectionSet, v ent.BookGenre) graphql.Marshaler {
+	return ec._BookGenre(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNBookGenre2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐBookGenre(ctx context.Context, sel ast.SelectionSet, v *ent.BookGenre) graphql.Marshaler {
@@ -106967,6 +113685,20 @@ func (ec *executionContext) unmarshalNCollectionWhereInput2ᚖgithubᚗcomᚋdkr
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalNCountry2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCountry(ctx context.Context, sel ast.SelectionSet, v ent.Country) graphql.Marshaler {
+	return ec._Country(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNCountry2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCountry(ctx context.Context, sel ast.SelectionSet, v *ent.Country) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Country(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNCountryConnection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCountryConnection(ctx context.Context, sel ast.SelectionSet, v ent.CountryConnection) graphql.Marshaler {
 	return ec._CountryConnection(ctx, sel, &v)
 }
@@ -107007,8 +113739,33 @@ func (ec *executionContext) unmarshalNCountryWhereInput2ᚖgithubᚗcomᚋdkrasn
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) unmarshalNCreateArtGenreInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateArtGenreInput(ctx context.Context, v interface{}) (ent.CreateArtGenreInput, error) {
+	res, err := ec.unmarshalInputCreateArtGenreInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateArtInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateArtInput(ctx context.Context, v interface{}) (ent.CreateArtInput, error) {
+	res, err := ec.unmarshalInputCreateArtInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateArtStyleInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateArtStyleInput(ctx context.Context, v interface{}) (ent.CreateArtStyleInput, error) {
+	res, err := ec.unmarshalInputCreateArtStyleInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNCreateArtifactInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateArtifactInput(ctx context.Context, v interface{}) (ent.CreateArtifactInput, error) {
 	res, err := ec.unmarshalInputCreateArtifactInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateBookGenreInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateBookGenreInput(ctx context.Context, v interface{}) (ent.CreateBookGenreInput, error) {
+	res, err := ec.unmarshalInputCreateBookGenreInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateBookInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateBookInput(ctx context.Context, v interface{}) (ent.CreateBookInput, error) {
+	res, err := ec.unmarshalInputCreateBookInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -107019,6 +113776,11 @@ func (ec *executionContext) unmarshalNCreateCategoryInput2githubᚗcomᚋdkrasno
 
 func (ec *executionContext) unmarshalNCreateCollectionInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateCollectionInput(ctx context.Context, v interface{}) (ent.CreateCollectionInput, error) {
 	res, err := ec.unmarshalInputCreateCollectionInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateCountryInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateCountryInput(ctx context.Context, v interface{}) (ent.CreateCountryInput, error) {
+	res, err := ec.unmarshalInputCreateCountryInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -107034,6 +113796,11 @@ func (ec *executionContext) unmarshalNCreateDistrictInput2githubᚗcomᚋdkrasno
 
 func (ec *executionContext) unmarshalNCreateHolderInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateHolderInput(ctx context.Context, v interface{}) (ent.CreateHolderInput, error) {
 	res, err := ec.unmarshalInputCreateHolderInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateHolderResponsibilityInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateHolderResponsibilityInput(ctx context.Context, v interface{}) (ent.CreateHolderResponsibilityInput, error) {
+	res, err := ec.unmarshalInputCreateHolderResponsibilityInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -107067,8 +113834,23 @@ func (ec *executionContext) unmarshalNCreateOrganizationInput2githubᚗcomᚋdkr
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) unmarshalNCreateOrganizationTypeInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateOrganizationTypeInput(ctx context.Context, v interface{}) (ent.CreateOrganizationTypeInput, error) {
+	res, err := ec.unmarshalInputCreateOrganizationTypeInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreatePeriodInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreatePeriodInput(ctx context.Context, v interface{}) (ent.CreatePeriodInput, error) {
+	res, err := ec.unmarshalInputCreatePeriodInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNCreatePersonInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreatePersonInput(ctx context.Context, v interface{}) (ent.CreatePersonInput, error) {
 	res, err := ec.unmarshalInputCreatePersonInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreatePersonRoleInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreatePersonRoleInput(ctx context.Context, v interface{}) (ent.CreatePersonRoleInput, error) {
+	res, err := ec.unmarshalInputCreatePersonRoleInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -107077,8 +113859,33 @@ func (ec *executionContext) unmarshalNCreateProjectInput2githubᚗcomᚋdkrasnov
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) unmarshalNCreateProjectTypeInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateProjectTypeInput(ctx context.Context, v interface{}) (ent.CreateProjectTypeInput, error) {
+	res, err := ec.unmarshalInputCreateProjectTypeInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateProtectedAreaCategoryInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateProtectedAreaCategoryInput(ctx context.Context, v interface{}) (ent.CreateProtectedAreaCategoryInput, error) {
+	res, err := ec.unmarshalInputCreateProtectedAreaCategoryInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateProtectedAreaInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateProtectedAreaInput(ctx context.Context, v interface{}) (ent.CreateProtectedAreaInput, error) {
+	res, err := ec.unmarshalInputCreateProtectedAreaInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateProtectedAreaPictureInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreateProtectedAreaPictureInput(ctx context.Context, v interface{}) (ent.CreateProtectedAreaPictureInput, error) {
+	res, err := ec.unmarshalInputCreateProtectedAreaPictureInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNCreatePublicationInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreatePublicationInput(ctx context.Context, v interface{}) (ent.CreatePublicationInput, error) {
 	res, err := ec.unmarshalInputCreatePublicationInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreatePublisherInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCreatePublisherInput(ctx context.Context, v interface{}) (ent.CreatePublisherInput, error) {
+	res, err := ec.unmarshalInputCreatePublisherInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -107277,6 +114084,10 @@ func (ec *executionContext) marshalNHolderOrderField2ᚖgithubᚗcomᚋdkrasnovd
 		return graphql.Null
 	}
 	return v
+}
+
+func (ec *executionContext) marshalNHolderResponsibility2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolderResponsibility(ctx context.Context, sel ast.SelectionSet, v ent.HolderResponsibility) graphql.Marshaler {
+	return ec._HolderResponsibility(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNHolderResponsibility2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolderResponsibility(ctx context.Context, sel ast.SelectionSet, v *ent.HolderResponsibility) graphql.Marshaler {
@@ -107763,6 +114574,20 @@ func (ec *executionContext) marshalNOrganizationOrderField2ᚖgithubᚗcomᚋdkr
 	return v
 }
 
+func (ec *executionContext) marshalNOrganizationType2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐOrganizationType(ctx context.Context, sel ast.SelectionSet, v ent.OrganizationType) graphql.Marshaler {
+	return ec._OrganizationType(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNOrganizationType2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐOrganizationType(ctx context.Context, sel ast.SelectionSet, v *ent.OrganizationType) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._OrganizationType(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNOrganizationTypeConnection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐOrganizationTypeConnection(ctx context.Context, sel ast.SelectionSet, v ent.OrganizationTypeConnection) graphql.Marshaler {
 	return ec._OrganizationTypeConnection(ctx, sel, &v)
 }
@@ -107810,6 +114635,20 @@ func (ec *executionContext) unmarshalNOrganizationWhereInput2ᚖgithubᚗcomᚋd
 
 func (ec *executionContext) marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v entgql.PageInfo[int]) graphql.Marshaler {
 	return ec._PageInfo(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNPeriod2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPeriod(ctx context.Context, sel ast.SelectionSet, v ent.Period) graphql.Marshaler {
+	return ec._Period(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNPeriod2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPeriod(ctx context.Context, sel ast.SelectionSet, v *ent.Period) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Period(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNPeriodConnection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPeriodConnection(ctx context.Context, sel ast.SelectionSet, v ent.PeriodConnection) graphql.Marshaler {
@@ -107909,6 +114748,10 @@ func (ec *executionContext) marshalNPersonOrderField2ᚖgithubᚗcomᚋdkrasnovd
 		return graphql.Null
 	}
 	return v
+}
+
+func (ec *executionContext) marshalNPersonRole2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPersonRole(ctx context.Context, sel ast.SelectionSet, v ent.PersonRole) graphql.Marshaler {
+	return ec._PersonRole(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNPersonRole2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPersonRole(ctx context.Context, sel ast.SelectionSet, v *ent.PersonRole) graphql.Marshaler {
@@ -108015,6 +114858,20 @@ func (ec *executionContext) marshalNProjectOrderField2ᚖgithubᚗcomᚋdkrasnov
 	return v
 }
 
+func (ec *executionContext) marshalNProjectType2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProjectType(ctx context.Context, sel ast.SelectionSet, v ent.ProjectType) graphql.Marshaler {
+	return ec._ProjectType(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNProjectType2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProjectType(ctx context.Context, sel ast.SelectionSet, v *ent.ProjectType) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ProjectType(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNProjectTypeConnection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProjectTypeConnection(ctx context.Context, sel ast.SelectionSet, v ent.ProjectTypeConnection) graphql.Marshaler {
 	return ec._ProjectTypeConnection(ctx, sel, &v)
 }
@@ -108060,6 +114917,10 @@ func (ec *executionContext) unmarshalNProjectWhereInput2ᚖgithubᚗcomᚋdkrasn
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalNProtectedArea2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedArea(ctx context.Context, sel ast.SelectionSet, v ent.ProtectedArea) graphql.Marshaler {
+	return ec._ProtectedArea(ctx, sel, &v)
+}
+
 func (ec *executionContext) marshalNProtectedArea2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedArea(ctx context.Context, sel ast.SelectionSet, v *ent.ProtectedArea) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -108068,6 +114929,20 @@ func (ec *executionContext) marshalNProtectedArea2ᚖgithubᚗcomᚋdkrasnovdev�
 		return graphql.Null
 	}
 	return ec._ProtectedArea(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNProtectedAreaCategory2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaCategory(ctx context.Context, sel ast.SelectionSet, v ent.ProtectedAreaCategory) graphql.Marshaler {
+	return ec._ProtectedAreaCategory(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNProtectedAreaCategory2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaCategory(ctx context.Context, sel ast.SelectionSet, v *ent.ProtectedAreaCategory) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ProtectedAreaCategory(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNProtectedAreaCategoryConnection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaCategoryConnection(ctx context.Context, sel ast.SelectionSet, v ent.ProtectedAreaCategoryConnection) graphql.Marshaler {
@@ -108143,6 +115018,10 @@ func (ec *executionContext) marshalNProtectedAreaOrderField2ᚖgithubᚗcomᚋdk
 		return graphql.Null
 	}
 	return v
+}
+
+func (ec *executionContext) marshalNProtectedAreaPicture2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPicture(ctx context.Context, sel ast.SelectionSet, v ent.ProtectedAreaPicture) graphql.Marshaler {
+	return ec._ProtectedAreaPicture(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNProtectedAreaPicture2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPicture(ctx context.Context, sel ast.SelectionSet, v *ent.ProtectedAreaPicture) graphql.Marshaler {
@@ -108252,6 +115131,20 @@ func (ec *executionContext) marshalNPublicationOrderField2ᚖgithubᚗcomᚋdkra
 func (ec *executionContext) unmarshalNPublicationWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPublicationWhereInput(ctx context.Context, v interface{}) (*ent.PublicationWhereInput, error) {
 	res, err := ec.unmarshalInputPublicationWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNPublisher2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPublisher(ctx context.Context, sel ast.SelectionSet, v ent.Publisher) graphql.Marshaler {
+	return ec._Publisher(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNPublisher2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPublisher(ctx context.Context, sel ast.SelectionSet, v *ent.Publisher) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Publisher(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNPublisherConnection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐPublisherConnection(ctx context.Context, sel ast.SelectionSet, v ent.PublisherConnection) graphql.Marshaler {
@@ -108540,8 +115433,33 @@ func (ec *executionContext) marshalNTime2timeᚐTime(ctx context.Context, sel as
 	return res
 }
 
+func (ec *executionContext) unmarshalNUpdateArtGenreInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateArtGenreInput(ctx context.Context, v interface{}) (ent.UpdateArtGenreInput, error) {
+	res, err := ec.unmarshalInputUpdateArtGenreInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateArtInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateArtInput(ctx context.Context, v interface{}) (ent.UpdateArtInput, error) {
+	res, err := ec.unmarshalInputUpdateArtInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateArtStyleInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateArtStyleInput(ctx context.Context, v interface{}) (ent.UpdateArtStyleInput, error) {
+	res, err := ec.unmarshalInputUpdateArtStyleInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNUpdateArtifactInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateArtifactInput(ctx context.Context, v interface{}) (ent.UpdateArtifactInput, error) {
 	res, err := ec.unmarshalInputUpdateArtifactInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateBookGenreInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateBookGenreInput(ctx context.Context, v interface{}) (ent.UpdateBookGenreInput, error) {
+	res, err := ec.unmarshalInputUpdateBookGenreInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateBookInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateBookInput(ctx context.Context, v interface{}) (ent.UpdateBookInput, error) {
+	res, err := ec.unmarshalInputUpdateBookInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -108552,6 +115470,11 @@ func (ec *executionContext) unmarshalNUpdateCategoryInput2githubᚗcomᚋdkrasno
 
 func (ec *executionContext) unmarshalNUpdateCollectionInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateCollectionInput(ctx context.Context, v interface{}) (ent.UpdateCollectionInput, error) {
 	res, err := ec.unmarshalInputUpdateCollectionInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateCountryInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateCountryInput(ctx context.Context, v interface{}) (ent.UpdateCountryInput, error) {
+	res, err := ec.unmarshalInputUpdateCountryInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -108567,6 +115490,11 @@ func (ec *executionContext) unmarshalNUpdateDistrictInput2githubᚗcomᚋdkrasno
 
 func (ec *executionContext) unmarshalNUpdateHolderInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateHolderInput(ctx context.Context, v interface{}) (ent.UpdateHolderInput, error) {
 	res, err := ec.unmarshalInputUpdateHolderInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateHolderResponsibilityInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateHolderResponsibilityInput(ctx context.Context, v interface{}) (ent.UpdateHolderResponsibilityInput, error) {
+	res, err := ec.unmarshalInputUpdateHolderResponsibilityInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -108600,8 +115528,23 @@ func (ec *executionContext) unmarshalNUpdateOrganizationInput2githubᚗcomᚋdkr
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) unmarshalNUpdateOrganizationTypeInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateOrganizationTypeInput(ctx context.Context, v interface{}) (ent.UpdateOrganizationTypeInput, error) {
+	res, err := ec.unmarshalInputUpdateOrganizationTypeInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdatePeriodInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdatePeriodInput(ctx context.Context, v interface{}) (ent.UpdatePeriodInput, error) {
+	res, err := ec.unmarshalInputUpdatePeriodInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNUpdatePersonInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdatePersonInput(ctx context.Context, v interface{}) (ent.UpdatePersonInput, error) {
 	res, err := ec.unmarshalInputUpdatePersonInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdatePersonRoleInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdatePersonRoleInput(ctx context.Context, v interface{}) (ent.UpdatePersonRoleInput, error) {
+	res, err := ec.unmarshalInputUpdatePersonRoleInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -108610,8 +115553,33 @@ func (ec *executionContext) unmarshalNUpdateProjectInput2githubᚗcomᚋdkrasnov
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) unmarshalNUpdateProjectTypeInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateProjectTypeInput(ctx context.Context, v interface{}) (ent.UpdateProjectTypeInput, error) {
+	res, err := ec.unmarshalInputUpdateProjectTypeInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateProtectedAreaCategoryInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateProtectedAreaCategoryInput(ctx context.Context, v interface{}) (ent.UpdateProtectedAreaCategoryInput, error) {
+	res, err := ec.unmarshalInputUpdateProtectedAreaCategoryInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateProtectedAreaInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateProtectedAreaInput(ctx context.Context, v interface{}) (ent.UpdateProtectedAreaInput, error) {
+	res, err := ec.unmarshalInputUpdateProtectedAreaInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateProtectedAreaPictureInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdateProtectedAreaPictureInput(ctx context.Context, v interface{}) (ent.UpdateProtectedAreaPictureInput, error) {
+	res, err := ec.unmarshalInputUpdateProtectedAreaPictureInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNUpdatePublicationInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdatePublicationInput(ctx context.Context, v interface{}) (ent.UpdatePublicationInput, error) {
 	res, err := ec.unmarshalInputUpdatePublicationInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdatePublisherInput2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐUpdatePublisherInput(ctx context.Context, v interface{}) (ent.UpdatePublisherInput, error) {
+	res, err := ec.unmarshalInputUpdatePublisherInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -108888,6 +115856,155 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
+func (ec *executionContext) marshalOArt2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Art) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNArt2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArt(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalOArt2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArt(ctx context.Context, sel ast.SelectionSet, v *ent.Art) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Art(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOArtEdge2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtEdge(ctx context.Context, sel ast.SelectionSet, v []*ent.ArtEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOArtEdge2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtEdge(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalOArtEdge2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtEdge(ctx context.Context, sel ast.SelectionSet, v *ent.ArtEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ArtEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOArtGenre2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtGenreᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.ArtGenre) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNArtGenre2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtGenre(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
 func (ec *executionContext) marshalOArtGenre2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtGenre(ctx context.Context, sel ast.SelectionSet, v *ent.ArtGenre) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -108989,6 +116106,73 @@ func (ec *executionContext) unmarshalOArtGenreWhereInput2ᚖgithubᚗcomᚋdkras
 	}
 	res, err := ec.unmarshalInputArtGenreWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOArtOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtOrderᚄ(ctx context.Context, v interface{}) ([]*ent.ArtOrder, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*ent.ArtOrder, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNArtOrder2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtOrder(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOArtStyle2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtStyleᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.ArtStyle) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNArtStyle2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtStyle(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) marshalOArtStyle2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐArtStyle(ctx context.Context, sel ast.SelectionSet, v *ent.ArtStyle) graphql.Marshaler {

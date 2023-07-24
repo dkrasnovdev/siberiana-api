@@ -3,8 +3,10 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -13,10 +15,67 @@ import (
 
 // Art is the model entity for the Art schema.
 type Art struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
+	ID int `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// CreatedBy holds the value of the "created_by" field.
+	CreatedBy string `json:"created_by,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy string `json:"updated_by,omitempty"`
+	// DisplayName holds the value of the "display_name" field.
+	DisplayName string `json:"display_name,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
+	// ExternalLinks holds the value of the "external_links" field.
+	ExternalLinks []string `json:"external_links,omitempty"`
+	// PrimaryImageURL holds the value of the "primary_image_url" field.
+	PrimaryImageURL string `json:"primary_image_url,omitempty"`
+	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
+	AdditionalImagesUrls []string `json:"additional_images_urls,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the ArtQuery when eager-loading is set.
+	Edges        ArtEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// ArtEdges holds the relations/edges for other nodes in the graph.
+type ArtEdges struct {
+	// ArtGenre holds the value of the art_genre edge.
+	ArtGenre []*ArtGenre `json:"art_genre,omitempty"`
+	// ArtStyle holds the value of the art_style edge.
+	ArtStyle []*ArtStyle `json:"art_style,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [2]bool
+	// totalCount holds the count of the edges above.
+	totalCount [2]map[string]int
+
+	namedArtGenre map[string][]*ArtGenre
+	namedArtStyle map[string][]*ArtStyle
+}
+
+// ArtGenreOrErr returns the ArtGenre value or an error if the edge
+// was not loaded in eager-loading.
+func (e ArtEdges) ArtGenreOrErr() ([]*ArtGenre, error) {
+	if e.loadedTypes[0] {
+		return e.ArtGenre, nil
+	}
+	return nil, &NotLoadedError{edge: "art_genre"}
+}
+
+// ArtStyleOrErr returns the ArtStyle value or an error if the edge
+// was not loaded in eager-loading.
+func (e ArtEdges) ArtStyleOrErr() ([]*ArtStyle, error) {
+	if e.loadedTypes[1] {
+		return e.ArtStyle, nil
+	}
+	return nil, &NotLoadedError{edge: "art_style"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -24,8 +83,14 @@ func (*Art) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case art.FieldExternalLinks, art.FieldAdditionalImagesUrls:
+			values[i] = new([]byte)
 		case art.FieldID:
 			values[i] = new(sql.NullInt64)
+		case art.FieldCreatedBy, art.FieldUpdatedBy, art.FieldDisplayName, art.FieldAbbreviation, art.FieldDescription, art.FieldPrimaryImageURL:
+			values[i] = new(sql.NullString)
+		case art.FieldCreatedAt, art.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -47,6 +112,70 @@ func (a *Art) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			a.ID = int(value.Int64)
+		case art.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				a.CreatedAt = value.Time
+			}
+		case art.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				a.CreatedBy = value.String
+			}
+		case art.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				a.UpdatedAt = value.Time
+			}
+		case art.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				a.UpdatedBy = value.String
+			}
+		case art.FieldDisplayName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field display_name", values[i])
+			} else if value.Valid {
+				a.DisplayName = value.String
+			}
+		case art.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				a.Abbreviation = value.String
+			}
+		case art.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				a.Description = value.String
+			}
+		case art.FieldExternalLinks:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field external_links", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &a.ExternalLinks); err != nil {
+					return fmt.Errorf("unmarshal field external_links: %w", err)
+				}
+			}
+		case art.FieldPrimaryImageURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field primary_image_url", values[i])
+			} else if value.Valid {
+				a.PrimaryImageURL = value.String
+			}
+		case art.FieldAdditionalImagesUrls:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field additional_images_urls", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &a.AdditionalImagesUrls); err != nil {
+					return fmt.Errorf("unmarshal field additional_images_urls: %w", err)
+				}
+			}
 		default:
 			a.selectValues.Set(columns[i], values[i])
 		}
@@ -58,6 +187,16 @@ func (a *Art) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (a *Art) Value(name string) (ent.Value, error) {
 	return a.selectValues.Get(name)
+}
+
+// QueryArtGenre queries the "art_genre" edge of the Art entity.
+func (a *Art) QueryArtGenre() *ArtGenreQuery {
+	return NewArtClient(a.config).QueryArtGenre(a)
+}
+
+// QueryArtStyle queries the "art_style" edge of the Art entity.
+func (a *Art) QueryArtStyle() *ArtStyleQuery {
+	return NewArtClient(a.config).QueryArtStyle(a)
 }
 
 // Update returns a builder for updating this Art.
@@ -82,9 +221,86 @@ func (a *Art) Unwrap() *Art {
 func (a *Art) String() string {
 	var builder strings.Builder
 	builder.WriteString("Art(")
-	builder.WriteString(fmt.Sprintf("id=%v", a.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", a.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(a.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("created_by=")
+	builder.WriteString(a.CreatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(a.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_by=")
+	builder.WriteString(a.UpdatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("display_name=")
+	builder.WriteString(a.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(a.Abbreviation)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(a.Description)
+	builder.WriteString(", ")
+	builder.WriteString("external_links=")
+	builder.WriteString(fmt.Sprintf("%v", a.ExternalLinks))
+	builder.WriteString(", ")
+	builder.WriteString("primary_image_url=")
+	builder.WriteString(a.PrimaryImageURL)
+	builder.WriteString(", ")
+	builder.WriteString("additional_images_urls=")
+	builder.WriteString(fmt.Sprintf("%v", a.AdditionalImagesUrls))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedArtGenre returns the ArtGenre named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (a *Art) NamedArtGenre(name string) ([]*ArtGenre, error) {
+	if a.Edges.namedArtGenre == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := a.Edges.namedArtGenre[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (a *Art) appendNamedArtGenre(name string, edges ...*ArtGenre) {
+	if a.Edges.namedArtGenre == nil {
+		a.Edges.namedArtGenre = make(map[string][]*ArtGenre)
+	}
+	if len(edges) == 0 {
+		a.Edges.namedArtGenre[name] = []*ArtGenre{}
+	} else {
+		a.Edges.namedArtGenre[name] = append(a.Edges.namedArtGenre[name], edges...)
+	}
+}
+
+// NamedArtStyle returns the ArtStyle named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (a *Art) NamedArtStyle(name string) ([]*ArtStyle, error) {
+	if a.Edges.namedArtStyle == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := a.Edges.namedArtStyle[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (a *Art) appendNamedArtStyle(name string, edges ...*ArtStyle) {
+	if a.Edges.namedArtStyle == nil {
+		a.Edges.namedArtStyle = make(map[string][]*ArtStyle)
+	}
+	if len(edges) == 0 {
+		a.Edges.namedArtStyle[name] = []*ArtStyle{}
+	} else {
+		a.Edges.namedArtStyle[name] = append(a.Edges.namedArtStyle[name], edges...)
+	}
 }
 
 // Arts is a parsable slice of Art.

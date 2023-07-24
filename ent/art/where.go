@@ -3,7 +3,10 @@
 package art
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
 
@@ -50,6 +53,642 @@ func IDLT(id int) predicate.Art {
 // IDLTE applies the LTE predicate on the ID field.
 func IDLTE(id int) predicate.Art {
 	return predicate.Art(sql.FieldLTE(FieldID, id))
+}
+
+// CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
+func CreatedAt(v time.Time) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldCreatedAt, v))
+}
+
+// CreatedBy applies equality check predicate on the "created_by" field. It's identical to CreatedByEQ.
+func CreatedBy(v string) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldCreatedBy, v))
+}
+
+// UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
+func UpdatedAt(v time.Time) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
+// UpdatedBy applies equality check predicate on the "updated_by" field. It's identical to UpdatedByEQ.
+func UpdatedBy(v string) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldUpdatedBy, v))
+}
+
+// DisplayName applies equality check predicate on the "display_name" field. It's identical to DisplayNameEQ.
+func DisplayName(v string) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldDisplayName, v))
+}
+
+// Abbreviation applies equality check predicate on the "abbreviation" field. It's identical to AbbreviationEQ.
+func Abbreviation(v string) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldAbbreviation, v))
+}
+
+// Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
+func Description(v string) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldDescription, v))
+}
+
+// PrimaryImageURL applies equality check predicate on the "primary_image_url" field. It's identical to PrimaryImageURLEQ.
+func PrimaryImageURL(v string) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldPrimaryImageURL, v))
+}
+
+// CreatedAtEQ applies the EQ predicate on the "created_at" field.
+func CreatedAtEQ(v time.Time) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldCreatedAt, v))
+}
+
+// CreatedAtNEQ applies the NEQ predicate on the "created_at" field.
+func CreatedAtNEQ(v time.Time) predicate.Art {
+	return predicate.Art(sql.FieldNEQ(FieldCreatedAt, v))
+}
+
+// CreatedAtIn applies the In predicate on the "created_at" field.
+func CreatedAtIn(vs ...time.Time) predicate.Art {
+	return predicate.Art(sql.FieldIn(FieldCreatedAt, vs...))
+}
+
+// CreatedAtNotIn applies the NotIn predicate on the "created_at" field.
+func CreatedAtNotIn(vs ...time.Time) predicate.Art {
+	return predicate.Art(sql.FieldNotIn(FieldCreatedAt, vs...))
+}
+
+// CreatedAtGT applies the GT predicate on the "created_at" field.
+func CreatedAtGT(v time.Time) predicate.Art {
+	return predicate.Art(sql.FieldGT(FieldCreatedAt, v))
+}
+
+// CreatedAtGTE applies the GTE predicate on the "created_at" field.
+func CreatedAtGTE(v time.Time) predicate.Art {
+	return predicate.Art(sql.FieldGTE(FieldCreatedAt, v))
+}
+
+// CreatedAtLT applies the LT predicate on the "created_at" field.
+func CreatedAtLT(v time.Time) predicate.Art {
+	return predicate.Art(sql.FieldLT(FieldCreatedAt, v))
+}
+
+// CreatedAtLTE applies the LTE predicate on the "created_at" field.
+func CreatedAtLTE(v time.Time) predicate.Art {
+	return predicate.Art(sql.FieldLTE(FieldCreatedAt, v))
+}
+
+// CreatedByEQ applies the EQ predicate on the "created_by" field.
+func CreatedByEQ(v string) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldCreatedBy, v))
+}
+
+// CreatedByNEQ applies the NEQ predicate on the "created_by" field.
+func CreatedByNEQ(v string) predicate.Art {
+	return predicate.Art(sql.FieldNEQ(FieldCreatedBy, v))
+}
+
+// CreatedByIn applies the In predicate on the "created_by" field.
+func CreatedByIn(vs ...string) predicate.Art {
+	return predicate.Art(sql.FieldIn(FieldCreatedBy, vs...))
+}
+
+// CreatedByNotIn applies the NotIn predicate on the "created_by" field.
+func CreatedByNotIn(vs ...string) predicate.Art {
+	return predicate.Art(sql.FieldNotIn(FieldCreatedBy, vs...))
+}
+
+// CreatedByGT applies the GT predicate on the "created_by" field.
+func CreatedByGT(v string) predicate.Art {
+	return predicate.Art(sql.FieldGT(FieldCreatedBy, v))
+}
+
+// CreatedByGTE applies the GTE predicate on the "created_by" field.
+func CreatedByGTE(v string) predicate.Art {
+	return predicate.Art(sql.FieldGTE(FieldCreatedBy, v))
+}
+
+// CreatedByLT applies the LT predicate on the "created_by" field.
+func CreatedByLT(v string) predicate.Art {
+	return predicate.Art(sql.FieldLT(FieldCreatedBy, v))
+}
+
+// CreatedByLTE applies the LTE predicate on the "created_by" field.
+func CreatedByLTE(v string) predicate.Art {
+	return predicate.Art(sql.FieldLTE(FieldCreatedBy, v))
+}
+
+// CreatedByContains applies the Contains predicate on the "created_by" field.
+func CreatedByContains(v string) predicate.Art {
+	return predicate.Art(sql.FieldContains(FieldCreatedBy, v))
+}
+
+// CreatedByHasPrefix applies the HasPrefix predicate on the "created_by" field.
+func CreatedByHasPrefix(v string) predicate.Art {
+	return predicate.Art(sql.FieldHasPrefix(FieldCreatedBy, v))
+}
+
+// CreatedByHasSuffix applies the HasSuffix predicate on the "created_by" field.
+func CreatedByHasSuffix(v string) predicate.Art {
+	return predicate.Art(sql.FieldHasSuffix(FieldCreatedBy, v))
+}
+
+// CreatedByIsNil applies the IsNil predicate on the "created_by" field.
+func CreatedByIsNil() predicate.Art {
+	return predicate.Art(sql.FieldIsNull(FieldCreatedBy))
+}
+
+// CreatedByNotNil applies the NotNil predicate on the "created_by" field.
+func CreatedByNotNil() predicate.Art {
+	return predicate.Art(sql.FieldNotNull(FieldCreatedBy))
+}
+
+// CreatedByEqualFold applies the EqualFold predicate on the "created_by" field.
+func CreatedByEqualFold(v string) predicate.Art {
+	return predicate.Art(sql.FieldEqualFold(FieldCreatedBy, v))
+}
+
+// CreatedByContainsFold applies the ContainsFold predicate on the "created_by" field.
+func CreatedByContainsFold(v string) predicate.Art {
+	return predicate.Art(sql.FieldContainsFold(FieldCreatedBy, v))
+}
+
+// UpdatedAtEQ applies the EQ predicate on the "updated_at" field.
+func UpdatedAtEQ(v time.Time) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
+// UpdatedAtNEQ applies the NEQ predicate on the "updated_at" field.
+func UpdatedAtNEQ(v time.Time) predicate.Art {
+	return predicate.Art(sql.FieldNEQ(FieldUpdatedAt, v))
+}
+
+// UpdatedAtIn applies the In predicate on the "updated_at" field.
+func UpdatedAtIn(vs ...time.Time) predicate.Art {
+	return predicate.Art(sql.FieldIn(FieldUpdatedAt, vs...))
+}
+
+// UpdatedAtNotIn applies the NotIn predicate on the "updated_at" field.
+func UpdatedAtNotIn(vs ...time.Time) predicate.Art {
+	return predicate.Art(sql.FieldNotIn(FieldUpdatedAt, vs...))
+}
+
+// UpdatedAtGT applies the GT predicate on the "updated_at" field.
+func UpdatedAtGT(v time.Time) predicate.Art {
+	return predicate.Art(sql.FieldGT(FieldUpdatedAt, v))
+}
+
+// UpdatedAtGTE applies the GTE predicate on the "updated_at" field.
+func UpdatedAtGTE(v time.Time) predicate.Art {
+	return predicate.Art(sql.FieldGTE(FieldUpdatedAt, v))
+}
+
+// UpdatedAtLT applies the LT predicate on the "updated_at" field.
+func UpdatedAtLT(v time.Time) predicate.Art {
+	return predicate.Art(sql.FieldLT(FieldUpdatedAt, v))
+}
+
+// UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
+func UpdatedAtLTE(v time.Time) predicate.Art {
+	return predicate.Art(sql.FieldLTE(FieldUpdatedAt, v))
+}
+
+// UpdatedByEQ applies the EQ predicate on the "updated_by" field.
+func UpdatedByEQ(v string) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldUpdatedBy, v))
+}
+
+// UpdatedByNEQ applies the NEQ predicate on the "updated_by" field.
+func UpdatedByNEQ(v string) predicate.Art {
+	return predicate.Art(sql.FieldNEQ(FieldUpdatedBy, v))
+}
+
+// UpdatedByIn applies the In predicate on the "updated_by" field.
+func UpdatedByIn(vs ...string) predicate.Art {
+	return predicate.Art(sql.FieldIn(FieldUpdatedBy, vs...))
+}
+
+// UpdatedByNotIn applies the NotIn predicate on the "updated_by" field.
+func UpdatedByNotIn(vs ...string) predicate.Art {
+	return predicate.Art(sql.FieldNotIn(FieldUpdatedBy, vs...))
+}
+
+// UpdatedByGT applies the GT predicate on the "updated_by" field.
+func UpdatedByGT(v string) predicate.Art {
+	return predicate.Art(sql.FieldGT(FieldUpdatedBy, v))
+}
+
+// UpdatedByGTE applies the GTE predicate on the "updated_by" field.
+func UpdatedByGTE(v string) predicate.Art {
+	return predicate.Art(sql.FieldGTE(FieldUpdatedBy, v))
+}
+
+// UpdatedByLT applies the LT predicate on the "updated_by" field.
+func UpdatedByLT(v string) predicate.Art {
+	return predicate.Art(sql.FieldLT(FieldUpdatedBy, v))
+}
+
+// UpdatedByLTE applies the LTE predicate on the "updated_by" field.
+func UpdatedByLTE(v string) predicate.Art {
+	return predicate.Art(sql.FieldLTE(FieldUpdatedBy, v))
+}
+
+// UpdatedByContains applies the Contains predicate on the "updated_by" field.
+func UpdatedByContains(v string) predicate.Art {
+	return predicate.Art(sql.FieldContains(FieldUpdatedBy, v))
+}
+
+// UpdatedByHasPrefix applies the HasPrefix predicate on the "updated_by" field.
+func UpdatedByHasPrefix(v string) predicate.Art {
+	return predicate.Art(sql.FieldHasPrefix(FieldUpdatedBy, v))
+}
+
+// UpdatedByHasSuffix applies the HasSuffix predicate on the "updated_by" field.
+func UpdatedByHasSuffix(v string) predicate.Art {
+	return predicate.Art(sql.FieldHasSuffix(FieldUpdatedBy, v))
+}
+
+// UpdatedByIsNil applies the IsNil predicate on the "updated_by" field.
+func UpdatedByIsNil() predicate.Art {
+	return predicate.Art(sql.FieldIsNull(FieldUpdatedBy))
+}
+
+// UpdatedByNotNil applies the NotNil predicate on the "updated_by" field.
+func UpdatedByNotNil() predicate.Art {
+	return predicate.Art(sql.FieldNotNull(FieldUpdatedBy))
+}
+
+// UpdatedByEqualFold applies the EqualFold predicate on the "updated_by" field.
+func UpdatedByEqualFold(v string) predicate.Art {
+	return predicate.Art(sql.FieldEqualFold(FieldUpdatedBy, v))
+}
+
+// UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
+func UpdatedByContainsFold(v string) predicate.Art {
+	return predicate.Art(sql.FieldContainsFold(FieldUpdatedBy, v))
+}
+
+// DisplayNameEQ applies the EQ predicate on the "display_name" field.
+func DisplayNameEQ(v string) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldDisplayName, v))
+}
+
+// DisplayNameNEQ applies the NEQ predicate on the "display_name" field.
+func DisplayNameNEQ(v string) predicate.Art {
+	return predicate.Art(sql.FieldNEQ(FieldDisplayName, v))
+}
+
+// DisplayNameIn applies the In predicate on the "display_name" field.
+func DisplayNameIn(vs ...string) predicate.Art {
+	return predicate.Art(sql.FieldIn(FieldDisplayName, vs...))
+}
+
+// DisplayNameNotIn applies the NotIn predicate on the "display_name" field.
+func DisplayNameNotIn(vs ...string) predicate.Art {
+	return predicate.Art(sql.FieldNotIn(FieldDisplayName, vs...))
+}
+
+// DisplayNameGT applies the GT predicate on the "display_name" field.
+func DisplayNameGT(v string) predicate.Art {
+	return predicate.Art(sql.FieldGT(FieldDisplayName, v))
+}
+
+// DisplayNameGTE applies the GTE predicate on the "display_name" field.
+func DisplayNameGTE(v string) predicate.Art {
+	return predicate.Art(sql.FieldGTE(FieldDisplayName, v))
+}
+
+// DisplayNameLT applies the LT predicate on the "display_name" field.
+func DisplayNameLT(v string) predicate.Art {
+	return predicate.Art(sql.FieldLT(FieldDisplayName, v))
+}
+
+// DisplayNameLTE applies the LTE predicate on the "display_name" field.
+func DisplayNameLTE(v string) predicate.Art {
+	return predicate.Art(sql.FieldLTE(FieldDisplayName, v))
+}
+
+// DisplayNameContains applies the Contains predicate on the "display_name" field.
+func DisplayNameContains(v string) predicate.Art {
+	return predicate.Art(sql.FieldContains(FieldDisplayName, v))
+}
+
+// DisplayNameHasPrefix applies the HasPrefix predicate on the "display_name" field.
+func DisplayNameHasPrefix(v string) predicate.Art {
+	return predicate.Art(sql.FieldHasPrefix(FieldDisplayName, v))
+}
+
+// DisplayNameHasSuffix applies the HasSuffix predicate on the "display_name" field.
+func DisplayNameHasSuffix(v string) predicate.Art {
+	return predicate.Art(sql.FieldHasSuffix(FieldDisplayName, v))
+}
+
+// DisplayNameIsNil applies the IsNil predicate on the "display_name" field.
+func DisplayNameIsNil() predicate.Art {
+	return predicate.Art(sql.FieldIsNull(FieldDisplayName))
+}
+
+// DisplayNameNotNil applies the NotNil predicate on the "display_name" field.
+func DisplayNameNotNil() predicate.Art {
+	return predicate.Art(sql.FieldNotNull(FieldDisplayName))
+}
+
+// DisplayNameEqualFold applies the EqualFold predicate on the "display_name" field.
+func DisplayNameEqualFold(v string) predicate.Art {
+	return predicate.Art(sql.FieldEqualFold(FieldDisplayName, v))
+}
+
+// DisplayNameContainsFold applies the ContainsFold predicate on the "display_name" field.
+func DisplayNameContainsFold(v string) predicate.Art {
+	return predicate.Art(sql.FieldContainsFold(FieldDisplayName, v))
+}
+
+// AbbreviationEQ applies the EQ predicate on the "abbreviation" field.
+func AbbreviationEQ(v string) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldAbbreviation, v))
+}
+
+// AbbreviationNEQ applies the NEQ predicate on the "abbreviation" field.
+func AbbreviationNEQ(v string) predicate.Art {
+	return predicate.Art(sql.FieldNEQ(FieldAbbreviation, v))
+}
+
+// AbbreviationIn applies the In predicate on the "abbreviation" field.
+func AbbreviationIn(vs ...string) predicate.Art {
+	return predicate.Art(sql.FieldIn(FieldAbbreviation, vs...))
+}
+
+// AbbreviationNotIn applies the NotIn predicate on the "abbreviation" field.
+func AbbreviationNotIn(vs ...string) predicate.Art {
+	return predicate.Art(sql.FieldNotIn(FieldAbbreviation, vs...))
+}
+
+// AbbreviationGT applies the GT predicate on the "abbreviation" field.
+func AbbreviationGT(v string) predicate.Art {
+	return predicate.Art(sql.FieldGT(FieldAbbreviation, v))
+}
+
+// AbbreviationGTE applies the GTE predicate on the "abbreviation" field.
+func AbbreviationGTE(v string) predicate.Art {
+	return predicate.Art(sql.FieldGTE(FieldAbbreviation, v))
+}
+
+// AbbreviationLT applies the LT predicate on the "abbreviation" field.
+func AbbreviationLT(v string) predicate.Art {
+	return predicate.Art(sql.FieldLT(FieldAbbreviation, v))
+}
+
+// AbbreviationLTE applies the LTE predicate on the "abbreviation" field.
+func AbbreviationLTE(v string) predicate.Art {
+	return predicate.Art(sql.FieldLTE(FieldAbbreviation, v))
+}
+
+// AbbreviationContains applies the Contains predicate on the "abbreviation" field.
+func AbbreviationContains(v string) predicate.Art {
+	return predicate.Art(sql.FieldContains(FieldAbbreviation, v))
+}
+
+// AbbreviationHasPrefix applies the HasPrefix predicate on the "abbreviation" field.
+func AbbreviationHasPrefix(v string) predicate.Art {
+	return predicate.Art(sql.FieldHasPrefix(FieldAbbreviation, v))
+}
+
+// AbbreviationHasSuffix applies the HasSuffix predicate on the "abbreviation" field.
+func AbbreviationHasSuffix(v string) predicate.Art {
+	return predicate.Art(sql.FieldHasSuffix(FieldAbbreviation, v))
+}
+
+// AbbreviationIsNil applies the IsNil predicate on the "abbreviation" field.
+func AbbreviationIsNil() predicate.Art {
+	return predicate.Art(sql.FieldIsNull(FieldAbbreviation))
+}
+
+// AbbreviationNotNil applies the NotNil predicate on the "abbreviation" field.
+func AbbreviationNotNil() predicate.Art {
+	return predicate.Art(sql.FieldNotNull(FieldAbbreviation))
+}
+
+// AbbreviationEqualFold applies the EqualFold predicate on the "abbreviation" field.
+func AbbreviationEqualFold(v string) predicate.Art {
+	return predicate.Art(sql.FieldEqualFold(FieldAbbreviation, v))
+}
+
+// AbbreviationContainsFold applies the ContainsFold predicate on the "abbreviation" field.
+func AbbreviationContainsFold(v string) predicate.Art {
+	return predicate.Art(sql.FieldContainsFold(FieldAbbreviation, v))
+}
+
+// DescriptionEQ applies the EQ predicate on the "description" field.
+func DescriptionEQ(v string) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldDescription, v))
+}
+
+// DescriptionNEQ applies the NEQ predicate on the "description" field.
+func DescriptionNEQ(v string) predicate.Art {
+	return predicate.Art(sql.FieldNEQ(FieldDescription, v))
+}
+
+// DescriptionIn applies the In predicate on the "description" field.
+func DescriptionIn(vs ...string) predicate.Art {
+	return predicate.Art(sql.FieldIn(FieldDescription, vs...))
+}
+
+// DescriptionNotIn applies the NotIn predicate on the "description" field.
+func DescriptionNotIn(vs ...string) predicate.Art {
+	return predicate.Art(sql.FieldNotIn(FieldDescription, vs...))
+}
+
+// DescriptionGT applies the GT predicate on the "description" field.
+func DescriptionGT(v string) predicate.Art {
+	return predicate.Art(sql.FieldGT(FieldDescription, v))
+}
+
+// DescriptionGTE applies the GTE predicate on the "description" field.
+func DescriptionGTE(v string) predicate.Art {
+	return predicate.Art(sql.FieldGTE(FieldDescription, v))
+}
+
+// DescriptionLT applies the LT predicate on the "description" field.
+func DescriptionLT(v string) predicate.Art {
+	return predicate.Art(sql.FieldLT(FieldDescription, v))
+}
+
+// DescriptionLTE applies the LTE predicate on the "description" field.
+func DescriptionLTE(v string) predicate.Art {
+	return predicate.Art(sql.FieldLTE(FieldDescription, v))
+}
+
+// DescriptionContains applies the Contains predicate on the "description" field.
+func DescriptionContains(v string) predicate.Art {
+	return predicate.Art(sql.FieldContains(FieldDescription, v))
+}
+
+// DescriptionHasPrefix applies the HasPrefix predicate on the "description" field.
+func DescriptionHasPrefix(v string) predicate.Art {
+	return predicate.Art(sql.FieldHasPrefix(FieldDescription, v))
+}
+
+// DescriptionHasSuffix applies the HasSuffix predicate on the "description" field.
+func DescriptionHasSuffix(v string) predicate.Art {
+	return predicate.Art(sql.FieldHasSuffix(FieldDescription, v))
+}
+
+// DescriptionIsNil applies the IsNil predicate on the "description" field.
+func DescriptionIsNil() predicate.Art {
+	return predicate.Art(sql.FieldIsNull(FieldDescription))
+}
+
+// DescriptionNotNil applies the NotNil predicate on the "description" field.
+func DescriptionNotNil() predicate.Art {
+	return predicate.Art(sql.FieldNotNull(FieldDescription))
+}
+
+// DescriptionEqualFold applies the EqualFold predicate on the "description" field.
+func DescriptionEqualFold(v string) predicate.Art {
+	return predicate.Art(sql.FieldEqualFold(FieldDescription, v))
+}
+
+// DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
+func DescriptionContainsFold(v string) predicate.Art {
+	return predicate.Art(sql.FieldContainsFold(FieldDescription, v))
+}
+
+// ExternalLinksIsNil applies the IsNil predicate on the "external_links" field.
+func ExternalLinksIsNil() predicate.Art {
+	return predicate.Art(sql.FieldIsNull(FieldExternalLinks))
+}
+
+// ExternalLinksNotNil applies the NotNil predicate on the "external_links" field.
+func ExternalLinksNotNil() predicate.Art {
+	return predicate.Art(sql.FieldNotNull(FieldExternalLinks))
+}
+
+// PrimaryImageURLEQ applies the EQ predicate on the "primary_image_url" field.
+func PrimaryImageURLEQ(v string) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLNEQ applies the NEQ predicate on the "primary_image_url" field.
+func PrimaryImageURLNEQ(v string) predicate.Art {
+	return predicate.Art(sql.FieldNEQ(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLIn applies the In predicate on the "primary_image_url" field.
+func PrimaryImageURLIn(vs ...string) predicate.Art {
+	return predicate.Art(sql.FieldIn(FieldPrimaryImageURL, vs...))
+}
+
+// PrimaryImageURLNotIn applies the NotIn predicate on the "primary_image_url" field.
+func PrimaryImageURLNotIn(vs ...string) predicate.Art {
+	return predicate.Art(sql.FieldNotIn(FieldPrimaryImageURL, vs...))
+}
+
+// PrimaryImageURLGT applies the GT predicate on the "primary_image_url" field.
+func PrimaryImageURLGT(v string) predicate.Art {
+	return predicate.Art(sql.FieldGT(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLGTE applies the GTE predicate on the "primary_image_url" field.
+func PrimaryImageURLGTE(v string) predicate.Art {
+	return predicate.Art(sql.FieldGTE(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLLT applies the LT predicate on the "primary_image_url" field.
+func PrimaryImageURLLT(v string) predicate.Art {
+	return predicate.Art(sql.FieldLT(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLLTE applies the LTE predicate on the "primary_image_url" field.
+func PrimaryImageURLLTE(v string) predicate.Art {
+	return predicate.Art(sql.FieldLTE(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLContains applies the Contains predicate on the "primary_image_url" field.
+func PrimaryImageURLContains(v string) predicate.Art {
+	return predicate.Art(sql.FieldContains(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLHasPrefix applies the HasPrefix predicate on the "primary_image_url" field.
+func PrimaryImageURLHasPrefix(v string) predicate.Art {
+	return predicate.Art(sql.FieldHasPrefix(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLHasSuffix applies the HasSuffix predicate on the "primary_image_url" field.
+func PrimaryImageURLHasSuffix(v string) predicate.Art {
+	return predicate.Art(sql.FieldHasSuffix(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLIsNil applies the IsNil predicate on the "primary_image_url" field.
+func PrimaryImageURLIsNil() predicate.Art {
+	return predicate.Art(sql.FieldIsNull(FieldPrimaryImageURL))
+}
+
+// PrimaryImageURLNotNil applies the NotNil predicate on the "primary_image_url" field.
+func PrimaryImageURLNotNil() predicate.Art {
+	return predicate.Art(sql.FieldNotNull(FieldPrimaryImageURL))
+}
+
+// PrimaryImageURLEqualFold applies the EqualFold predicate on the "primary_image_url" field.
+func PrimaryImageURLEqualFold(v string) predicate.Art {
+	return predicate.Art(sql.FieldEqualFold(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLContainsFold applies the ContainsFold predicate on the "primary_image_url" field.
+func PrimaryImageURLContainsFold(v string) predicate.Art {
+	return predicate.Art(sql.FieldContainsFold(FieldPrimaryImageURL, v))
+}
+
+// AdditionalImagesUrlsIsNil applies the IsNil predicate on the "additional_images_urls" field.
+func AdditionalImagesUrlsIsNil() predicate.Art {
+	return predicate.Art(sql.FieldIsNull(FieldAdditionalImagesUrls))
+}
+
+// AdditionalImagesUrlsNotNil applies the NotNil predicate on the "additional_images_urls" field.
+func AdditionalImagesUrlsNotNil() predicate.Art {
+	return predicate.Art(sql.FieldNotNull(FieldAdditionalImagesUrls))
+}
+
+// HasArtGenre applies the HasEdge predicate on the "art_genre" edge.
+func HasArtGenre() predicate.Art {
+	return predicate.Art(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ArtGenreTable, ArtGenrePrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasArtGenreWith applies the HasEdge predicate on the "art_genre" edge with a given conditions (other predicates).
+func HasArtGenreWith(preds ...predicate.ArtGenre) predicate.Art {
+	return predicate.Art(func(s *sql.Selector) {
+		step := newArtGenreStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasArtStyle applies the HasEdge predicate on the "art_style" edge.
+func HasArtStyle() predicate.Art {
+	return predicate.Art(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ArtStyleTable, ArtStylePrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasArtStyleWith applies the HasEdge predicate on the "art_style" edge with a given conditions (other predicates).
+func HasArtStyleWith(preds ...predicate.ArtStyle) predicate.Art {
+	return predicate.Art(func(s *sql.Selector) {
+		step := newArtStyleStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

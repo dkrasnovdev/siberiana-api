@@ -34,7 +34,32 @@ type ArtStyle struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLinks holds the value of the "external_links" field.
 	ExternalLinks []string `json:"external_links,omitempty"`
-	selectValues  sql.SelectValues
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the ArtStyleQuery when eager-loading is set.
+	Edges        ArtStyleEdges `json:"edges"`
+	selectValues sql.SelectValues
+}
+
+// ArtStyleEdges holds the relations/edges for other nodes in the graph.
+type ArtStyleEdges struct {
+	// Art holds the value of the art edge.
+	Art []*Art `json:"art,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+	// totalCount holds the count of the edges above.
+	totalCount [1]map[string]int
+
+	namedArt map[string][]*Art
+}
+
+// ArtOrErr returns the Art value or an error if the edge
+// was not loaded in eager-loading.
+func (e ArtStyleEdges) ArtOrErr() ([]*Art, error) {
+	if e.loadedTypes[0] {
+		return e.Art, nil
+	}
+	return nil, &NotLoadedError{edge: "art"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -134,6 +159,11 @@ func (as *ArtStyle) Value(name string) (ent.Value, error) {
 	return as.selectValues.Get(name)
 }
 
+// QueryArt queries the "art" edge of the ArtStyle entity.
+func (as *ArtStyle) QueryArt() *ArtQuery {
+	return NewArtStyleClient(as.config).QueryArt(as)
+}
+
 // Update returns a builder for updating this ArtStyle.
 // Note that you need to call ArtStyle.Unwrap() before calling this method if this ArtStyle
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -182,6 +212,30 @@ func (as *ArtStyle) String() string {
 	builder.WriteString(fmt.Sprintf("%v", as.ExternalLinks))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedArt returns the Art named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (as *ArtStyle) NamedArt(name string) ([]*Art, error) {
+	if as.Edges.namedArt == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := as.Edges.namedArt[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (as *ArtStyle) appendNamedArt(name string, edges ...*Art) {
+	if as.Edges.namedArt == nil {
+		as.Edges.namedArt = make(map[string][]*Art)
+	}
+	if len(edges) == 0 {
+		as.Edges.namedArt[name] = []*Art{}
+	} else {
+		as.Edges.namedArt[name] = append(as.Edges.namedArt[name], edges...)
+	}
 }
 
 // ArtStyles is a parsable slice of ArtStyle.

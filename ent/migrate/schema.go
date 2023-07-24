@@ -11,6 +11,16 @@ var (
 	// ArtsColumns holds the columns for the "arts" table.
 	ArtsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
+		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
 	}
 	// ArtsTable holds the schema information for the "arts" table.
 	ArtsTable = &schema.Table{
@@ -901,6 +911,56 @@ var (
 		Columns:    TechniquesColumns,
 		PrimaryKey: []*schema.Column{TechniquesColumns[0]},
 	}
+	// ArtGenreArtColumns holds the columns for the "art_genre_art" table.
+	ArtGenreArtColumns = []*schema.Column{
+		{Name: "art_genre_id", Type: field.TypeInt},
+		{Name: "art_id", Type: field.TypeInt},
+	}
+	// ArtGenreArtTable holds the schema information for the "art_genre_art" table.
+	ArtGenreArtTable = &schema.Table{
+		Name:       "art_genre_art",
+		Columns:    ArtGenreArtColumns,
+		PrimaryKey: []*schema.Column{ArtGenreArtColumns[0], ArtGenreArtColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "art_genre_art_art_genre_id",
+				Columns:    []*schema.Column{ArtGenreArtColumns[0]},
+				RefColumns: []*schema.Column{ArtGenresColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "art_genre_art_art_id",
+				Columns:    []*schema.Column{ArtGenreArtColumns[1]},
+				RefColumns: []*schema.Column{ArtsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ArtStyleArtColumns holds the columns for the "art_style_art" table.
+	ArtStyleArtColumns = []*schema.Column{
+		{Name: "art_style_id", Type: field.TypeInt},
+		{Name: "art_id", Type: field.TypeInt},
+	}
+	// ArtStyleArtTable holds the schema information for the "art_style_art" table.
+	ArtStyleArtTable = &schema.Table{
+		Name:       "art_style_art",
+		Columns:    ArtStyleArtColumns,
+		PrimaryKey: []*schema.Column{ArtStyleArtColumns[0], ArtStyleArtColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "art_style_art_art_style_id",
+				Columns:    []*schema.Column{ArtStyleArtColumns[0]},
+				RefColumns: []*schema.Column{ArtStylesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "art_style_art_art_id",
+				Columns:    []*schema.Column{ArtStyleArtColumns[1]},
+				RefColumns: []*schema.Column{ArtsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// BookGenreBooksColumns holds the columns for the "book_genre_books" table.
 	BookGenreBooksColumns = []*schema.Column{
 		{Name: "book_genre_id", Type: field.TypeInt},
@@ -1289,6 +1349,8 @@ var (
 		SetsTable,
 		SettlementsTable,
 		TechniquesTable,
+		ArtGenreArtTable,
+		ArtStyleArtTable,
 		BookGenreBooksTable,
 		HolderArtifactsTable,
 		HolderBooksTable,
@@ -1335,6 +1397,10 @@ func init() {
 	ProtectedAreaPicturesTable.ForeignKeys[3].RefTable = ProtectedAreasTable
 	RegionsTable.ForeignKeys[0].RefTable = LocationsTable
 	SettlementsTable.ForeignKeys[0].RefTable = LocationsTable
+	ArtGenreArtTable.ForeignKeys[0].RefTable = ArtGenresTable
+	ArtGenreArtTable.ForeignKeys[1].RefTable = ArtsTable
+	ArtStyleArtTable.ForeignKeys[0].RefTable = ArtStylesTable
+	ArtStyleArtTable.ForeignKeys[1].RefTable = ArtsTable
 	BookGenreBooksTable.ForeignKeys[0].RefTable = BookGenresTable
 	BookGenreBooksTable.ForeignKeys[1].RefTable = BooksTable
 	HolderArtifactsTable.ForeignKeys[0].RefTable = HoldersTable

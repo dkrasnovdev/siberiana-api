@@ -8,6 +8,54 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 )
 
+func (a *Art) ArtGenre(ctx context.Context) (result []*ArtGenre, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = a.NamedArtGenre(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = a.Edges.ArtGenreOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = a.QueryArtGenre().All(ctx)
+	}
+	return result, err
+}
+
+func (a *Art) ArtStyle(ctx context.Context) (result []*ArtStyle, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = a.NamedArtStyle(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = a.Edges.ArtStyleOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = a.QueryArtStyle().All(ctx)
+	}
+	return result, err
+}
+
+func (ag *ArtGenre) Art(ctx context.Context) (result []*Art, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = ag.NamedArt(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = ag.Edges.ArtOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = ag.QueryArt().All(ctx)
+	}
+	return result, err
+}
+
+func (as *ArtStyle) Art(ctx context.Context) (result []*Art, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = as.NamedArt(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = as.Edges.ArtOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = as.QueryArt().All(ctx)
+	}
+	return result, err
+}
+
 func (a *Artifact) Authors(ctx context.Context) (result []*Person, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = a.NamedAuthors(graphql.GetFieldContext(ctx).Field.Alias)

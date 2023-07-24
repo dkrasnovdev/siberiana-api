@@ -2,12 +2,30 @@ type Mutation {
   # Artifact
   createArtifact(input: CreateArtifactInput!): Artifact!
   updateArtifact(id: ID!, input: UpdateArtifactInput!): Artifact!
+  # Art
+  createArt(input: CreateArtInput!): Art!
+  updateArt(id: ID!, input: UpdateArtInput!): Art!
+  # ArtGenre
+  createArtGenre(input: CreateArtGenreInput!): ArtGenre!
+  updateArtGenre(id: ID!, input: UpdateArtGenreInput!): ArtGenre!
+  # ArtStyle
+  createArtStyle(input: CreateArtStyleInput!): ArtStyle!
+  updateArtStyle(id: ID!, input: UpdateArtStyleInput!): ArtStyle!
+  # Book
+  createBook(input: CreateBookInput!): Book!
+  updateBook(id: ID!, input: UpdateBookInput!): Book!
+  # BookGenre
+  createBookGenre(input: CreateBookGenreInput!): BookGenre!
+  updateBookGenre(id: ID!, input: UpdateBookGenreInput!): BookGenre!
   # Category
   createCategory(input: CreateCategoryInput!): Category!
   updateCategory(id: ID!, input: UpdateCategoryInput!): Category!
   # Collection
   createCollection(input: CreateCollectionInput!): Collection!
   updateCollection(id: ID!, input: UpdateCollectionInput!): Collection!
+  # Country
+  createCountry(input: CreateCountryInput!): Country!
+  updateCountry(id: ID!, input: UpdateCountryInput!): Country!
   # Culture
   createCulture(input: CreateCultureInput!): Culture!
   updateCulture(id: ID!, input: UpdateCultureInput!): Culture!
@@ -17,6 +35,14 @@ type Mutation {
   # Holder
   createHolder(input: CreateHolderInput!): Holder!
   updateHolder(id: ID!, input: UpdateHolderInput!): Holder!
+  # HolderResponsibility
+  createHolderResponsibility(
+    input: CreateHolderResponsibilityInput!
+  ): HolderResponsibility!
+  updateHolderResponsibility(
+    id: ID!
+    input: UpdateHolderResponsibilityInput!
+  ): HolderResponsibility!
   # License
   createLicense(input: CreateLicenseInput!): License!
   updateLicense(id: ID!, input: UpdateLicenseInput!): License!
@@ -35,15 +61,52 @@ type Mutation {
   # Organization
   createOrganization(input: CreateOrganizationInput!): Organization!
   updateOrganization(id: ID!, input: UpdateOrganizationInput!): Organization!
+  # OrganizationType
+  createOrganizationType(input: CreateOrganizationTypeInput!): OrganizationType!
+  updateOrganizationType(
+    id: ID!
+    input: UpdateOrganizationTypeInput!
+  ): OrganizationType!
+  # Period
+  createPeriod(input: CreatePeriodInput!): Period!
+  updatePeriod(id: ID!, input: UpdatePeriodInput!): Period!
   # Person
   createPerson(input: CreatePersonInput!): Person!
   updatePerson(id: ID!, input: UpdatePersonInput!): Person!
+  # PersonRole
+  createPersonRole(input: CreatePersonRoleInput!): PersonRole!
+  updatePersonRole(id: ID!, input: UpdatePersonRoleInput!): PersonRole!
   # Project
   createProject(input: CreateProjectInput!): Project!
   updateProject(id: ID!, input: UpdateProjectInput!): Project!
+  # ProjectType
+  createProjectType(input: CreateProjectTypeInput!): ProjectType!
+  updateProjectType(id: ID!, input: UpdateProjectTypeInput!): ProjectType!
+  # ProtectedArea
+  createProtectedArea(input: CreateProtectedAreaInput!): ProtectedArea!
+  updateProtectedArea(id: ID!, input: UpdateProtectedAreaInput!): ProtectedArea!
+  # ProtectedAreaCategory
+  createProtectedAreaCategory(
+    input: CreateProtectedAreaCategoryInput!
+  ): ProtectedAreaCategory!
+  updateProtectedAreaCategory(
+    id: ID!
+    input: UpdateProtectedAreaCategoryInput!
+  ): ProtectedAreaCategory!
+  # ProtectedAreaPicture
+  createProtectedAreaPicture(
+    input: CreateProtectedAreaPictureInput!
+  ): ProtectedAreaPicture!
+  updateProtectedAreaPicture(
+    id: ID!
+    input: UpdateProtectedAreaPictureInput!
+  ): ProtectedAreaPicture!
   # Publication
   createPublication(input: CreatePublicationInput!): Publication!
   updatePublication(id: ID!, input: UpdatePublicationInput!): Publication!
+  # Publisher
+  createPublisher(input: CreatePublisherInput!): Publisher!
+  updatePublisher(id: ID!, input: UpdatePublisherInput!): Publisher!
   # Region
   createRegion(input: CreateRegionInput!): Region!
   updateRegion(id: ID!, input: UpdateRegionInput!): Region!

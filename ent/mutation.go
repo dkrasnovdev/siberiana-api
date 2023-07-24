@@ -11,6 +11,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/dkrasnovdev/heritage-api/ent/art"
 	"github.com/dkrasnovdev/heritage-api/ent/artgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/artstyle"
@@ -99,13 +100,31 @@ const (
 // ArtMutation represents an operation that mutates the Art nodes in the graph.
 type ArtMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*Art, error)
-	predicates    []predicate.Art
+	op                           Op
+	typ                          string
+	id                           *int
+	created_at                   *time.Time
+	created_by                   *string
+	updated_at                   *time.Time
+	updated_by                   *string
+	display_name                 *string
+	abbreviation                 *string
+	description                  *string
+	external_links               *[]string
+	appendexternal_links         []string
+	primary_image_url            *string
+	additional_images_urls       *[]string
+	appendadditional_images_urls []string
+	clearedFields                map[string]struct{}
+	art_genre                    map[int]struct{}
+	removedart_genre             map[int]struct{}
+	clearedart_genre             bool
+	art_style                    map[int]struct{}
+	removedart_style             map[int]struct{}
+	clearedart_style             bool
+	done                         bool
+	oldValue                     func(context.Context) (*Art, error)
+	predicates                   []predicate.Art
 }
 
 var _ ent.Mutation = (*ArtMutation)(nil)
@@ -206,6 +225,610 @@ func (m *ArtMutation) IDs(ctx context.Context) ([]int, error) {
 	}
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (m *ArtMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *ArtMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *ArtMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *ArtMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *ArtMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *ArtMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[art.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *ArtMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[art.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *ArtMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, art.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *ArtMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *ArtMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *ArtMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *ArtMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *ArtMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *ArtMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[art.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *ArtMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[art.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *ArtMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, art.FieldUpdatedBy)
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *ArtMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *ArtMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (m *ArtMutation) ClearDisplayName() {
+	m.display_name = nil
+	m.clearedFields[art.FieldDisplayName] = struct{}{}
+}
+
+// DisplayNameCleared returns if the "display_name" field was cleared in this mutation.
+func (m *ArtMutation) DisplayNameCleared() bool {
+	_, ok := m.clearedFields[art.FieldDisplayName]
+	return ok
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *ArtMutation) ResetDisplayName() {
+	m.display_name = nil
+	delete(m.clearedFields, art.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *ArtMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *ArtMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *ArtMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[art.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *ArtMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[art.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *ArtMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, art.FieldAbbreviation)
+}
+
+// SetDescription sets the "description" field.
+func (m *ArtMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *ArtMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *ArtMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[art.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *ArtMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[art.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *ArtMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, art.FieldDescription)
+}
+
+// SetExternalLinks sets the "external_links" field.
+func (m *ArtMutation) SetExternalLinks(s []string) {
+	m.external_links = &s
+	m.appendexternal_links = nil
+}
+
+// ExternalLinks returns the value of the "external_links" field in the mutation.
+func (m *ArtMutation) ExternalLinks() (r []string, exists bool) {
+	v := m.external_links
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalLinks returns the old "external_links" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
+	}
+	return oldValue.ExternalLinks, nil
+}
+
+// AppendExternalLinks adds s to the "external_links" field.
+func (m *ArtMutation) AppendExternalLinks(s []string) {
+	m.appendexternal_links = append(m.appendexternal_links, s...)
+}
+
+// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
+func (m *ArtMutation) AppendedExternalLinks() ([]string, bool) {
+	if len(m.appendexternal_links) == 0 {
+		return nil, false
+	}
+	return m.appendexternal_links, true
+}
+
+// ClearExternalLinks clears the value of the "external_links" field.
+func (m *ArtMutation) ClearExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	m.clearedFields[art.FieldExternalLinks] = struct{}{}
+}
+
+// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
+func (m *ArtMutation) ExternalLinksCleared() bool {
+	_, ok := m.clearedFields[art.FieldExternalLinks]
+	return ok
+}
+
+// ResetExternalLinks resets all changes to the "external_links" field.
+func (m *ArtMutation) ResetExternalLinks() {
+	m.external_links = nil
+	m.appendexternal_links = nil
+	delete(m.clearedFields, art.FieldExternalLinks)
+}
+
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (m *ArtMutation) SetPrimaryImageURL(s string) {
+	m.primary_image_url = &s
+}
+
+// PrimaryImageURL returns the value of the "primary_image_url" field in the mutation.
+func (m *ArtMutation) PrimaryImageURL() (r string, exists bool) {
+	v := m.primary_image_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPrimaryImageURL returns the old "primary_image_url" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldPrimaryImageURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPrimaryImageURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPrimaryImageURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPrimaryImageURL: %w", err)
+	}
+	return oldValue.PrimaryImageURL, nil
+}
+
+// ClearPrimaryImageURL clears the value of the "primary_image_url" field.
+func (m *ArtMutation) ClearPrimaryImageURL() {
+	m.primary_image_url = nil
+	m.clearedFields[art.FieldPrimaryImageURL] = struct{}{}
+}
+
+// PrimaryImageURLCleared returns if the "primary_image_url" field was cleared in this mutation.
+func (m *ArtMutation) PrimaryImageURLCleared() bool {
+	_, ok := m.clearedFields[art.FieldPrimaryImageURL]
+	return ok
+}
+
+// ResetPrimaryImageURL resets all changes to the "primary_image_url" field.
+func (m *ArtMutation) ResetPrimaryImageURL() {
+	m.primary_image_url = nil
+	delete(m.clearedFields, art.FieldPrimaryImageURL)
+}
+
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (m *ArtMutation) SetAdditionalImagesUrls(s []string) {
+	m.additional_images_urls = &s
+	m.appendadditional_images_urls = nil
+}
+
+// AdditionalImagesUrls returns the value of the "additional_images_urls" field in the mutation.
+func (m *ArtMutation) AdditionalImagesUrls() (r []string, exists bool) {
+	v := m.additional_images_urls
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAdditionalImagesUrls returns the old "additional_images_urls" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldAdditionalImagesUrls(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAdditionalImagesUrls is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAdditionalImagesUrls requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAdditionalImagesUrls: %w", err)
+	}
+	return oldValue.AdditionalImagesUrls, nil
+}
+
+// AppendAdditionalImagesUrls adds s to the "additional_images_urls" field.
+func (m *ArtMutation) AppendAdditionalImagesUrls(s []string) {
+	m.appendadditional_images_urls = append(m.appendadditional_images_urls, s...)
+}
+
+// AppendedAdditionalImagesUrls returns the list of values that were appended to the "additional_images_urls" field in this mutation.
+func (m *ArtMutation) AppendedAdditionalImagesUrls() ([]string, bool) {
+	if len(m.appendadditional_images_urls) == 0 {
+		return nil, false
+	}
+	return m.appendadditional_images_urls, true
+}
+
+// ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
+func (m *ArtMutation) ClearAdditionalImagesUrls() {
+	m.additional_images_urls = nil
+	m.appendadditional_images_urls = nil
+	m.clearedFields[art.FieldAdditionalImagesUrls] = struct{}{}
+}
+
+// AdditionalImagesUrlsCleared returns if the "additional_images_urls" field was cleared in this mutation.
+func (m *ArtMutation) AdditionalImagesUrlsCleared() bool {
+	_, ok := m.clearedFields[art.FieldAdditionalImagesUrls]
+	return ok
+}
+
+// ResetAdditionalImagesUrls resets all changes to the "additional_images_urls" field.
+func (m *ArtMutation) ResetAdditionalImagesUrls() {
+	m.additional_images_urls = nil
+	m.appendadditional_images_urls = nil
+	delete(m.clearedFields, art.FieldAdditionalImagesUrls)
+}
+
+// AddArtGenreIDs adds the "art_genre" edge to the ArtGenre entity by ids.
+func (m *ArtMutation) AddArtGenreIDs(ids ...int) {
+	if m.art_genre == nil {
+		m.art_genre = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.art_genre[ids[i]] = struct{}{}
+	}
+}
+
+// ClearArtGenre clears the "art_genre" edge to the ArtGenre entity.
+func (m *ArtMutation) ClearArtGenre() {
+	m.clearedart_genre = true
+}
+
+// ArtGenreCleared reports if the "art_genre" edge to the ArtGenre entity was cleared.
+func (m *ArtMutation) ArtGenreCleared() bool {
+	return m.clearedart_genre
+}
+
+// RemoveArtGenreIDs removes the "art_genre" edge to the ArtGenre entity by IDs.
+func (m *ArtMutation) RemoveArtGenreIDs(ids ...int) {
+	if m.removedart_genre == nil {
+		m.removedart_genre = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.art_genre, ids[i])
+		m.removedart_genre[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedArtGenre returns the removed IDs of the "art_genre" edge to the ArtGenre entity.
+func (m *ArtMutation) RemovedArtGenreIDs() (ids []int) {
+	for id := range m.removedart_genre {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ArtGenreIDs returns the "art_genre" edge IDs in the mutation.
+func (m *ArtMutation) ArtGenreIDs() (ids []int) {
+	for id := range m.art_genre {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetArtGenre resets all changes to the "art_genre" edge.
+func (m *ArtMutation) ResetArtGenre() {
+	m.art_genre = nil
+	m.clearedart_genre = false
+	m.removedart_genre = nil
+}
+
+// AddArtStyleIDs adds the "art_style" edge to the ArtStyle entity by ids.
+func (m *ArtMutation) AddArtStyleIDs(ids ...int) {
+	if m.art_style == nil {
+		m.art_style = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.art_style[ids[i]] = struct{}{}
+	}
+}
+
+// ClearArtStyle clears the "art_style" edge to the ArtStyle entity.
+func (m *ArtMutation) ClearArtStyle() {
+	m.clearedart_style = true
+}
+
+// ArtStyleCleared reports if the "art_style" edge to the ArtStyle entity was cleared.
+func (m *ArtMutation) ArtStyleCleared() bool {
+	return m.clearedart_style
+}
+
+// RemoveArtStyleIDs removes the "art_style" edge to the ArtStyle entity by IDs.
+func (m *ArtMutation) RemoveArtStyleIDs(ids ...int) {
+	if m.removedart_style == nil {
+		m.removedart_style = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.art_style, ids[i])
+		m.removedart_style[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedArtStyle returns the removed IDs of the "art_style" edge to the ArtStyle entity.
+func (m *ArtMutation) RemovedArtStyleIDs() (ids []int) {
+	for id := range m.removedart_style {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ArtStyleIDs returns the "art_style" edge IDs in the mutation.
+func (m *ArtMutation) ArtStyleIDs() (ids []int) {
+	for id := range m.art_style {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetArtStyle resets all changes to the "art_style" edge.
+func (m *ArtMutation) ResetArtStyle() {
+	m.art_style = nil
+	m.clearedart_style = false
+	m.removedart_style = nil
+}
+
 // Where appends a list predicates to the ArtMutation builder.
 func (m *ArtMutation) Where(ps ...predicate.Art) {
 	m.predicates = append(m.predicates, ps...)
@@ -240,7 +863,37 @@ func (m *ArtMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArtMutation) Fields() []string {
-	fields := make([]string, 0, 0)
+	fields := make([]string, 0, 10)
+	if m.created_at != nil {
+		fields = append(fields, art.FieldCreatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, art.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, art.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, art.FieldUpdatedBy)
+	}
+	if m.display_name != nil {
+		fields = append(fields, art.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, art.FieldAbbreviation)
+	}
+	if m.description != nil {
+		fields = append(fields, art.FieldDescription)
+	}
+	if m.external_links != nil {
+		fields = append(fields, art.FieldExternalLinks)
+	}
+	if m.primary_image_url != nil {
+		fields = append(fields, art.FieldPrimaryImageURL)
+	}
+	if m.additional_images_urls != nil {
+		fields = append(fields, art.FieldAdditionalImagesUrls)
+	}
 	return fields
 }
 
@@ -248,6 +901,28 @@ func (m *ArtMutation) Fields() []string {
 // return value indicates that this field was not set, or was not defined in the
 // schema.
 func (m *ArtMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case art.FieldCreatedAt:
+		return m.CreatedAt()
+	case art.FieldCreatedBy:
+		return m.CreatedBy()
+	case art.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case art.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case art.FieldDisplayName:
+		return m.DisplayName()
+	case art.FieldAbbreviation:
+		return m.Abbreviation()
+	case art.FieldDescription:
+		return m.Description()
+	case art.FieldExternalLinks:
+		return m.ExternalLinks()
+	case art.FieldPrimaryImageURL:
+		return m.PrimaryImageURL()
+	case art.FieldAdditionalImagesUrls:
+		return m.AdditionalImagesUrls()
+	}
 	return nil, false
 }
 
@@ -255,6 +930,28 @@ func (m *ArtMutation) Field(name string) (ent.Value, bool) {
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
 func (m *ArtMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case art.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case art.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case art.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case art.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case art.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case art.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
+	case art.FieldDescription:
+		return m.OldDescription(ctx)
+	case art.FieldExternalLinks:
+		return m.OldExternalLinks(ctx)
+	case art.FieldPrimaryImageURL:
+		return m.OldPrimaryImageURL(ctx)
+	case art.FieldAdditionalImagesUrls:
+		return m.OldAdditionalImagesUrls(ctx)
+	}
 	return nil, fmt.Errorf("unknown Art field %s", name)
 }
 
@@ -263,6 +960,76 @@ func (m *ArtMutation) OldField(ctx context.Context, name string) (ent.Value, err
 // type.
 func (m *ArtMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case art.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case art.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case art.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case art.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case art.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case art.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
+		return nil
+	case art.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case art.FieldExternalLinks:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalLinks(v)
+		return nil
+	case art.FieldPrimaryImageURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPrimaryImageURL(v)
+		return nil
+	case art.FieldAdditionalImagesUrls:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAdditionalImagesUrls(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Art field %s", name)
 }
@@ -284,13 +1051,40 @@ func (m *ArtMutation) AddedField(name string) (ent.Value, bool) {
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
 func (m *ArtMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown Art numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *ArtMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(art.FieldCreatedBy) {
+		fields = append(fields, art.FieldCreatedBy)
+	}
+	if m.FieldCleared(art.FieldUpdatedBy) {
+		fields = append(fields, art.FieldUpdatedBy)
+	}
+	if m.FieldCleared(art.FieldDisplayName) {
+		fields = append(fields, art.FieldDisplayName)
+	}
+	if m.FieldCleared(art.FieldAbbreviation) {
+		fields = append(fields, art.FieldAbbreviation)
+	}
+	if m.FieldCleared(art.FieldDescription) {
+		fields = append(fields, art.FieldDescription)
+	}
+	if m.FieldCleared(art.FieldExternalLinks) {
+		fields = append(fields, art.FieldExternalLinks)
+	}
+	if m.FieldCleared(art.FieldPrimaryImageURL) {
+		fields = append(fields, art.FieldPrimaryImageURL)
+	}
+	if m.FieldCleared(art.FieldAdditionalImagesUrls) {
+		fields = append(fields, art.FieldAdditionalImagesUrls)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -303,60 +1097,180 @@ func (m *ArtMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *ArtMutation) ClearField(name string) error {
+	switch name {
+	case art.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case art.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case art.FieldDisplayName:
+		m.ClearDisplayName()
+		return nil
+	case art.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
+	case art.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case art.FieldExternalLinks:
+		m.ClearExternalLinks()
+		return nil
+	case art.FieldPrimaryImageURL:
+		m.ClearPrimaryImageURL()
+		return nil
+	case art.FieldAdditionalImagesUrls:
+		m.ClearAdditionalImagesUrls()
+		return nil
+	}
 	return fmt.Errorf("unknown Art nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
 func (m *ArtMutation) ResetField(name string) error {
+	switch name {
+	case art.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case art.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case art.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case art.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case art.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case art.FieldAbbreviation:
+		m.ResetAbbreviation()
+		return nil
+	case art.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case art.FieldExternalLinks:
+		m.ResetExternalLinks()
+		return nil
+	case art.FieldPrimaryImageURL:
+		m.ResetPrimaryImageURL()
+		return nil
+	case art.FieldAdditionalImagesUrls:
+		m.ResetAdditionalImagesUrls()
+		return nil
+	}
 	return fmt.Errorf("unknown Art field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ArtMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 2)
+	if m.art_genre != nil {
+		edges = append(edges, art.EdgeArtGenre)
+	}
+	if m.art_style != nil {
+		edges = append(edges, art.EdgeArtStyle)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *ArtMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case art.EdgeArtGenre:
+		ids := make([]ent.Value, 0, len(m.art_genre))
+		for id := range m.art_genre {
+			ids = append(ids, id)
+		}
+		return ids
+	case art.EdgeArtStyle:
+		ids := make([]ent.Value, 0, len(m.art_style))
+		for id := range m.art_style {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ArtMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 2)
+	if m.removedart_genre != nil {
+		edges = append(edges, art.EdgeArtGenre)
+	}
+	if m.removedart_style != nil {
+		edges = append(edges, art.EdgeArtStyle)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *ArtMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case art.EdgeArtGenre:
+		ids := make([]ent.Value, 0, len(m.removedart_genre))
+		for id := range m.removedart_genre {
+			ids = append(ids, id)
+		}
+		return ids
+	case art.EdgeArtStyle:
+		ids := make([]ent.Value, 0, len(m.removedart_style))
+		for id := range m.removedart_style {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ArtMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 2)
+	if m.clearedart_genre {
+		edges = append(edges, art.EdgeArtGenre)
+	}
+	if m.clearedart_style {
+		edges = append(edges, art.EdgeArtStyle)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *ArtMutation) EdgeCleared(name string) bool {
+	switch name {
+	case art.EdgeArtGenre:
+		return m.clearedart_genre
+	case art.EdgeArtStyle:
+		return m.clearedart_style
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *ArtMutation) ClearEdge(name string) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown Art unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *ArtMutation) ResetEdge(name string) error {
+	switch name {
+	case art.EdgeArtGenre:
+		m.ResetArtGenre()
+		return nil
+	case art.EdgeArtStyle:
+		m.ResetArtStyle()
+		return nil
+	}
 	return fmt.Errorf("unknown Art edge %s", name)
 }
 
@@ -376,6 +1290,9 @@ type ArtGenreMutation struct {
 	external_links       *[]string
 	appendexternal_links []string
 	clearedFields        map[string]struct{}
+	art                  map[int]struct{}
+	removedart           map[int]struct{}
+	clearedart           bool
 	done                 bool
 	oldValue             func(context.Context) (*ArtGenre, error)
 	predicates           []predicate.ArtGenre
@@ -861,6 +1778,60 @@ func (m *ArtGenreMutation) ResetExternalLinks() {
 	delete(m.clearedFields, artgenre.FieldExternalLinks)
 }
 
+// AddArtIDs adds the "art" edge to the Art entity by ids.
+func (m *ArtGenreMutation) AddArtIDs(ids ...int) {
+	if m.art == nil {
+		m.art = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.art[ids[i]] = struct{}{}
+	}
+}
+
+// ClearArt clears the "art" edge to the Art entity.
+func (m *ArtGenreMutation) ClearArt() {
+	m.clearedart = true
+}
+
+// ArtCleared reports if the "art" edge to the Art entity was cleared.
+func (m *ArtGenreMutation) ArtCleared() bool {
+	return m.clearedart
+}
+
+// RemoveArtIDs removes the "art" edge to the Art entity by IDs.
+func (m *ArtGenreMutation) RemoveArtIDs(ids ...int) {
+	if m.removedart == nil {
+		m.removedart = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.art, ids[i])
+		m.removedart[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedArt returns the removed IDs of the "art" edge to the Art entity.
+func (m *ArtGenreMutation) RemovedArtIDs() (ids []int) {
+	for id := range m.removedart {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ArtIDs returns the "art" edge IDs in the mutation.
+func (m *ArtGenreMutation) ArtIDs() (ids []int) {
+	for id := range m.art {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetArt resets all changes to the "art" edge.
+func (m *ArtGenreMutation) ResetArt() {
+	m.art = nil
+	m.clearedart = false
+	m.removedart = nil
+}
+
 // Where appends a list predicates to the ArtGenreMutation builder.
 func (m *ArtGenreMutation) Where(ps ...predicate.ArtGenre) {
 	m.predicates = append(m.predicates, ps...)
@@ -1152,49 +2123,85 @@ func (m *ArtGenreMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ArtGenreMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.art != nil {
+		edges = append(edges, artgenre.EdgeArt)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *ArtGenreMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case artgenre.EdgeArt:
+		ids := make([]ent.Value, 0, len(m.art))
+		for id := range m.art {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ArtGenreMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.removedart != nil {
+		edges = append(edges, artgenre.EdgeArt)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *ArtGenreMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case artgenre.EdgeArt:
+		ids := make([]ent.Value, 0, len(m.removedart))
+		for id := range m.removedart {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ArtGenreMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.clearedart {
+		edges = append(edges, artgenre.EdgeArt)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *ArtGenreMutation) EdgeCleared(name string) bool {
+	switch name {
+	case artgenre.EdgeArt:
+		return m.clearedart
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *ArtGenreMutation) ClearEdge(name string) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown ArtGenre unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *ArtGenreMutation) ResetEdge(name string) error {
+	switch name {
+	case artgenre.EdgeArt:
+		m.ResetArt()
+		return nil
+	}
 	return fmt.Errorf("unknown ArtGenre edge %s", name)
 }
 
@@ -1214,6 +2221,9 @@ type ArtStyleMutation struct {
 	external_links       *[]string
 	appendexternal_links []string
 	clearedFields        map[string]struct{}
+	art                  map[int]struct{}
+	removedart           map[int]struct{}
+	clearedart           bool
 	done                 bool
 	oldValue             func(context.Context) (*ArtStyle, error)
 	predicates           []predicate.ArtStyle
@@ -1699,6 +2709,60 @@ func (m *ArtStyleMutation) ResetExternalLinks() {
 	delete(m.clearedFields, artstyle.FieldExternalLinks)
 }
 
+// AddArtIDs adds the "art" edge to the Art entity by ids.
+func (m *ArtStyleMutation) AddArtIDs(ids ...int) {
+	if m.art == nil {
+		m.art = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.art[ids[i]] = struct{}{}
+	}
+}
+
+// ClearArt clears the "art" edge to the Art entity.
+func (m *ArtStyleMutation) ClearArt() {
+	m.clearedart = true
+}
+
+// ArtCleared reports if the "art" edge to the Art entity was cleared.
+func (m *ArtStyleMutation) ArtCleared() bool {
+	return m.clearedart
+}
+
+// RemoveArtIDs removes the "art" edge to the Art entity by IDs.
+func (m *ArtStyleMutation) RemoveArtIDs(ids ...int) {
+	if m.removedart == nil {
+		m.removedart = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.art, ids[i])
+		m.removedart[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedArt returns the removed IDs of the "art" edge to the Art entity.
+func (m *ArtStyleMutation) RemovedArtIDs() (ids []int) {
+	for id := range m.removedart {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ArtIDs returns the "art" edge IDs in the mutation.
+func (m *ArtStyleMutation) ArtIDs() (ids []int) {
+	for id := range m.art {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetArt resets all changes to the "art" edge.
+func (m *ArtStyleMutation) ResetArt() {
+	m.art = nil
+	m.clearedart = false
+	m.removedart = nil
+}
+
 // Where appends a list predicates to the ArtStyleMutation builder.
 func (m *ArtStyleMutation) Where(ps ...predicate.ArtStyle) {
 	m.predicates = append(m.predicates, ps...)
@@ -1990,49 +3054,85 @@ func (m *ArtStyleMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ArtStyleMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.art != nil {
+		edges = append(edges, artstyle.EdgeArt)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *ArtStyleMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case artstyle.EdgeArt:
+		ids := make([]ent.Value, 0, len(m.art))
+		for id := range m.art {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ArtStyleMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.removedart != nil {
+		edges = append(edges, artstyle.EdgeArt)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *ArtStyleMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case artstyle.EdgeArt:
+		ids := make([]ent.Value, 0, len(m.removedart))
+		for id := range m.removedart {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ArtStyleMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.clearedart {
+		edges = append(edges, artstyle.EdgeArt)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *ArtStyleMutation) EdgeCleared(name string) bool {
+	switch name {
+	case artstyle.EdgeArt:
+		return m.clearedart
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *ArtStyleMutation) ClearEdge(name string) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown ArtStyle unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *ArtStyleMutation) ResetEdge(name string) error {
+	switch name {
+	case artstyle.EdgeArt:
+		m.ResetArt()
+		return nil
+	}
 	return fmt.Errorf("unknown ArtStyle edge %s", name)
 }
 

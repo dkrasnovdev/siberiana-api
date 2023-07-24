@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/art"
 	"github.com/dkrasnovdev/heritage-api/ent/artstyle"
 )
 
@@ -122,6 +123,21 @@ func (asc *ArtStyleCreate) SetNillableDescription(s *string) *ArtStyleCreate {
 func (asc *ArtStyleCreate) SetExternalLinks(s []string) *ArtStyleCreate {
 	asc.mutation.SetExternalLinks(s)
 	return asc
+}
+
+// AddArtIDs adds the "art" edge to the Art entity by IDs.
+func (asc *ArtStyleCreate) AddArtIDs(ids ...int) *ArtStyleCreate {
+	asc.mutation.AddArtIDs(ids...)
+	return asc
+}
+
+// AddArt adds the "art" edges to the Art entity.
+func (asc *ArtStyleCreate) AddArt(a ...*Art) *ArtStyleCreate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return asc.AddArtIDs(ids...)
 }
 
 // Mutation returns the ArtStyleMutation object of the builder.
@@ -243,6 +259,22 @@ func (asc *ArtStyleCreate) createSpec() (*ArtStyle, *sqlgraph.CreateSpec) {
 	if value, ok := asc.mutation.ExternalLinks(); ok {
 		_spec.SetField(artstyle.FieldExternalLinks, field.TypeJSON, value)
 		_node.ExternalLinks = value
+	}
+	if nodes := asc.mutation.ArtIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   artstyle.ArtTable,
+			Columns: artstyle.ArtPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

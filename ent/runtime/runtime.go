@@ -6,6 +6,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/dkrasnovdev/heritage-api/ent/art"
 	"github.com/dkrasnovdev/heritage-api/ent/artgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/artstyle"
@@ -50,6 +51,33 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	artMixin := schema.Art{}.Mixin()
+	art.Policy = privacy.NewPolicies(schema.Art{})
+	art.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := art.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	artMixinHooks0 := artMixin[0].Hooks()
+
+	art.Hooks[1] = artMixinHooks0[0]
+	artMixinFields0 := artMixin[0].Fields()
+	_ = artMixinFields0
+	artFields := schema.Art{}.Fields()
+	_ = artFields
+	// artDescCreatedAt is the schema descriptor for created_at field.
+	artDescCreatedAt := artMixinFields0[0].Descriptor()
+	// art.DefaultCreatedAt holds the default value on creation for the created_at field.
+	art.DefaultCreatedAt = artDescCreatedAt.Default.(func() time.Time)
+	// artDescUpdatedAt is the schema descriptor for updated_at field.
+	artDescUpdatedAt := artMixinFields0[2].Descriptor()
+	// art.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	art.DefaultUpdatedAt = artDescUpdatedAt.Default.(func() time.Time)
+	// art.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	art.UpdateDefaultUpdatedAt = artDescUpdatedAt.UpdateDefault.(func() time.Time)
 	artgenreMixin := schema.ArtGenre{}.Mixin()
 	artgenre.Policy = privacy.NewPolicies(schema.ArtGenre{})
 	artgenre.Hooks[0] = func(next ent.Mutator) ent.Mutator {

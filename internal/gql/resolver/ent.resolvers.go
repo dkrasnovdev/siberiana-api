@@ -23,6 +23,11 @@ func (r *queryResolver) Nodes(ctx context.Context, ids []int) ([]ent.Noder, erro
 	panic(fmt.Errorf("not implemented: Nodes - nodes"))
 }
 
+// Arts is the resolver for the arts field.
+func (r *queryResolver) Arts(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtOrder, where *ent.ArtWhereInput) (*ent.ArtConnection, error) {
+	panic(fmt.Errorf("not implemented: Arts - arts"))
+}
+
 // ArtGenres is the resolver for the artGenres field.
 func (r *queryResolver) ArtGenres(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtGenreOrder, where *ent.ArtGenreWhereInput) (*ent.ArtGenreConnection, error) {
 	panic(fmt.Errorf("not implemented: ArtGenres - artGenres"))
