@@ -18,6 +18,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/heritage-api/internal/ent/types"
 )
 
 // ProtectedAreaPictureUpdate is the builder for updating ProtectedAreaPicture entities.
@@ -212,6 +213,26 @@ func (papu *ProtectedAreaPictureUpdate) SetNillableShootingDate(t *time.Time) *P
 // ClearShootingDate clears the value of the "shooting_date" field.
 func (papu *ProtectedAreaPictureUpdate) ClearShootingDate() *ProtectedAreaPictureUpdate {
 	papu.mutation.ClearShootingDate()
+	return papu
+}
+
+// SetGeometry sets the "geometry" field.
+func (papu *ProtectedAreaPictureUpdate) SetGeometry(t types.Geometry) *ProtectedAreaPictureUpdate {
+	papu.mutation.SetGeometry(t)
+	return papu
+}
+
+// SetNillableGeometry sets the "geometry" field if the given value is not nil.
+func (papu *ProtectedAreaPictureUpdate) SetNillableGeometry(t *types.Geometry) *ProtectedAreaPictureUpdate {
+	if t != nil {
+		papu.SetGeometry(*t)
+	}
+	return papu
+}
+
+// ClearGeometry clears the value of the "geometry" field.
+func (papu *ProtectedAreaPictureUpdate) ClearGeometry() *ProtectedAreaPictureUpdate {
+	papu.mutation.ClearGeometry()
 	return papu
 }
 
@@ -437,6 +458,12 @@ func (papu *ProtectedAreaPictureUpdate) sqlSave(ctx context.Context) (n int, err
 	}
 	if papu.mutation.ShootingDateCleared() {
 		_spec.ClearField(protectedareapicture.FieldShootingDate, field.TypeTime)
+	}
+	if value, ok := papu.mutation.Geometry(); ok {
+		_spec.SetField(protectedareapicture.FieldGeometry, field.TypeOther, value)
+	}
+	if papu.mutation.GeometryCleared() {
+		_spec.ClearField(protectedareapicture.FieldGeometry, field.TypeOther)
 	}
 	if papu.mutation.CollectionCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -756,6 +783,26 @@ func (papuo *ProtectedAreaPictureUpdateOne) ClearShootingDate() *ProtectedAreaPi
 	return papuo
 }
 
+// SetGeometry sets the "geometry" field.
+func (papuo *ProtectedAreaPictureUpdateOne) SetGeometry(t types.Geometry) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.SetGeometry(t)
+	return papuo
+}
+
+// SetNillableGeometry sets the "geometry" field if the given value is not nil.
+func (papuo *ProtectedAreaPictureUpdateOne) SetNillableGeometry(t *types.Geometry) *ProtectedAreaPictureUpdateOne {
+	if t != nil {
+		papuo.SetGeometry(*t)
+	}
+	return papuo
+}
+
+// ClearGeometry clears the value of the "geometry" field.
+func (papuo *ProtectedAreaPictureUpdateOne) ClearGeometry() *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.ClearGeometry()
+	return papuo
+}
+
 // SetCollectionID sets the "collection" edge to the Collection entity by ID.
 func (papuo *ProtectedAreaPictureUpdateOne) SetCollectionID(id int) *ProtectedAreaPictureUpdateOne {
 	papuo.mutation.SetCollectionID(id)
@@ -1008,6 +1055,12 @@ func (papuo *ProtectedAreaPictureUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if papuo.mutation.ShootingDateCleared() {
 		_spec.ClearField(protectedareapicture.FieldShootingDate, field.TypeTime)
+	}
+	if value, ok := papuo.mutation.Geometry(); ok {
+		_spec.SetField(protectedareapicture.FieldGeometry, field.TypeOther, value)
+	}
+	if papuo.mutation.GeometryCleared() {
+		_spec.ClearField(protectedareapicture.FieldGeometry, field.TypeOther)
 	}
 	if papuo.mutation.CollectionCleared() {
 		edge := &sqlgraph.EdgeSpec{

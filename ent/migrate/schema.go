@@ -748,6 +748,7 @@ var (
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
 		{Name: "shooting_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "geometry", Type: field.TypeOther, Nullable: true, SchemaType: map[string]string{"postgres": "geometry"}},
 		{Name: "collection_protected_area_pictures", Type: field.TypeInt, Nullable: true},
 		{Name: "license_protected_area_pictures", Type: field.TypeInt, Nullable: true},
 		{Name: "location_protected_area_pictures", Type: field.TypeInt, Nullable: true},
@@ -761,25 +762,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "protected_area_pictures_collections_protected_area_pictures",
-				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[12]},
+				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[13]},
 				RefColumns: []*schema.Column{CollectionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "protected_area_pictures_licenses_protected_area_pictures",
-				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[13]},
+				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[14]},
 				RefColumns: []*schema.Column{LicensesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "protected_area_pictures_locations_protected_area_pictures",
-				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[14]},
+				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[15]},
 				RefColumns: []*schema.Column{LocationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "protected_area_pictures_protected_areas_protected_area_pictures",
-				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[15]},
+				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[16]},
 				RefColumns: []*schema.Column{ProtectedAreasColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

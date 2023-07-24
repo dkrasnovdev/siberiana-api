@@ -8,7 +8,6 @@ require (
 	github.com/99designs/gqlgen v0.17.36-0.20230717192134-9adc7b81ac27
 	github.com/go-chi/chi/v5 v5.0.10
 	github.com/go-chi/cors v1.2.1
-	github.com/golang-jwt/jwt/v5 v5.0.0
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/jackc/pgx/v5 v5.4.2
 	github.com/spf13/viper v1.16.0

@@ -4897,6 +4897,11 @@ func (pap *ProtectedAreaPictureQuery) collectField(ctx context.Context, opCtx *g
 				selectedFields = append(selectedFields, protectedareapicture.FieldShootingDate)
 				fieldSeen[protectedareapicture.FieldShootingDate] = struct{}{}
 			}
+		case "geometry":
+			if _, ok := fieldSeen[protectedareapicture.FieldGeometry]; !ok {
+				selectedFields = append(selectedFields, protectedareapicture.FieldGeometry)
+				fieldSeen[protectedareapicture.FieldGeometry] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

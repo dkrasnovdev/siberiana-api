@@ -32942,6 +32942,7 @@ type ProtectedAreaPictureMutation struct {
 	additional_images_urls       *[]string
 	appendadditional_images_urls []string
 	shooting_date                *time.Time
+	geometry                     *types.Geometry
 	clearedFields                map[string]struct{}
 	collection                   *int
 	clearedcollection            bool
@@ -33599,6 +33600,55 @@ func (m *ProtectedAreaPictureMutation) ResetShootingDate() {
 	delete(m.clearedFields, protectedareapicture.FieldShootingDate)
 }
 
+// SetGeometry sets the "geometry" field.
+func (m *ProtectedAreaPictureMutation) SetGeometry(t types.Geometry) {
+	m.geometry = &t
+}
+
+// Geometry returns the value of the "geometry" field in the mutation.
+func (m *ProtectedAreaPictureMutation) Geometry() (r types.Geometry, exists bool) {
+	v := m.geometry
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldGeometry returns the old "geometry" field's value of the ProtectedAreaPicture entity.
+// If the ProtectedAreaPicture object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaPictureMutation) OldGeometry(ctx context.Context) (v *types.Geometry, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldGeometry is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldGeometry requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldGeometry: %w", err)
+	}
+	return oldValue.Geometry, nil
+}
+
+// ClearGeometry clears the value of the "geometry" field.
+func (m *ProtectedAreaPictureMutation) ClearGeometry() {
+	m.geometry = nil
+	m.clearedFields[protectedareapicture.FieldGeometry] = struct{}{}
+}
+
+// GeometryCleared returns if the "geometry" field was cleared in this mutation.
+func (m *ProtectedAreaPictureMutation) GeometryCleared() bool {
+	_, ok := m.clearedFields[protectedareapicture.FieldGeometry]
+	return ok
+}
+
+// ResetGeometry resets all changes to the "geometry" field.
+func (m *ProtectedAreaPictureMutation) ResetGeometry() {
+	m.geometry = nil
+	delete(m.clearedFields, protectedareapicture.FieldGeometry)
+}
+
 // SetCollectionID sets the "collection" edge to the Collection entity by id.
 func (m *ProtectedAreaPictureMutation) SetCollectionID(id int) {
 	m.collection = &id
@@ -33789,7 +33839,7 @@ func (m *ProtectedAreaPictureMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProtectedAreaPictureMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 12)
 	if m.created_at != nil {
 		fields = append(fields, protectedareapicture.FieldCreatedAt)
 	}
@@ -33823,6 +33873,9 @@ func (m *ProtectedAreaPictureMutation) Fields() []string {
 	if m.shooting_date != nil {
 		fields = append(fields, protectedareapicture.FieldShootingDate)
 	}
+	if m.geometry != nil {
+		fields = append(fields, protectedareapicture.FieldGeometry)
+	}
 	return fields
 }
 
@@ -33853,6 +33906,8 @@ func (m *ProtectedAreaPictureMutation) Field(name string) (ent.Value, bool) {
 		return m.AdditionalImagesUrls()
 	case protectedareapicture.FieldShootingDate:
 		return m.ShootingDate()
+	case protectedareapicture.FieldGeometry:
+		return m.Geometry()
 	}
 	return nil, false
 }
@@ -33884,6 +33939,8 @@ func (m *ProtectedAreaPictureMutation) OldField(ctx context.Context, name string
 		return m.OldAdditionalImagesUrls(ctx)
 	case protectedareapicture.FieldShootingDate:
 		return m.OldShootingDate(ctx)
+	case protectedareapicture.FieldGeometry:
+		return m.OldGeometry(ctx)
 	}
 	return nil, fmt.Errorf("unknown ProtectedAreaPicture field %s", name)
 }
@@ -33970,6 +34027,13 @@ func (m *ProtectedAreaPictureMutation) SetField(name string, value ent.Value) er
 		}
 		m.SetShootingDate(v)
 		return nil
+	case protectedareapicture.FieldGeometry:
+		v, ok := value.(types.Geometry)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetGeometry(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ProtectedAreaPicture field %s", name)
 }
@@ -34027,6 +34091,9 @@ func (m *ProtectedAreaPictureMutation) ClearedFields() []string {
 	if m.FieldCleared(protectedareapicture.FieldShootingDate) {
 		fields = append(fields, protectedareapicture.FieldShootingDate)
 	}
+	if m.FieldCleared(protectedareapicture.FieldGeometry) {
+		fields = append(fields, protectedareapicture.FieldGeometry)
+	}
 	return fields
 }
 
@@ -34068,6 +34135,9 @@ func (m *ProtectedAreaPictureMutation) ClearField(name string) error {
 	case protectedareapicture.FieldShootingDate:
 		m.ClearShootingDate()
 		return nil
+	case protectedareapicture.FieldGeometry:
+		m.ClearGeometry()
+		return nil
 	}
 	return fmt.Errorf("unknown ProtectedAreaPicture nullable field %s", name)
 }
@@ -34108,6 +34178,9 @@ func (m *ProtectedAreaPictureMutation) ResetField(name string) error {
 		return nil
 	case protectedareapicture.FieldShootingDate:
 		m.ResetShootingDate()
+		return nil
+	case protectedareapicture.FieldGeometry:
+		m.ResetGeometry()
 		return nil
 	}
 	return fmt.Errorf("unknown ProtectedAreaPicture field %s", name)

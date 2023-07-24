@@ -11,7 +11,6 @@ import (
 
 	"github.com/dkrasnovdev/heritage-api/config"
 	"github.com/dkrasnovdev/heritage-api/internal/ent/privacy"
-	"github.com/golang-jwt/jwt/v5"
 )
 
 // CacheTTL specifies the time-to-live for cached user information.
@@ -49,14 +48,6 @@ func Authentication(next http.Handler) http.Handler {
 			return
 		}
 		token := parts[1]
-
-		// Parse the token without verification
-		jwt, _, err := new(jwt.Parser).ParseUnverified(token, jwt.MapClaims{})
-		if err != nil || !jwt.Valid {
-			// Invalid token format, return an error response
-			http.Error(w, "Invalid token format", http.StatusUnauthorized)
-			return
-		}
 
 		// Check if user information is already cached for the token
 		if entry, ok := userCache.Load(token); ok {

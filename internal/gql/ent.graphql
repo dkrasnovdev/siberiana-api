@@ -2371,6 +2371,7 @@ input CreateProtectedAreaPictureInput {
   primaryImageURL: String
   additionalImagesUrls: [String!]
   shootingDate: Time
+  geometry: Geometry
   collectionID: ID
   protectedAreaID: ID
   locationID: ID
@@ -5568,6 +5569,7 @@ type ProtectedAreaPicture implements Node {
   primaryImageURL: String
   additionalImagesUrls: [String!]
   shootingDate: Time
+  geometry: Geometry
   collection: Collection
   protectedArea: ProtectedArea
   location: Location
@@ -5743,6 +5745,17 @@ input ProtectedAreaPictureWhereInput {
   shootingDateLTE: Time
   shootingDateIsNil: Boolean
   shootingDateNotNil: Boolean
+  """geometry field predicates"""
+  geometry: Geometry
+  geometryNEQ: Geometry
+  geometryIn: [Geometry!]
+  geometryNotIn: [Geometry!]
+  geometryGT: Geometry
+  geometryGTE: Geometry
+  geometryLT: Geometry
+  geometryLTE: Geometry
+  geometryIsNil: Boolean
+  geometryNotNil: Boolean
   """collection edge predicates"""
   hasCollection: Boolean
   hasCollectionWith: [CollectionWhereInput!]
@@ -8398,6 +8411,8 @@ input UpdateProtectedAreaPictureInput {
   clearAdditionalImagesUrls: Boolean
   shootingDate: Time
   clearShootingDate: Boolean
+  geometry: Geometry
+  clearGeometry: Boolean
   collectionID: ID
   clearCollection: Boolean
   protectedAreaID: ID

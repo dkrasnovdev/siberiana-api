@@ -4916,6 +4916,7 @@ type CreateProtectedAreaPictureInput struct {
 	PrimaryImageURL      *string
 	AdditionalImagesUrls []string
 	ShootingDate         *time.Time
+	Geometry             *types.Geometry
 	CollectionID         *int
 	ProtectedAreaID      *int
 	LocationID           *int
@@ -4956,6 +4957,9 @@ func (i *CreateProtectedAreaPictureInput) Mutate(m *ProtectedAreaPictureMutation
 	}
 	if v := i.ShootingDate; v != nil {
 		m.SetShootingDate(*v)
+	}
+	if v := i.Geometry; v != nil {
+		m.SetGeometry(*v)
 	}
 	if v := i.CollectionID; v != nil {
 		m.SetCollectionID(*v)
@@ -5000,6 +5004,8 @@ type UpdateProtectedAreaPictureInput struct {
 	AppendAdditionalImagesUrls []string
 	ClearShootingDate          bool
 	ShootingDate               *time.Time
+	ClearGeometry              bool
+	Geometry                   *types.Geometry
 	ClearCollection            bool
 	CollectionID               *int
 	ClearProtectedArea         bool
@@ -5074,6 +5080,12 @@ func (i *UpdateProtectedAreaPictureInput) Mutate(m *ProtectedAreaPictureMutation
 	}
 	if v := i.ShootingDate; v != nil {
 		m.SetShootingDate(*v)
+	}
+	if i.ClearGeometry {
+		m.ClearGeometry()
+	}
+	if v := i.Geometry; v != nil {
+		m.SetGeometry(*v)
 	}
 	if i.ClearCollection {
 		m.ClearCollection()

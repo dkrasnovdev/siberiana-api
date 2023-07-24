@@ -900,6 +900,7 @@ type ComplexityRoot struct {
 		Description          func(childComplexity int) int
 		DisplayName          func(childComplexity int) int
 		ExternalLinks        func(childComplexity int) int
+		Geometry             func(childComplexity int) int
 		ID                   func(childComplexity int) int
 		License              func(childComplexity int) int
 		Location             func(childComplexity int) int
@@ -5695,6 +5696,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ProtectedAreaPicture.ExternalLinks(childComplexity), true
+
+	case "ProtectedAreaPicture.geometry":
+		if e.complexity.ProtectedAreaPicture.Geometry == nil {
+			break
+		}
+
+		return e.complexity.ProtectedAreaPicture.Geometry(childComplexity), true
 
 	case "ProtectedAreaPicture.id":
 		if e.complexity.ProtectedAreaPicture.ID == nil {
@@ -19116,6 +19124,8 @@ func (ec *executionContext) fieldContext_Collection_protectedAreaPictures(ctx co
 				return ec.fieldContext_ProtectedAreaPicture_additionalImagesUrls(ctx, field)
 			case "shootingDate":
 				return ec.fieldContext_ProtectedAreaPicture_shootingDate(ctx, field)
+			case "geometry":
+				return ec.fieldContext_ProtectedAreaPicture_geometry(ctx, field)
 			case "collection":
 				return ec.fieldContext_ProtectedAreaPicture_collection(ctx, field)
 			case "protectedArea":
@@ -23976,6 +23986,8 @@ func (ec *executionContext) fieldContext_License_protectedAreaPictures(ctx conte
 				return ec.fieldContext_ProtectedAreaPicture_additionalImagesUrls(ctx, field)
 			case "shootingDate":
 				return ec.fieldContext_ProtectedAreaPicture_shootingDate(ctx, field)
+			case "geometry":
+				return ec.fieldContext_ProtectedAreaPicture_geometry(ctx, field)
 			case "collection":
 				return ec.fieldContext_ProtectedAreaPicture_collection(ctx, field)
 			case "protectedArea":
@@ -24920,6 +24932,8 @@ func (ec *executionContext) fieldContext_Location_protectedAreaPictures(ctx cont
 				return ec.fieldContext_ProtectedAreaPicture_additionalImagesUrls(ctx, field)
 			case "shootingDate":
 				return ec.fieldContext_ProtectedAreaPicture_shootingDate(ctx, field)
+			case "geometry":
+				return ec.fieldContext_ProtectedAreaPicture_geometry(ctx, field)
 			case "collection":
 				return ec.fieldContext_ProtectedAreaPicture_collection(ctx, field)
 			case "protectedArea":
@@ -32316,6 +32330,8 @@ func (ec *executionContext) fieldContext_Mutation_createProtectedAreaPicture(ctx
 				return ec.fieldContext_ProtectedAreaPicture_additionalImagesUrls(ctx, field)
 			case "shootingDate":
 				return ec.fieldContext_ProtectedAreaPicture_shootingDate(ctx, field)
+			case "geometry":
+				return ec.fieldContext_ProtectedAreaPicture_geometry(ctx, field)
 			case "collection":
 				return ec.fieldContext_ProtectedAreaPicture_collection(ctx, field)
 			case "protectedArea":
@@ -32405,6 +32421,8 @@ func (ec *executionContext) fieldContext_Mutation_updateProtectedAreaPicture(ctx
 				return ec.fieldContext_ProtectedAreaPicture_additionalImagesUrls(ctx, field)
 			case "shootingDate":
 				return ec.fieldContext_ProtectedAreaPicture_shootingDate(ctx, field)
+			case "geometry":
+				return ec.fieldContext_ProtectedAreaPicture_geometry(ctx, field)
 			case "collection":
 				return ec.fieldContext_ProtectedAreaPicture_collection(ctx, field)
 			case "protectedArea":
@@ -40871,6 +40889,8 @@ func (ec *executionContext) fieldContext_ProtectedArea_protectedAreaPictures(ctx
 				return ec.fieldContext_ProtectedAreaPicture_additionalImagesUrls(ctx, field)
 			case "shootingDate":
 				return ec.fieldContext_ProtectedAreaPicture_shootingDate(ctx, field)
+			case "geometry":
+				return ec.fieldContext_ProtectedAreaPicture_geometry(ctx, field)
 			case "collection":
 				return ec.fieldContext_ProtectedAreaPicture_collection(ctx, field)
 			case "protectedArea":
@@ -42407,6 +42427,47 @@ func (ec *executionContext) fieldContext_ProtectedAreaPicture_shootingDate(ctx c
 	return fc, nil
 }
 
+func (ec *executionContext) _ProtectedAreaPicture_geometry(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaPicture) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProtectedAreaPicture_geometry(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Geometry, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*types.Geometry)
+	fc.Result = res
+	return ec.marshalOGeometry2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProtectedAreaPicture_geometry(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProtectedAreaPicture",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Geometry does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ProtectedAreaPicture_collection(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaPicture) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ProtectedAreaPicture_collection(ctx, field)
 	if err != nil {
@@ -42896,6 +42957,8 @@ func (ec *executionContext) fieldContext_ProtectedAreaPictureEdge_node(ctx conte
 				return ec.fieldContext_ProtectedAreaPicture_additionalImagesUrls(ctx, field)
 			case "shootingDate":
 				return ec.fieldContext_ProtectedAreaPicture_shootingDate(ctx, field)
+			case "geometry":
+				return ec.fieldContext_ProtectedAreaPicture_geometry(ctx, field)
 			case "collection":
 				return ec.fieldContext_ProtectedAreaPicture_collection(ctx, field)
 			case "protectedArea":
@@ -66975,7 +67038,7 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaPictureInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "shootingDate", "collectionID", "protectedAreaID", "locationID", "licenseID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "shootingDate", "geometry", "collectionID", "protectedAreaID", "locationID", "licenseID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -67081,6 +67144,15 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaPictureInput(ctx co
 				return it, err
 			}
 			it.ShootingDate = data
+		case "geometry":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometry"))
+			data, err := ec.unmarshalOGeometry2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Geometry = data
 		case "collectionID":
 			var err error
 
@@ -86714,7 +86786,7 @@ func (ec *executionContext) unmarshalInputProtectedAreaPictureWhereInput(ctx con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "shootingDate", "shootingDateNEQ", "shootingDateIn", "shootingDateNotIn", "shootingDateGT", "shootingDateGTE", "shootingDateLT", "shootingDateLTE", "shootingDateIsNil", "shootingDateNotNil", "hasCollection", "hasCollectionWith", "hasProtectedArea", "hasProtectedAreaWith", "hasLocation", "hasLocationWith", "hasLicense", "hasLicenseWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "shootingDate", "shootingDateNEQ", "shootingDateIn", "shootingDateNotIn", "shootingDateGT", "shootingDateGTE", "shootingDateLT", "shootingDateLTE", "shootingDateIsNil", "shootingDateNotNil", "geometry", "geometryNEQ", "geometryIn", "geometryNotIn", "geometryGT", "geometryGTE", "geometryLT", "geometryLTE", "geometryIsNil", "geometryNotNil", "hasCollection", "hasCollectionWith", "hasProtectedArea", "hasProtectedAreaWith", "hasLocation", "hasLocationWith", "hasLicense", "hasLicenseWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -87864,6 +87936,96 @@ func (ec *executionContext) unmarshalInputProtectedAreaPictureWhereInput(ctx con
 				return it, err
 			}
 			it.ShootingDateNotNil = data
+		case "geometry":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometry"))
+			data, err := ec.unmarshalOGeometry2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Geometry = data
+		case "geometryNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometryNEQ"))
+			data, err := ec.unmarshalOGeometry2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.GeometryNEQ = data
+		case "geometryIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometryIn"))
+			data, err := ec.unmarshalOGeometry2ᚕgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometryᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.GeometryIn = data
+		case "geometryNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometryNotIn"))
+			data, err := ec.unmarshalOGeometry2ᚕgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometryᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.GeometryNotIn = data
+		case "geometryGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometryGT"))
+			data, err := ec.unmarshalOGeometry2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.GeometryGT = data
+		case "geometryGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometryGTE"))
+			data, err := ec.unmarshalOGeometry2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.GeometryGTE = data
+		case "geometryLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometryLT"))
+			data, err := ec.unmarshalOGeometry2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.GeometryLT = data
+		case "geometryLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometryLTE"))
+			data, err := ec.unmarshalOGeometry2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.GeometryLTE = data
+		case "geometryIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometryIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.GeometryIsNil = data
+		case "geometryNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometryNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.GeometryNotNil = data
 		case "hasCollection":
 			var err error
 
@@ -101688,7 +101850,7 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaPictureInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "shootingDate", "clearShootingDate", "collectionID", "clearCollection", "protectedAreaID", "clearProtectedArea", "locationID", "clearLocation", "licenseID", "clearLicense"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "shootingDate", "clearShootingDate", "geometry", "clearGeometry", "collectionID", "clearCollection", "protectedAreaID", "clearProtectedArea", "locationID", "clearLocation", "licenseID", "clearLicense"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -101884,6 +102046,24 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaPictureInput(ctx co
 				return it, err
 			}
 			it.ClearShootingDate = data
+		case "geometry":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometry"))
+			data, err := ec.unmarshalOGeometry2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Geometry = data
+		case "clearGeometry":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearGeometry"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearGeometry = data
 		case "collectionID":
 			var err error
 
@@ -110617,6 +110797,8 @@ func (ec *executionContext) _ProtectedAreaPicture(ctx context.Context, sel ast.S
 			out.Values[i] = ec._ProtectedAreaPicture_additionalImagesUrls(ctx, field, obj)
 		case "shootingDate":
 			out.Values[i] = ec._ProtectedAreaPicture_shootingDate(ctx, field, obj)
+		case "geometry":
+			out.Values[i] = ec._ProtectedAreaPicture_geometry(ctx, field, obj)
 		case "collection":
 			field := field
 

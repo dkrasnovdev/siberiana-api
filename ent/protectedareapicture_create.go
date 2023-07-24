@@ -15,6 +15,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/heritage-api/internal/ent/types"
 )
 
 // ProtectedAreaPictureCreate is the builder for creating a ProtectedAreaPicture entity.
@@ -158,6 +159,20 @@ func (papc *ProtectedAreaPictureCreate) SetShootingDate(t time.Time) *ProtectedA
 func (papc *ProtectedAreaPictureCreate) SetNillableShootingDate(t *time.Time) *ProtectedAreaPictureCreate {
 	if t != nil {
 		papc.SetShootingDate(*t)
+	}
+	return papc
+}
+
+// SetGeometry sets the "geometry" field.
+func (papc *ProtectedAreaPictureCreate) SetGeometry(t types.Geometry) *ProtectedAreaPictureCreate {
+	papc.mutation.SetGeometry(t)
+	return papc
+}
+
+// SetNillableGeometry sets the "geometry" field if the given value is not nil.
+func (papc *ProtectedAreaPictureCreate) SetNillableGeometry(t *types.Geometry) *ProtectedAreaPictureCreate {
+	if t != nil {
+		papc.SetGeometry(*t)
 	}
 	return papc
 }
@@ -369,6 +384,10 @@ func (papc *ProtectedAreaPictureCreate) createSpec() (*ProtectedAreaPicture, *sq
 	if value, ok := papc.mutation.ShootingDate(); ok {
 		_spec.SetField(protectedareapicture.FieldShootingDate, field.TypeTime, value)
 		_node.ShootingDate = value
+	}
+	if value, ok := papc.mutation.Geometry(); ok {
+		_spec.SetField(protectedareapicture.FieldGeometry, field.TypeOther, value)
+		_node.Geometry = &value
 	}
 	if nodes := papc.mutation.CollectionIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

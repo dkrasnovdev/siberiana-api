@@ -15,6 +15,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/heritage-api/internal/ent/types"
 )
 
 // ProtectedAreaPicture is the model entity for the ProtectedAreaPicture schema.
@@ -44,6 +45,8 @@ type ProtectedAreaPicture struct {
 	AdditionalImagesUrls []string `json:"additional_images_urls,omitempty"`
 	// ShootingDate holds the value of the "shooting_date" field.
 	ShootingDate time.Time `json:"shooting_date,omitempty"`
+	// Geometry holds the value of the "geometry" field.
+	Geometry *types.Geometry `json:"geometry,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProtectedAreaPictureQuery when eager-loading is set.
 	Edges                                  ProtectedAreaPictureEdges `json:"edges"`
@@ -128,6 +131,8 @@ func (*ProtectedAreaPicture) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case protectedareapicture.FieldGeometry:
+			values[i] = &sql.NullScanner{S: new(types.Geometry)}
 		case protectedareapicture.FieldExternalLinks, protectedareapicture.FieldAdditionalImagesUrls:
 			values[i] = new([]byte)
 		case protectedareapicture.FieldID:
@@ -234,6 +239,13 @@ func (pap *ProtectedAreaPicture) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field shooting_date", values[i])
 			} else if value.Valid {
 				pap.ShootingDate = value.Time
+			}
+		case protectedareapicture.FieldGeometry:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field geometry", values[i])
+			} else if value.Valid {
+				pap.Geometry = new(types.Geometry)
+				*pap.Geometry = *value.S.(*types.Geometry)
 			}
 		case protectedareapicture.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -351,6 +363,11 @@ func (pap *ProtectedAreaPicture) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("shooting_date=")
 	builder.WriteString(pap.ShootingDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	if v := pap.Geometry; v != nil {
+		builder.WriteString("geometry=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -10,6 +10,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/privacy"
 	"github.com/dkrasnovdev/heritage-api/internal/ent/mixin"
 	rule "github.com/dkrasnovdev/heritage-api/internal/ent/privacy"
+	"github.com/dkrasnovdev/heritage-api/internal/ent/types"
 )
 
 // ProtectedAreaPicture holds the schema definition for the ProtectedAreaPicture entity.
@@ -59,6 +60,10 @@ func (ProtectedAreaPicture) Fields() []ent.Field {
 			SchemaType(map[string]string{
 				dialect.Postgres: "date",
 			}),
+		field.Other("geometry", types.Geometry{}).
+			Optional().
+			Nillable().
+			SchemaType(types.GeometrySchemaType()),
 	}
 }
 

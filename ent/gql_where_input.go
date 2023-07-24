@@ -17416,6 +17416,18 @@ type ProtectedAreaPictureWhereInput struct {
 	ShootingDateIsNil  bool        `json:"shootingDateIsNil,omitempty"`
 	ShootingDateNotNil bool        `json:"shootingDateNotNil,omitempty"`
 
+	// "geometry" field predicates.
+	Geometry       *types.Geometry  `json:"geometry,omitempty"`
+	GeometryNEQ    *types.Geometry  `json:"geometryNEQ,omitempty"`
+	GeometryIn     []types.Geometry `json:"geometryIn,omitempty"`
+	GeometryNotIn  []types.Geometry `json:"geometryNotIn,omitempty"`
+	GeometryGT     *types.Geometry  `json:"geometryGT,omitempty"`
+	GeometryGTE    *types.Geometry  `json:"geometryGTE,omitempty"`
+	GeometryLT     *types.Geometry  `json:"geometryLT,omitempty"`
+	GeometryLTE    *types.Geometry  `json:"geometryLTE,omitempty"`
+	GeometryIsNil  bool             `json:"geometryIsNil,omitempty"`
+	GeometryNotNil bool             `json:"geometryNotNil,omitempty"`
+
 	// "collection" edge predicates.
 	HasCollection     *bool                   `json:"hasCollection,omitempty"`
 	HasCollectionWith []*CollectionWhereInput `json:"hasCollectionWith,omitempty"`
@@ -17875,6 +17887,36 @@ func (i *ProtectedAreaPictureWhereInput) P() (predicate.ProtectedAreaPicture, er
 	}
 	if i.ShootingDateNotNil {
 		predicates = append(predicates, protectedareapicture.ShootingDateNotNil())
+	}
+	if i.Geometry != nil {
+		predicates = append(predicates, protectedareapicture.GeometryEQ(*i.Geometry))
+	}
+	if i.GeometryNEQ != nil {
+		predicates = append(predicates, protectedareapicture.GeometryNEQ(*i.GeometryNEQ))
+	}
+	if len(i.GeometryIn) > 0 {
+		predicates = append(predicates, protectedareapicture.GeometryIn(i.GeometryIn...))
+	}
+	if len(i.GeometryNotIn) > 0 {
+		predicates = append(predicates, protectedareapicture.GeometryNotIn(i.GeometryNotIn...))
+	}
+	if i.GeometryGT != nil {
+		predicates = append(predicates, protectedareapicture.GeometryGT(*i.GeometryGT))
+	}
+	if i.GeometryGTE != nil {
+		predicates = append(predicates, protectedareapicture.GeometryGTE(*i.GeometryGTE))
+	}
+	if i.GeometryLT != nil {
+		predicates = append(predicates, protectedareapicture.GeometryLT(*i.GeometryLT))
+	}
+	if i.GeometryLTE != nil {
+		predicates = append(predicates, protectedareapicture.GeometryLTE(*i.GeometryLTE))
+	}
+	if i.GeometryIsNil {
+		predicates = append(predicates, protectedareapicture.GeometryIsNil())
+	}
+	if i.GeometryNotNil {
+		predicates = append(predicates, protectedareapicture.GeometryNotNil())
 	}
 
 	if i.HasCollection != nil {

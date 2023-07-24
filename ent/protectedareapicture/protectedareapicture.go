@@ -37,6 +37,8 @@ const (
 	FieldAdditionalImagesUrls = "additional_images_urls"
 	// FieldShootingDate holds the string denoting the shooting_date field in the database.
 	FieldShootingDate = "shooting_date"
+	// FieldGeometry holds the string denoting the geometry field in the database.
+	FieldGeometry = "geometry"
 	// EdgeCollection holds the string denoting the collection edge name in mutations.
 	EdgeCollection = "collection"
 	// EdgeProtectedArea holds the string denoting the protected_area edge name in mutations.
@@ -91,6 +93,7 @@ var Columns = []string{
 	FieldPrimaryImageURL,
 	FieldAdditionalImagesUrls,
 	FieldShootingDate,
+	FieldGeometry,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "protected_area_pictures"
@@ -184,6 +187,11 @@ func ByPrimaryImageURL(opts ...sql.OrderTermOption) OrderOption {
 // ByShootingDate orders the results by the shooting_date field.
 func ByShootingDate(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldShootingDate, opts...).ToFunc()
+}
+
+// ByGeometry orders the results by the geometry field.
+func ByGeometry(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldGeometry, opts...).ToFunc()
 }
 
 // ByCollectionField orders the results by collection field.

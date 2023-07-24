@@ -6,7 +6,6 @@ package resolver
 
 import (
 	"context"
-	"fmt"
 
 	"entgo.io/contrib/entgql"
 	"github.com/dkrasnovdev/heritage-api/ent"
@@ -15,187 +14,187 @@ import (
 
 // Node is the resolver for the node field.
 func (r *queryResolver) Node(ctx context.Context, id int) (ent.Noder, error) {
-	panic(fmt.Errorf("not implemented: Node - node"))
+	return r.client.Noder(ctx, id)
 }
 
 // Nodes is the resolver for the nodes field.
 func (r *queryResolver) Nodes(ctx context.Context, ids []int) ([]ent.Noder, error) {
-	panic(fmt.Errorf("not implemented: Nodes - nodes"))
+	return r.client.Noders(ctx, ids)
 }
 
 // Arts is the resolver for the arts field.
 func (r *queryResolver) Arts(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtOrder, where *ent.ArtWhereInput) (*ent.ArtConnection, error) {
-	panic(fmt.Errorf("not implemented: Arts - arts"))
+	return r.client.Art.Query().Paginate(ctx, after, first, before, last, ent.WithArtOrder(orderBy), ent.WithArtFilter(where.Filter))
 }
 
 // ArtGenres is the resolver for the artGenres field.
 func (r *queryResolver) ArtGenres(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtGenreOrder, where *ent.ArtGenreWhereInput) (*ent.ArtGenreConnection, error) {
-	panic(fmt.Errorf("not implemented: ArtGenres - artGenres"))
+	return r.client.ArtGenre.Query().Paginate(ctx, after, first, before, last, ent.WithArtGenreOrder(orderBy), ent.WithArtGenreFilter(where.Filter))
 }
 
 // ArtStyles is the resolver for the artStyles field.
 func (r *queryResolver) ArtStyles(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtStyleOrder, where *ent.ArtStyleWhereInput) (*ent.ArtStyleConnection, error) {
-	panic(fmt.Errorf("not implemented: ArtStyles - artStyles"))
+	return r.client.ArtStyle.Query().Paginate(ctx, after, first, before, last, ent.WithArtStyleOrder(orderBy), ent.WithArtStyleFilter(where.Filter))
 }
 
 // Artifacts is the resolver for the artifacts field.
 func (r *queryResolver) Artifacts(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtifactOrder, where *ent.ArtifactWhereInput) (*ent.ArtifactConnection, error) {
-	panic(fmt.Errorf("not implemented: Artifacts - artifacts"))
+	return r.client.Artifact.Query().Paginate(ctx, after, first, before, last, ent.WithArtifactOrder(orderBy), ent.WithArtifactFilter(where.Filter))
 }
 
 // AuditLogs is the resolver for the auditLogs field.
 func (r *queryResolver) AuditLogs(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.AuditLogOrder, where *ent.AuditLogWhereInput) (*ent.AuditLogConnection, error) {
-	panic(fmt.Errorf("not implemented: AuditLogs - auditLogs"))
+	return r.client.AuditLog.Query().Paginate(ctx, after, first, before, last, ent.WithAuditLogOrder(orderBy), ent.WithAuditLogFilter(where.Filter))
 }
 
 // Books is the resolver for the books field.
 func (r *queryResolver) Books(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.BookOrder, where *ent.BookWhereInput) (*ent.BookConnection, error) {
-	panic(fmt.Errorf("not implemented: Books - books"))
+	return r.client.Book.Query().Paginate(ctx, after, first, before, last, ent.WithBookOrder(orderBy), ent.WithBookFilter(where.Filter))
 }
 
 // BookGenres is the resolver for the bookGenres field.
 func (r *queryResolver) BookGenres(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.BookGenreOrder, where *ent.BookGenreWhereInput) (*ent.BookGenreConnection, error) {
-	panic(fmt.Errorf("not implemented: BookGenres - bookGenres"))
+	return r.client.BookGenre.Query().Paginate(ctx, after, first, before, last, ent.WithBookGenreOrder(orderBy), ent.WithBookGenreFilter(where.Filter))
 }
 
 // Categories is the resolver for the categories field.
 func (r *queryResolver) Categories(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.CategoryOrder, where *ent.CategoryWhereInput) (*ent.CategoryConnection, error) {
-	panic(fmt.Errorf("not implemented: Categories - categories"))
+	return r.client.Category.Query().Paginate(ctx, after, first, before, last, ent.WithCategoryOrder(orderBy), ent.WithCategoryFilter(where.Filter))
 }
 
 // Collections is the resolver for the collections field.
 func (r *queryResolver) Collections(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.CollectionOrder, where *ent.CollectionWhereInput) (*ent.CollectionConnection, error) {
-	panic(fmt.Errorf("not implemented: Collections - collections"))
+	return r.client.Collection.Query().Paginate(ctx, after, first, before, last, ent.WithCollectionOrder(orderBy), ent.WithCollectionFilter(where.Filter))
 }
 
 // Countries is the resolver for the countries field.
 func (r *queryResolver) Countries(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.CountryOrder, where *ent.CountryWhereInput) (*ent.CountryConnection, error) {
-	panic(fmt.Errorf("not implemented: Countries - countries"))
+	return r.client.Country.Query().Paginate(ctx, after, first, before, last, ent.WithCountryOrder(orderBy), ent.WithCountryFilter(where.Filter))
 }
 
 // Cultures is the resolver for the cultures field.
 func (r *queryResolver) Cultures(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.CultureOrder, where *ent.CultureWhereInput) (*ent.CultureConnection, error) {
-	panic(fmt.Errorf("not implemented: Cultures - cultures"))
+	return r.client.Culture.Query().Paginate(ctx, after, first, before, last, ent.WithCultureOrder(orderBy), ent.WithCultureFilter(where.Filter))
 }
 
 // Districts is the resolver for the districts field.
 func (r *queryResolver) Districts(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.DistrictOrder, where *ent.DistrictWhereInput) (*ent.DistrictConnection, error) {
-	panic(fmt.Errorf("not implemented: Districts - districts"))
+	return r.client.District.Query().Paginate(ctx, after, first, before, last, ent.WithDistrictOrder(orderBy), ent.WithDistrictFilter(where.Filter))
 }
 
 // Holders is the resolver for the holders field.
 func (r *queryResolver) Holders(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.HolderOrder, where *ent.HolderWhereInput) (*ent.HolderConnection, error) {
-	panic(fmt.Errorf("not implemented: Holders - holders"))
+	return r.client.Holder.Query().Paginate(ctx, after, first, before, last, ent.WithHolderOrder(orderBy), ent.WithHolderFilter(where.Filter))
 }
 
 // HolderResponsibilities is the resolver for the holderResponsibilities field.
 func (r *queryResolver) HolderResponsibilities(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.HolderResponsibilityOrder, where *ent.HolderResponsibilityWhereInput) (*ent.HolderResponsibilityConnection, error) {
-	panic(fmt.Errorf("not implemented: HolderResponsibilities - holderResponsibilities"))
+	return r.client.HolderResponsibility.Query().Paginate(ctx, after, first, before, last, ent.WithHolderResponsibilityOrder(orderBy), ent.WithHolderResponsibilityFilter(where.Filter))
 }
 
 // Licenses is the resolver for the licenses field.
 func (r *queryResolver) Licenses(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.LicenseOrder, where *ent.LicenseWhereInput) (*ent.LicenseConnection, error) {
-	panic(fmt.Errorf("not implemented: Licenses - licenses"))
+	return r.client.License.Query().Paginate(ctx, after, first, before, last, ent.WithLicenseOrder(orderBy), ent.WithLicenseFilter(where.Filter))
 }
 
 // Locations is the resolver for the locations field.
 func (r *queryResolver) Locations(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.LocationOrder, where *ent.LocationWhereInput) (*ent.LocationConnection, error) {
-	panic(fmt.Errorf("not implemented: Locations - locations"))
+	return r.client.Location.Query().Paginate(ctx, after, first, before, last, ent.WithLocationOrder(orderBy), ent.WithLocationFilter(where.Filter))
 }
 
 // Media is the resolver for the media field.
 func (r *queryResolver) Media(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.MediumOrder, where *ent.MediumWhereInput) (*ent.MediumConnection, error) {
-	panic(fmt.Errorf("not implemented: Media - media"))
+	return r.client.Medium.Query().Paginate(ctx, after, first, before, last, ent.WithMediumOrder(orderBy), ent.WithMediumFilter(where.Filter))
 }
 
 // Models is the resolver for the models field.
 func (r *queryResolver) Models(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ModelOrder, where *ent.ModelWhereInput) (*ent.ModelConnection, error) {
-	panic(fmt.Errorf("not implemented: Models - models"))
+	return r.client.Model.Query().Paginate(ctx, after, first, before, last, ent.WithModelOrder(orderBy), ent.WithModelFilter(where.Filter))
 }
 
 // Monuments is the resolver for the monuments field.
 func (r *queryResolver) Monuments(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.MonumentOrder, where *ent.MonumentWhereInput) (*ent.MonumentConnection, error) {
-	panic(fmt.Errorf("not implemented: Monuments - monuments"))
+	return r.client.Monument.Query().Paginate(ctx, after, first, before, last, ent.WithMonumentOrder(orderBy), ent.WithMonumentFilter(where.Filter))
 }
 
 // Organizations is the resolver for the organizations field.
 func (r *queryResolver) Organizations(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.OrganizationOrder, where *ent.OrganizationWhereInput) (*ent.OrganizationConnection, error) {
-	panic(fmt.Errorf("not implemented: Organizations - organizations"))
+	return r.client.Organization.Query().Paginate(ctx, after, first, before, last, ent.WithOrganizationOrder(orderBy), ent.WithOrganizationFilter(where.Filter))
 }
 
 // OrganizationTypes is the resolver for the organizationTypes field.
 func (r *queryResolver) OrganizationTypes(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.OrganizationTypeOrder, where *ent.OrganizationTypeWhereInput) (*ent.OrganizationTypeConnection, error) {
-	panic(fmt.Errorf("not implemented: OrganizationTypes - organizationTypes"))
+	return r.client.OrganizationType.Query().Paginate(ctx, after, first, before, last, ent.WithOrganizationTypeOrder(orderBy), ent.WithOrganizationTypeFilter(where.Filter))
 }
 
 // Periods is the resolver for the periods field.
 func (r *queryResolver) Periods(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.PeriodOrder, where *ent.PeriodWhereInput) (*ent.PeriodConnection, error) {
-	panic(fmt.Errorf("not implemented: Periods - periods"))
+	return r.client.Period.Query().Paginate(ctx, after, first, before, last, ent.WithPeriodOrder(orderBy), ent.WithPeriodFilter(where.Filter))
 }
 
 // Persons is the resolver for the persons field.
 func (r *queryResolver) Persons(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.PersonOrder, where *ent.PersonWhereInput) (*ent.PersonConnection, error) {
-	panic(fmt.Errorf("not implemented: Persons - persons"))
+	return r.client.Person.Query().Paginate(ctx, after, first, before, last, ent.WithPersonOrder(orderBy), ent.WithPersonFilter(where.Filter))
 }
 
 // PersonRoles is the resolver for the personRoles field.
 func (r *queryResolver) PersonRoles(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.PersonRoleOrder, where *ent.PersonRoleWhereInput) (*ent.PersonRoleConnection, error) {
-	panic(fmt.Errorf("not implemented: PersonRoles - personRoles"))
+	return r.client.PersonRole.Query().Paginate(ctx, after, first, before, last, ent.WithPersonRoleOrder(orderBy), ent.WithPersonRoleFilter(where.Filter))
 }
 
 // Projects is the resolver for the projects field.
 func (r *queryResolver) Projects(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ProjectOrder, where *ent.ProjectWhereInput) (*ent.ProjectConnection, error) {
-	panic(fmt.Errorf("not implemented: Projects - projects"))
+	return r.client.Project.Query().Paginate(ctx, after, first, before, last, ent.WithProjectOrder(orderBy), ent.WithProjectFilter(where.Filter))
 }
 
 // ProjectTypes is the resolver for the projectTypes field.
 func (r *queryResolver) ProjectTypes(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ProjectTypeOrder, where *ent.ProjectTypeWhereInput) (*ent.ProjectTypeConnection, error) {
-	panic(fmt.Errorf("not implemented: ProjectTypes - projectTypes"))
+	return r.client.ProjectType.Query().Paginate(ctx, after, first, before, last, ent.WithProjectTypeOrder(orderBy), ent.WithProjectTypeFilter(where.Filter))
 }
 
 // ProtectedAreas is the resolver for the protectedAreas field.
 func (r *queryResolver) ProtectedAreas(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ProtectedAreaOrder, where *ent.ProtectedAreaWhereInput) (*ent.ProtectedAreaConnection, error) {
-	panic(fmt.Errorf("not implemented: ProtectedAreas - protectedAreas"))
+	return r.client.ProtectedArea.Query().Paginate(ctx, after, first, before, last, ent.WithProtectedAreaOrder(orderBy), ent.WithProtectedAreaFilter(where.Filter))
 }
 
 // ProtectedAreaCategories is the resolver for the protectedAreaCategories field.
 func (r *queryResolver) ProtectedAreaCategories(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ProtectedAreaCategoryOrder, where *ent.ProtectedAreaCategoryWhereInput) (*ent.ProtectedAreaCategoryConnection, error) {
-	panic(fmt.Errorf("not implemented: ProtectedAreaCategories - protectedAreaCategories"))
+	return r.client.ProtectedAreaCategory.Query().Paginate(ctx, after, first, before, last, ent.WithProtectedAreaCategoryOrder(orderBy), ent.WithProtectedAreaCategoryFilter(where.Filter))
 }
 
 // ProtectedAreaPictures is the resolver for the protectedAreaPictures field.
 func (r *queryResolver) ProtectedAreaPictures(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ProtectedAreaPictureOrder, where *ent.ProtectedAreaPictureWhereInput) (*ent.ProtectedAreaPictureConnection, error) {
-	panic(fmt.Errorf("not implemented: ProtectedAreaPictures - protectedAreaPictures"))
+	return r.client.ProtectedAreaPicture.Query().Paginate(ctx, after, first, before, last, ent.WithProtectedAreaPictureOrder(orderBy), ent.WithProtectedAreaPictureFilter(where.Filter))
 }
 
 // Publications is the resolver for the publications field.
 func (r *queryResolver) Publications(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.PublicationOrder, where *ent.PublicationWhereInput) (*ent.PublicationConnection, error) {
-	panic(fmt.Errorf("not implemented: Publications - publications"))
+	return r.client.Publication.Query().Paginate(ctx, after, first, before, last, ent.WithPublicationOrder(orderBy), ent.WithPublicationFilter(where.Filter))
 }
 
 // Publishers is the resolver for the publishers field.
 func (r *queryResolver) Publishers(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.PublisherOrder, where *ent.PublisherWhereInput) (*ent.PublisherConnection, error) {
-	panic(fmt.Errorf("not implemented: Publishers - publishers"))
+	return r.client.Publisher.Query().Paginate(ctx, after, first, before, last, ent.WithPublisherOrder(orderBy), ent.WithPublisherFilter(where.Filter))
 }
 
 // Regions is the resolver for the regions field.
 func (r *queryResolver) Regions(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.RegionOrder, where *ent.RegionWhereInput) (*ent.RegionConnection, error) {
-	panic(fmt.Errorf("not implemented: Regions - regions"))
+	return r.client.Region.Query().Paginate(ctx, after, first, before, last, ent.WithRegionOrder(orderBy), ent.WithRegionFilter(where.Filter))
 }
 
 // Sets is the resolver for the sets field.
 func (r *queryResolver) Sets(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.SetOrder, where *ent.SetWhereInput) (*ent.SetConnection, error) {
-	panic(fmt.Errorf("not implemented: Sets - sets"))
+	return r.client.Set.Query().Paginate(ctx, after, first, before, last, ent.WithSetOrder(orderBy), ent.WithSetFilter(where.Filter))
 }
 
 // Settlements is the resolver for the settlements field.
 func (r *queryResolver) Settlements(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.SettlementOrder, where *ent.SettlementWhereInput) (*ent.SettlementConnection, error) {
-	panic(fmt.Errorf("not implemented: Settlements - settlements"))
+	return r.client.Settlement.Query().Paginate(ctx, after, first, before, last, ent.WithSettlementOrder(orderBy), ent.WithSettlementFilter(where.Filter))
 }
 
 // Techniques is the resolver for the techniques field.
 func (r *queryResolver) Techniques(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.TechniqueOrder, where *ent.TechniqueWhereInput) (*ent.TechniqueConnection, error) {
-	panic(fmt.Errorf("not implemented: Techniques - techniques"))
+	return r.client.Technique.Query().Paginate(ctx, after, first, before, last, ent.WithTechniqueOrder(orderBy), ent.WithTechniqueFilter(where.Filter))
 }
 
 // Query returns gql.QueryResolver implementation.

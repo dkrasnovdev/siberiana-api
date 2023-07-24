@@ -25,6 +25,7 @@ func (Location) Policy() ent.Policy {
 			rule.AllowIfAdministrator(),
 			rule.AllowIfModerator(),
 			privacy.AlwaysDenyRule(),
+			privacy.AlwaysAllowRule(),
 		},
 		Query: privacy.QueryPolicy{
 			privacy.AlwaysAllowRule(),

@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/heritage-api/internal/ent/types"
 )
 
 // ID filters vertices based on their ID field.
@@ -98,6 +99,11 @@ func PrimaryImageURL(v string) predicate.ProtectedAreaPicture {
 // ShootingDate applies equality check predicate on the "shooting_date" field. It's identical to ShootingDateEQ.
 func ShootingDate(v time.Time) predicate.ProtectedAreaPicture {
 	return predicate.ProtectedAreaPicture(sql.FieldEQ(FieldShootingDate, v))
+}
+
+// Geometry applies equality check predicate on the "geometry" field. It's identical to GeometryEQ.
+func Geometry(v types.Geometry) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldEQ(FieldGeometry, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -698,6 +704,56 @@ func ShootingDateIsNil() predicate.ProtectedAreaPicture {
 // ShootingDateNotNil applies the NotNil predicate on the "shooting_date" field.
 func ShootingDateNotNil() predicate.ProtectedAreaPicture {
 	return predicate.ProtectedAreaPicture(sql.FieldNotNull(FieldShootingDate))
+}
+
+// GeometryEQ applies the EQ predicate on the "geometry" field.
+func GeometryEQ(v types.Geometry) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldEQ(FieldGeometry, v))
+}
+
+// GeometryNEQ applies the NEQ predicate on the "geometry" field.
+func GeometryNEQ(v types.Geometry) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldNEQ(FieldGeometry, v))
+}
+
+// GeometryIn applies the In predicate on the "geometry" field.
+func GeometryIn(vs ...types.Geometry) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldIn(FieldGeometry, vs...))
+}
+
+// GeometryNotIn applies the NotIn predicate on the "geometry" field.
+func GeometryNotIn(vs ...types.Geometry) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldNotIn(FieldGeometry, vs...))
+}
+
+// GeometryGT applies the GT predicate on the "geometry" field.
+func GeometryGT(v types.Geometry) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldGT(FieldGeometry, v))
+}
+
+// GeometryGTE applies the GTE predicate on the "geometry" field.
+func GeometryGTE(v types.Geometry) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldGTE(FieldGeometry, v))
+}
+
+// GeometryLT applies the LT predicate on the "geometry" field.
+func GeometryLT(v types.Geometry) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldLT(FieldGeometry, v))
+}
+
+// GeometryLTE applies the LTE predicate on the "geometry" field.
+func GeometryLTE(v types.Geometry) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldLTE(FieldGeometry, v))
+}
+
+// GeometryIsNil applies the IsNil predicate on the "geometry" field.
+func GeometryIsNil() predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldIsNull(FieldGeometry))
+}
+
+// GeometryNotNil applies the NotNil predicate on the "geometry" field.
+func GeometryNotNil() predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldNotNull(FieldGeometry))
 }
 
 // HasCollection applies the HasEdge predicate on the "collection" edge.
