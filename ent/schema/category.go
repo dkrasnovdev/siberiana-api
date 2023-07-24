@@ -48,11 +48,6 @@ func (Category) Annotations() []schema.Annotation {
 	}
 }
 
-// Fields of the Category.
-func (Category) Fields() []ent.Field {
-	return nil
-}
-
 // Edges of the Category.
 func (Category) Edges() []ent.Edge {
 	return []ent.Edge{

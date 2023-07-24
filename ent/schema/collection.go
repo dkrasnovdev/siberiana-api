@@ -48,11 +48,6 @@ func (Collection) Annotations() []schema.Annotation {
 	}
 }
 
-// Fields of the Collection.
-func (Collection) Fields() []ent.Field {
-	return nil
-}
-
 // Edges of the Collection.
 func (Collection) Edges() []ent.Edge {
 	return []ent.Edge{

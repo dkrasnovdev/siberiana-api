@@ -48,11 +48,6 @@ func (Publication) Annotations() []schema.Annotation {
 	}
 }
 
-// Fields of the Publication.
-func (Publication) Fields() []ent.Field {
-	return nil
-}
-
 // Edges of the Publication.
 func (Publication) Edges() []ent.Edge {
 	return []ent.Edge{

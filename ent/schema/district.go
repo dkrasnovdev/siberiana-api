@@ -48,11 +48,6 @@ func (District) Annotations() []schema.Annotation {
 	}
 }
 
-// Fields of the District.
-func (District) Fields() []ent.Field {
-	return nil
-}
-
 // Edges of the District.
 func (District) Edges() []ent.Edge {
 	return []ent.Edge{

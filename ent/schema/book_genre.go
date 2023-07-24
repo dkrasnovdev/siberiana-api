@@ -48,11 +48,6 @@ func (BookGenre) Annotations() []schema.Annotation {
 	}
 }
 
-// Fields of the BookGenre.
-func (BookGenre) Fields() []ent.Field {
-	return nil
-}
-
 // Edges of the BookGenre.
 func (BookGenre) Edges() []ent.Edge {
 	return []ent.Edge{

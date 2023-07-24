@@ -48,11 +48,6 @@ func (Technique) Annotations() []schema.Annotation {
 	}
 }
 
-// Fields of the Technique.
-func (Technique) Fields() []ent.Field {
-	return nil
-}
-
 // Edges of the Technique.
 func (Technique) Edges() []ent.Edge {
 	return []ent.Edge{

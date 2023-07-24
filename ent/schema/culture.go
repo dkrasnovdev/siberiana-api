@@ -48,11 +48,6 @@ func (Culture) Annotations() []schema.Annotation {
 	}
 }
 
-// Fields of the Culture.
-func (Culture) Fields() []ent.Field {
-	return nil
-}
-
 // Edges of the Culture.
 func (Culture) Edges() []ent.Edge {
 	return []ent.Edge{

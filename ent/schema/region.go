@@ -48,11 +48,6 @@ func (Region) Annotations() []schema.Annotation {
 	}
 }
 
-// Fields of the Region.
-func (Region) Fields() []ent.Field {
-	return nil
-}
-
 // Edges of the Region.
 func (Region) Edges() []ent.Edge {
 	return []ent.Edge{

@@ -48,11 +48,6 @@ func (Period) Annotations() []schema.Annotation {
 	}
 }
 
-// Fields of the Period.
-func (Period) Fields() []ent.Field {
-	return nil
-}
-
 // Edges of the Period.
 func (Period) Edges() []ent.Edge {
 	return []ent.Edge{

@@ -48,11 +48,6 @@ func (Country) Annotations() []schema.Annotation {
 	}
 }
 
-// Fields of the Country.
-func (Country) Fields() []ent.Field {
-	return nil
-}
-
 // Edges of the Country.
 func (Country) Edges() []ent.Edge {
 	return []ent.Edge{

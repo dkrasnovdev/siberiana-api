@@ -48,11 +48,6 @@ func (License) Annotations() []schema.Annotation {
 	}
 }
 
-// Fields of the License.
-func (License) Fields() []ent.Field {
-	return nil
-}
-
 // Edges of the License.
 func (License) Edges() []ent.Edge {
 	return []ent.Edge{

@@ -48,11 +48,6 @@ func (ProjectType) Annotations() []schema.Annotation {
 	}
 }
 
-// Fields of the ProjectType.
-func (ProjectType) Fields() []ent.Field {
-	return nil
-}
-
 // Edges of the ProjectType.
 func (ProjectType) Edges() []ent.Edge {
 	return []ent.Edge{

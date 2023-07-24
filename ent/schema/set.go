@@ -48,11 +48,6 @@ func (Set) Annotations() []schema.Annotation {
 	}
 }
 
-// Fields of the Set.
-func (Set) Fields() []ent.Field {
-	return nil
-}
-
 // Edges of the Set.
 func (Set) Edges() []ent.Edge {
 	return []ent.Edge{

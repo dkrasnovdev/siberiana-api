@@ -48,11 +48,6 @@ func (Medium) Annotations() []schema.Annotation {
 	}
 }
 
-// Fields of the Medium.
-func (Medium) Fields() []ent.Field {
-	return nil
-}
-
 // Edges of the Medium.
 func (Medium) Edges() []ent.Edge {
 	return []ent.Edge{

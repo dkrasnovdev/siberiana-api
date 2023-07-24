@@ -48,11 +48,6 @@ func (Settlement) Annotations() []schema.Annotation {
 	}
 }
 
-// Fields of the Settlement.
-func (Settlement) Fields() []ent.Field {
-	return nil
-}
-
 // Edges of the Settlement.
 func (Settlement) Edges() []ent.Edge {
 	return []ent.Edge{
