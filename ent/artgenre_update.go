@@ -75,26 +75,6 @@ func (agu *ArtGenreUpdate) ClearUpdatedBy() *ArtGenreUpdate {
 	return agu
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (agu *ArtGenreUpdate) SetAbbreviation(s string) *ArtGenreUpdate {
-	agu.mutation.SetAbbreviation(s)
-	return agu
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (agu *ArtGenreUpdate) SetNillableAbbreviation(s *string) *ArtGenreUpdate {
-	if s != nil {
-		agu.SetAbbreviation(*s)
-	}
-	return agu
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (agu *ArtGenreUpdate) ClearAbbreviation() *ArtGenreUpdate {
-	agu.mutation.ClearAbbreviation()
-	return agu
-}
-
 // SetDisplayName sets the "display_name" field.
 func (agu *ArtGenreUpdate) SetDisplayName(s string) *ArtGenreUpdate {
 	agu.mutation.SetDisplayName(s)
@@ -112,6 +92,26 @@ func (agu *ArtGenreUpdate) SetNillableDisplayName(s *string) *ArtGenreUpdate {
 // ClearDisplayName clears the value of the "display_name" field.
 func (agu *ArtGenreUpdate) ClearDisplayName() *ArtGenreUpdate {
 	agu.mutation.ClearDisplayName()
+	return agu
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (agu *ArtGenreUpdate) SetAbbreviation(s string) *ArtGenreUpdate {
+	agu.mutation.SetAbbreviation(s)
+	return agu
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (agu *ArtGenreUpdate) SetNillableAbbreviation(s *string) *ArtGenreUpdate {
+	if s != nil {
+		agu.SetAbbreviation(*s)
+	}
+	return agu
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (agu *ArtGenreUpdate) ClearAbbreviation() *ArtGenreUpdate {
+	agu.mutation.ClearAbbreviation()
 	return agu
 }
 
@@ -224,17 +224,17 @@ func (agu *ArtGenreUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if agu.mutation.UpdatedByCleared() {
 		_spec.ClearField(artgenre.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := agu.mutation.Abbreviation(); ok {
-		_spec.SetField(artgenre.FieldAbbreviation, field.TypeString, value)
-	}
-	if agu.mutation.AbbreviationCleared() {
-		_spec.ClearField(artgenre.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := agu.mutation.DisplayName(); ok {
 		_spec.SetField(artgenre.FieldDisplayName, field.TypeString, value)
 	}
 	if agu.mutation.DisplayNameCleared() {
 		_spec.ClearField(artgenre.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := agu.mutation.Abbreviation(); ok {
+		_spec.SetField(artgenre.FieldAbbreviation, field.TypeString, value)
+	}
+	if agu.mutation.AbbreviationCleared() {
+		_spec.ClearField(artgenre.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := agu.mutation.Description(); ok {
 		_spec.SetField(artgenre.FieldDescription, field.TypeString, value)
@@ -319,26 +319,6 @@ func (aguo *ArtGenreUpdateOne) ClearUpdatedBy() *ArtGenreUpdateOne {
 	return aguo
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (aguo *ArtGenreUpdateOne) SetAbbreviation(s string) *ArtGenreUpdateOne {
-	aguo.mutation.SetAbbreviation(s)
-	return aguo
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (aguo *ArtGenreUpdateOne) SetNillableAbbreviation(s *string) *ArtGenreUpdateOne {
-	if s != nil {
-		aguo.SetAbbreviation(*s)
-	}
-	return aguo
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (aguo *ArtGenreUpdateOne) ClearAbbreviation() *ArtGenreUpdateOne {
-	aguo.mutation.ClearAbbreviation()
-	return aguo
-}
-
 // SetDisplayName sets the "display_name" field.
 func (aguo *ArtGenreUpdateOne) SetDisplayName(s string) *ArtGenreUpdateOne {
 	aguo.mutation.SetDisplayName(s)
@@ -356,6 +336,26 @@ func (aguo *ArtGenreUpdateOne) SetNillableDisplayName(s *string) *ArtGenreUpdate
 // ClearDisplayName clears the value of the "display_name" field.
 func (aguo *ArtGenreUpdateOne) ClearDisplayName() *ArtGenreUpdateOne {
 	aguo.mutation.ClearDisplayName()
+	return aguo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (aguo *ArtGenreUpdateOne) SetAbbreviation(s string) *ArtGenreUpdateOne {
+	aguo.mutation.SetAbbreviation(s)
+	return aguo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (aguo *ArtGenreUpdateOne) SetNillableAbbreviation(s *string) *ArtGenreUpdateOne {
+	if s != nil {
+		aguo.SetAbbreviation(*s)
+	}
+	return aguo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (aguo *ArtGenreUpdateOne) ClearAbbreviation() *ArtGenreUpdateOne {
+	aguo.mutation.ClearAbbreviation()
 	return aguo
 }
 
@@ -498,17 +498,17 @@ func (aguo *ArtGenreUpdateOne) sqlSave(ctx context.Context) (_node *ArtGenre, er
 	if aguo.mutation.UpdatedByCleared() {
 		_spec.ClearField(artgenre.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := aguo.mutation.Abbreviation(); ok {
-		_spec.SetField(artgenre.FieldAbbreviation, field.TypeString, value)
-	}
-	if aguo.mutation.AbbreviationCleared() {
-		_spec.ClearField(artgenre.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := aguo.mutation.DisplayName(); ok {
 		_spec.SetField(artgenre.FieldDisplayName, field.TypeString, value)
 	}
 	if aguo.mutation.DisplayNameCleared() {
 		_spec.ClearField(artgenre.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := aguo.mutation.Abbreviation(); ok {
+		_spec.SetField(artgenre.FieldAbbreviation, field.TypeString, value)
+	}
+	if aguo.mutation.AbbreviationCleared() {
+		_spec.ClearField(artgenre.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := aguo.mutation.Description(); ok {
 		_spec.SetField(artgenre.FieldDescription, field.TypeString, value)

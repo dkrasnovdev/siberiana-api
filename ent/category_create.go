@@ -77,20 +77,6 @@ func (cc *CategoryCreate) SetNillableUpdatedBy(s *string) *CategoryCreate {
 	return cc
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (cc *CategoryCreate) SetAbbreviation(s string) *CategoryCreate {
-	cc.mutation.SetAbbreviation(s)
-	return cc
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (cc *CategoryCreate) SetNillableAbbreviation(s *string) *CategoryCreate {
-	if s != nil {
-		cc.SetAbbreviation(*s)
-	}
-	return cc
-}
-
 // SetDisplayName sets the "display_name" field.
 func (cc *CategoryCreate) SetDisplayName(s string) *CategoryCreate {
 	cc.mutation.SetDisplayName(s)
@@ -101,6 +87,20 @@ func (cc *CategoryCreate) SetDisplayName(s string) *CategoryCreate {
 func (cc *CategoryCreate) SetNillableDisplayName(s *string) *CategoryCreate {
 	if s != nil {
 		cc.SetDisplayName(*s)
+	}
+	return cc
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (cc *CategoryCreate) SetAbbreviation(s string) *CategoryCreate {
+	cc.mutation.SetAbbreviation(s)
+	return cc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (cc *CategoryCreate) SetNillableAbbreviation(s *string) *CategoryCreate {
+	if s != nil {
+		cc.SetAbbreviation(*s)
 	}
 	return cc
 }
@@ -244,13 +244,13 @@ func (cc *CategoryCreate) createSpec() (*Category, *sqlgraph.CreateSpec) {
 		_spec.SetField(category.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := cc.mutation.Abbreviation(); ok {
-		_spec.SetField(category.FieldAbbreviation, field.TypeString, value)
-		_node.Abbreviation = value
-	}
 	if value, ok := cc.mutation.DisplayName(); ok {
 		_spec.SetField(category.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := cc.mutation.Abbreviation(); ok {
+		_spec.SetField(category.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := cc.mutation.Description(); ok {
 		_spec.SetField(category.FieldDescription, field.TypeString, value)

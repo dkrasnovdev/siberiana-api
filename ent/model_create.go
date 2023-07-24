@@ -77,20 +77,6 @@ func (mc *ModelCreate) SetNillableUpdatedBy(s *string) *ModelCreate {
 	return mc
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (mc *ModelCreate) SetAbbreviation(s string) *ModelCreate {
-	mc.mutation.SetAbbreviation(s)
-	return mc
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (mc *ModelCreate) SetNillableAbbreviation(s *string) *ModelCreate {
-	if s != nil {
-		mc.SetAbbreviation(*s)
-	}
-	return mc
-}
-
 // SetDisplayName sets the "display_name" field.
 func (mc *ModelCreate) SetDisplayName(s string) *ModelCreate {
 	mc.mutation.SetDisplayName(s)
@@ -101,6 +87,20 @@ func (mc *ModelCreate) SetDisplayName(s string) *ModelCreate {
 func (mc *ModelCreate) SetNillableDisplayName(s *string) *ModelCreate {
 	if s != nil {
 		mc.SetDisplayName(*s)
+	}
+	return mc
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (mc *ModelCreate) SetAbbreviation(s string) *ModelCreate {
+	mc.mutation.SetAbbreviation(s)
+	return mc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (mc *ModelCreate) SetNillableAbbreviation(s *string) *ModelCreate {
+	if s != nil {
+		mc.SetAbbreviation(*s)
 	}
 	return mc
 }
@@ -244,13 +244,13 @@ func (mc *ModelCreate) createSpec() (*Model, *sqlgraph.CreateSpec) {
 		_spec.SetField(model.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := mc.mutation.Abbreviation(); ok {
-		_spec.SetField(model.FieldAbbreviation, field.TypeString, value)
-		_node.Abbreviation = value
-	}
 	if value, ok := mc.mutation.DisplayName(); ok {
 		_spec.SetField(model.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := mc.mutation.Abbreviation(); ok {
+		_spec.SetField(model.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := mc.mutation.Description(); ok {
 		_spec.SetField(model.FieldDescription, field.TypeString, value)

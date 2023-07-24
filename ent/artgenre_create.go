@@ -76,20 +76,6 @@ func (agc *ArtGenreCreate) SetNillableUpdatedBy(s *string) *ArtGenreCreate {
 	return agc
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (agc *ArtGenreCreate) SetAbbreviation(s string) *ArtGenreCreate {
-	agc.mutation.SetAbbreviation(s)
-	return agc
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (agc *ArtGenreCreate) SetNillableAbbreviation(s *string) *ArtGenreCreate {
-	if s != nil {
-		agc.SetAbbreviation(*s)
-	}
-	return agc
-}
-
 // SetDisplayName sets the "display_name" field.
 func (agc *ArtGenreCreate) SetDisplayName(s string) *ArtGenreCreate {
 	agc.mutation.SetDisplayName(s)
@@ -100,6 +86,20 @@ func (agc *ArtGenreCreate) SetDisplayName(s string) *ArtGenreCreate {
 func (agc *ArtGenreCreate) SetNillableDisplayName(s *string) *ArtGenreCreate {
 	if s != nil {
 		agc.SetDisplayName(*s)
+	}
+	return agc
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (agc *ArtGenreCreate) SetAbbreviation(s string) *ArtGenreCreate {
+	agc.mutation.SetAbbreviation(s)
+	return agc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (agc *ArtGenreCreate) SetNillableAbbreviation(s *string) *ArtGenreCreate {
+	if s != nil {
+		agc.SetAbbreviation(*s)
 	}
 	return agc
 }
@@ -228,13 +228,13 @@ func (agc *ArtGenreCreate) createSpec() (*ArtGenre, *sqlgraph.CreateSpec) {
 		_spec.SetField(artgenre.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := agc.mutation.Abbreviation(); ok {
-		_spec.SetField(artgenre.FieldAbbreviation, field.TypeString, value)
-		_node.Abbreviation = value
-	}
 	if value, ok := agc.mutation.DisplayName(); ok {
 		_spec.SetField(artgenre.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := agc.mutation.Abbreviation(); ok {
+		_spec.SetField(artgenre.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := agc.mutation.Description(); ok {
 		_spec.SetField(artgenre.FieldDescription, field.TypeString, value)

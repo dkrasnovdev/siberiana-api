@@ -24,7 +24,6 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
-	"github.com/dkrasnovdev/heritage-api/ent/library"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/medium"
@@ -73,7 +72,6 @@ const (
 	TypeHolder                = "Holder"
 	TypeHolderResponsibility  = "HolderResponsibility"
 	TypeKeyword               = "Keyword"
-	TypeLibrary               = "Library"
 	TypeLicense               = "License"
 	TypeLocation              = "Location"
 	TypeMedium                = "Medium"
@@ -371,8 +369,8 @@ type ArtGenreMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -650,55 +648,6 @@ func (m *ArtGenreMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, artgenre.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *ArtGenreMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *ArtGenreMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the ArtGenre entity.
-// If the ArtGenre object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArtGenreMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *ArtGenreMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[artgenre.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *ArtGenreMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[artgenre.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *ArtGenreMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, artgenre.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *ArtGenreMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -746,6 +695,55 @@ func (m *ArtGenreMutation) DisplayNameCleared() bool {
 func (m *ArtGenreMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, artgenre.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *ArtGenreMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *ArtGenreMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the ArtGenre entity.
+// If the ArtGenre object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtGenreMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *ArtGenreMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[artgenre.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *ArtGenreMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[artgenre.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *ArtGenreMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, artgenre.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -909,11 +907,11 @@ func (m *ArtGenreMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, artgenre.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, artgenre.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, artgenre.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, artgenre.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, artgenre.FieldDescription)
@@ -937,10 +935,10 @@ func (m *ArtGenreMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case artgenre.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case artgenre.FieldAbbreviation:
-		return m.Abbreviation()
 	case artgenre.FieldDisplayName:
 		return m.DisplayName()
+	case artgenre.FieldAbbreviation:
+		return m.Abbreviation()
 	case artgenre.FieldDescription:
 		return m.Description()
 	case artgenre.FieldExternalLinks:
@@ -962,10 +960,10 @@ func (m *ArtGenreMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldUpdatedAt(ctx)
 	case artgenre.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case artgenre.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case artgenre.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case artgenre.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case artgenre.FieldDescription:
 		return m.OldDescription(ctx)
 	case artgenre.FieldExternalLinks:
@@ -1007,19 +1005,19 @@ func (m *ArtGenreMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case artgenre.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case artgenre.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case artgenre.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case artgenre.FieldDescription:
 		v, ok := value.(string)
@@ -1071,11 +1069,11 @@ func (m *ArtGenreMutation) ClearedFields() []string {
 	if m.FieldCleared(artgenre.FieldUpdatedBy) {
 		fields = append(fields, artgenre.FieldUpdatedBy)
 	}
-	if m.FieldCleared(artgenre.FieldAbbreviation) {
-		fields = append(fields, artgenre.FieldAbbreviation)
-	}
 	if m.FieldCleared(artgenre.FieldDisplayName) {
 		fields = append(fields, artgenre.FieldDisplayName)
+	}
+	if m.FieldCleared(artgenre.FieldAbbreviation) {
+		fields = append(fields, artgenre.FieldAbbreviation)
 	}
 	if m.FieldCleared(artgenre.FieldDescription) {
 		fields = append(fields, artgenre.FieldDescription)
@@ -1103,11 +1101,11 @@ func (m *ArtGenreMutation) ClearField(name string) error {
 	case artgenre.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case artgenre.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case artgenre.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case artgenre.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case artgenre.FieldDescription:
 		m.ClearDescription()
@@ -1135,11 +1133,11 @@ func (m *ArtGenreMutation) ResetField(name string) error {
 	case artgenre.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case artgenre.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case artgenre.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case artgenre.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case artgenre.FieldDescription:
 		m.ResetDescription()
@@ -1209,8 +1207,8 @@ type ArtStyleMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -1488,55 +1486,6 @@ func (m *ArtStyleMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, artstyle.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *ArtStyleMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *ArtStyleMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the ArtStyle entity.
-// If the ArtStyle object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArtStyleMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *ArtStyleMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[artstyle.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *ArtStyleMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[artstyle.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *ArtStyleMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, artstyle.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *ArtStyleMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -1584,6 +1533,55 @@ func (m *ArtStyleMutation) DisplayNameCleared() bool {
 func (m *ArtStyleMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, artstyle.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *ArtStyleMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *ArtStyleMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the ArtStyle entity.
+// If the ArtStyle object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtStyleMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *ArtStyleMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[artstyle.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *ArtStyleMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[artstyle.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *ArtStyleMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, artstyle.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -1747,11 +1745,11 @@ func (m *ArtStyleMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, artstyle.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, artstyle.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, artstyle.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, artstyle.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, artstyle.FieldDescription)
@@ -1775,10 +1773,10 @@ func (m *ArtStyleMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case artstyle.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case artstyle.FieldAbbreviation:
-		return m.Abbreviation()
 	case artstyle.FieldDisplayName:
 		return m.DisplayName()
+	case artstyle.FieldAbbreviation:
+		return m.Abbreviation()
 	case artstyle.FieldDescription:
 		return m.Description()
 	case artstyle.FieldExternalLinks:
@@ -1800,10 +1798,10 @@ func (m *ArtStyleMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldUpdatedAt(ctx)
 	case artstyle.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case artstyle.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case artstyle.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case artstyle.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case artstyle.FieldDescription:
 		return m.OldDescription(ctx)
 	case artstyle.FieldExternalLinks:
@@ -1845,19 +1843,19 @@ func (m *ArtStyleMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case artstyle.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case artstyle.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case artstyle.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case artstyle.FieldDescription:
 		v, ok := value.(string)
@@ -1909,11 +1907,11 @@ func (m *ArtStyleMutation) ClearedFields() []string {
 	if m.FieldCleared(artstyle.FieldUpdatedBy) {
 		fields = append(fields, artstyle.FieldUpdatedBy)
 	}
-	if m.FieldCleared(artstyle.FieldAbbreviation) {
-		fields = append(fields, artstyle.FieldAbbreviation)
-	}
 	if m.FieldCleared(artstyle.FieldDisplayName) {
 		fields = append(fields, artstyle.FieldDisplayName)
+	}
+	if m.FieldCleared(artstyle.FieldAbbreviation) {
+		fields = append(fields, artstyle.FieldAbbreviation)
 	}
 	if m.FieldCleared(artstyle.FieldDescription) {
 		fields = append(fields, artstyle.FieldDescription)
@@ -1941,11 +1939,11 @@ func (m *ArtStyleMutation) ClearField(name string) error {
 	case artstyle.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case artstyle.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case artstyle.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case artstyle.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case artstyle.FieldDescription:
 		m.ClearDescription()
@@ -1973,11 +1971,11 @@ func (m *ArtStyleMutation) ResetField(name string) error {
 	case artstyle.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case artstyle.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case artstyle.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case artstyle.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case artstyle.FieldDescription:
 		m.ResetDescription()
@@ -2047,8 +2045,8 @@ type ArtifactMutation struct {
 	created_by                   *string
 	updated_at                   *time.Time
 	updated_by                   *string
-	abbreviation                 *string
 	display_name                 *string
+	abbreviation                 *string
 	description                  *string
 	external_links               *[]string
 	appendexternal_links         []string
@@ -2372,55 +2370,6 @@ func (m *ArtifactMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, artifact.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *ArtifactMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *ArtifactMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the Artifact entity.
-// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArtifactMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *ArtifactMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[artifact.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *ArtifactMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[artifact.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *ArtifactMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, artifact.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *ArtifactMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -2468,6 +2417,55 @@ func (m *ArtifactMutation) DisplayNameCleared() bool {
 func (m *ArtifactMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, artifact.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *ArtifactMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *ArtifactMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Artifact entity.
+// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtifactMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *ArtifactMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[artifact.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *ArtifactMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[artifact.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *ArtifactMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, artifact.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -3822,11 +3820,11 @@ func (m *ArtifactMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, artifact.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, artifact.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, artifact.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, artifact.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, artifact.FieldDescription)
@@ -3883,10 +3881,10 @@ func (m *ArtifactMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case artifact.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case artifact.FieldAbbreviation:
-		return m.Abbreviation()
 	case artifact.FieldDisplayName:
 		return m.DisplayName()
+	case artifact.FieldAbbreviation:
+		return m.Abbreviation()
 	case artifact.FieldDescription:
 		return m.Description()
 	case artifact.FieldExternalLinks:
@@ -3930,10 +3928,10 @@ func (m *ArtifactMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldUpdatedAt(ctx)
 	case artifact.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case artifact.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case artifact.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case artifact.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case artifact.FieldDescription:
 		return m.OldDescription(ctx)
 	case artifact.FieldExternalLinks:
@@ -3997,19 +3995,19 @@ func (m *ArtifactMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case artifact.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case artifact.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case artifact.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case artifact.FieldDescription:
 		v, ok := value.(string)
@@ -4138,11 +4136,11 @@ func (m *ArtifactMutation) ClearedFields() []string {
 	if m.FieldCleared(artifact.FieldUpdatedBy) {
 		fields = append(fields, artifact.FieldUpdatedBy)
 	}
-	if m.FieldCleared(artifact.FieldAbbreviation) {
-		fields = append(fields, artifact.FieldAbbreviation)
-	}
 	if m.FieldCleared(artifact.FieldDisplayName) {
 		fields = append(fields, artifact.FieldDisplayName)
+	}
+	if m.FieldCleared(artifact.FieldAbbreviation) {
+		fields = append(fields, artifact.FieldAbbreviation)
 	}
 	if m.FieldCleared(artifact.FieldDescription) {
 		fields = append(fields, artifact.FieldDescription)
@@ -4203,11 +4201,11 @@ func (m *ArtifactMutation) ClearField(name string) error {
 	case artifact.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case artifact.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case artifact.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case artifact.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case artifact.FieldDescription:
 		m.ClearDescription()
@@ -4268,11 +4266,11 @@ func (m *ArtifactMutation) ResetField(name string) error {
 	case artifact.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case artifact.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case artifact.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case artifact.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case artifact.FieldDescription:
 		m.ResetDescription()
@@ -5703,8 +5701,8 @@ type BookMutation struct {
 	created_by                   *string
 	updated_at                   *time.Time
 	updated_by                   *string
-	abbreviation                 *string
 	display_name                 *string
+	abbreviation                 *string
 	description                  *string
 	external_links               *[]string
 	appendexternal_links         []string
@@ -6004,55 +6002,6 @@ func (m *BookMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, book.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *BookMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *BookMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the Book entity.
-// If the Book object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *BookMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *BookMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[book.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *BookMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[book.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *BookMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, book.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *BookMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -6100,6 +6049,55 @@ func (m *BookMutation) DisplayNameCleared() bool {
 func (m *BookMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, book.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *BookMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *BookMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Book entity.
+// If the Book object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BookMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *BookMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[book.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *BookMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[book.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *BookMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, book.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -6791,11 +6789,11 @@ func (m *BookMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, book.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, book.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, book.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, book.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, book.FieldDescription)
@@ -6831,10 +6829,10 @@ func (m *BookMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case book.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case book.FieldAbbreviation:
-		return m.Abbreviation()
 	case book.FieldDisplayName:
 		return m.DisplayName()
+	case book.FieldAbbreviation:
+		return m.Abbreviation()
 	case book.FieldDescription:
 		return m.Description()
 	case book.FieldExternalLinks:
@@ -6864,10 +6862,10 @@ func (m *BookMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldUpdatedAt(ctx)
 	case book.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case book.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case book.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case book.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case book.FieldDescription:
 		return m.OldDescription(ctx)
 	case book.FieldExternalLinks:
@@ -6917,19 +6915,19 @@ func (m *BookMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case book.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case book.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case book.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case book.FieldDescription:
 		v, ok := value.(string)
@@ -7024,11 +7022,11 @@ func (m *BookMutation) ClearedFields() []string {
 	if m.FieldCleared(book.FieldUpdatedBy) {
 		fields = append(fields, book.FieldUpdatedBy)
 	}
-	if m.FieldCleared(book.FieldAbbreviation) {
-		fields = append(fields, book.FieldAbbreviation)
-	}
 	if m.FieldCleared(book.FieldDisplayName) {
 		fields = append(fields, book.FieldDisplayName)
+	}
+	if m.FieldCleared(book.FieldAbbreviation) {
+		fields = append(fields, book.FieldAbbreviation)
 	}
 	if m.FieldCleared(book.FieldDescription) {
 		fields = append(fields, book.FieldDescription)
@@ -7068,11 +7066,11 @@ func (m *BookMutation) ClearField(name string) error {
 	case book.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case book.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case book.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case book.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case book.FieldDescription:
 		m.ClearDescription()
@@ -7112,11 +7110,11 @@ func (m *BookMutation) ResetField(name string) error {
 	case book.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case book.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case book.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case book.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case book.FieldDescription:
 		m.ResetDescription()
@@ -7340,8 +7338,8 @@ type BookGenreMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -7622,55 +7620,6 @@ func (m *BookGenreMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, bookgenre.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *BookGenreMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *BookGenreMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the BookGenre entity.
-// If the BookGenre object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *BookGenreMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *BookGenreMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[bookgenre.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *BookGenreMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[bookgenre.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *BookGenreMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, bookgenre.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *BookGenreMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -7718,6 +7667,55 @@ func (m *BookGenreMutation) DisplayNameCleared() bool {
 func (m *BookGenreMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, bookgenre.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *BookGenreMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *BookGenreMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the BookGenre entity.
+// If the BookGenre object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BookGenreMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *BookGenreMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[bookgenre.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *BookGenreMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[bookgenre.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *BookGenreMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, bookgenre.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -7935,11 +7933,11 @@ func (m *BookGenreMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, bookgenre.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, bookgenre.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, bookgenre.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, bookgenre.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, bookgenre.FieldDescription)
@@ -7963,10 +7961,10 @@ func (m *BookGenreMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case bookgenre.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case bookgenre.FieldAbbreviation:
-		return m.Abbreviation()
 	case bookgenre.FieldDisplayName:
 		return m.DisplayName()
+	case bookgenre.FieldAbbreviation:
+		return m.Abbreviation()
 	case bookgenre.FieldDescription:
 		return m.Description()
 	case bookgenre.FieldExternalLinks:
@@ -7988,10 +7986,10 @@ func (m *BookGenreMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldUpdatedAt(ctx)
 	case bookgenre.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case bookgenre.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case bookgenre.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case bookgenre.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case bookgenre.FieldDescription:
 		return m.OldDescription(ctx)
 	case bookgenre.FieldExternalLinks:
@@ -8033,19 +8031,19 @@ func (m *BookGenreMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case bookgenre.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case bookgenre.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case bookgenre.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case bookgenre.FieldDescription:
 		v, ok := value.(string)
@@ -8097,11 +8095,11 @@ func (m *BookGenreMutation) ClearedFields() []string {
 	if m.FieldCleared(bookgenre.FieldUpdatedBy) {
 		fields = append(fields, bookgenre.FieldUpdatedBy)
 	}
-	if m.FieldCleared(bookgenre.FieldAbbreviation) {
-		fields = append(fields, bookgenre.FieldAbbreviation)
-	}
 	if m.FieldCleared(bookgenre.FieldDisplayName) {
 		fields = append(fields, bookgenre.FieldDisplayName)
+	}
+	if m.FieldCleared(bookgenre.FieldAbbreviation) {
+		fields = append(fields, bookgenre.FieldAbbreviation)
 	}
 	if m.FieldCleared(bookgenre.FieldDescription) {
 		fields = append(fields, bookgenre.FieldDescription)
@@ -8129,11 +8127,11 @@ func (m *BookGenreMutation) ClearField(name string) error {
 	case bookgenre.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case bookgenre.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case bookgenre.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case bookgenre.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case bookgenre.FieldDescription:
 		m.ClearDescription()
@@ -8161,11 +8159,11 @@ func (m *BookGenreMutation) ResetField(name string) error {
 	case bookgenre.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case bookgenre.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case bookgenre.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case bookgenre.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case bookgenre.FieldDescription:
 		m.ResetDescription()
@@ -8271,8 +8269,8 @@ type CategoryMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -8553,55 +8551,6 @@ func (m *CategoryMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, category.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *CategoryMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *CategoryMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the Category entity.
-// If the Category object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CategoryMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *CategoryMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[category.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *CategoryMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[category.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *CategoryMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, category.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *CategoryMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -8649,6 +8598,55 @@ func (m *CategoryMutation) DisplayNameCleared() bool {
 func (m *CategoryMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, category.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *CategoryMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *CategoryMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *CategoryMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[category.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *CategoryMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[category.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *CategoryMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, category.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -8866,11 +8864,11 @@ func (m *CategoryMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, category.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, category.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, category.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, category.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, category.FieldDescription)
@@ -8894,10 +8892,10 @@ func (m *CategoryMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case category.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case category.FieldAbbreviation:
-		return m.Abbreviation()
 	case category.FieldDisplayName:
 		return m.DisplayName()
+	case category.FieldAbbreviation:
+		return m.Abbreviation()
 	case category.FieldDescription:
 		return m.Description()
 	case category.FieldExternalLinks:
@@ -8919,10 +8917,10 @@ func (m *CategoryMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldUpdatedAt(ctx)
 	case category.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case category.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case category.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case category.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case category.FieldDescription:
 		return m.OldDescription(ctx)
 	case category.FieldExternalLinks:
@@ -8964,19 +8962,19 @@ func (m *CategoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case category.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case category.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case category.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case category.FieldDescription:
 		v, ok := value.(string)
@@ -9028,11 +9026,11 @@ func (m *CategoryMutation) ClearedFields() []string {
 	if m.FieldCleared(category.FieldUpdatedBy) {
 		fields = append(fields, category.FieldUpdatedBy)
 	}
-	if m.FieldCleared(category.FieldAbbreviation) {
-		fields = append(fields, category.FieldAbbreviation)
-	}
 	if m.FieldCleared(category.FieldDisplayName) {
 		fields = append(fields, category.FieldDisplayName)
+	}
+	if m.FieldCleared(category.FieldAbbreviation) {
+		fields = append(fields, category.FieldAbbreviation)
 	}
 	if m.FieldCleared(category.FieldDescription) {
 		fields = append(fields, category.FieldDescription)
@@ -9060,11 +9058,11 @@ func (m *CategoryMutation) ClearField(name string) error {
 	case category.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case category.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case category.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case category.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case category.FieldDescription:
 		m.ClearDescription()
@@ -9092,11 +9090,11 @@ func (m *CategoryMutation) ResetField(name string) error {
 	case category.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case category.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case category.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case category.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case category.FieldDescription:
 		m.ResetDescription()
@@ -9202,8 +9200,8 @@ type CollectionMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -9492,55 +9490,6 @@ func (m *CollectionMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, collection.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *CollectionMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *CollectionMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the Collection entity.
-// If the Collection object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CollectionMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *CollectionMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[collection.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *CollectionMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[collection.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *CollectionMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, collection.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *CollectionMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -9588,6 +9537,55 @@ func (m *CollectionMutation) DisplayNameCleared() bool {
 func (m *CollectionMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, collection.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *CollectionMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *CollectionMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Collection entity.
+// If the Collection object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CollectionMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *CollectionMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[collection.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *CollectionMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[collection.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *CollectionMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, collection.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -9952,11 +9950,11 @@ func (m *CollectionMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, collection.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, collection.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, collection.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, collection.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, collection.FieldDescription)
@@ -9980,10 +9978,10 @@ func (m *CollectionMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case collection.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case collection.FieldAbbreviation:
-		return m.Abbreviation()
 	case collection.FieldDisplayName:
 		return m.DisplayName()
+	case collection.FieldAbbreviation:
+		return m.Abbreviation()
 	case collection.FieldDescription:
 		return m.Description()
 	case collection.FieldExternalLinks:
@@ -10005,10 +10003,10 @@ func (m *CollectionMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldUpdatedAt(ctx)
 	case collection.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case collection.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case collection.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case collection.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case collection.FieldDescription:
 		return m.OldDescription(ctx)
 	case collection.FieldExternalLinks:
@@ -10050,19 +10048,19 @@ func (m *CollectionMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case collection.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case collection.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case collection.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case collection.FieldDescription:
 		v, ok := value.(string)
@@ -10114,11 +10112,11 @@ func (m *CollectionMutation) ClearedFields() []string {
 	if m.FieldCleared(collection.FieldUpdatedBy) {
 		fields = append(fields, collection.FieldUpdatedBy)
 	}
-	if m.FieldCleared(collection.FieldAbbreviation) {
-		fields = append(fields, collection.FieldAbbreviation)
-	}
 	if m.FieldCleared(collection.FieldDisplayName) {
 		fields = append(fields, collection.FieldDisplayName)
+	}
+	if m.FieldCleared(collection.FieldAbbreviation) {
+		fields = append(fields, collection.FieldAbbreviation)
 	}
 	if m.FieldCleared(collection.FieldDescription) {
 		fields = append(fields, collection.FieldDescription)
@@ -10146,11 +10144,11 @@ func (m *CollectionMutation) ClearField(name string) error {
 	case collection.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case collection.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case collection.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case collection.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case collection.FieldDescription:
 		m.ClearDescription()
@@ -10178,11 +10176,11 @@ func (m *CollectionMutation) ResetField(name string) error {
 	case collection.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case collection.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case collection.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case collection.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case collection.FieldDescription:
 		m.ResetDescription()
@@ -10358,8 +10356,8 @@ type CountryMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -10639,55 +10637,6 @@ func (m *CountryMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, country.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *CountryMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *CountryMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the Country entity.
-// If the Country object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CountryMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *CountryMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[country.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *CountryMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[country.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *CountryMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, country.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *CountryMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -10735,6 +10684,55 @@ func (m *CountryMutation) DisplayNameCleared() bool {
 func (m *CountryMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, country.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *CountryMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *CountryMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Country entity.
+// If the Country object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CountryMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *CountryMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[country.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *CountryMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[country.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *CountryMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, country.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -10937,11 +10935,11 @@ func (m *CountryMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, country.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, country.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, country.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, country.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, country.FieldDescription)
@@ -10965,10 +10963,10 @@ func (m *CountryMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case country.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case country.FieldAbbreviation:
-		return m.Abbreviation()
 	case country.FieldDisplayName:
 		return m.DisplayName()
+	case country.FieldAbbreviation:
+		return m.Abbreviation()
 	case country.FieldDescription:
 		return m.Description()
 	case country.FieldExternalLinks:
@@ -10990,10 +10988,10 @@ func (m *CountryMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldUpdatedAt(ctx)
 	case country.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case country.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case country.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case country.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case country.FieldDescription:
 		return m.OldDescription(ctx)
 	case country.FieldExternalLinks:
@@ -11035,19 +11033,19 @@ func (m *CountryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case country.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case country.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case country.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case country.FieldDescription:
 		v, ok := value.(string)
@@ -11099,11 +11097,11 @@ func (m *CountryMutation) ClearedFields() []string {
 	if m.FieldCleared(country.FieldUpdatedBy) {
 		fields = append(fields, country.FieldUpdatedBy)
 	}
-	if m.FieldCleared(country.FieldAbbreviation) {
-		fields = append(fields, country.FieldAbbreviation)
-	}
 	if m.FieldCleared(country.FieldDisplayName) {
 		fields = append(fields, country.FieldDisplayName)
+	}
+	if m.FieldCleared(country.FieldAbbreviation) {
+		fields = append(fields, country.FieldAbbreviation)
 	}
 	if m.FieldCleared(country.FieldDescription) {
 		fields = append(fields, country.FieldDescription)
@@ -11131,11 +11129,11 @@ func (m *CountryMutation) ClearField(name string) error {
 	case country.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case country.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case country.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case country.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case country.FieldDescription:
 		m.ClearDescription()
@@ -11163,11 +11161,11 @@ func (m *CountryMutation) ResetField(name string) error {
 	case country.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case country.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case country.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case country.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case country.FieldDescription:
 		m.ResetDescription()
@@ -11263,8 +11261,8 @@ type CultureMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -11545,55 +11543,6 @@ func (m *CultureMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, culture.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *CultureMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *CultureMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the Culture entity.
-// If the Culture object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CultureMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *CultureMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[culture.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *CultureMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[culture.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *CultureMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, culture.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *CultureMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -11641,6 +11590,55 @@ func (m *CultureMutation) DisplayNameCleared() bool {
 func (m *CultureMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, culture.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *CultureMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *CultureMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Culture entity.
+// If the Culture object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CultureMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *CultureMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[culture.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *CultureMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[culture.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *CultureMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, culture.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -11858,11 +11856,11 @@ func (m *CultureMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, culture.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, culture.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, culture.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, culture.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, culture.FieldDescription)
@@ -11886,10 +11884,10 @@ func (m *CultureMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case culture.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case culture.FieldAbbreviation:
-		return m.Abbreviation()
 	case culture.FieldDisplayName:
 		return m.DisplayName()
+	case culture.FieldAbbreviation:
+		return m.Abbreviation()
 	case culture.FieldDescription:
 		return m.Description()
 	case culture.FieldExternalLinks:
@@ -11911,10 +11909,10 @@ func (m *CultureMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldUpdatedAt(ctx)
 	case culture.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case culture.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case culture.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case culture.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case culture.FieldDescription:
 		return m.OldDescription(ctx)
 	case culture.FieldExternalLinks:
@@ -11956,19 +11954,19 @@ func (m *CultureMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case culture.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case culture.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case culture.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case culture.FieldDescription:
 		v, ok := value.(string)
@@ -12020,11 +12018,11 @@ func (m *CultureMutation) ClearedFields() []string {
 	if m.FieldCleared(culture.FieldUpdatedBy) {
 		fields = append(fields, culture.FieldUpdatedBy)
 	}
-	if m.FieldCleared(culture.FieldAbbreviation) {
-		fields = append(fields, culture.FieldAbbreviation)
-	}
 	if m.FieldCleared(culture.FieldDisplayName) {
 		fields = append(fields, culture.FieldDisplayName)
+	}
+	if m.FieldCleared(culture.FieldAbbreviation) {
+		fields = append(fields, culture.FieldAbbreviation)
 	}
 	if m.FieldCleared(culture.FieldDescription) {
 		fields = append(fields, culture.FieldDescription)
@@ -12052,11 +12050,11 @@ func (m *CultureMutation) ClearField(name string) error {
 	case culture.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case culture.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case culture.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case culture.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case culture.FieldDescription:
 		m.ClearDescription()
@@ -12084,11 +12082,11 @@ func (m *CultureMutation) ResetField(name string) error {
 	case culture.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case culture.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case culture.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case culture.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case culture.FieldDescription:
 		m.ResetDescription()
@@ -12194,8 +12192,8 @@ type DistrictMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -12475,55 +12473,6 @@ func (m *DistrictMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, district.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *DistrictMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *DistrictMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the District entity.
-// If the District object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *DistrictMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *DistrictMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[district.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *DistrictMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[district.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *DistrictMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, district.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *DistrictMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -12571,6 +12520,55 @@ func (m *DistrictMutation) DisplayNameCleared() bool {
 func (m *DistrictMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, district.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *DistrictMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *DistrictMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the District entity.
+// If the District object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DistrictMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *DistrictMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[district.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *DistrictMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[district.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *DistrictMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, district.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -12773,11 +12771,11 @@ func (m *DistrictMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, district.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, district.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, district.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, district.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, district.FieldDescription)
@@ -12801,10 +12799,10 @@ func (m *DistrictMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case district.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case district.FieldAbbreviation:
-		return m.Abbreviation()
 	case district.FieldDisplayName:
 		return m.DisplayName()
+	case district.FieldAbbreviation:
+		return m.Abbreviation()
 	case district.FieldDescription:
 		return m.Description()
 	case district.FieldExternalLinks:
@@ -12826,10 +12824,10 @@ func (m *DistrictMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldUpdatedAt(ctx)
 	case district.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case district.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case district.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case district.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case district.FieldDescription:
 		return m.OldDescription(ctx)
 	case district.FieldExternalLinks:
@@ -12871,19 +12869,19 @@ func (m *DistrictMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case district.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case district.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case district.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case district.FieldDescription:
 		v, ok := value.(string)
@@ -12935,11 +12933,11 @@ func (m *DistrictMutation) ClearedFields() []string {
 	if m.FieldCleared(district.FieldUpdatedBy) {
 		fields = append(fields, district.FieldUpdatedBy)
 	}
-	if m.FieldCleared(district.FieldAbbreviation) {
-		fields = append(fields, district.FieldAbbreviation)
-	}
 	if m.FieldCleared(district.FieldDisplayName) {
 		fields = append(fields, district.FieldDisplayName)
+	}
+	if m.FieldCleared(district.FieldAbbreviation) {
+		fields = append(fields, district.FieldAbbreviation)
 	}
 	if m.FieldCleared(district.FieldDescription) {
 		fields = append(fields, district.FieldDescription)
@@ -12967,11 +12965,11 @@ func (m *DistrictMutation) ClearField(name string) error {
 	case district.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case district.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case district.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case district.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case district.FieldDescription:
 		m.ClearDescription()
@@ -12999,11 +12997,11 @@ func (m *DistrictMutation) ResetField(name string) error {
 	case district.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case district.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case district.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case district.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case district.FieldDescription:
 		m.ResetDescription()
@@ -14132,8 +14130,8 @@ type HolderResponsibilityMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -14414,55 +14412,6 @@ func (m *HolderResponsibilityMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, holderresponsibility.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *HolderResponsibilityMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *HolderResponsibilityMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the HolderResponsibility entity.
-// If the HolderResponsibility object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *HolderResponsibilityMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *HolderResponsibilityMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[holderresponsibility.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *HolderResponsibilityMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[holderresponsibility.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *HolderResponsibilityMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, holderresponsibility.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *HolderResponsibilityMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -14510,6 +14459,55 @@ func (m *HolderResponsibilityMutation) DisplayNameCleared() bool {
 func (m *HolderResponsibilityMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, holderresponsibility.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *HolderResponsibilityMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *HolderResponsibilityMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the HolderResponsibility entity.
+// If the HolderResponsibility object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *HolderResponsibilityMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *HolderResponsibilityMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[holderresponsibility.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *HolderResponsibilityMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[holderresponsibility.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *HolderResponsibilityMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, holderresponsibility.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -14727,11 +14725,11 @@ func (m *HolderResponsibilityMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, holderresponsibility.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, holderresponsibility.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, holderresponsibility.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, holderresponsibility.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, holderresponsibility.FieldDescription)
@@ -14755,10 +14753,10 @@ func (m *HolderResponsibilityMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case holderresponsibility.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case holderresponsibility.FieldAbbreviation:
-		return m.Abbreviation()
 	case holderresponsibility.FieldDisplayName:
 		return m.DisplayName()
+	case holderresponsibility.FieldAbbreviation:
+		return m.Abbreviation()
 	case holderresponsibility.FieldDescription:
 		return m.Description()
 	case holderresponsibility.FieldExternalLinks:
@@ -14780,10 +14778,10 @@ func (m *HolderResponsibilityMutation) OldField(ctx context.Context, name string
 		return m.OldUpdatedAt(ctx)
 	case holderresponsibility.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case holderresponsibility.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case holderresponsibility.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case holderresponsibility.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case holderresponsibility.FieldDescription:
 		return m.OldDescription(ctx)
 	case holderresponsibility.FieldExternalLinks:
@@ -14825,19 +14823,19 @@ func (m *HolderResponsibilityMutation) SetField(name string, value ent.Value) er
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case holderresponsibility.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case holderresponsibility.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case holderresponsibility.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case holderresponsibility.FieldDescription:
 		v, ok := value.(string)
@@ -14889,11 +14887,11 @@ func (m *HolderResponsibilityMutation) ClearedFields() []string {
 	if m.FieldCleared(holderresponsibility.FieldUpdatedBy) {
 		fields = append(fields, holderresponsibility.FieldUpdatedBy)
 	}
-	if m.FieldCleared(holderresponsibility.FieldAbbreviation) {
-		fields = append(fields, holderresponsibility.FieldAbbreviation)
-	}
 	if m.FieldCleared(holderresponsibility.FieldDisplayName) {
 		fields = append(fields, holderresponsibility.FieldDisplayName)
+	}
+	if m.FieldCleared(holderresponsibility.FieldAbbreviation) {
+		fields = append(fields, holderresponsibility.FieldAbbreviation)
 	}
 	if m.FieldCleared(holderresponsibility.FieldDescription) {
 		fields = append(fields, holderresponsibility.FieldDescription)
@@ -14921,11 +14919,11 @@ func (m *HolderResponsibilityMutation) ClearField(name string) error {
 	case holderresponsibility.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case holderresponsibility.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case holderresponsibility.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case holderresponsibility.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case holderresponsibility.FieldDescription:
 		m.ClearDescription()
@@ -14953,11 +14951,11 @@ func (m *HolderResponsibilityMutation) ResetField(name string) error {
 	case holderresponsibility.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case holderresponsibility.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case holderresponsibility.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case holderresponsibility.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case holderresponsibility.FieldDescription:
 		m.ResetDescription()
@@ -15317,937 +15315,6 @@ func (m *KeywordMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Keyword edge %s", name)
 }
 
-// LibraryMutation represents an operation that mutates the Library nodes in the graph.
-type LibraryMutation struct {
-	config
-	op                   Op
-	typ                  string
-	id                   *int
-	created_at           *time.Time
-	created_by           *string
-	updated_at           *time.Time
-	updated_by           *string
-	abbreviation         *string
-	display_name         *string
-	description          *string
-	external_links       *[]string
-	appendexternal_links []string
-	clearedFields        map[string]struct{}
-	books                map[int]struct{}
-	removedbooks         map[int]struct{}
-	clearedbooks         bool
-	done                 bool
-	oldValue             func(context.Context) (*Library, error)
-	predicates           []predicate.Library
-}
-
-var _ ent.Mutation = (*LibraryMutation)(nil)
-
-// libraryOption allows management of the mutation configuration using functional options.
-type libraryOption func(*LibraryMutation)
-
-// newLibraryMutation creates new mutation for the Library entity.
-func newLibraryMutation(c config, op Op, opts ...libraryOption) *LibraryMutation {
-	m := &LibraryMutation{
-		config:        c,
-		op:            op,
-		typ:           TypeLibrary,
-		clearedFields: make(map[string]struct{}),
-	}
-	for _, opt := range opts {
-		opt(m)
-	}
-	return m
-}
-
-// withLibraryID sets the ID field of the mutation.
-func withLibraryID(id int) libraryOption {
-	return func(m *LibraryMutation) {
-		var (
-			err   error
-			once  sync.Once
-			value *Library
-		)
-		m.oldValue = func(ctx context.Context) (*Library, error) {
-			once.Do(func() {
-				if m.done {
-					err = errors.New("querying old values post mutation is not allowed")
-				} else {
-					value, err = m.Client().Library.Get(ctx, id)
-				}
-			})
-			return value, err
-		}
-		m.id = &id
-	}
-}
-
-// withLibrary sets the old Library of the mutation.
-func withLibrary(node *Library) libraryOption {
-	return func(m *LibraryMutation) {
-		m.oldValue = func(context.Context) (*Library, error) {
-			return node, nil
-		}
-		m.id = &node.ID
-	}
-}
-
-// Client returns a new `ent.Client` from the mutation. If the mutation was
-// executed in a transaction (ent.Tx), a transactional client is returned.
-func (m LibraryMutation) Client() *Client {
-	client := &Client{config: m.config}
-	client.init()
-	return client
-}
-
-// Tx returns an `ent.Tx` for mutations that were executed in transactions;
-// it returns an error otherwise.
-func (m LibraryMutation) Tx() (*Tx, error) {
-	if _, ok := m.driver.(*txDriver); !ok {
-		return nil, errors.New("ent: mutation is not running in a transaction")
-	}
-	tx := &Tx{config: m.config}
-	tx.init()
-	return tx, nil
-}
-
-// ID returns the ID value in the mutation. Note that the ID is only available
-// if it was provided to the builder or after it was returned from the database.
-func (m *LibraryMutation) ID() (id int, exists bool) {
-	if m.id == nil {
-		return
-	}
-	return *m.id, true
-}
-
-// IDs queries the database and returns the entity ids that match the mutation's predicate.
-// That means, if the mutation is applied within a transaction with an isolation level such
-// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
-// or updated by the mutation.
-func (m *LibraryMutation) IDs(ctx context.Context) ([]int, error) {
-	switch {
-	case m.op.Is(OpUpdateOne | OpDeleteOne):
-		id, exists := m.ID()
-		if exists {
-			return []int{id}, nil
-		}
-		fallthrough
-	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().Library.Query().Where(m.predicates...).IDs(ctx)
-	default:
-		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
-	}
-}
-
-// SetCreatedAt sets the "created_at" field.
-func (m *LibraryMutation) SetCreatedAt(t time.Time) {
-	m.created_at = &t
-}
-
-// CreatedAt returns the value of the "created_at" field in the mutation.
-func (m *LibraryMutation) CreatedAt() (r time.Time, exists bool) {
-	v := m.created_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCreatedAt returns the old "created_at" field's value of the Library entity.
-// If the Library object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *LibraryMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
-	}
-	return oldValue.CreatedAt, nil
-}
-
-// ResetCreatedAt resets all changes to the "created_at" field.
-func (m *LibraryMutation) ResetCreatedAt() {
-	m.created_at = nil
-}
-
-// SetCreatedBy sets the "created_by" field.
-func (m *LibraryMutation) SetCreatedBy(s string) {
-	m.created_by = &s
-}
-
-// CreatedBy returns the value of the "created_by" field in the mutation.
-func (m *LibraryMutation) CreatedBy() (r string, exists bool) {
-	v := m.created_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCreatedBy returns the old "created_by" field's value of the Library entity.
-// If the Library object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *LibraryMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
-	}
-	return oldValue.CreatedBy, nil
-}
-
-// ClearCreatedBy clears the value of the "created_by" field.
-func (m *LibraryMutation) ClearCreatedBy() {
-	m.created_by = nil
-	m.clearedFields[library.FieldCreatedBy] = struct{}{}
-}
-
-// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
-func (m *LibraryMutation) CreatedByCleared() bool {
-	_, ok := m.clearedFields[library.FieldCreatedBy]
-	return ok
-}
-
-// ResetCreatedBy resets all changes to the "created_by" field.
-func (m *LibraryMutation) ResetCreatedBy() {
-	m.created_by = nil
-	delete(m.clearedFields, library.FieldCreatedBy)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (m *LibraryMutation) SetUpdatedAt(t time.Time) {
-	m.updated_at = &t
-}
-
-// UpdatedAt returns the value of the "updated_at" field in the mutation.
-func (m *LibraryMutation) UpdatedAt() (r time.Time, exists bool) {
-	v := m.updated_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUpdatedAt returns the old "updated_at" field's value of the Library entity.
-// If the Library object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *LibraryMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
-	}
-	return oldValue.UpdatedAt, nil
-}
-
-// ResetUpdatedAt resets all changes to the "updated_at" field.
-func (m *LibraryMutation) ResetUpdatedAt() {
-	m.updated_at = nil
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (m *LibraryMutation) SetUpdatedBy(s string) {
-	m.updated_by = &s
-}
-
-// UpdatedBy returns the value of the "updated_by" field in the mutation.
-func (m *LibraryMutation) UpdatedBy() (r string, exists bool) {
-	v := m.updated_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUpdatedBy returns the old "updated_by" field's value of the Library entity.
-// If the Library object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *LibraryMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
-	}
-	return oldValue.UpdatedBy, nil
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (m *LibraryMutation) ClearUpdatedBy() {
-	m.updated_by = nil
-	m.clearedFields[library.FieldUpdatedBy] = struct{}{}
-}
-
-// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
-func (m *LibraryMutation) UpdatedByCleared() bool {
-	_, ok := m.clearedFields[library.FieldUpdatedBy]
-	return ok
-}
-
-// ResetUpdatedBy resets all changes to the "updated_by" field.
-func (m *LibraryMutation) ResetUpdatedBy() {
-	m.updated_by = nil
-	delete(m.clearedFields, library.FieldUpdatedBy)
-}
-
-// SetAbbreviation sets the "abbreviation" field.
-func (m *LibraryMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *LibraryMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the Library entity.
-// If the Library object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *LibraryMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *LibraryMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[library.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *LibraryMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[library.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *LibraryMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, library.FieldAbbreviation)
-}
-
-// SetDisplayName sets the "display_name" field.
-func (m *LibraryMutation) SetDisplayName(s string) {
-	m.display_name = &s
-}
-
-// DisplayName returns the value of the "display_name" field in the mutation.
-func (m *LibraryMutation) DisplayName() (r string, exists bool) {
-	v := m.display_name
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldDisplayName returns the old "display_name" field's value of the Library entity.
-// If the Library object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *LibraryMutation) OldDisplayName(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDisplayName requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
-	}
-	return oldValue.DisplayName, nil
-}
-
-// ClearDisplayName clears the value of the "display_name" field.
-func (m *LibraryMutation) ClearDisplayName() {
-	m.display_name = nil
-	m.clearedFields[library.FieldDisplayName] = struct{}{}
-}
-
-// DisplayNameCleared returns if the "display_name" field was cleared in this mutation.
-func (m *LibraryMutation) DisplayNameCleared() bool {
-	_, ok := m.clearedFields[library.FieldDisplayName]
-	return ok
-}
-
-// ResetDisplayName resets all changes to the "display_name" field.
-func (m *LibraryMutation) ResetDisplayName() {
-	m.display_name = nil
-	delete(m.clearedFields, library.FieldDisplayName)
-}
-
-// SetDescription sets the "description" field.
-func (m *LibraryMutation) SetDescription(s string) {
-	m.description = &s
-}
-
-// Description returns the value of the "description" field in the mutation.
-func (m *LibraryMutation) Description() (r string, exists bool) {
-	v := m.description
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldDescription returns the old "description" field's value of the Library entity.
-// If the Library object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *LibraryMutation) OldDescription(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDescription requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
-	}
-	return oldValue.Description, nil
-}
-
-// ClearDescription clears the value of the "description" field.
-func (m *LibraryMutation) ClearDescription() {
-	m.description = nil
-	m.clearedFields[library.FieldDescription] = struct{}{}
-}
-
-// DescriptionCleared returns if the "description" field was cleared in this mutation.
-func (m *LibraryMutation) DescriptionCleared() bool {
-	_, ok := m.clearedFields[library.FieldDescription]
-	return ok
-}
-
-// ResetDescription resets all changes to the "description" field.
-func (m *LibraryMutation) ResetDescription() {
-	m.description = nil
-	delete(m.clearedFields, library.FieldDescription)
-}
-
-// SetExternalLinks sets the "external_links" field.
-func (m *LibraryMutation) SetExternalLinks(s []string) {
-	m.external_links = &s
-	m.appendexternal_links = nil
-}
-
-// ExternalLinks returns the value of the "external_links" field in the mutation.
-func (m *LibraryMutation) ExternalLinks() (r []string, exists bool) {
-	v := m.external_links
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldExternalLinks returns the old "external_links" field's value of the Library entity.
-// If the Library object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *LibraryMutation) OldExternalLinks(ctx context.Context) (v []string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalLinks is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalLinks requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalLinks: %w", err)
-	}
-	return oldValue.ExternalLinks, nil
-}
-
-// AppendExternalLinks adds s to the "external_links" field.
-func (m *LibraryMutation) AppendExternalLinks(s []string) {
-	m.appendexternal_links = append(m.appendexternal_links, s...)
-}
-
-// AppendedExternalLinks returns the list of values that were appended to the "external_links" field in this mutation.
-func (m *LibraryMutation) AppendedExternalLinks() ([]string, bool) {
-	if len(m.appendexternal_links) == 0 {
-		return nil, false
-	}
-	return m.appendexternal_links, true
-}
-
-// ClearExternalLinks clears the value of the "external_links" field.
-func (m *LibraryMutation) ClearExternalLinks() {
-	m.external_links = nil
-	m.appendexternal_links = nil
-	m.clearedFields[library.FieldExternalLinks] = struct{}{}
-}
-
-// ExternalLinksCleared returns if the "external_links" field was cleared in this mutation.
-func (m *LibraryMutation) ExternalLinksCleared() bool {
-	_, ok := m.clearedFields[library.FieldExternalLinks]
-	return ok
-}
-
-// ResetExternalLinks resets all changes to the "external_links" field.
-func (m *LibraryMutation) ResetExternalLinks() {
-	m.external_links = nil
-	m.appendexternal_links = nil
-	delete(m.clearedFields, library.FieldExternalLinks)
-}
-
-// AddBookIDs adds the "books" edge to the Book entity by ids.
-func (m *LibraryMutation) AddBookIDs(ids ...int) {
-	if m.books == nil {
-		m.books = make(map[int]struct{})
-	}
-	for i := range ids {
-		m.books[ids[i]] = struct{}{}
-	}
-}
-
-// ClearBooks clears the "books" edge to the Book entity.
-func (m *LibraryMutation) ClearBooks() {
-	m.clearedbooks = true
-}
-
-// BooksCleared reports if the "books" edge to the Book entity was cleared.
-func (m *LibraryMutation) BooksCleared() bool {
-	return m.clearedbooks
-}
-
-// RemoveBookIDs removes the "books" edge to the Book entity by IDs.
-func (m *LibraryMutation) RemoveBookIDs(ids ...int) {
-	if m.removedbooks == nil {
-		m.removedbooks = make(map[int]struct{})
-	}
-	for i := range ids {
-		delete(m.books, ids[i])
-		m.removedbooks[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedBooks returns the removed IDs of the "books" edge to the Book entity.
-func (m *LibraryMutation) RemovedBooksIDs() (ids []int) {
-	for id := range m.removedbooks {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// BooksIDs returns the "books" edge IDs in the mutation.
-func (m *LibraryMutation) BooksIDs() (ids []int) {
-	for id := range m.books {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ResetBooks resets all changes to the "books" edge.
-func (m *LibraryMutation) ResetBooks() {
-	m.books = nil
-	m.clearedbooks = false
-	m.removedbooks = nil
-}
-
-// Where appends a list predicates to the LibraryMutation builder.
-func (m *LibraryMutation) Where(ps ...predicate.Library) {
-	m.predicates = append(m.predicates, ps...)
-}
-
-// WhereP appends storage-level predicates to the LibraryMutation builder. Using this method,
-// users can use type-assertion to append predicates that do not depend on any generated package.
-func (m *LibraryMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.Library, len(ps))
-	for i := range ps {
-		p[i] = ps[i]
-	}
-	m.Where(p...)
-}
-
-// Op returns the operation name.
-func (m *LibraryMutation) Op() Op {
-	return m.op
-}
-
-// SetOp allows setting the mutation operation.
-func (m *LibraryMutation) SetOp(op Op) {
-	m.op = op
-}
-
-// Type returns the node type of this mutation (Library).
-func (m *LibraryMutation) Type() string {
-	return m.typ
-}
-
-// Fields returns all fields that were changed during this mutation. Note that in
-// order to get all numeric fields that were incremented/decremented, call
-// AddedFields().
-func (m *LibraryMutation) Fields() []string {
-	fields := make([]string, 0, 8)
-	if m.created_at != nil {
-		fields = append(fields, library.FieldCreatedAt)
-	}
-	if m.created_by != nil {
-		fields = append(fields, library.FieldCreatedBy)
-	}
-	if m.updated_at != nil {
-		fields = append(fields, library.FieldUpdatedAt)
-	}
-	if m.updated_by != nil {
-		fields = append(fields, library.FieldUpdatedBy)
-	}
-	if m.abbreviation != nil {
-		fields = append(fields, library.FieldAbbreviation)
-	}
-	if m.display_name != nil {
-		fields = append(fields, library.FieldDisplayName)
-	}
-	if m.description != nil {
-		fields = append(fields, library.FieldDescription)
-	}
-	if m.external_links != nil {
-		fields = append(fields, library.FieldExternalLinks)
-	}
-	return fields
-}
-
-// Field returns the value of a field with the given name. The second boolean
-// return value indicates that this field was not set, or was not defined in the
-// schema.
-func (m *LibraryMutation) Field(name string) (ent.Value, bool) {
-	switch name {
-	case library.FieldCreatedAt:
-		return m.CreatedAt()
-	case library.FieldCreatedBy:
-		return m.CreatedBy()
-	case library.FieldUpdatedAt:
-		return m.UpdatedAt()
-	case library.FieldUpdatedBy:
-		return m.UpdatedBy()
-	case library.FieldAbbreviation:
-		return m.Abbreviation()
-	case library.FieldDisplayName:
-		return m.DisplayName()
-	case library.FieldDescription:
-		return m.Description()
-	case library.FieldExternalLinks:
-		return m.ExternalLinks()
-	}
-	return nil, false
-}
-
-// OldField returns the old value of the field from the database. An error is
-// returned if the mutation operation is not UpdateOne, or the query to the
-// database failed.
-func (m *LibraryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
-	switch name {
-	case library.FieldCreatedAt:
-		return m.OldCreatedAt(ctx)
-	case library.FieldCreatedBy:
-		return m.OldCreatedBy(ctx)
-	case library.FieldUpdatedAt:
-		return m.OldUpdatedAt(ctx)
-	case library.FieldUpdatedBy:
-		return m.OldUpdatedBy(ctx)
-	case library.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
-	case library.FieldDisplayName:
-		return m.OldDisplayName(ctx)
-	case library.FieldDescription:
-		return m.OldDescription(ctx)
-	case library.FieldExternalLinks:
-		return m.OldExternalLinks(ctx)
-	}
-	return nil, fmt.Errorf("unknown Library field %s", name)
-}
-
-// SetField sets the value of a field with the given name. It returns an error if
-// the field is not defined in the schema, or if the type mismatched the field
-// type.
-func (m *LibraryMutation) SetField(name string, value ent.Value) error {
-	switch name {
-	case library.FieldCreatedAt:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCreatedAt(v)
-		return nil
-	case library.FieldCreatedBy:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCreatedBy(v)
-		return nil
-	case library.FieldUpdatedAt:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUpdatedAt(v)
-		return nil
-	case library.FieldUpdatedBy:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUpdatedBy(v)
-		return nil
-	case library.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
-	case library.FieldDisplayName:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetDisplayName(v)
-		return nil
-	case library.FieldDescription:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetDescription(v)
-		return nil
-	case library.FieldExternalLinks:
-		v, ok := value.([]string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetExternalLinks(v)
-		return nil
-	}
-	return fmt.Errorf("unknown Library field %s", name)
-}
-
-// AddedFields returns all numeric fields that were incremented/decremented during
-// this mutation.
-func (m *LibraryMutation) AddedFields() []string {
-	return nil
-}
-
-// AddedField returns the numeric value that was incremented/decremented on a field
-// with the given name. The second boolean return value indicates that this field
-// was not set, or was not defined in the schema.
-func (m *LibraryMutation) AddedField(name string) (ent.Value, bool) {
-	return nil, false
-}
-
-// AddField adds the value to the field with the given name. It returns an error if
-// the field is not defined in the schema, or if the type mismatched the field
-// type.
-func (m *LibraryMutation) AddField(name string, value ent.Value) error {
-	switch name {
-	}
-	return fmt.Errorf("unknown Library numeric field %s", name)
-}
-
-// ClearedFields returns all nullable fields that were cleared during this
-// mutation.
-func (m *LibraryMutation) ClearedFields() []string {
-	var fields []string
-	if m.FieldCleared(library.FieldCreatedBy) {
-		fields = append(fields, library.FieldCreatedBy)
-	}
-	if m.FieldCleared(library.FieldUpdatedBy) {
-		fields = append(fields, library.FieldUpdatedBy)
-	}
-	if m.FieldCleared(library.FieldAbbreviation) {
-		fields = append(fields, library.FieldAbbreviation)
-	}
-	if m.FieldCleared(library.FieldDisplayName) {
-		fields = append(fields, library.FieldDisplayName)
-	}
-	if m.FieldCleared(library.FieldDescription) {
-		fields = append(fields, library.FieldDescription)
-	}
-	if m.FieldCleared(library.FieldExternalLinks) {
-		fields = append(fields, library.FieldExternalLinks)
-	}
-	return fields
-}
-
-// FieldCleared returns a boolean indicating if a field with the given name was
-// cleared in this mutation.
-func (m *LibraryMutation) FieldCleared(name string) bool {
-	_, ok := m.clearedFields[name]
-	return ok
-}
-
-// ClearField clears the value of the field with the given name. It returns an
-// error if the field is not defined in the schema.
-func (m *LibraryMutation) ClearField(name string) error {
-	switch name {
-	case library.FieldCreatedBy:
-		m.ClearCreatedBy()
-		return nil
-	case library.FieldUpdatedBy:
-		m.ClearUpdatedBy()
-		return nil
-	case library.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
-	case library.FieldDisplayName:
-		m.ClearDisplayName()
-		return nil
-	case library.FieldDescription:
-		m.ClearDescription()
-		return nil
-	case library.FieldExternalLinks:
-		m.ClearExternalLinks()
-		return nil
-	}
-	return fmt.Errorf("unknown Library nullable field %s", name)
-}
-
-// ResetField resets all changes in the mutation for the field with the given name.
-// It returns an error if the field is not defined in the schema.
-func (m *LibraryMutation) ResetField(name string) error {
-	switch name {
-	case library.FieldCreatedAt:
-		m.ResetCreatedAt()
-		return nil
-	case library.FieldCreatedBy:
-		m.ResetCreatedBy()
-		return nil
-	case library.FieldUpdatedAt:
-		m.ResetUpdatedAt()
-		return nil
-	case library.FieldUpdatedBy:
-		m.ResetUpdatedBy()
-		return nil
-	case library.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
-	case library.FieldDisplayName:
-		m.ResetDisplayName()
-		return nil
-	case library.FieldDescription:
-		m.ResetDescription()
-		return nil
-	case library.FieldExternalLinks:
-		m.ResetExternalLinks()
-		return nil
-	}
-	return fmt.Errorf("unknown Library field %s", name)
-}
-
-// AddedEdges returns all edge names that were set/added in this mutation.
-func (m *LibraryMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.books != nil {
-		edges = append(edges, library.EdgeBooks)
-	}
-	return edges
-}
-
-// AddedIDs returns all IDs (to other nodes) that were added for the given edge
-// name in this mutation.
-func (m *LibraryMutation) AddedIDs(name string) []ent.Value {
-	switch name {
-	case library.EdgeBooks:
-		ids := make([]ent.Value, 0, len(m.books))
-		for id := range m.books {
-			ids = append(ids, id)
-		}
-		return ids
-	}
-	return nil
-}
-
-// RemovedEdges returns all edge names that were removed in this mutation.
-func (m *LibraryMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.removedbooks != nil {
-		edges = append(edges, library.EdgeBooks)
-	}
-	return edges
-}
-
-// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
-// the given name in this mutation.
-func (m *LibraryMutation) RemovedIDs(name string) []ent.Value {
-	switch name {
-	case library.EdgeBooks:
-		ids := make([]ent.Value, 0, len(m.removedbooks))
-		for id := range m.removedbooks {
-			ids = append(ids, id)
-		}
-		return ids
-	}
-	return nil
-}
-
-// ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *LibraryMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.clearedbooks {
-		edges = append(edges, library.EdgeBooks)
-	}
-	return edges
-}
-
-// EdgeCleared returns a boolean which indicates if the edge with the given name
-// was cleared in this mutation.
-func (m *LibraryMutation) EdgeCleared(name string) bool {
-	switch name {
-	case library.EdgeBooks:
-		return m.clearedbooks
-	}
-	return false
-}
-
-// ClearEdge clears the value of the edge with the given name. It returns an error
-// if that edge is not defined in the schema.
-func (m *LibraryMutation) ClearEdge(name string) error {
-	switch name {
-	}
-	return fmt.Errorf("unknown Library unique edge %s", name)
-}
-
-// ResetEdge resets all changes to the edge with the given name in this mutation.
-// It returns an error if the edge is not defined in the schema.
-func (m *LibraryMutation) ResetEdge(name string) error {
-	switch name {
-	case library.EdgeBooks:
-		m.ResetBooks()
-		return nil
-	}
-	return fmt.Errorf("unknown Library edge %s", name)
-}
-
 // LicenseMutation represents an operation that mutates the License nodes in the graph.
 type LicenseMutation struct {
 	config
@@ -16258,8 +15325,8 @@ type LicenseMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -16543,55 +15610,6 @@ func (m *LicenseMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, license.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *LicenseMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *LicenseMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the License entity.
-// If the License object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *LicenseMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *LicenseMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[license.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *LicenseMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[license.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *LicenseMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, license.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *LicenseMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -16639,6 +15657,55 @@ func (m *LicenseMutation) DisplayNameCleared() bool {
 func (m *LicenseMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, license.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *LicenseMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *LicenseMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the License entity.
+// If the License object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LicenseMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *LicenseMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[license.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *LicenseMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[license.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *LicenseMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, license.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -16910,11 +15977,11 @@ func (m *LicenseMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, license.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, license.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, license.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, license.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, license.FieldDescription)
@@ -16938,10 +16005,10 @@ func (m *LicenseMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case license.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case license.FieldAbbreviation:
-		return m.Abbreviation()
 	case license.FieldDisplayName:
 		return m.DisplayName()
+	case license.FieldAbbreviation:
+		return m.Abbreviation()
 	case license.FieldDescription:
 		return m.Description()
 	case license.FieldExternalLinks:
@@ -16963,10 +16030,10 @@ func (m *LicenseMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldUpdatedAt(ctx)
 	case license.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case license.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case license.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case license.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case license.FieldDescription:
 		return m.OldDescription(ctx)
 	case license.FieldExternalLinks:
@@ -17008,19 +16075,19 @@ func (m *LicenseMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case license.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case license.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case license.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case license.FieldDescription:
 		v, ok := value.(string)
@@ -17072,11 +16139,11 @@ func (m *LicenseMutation) ClearedFields() []string {
 	if m.FieldCleared(license.FieldUpdatedBy) {
 		fields = append(fields, license.FieldUpdatedBy)
 	}
-	if m.FieldCleared(license.FieldAbbreviation) {
-		fields = append(fields, license.FieldAbbreviation)
-	}
 	if m.FieldCleared(license.FieldDisplayName) {
 		fields = append(fields, license.FieldDisplayName)
+	}
+	if m.FieldCleared(license.FieldAbbreviation) {
+		fields = append(fields, license.FieldAbbreviation)
 	}
 	if m.FieldCleared(license.FieldDescription) {
 		fields = append(fields, license.FieldDescription)
@@ -17104,11 +16171,11 @@ func (m *LicenseMutation) ClearField(name string) error {
 	case license.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case license.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case license.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case license.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case license.FieldDescription:
 		m.ClearDescription()
@@ -17136,11 +16203,11 @@ func (m *LicenseMutation) ResetField(name string) error {
 	case license.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case license.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case license.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case license.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case license.FieldDescription:
 		m.ResetDescription()
@@ -17272,8 +16339,8 @@ type LocationMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -17562,55 +16629,6 @@ func (m *LocationMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, location.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *LocationMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *LocationMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the Location entity.
-// If the Location object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *LocationMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *LocationMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[location.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *LocationMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[location.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *LocationMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, location.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *LocationMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -17658,6 +16676,55 @@ func (m *LocationMutation) DisplayNameCleared() bool {
 func (m *LocationMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, location.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *LocationMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *LocationMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Location entity.
+// If the Location object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LocationMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *LocationMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[location.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *LocationMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[location.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *LocationMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, location.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -18031,11 +17098,11 @@ func (m *LocationMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, location.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, location.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, location.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, location.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, location.FieldDescription)
@@ -18059,10 +17126,10 @@ func (m *LocationMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case location.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case location.FieldAbbreviation:
-		return m.Abbreviation()
 	case location.FieldDisplayName:
 		return m.DisplayName()
+	case location.FieldAbbreviation:
+		return m.Abbreviation()
 	case location.FieldDescription:
 		return m.Description()
 	case location.FieldExternalLinks:
@@ -18084,10 +17151,10 @@ func (m *LocationMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldUpdatedAt(ctx)
 	case location.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case location.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case location.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case location.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case location.FieldDescription:
 		return m.OldDescription(ctx)
 	case location.FieldExternalLinks:
@@ -18129,19 +17196,19 @@ func (m *LocationMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case location.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case location.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case location.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case location.FieldDescription:
 		v, ok := value.(string)
@@ -18193,11 +17260,11 @@ func (m *LocationMutation) ClearedFields() []string {
 	if m.FieldCleared(location.FieldUpdatedBy) {
 		fields = append(fields, location.FieldUpdatedBy)
 	}
-	if m.FieldCleared(location.FieldAbbreviation) {
-		fields = append(fields, location.FieldAbbreviation)
-	}
 	if m.FieldCleared(location.FieldDisplayName) {
 		fields = append(fields, location.FieldDisplayName)
+	}
+	if m.FieldCleared(location.FieldAbbreviation) {
+		fields = append(fields, location.FieldAbbreviation)
 	}
 	if m.FieldCleared(location.FieldDescription) {
 		fields = append(fields, location.FieldDescription)
@@ -18225,11 +17292,11 @@ func (m *LocationMutation) ClearField(name string) error {
 	case location.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case location.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case location.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case location.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case location.FieldDescription:
 		m.ClearDescription()
@@ -18257,11 +17324,11 @@ func (m *LocationMutation) ResetField(name string) error {
 	case location.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case location.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case location.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case location.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case location.FieldDescription:
 		m.ResetDescription()
@@ -18439,8 +17506,8 @@ type MediumMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -18721,55 +17788,6 @@ func (m *MediumMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, medium.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *MediumMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *MediumMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the Medium entity.
-// If the Medium object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MediumMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *MediumMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[medium.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *MediumMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[medium.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *MediumMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, medium.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *MediumMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -18817,6 +17835,55 @@ func (m *MediumMutation) DisplayNameCleared() bool {
 func (m *MediumMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, medium.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *MediumMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *MediumMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Medium entity.
+// If the Medium object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MediumMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *MediumMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[medium.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *MediumMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[medium.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *MediumMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, medium.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -19034,11 +18101,11 @@ func (m *MediumMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, medium.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, medium.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, medium.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, medium.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, medium.FieldDescription)
@@ -19062,10 +18129,10 @@ func (m *MediumMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case medium.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case medium.FieldAbbreviation:
-		return m.Abbreviation()
 	case medium.FieldDisplayName:
 		return m.DisplayName()
+	case medium.FieldAbbreviation:
+		return m.Abbreviation()
 	case medium.FieldDescription:
 		return m.Description()
 	case medium.FieldExternalLinks:
@@ -19087,10 +18154,10 @@ func (m *MediumMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldUpdatedAt(ctx)
 	case medium.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case medium.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case medium.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case medium.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case medium.FieldDescription:
 		return m.OldDescription(ctx)
 	case medium.FieldExternalLinks:
@@ -19132,19 +18199,19 @@ func (m *MediumMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case medium.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case medium.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case medium.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case medium.FieldDescription:
 		v, ok := value.(string)
@@ -19196,11 +18263,11 @@ func (m *MediumMutation) ClearedFields() []string {
 	if m.FieldCleared(medium.FieldUpdatedBy) {
 		fields = append(fields, medium.FieldUpdatedBy)
 	}
-	if m.FieldCleared(medium.FieldAbbreviation) {
-		fields = append(fields, medium.FieldAbbreviation)
-	}
 	if m.FieldCleared(medium.FieldDisplayName) {
 		fields = append(fields, medium.FieldDisplayName)
+	}
+	if m.FieldCleared(medium.FieldAbbreviation) {
+		fields = append(fields, medium.FieldAbbreviation)
 	}
 	if m.FieldCleared(medium.FieldDescription) {
 		fields = append(fields, medium.FieldDescription)
@@ -19228,11 +18295,11 @@ func (m *MediumMutation) ClearField(name string) error {
 	case medium.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case medium.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case medium.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case medium.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case medium.FieldDescription:
 		m.ClearDescription()
@@ -19260,11 +18327,11 @@ func (m *MediumMutation) ResetField(name string) error {
 	case medium.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case medium.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case medium.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case medium.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case medium.FieldDescription:
 		m.ResetDescription()
@@ -19370,8 +18437,8 @@ type ModelMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -19652,55 +18719,6 @@ func (m *ModelMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, model.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *ModelMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *ModelMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the Model entity.
-// If the Model object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ModelMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *ModelMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[model.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *ModelMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[model.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *ModelMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, model.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *ModelMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -19748,6 +18766,55 @@ func (m *ModelMutation) DisplayNameCleared() bool {
 func (m *ModelMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, model.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *ModelMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *ModelMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Model entity.
+// If the Model object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ModelMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *ModelMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[model.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *ModelMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[model.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *ModelMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, model.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -19965,11 +19032,11 @@ func (m *ModelMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, model.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, model.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, model.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, model.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, model.FieldDescription)
@@ -19993,10 +19060,10 @@ func (m *ModelMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case model.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case model.FieldAbbreviation:
-		return m.Abbreviation()
 	case model.FieldDisplayName:
 		return m.DisplayName()
+	case model.FieldAbbreviation:
+		return m.Abbreviation()
 	case model.FieldDescription:
 		return m.Description()
 	case model.FieldExternalLinks:
@@ -20018,10 +19085,10 @@ func (m *ModelMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldUpdatedAt(ctx)
 	case model.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case model.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case model.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case model.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case model.FieldDescription:
 		return m.OldDescription(ctx)
 	case model.FieldExternalLinks:
@@ -20063,19 +19130,19 @@ func (m *ModelMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case model.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case model.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case model.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case model.FieldDescription:
 		v, ok := value.(string)
@@ -20127,11 +19194,11 @@ func (m *ModelMutation) ClearedFields() []string {
 	if m.FieldCleared(model.FieldUpdatedBy) {
 		fields = append(fields, model.FieldUpdatedBy)
 	}
-	if m.FieldCleared(model.FieldAbbreviation) {
-		fields = append(fields, model.FieldAbbreviation)
-	}
 	if m.FieldCleared(model.FieldDisplayName) {
 		fields = append(fields, model.FieldDisplayName)
+	}
+	if m.FieldCleared(model.FieldAbbreviation) {
+		fields = append(fields, model.FieldAbbreviation)
 	}
 	if m.FieldCleared(model.FieldDescription) {
 		fields = append(fields, model.FieldDescription)
@@ -20159,11 +19226,11 @@ func (m *ModelMutation) ClearField(name string) error {
 	case model.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case model.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case model.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case model.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case model.FieldDescription:
 		m.ClearDescription()
@@ -20191,11 +19258,11 @@ func (m *ModelMutation) ResetField(name string) error {
 	case model.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case model.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case model.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case model.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case model.FieldDescription:
 		m.ResetDescription()
@@ -20301,8 +19368,8 @@ type MonumentMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -20586,55 +19653,6 @@ func (m *MonumentMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, monument.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *MonumentMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *MonumentMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the Monument entity.
-// If the Monument object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MonumentMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *MonumentMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[monument.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *MonumentMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[monument.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *MonumentMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, monument.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *MonumentMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -20682,6 +19700,55 @@ func (m *MonumentMutation) DisplayNameCleared() bool {
 func (m *MonumentMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, monument.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *MonumentMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *MonumentMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Monument entity.
+// If the Monument object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MonumentMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *MonumentMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[monument.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *MonumentMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[monument.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *MonumentMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, monument.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -20953,11 +20020,11 @@ func (m *MonumentMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, monument.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, monument.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, monument.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, monument.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, monument.FieldDescription)
@@ -20981,10 +20048,10 @@ func (m *MonumentMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case monument.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case monument.FieldAbbreviation:
-		return m.Abbreviation()
 	case monument.FieldDisplayName:
 		return m.DisplayName()
+	case monument.FieldAbbreviation:
+		return m.Abbreviation()
 	case monument.FieldDescription:
 		return m.Description()
 	case monument.FieldExternalLinks:
@@ -21006,10 +20073,10 @@ func (m *MonumentMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldUpdatedAt(ctx)
 	case monument.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case monument.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case monument.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case monument.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case monument.FieldDescription:
 		return m.OldDescription(ctx)
 	case monument.FieldExternalLinks:
@@ -21051,19 +20118,19 @@ func (m *MonumentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case monument.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case monument.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case monument.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case monument.FieldDescription:
 		v, ok := value.(string)
@@ -21115,11 +20182,11 @@ func (m *MonumentMutation) ClearedFields() []string {
 	if m.FieldCleared(monument.FieldUpdatedBy) {
 		fields = append(fields, monument.FieldUpdatedBy)
 	}
-	if m.FieldCleared(monument.FieldAbbreviation) {
-		fields = append(fields, monument.FieldAbbreviation)
-	}
 	if m.FieldCleared(monument.FieldDisplayName) {
 		fields = append(fields, monument.FieldDisplayName)
+	}
+	if m.FieldCleared(monument.FieldAbbreviation) {
+		fields = append(fields, monument.FieldAbbreviation)
 	}
 	if m.FieldCleared(monument.FieldDescription) {
 		fields = append(fields, monument.FieldDescription)
@@ -21147,11 +20214,11 @@ func (m *MonumentMutation) ClearField(name string) error {
 	case monument.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case monument.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case monument.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case monument.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case monument.FieldDescription:
 		m.ClearDescription()
@@ -21179,11 +20246,11 @@ func (m *MonumentMutation) ResetField(name string) error {
 	case monument.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case monument.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case monument.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case monument.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case monument.FieldDescription:
 		m.ResetDescription()
@@ -21320,8 +20387,8 @@ type OrganizationMutation struct {
 	appendphone_numbers          []string
 	emails                       *[]string
 	appendemails                 []string
-	abbreviation                 *string
 	display_name                 *string
+	abbreviation                 *string
 	description                  *string
 	external_links               *[]string
 	appendexternal_links         []string
@@ -21792,55 +20859,6 @@ func (m *OrganizationMutation) ResetEmails() {
 	delete(m.clearedFields, organization.FieldEmails)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *OrganizationMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *OrganizationMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the Organization entity.
-// If the Organization object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *OrganizationMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *OrganizationMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[organization.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *OrganizationMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[organization.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *OrganizationMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, organization.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *OrganizationMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -21888,6 +20906,55 @@ func (m *OrganizationMutation) DisplayNameCleared() bool {
 func (m *OrganizationMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, organization.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *OrganizationMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *OrganizationMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Organization entity.
+// If the Organization object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *OrganizationMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[organization.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *OrganizationMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[organization.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *OrganizationMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, organization.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -22469,11 +21536,11 @@ func (m *OrganizationMutation) Fields() []string {
 	if m.emails != nil {
 		fields = append(fields, organization.FieldEmails)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, organization.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, organization.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, organization.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, organization.FieldDescription)
@@ -22518,10 +21585,10 @@ func (m *OrganizationMutation) Field(name string) (ent.Value, bool) {
 		return m.PhoneNumbers()
 	case organization.FieldEmails:
 		return m.Emails()
-	case organization.FieldAbbreviation:
-		return m.Abbreviation()
 	case organization.FieldDisplayName:
 		return m.DisplayName()
+	case organization.FieldAbbreviation:
+		return m.Abbreviation()
 	case organization.FieldDescription:
 		return m.Description()
 	case organization.FieldExternalLinks:
@@ -22559,10 +21626,10 @@ func (m *OrganizationMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldPhoneNumbers(ctx)
 	case organization.FieldEmails:
 		return m.OldEmails(ctx)
-	case organization.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case organization.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case organization.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case organization.FieldDescription:
 		return m.OldDescription(ctx)
 	case organization.FieldExternalLinks:
@@ -22635,19 +21702,19 @@ func (m *OrganizationMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetEmails(v)
 		return nil
-	case organization.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case organization.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case organization.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case organization.FieldDescription:
 		v, ok := value.(string)
@@ -22743,11 +21810,11 @@ func (m *OrganizationMutation) ClearedFields() []string {
 	if m.FieldCleared(organization.FieldEmails) {
 		fields = append(fields, organization.FieldEmails)
 	}
-	if m.FieldCleared(organization.FieldAbbreviation) {
-		fields = append(fields, organization.FieldAbbreviation)
-	}
 	if m.FieldCleared(organization.FieldDisplayName) {
 		fields = append(fields, organization.FieldDisplayName)
+	}
+	if m.FieldCleared(organization.FieldAbbreviation) {
+		fields = append(fields, organization.FieldAbbreviation)
 	}
 	if m.FieldCleared(organization.FieldDescription) {
 		fields = append(fields, organization.FieldDescription)
@@ -22799,11 +21866,11 @@ func (m *OrganizationMutation) ClearField(name string) error {
 	case organization.FieldEmails:
 		m.ClearEmails()
 		return nil
-	case organization.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case organization.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case organization.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case organization.FieldDescription:
 		m.ClearDescription()
@@ -22855,11 +21922,11 @@ func (m *OrganizationMutation) ResetField(name string) error {
 	case organization.FieldEmails:
 		m.ResetEmails()
 		return nil
-	case organization.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case organization.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case organization.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case organization.FieldDescription:
 		m.ResetDescription()
@@ -23016,8 +22083,8 @@ type OrganizationTypeMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -23298,55 +22365,6 @@ func (m *OrganizationTypeMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, organizationtype.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *OrganizationTypeMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *OrganizationTypeMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the OrganizationType entity.
-// If the OrganizationType object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *OrganizationTypeMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *OrganizationTypeMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[organizationtype.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *OrganizationTypeMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[organizationtype.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *OrganizationTypeMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, organizationtype.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *OrganizationTypeMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -23394,6 +22412,55 @@ func (m *OrganizationTypeMutation) DisplayNameCleared() bool {
 func (m *OrganizationTypeMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, organizationtype.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *OrganizationTypeMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *OrganizationTypeMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the OrganizationType entity.
+// If the OrganizationType object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationTypeMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *OrganizationTypeMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[organizationtype.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *OrganizationTypeMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[organizationtype.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *OrganizationTypeMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, organizationtype.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -23611,11 +22678,11 @@ func (m *OrganizationTypeMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, organizationtype.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, organizationtype.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, organizationtype.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, organizationtype.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, organizationtype.FieldDescription)
@@ -23639,10 +22706,10 @@ func (m *OrganizationTypeMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case organizationtype.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case organizationtype.FieldAbbreviation:
-		return m.Abbreviation()
 	case organizationtype.FieldDisplayName:
 		return m.DisplayName()
+	case organizationtype.FieldAbbreviation:
+		return m.Abbreviation()
 	case organizationtype.FieldDescription:
 		return m.Description()
 	case organizationtype.FieldExternalLinks:
@@ -23664,10 +22731,10 @@ func (m *OrganizationTypeMutation) OldField(ctx context.Context, name string) (e
 		return m.OldUpdatedAt(ctx)
 	case organizationtype.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case organizationtype.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case organizationtype.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case organizationtype.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case organizationtype.FieldDescription:
 		return m.OldDescription(ctx)
 	case organizationtype.FieldExternalLinks:
@@ -23709,19 +22776,19 @@ func (m *OrganizationTypeMutation) SetField(name string, value ent.Value) error 
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case organizationtype.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case organizationtype.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case organizationtype.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case organizationtype.FieldDescription:
 		v, ok := value.(string)
@@ -23773,11 +22840,11 @@ func (m *OrganizationTypeMutation) ClearedFields() []string {
 	if m.FieldCleared(organizationtype.FieldUpdatedBy) {
 		fields = append(fields, organizationtype.FieldUpdatedBy)
 	}
-	if m.FieldCleared(organizationtype.FieldAbbreviation) {
-		fields = append(fields, organizationtype.FieldAbbreviation)
-	}
 	if m.FieldCleared(organizationtype.FieldDisplayName) {
 		fields = append(fields, organizationtype.FieldDisplayName)
+	}
+	if m.FieldCleared(organizationtype.FieldAbbreviation) {
+		fields = append(fields, organizationtype.FieldAbbreviation)
 	}
 	if m.FieldCleared(organizationtype.FieldDescription) {
 		fields = append(fields, organizationtype.FieldDescription)
@@ -23805,11 +22872,11 @@ func (m *OrganizationTypeMutation) ClearField(name string) error {
 	case organizationtype.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case organizationtype.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case organizationtype.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case organizationtype.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case organizationtype.FieldDescription:
 		m.ClearDescription()
@@ -23837,11 +22904,11 @@ func (m *OrganizationTypeMutation) ResetField(name string) error {
 	case organizationtype.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case organizationtype.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case organizationtype.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case organizationtype.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case organizationtype.FieldDescription:
 		m.ResetDescription()
@@ -23947,8 +23014,8 @@ type PeriodMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -24229,55 +23296,6 @@ func (m *PeriodMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, period.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *PeriodMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *PeriodMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the Period entity.
-// If the Period object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PeriodMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *PeriodMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[period.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *PeriodMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[period.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *PeriodMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, period.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *PeriodMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -24325,6 +23343,55 @@ func (m *PeriodMutation) DisplayNameCleared() bool {
 func (m *PeriodMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, period.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *PeriodMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *PeriodMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Period entity.
+// If the Period object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PeriodMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *PeriodMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[period.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *PeriodMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[period.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *PeriodMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, period.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -24542,11 +23609,11 @@ func (m *PeriodMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, period.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, period.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, period.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, period.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, period.FieldDescription)
@@ -24570,10 +23637,10 @@ func (m *PeriodMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case period.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case period.FieldAbbreviation:
-		return m.Abbreviation()
 	case period.FieldDisplayName:
 		return m.DisplayName()
+	case period.FieldAbbreviation:
+		return m.Abbreviation()
 	case period.FieldDescription:
 		return m.Description()
 	case period.FieldExternalLinks:
@@ -24595,10 +23662,10 @@ func (m *PeriodMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldUpdatedAt(ctx)
 	case period.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case period.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case period.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case period.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case period.FieldDescription:
 		return m.OldDescription(ctx)
 	case period.FieldExternalLinks:
@@ -24640,19 +23707,19 @@ func (m *PeriodMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case period.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case period.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case period.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case period.FieldDescription:
 		v, ok := value.(string)
@@ -24704,11 +23771,11 @@ func (m *PeriodMutation) ClearedFields() []string {
 	if m.FieldCleared(period.FieldUpdatedBy) {
 		fields = append(fields, period.FieldUpdatedBy)
 	}
-	if m.FieldCleared(period.FieldAbbreviation) {
-		fields = append(fields, period.FieldAbbreviation)
-	}
 	if m.FieldCleared(period.FieldDisplayName) {
 		fields = append(fields, period.FieldDisplayName)
+	}
+	if m.FieldCleared(period.FieldAbbreviation) {
+		fields = append(fields, period.FieldAbbreviation)
 	}
 	if m.FieldCleared(period.FieldDescription) {
 		fields = append(fields, period.FieldDescription)
@@ -24736,11 +23803,11 @@ func (m *PeriodMutation) ClearField(name string) error {
 	case period.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case period.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case period.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case period.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case period.FieldDescription:
 		m.ClearDescription()
@@ -24768,11 +23835,11 @@ func (m *PeriodMutation) ResetField(name string) error {
 	case period.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case period.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case period.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case period.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case period.FieldDescription:
 		m.ResetDescription()
@@ -24883,8 +23950,8 @@ type PersonMutation struct {
 	appendphone_numbers          []string
 	emails                       *[]string
 	appendemails                 []string
-	abbreviation                 *string
 	display_name                 *string
+	abbreviation                 *string
 	description                  *string
 	external_links               *[]string
 	appendexternal_links         []string
@@ -25371,55 +24438,6 @@ func (m *PersonMutation) ResetEmails() {
 	delete(m.clearedFields, person.FieldEmails)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *PersonMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *PersonMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the Person entity.
-// If the Person object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PersonMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *PersonMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[person.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *PersonMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[person.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *PersonMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, person.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *PersonMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -25467,6 +24485,55 @@ func (m *PersonMutation) DisplayNameCleared() bool {
 func (m *PersonMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, person.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *PersonMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *PersonMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Person entity.
+// If the Person object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *PersonMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[person.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *PersonMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[person.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *PersonMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, person.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -26421,11 +25488,11 @@ func (m *PersonMutation) Fields() []string {
 	if m.emails != nil {
 		fields = append(fields, person.FieldEmails)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, person.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, person.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, person.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, person.FieldDescription)
@@ -26479,10 +25546,10 @@ func (m *PersonMutation) Field(name string) (ent.Value, bool) {
 		return m.PhoneNumbers()
 	case person.FieldEmails:
 		return m.Emails()
-	case person.FieldAbbreviation:
-		return m.Abbreviation()
 	case person.FieldDisplayName:
 		return m.DisplayName()
+	case person.FieldAbbreviation:
+		return m.Abbreviation()
 	case person.FieldDescription:
 		return m.Description()
 	case person.FieldExternalLinks:
@@ -26526,10 +25593,10 @@ func (m *PersonMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldPhoneNumbers(ctx)
 	case person.FieldEmails:
 		return m.OldEmails(ctx)
-	case person.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case person.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case person.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case person.FieldDescription:
 		return m.OldDescription(ctx)
 	case person.FieldExternalLinks:
@@ -26608,19 +25675,19 @@ func (m *PersonMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetEmails(v)
 		return nil
-	case person.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case person.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case person.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case person.FieldDescription:
 		v, ok := value.(string)
@@ -26737,11 +25804,11 @@ func (m *PersonMutation) ClearedFields() []string {
 	if m.FieldCleared(person.FieldEmails) {
 		fields = append(fields, person.FieldEmails)
 	}
-	if m.FieldCleared(person.FieldAbbreviation) {
-		fields = append(fields, person.FieldAbbreviation)
-	}
 	if m.FieldCleared(person.FieldDisplayName) {
 		fields = append(fields, person.FieldDisplayName)
+	}
+	if m.FieldCleared(person.FieldAbbreviation) {
+		fields = append(fields, person.FieldAbbreviation)
 	}
 	if m.FieldCleared(person.FieldDescription) {
 		fields = append(fields, person.FieldDescription)
@@ -26799,11 +25866,11 @@ func (m *PersonMutation) ClearField(name string) error {
 	case person.FieldEmails:
 		m.ClearEmails()
 		return nil
-	case person.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case person.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case person.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case person.FieldDescription:
 		m.ClearDescription()
@@ -26861,11 +25928,11 @@ func (m *PersonMutation) ResetField(name string) error {
 	case person.FieldEmails:
 		m.ResetEmails()
 		return nil
-	case person.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case person.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case person.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case person.FieldDescription:
 		m.ResetDescription()
@@ -27153,8 +26220,8 @@ type PersonRoleMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -27435,55 +26502,6 @@ func (m *PersonRoleMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, personrole.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *PersonRoleMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *PersonRoleMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the PersonRole entity.
-// If the PersonRole object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PersonRoleMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *PersonRoleMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[personrole.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *PersonRoleMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[personrole.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *PersonRoleMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, personrole.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *PersonRoleMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -27531,6 +26549,55 @@ func (m *PersonRoleMutation) DisplayNameCleared() bool {
 func (m *PersonRoleMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, personrole.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *PersonRoleMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *PersonRoleMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the PersonRole entity.
+// If the PersonRole object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonRoleMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *PersonRoleMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[personrole.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *PersonRoleMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[personrole.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *PersonRoleMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, personrole.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -27748,11 +26815,11 @@ func (m *PersonRoleMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, personrole.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, personrole.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, personrole.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, personrole.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, personrole.FieldDescription)
@@ -27776,10 +26843,10 @@ func (m *PersonRoleMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case personrole.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case personrole.FieldAbbreviation:
-		return m.Abbreviation()
 	case personrole.FieldDisplayName:
 		return m.DisplayName()
+	case personrole.FieldAbbreviation:
+		return m.Abbreviation()
 	case personrole.FieldDescription:
 		return m.Description()
 	case personrole.FieldExternalLinks:
@@ -27801,10 +26868,10 @@ func (m *PersonRoleMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldUpdatedAt(ctx)
 	case personrole.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case personrole.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case personrole.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case personrole.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case personrole.FieldDescription:
 		return m.OldDescription(ctx)
 	case personrole.FieldExternalLinks:
@@ -27846,19 +26913,19 @@ func (m *PersonRoleMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case personrole.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case personrole.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case personrole.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case personrole.FieldDescription:
 		v, ok := value.(string)
@@ -27910,11 +26977,11 @@ func (m *PersonRoleMutation) ClearedFields() []string {
 	if m.FieldCleared(personrole.FieldUpdatedBy) {
 		fields = append(fields, personrole.FieldUpdatedBy)
 	}
-	if m.FieldCleared(personrole.FieldAbbreviation) {
-		fields = append(fields, personrole.FieldAbbreviation)
-	}
 	if m.FieldCleared(personrole.FieldDisplayName) {
 		fields = append(fields, personrole.FieldDisplayName)
+	}
+	if m.FieldCleared(personrole.FieldAbbreviation) {
+		fields = append(fields, personrole.FieldAbbreviation)
 	}
 	if m.FieldCleared(personrole.FieldDescription) {
 		fields = append(fields, personrole.FieldDescription)
@@ -27942,11 +27009,11 @@ func (m *PersonRoleMutation) ClearField(name string) error {
 	case personrole.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case personrole.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case personrole.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case personrole.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case personrole.FieldDescription:
 		m.ClearDescription()
@@ -27974,11 +27041,11 @@ func (m *PersonRoleMutation) ResetField(name string) error {
 	case personrole.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case personrole.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case personrole.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case personrole.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case personrole.FieldDescription:
 		m.ResetDescription()
@@ -28084,8 +27151,8 @@ type ProjectMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -28373,55 +27440,6 @@ func (m *ProjectMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, project.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *ProjectMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *ProjectMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the Project entity.
-// If the Project object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProjectMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *ProjectMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[project.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *ProjectMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[project.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *ProjectMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, project.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *ProjectMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -28469,6 +27487,55 @@ func (m *ProjectMutation) DisplayNameCleared() bool {
 func (m *ProjectMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, project.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *ProjectMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *ProjectMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Project entity.
+// If the Project object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProjectMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *ProjectMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[project.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *ProjectMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[project.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *ProjectMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, project.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -28877,11 +27944,11 @@ func (m *ProjectMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, project.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, project.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, project.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, project.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, project.FieldDescription)
@@ -28911,10 +27978,10 @@ func (m *ProjectMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case project.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case project.FieldAbbreviation:
-		return m.Abbreviation()
 	case project.FieldDisplayName:
 		return m.DisplayName()
+	case project.FieldAbbreviation:
+		return m.Abbreviation()
 	case project.FieldDescription:
 		return m.Description()
 	case project.FieldExternalLinks:
@@ -28940,10 +28007,10 @@ func (m *ProjectMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldUpdatedAt(ctx)
 	case project.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case project.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case project.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case project.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case project.FieldDescription:
 		return m.OldDescription(ctx)
 	case project.FieldExternalLinks:
@@ -28989,19 +28056,19 @@ func (m *ProjectMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case project.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case project.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case project.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case project.FieldDescription:
 		v, ok := value.(string)
@@ -29067,11 +28134,11 @@ func (m *ProjectMutation) ClearedFields() []string {
 	if m.FieldCleared(project.FieldUpdatedBy) {
 		fields = append(fields, project.FieldUpdatedBy)
 	}
-	if m.FieldCleared(project.FieldAbbreviation) {
-		fields = append(fields, project.FieldAbbreviation)
-	}
 	if m.FieldCleared(project.FieldDisplayName) {
 		fields = append(fields, project.FieldDisplayName)
+	}
+	if m.FieldCleared(project.FieldAbbreviation) {
+		fields = append(fields, project.FieldAbbreviation)
 	}
 	if m.FieldCleared(project.FieldDescription) {
 		fields = append(fields, project.FieldDescription)
@@ -29105,11 +28172,11 @@ func (m *ProjectMutation) ClearField(name string) error {
 	case project.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case project.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case project.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case project.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case project.FieldDescription:
 		m.ClearDescription()
@@ -29143,11 +28210,11 @@ func (m *ProjectMutation) ResetField(name string) error {
 	case project.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case project.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case project.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case project.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case project.FieldDescription:
 		m.ResetDescription()
@@ -29303,8 +28370,8 @@ type ProjectTypeMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -29585,55 +28652,6 @@ func (m *ProjectTypeMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, projecttype.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *ProjectTypeMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *ProjectTypeMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the ProjectType entity.
-// If the ProjectType object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProjectTypeMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *ProjectTypeMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[projecttype.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *ProjectTypeMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[projecttype.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *ProjectTypeMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, projecttype.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *ProjectTypeMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -29681,6 +28699,55 @@ func (m *ProjectTypeMutation) DisplayNameCleared() bool {
 func (m *ProjectTypeMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, projecttype.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *ProjectTypeMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *ProjectTypeMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the ProjectType entity.
+// If the ProjectType object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProjectTypeMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *ProjectTypeMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[projecttype.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *ProjectTypeMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[projecttype.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *ProjectTypeMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, projecttype.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -29898,11 +28965,11 @@ func (m *ProjectTypeMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, projecttype.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, projecttype.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, projecttype.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, projecttype.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, projecttype.FieldDescription)
@@ -29926,10 +28993,10 @@ func (m *ProjectTypeMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case projecttype.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case projecttype.FieldAbbreviation:
-		return m.Abbreviation()
 	case projecttype.FieldDisplayName:
 		return m.DisplayName()
+	case projecttype.FieldAbbreviation:
+		return m.Abbreviation()
 	case projecttype.FieldDescription:
 		return m.Description()
 	case projecttype.FieldExternalLinks:
@@ -29951,10 +29018,10 @@ func (m *ProjectTypeMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldUpdatedAt(ctx)
 	case projecttype.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case projecttype.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case projecttype.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case projecttype.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case projecttype.FieldDescription:
 		return m.OldDescription(ctx)
 	case projecttype.FieldExternalLinks:
@@ -29996,19 +29063,19 @@ func (m *ProjectTypeMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case projecttype.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case projecttype.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case projecttype.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case projecttype.FieldDescription:
 		v, ok := value.(string)
@@ -30060,11 +29127,11 @@ func (m *ProjectTypeMutation) ClearedFields() []string {
 	if m.FieldCleared(projecttype.FieldUpdatedBy) {
 		fields = append(fields, projecttype.FieldUpdatedBy)
 	}
-	if m.FieldCleared(projecttype.FieldAbbreviation) {
-		fields = append(fields, projecttype.FieldAbbreviation)
-	}
 	if m.FieldCleared(projecttype.FieldDisplayName) {
 		fields = append(fields, projecttype.FieldDisplayName)
+	}
+	if m.FieldCleared(projecttype.FieldAbbreviation) {
+		fields = append(fields, projecttype.FieldAbbreviation)
 	}
 	if m.FieldCleared(projecttype.FieldDescription) {
 		fields = append(fields, projecttype.FieldDescription)
@@ -30092,11 +29159,11 @@ func (m *ProjectTypeMutation) ClearField(name string) error {
 	case projecttype.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case projecttype.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case projecttype.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case projecttype.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case projecttype.FieldDescription:
 		m.ClearDescription()
@@ -30124,11 +29191,11 @@ func (m *ProjectTypeMutation) ResetField(name string) error {
 	case projecttype.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case projecttype.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case projecttype.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case projecttype.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case projecttype.FieldDescription:
 		m.ResetDescription()
@@ -30234,8 +29301,8 @@ type ProtectedAreaMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -30513,55 +29580,6 @@ func (m *ProtectedAreaMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, protectedarea.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *ProtectedAreaMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *ProtectedAreaMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the ProtectedArea entity.
-// If the ProtectedArea object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProtectedAreaMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *ProtectedAreaMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[protectedarea.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *ProtectedAreaMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[protectedarea.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *ProtectedAreaMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, protectedarea.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *ProtectedAreaMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -30609,6 +29627,55 @@ func (m *ProtectedAreaMutation) DisplayNameCleared() bool {
 func (m *ProtectedAreaMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, protectedarea.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *ProtectedAreaMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *ProtectedAreaMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the ProtectedArea entity.
+// If the ProtectedArea object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *ProtectedAreaMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[protectedarea.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *ProtectedAreaMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[protectedarea.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *ProtectedAreaMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, protectedarea.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -30772,11 +29839,11 @@ func (m *ProtectedAreaMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, protectedarea.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, protectedarea.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, protectedarea.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, protectedarea.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, protectedarea.FieldDescription)
@@ -30800,10 +29867,10 @@ func (m *ProtectedAreaMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case protectedarea.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case protectedarea.FieldAbbreviation:
-		return m.Abbreviation()
 	case protectedarea.FieldDisplayName:
 		return m.DisplayName()
+	case protectedarea.FieldAbbreviation:
+		return m.Abbreviation()
 	case protectedarea.FieldDescription:
 		return m.Description()
 	case protectedarea.FieldExternalLinks:
@@ -30825,10 +29892,10 @@ func (m *ProtectedAreaMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldUpdatedAt(ctx)
 	case protectedarea.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case protectedarea.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case protectedarea.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case protectedarea.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case protectedarea.FieldDescription:
 		return m.OldDescription(ctx)
 	case protectedarea.FieldExternalLinks:
@@ -30870,19 +29937,19 @@ func (m *ProtectedAreaMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case protectedarea.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case protectedarea.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case protectedarea.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case protectedarea.FieldDescription:
 		v, ok := value.(string)
@@ -30934,11 +30001,11 @@ func (m *ProtectedAreaMutation) ClearedFields() []string {
 	if m.FieldCleared(protectedarea.FieldUpdatedBy) {
 		fields = append(fields, protectedarea.FieldUpdatedBy)
 	}
-	if m.FieldCleared(protectedarea.FieldAbbreviation) {
-		fields = append(fields, protectedarea.FieldAbbreviation)
-	}
 	if m.FieldCleared(protectedarea.FieldDisplayName) {
 		fields = append(fields, protectedarea.FieldDisplayName)
+	}
+	if m.FieldCleared(protectedarea.FieldAbbreviation) {
+		fields = append(fields, protectedarea.FieldAbbreviation)
 	}
 	if m.FieldCleared(protectedarea.FieldDescription) {
 		fields = append(fields, protectedarea.FieldDescription)
@@ -30966,11 +30033,11 @@ func (m *ProtectedAreaMutation) ClearField(name string) error {
 	case protectedarea.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case protectedarea.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case protectedarea.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case protectedarea.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case protectedarea.FieldDescription:
 		m.ClearDescription()
@@ -30998,11 +30065,11 @@ func (m *ProtectedAreaMutation) ResetField(name string) error {
 	case protectedarea.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case protectedarea.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case protectedarea.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case protectedarea.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case protectedarea.FieldDescription:
 		m.ResetDescription()
@@ -31072,8 +30139,8 @@ type ProtectedAreaCategoryMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -31351,55 +30418,6 @@ func (m *ProtectedAreaCategoryMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, protectedareacategory.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *ProtectedAreaCategoryMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *ProtectedAreaCategoryMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the ProtectedAreaCategory entity.
-// If the ProtectedAreaCategory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProtectedAreaCategoryMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *ProtectedAreaCategoryMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[protectedareacategory.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *ProtectedAreaCategoryMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[protectedareacategory.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *ProtectedAreaCategoryMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, protectedareacategory.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *ProtectedAreaCategoryMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -31447,6 +30465,55 @@ func (m *ProtectedAreaCategoryMutation) DisplayNameCleared() bool {
 func (m *ProtectedAreaCategoryMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, protectedareacategory.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *ProtectedAreaCategoryMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *ProtectedAreaCategoryMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the ProtectedAreaCategory entity.
+// If the ProtectedAreaCategory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaCategoryMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *ProtectedAreaCategoryMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[protectedareacategory.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *ProtectedAreaCategoryMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[protectedareacategory.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *ProtectedAreaCategoryMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, protectedareacategory.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -31610,11 +30677,11 @@ func (m *ProtectedAreaCategoryMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, protectedareacategory.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, protectedareacategory.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, protectedareacategory.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, protectedareacategory.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, protectedareacategory.FieldDescription)
@@ -31638,10 +30705,10 @@ func (m *ProtectedAreaCategoryMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case protectedareacategory.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case protectedareacategory.FieldAbbreviation:
-		return m.Abbreviation()
 	case protectedareacategory.FieldDisplayName:
 		return m.DisplayName()
+	case protectedareacategory.FieldAbbreviation:
+		return m.Abbreviation()
 	case protectedareacategory.FieldDescription:
 		return m.Description()
 	case protectedareacategory.FieldExternalLinks:
@@ -31663,10 +30730,10 @@ func (m *ProtectedAreaCategoryMutation) OldField(ctx context.Context, name strin
 		return m.OldUpdatedAt(ctx)
 	case protectedareacategory.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case protectedareacategory.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case protectedareacategory.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case protectedareacategory.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case protectedareacategory.FieldDescription:
 		return m.OldDescription(ctx)
 	case protectedareacategory.FieldExternalLinks:
@@ -31708,19 +30775,19 @@ func (m *ProtectedAreaCategoryMutation) SetField(name string, value ent.Value) e
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case protectedareacategory.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case protectedareacategory.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case protectedareacategory.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case protectedareacategory.FieldDescription:
 		v, ok := value.(string)
@@ -31772,11 +30839,11 @@ func (m *ProtectedAreaCategoryMutation) ClearedFields() []string {
 	if m.FieldCleared(protectedareacategory.FieldUpdatedBy) {
 		fields = append(fields, protectedareacategory.FieldUpdatedBy)
 	}
-	if m.FieldCleared(protectedareacategory.FieldAbbreviation) {
-		fields = append(fields, protectedareacategory.FieldAbbreviation)
-	}
 	if m.FieldCleared(protectedareacategory.FieldDisplayName) {
 		fields = append(fields, protectedareacategory.FieldDisplayName)
+	}
+	if m.FieldCleared(protectedareacategory.FieldAbbreviation) {
+		fields = append(fields, protectedareacategory.FieldAbbreviation)
 	}
 	if m.FieldCleared(protectedareacategory.FieldDescription) {
 		fields = append(fields, protectedareacategory.FieldDescription)
@@ -31804,11 +30871,11 @@ func (m *ProtectedAreaCategoryMutation) ClearField(name string) error {
 	case protectedareacategory.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case protectedareacategory.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case protectedareacategory.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case protectedareacategory.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case protectedareacategory.FieldDescription:
 		m.ClearDescription()
@@ -31836,11 +30903,11 @@ func (m *ProtectedAreaCategoryMutation) ResetField(name string) error {
 	case protectedareacategory.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case protectedareacategory.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case protectedareacategory.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case protectedareacategory.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case protectedareacategory.FieldDescription:
 		m.ResetDescription()
@@ -31910,8 +30977,8 @@ type ProtectedAreaPictureMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -32189,55 +31256,6 @@ func (m *ProtectedAreaPictureMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, protectedareapicture.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *ProtectedAreaPictureMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *ProtectedAreaPictureMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the ProtectedAreaPicture entity.
-// If the ProtectedAreaPicture object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProtectedAreaPictureMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *ProtectedAreaPictureMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[protectedareapicture.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *ProtectedAreaPictureMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[protectedareapicture.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *ProtectedAreaPictureMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, protectedareapicture.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *ProtectedAreaPictureMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -32285,6 +31303,55 @@ func (m *ProtectedAreaPictureMutation) DisplayNameCleared() bool {
 func (m *ProtectedAreaPictureMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, protectedareapicture.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *ProtectedAreaPictureMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *ProtectedAreaPictureMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the ProtectedAreaPicture entity.
+// If the ProtectedAreaPicture object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaPictureMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *ProtectedAreaPictureMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[protectedareapicture.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *ProtectedAreaPictureMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[protectedareapicture.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *ProtectedAreaPictureMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, protectedareapicture.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -32448,11 +31515,11 @@ func (m *ProtectedAreaPictureMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, protectedareapicture.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, protectedareapicture.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, protectedareapicture.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, protectedareapicture.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, protectedareapicture.FieldDescription)
@@ -32476,10 +31543,10 @@ func (m *ProtectedAreaPictureMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case protectedareapicture.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case protectedareapicture.FieldAbbreviation:
-		return m.Abbreviation()
 	case protectedareapicture.FieldDisplayName:
 		return m.DisplayName()
+	case protectedareapicture.FieldAbbreviation:
+		return m.Abbreviation()
 	case protectedareapicture.FieldDescription:
 		return m.Description()
 	case protectedareapicture.FieldExternalLinks:
@@ -32501,10 +31568,10 @@ func (m *ProtectedAreaPictureMutation) OldField(ctx context.Context, name string
 		return m.OldUpdatedAt(ctx)
 	case protectedareapicture.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case protectedareapicture.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case protectedareapicture.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case protectedareapicture.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case protectedareapicture.FieldDescription:
 		return m.OldDescription(ctx)
 	case protectedareapicture.FieldExternalLinks:
@@ -32546,19 +31613,19 @@ func (m *ProtectedAreaPictureMutation) SetField(name string, value ent.Value) er
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case protectedareapicture.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case protectedareapicture.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case protectedareapicture.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case protectedareapicture.FieldDescription:
 		v, ok := value.(string)
@@ -32610,11 +31677,11 @@ func (m *ProtectedAreaPictureMutation) ClearedFields() []string {
 	if m.FieldCleared(protectedareapicture.FieldUpdatedBy) {
 		fields = append(fields, protectedareapicture.FieldUpdatedBy)
 	}
-	if m.FieldCleared(protectedareapicture.FieldAbbreviation) {
-		fields = append(fields, protectedareapicture.FieldAbbreviation)
-	}
 	if m.FieldCleared(protectedareapicture.FieldDisplayName) {
 		fields = append(fields, protectedareapicture.FieldDisplayName)
+	}
+	if m.FieldCleared(protectedareapicture.FieldAbbreviation) {
+		fields = append(fields, protectedareapicture.FieldAbbreviation)
 	}
 	if m.FieldCleared(protectedareapicture.FieldDescription) {
 		fields = append(fields, protectedareapicture.FieldDescription)
@@ -32642,11 +31709,11 @@ func (m *ProtectedAreaPictureMutation) ClearField(name string) error {
 	case protectedareapicture.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case protectedareapicture.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case protectedareapicture.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case protectedareapicture.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case protectedareapicture.FieldDescription:
 		m.ClearDescription()
@@ -32674,11 +31741,11 @@ func (m *ProtectedAreaPictureMutation) ResetField(name string) error {
 	case protectedareapicture.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case protectedareapicture.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case protectedareapicture.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case protectedareapicture.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case protectedareapicture.FieldDescription:
 		m.ResetDescription()
@@ -32748,8 +31815,8 @@ type PublicationMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -33033,55 +32100,6 @@ func (m *PublicationMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, publication.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *PublicationMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *PublicationMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the Publication entity.
-// If the Publication object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PublicationMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *PublicationMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[publication.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *PublicationMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[publication.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *PublicationMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, publication.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *PublicationMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -33129,6 +32147,55 @@ func (m *PublicationMutation) DisplayNameCleared() bool {
 func (m *PublicationMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, publication.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *PublicationMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *PublicationMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Publication entity.
+// If the Publication object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PublicationMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *PublicationMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[publication.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *PublicationMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[publication.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *PublicationMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, publication.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -33400,11 +32467,11 @@ func (m *PublicationMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, publication.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, publication.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, publication.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, publication.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, publication.FieldDescription)
@@ -33428,10 +32495,10 @@ func (m *PublicationMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case publication.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case publication.FieldAbbreviation:
-		return m.Abbreviation()
 	case publication.FieldDisplayName:
 		return m.DisplayName()
+	case publication.FieldAbbreviation:
+		return m.Abbreviation()
 	case publication.FieldDescription:
 		return m.Description()
 	case publication.FieldExternalLinks:
@@ -33453,10 +32520,10 @@ func (m *PublicationMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldUpdatedAt(ctx)
 	case publication.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case publication.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case publication.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case publication.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case publication.FieldDescription:
 		return m.OldDescription(ctx)
 	case publication.FieldExternalLinks:
@@ -33498,19 +32565,19 @@ func (m *PublicationMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case publication.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case publication.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case publication.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case publication.FieldDescription:
 		v, ok := value.(string)
@@ -33562,11 +32629,11 @@ func (m *PublicationMutation) ClearedFields() []string {
 	if m.FieldCleared(publication.FieldUpdatedBy) {
 		fields = append(fields, publication.FieldUpdatedBy)
 	}
-	if m.FieldCleared(publication.FieldAbbreviation) {
-		fields = append(fields, publication.FieldAbbreviation)
-	}
 	if m.FieldCleared(publication.FieldDisplayName) {
 		fields = append(fields, publication.FieldDisplayName)
+	}
+	if m.FieldCleared(publication.FieldAbbreviation) {
+		fields = append(fields, publication.FieldAbbreviation)
 	}
 	if m.FieldCleared(publication.FieldDescription) {
 		fields = append(fields, publication.FieldDescription)
@@ -33594,11 +32661,11 @@ func (m *PublicationMutation) ClearField(name string) error {
 	case publication.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case publication.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case publication.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case publication.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case publication.FieldDescription:
 		m.ClearDescription()
@@ -33626,11 +32693,11 @@ func (m *PublicationMutation) ResetField(name string) error {
 	case publication.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case publication.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case publication.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case publication.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case publication.FieldDescription:
 		m.ResetDescription()
@@ -33762,8 +32829,8 @@ type PublisherMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -34044,55 +33111,6 @@ func (m *PublisherMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, publisher.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *PublisherMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *PublisherMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the Publisher entity.
-// If the Publisher object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PublisherMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *PublisherMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[publisher.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *PublisherMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[publisher.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *PublisherMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, publisher.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *PublisherMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -34140,6 +33158,55 @@ func (m *PublisherMutation) DisplayNameCleared() bool {
 func (m *PublisherMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, publisher.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *PublisherMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *PublisherMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Publisher entity.
+// If the Publisher object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PublisherMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *PublisherMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[publisher.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *PublisherMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[publisher.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *PublisherMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, publisher.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -34357,11 +33424,11 @@ func (m *PublisherMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, publisher.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, publisher.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, publisher.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, publisher.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, publisher.FieldDescription)
@@ -34385,10 +33452,10 @@ func (m *PublisherMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case publisher.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case publisher.FieldAbbreviation:
-		return m.Abbreviation()
 	case publisher.FieldDisplayName:
 		return m.DisplayName()
+	case publisher.FieldAbbreviation:
+		return m.Abbreviation()
 	case publisher.FieldDescription:
 		return m.Description()
 	case publisher.FieldExternalLinks:
@@ -34410,10 +33477,10 @@ func (m *PublisherMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldUpdatedAt(ctx)
 	case publisher.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case publisher.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case publisher.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case publisher.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case publisher.FieldDescription:
 		return m.OldDescription(ctx)
 	case publisher.FieldExternalLinks:
@@ -34455,19 +33522,19 @@ func (m *PublisherMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case publisher.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case publisher.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case publisher.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case publisher.FieldDescription:
 		v, ok := value.(string)
@@ -34519,11 +33586,11 @@ func (m *PublisherMutation) ClearedFields() []string {
 	if m.FieldCleared(publisher.FieldUpdatedBy) {
 		fields = append(fields, publisher.FieldUpdatedBy)
 	}
-	if m.FieldCleared(publisher.FieldAbbreviation) {
-		fields = append(fields, publisher.FieldAbbreviation)
-	}
 	if m.FieldCleared(publisher.FieldDisplayName) {
 		fields = append(fields, publisher.FieldDisplayName)
+	}
+	if m.FieldCleared(publisher.FieldAbbreviation) {
+		fields = append(fields, publisher.FieldAbbreviation)
 	}
 	if m.FieldCleared(publisher.FieldDescription) {
 		fields = append(fields, publisher.FieldDescription)
@@ -34551,11 +33618,11 @@ func (m *PublisherMutation) ClearField(name string) error {
 	case publisher.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case publisher.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case publisher.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case publisher.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case publisher.FieldDescription:
 		m.ClearDescription()
@@ -34583,11 +33650,11 @@ func (m *PublisherMutation) ResetField(name string) error {
 	case publisher.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case publisher.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case publisher.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case publisher.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case publisher.FieldDescription:
 		m.ResetDescription()
@@ -34693,8 +33760,8 @@ type RegionMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -34974,55 +34041,6 @@ func (m *RegionMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, region.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *RegionMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *RegionMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the Region entity.
-// If the Region object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RegionMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *RegionMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[region.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *RegionMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[region.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *RegionMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, region.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *RegionMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -35070,6 +34088,55 @@ func (m *RegionMutation) DisplayNameCleared() bool {
 func (m *RegionMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, region.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *RegionMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *RegionMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Region entity.
+// If the Region object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RegionMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *RegionMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[region.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *RegionMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[region.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *RegionMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, region.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -35272,11 +34339,11 @@ func (m *RegionMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, region.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, region.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, region.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, region.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, region.FieldDescription)
@@ -35300,10 +34367,10 @@ func (m *RegionMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case region.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case region.FieldAbbreviation:
-		return m.Abbreviation()
 	case region.FieldDisplayName:
 		return m.DisplayName()
+	case region.FieldAbbreviation:
+		return m.Abbreviation()
 	case region.FieldDescription:
 		return m.Description()
 	case region.FieldExternalLinks:
@@ -35325,10 +34392,10 @@ func (m *RegionMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldUpdatedAt(ctx)
 	case region.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case region.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case region.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case region.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case region.FieldDescription:
 		return m.OldDescription(ctx)
 	case region.FieldExternalLinks:
@@ -35370,19 +34437,19 @@ func (m *RegionMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case region.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case region.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case region.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case region.FieldDescription:
 		v, ok := value.(string)
@@ -35434,11 +34501,11 @@ func (m *RegionMutation) ClearedFields() []string {
 	if m.FieldCleared(region.FieldUpdatedBy) {
 		fields = append(fields, region.FieldUpdatedBy)
 	}
-	if m.FieldCleared(region.FieldAbbreviation) {
-		fields = append(fields, region.FieldAbbreviation)
-	}
 	if m.FieldCleared(region.FieldDisplayName) {
 		fields = append(fields, region.FieldDisplayName)
+	}
+	if m.FieldCleared(region.FieldAbbreviation) {
+		fields = append(fields, region.FieldAbbreviation)
 	}
 	if m.FieldCleared(region.FieldDescription) {
 		fields = append(fields, region.FieldDescription)
@@ -35466,11 +34533,11 @@ func (m *RegionMutation) ClearField(name string) error {
 	case region.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case region.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case region.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case region.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case region.FieldDescription:
 		m.ClearDescription()
@@ -35498,11 +34565,11 @@ func (m *RegionMutation) ResetField(name string) error {
 	case region.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case region.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case region.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case region.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case region.FieldDescription:
 		m.ResetDescription()
@@ -35598,8 +34665,8 @@ type SetMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -35883,55 +34950,6 @@ func (m *SetMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, set.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *SetMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *SetMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the Set entity.
-// If the Set object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SetMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *SetMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[set.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *SetMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[set.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *SetMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, set.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *SetMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -35979,6 +34997,55 @@ func (m *SetMutation) DisplayNameCleared() bool {
 func (m *SetMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, set.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *SetMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *SetMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Set entity.
+// If the Set object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SetMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *SetMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[set.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *SetMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[set.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *SetMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, set.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -36250,11 +35317,11 @@ func (m *SetMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, set.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, set.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, set.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, set.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, set.FieldDescription)
@@ -36278,10 +35345,10 @@ func (m *SetMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case set.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case set.FieldAbbreviation:
-		return m.Abbreviation()
 	case set.FieldDisplayName:
 		return m.DisplayName()
+	case set.FieldAbbreviation:
+		return m.Abbreviation()
 	case set.FieldDescription:
 		return m.Description()
 	case set.FieldExternalLinks:
@@ -36303,10 +35370,10 @@ func (m *SetMutation) OldField(ctx context.Context, name string) (ent.Value, err
 		return m.OldUpdatedAt(ctx)
 	case set.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case set.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case set.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case set.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case set.FieldDescription:
 		return m.OldDescription(ctx)
 	case set.FieldExternalLinks:
@@ -36348,19 +35415,19 @@ func (m *SetMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case set.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case set.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case set.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case set.FieldDescription:
 		v, ok := value.(string)
@@ -36412,11 +35479,11 @@ func (m *SetMutation) ClearedFields() []string {
 	if m.FieldCleared(set.FieldUpdatedBy) {
 		fields = append(fields, set.FieldUpdatedBy)
 	}
-	if m.FieldCleared(set.FieldAbbreviation) {
-		fields = append(fields, set.FieldAbbreviation)
-	}
 	if m.FieldCleared(set.FieldDisplayName) {
 		fields = append(fields, set.FieldDisplayName)
+	}
+	if m.FieldCleared(set.FieldAbbreviation) {
+		fields = append(fields, set.FieldAbbreviation)
 	}
 	if m.FieldCleared(set.FieldDescription) {
 		fields = append(fields, set.FieldDescription)
@@ -36444,11 +35511,11 @@ func (m *SetMutation) ClearField(name string) error {
 	case set.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case set.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case set.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case set.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case set.FieldDescription:
 		m.ClearDescription()
@@ -36476,11 +35543,11 @@ func (m *SetMutation) ResetField(name string) error {
 	case set.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case set.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case set.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case set.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case set.FieldDescription:
 		m.ResetDescription()
@@ -36612,8 +35679,8 @@ type SettlementMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -36893,55 +35960,6 @@ func (m *SettlementMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, settlement.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *SettlementMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *SettlementMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the Settlement entity.
-// If the Settlement object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SettlementMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *SettlementMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[settlement.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *SettlementMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[settlement.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *SettlementMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, settlement.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *SettlementMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -36989,6 +36007,55 @@ func (m *SettlementMutation) DisplayNameCleared() bool {
 func (m *SettlementMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, settlement.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *SettlementMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *SettlementMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Settlement entity.
+// If the Settlement object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettlementMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *SettlementMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[settlement.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *SettlementMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[settlement.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *SettlementMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, settlement.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -37191,11 +36258,11 @@ func (m *SettlementMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, settlement.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, settlement.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, settlement.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, settlement.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, settlement.FieldDescription)
@@ -37219,10 +36286,10 @@ func (m *SettlementMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case settlement.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case settlement.FieldAbbreviation:
-		return m.Abbreviation()
 	case settlement.FieldDisplayName:
 		return m.DisplayName()
+	case settlement.FieldAbbreviation:
+		return m.Abbreviation()
 	case settlement.FieldDescription:
 		return m.Description()
 	case settlement.FieldExternalLinks:
@@ -37244,10 +36311,10 @@ func (m *SettlementMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldUpdatedAt(ctx)
 	case settlement.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case settlement.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case settlement.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case settlement.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case settlement.FieldDescription:
 		return m.OldDescription(ctx)
 	case settlement.FieldExternalLinks:
@@ -37289,19 +36356,19 @@ func (m *SettlementMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case settlement.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case settlement.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case settlement.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case settlement.FieldDescription:
 		v, ok := value.(string)
@@ -37353,11 +36420,11 @@ func (m *SettlementMutation) ClearedFields() []string {
 	if m.FieldCleared(settlement.FieldUpdatedBy) {
 		fields = append(fields, settlement.FieldUpdatedBy)
 	}
-	if m.FieldCleared(settlement.FieldAbbreviation) {
-		fields = append(fields, settlement.FieldAbbreviation)
-	}
 	if m.FieldCleared(settlement.FieldDisplayName) {
 		fields = append(fields, settlement.FieldDisplayName)
+	}
+	if m.FieldCleared(settlement.FieldAbbreviation) {
+		fields = append(fields, settlement.FieldAbbreviation)
 	}
 	if m.FieldCleared(settlement.FieldDescription) {
 		fields = append(fields, settlement.FieldDescription)
@@ -37385,11 +36452,11 @@ func (m *SettlementMutation) ClearField(name string) error {
 	case settlement.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case settlement.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case settlement.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case settlement.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case settlement.FieldDescription:
 		m.ClearDescription()
@@ -37417,11 +36484,11 @@ func (m *SettlementMutation) ResetField(name string) error {
 	case settlement.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case settlement.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case settlement.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case settlement.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case settlement.FieldDescription:
 		m.ResetDescription()
@@ -37517,8 +36584,8 @@ type TechniqueMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
-	abbreviation         *string
 	display_name         *string
+	abbreviation         *string
 	description          *string
 	external_links       *[]string
 	appendexternal_links []string
@@ -37799,55 +36866,6 @@ func (m *TechniqueMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, technique.FieldUpdatedBy)
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (m *TechniqueMutation) SetAbbreviation(s string) {
-	m.abbreviation = &s
-}
-
-// Abbreviation returns the value of the "abbreviation" field in the mutation.
-func (m *TechniqueMutation) Abbreviation() (r string, exists bool) {
-	v := m.abbreviation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAbbreviation returns the old "abbreviation" field's value of the Technique entity.
-// If the Technique object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TechniqueMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
-	}
-	return oldValue.Abbreviation, nil
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (m *TechniqueMutation) ClearAbbreviation() {
-	m.abbreviation = nil
-	m.clearedFields[technique.FieldAbbreviation] = struct{}{}
-}
-
-// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
-func (m *TechniqueMutation) AbbreviationCleared() bool {
-	_, ok := m.clearedFields[technique.FieldAbbreviation]
-	return ok
-}
-
-// ResetAbbreviation resets all changes to the "abbreviation" field.
-func (m *TechniqueMutation) ResetAbbreviation() {
-	m.abbreviation = nil
-	delete(m.clearedFields, technique.FieldAbbreviation)
-}
-
 // SetDisplayName sets the "display_name" field.
 func (m *TechniqueMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -37895,6 +36913,55 @@ func (m *TechniqueMutation) DisplayNameCleared() bool {
 func (m *TechniqueMutation) ResetDisplayName() {
 	m.display_name = nil
 	delete(m.clearedFields, technique.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *TechniqueMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *TechniqueMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Technique entity.
+// If the Technique object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TechniqueMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *TechniqueMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[technique.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *TechniqueMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[technique.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *TechniqueMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, technique.FieldAbbreviation)
 }
 
 // SetDescription sets the "description" field.
@@ -38112,11 +37179,11 @@ func (m *TechniqueMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, technique.FieldUpdatedBy)
 	}
-	if m.abbreviation != nil {
-		fields = append(fields, technique.FieldAbbreviation)
-	}
 	if m.display_name != nil {
 		fields = append(fields, technique.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, technique.FieldAbbreviation)
 	}
 	if m.description != nil {
 		fields = append(fields, technique.FieldDescription)
@@ -38140,10 +37207,10 @@ func (m *TechniqueMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case technique.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case technique.FieldAbbreviation:
-		return m.Abbreviation()
 	case technique.FieldDisplayName:
 		return m.DisplayName()
+	case technique.FieldAbbreviation:
+		return m.Abbreviation()
 	case technique.FieldDescription:
 		return m.Description()
 	case technique.FieldExternalLinks:
@@ -38165,10 +37232,10 @@ func (m *TechniqueMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldUpdatedAt(ctx)
 	case technique.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case technique.FieldAbbreviation:
-		return m.OldAbbreviation(ctx)
 	case technique.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case technique.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case technique.FieldDescription:
 		return m.OldDescription(ctx)
 	case technique.FieldExternalLinks:
@@ -38210,19 +37277,19 @@ func (m *TechniqueMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case technique.FieldAbbreviation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAbbreviation(v)
-		return nil
 	case technique.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case technique.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case technique.FieldDescription:
 		v, ok := value.(string)
@@ -38274,11 +37341,11 @@ func (m *TechniqueMutation) ClearedFields() []string {
 	if m.FieldCleared(technique.FieldUpdatedBy) {
 		fields = append(fields, technique.FieldUpdatedBy)
 	}
-	if m.FieldCleared(technique.FieldAbbreviation) {
-		fields = append(fields, technique.FieldAbbreviation)
-	}
 	if m.FieldCleared(technique.FieldDisplayName) {
 		fields = append(fields, technique.FieldDisplayName)
+	}
+	if m.FieldCleared(technique.FieldAbbreviation) {
+		fields = append(fields, technique.FieldAbbreviation)
 	}
 	if m.FieldCleared(technique.FieldDescription) {
 		fields = append(fields, technique.FieldDescription)
@@ -38306,11 +37373,11 @@ func (m *TechniqueMutation) ClearField(name string) error {
 	case technique.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
-	case technique.FieldAbbreviation:
-		m.ClearAbbreviation()
-		return nil
 	case technique.FieldDisplayName:
 		m.ClearDisplayName()
+		return nil
+	case technique.FieldAbbreviation:
+		m.ClearAbbreviation()
 		return nil
 	case technique.FieldDescription:
 		m.ClearDescription()
@@ -38338,11 +37405,11 @@ func (m *TechniqueMutation) ResetField(name string) error {
 	case technique.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case technique.FieldAbbreviation:
-		m.ResetAbbreviation()
-		return nil
 	case technique.FieldDisplayName:
 		m.ResetDisplayName()
+		return nil
+	case technique.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case technique.FieldDescription:
 		m.ResetDescription()

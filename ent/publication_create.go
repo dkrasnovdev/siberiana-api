@@ -78,20 +78,6 @@ func (pc *PublicationCreate) SetNillableUpdatedBy(s *string) *PublicationCreate 
 	return pc
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (pc *PublicationCreate) SetAbbreviation(s string) *PublicationCreate {
-	pc.mutation.SetAbbreviation(s)
-	return pc
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (pc *PublicationCreate) SetNillableAbbreviation(s *string) *PublicationCreate {
-	if s != nil {
-		pc.SetAbbreviation(*s)
-	}
-	return pc
-}
-
 // SetDisplayName sets the "display_name" field.
 func (pc *PublicationCreate) SetDisplayName(s string) *PublicationCreate {
 	pc.mutation.SetDisplayName(s)
@@ -102,6 +88,20 @@ func (pc *PublicationCreate) SetDisplayName(s string) *PublicationCreate {
 func (pc *PublicationCreate) SetNillableDisplayName(s *string) *PublicationCreate {
 	if s != nil {
 		pc.SetDisplayName(*s)
+	}
+	return pc
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (pc *PublicationCreate) SetAbbreviation(s string) *PublicationCreate {
+	pc.mutation.SetAbbreviation(s)
+	return pc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (pc *PublicationCreate) SetNillableAbbreviation(s *string) *PublicationCreate {
+	if s != nil {
+		pc.SetAbbreviation(*s)
 	}
 	return pc
 }
@@ -260,13 +260,13 @@ func (pc *PublicationCreate) createSpec() (*Publication, *sqlgraph.CreateSpec) {
 		_spec.SetField(publication.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := pc.mutation.Abbreviation(); ok {
-		_spec.SetField(publication.FieldAbbreviation, field.TypeString, value)
-		_node.Abbreviation = value
-	}
 	if value, ok := pc.mutation.DisplayName(); ok {
 		_spec.SetField(publication.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := pc.mutation.Abbreviation(); ok {
+		_spec.SetField(publication.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := pc.mutation.Description(); ok {
 		_spec.SetField(publication.FieldDescription, field.TypeString, value)

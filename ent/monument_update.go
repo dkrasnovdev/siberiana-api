@@ -77,26 +77,6 @@ func (mu *MonumentUpdate) ClearUpdatedBy() *MonumentUpdate {
 	return mu
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (mu *MonumentUpdate) SetAbbreviation(s string) *MonumentUpdate {
-	mu.mutation.SetAbbreviation(s)
-	return mu
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (mu *MonumentUpdate) SetNillableAbbreviation(s *string) *MonumentUpdate {
-	if s != nil {
-		mu.SetAbbreviation(*s)
-	}
-	return mu
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (mu *MonumentUpdate) ClearAbbreviation() *MonumentUpdate {
-	mu.mutation.ClearAbbreviation()
-	return mu
-}
-
 // SetDisplayName sets the "display_name" field.
 func (mu *MonumentUpdate) SetDisplayName(s string) *MonumentUpdate {
 	mu.mutation.SetDisplayName(s)
@@ -114,6 +94,26 @@ func (mu *MonumentUpdate) SetNillableDisplayName(s *string) *MonumentUpdate {
 // ClearDisplayName clears the value of the "display_name" field.
 func (mu *MonumentUpdate) ClearDisplayName() *MonumentUpdate {
 	mu.mutation.ClearDisplayName()
+	return mu
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (mu *MonumentUpdate) SetAbbreviation(s string) *MonumentUpdate {
+	mu.mutation.SetAbbreviation(s)
+	return mu
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (mu *MonumentUpdate) SetNillableAbbreviation(s *string) *MonumentUpdate {
+	if s != nil {
+		mu.SetAbbreviation(*s)
+	}
+	return mu
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (mu *MonumentUpdate) ClearAbbreviation() *MonumentUpdate {
+	mu.mutation.ClearAbbreviation()
 	return mu
 }
 
@@ -298,17 +298,17 @@ func (mu *MonumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if mu.mutation.UpdatedByCleared() {
 		_spec.ClearField(monument.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := mu.mutation.Abbreviation(); ok {
-		_spec.SetField(monument.FieldAbbreviation, field.TypeString, value)
-	}
-	if mu.mutation.AbbreviationCleared() {
-		_spec.ClearField(monument.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := mu.mutation.DisplayName(); ok {
 		_spec.SetField(monument.FieldDisplayName, field.TypeString, value)
 	}
 	if mu.mutation.DisplayNameCleared() {
 		_spec.ClearField(monument.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := mu.mutation.Abbreviation(); ok {
+		_spec.SetField(monument.FieldAbbreviation, field.TypeString, value)
+	}
+	if mu.mutation.AbbreviationCleared() {
+		_spec.ClearField(monument.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := mu.mutation.Description(); ok {
 		_spec.SetField(monument.FieldDescription, field.TypeString, value)
@@ -483,26 +483,6 @@ func (muo *MonumentUpdateOne) ClearUpdatedBy() *MonumentUpdateOne {
 	return muo
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (muo *MonumentUpdateOne) SetAbbreviation(s string) *MonumentUpdateOne {
-	muo.mutation.SetAbbreviation(s)
-	return muo
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (muo *MonumentUpdateOne) SetNillableAbbreviation(s *string) *MonumentUpdateOne {
-	if s != nil {
-		muo.SetAbbreviation(*s)
-	}
-	return muo
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (muo *MonumentUpdateOne) ClearAbbreviation() *MonumentUpdateOne {
-	muo.mutation.ClearAbbreviation()
-	return muo
-}
-
 // SetDisplayName sets the "display_name" field.
 func (muo *MonumentUpdateOne) SetDisplayName(s string) *MonumentUpdateOne {
 	muo.mutation.SetDisplayName(s)
@@ -520,6 +500,26 @@ func (muo *MonumentUpdateOne) SetNillableDisplayName(s *string) *MonumentUpdateO
 // ClearDisplayName clears the value of the "display_name" field.
 func (muo *MonumentUpdateOne) ClearDisplayName() *MonumentUpdateOne {
 	muo.mutation.ClearDisplayName()
+	return muo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (muo *MonumentUpdateOne) SetAbbreviation(s string) *MonumentUpdateOne {
+	muo.mutation.SetAbbreviation(s)
+	return muo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (muo *MonumentUpdateOne) SetNillableAbbreviation(s *string) *MonumentUpdateOne {
+	if s != nil {
+		muo.SetAbbreviation(*s)
+	}
+	return muo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (muo *MonumentUpdateOne) ClearAbbreviation() *MonumentUpdateOne {
+	muo.mutation.ClearAbbreviation()
 	return muo
 }
 
@@ -734,17 +734,17 @@ func (muo *MonumentUpdateOne) sqlSave(ctx context.Context) (_node *Monument, err
 	if muo.mutation.UpdatedByCleared() {
 		_spec.ClearField(monument.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := muo.mutation.Abbreviation(); ok {
-		_spec.SetField(monument.FieldAbbreviation, field.TypeString, value)
-	}
-	if muo.mutation.AbbreviationCleared() {
-		_spec.ClearField(monument.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := muo.mutation.DisplayName(); ok {
 		_spec.SetField(monument.FieldDisplayName, field.TypeString, value)
 	}
 	if muo.mutation.DisplayNameCleared() {
 		_spec.ClearField(monument.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := muo.mutation.Abbreviation(); ok {
+		_spec.SetField(monument.FieldAbbreviation, field.TypeString, value)
+	}
+	if muo.mutation.AbbreviationCleared() {
+		_spec.ClearField(monument.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := muo.mutation.Description(); ok {
 		_spec.SetField(monument.FieldDescription, field.TypeString, value)

@@ -404,30 +404,6 @@ type ComplexityRoot struct {
 		ID func(childComplexity int) int
 	}
 
-	Library struct {
-		Abbreviation  func(childComplexity int) int
-		Books         func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
-	}
-
-	LibraryConnection struct {
-		Edges      func(childComplexity int) int
-		PageInfo   func(childComplexity int) int
-		TotalCount func(childComplexity int) int
-	}
-
-	LibraryEdge struct {
-		Cursor func(childComplexity int) int
-		Node   func(childComplexity int) int
-	}
-
 	License struct {
 		Abbreviation  func(childComplexity int) int
 		Artifacts     func(childComplexity int) int
@@ -934,7 +910,6 @@ type ComplexityRoot struct {
 		Districts               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.DistrictOrder, where *ent.DistrictWhereInput) int
 		HolderResponsibilities  func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.HolderResponsibilityOrder, where *ent.HolderResponsibilityWhereInput) int
 		Holders                 func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.HolderOrder, where *ent.HolderWhereInput) int
-		Libraries               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.LibraryOrder, where *ent.LibraryWhereInput) int
 		Licenses                func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.LicenseOrder, where *ent.LicenseWhereInput) int
 		Locations               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.LocationOrder, where *ent.LocationWhereInput) int
 		Media                   func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.MediumOrder, where *ent.MediumWhereInput) int
@@ -1114,7 +1089,6 @@ type QueryResolver interface {
 	Districts(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.DistrictOrder, where *ent.DistrictWhereInput) (*ent.DistrictConnection, error)
 	Holders(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.HolderOrder, where *ent.HolderWhereInput) (*ent.HolderConnection, error)
 	HolderResponsibilities(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.HolderResponsibilityOrder, where *ent.HolderResponsibilityWhereInput) (*ent.HolderResponsibilityConnection, error)
-	Libraries(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.LibraryOrder, where *ent.LibraryWhereInput) (*ent.LibraryConnection, error)
 	Licenses(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.LicenseOrder, where *ent.LicenseWhereInput) (*ent.LicenseConnection, error)
 	Locations(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.LocationOrder, where *ent.LocationWhereInput) (*ent.LocationConnection, error)
 	Media(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.MediumOrder, where *ent.MediumWhereInput) (*ent.MediumConnection, error)
@@ -2783,111 +2757,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Keyword.ID(childComplexity), true
-
-	case "Library.abbreviation":
-		if e.complexity.Library.Abbreviation == nil {
-			break
-		}
-
-		return e.complexity.Library.Abbreviation(childComplexity), true
-
-	case "Library.books":
-		if e.complexity.Library.Books == nil {
-			break
-		}
-
-		return e.complexity.Library.Books(childComplexity), true
-
-	case "Library.createdAt":
-		if e.complexity.Library.CreatedAt == nil {
-			break
-		}
-
-		return e.complexity.Library.CreatedAt(childComplexity), true
-
-	case "Library.createdBy":
-		if e.complexity.Library.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.Library.CreatedBy(childComplexity), true
-
-	case "Library.description":
-		if e.complexity.Library.Description == nil {
-			break
-		}
-
-		return e.complexity.Library.Description(childComplexity), true
-
-	case "Library.displayName":
-		if e.complexity.Library.DisplayName == nil {
-			break
-		}
-
-		return e.complexity.Library.DisplayName(childComplexity), true
-
-	case "Library.externalLinks":
-		if e.complexity.Library.ExternalLinks == nil {
-			break
-		}
-
-		return e.complexity.Library.ExternalLinks(childComplexity), true
-
-	case "Library.id":
-		if e.complexity.Library.ID == nil {
-			break
-		}
-
-		return e.complexity.Library.ID(childComplexity), true
-
-	case "Library.updatedAt":
-		if e.complexity.Library.UpdatedAt == nil {
-			break
-		}
-
-		return e.complexity.Library.UpdatedAt(childComplexity), true
-
-	case "Library.updatedBy":
-		if e.complexity.Library.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.Library.UpdatedBy(childComplexity), true
-
-	case "LibraryConnection.edges":
-		if e.complexity.LibraryConnection.Edges == nil {
-			break
-		}
-
-		return e.complexity.LibraryConnection.Edges(childComplexity), true
-
-	case "LibraryConnection.pageInfo":
-		if e.complexity.LibraryConnection.PageInfo == nil {
-			break
-		}
-
-		return e.complexity.LibraryConnection.PageInfo(childComplexity), true
-
-	case "LibraryConnection.totalCount":
-		if e.complexity.LibraryConnection.TotalCount == nil {
-			break
-		}
-
-		return e.complexity.LibraryConnection.TotalCount(childComplexity), true
-
-	case "LibraryEdge.cursor":
-		if e.complexity.LibraryEdge.Cursor == nil {
-			break
-		}
-
-		return e.complexity.LibraryEdge.Cursor(childComplexity), true
-
-	case "LibraryEdge.node":
-		if e.complexity.LibraryEdge.Node == nil {
-			break
-		}
-
-		return e.complexity.LibraryEdge.Node(childComplexity), true
 
 	case "License.abbreviation":
 		if e.complexity.License.Abbreviation == nil {
@@ -5566,18 +5435,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.Holders(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.HolderOrder), args["where"].(*ent.HolderWhereInput)), true
 
-	case "Query.libraries":
-		if e.complexity.Query.Libraries == nil {
-			break
-		}
-
-		args, err := ec.field_Query_libraries_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.Libraries(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.LibraryOrder), args["where"].(*ent.LibraryWhereInput)), true
-
 	case "Query.licenses":
 		if e.complexity.Query.Licenses == nil {
 			break
@@ -6320,7 +6177,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateDistrictInput,
 		ec.unmarshalInputCreateHolderInput,
 		ec.unmarshalInputCreateHolderResponsibilityInput,
-		ec.unmarshalInputCreateLibraryInput,
 		ec.unmarshalInputCreateLicenseInput,
 		ec.unmarshalInputCreateLocationInput,
 		ec.unmarshalInputCreateMediumInput,
@@ -6351,8 +6207,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputHolderResponsibilityWhereInput,
 		ec.unmarshalInputHolderWhereInput,
 		ec.unmarshalInputKeywordWhereInput,
-		ec.unmarshalInputLibraryOrder,
-		ec.unmarshalInputLibraryWhereInput,
 		ec.unmarshalInputLicenseOrder,
 		ec.unmarshalInputLicenseWhereInput,
 		ec.unmarshalInputLocationOrder,
@@ -6407,7 +6261,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateDistrictInput,
 		ec.unmarshalInputUpdateHolderInput,
 		ec.unmarshalInputUpdateHolderResponsibilityInput,
-		ec.unmarshalInputUpdateLibraryInput,
 		ec.unmarshalInputUpdateLicenseInput,
 		ec.unmarshalInputUpdateLocationInput,
 		ec.unmarshalInputUpdateMediumInput,
@@ -8082,66 +7935,6 @@ func (ec *executionContext) field_Query_holders_args(ctx context.Context, rawArg
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_libraries_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 *entgql.Cursor[int]
-	if tmp, ok := rawArgs["after"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
-		arg0, err = ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["after"] = arg0
-	var arg1 *int
-	if tmp, ok := rawArgs["first"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("first"))
-		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["first"] = arg1
-	var arg2 *entgql.Cursor[int]
-	if tmp, ok := rawArgs["before"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
-		arg2, err = ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["before"] = arg2
-	var arg3 *int
-	if tmp, ok := rawArgs["last"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last"))
-		arg3, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["last"] = arg3
-	var arg4 []*ent.LibraryOrder
-	if tmp, ok := rawArgs["orderBy"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOLibraryOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibraryOrderᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["orderBy"] = arg4
-	var arg5 *ent.LibraryWhereInput
-	if tmp, ok := rawArgs["where"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOLibraryWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibraryWhereInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Query_licenses_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -9728,47 +9521,6 @@ func (ec *executionContext) fieldContext_ArtGenre_updatedBy(ctx context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _ArtGenre_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.ArtGenre) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ArtGenre_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ArtGenre_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ArtGenre",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _ArtGenre_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.ArtGenre) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ArtGenre_displayName(ctx, field)
 	if err != nil {
@@ -9798,6 +9550,47 @@ func (ec *executionContext) _ArtGenre_displayName(ctx context.Context, field gra
 }
 
 func (ec *executionContext) fieldContext_ArtGenre_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ArtGenre",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ArtGenre_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.ArtGenre) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ArtGenre_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ArtGenre_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ArtGenre",
 		Field:      field,
@@ -10083,10 +9876,10 @@ func (ec *executionContext) fieldContext_ArtGenreEdge_node(ctx context.Context, 
 				return ec.fieldContext_ArtGenre_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_ArtGenre_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_ArtGenre_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_ArtGenre_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ArtGenre_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ArtGenre_description(ctx, field)
 			case "externalLinks":
@@ -10356,47 +10149,6 @@ func (ec *executionContext) fieldContext_ArtStyle_updatedBy(ctx context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _ArtStyle_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.ArtStyle) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ArtStyle_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ArtStyle_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ArtStyle",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _ArtStyle_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.ArtStyle) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ArtStyle_displayName(ctx, field)
 	if err != nil {
@@ -10426,6 +10178,47 @@ func (ec *executionContext) _ArtStyle_displayName(ctx context.Context, field gra
 }
 
 func (ec *executionContext) fieldContext_ArtStyle_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ArtStyle",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ArtStyle_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.ArtStyle) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ArtStyle_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ArtStyle_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ArtStyle",
 		Field:      field,
@@ -10711,10 +10504,10 @@ func (ec *executionContext) fieldContext_ArtStyleEdge_node(ctx context.Context, 
 				return ec.fieldContext_ArtStyle_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_ArtStyle_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_ArtStyle_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_ArtStyle_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ArtStyle_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ArtStyle_description(ctx, field)
 			case "externalLinks":
@@ -10984,47 +10777,6 @@ func (ec *executionContext) fieldContext_Artifact_updatedBy(ctx context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _Artifact_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Artifact) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Artifact_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Artifact_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Artifact",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Artifact_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.Artifact) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Artifact_displayName(ctx, field)
 	if err != nil {
@@ -11054,6 +10806,47 @@ func (ec *executionContext) _Artifact_displayName(ctx context.Context, field gra
 }
 
 func (ec *executionContext) fieldContext_Artifact_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Artifact",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Artifact_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Artifact) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Artifact_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Artifact_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Artifact",
 		Field:      field,
@@ -11651,10 +11444,10 @@ func (ec *executionContext) fieldContext_Artifact_authors(ctx context.Context, f
 				return ec.fieldContext_Person_phoneNumbers(ctx, field)
 			case "emails":
 				return ec.fieldContext_Person_emails(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Person_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Person_description(ctx, field)
 			case "externalLinks":
@@ -11744,10 +11537,10 @@ func (ec *executionContext) fieldContext_Artifact_mediums(ctx context.Context, f
 				return ec.fieldContext_Medium_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Medium_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Medium_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Medium_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Medium_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Medium_description(ctx, field)
 			case "externalLinks":
@@ -11807,10 +11600,10 @@ func (ec *executionContext) fieldContext_Artifact_techniques(ctx context.Context
 				return ec.fieldContext_Technique_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Technique_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Technique_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Technique_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Technique_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Technique_description(ctx, field)
 			case "externalLinks":
@@ -11870,10 +11663,10 @@ func (ec *executionContext) fieldContext_Artifact_period(ctx context.Context, fi
 				return ec.fieldContext_Period_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Period_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Period_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Period_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Period_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Period_description(ctx, field)
 			case "externalLinks":
@@ -11933,10 +11726,10 @@ func (ec *executionContext) fieldContext_Artifact_projects(ctx context.Context, 
 				return ec.fieldContext_Project_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Project_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Project_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Project_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Project_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Project_description(ctx, field)
 			case "externalLinks":
@@ -12004,10 +11797,10 @@ func (ec *executionContext) fieldContext_Artifact_publications(ctx context.Conte
 				return ec.fieldContext_Publication_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Publication_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Publication_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Publication_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Publication_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Publication_description(ctx, field)
 			case "externalLinks":
@@ -12136,10 +11929,10 @@ func (ec *executionContext) fieldContext_Artifact_culturalAffiliation(ctx contex
 				return ec.fieldContext_Culture_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Culture_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Culture_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Culture_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Culture_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Culture_description(ctx, field)
 			case "externalLinks":
@@ -12199,10 +11992,10 @@ func (ec *executionContext) fieldContext_Artifact_monument(ctx context.Context, 
 				return ec.fieldContext_Monument_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Monument_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Monument_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Monument_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Monument_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Monument_description(ctx, field)
 			case "externalLinks":
@@ -12264,10 +12057,10 @@ func (ec *executionContext) fieldContext_Artifact_model(ctx context.Context, fie
 				return ec.fieldContext_Model_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Model_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Model_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Model_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Model_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Model_description(ctx, field)
 			case "externalLinks":
@@ -12327,10 +12120,10 @@ func (ec *executionContext) fieldContext_Artifact_set(ctx context.Context, field
 				return ec.fieldContext_Set_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Set_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Set_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Set_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Set_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Set_description(ctx, field)
 			case "externalLinks":
@@ -12392,10 +12185,10 @@ func (ec *executionContext) fieldContext_Artifact_location(ctx context.Context, 
 				return ec.fieldContext_Location_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Location_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Location_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Location_description(ctx, field)
 			case "externalLinks":
@@ -12463,10 +12256,10 @@ func (ec *executionContext) fieldContext_Artifact_collection(ctx context.Context
 				return ec.fieldContext_Collection_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Collection_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Collection_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Collection_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Collection_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Collection_description(ctx, field)
 			case "externalLinks":
@@ -12532,10 +12325,10 @@ func (ec *executionContext) fieldContext_Artifact_license(ctx context.Context, f
 				return ec.fieldContext_License_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_License_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_License_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_License_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_License_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_License_description(ctx, field)
 			case "externalLinks":
@@ -12742,10 +12535,10 @@ func (ec *executionContext) fieldContext_ArtifactEdge_node(ctx context.Context, 
 				return ec.fieldContext_Artifact_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Artifact_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Artifact_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLinks":
@@ -13733,47 +13526,6 @@ func (ec *executionContext) fieldContext_Book_updatedBy(ctx context.Context, fie
 	return fc, nil
 }
 
-func (ec *executionContext) _Book_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Book) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Book_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Book_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Book",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Book_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.Book) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Book_displayName(ctx, field)
 	if err != nil {
@@ -13803,6 +13555,47 @@ func (ec *executionContext) _Book_displayName(ctx context.Context, field graphql
 }
 
 func (ec *executionContext) fieldContext_Book_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Book",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Book_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Book) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Book_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Book_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Book",
 		Field:      field,
@@ -14113,10 +13906,10 @@ func (ec *executionContext) fieldContext_Book_authors(ctx context.Context, field
 				return ec.fieldContext_Person_phoneNumbers(ctx, field)
 			case "emails":
 				return ec.fieldContext_Person_emails(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Person_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Person_description(ctx, field)
 			case "externalLinks":
@@ -14206,10 +13999,10 @@ func (ec *executionContext) fieldContext_Book_bookGenres(ctx context.Context, fi
 				return ec.fieldContext_BookGenre_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_BookGenre_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_BookGenre_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_BookGenre_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_BookGenre_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_BookGenre_description(ctx, field)
 			case "externalLinks":
@@ -14269,10 +14062,10 @@ func (ec *executionContext) fieldContext_Book_collection(ctx context.Context, fi
 				return ec.fieldContext_Collection_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Collection_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Collection_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Collection_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Collection_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Collection_description(ctx, field)
 			case "externalLinks":
@@ -14405,10 +14198,10 @@ func (ec *executionContext) fieldContext_Book_publisher(ctx context.Context, fie
 				return ec.fieldContext_Publisher_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Publisher_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Publisher_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Publisher_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Publisher_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Publisher_description(ctx, field)
 			case "externalLinks":
@@ -14468,10 +14261,10 @@ func (ec *executionContext) fieldContext_Book_license(ctx context.Context, field
 				return ec.fieldContext_License_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_License_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_License_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_License_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_License_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_License_description(ctx, field)
 			case "externalLinks":
@@ -14678,10 +14471,10 @@ func (ec *executionContext) fieldContext_BookEdge_node(ctx context.Context, fiel
 				return ec.fieldContext_Book_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Book_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Book_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Book_description(ctx, field)
 			case "externalLinks":
@@ -14971,47 +14764,6 @@ func (ec *executionContext) fieldContext_BookGenre_updatedBy(ctx context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _BookGenre_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.BookGenre) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_BookGenre_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_BookGenre_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "BookGenre",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _BookGenre_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.BookGenre) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_BookGenre_displayName(ctx, field)
 	if err != nil {
@@ -15041,6 +14793,47 @@ func (ec *executionContext) _BookGenre_displayName(ctx context.Context, field gr
 }
 
 func (ec *executionContext) fieldContext_BookGenre_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BookGenre",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BookGenre_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.BookGenre) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_BookGenre_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_BookGenre_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "BookGenre",
 		Field:      field,
@@ -15181,10 +14974,10 @@ func (ec *executionContext) fieldContext_BookGenre_books(ctx context.Context, fi
 				return ec.fieldContext_Book_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Book_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Book_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Book_description(ctx, field)
 			case "externalLinks":
@@ -15407,10 +15200,10 @@ func (ec *executionContext) fieldContext_BookGenreEdge_node(ctx context.Context,
 				return ec.fieldContext_BookGenre_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_BookGenre_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_BookGenre_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_BookGenre_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_BookGenre_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_BookGenre_description(ctx, field)
 			case "externalLinks":
@@ -15682,47 +15475,6 @@ func (ec *executionContext) fieldContext_Category_updatedBy(ctx context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _Category_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Category) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Category_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Category_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Category",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Category_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.Category) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Category_displayName(ctx, field)
 	if err != nil {
@@ -15752,6 +15504,47 @@ func (ec *executionContext) _Category_displayName(ctx context.Context, field gra
 }
 
 func (ec *executionContext) fieldContext_Category_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Category",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Category_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Category) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Category_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Category_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Category",
 		Field:      field,
@@ -15892,10 +15685,10 @@ func (ec *executionContext) fieldContext_Category_collections(ctx context.Contex
 				return ec.fieldContext_Collection_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Collection_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Collection_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Collection_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Collection_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Collection_description(ctx, field)
 			case "externalLinks":
@@ -16106,10 +15899,10 @@ func (ec *executionContext) fieldContext_CategoryEdge_node(ctx context.Context, 
 				return ec.fieldContext_Category_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Category_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Category_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Category_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Category_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Category_description(ctx, field)
 			case "externalLinks":
@@ -16381,47 +16174,6 @@ func (ec *executionContext) fieldContext_Collection_updatedBy(ctx context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _Collection_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Collection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Collection_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Collection_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Collection",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Collection_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.Collection) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Collection_displayName(ctx, field)
 	if err != nil {
@@ -16451,6 +16203,47 @@ func (ec *executionContext) _Collection_displayName(ctx context.Context, field g
 }
 
 func (ec *executionContext) fieldContext_Collection_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Collection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Collection_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Collection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Collection_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Collection_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Collection",
 		Field:      field,
@@ -16591,10 +16384,10 @@ func (ec *executionContext) fieldContext_Collection_artifacts(ctx context.Contex
 				return ec.fieldContext_Artifact_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Artifact_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Artifact_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLinks":
@@ -16702,10 +16495,10 @@ func (ec *executionContext) fieldContext_Collection_books(ctx context.Context, f
 				return ec.fieldContext_Book_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Book_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Book_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Book_description(ctx, field)
 			case "externalLinks":
@@ -16789,10 +16582,10 @@ func (ec *executionContext) fieldContext_Collection_people(ctx context.Context, 
 				return ec.fieldContext_Person_phoneNumbers(ctx, field)
 			case "emails":
 				return ec.fieldContext_Person_emails(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Person_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Person_description(ctx, field)
 			case "externalLinks":
@@ -16882,10 +16675,10 @@ func (ec *executionContext) fieldContext_Collection_category(ctx context.Context
 				return ec.fieldContext_Category_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Category_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Category_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Category_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Category_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Category_description(ctx, field)
 			case "externalLinks":
@@ -17090,10 +16883,10 @@ func (ec *executionContext) fieldContext_CollectionEdge_node(ctx context.Context
 				return ec.fieldContext_Collection_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Collection_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Collection_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Collection_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Collection_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Collection_description(ctx, field)
 			case "externalLinks":
@@ -17371,47 +17164,6 @@ func (ec *executionContext) fieldContext_Country_updatedBy(ctx context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _Country_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Country) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Country_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Country_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Country",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Country_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.Country) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Country_displayName(ctx, field)
 	if err != nil {
@@ -17441,6 +17193,47 @@ func (ec *executionContext) _Country_displayName(ctx context.Context, field grap
 }
 
 func (ec *executionContext) fieldContext_Country_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Country",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Country_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Country) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Country_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Country_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Country",
 		Field:      field,
@@ -17581,10 +17374,10 @@ func (ec *executionContext) fieldContext_Country_location(ctx context.Context, f
 				return ec.fieldContext_Location_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Location_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Location_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Location_description(ctx, field)
 			case "externalLinks":
@@ -17797,10 +17590,10 @@ func (ec *executionContext) fieldContext_CountryEdge_node(ctx context.Context, f
 				return ec.fieldContext_Country_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Country_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Country_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Country_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Country_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Country_description(ctx, field)
 			case "externalLinks":
@@ -18072,47 +17865,6 @@ func (ec *executionContext) fieldContext_Culture_updatedBy(ctx context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _Culture_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Culture) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Culture_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Culture_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Culture",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Culture_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.Culture) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Culture_displayName(ctx, field)
 	if err != nil {
@@ -18142,6 +17894,47 @@ func (ec *executionContext) _Culture_displayName(ctx context.Context, field grap
 }
 
 func (ec *executionContext) fieldContext_Culture_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Culture",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Culture_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Culture) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Culture_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Culture_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Culture",
 		Field:      field,
@@ -18282,10 +18075,10 @@ func (ec *executionContext) fieldContext_Culture_artifacts(ctx context.Context, 
 				return ec.fieldContext_Artifact_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Artifact_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Artifact_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLinks":
@@ -18538,10 +18331,10 @@ func (ec *executionContext) fieldContext_CultureEdge_node(ctx context.Context, f
 				return ec.fieldContext_Culture_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Culture_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Culture_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Culture_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Culture_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Culture_description(ctx, field)
 			case "externalLinks":
@@ -18813,47 +18606,6 @@ func (ec *executionContext) fieldContext_District_updatedBy(ctx context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _District_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.District) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_District_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_District_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "District",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _District_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.District) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_District_displayName(ctx, field)
 	if err != nil {
@@ -18883,6 +18635,47 @@ func (ec *executionContext) _District_displayName(ctx context.Context, field gra
 }
 
 func (ec *executionContext) fieldContext_District_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "District",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _District_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.District) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_District_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_District_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "District",
 		Field:      field,
@@ -19023,10 +18816,10 @@ func (ec *executionContext) fieldContext_District_location(ctx context.Context, 
 				return ec.fieldContext_Location_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Location_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Location_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Location_description(ctx, field)
 			case "externalLinks":
@@ -19239,10 +19032,10 @@ func (ec *executionContext) fieldContext_DistrictEdge_node(ctx context.Context, 
 				return ec.fieldContext_District_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_District_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_District_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_District_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_District_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_District_description(ctx, field)
 			case "externalLinks":
@@ -19645,10 +19438,10 @@ func (ec *executionContext) fieldContext_Holder_artifacts(ctx context.Context, f
 				return ec.fieldContext_Artifact_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Artifact_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Artifact_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLinks":
@@ -19756,10 +19549,10 @@ func (ec *executionContext) fieldContext_Holder_books(ctx context.Context, field
 				return ec.fieldContext_Book_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Book_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Book_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Book_description(ctx, field)
 			case "externalLinks":
@@ -19837,10 +19630,10 @@ func (ec *executionContext) fieldContext_Holder_holderResponsibilities(ctx conte
 				return ec.fieldContext_HolderResponsibility_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_HolderResponsibility_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_HolderResponsibility_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_HolderResponsibility_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_HolderResponsibility_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_HolderResponsibility_description(ctx, field)
 			case "externalLinks":
@@ -19906,10 +19699,10 @@ func (ec *executionContext) fieldContext_Holder_person(ctx context.Context, fiel
 				return ec.fieldContext_Person_phoneNumbers(ctx, field)
 			case "emails":
 				return ec.fieldContext_Person_emails(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Person_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Person_description(ctx, field)
 			case "externalLinks":
@@ -20005,10 +19798,10 @@ func (ec *executionContext) fieldContext_Holder_organization(ctx context.Context
 				return ec.fieldContext_Organization_phoneNumbers(ctx, field)
 			case "emails":
 				return ec.fieldContext_Organization_emails(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Organization_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Organization_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Organization_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Organization_description(ctx, field)
 			case "externalLinks":
@@ -20506,47 +20299,6 @@ func (ec *executionContext) fieldContext_HolderResponsibility_updatedBy(ctx cont
 	return fc, nil
 }
 
-func (ec *executionContext) _HolderResponsibility_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.HolderResponsibility) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_HolderResponsibility_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_HolderResponsibility_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "HolderResponsibility",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _HolderResponsibility_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.HolderResponsibility) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_HolderResponsibility_displayName(ctx, field)
 	if err != nil {
@@ -20576,6 +20328,47 @@ func (ec *executionContext) _HolderResponsibility_displayName(ctx context.Contex
 }
 
 func (ec *executionContext) fieldContext_HolderResponsibility_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "HolderResponsibility",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _HolderResponsibility_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.HolderResponsibility) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_HolderResponsibility_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_HolderResponsibility_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "HolderResponsibility",
 		Field:      field,
@@ -20928,10 +20721,10 @@ func (ec *executionContext) fieldContext_HolderResponsibilityEdge_node(ctx conte
 				return ec.fieldContext_HolderResponsibility_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_HolderResponsibility_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_HolderResponsibility_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_HolderResponsibility_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_HolderResponsibility_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_HolderResponsibility_description(ctx, field)
 			case "externalLinks":
@@ -21028,717 +20821,6 @@ func (ec *executionContext) fieldContext_Keyword_id(ctx context.Context, field g
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Library_id(ctx context.Context, field graphql.CollectedField, obj *ent.Library) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Library_id(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNID2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Library_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Library",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Library_createdAt(ctx context.Context, field graphql.CollectedField, obj *ent.Library) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Library_createdAt(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.CreatedAt, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(time.Time)
-	fc.Result = res
-	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Library_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Library",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Time does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Library_createdBy(ctx context.Context, field graphql.CollectedField, obj *ent.Library) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Library_createdBy(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.CreatedBy, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Library_createdBy(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Library",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Library_updatedAt(ctx context.Context, field graphql.CollectedField, obj *ent.Library) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Library_updatedAt(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.UpdatedAt, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(time.Time)
-	fc.Result = res
-	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Library_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Library",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Time does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Library_updatedBy(ctx context.Context, field graphql.CollectedField, obj *ent.Library) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Library_updatedBy(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.UpdatedBy, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Library_updatedBy(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Library",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Library_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Library) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Library_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Library_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Library",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Library_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.Library) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Library_displayName(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DisplayName, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Library_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Library",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Library_description(ctx context.Context, field graphql.CollectedField, obj *ent.Library) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Library_description(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Description, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Library_description(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Library",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Library_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.Library) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Library_externalLinks(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]string)
-	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Library_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Library",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Library_books(ctx context.Context, field graphql.CollectedField, obj *ent.Library) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Library_books(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Books(ctx)
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*ent.Book)
-	fc.Result = res
-	return ec.marshalOBook2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐBookᚄ(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Library_books(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Library",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Book_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Book_createdAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Book_createdBy(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Book_updatedAt(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Book_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Book_abbreviation(ctx, field)
-			case "displayName":
-				return ec.fieldContext_Book_displayName(ctx, field)
-			case "description":
-				return ec.fieldContext_Book_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Book_externalLinks(ctx, field)
-			case "primaryImageURL":
-				return ec.fieldContext_Book_primaryImageURL(ctx, field)
-			case "additionalImagesUrls":
-				return ec.fieldContext_Book_additionalImagesUrls(ctx, field)
-			case "files":
-				return ec.fieldContext_Book_files(ctx, field)
-			case "year":
-				return ec.fieldContext_Book_year(ctx, field)
-			case "authors":
-				return ec.fieldContext_Book_authors(ctx, field)
-			case "bookGenres":
-				return ec.fieldContext_Book_bookGenres(ctx, field)
-			case "collection":
-				return ec.fieldContext_Book_collection(ctx, field)
-			case "holders":
-				return ec.fieldContext_Book_holders(ctx, field)
-			case "publisher":
-				return ec.fieldContext_Book_publisher(ctx, field)
-			case "license":
-				return ec.fieldContext_Book_license(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Book", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _LibraryConnection_edges(ctx context.Context, field graphql.CollectedField, obj *ent.LibraryConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_LibraryConnection_edges(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Edges, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*ent.LibraryEdge)
-	fc.Result = res
-	return ec.marshalOLibraryEdge2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibraryEdge(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_LibraryConnection_edges(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "LibraryConnection",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "node":
-				return ec.fieldContext_LibraryEdge_node(ctx, field)
-			case "cursor":
-				return ec.fieldContext_LibraryEdge_cursor(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type LibraryEdge", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _LibraryConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *ent.LibraryConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_LibraryConnection_pageInfo(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.PageInfo, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(entgql.PageInfo[int])
-	fc.Result = res
-	return ec.marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_LibraryConnection_pageInfo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "LibraryConnection",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "hasNextPage":
-				return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
-			case "hasPreviousPage":
-				return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
-			case "startCursor":
-				return ec.fieldContext_PageInfo_startCursor(ctx, field)
-			case "endCursor":
-				return ec.fieldContext_PageInfo_endCursor(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _LibraryConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *ent.LibraryConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_LibraryConnection_totalCount(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.TotalCount, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_LibraryConnection_totalCount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "LibraryConnection",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _LibraryEdge_node(ctx context.Context, field graphql.CollectedField, obj *ent.LibraryEdge) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_LibraryEdge_node(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Node, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*ent.Library)
-	fc.Result = res
-	return ec.marshalOLibrary2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibrary(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_LibraryEdge_node(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "LibraryEdge",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Library_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Library_createdAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Library_createdBy(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Library_updatedAt(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Library_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Library_abbreviation(ctx, field)
-			case "displayName":
-				return ec.fieldContext_Library_displayName(ctx, field)
-			case "description":
-				return ec.fieldContext_Library_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Library_externalLinks(ctx, field)
-			case "books":
-				return ec.fieldContext_Library_books(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Library", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _LibraryEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *ent.LibraryEdge) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_LibraryEdge_cursor(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Cursor, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(entgql.Cursor[int])
-	fc.Result = res
-	return ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_LibraryEdge_cursor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "LibraryEdge",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Cursor does not have child fields")
 		},
 	}
 	return fc, nil
@@ -21958,47 +21040,6 @@ func (ec *executionContext) fieldContext_License_updatedBy(ctx context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _License_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.License) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_License_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_License_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "License",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _License_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.License) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_License_displayName(ctx, field)
 	if err != nil {
@@ -22028,6 +21069,47 @@ func (ec *executionContext) _License_displayName(ctx context.Context, field grap
 }
 
 func (ec *executionContext) fieldContext_License_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "License",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _License_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.License) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_License_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_License_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "License",
 		Field:      field,
@@ -22168,10 +21250,10 @@ func (ec *executionContext) fieldContext_License_artifacts(ctx context.Context, 
 				return ec.fieldContext_Artifact_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Artifact_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Artifact_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLinks":
@@ -22279,10 +21361,10 @@ func (ec *executionContext) fieldContext_License_books(ctx context.Context, fiel
 				return ec.fieldContext_Book_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Book_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Book_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Book_description(ctx, field)
 			case "externalLinks":
@@ -22505,10 +21587,10 @@ func (ec *executionContext) fieldContext_LicenseEdge_node(ctx context.Context, f
 				return ec.fieldContext_License_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_License_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_License_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_License_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_License_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_License_description(ctx, field)
 			case "externalLinks":
@@ -22782,47 +21864,6 @@ func (ec *executionContext) fieldContext_Location_updatedBy(ctx context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _Location_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Location) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Location_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Location_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Location",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Location_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.Location) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Location_displayName(ctx, field)
 	if err != nil {
@@ -22852,6 +21893,47 @@ func (ec *executionContext) _Location_displayName(ctx context.Context, field gra
 }
 
 func (ec *executionContext) fieldContext_Location_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Location",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Location_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Location) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Location_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Location_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Location",
 		Field:      field,
@@ -22992,10 +22074,10 @@ func (ec *executionContext) fieldContext_Location_artifacts(ctx context.Context,
 				return ec.fieldContext_Artifact_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Artifact_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Artifact_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLinks":
@@ -23103,10 +22185,10 @@ func (ec *executionContext) fieldContext_Location_country(ctx context.Context, f
 				return ec.fieldContext_Country_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Country_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Country_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Country_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Country_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Country_description(ctx, field)
 			case "externalLinks":
@@ -23166,10 +22248,10 @@ func (ec *executionContext) fieldContext_Location_district(ctx context.Context, 
 				return ec.fieldContext_District_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_District_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_District_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_District_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_District_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_District_description(ctx, field)
 			case "externalLinks":
@@ -23229,10 +22311,10 @@ func (ec *executionContext) fieldContext_Location_settlement(ctx context.Context
 				return ec.fieldContext_Settlement_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Settlement_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Settlement_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Settlement_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Settlement_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Settlement_description(ctx, field)
 			case "externalLinks":
@@ -23292,10 +22374,10 @@ func (ec *executionContext) fieldContext_Location_region(ctx context.Context, fi
 				return ec.fieldContext_Region_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Region_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Region_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Region_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Region_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Region_description(ctx, field)
 			case "externalLinks":
@@ -23500,10 +22582,10 @@ func (ec *executionContext) fieldContext_LocationEdge_node(ctx context.Context, 
 				return ec.fieldContext_Location_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Location_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Location_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Location_description(ctx, field)
 			case "externalLinks":
@@ -23783,47 +22865,6 @@ func (ec *executionContext) fieldContext_Medium_updatedBy(ctx context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _Medium_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Medium) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Medium_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Medium_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Medium",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Medium_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.Medium) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Medium_displayName(ctx, field)
 	if err != nil {
@@ -23853,6 +22894,47 @@ func (ec *executionContext) _Medium_displayName(ctx context.Context, field graph
 }
 
 func (ec *executionContext) fieldContext_Medium_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Medium",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Medium_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Medium) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Medium_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Medium_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Medium",
 		Field:      field,
@@ -23993,10 +23075,10 @@ func (ec *executionContext) fieldContext_Medium_artifacts(ctx context.Context, f
 				return ec.fieldContext_Artifact_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Artifact_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Artifact_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLinks":
@@ -24249,10 +23331,10 @@ func (ec *executionContext) fieldContext_MediumEdge_node(ctx context.Context, fi
 				return ec.fieldContext_Medium_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Medium_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Medium_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Medium_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Medium_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Medium_description(ctx, field)
 			case "externalLinks":
@@ -24524,47 +23606,6 @@ func (ec *executionContext) fieldContext_Model_updatedBy(ctx context.Context, fi
 	return fc, nil
 }
 
-func (ec *executionContext) _Model_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Model) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Model_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Model_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Model",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Model_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.Model) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Model_displayName(ctx, field)
 	if err != nil {
@@ -24594,6 +23635,47 @@ func (ec *executionContext) _Model_displayName(ctx context.Context, field graphq
 }
 
 func (ec *executionContext) fieldContext_Model_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Model",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Model_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Model) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Model_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Model_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Model",
 		Field:      field,
@@ -24734,10 +23816,10 @@ func (ec *executionContext) fieldContext_Model_artifacts(ctx context.Context, fi
 				return ec.fieldContext_Artifact_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Artifact_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Artifact_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLinks":
@@ -24990,10 +24072,10 @@ func (ec *executionContext) fieldContext_ModelEdge_node(ctx context.Context, fie
 				return ec.fieldContext_Model_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Model_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Model_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Model_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Model_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Model_description(ctx, field)
 			case "externalLinks":
@@ -25265,47 +24347,6 @@ func (ec *executionContext) fieldContext_Monument_updatedBy(ctx context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _Monument_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Monument) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Monument_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Monument_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Monument",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Monument_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.Monument) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Monument_displayName(ctx, field)
 	if err != nil {
@@ -25335,6 +24376,47 @@ func (ec *executionContext) _Monument_displayName(ctx context.Context, field gra
 }
 
 func (ec *executionContext) fieldContext_Monument_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Monument",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Monument_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Monument) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Monument_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Monument_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Monument",
 		Field:      field,
@@ -25475,10 +24557,10 @@ func (ec *executionContext) fieldContext_Monument_artifacts(ctx context.Context,
 				return ec.fieldContext_Artifact_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Artifact_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Artifact_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLinks":
@@ -25586,10 +24668,10 @@ func (ec *executionContext) fieldContext_Monument_sets(ctx context.Context, fiel
 				return ec.fieldContext_Set_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Set_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Set_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Set_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Set_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Set_description(ctx, field)
 			case "externalLinks":
@@ -25796,10 +24878,10 @@ func (ec *executionContext) fieldContext_MonumentEdge_node(ctx context.Context, 
 				return ec.fieldContext_Monument_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Monument_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Monument_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Monument_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Monument_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Monument_description(ctx, field)
 			case "externalLinks":
@@ -25908,10 +24990,10 @@ func (ec *executionContext) fieldContext_Mutation_createArtifact(ctx context.Con
 				return ec.fieldContext_Artifact_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Artifact_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Artifact_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLinks":
@@ -26033,10 +25115,10 @@ func (ec *executionContext) fieldContext_Mutation_updateArtifact(ctx context.Con
 				return ec.fieldContext_Artifact_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Artifact_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Artifact_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLinks":
@@ -26158,10 +25240,10 @@ func (ec *executionContext) fieldContext_Mutation_createCategory(ctx context.Con
 				return ec.fieldContext_Category_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Category_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Category_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Category_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Category_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Category_description(ctx, field)
 			case "externalLinks":
@@ -26235,10 +25317,10 @@ func (ec *executionContext) fieldContext_Mutation_updateCategory(ctx context.Con
 				return ec.fieldContext_Category_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Category_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Category_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Category_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Category_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Category_description(ctx, field)
 			case "externalLinks":
@@ -26312,10 +25394,10 @@ func (ec *executionContext) fieldContext_Mutation_createCollection(ctx context.C
 				return ec.fieldContext_Collection_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Collection_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Collection_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Collection_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Collection_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Collection_description(ctx, field)
 			case "externalLinks":
@@ -26395,10 +25477,10 @@ func (ec *executionContext) fieldContext_Mutation_updateCollection(ctx context.C
 				return ec.fieldContext_Collection_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Collection_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Collection_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Collection_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Collection_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Collection_description(ctx, field)
 			case "externalLinks":
@@ -26478,10 +25560,10 @@ func (ec *executionContext) fieldContext_Mutation_createCulture(ctx context.Cont
 				return ec.fieldContext_Culture_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Culture_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Culture_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Culture_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Culture_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Culture_description(ctx, field)
 			case "externalLinks":
@@ -26555,10 +25637,10 @@ func (ec *executionContext) fieldContext_Mutation_updateCulture(ctx context.Cont
 				return ec.fieldContext_Culture_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Culture_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Culture_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Culture_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Culture_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Culture_description(ctx, field)
 			case "externalLinks":
@@ -26632,10 +25714,10 @@ func (ec *executionContext) fieldContext_Mutation_createDistrict(ctx context.Con
 				return ec.fieldContext_District_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_District_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_District_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_District_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_District_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_District_description(ctx, field)
 			case "externalLinks":
@@ -26709,10 +25791,10 @@ func (ec *executionContext) fieldContext_Mutation_updateDistrict(ctx context.Con
 				return ec.fieldContext_District_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_District_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_District_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_District_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_District_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_District_description(ctx, field)
 			case "externalLinks":
@@ -26948,10 +26030,10 @@ func (ec *executionContext) fieldContext_Mutation_createLicense(ctx context.Cont
 				return ec.fieldContext_License_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_License_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_License_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_License_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_License_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_License_description(ctx, field)
 			case "externalLinks":
@@ -27027,10 +26109,10 @@ func (ec *executionContext) fieldContext_Mutation_updateLicense(ctx context.Cont
 				return ec.fieldContext_License_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_License_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_License_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_License_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_License_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_License_description(ctx, field)
 			case "externalLinks":
@@ -27106,10 +26188,10 @@ func (ec *executionContext) fieldContext_Mutation_createLocation(ctx context.Con
 				return ec.fieldContext_Location_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Location_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Location_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Location_description(ctx, field)
 			case "externalLinks":
@@ -27191,10 +26273,10 @@ func (ec *executionContext) fieldContext_Mutation_updateLocation(ctx context.Con
 				return ec.fieldContext_Location_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Location_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Location_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Location_description(ctx, field)
 			case "externalLinks":
@@ -27276,10 +26358,10 @@ func (ec *executionContext) fieldContext_Mutation_createMedium(ctx context.Conte
 				return ec.fieldContext_Medium_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Medium_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Medium_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Medium_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Medium_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Medium_description(ctx, field)
 			case "externalLinks":
@@ -27353,10 +26435,10 @@ func (ec *executionContext) fieldContext_Mutation_updateMedium(ctx context.Conte
 				return ec.fieldContext_Medium_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Medium_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Medium_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Medium_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Medium_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Medium_description(ctx, field)
 			case "externalLinks":
@@ -27430,10 +26512,10 @@ func (ec *executionContext) fieldContext_Mutation_createModel(ctx context.Contex
 				return ec.fieldContext_Model_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Model_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Model_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Model_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Model_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Model_description(ctx, field)
 			case "externalLinks":
@@ -27507,10 +26589,10 @@ func (ec *executionContext) fieldContext_Mutation_updateModel(ctx context.Contex
 				return ec.fieldContext_Model_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Model_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Model_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Model_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Model_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Model_description(ctx, field)
 			case "externalLinks":
@@ -27584,10 +26666,10 @@ func (ec *executionContext) fieldContext_Mutation_createMonument(ctx context.Con
 				return ec.fieldContext_Monument_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Monument_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Monument_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Monument_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Monument_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Monument_description(ctx, field)
 			case "externalLinks":
@@ -27663,10 +26745,10 @@ func (ec *executionContext) fieldContext_Mutation_updateMonument(ctx context.Con
 				return ec.fieldContext_Monument_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Monument_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Monument_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Monument_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Monument_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Monument_description(ctx, field)
 			case "externalLinks":
@@ -27748,10 +26830,10 @@ func (ec *executionContext) fieldContext_Mutation_createOrganization(ctx context
 				return ec.fieldContext_Organization_phoneNumbers(ctx, field)
 			case "emails":
 				return ec.fieldContext_Organization_emails(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Organization_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Organization_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Organization_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Organization_description(ctx, field)
 			case "externalLinks":
@@ -27845,10 +26927,10 @@ func (ec *executionContext) fieldContext_Mutation_updateOrganization(ctx context
 				return ec.fieldContext_Organization_phoneNumbers(ctx, field)
 			case "emails":
 				return ec.fieldContext_Organization_emails(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Organization_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Organization_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Organization_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Organization_description(ctx, field)
 			case "externalLinks":
@@ -27942,10 +27024,10 @@ func (ec *executionContext) fieldContext_Mutation_createPerson(ctx context.Conte
 				return ec.fieldContext_Person_phoneNumbers(ctx, field)
 			case "emails":
 				return ec.fieldContext_Person_emails(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Person_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Person_description(ctx, field)
 			case "externalLinks":
@@ -28055,10 +27137,10 @@ func (ec *executionContext) fieldContext_Mutation_updatePerson(ctx context.Conte
 				return ec.fieldContext_Person_phoneNumbers(ctx, field)
 			case "emails":
 				return ec.fieldContext_Person_emails(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Person_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Person_description(ctx, field)
 			case "externalLinks":
@@ -28162,10 +27244,10 @@ func (ec *executionContext) fieldContext_Mutation_createProject(ctx context.Cont
 				return ec.fieldContext_Project_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Project_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Project_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Project_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Project_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Project_description(ctx, field)
 			case "externalLinks":
@@ -28247,10 +27329,10 @@ func (ec *executionContext) fieldContext_Mutation_updateProject(ctx context.Cont
 				return ec.fieldContext_Project_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Project_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Project_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Project_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Project_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Project_description(ctx, field)
 			case "externalLinks":
@@ -28332,10 +27414,10 @@ func (ec *executionContext) fieldContext_Mutation_createPublication(ctx context.
 				return ec.fieldContext_Publication_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Publication_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Publication_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Publication_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Publication_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Publication_description(ctx, field)
 			case "externalLinks":
@@ -28411,10 +27493,10 @@ func (ec *executionContext) fieldContext_Mutation_updatePublication(ctx context.
 				return ec.fieldContext_Publication_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Publication_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Publication_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Publication_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Publication_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Publication_description(ctx, field)
 			case "externalLinks":
@@ -28490,10 +27572,10 @@ func (ec *executionContext) fieldContext_Mutation_createRegion(ctx context.Conte
 				return ec.fieldContext_Region_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Region_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Region_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Region_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Region_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Region_description(ctx, field)
 			case "externalLinks":
@@ -28567,10 +27649,10 @@ func (ec *executionContext) fieldContext_Mutation_updateRegion(ctx context.Conte
 				return ec.fieldContext_Region_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Region_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Region_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Region_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Region_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Region_description(ctx, field)
 			case "externalLinks":
@@ -28644,10 +27726,10 @@ func (ec *executionContext) fieldContext_Mutation_createSet(ctx context.Context,
 				return ec.fieldContext_Set_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Set_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Set_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Set_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Set_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Set_description(ctx, field)
 			case "externalLinks":
@@ -28723,10 +27805,10 @@ func (ec *executionContext) fieldContext_Mutation_updateSet(ctx context.Context,
 				return ec.fieldContext_Set_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Set_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Set_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Set_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Set_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Set_description(ctx, field)
 			case "externalLinks":
@@ -28802,10 +27884,10 @@ func (ec *executionContext) fieldContext_Mutation_createSettlement(ctx context.C
 				return ec.fieldContext_Settlement_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Settlement_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Settlement_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Settlement_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Settlement_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Settlement_description(ctx, field)
 			case "externalLinks":
@@ -28879,10 +27961,10 @@ func (ec *executionContext) fieldContext_Mutation_updateSettlement(ctx context.C
 				return ec.fieldContext_Settlement_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Settlement_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Settlement_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Settlement_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Settlement_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Settlement_description(ctx, field)
 			case "externalLinks":
@@ -28956,10 +28038,10 @@ func (ec *executionContext) fieldContext_Mutation_createTechnique(ctx context.Co
 				return ec.fieldContext_Technique_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Technique_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Technique_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Technique_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Technique_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Technique_description(ctx, field)
 			case "externalLinks":
@@ -29033,10 +28115,10 @@ func (ec *executionContext) fieldContext_Mutation_updateTechnique(ctx context.Co
 				return ec.fieldContext_Technique_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Technique_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Technique_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Technique_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Technique_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Technique_description(ctx, field)
 			case "externalLinks":
@@ -29398,47 +28480,6 @@ func (ec *executionContext) fieldContext_Organization_emails(ctx context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _Organization_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Organization) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Organization_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Organization_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Organization_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.Organization) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Organization_displayName(ctx, field)
 	if err != nil {
@@ -29468,6 +28509,47 @@ func (ec *executionContext) _Organization_displayName(ctx context.Context, field
 }
 
 func (ec *executionContext) fieldContext_Organization_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Organization",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Organization_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Organization) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Organization_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Organization_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Organization",
 		Field:      field,
@@ -29819,10 +28901,10 @@ func (ec *executionContext) fieldContext_Organization_people(ctx context.Context
 				return ec.fieldContext_Person_phoneNumbers(ctx, field)
 			case "emails":
 				return ec.fieldContext_Person_emails(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Person_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Person_description(ctx, field)
 			case "externalLinks":
@@ -29979,10 +29061,10 @@ func (ec *executionContext) fieldContext_Organization_organizationType(ctx conte
 				return ec.fieldContext_OrganizationType_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_OrganizationType_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_OrganizationType_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_OrganizationType_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_OrganizationType_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_OrganizationType_description(ctx, field)
 			case "externalLinks":
@@ -30193,10 +29275,10 @@ func (ec *executionContext) fieldContext_OrganizationEdge_node(ctx context.Conte
 				return ec.fieldContext_Organization_phoneNumbers(ctx, field)
 			case "emails":
 				return ec.fieldContext_Organization_emails(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Organization_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Organization_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Organization_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Organization_description(ctx, field)
 			case "externalLinks":
@@ -30482,47 +29564,6 @@ func (ec *executionContext) fieldContext_OrganizationType_updatedBy(ctx context.
 	return fc, nil
 }
 
-func (ec *executionContext) _OrganizationType_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.OrganizationType) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_OrganizationType_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_OrganizationType_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "OrganizationType",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _OrganizationType_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.OrganizationType) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_OrganizationType_displayName(ctx, field)
 	if err != nil {
@@ -30552,6 +29593,47 @@ func (ec *executionContext) _OrganizationType_displayName(ctx context.Context, f
 }
 
 func (ec *executionContext) fieldContext_OrganizationType_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OrganizationType",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OrganizationType_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.OrganizationType) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OrganizationType_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OrganizationType_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "OrganizationType",
 		Field:      field,
@@ -30698,10 +29780,10 @@ func (ec *executionContext) fieldContext_OrganizationType_organizations(ctx cont
 				return ec.fieldContext_Organization_phoneNumbers(ctx, field)
 			case "emails":
 				return ec.fieldContext_Organization_emails(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Organization_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Organization_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Organization_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Organization_description(ctx, field)
 			case "externalLinks":
@@ -30920,10 +30002,10 @@ func (ec *executionContext) fieldContext_OrganizationTypeEdge_node(ctx context.C
 				return ec.fieldContext_OrganizationType_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_OrganizationType_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_OrganizationType_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_OrganizationType_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_OrganizationType_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_OrganizationType_description(ctx, field)
 			case "externalLinks":
@@ -31365,47 +30447,6 @@ func (ec *executionContext) fieldContext_Period_updatedBy(ctx context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _Period_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Period) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Period_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Period_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Period",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Period_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.Period) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Period_displayName(ctx, field)
 	if err != nil {
@@ -31435,6 +30476,47 @@ func (ec *executionContext) _Period_displayName(ctx context.Context, field graph
 }
 
 func (ec *executionContext) fieldContext_Period_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Period",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Period_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Period) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Period_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Period_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Period",
 		Field:      field,
@@ -31575,10 +30657,10 @@ func (ec *executionContext) fieldContext_Period_artifacts(ctx context.Context, f
 				return ec.fieldContext_Artifact_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Artifact_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Artifact_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLinks":
@@ -31831,10 +30913,10 @@ func (ec *executionContext) fieldContext_PeriodEdge_node(ctx context.Context, fi
 				return ec.fieldContext_Period_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Period_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Period_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Period_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Period_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Period_description(ctx, field)
 			case "externalLinks":
@@ -32229,47 +31311,6 @@ func (ec *executionContext) fieldContext_Person_emails(ctx context.Context, fiel
 	return fc, nil
 }
 
-func (ec *executionContext) _Person_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Person) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Person_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Person_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Person",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Person_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.Person) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Person_displayName(ctx, field)
 	if err != nil {
@@ -32299,6 +31340,47 @@ func (ec *executionContext) _Person_displayName(ctx context.Context, field graph
 }
 
 func (ec *executionContext) fieldContext_Person_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Person",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Person_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Person) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Person_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Person_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Person",
 		Field:      field,
@@ -32770,10 +31852,10 @@ func (ec *executionContext) fieldContext_Person_artifacts(ctx context.Context, f
 				return ec.fieldContext_Artifact_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Artifact_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Artifact_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLinks":
@@ -32881,10 +31963,10 @@ func (ec *executionContext) fieldContext_Person_books(ctx context.Context, field
 				return ec.fieldContext_Book_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Book_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Book_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Book_description(ctx, field)
 			case "externalLinks":
@@ -32962,10 +32044,10 @@ func (ec *executionContext) fieldContext_Person_projects(ctx context.Context, fi
 				return ec.fieldContext_Project_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Project_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Project_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Project_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Project_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Project_description(ctx, field)
 			case "externalLinks":
@@ -33033,10 +32115,10 @@ func (ec *executionContext) fieldContext_Person_publications(ctx context.Context
 				return ec.fieldContext_Publication_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Publication_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Publication_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Publication_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Publication_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Publication_description(ctx, field)
 			case "externalLinks":
@@ -33098,10 +32180,10 @@ func (ec *executionContext) fieldContext_Person_personRoles(ctx context.Context,
 				return ec.fieldContext_PersonRole_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_PersonRole_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_PersonRole_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_PersonRole_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_PersonRole_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_PersonRole_description(ctx, field)
 			case "externalLinks":
@@ -33234,10 +32316,10 @@ func (ec *executionContext) fieldContext_Person_affiliation(ctx context.Context,
 				return ec.fieldContext_Organization_phoneNumbers(ctx, field)
 			case "emails":
 				return ec.fieldContext_Organization_emails(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Organization_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Organization_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Organization_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Organization_description(ctx, field)
 			case "externalLinks":
@@ -33311,10 +32393,10 @@ func (ec *executionContext) fieldContext_Person_collections(ctx context.Context,
 				return ec.fieldContext_Collection_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Collection_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Collection_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Collection_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Collection_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Collection_description(ctx, field)
 			case "externalLinks":
@@ -33531,10 +32613,10 @@ func (ec *executionContext) fieldContext_PersonEdge_node(ctx context.Context, fi
 				return ec.fieldContext_Person_phoneNumbers(ctx, field)
 			case "emails":
 				return ec.fieldContext_Person_emails(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Person_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Person_description(ctx, field)
 			case "externalLinks":
@@ -33836,47 +32918,6 @@ func (ec *executionContext) fieldContext_PersonRole_updatedBy(ctx context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _PersonRole_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.PersonRole) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_PersonRole_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_PersonRole_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "PersonRole",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _PersonRole_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.PersonRole) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_PersonRole_displayName(ctx, field)
 	if err != nil {
@@ -33906,6 +32947,47 @@ func (ec *executionContext) _PersonRole_displayName(ctx context.Context, field g
 }
 
 func (ec *executionContext) fieldContext_PersonRole_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PersonRole",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PersonRole_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.PersonRole) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PersonRole_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PersonRole_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "PersonRole",
 		Field:      field,
@@ -34052,10 +33134,10 @@ func (ec *executionContext) fieldContext_PersonRole_person(ctx context.Context, 
 				return ec.fieldContext_Person_phoneNumbers(ctx, field)
 			case "emails":
 				return ec.fieldContext_Person_emails(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Person_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Person_description(ctx, field)
 			case "externalLinks":
@@ -34290,10 +33372,10 @@ func (ec *executionContext) fieldContext_PersonRoleEdge_node(ctx context.Context
 				return ec.fieldContext_PersonRole_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_PersonRole_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_PersonRole_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_PersonRole_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_PersonRole_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_PersonRole_description(ctx, field)
 			case "externalLinks":
@@ -34565,47 +33647,6 @@ func (ec *executionContext) fieldContext_Project_updatedBy(ctx context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _Project_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Project) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Project_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Project_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Project",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Project_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.Project) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Project_displayName(ctx, field)
 	if err != nil {
@@ -34635,6 +33676,47 @@ func (ec *executionContext) _Project_displayName(ctx context.Context, field grap
 }
 
 func (ec *executionContext) fieldContext_Project_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Project",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Project_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Project) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Project_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Project_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Project",
 		Field:      field,
@@ -34857,10 +33939,10 @@ func (ec *executionContext) fieldContext_Project_artifacts(ctx context.Context, 
 				return ec.fieldContext_Artifact_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Artifact_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Artifact_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLinks":
@@ -34974,10 +34056,10 @@ func (ec *executionContext) fieldContext_Project_team(ctx context.Context, field
 				return ec.fieldContext_Person_phoneNumbers(ctx, field)
 			case "emails":
 				return ec.fieldContext_Person_emails(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Person_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Person_description(ctx, field)
 			case "externalLinks":
@@ -35067,10 +34149,10 @@ func (ec *executionContext) fieldContext_Project_projectType(ctx context.Context
 				return ec.fieldContext_ProjectType_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_ProjectType_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_ProjectType_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_ProjectType_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ProjectType_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProjectType_description(ctx, field)
 			case "externalLinks":
@@ -35275,10 +34357,10 @@ func (ec *executionContext) fieldContext_ProjectEdge_node(ctx context.Context, f
 				return ec.fieldContext_Project_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Project_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Project_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Project_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Project_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Project_description(ctx, field)
 			case "externalLinks":
@@ -35558,47 +34640,6 @@ func (ec *executionContext) fieldContext_ProjectType_updatedBy(ctx context.Conte
 	return fc, nil
 }
 
-func (ec *executionContext) _ProjectType_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.ProjectType) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProjectType_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ProjectType_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ProjectType",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _ProjectType_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.ProjectType) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ProjectType_displayName(ctx, field)
 	if err != nil {
@@ -35628,6 +34669,47 @@ func (ec *executionContext) _ProjectType_displayName(ctx context.Context, field 
 }
 
 func (ec *executionContext) fieldContext_ProjectType_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProjectType",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProjectType_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.ProjectType) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProjectType_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProjectType_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ProjectType",
 		Field:      field,
@@ -35768,10 +34850,10 @@ func (ec *executionContext) fieldContext_ProjectType_projects(ctx context.Contex
 				return ec.fieldContext_Project_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Project_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Project_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Project_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Project_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Project_description(ctx, field)
 			case "externalLinks":
@@ -35984,10 +35066,10 @@ func (ec *executionContext) fieldContext_ProjectTypeEdge_node(ctx context.Contex
 				return ec.fieldContext_ProjectType_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_ProjectType_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_ProjectType_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_ProjectType_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ProjectType_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProjectType_description(ctx, field)
 			case "externalLinks":
@@ -36259,47 +35341,6 @@ func (ec *executionContext) fieldContext_ProtectedArea_updatedBy(ctx context.Con
 	return fc, nil
 }
 
-func (ec *executionContext) _ProtectedArea_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedArea) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProtectedArea_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ProtectedArea_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ProtectedArea",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _ProtectedArea_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedArea) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ProtectedArea_displayName(ctx, field)
 	if err != nil {
@@ -36329,6 +35370,47 @@ func (ec *executionContext) _ProtectedArea_displayName(ctx context.Context, fiel
 }
 
 func (ec *executionContext) fieldContext_ProtectedArea_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProtectedArea",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProtectedArea_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedArea) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProtectedArea_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProtectedArea_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ProtectedArea",
 		Field:      field,
@@ -36637,47 +35719,6 @@ func (ec *executionContext) fieldContext_ProtectedAreaCategory_updatedBy(ctx con
 	return fc, nil
 }
 
-func (ec *executionContext) _ProtectedAreaCategory_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaCategory) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProtectedAreaCategory_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ProtectedAreaCategory_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ProtectedAreaCategory",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _ProtectedAreaCategory_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaCategory) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ProtectedAreaCategory_displayName(ctx, field)
 	if err != nil {
@@ -36707,6 +35748,47 @@ func (ec *executionContext) _ProtectedAreaCategory_displayName(ctx context.Conte
 }
 
 func (ec *executionContext) fieldContext_ProtectedAreaCategory_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProtectedAreaCategory",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProtectedAreaCategory_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaCategory) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProtectedAreaCategory_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProtectedAreaCategory_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ProtectedAreaCategory",
 		Field:      field,
@@ -36992,10 +36074,10 @@ func (ec *executionContext) fieldContext_ProtectedAreaCategoryEdge_node(ctx cont
 				return ec.fieldContext_ProtectedAreaCategory_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_ProtectedAreaCategory_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_ProtectedAreaCategory_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_ProtectedAreaCategory_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ProtectedAreaCategory_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProtectedAreaCategory_description(ctx, field)
 			case "externalLinks":
@@ -37242,10 +36324,10 @@ func (ec *executionContext) fieldContext_ProtectedAreaEdge_node(ctx context.Cont
 				return ec.fieldContext_ProtectedArea_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_ProtectedArea_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_ProtectedArea_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_ProtectedArea_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ProtectedArea_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProtectedArea_description(ctx, field)
 			case "externalLinks":
@@ -37515,47 +36597,6 @@ func (ec *executionContext) fieldContext_ProtectedAreaPicture_updatedBy(ctx cont
 	return fc, nil
 }
 
-func (ec *executionContext) _ProtectedAreaPicture_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaPicture) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProtectedAreaPicture_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ProtectedAreaPicture_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ProtectedAreaPicture",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _ProtectedAreaPicture_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaPicture) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ProtectedAreaPicture_displayName(ctx, field)
 	if err != nil {
@@ -37585,6 +36626,47 @@ func (ec *executionContext) _ProtectedAreaPicture_displayName(ctx context.Contex
 }
 
 func (ec *executionContext) fieldContext_ProtectedAreaPicture_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProtectedAreaPicture",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProtectedAreaPicture_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaPicture) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProtectedAreaPicture_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProtectedAreaPicture_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ProtectedAreaPicture",
 		Field:      field,
@@ -37870,10 +36952,10 @@ func (ec *executionContext) fieldContext_ProtectedAreaPictureEdge_node(ctx conte
 				return ec.fieldContext_ProtectedAreaPicture_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_ProtectedAreaPicture_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_ProtectedAreaPicture_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_ProtectedAreaPicture_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ProtectedAreaPicture_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProtectedAreaPicture_description(ctx, field)
 			case "externalLinks":
@@ -38143,47 +37225,6 @@ func (ec *executionContext) fieldContext_Publication_updatedBy(ctx context.Conte
 	return fc, nil
 }
 
-func (ec *executionContext) _Publication_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Publication) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Publication_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Publication_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Publication",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Publication_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.Publication) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Publication_displayName(ctx, field)
 	if err != nil {
@@ -38213,6 +37254,47 @@ func (ec *executionContext) _Publication_displayName(ctx context.Context, field 
 }
 
 func (ec *executionContext) fieldContext_Publication_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Publication",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Publication_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Publication) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Publication_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Publication_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Publication",
 		Field:      field,
@@ -38353,10 +37435,10 @@ func (ec *executionContext) fieldContext_Publication_artifacts(ctx context.Conte
 				return ec.fieldContext_Artifact_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Artifact_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Artifact_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLinks":
@@ -38470,10 +37552,10 @@ func (ec *executionContext) fieldContext_Publication_authors(ctx context.Context
 				return ec.fieldContext_Person_phoneNumbers(ctx, field)
 			case "emails":
 				return ec.fieldContext_Person_emails(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Person_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Person_description(ctx, field)
 			case "externalLinks":
@@ -38708,10 +37790,10 @@ func (ec *executionContext) fieldContext_PublicationEdge_node(ctx context.Contex
 				return ec.fieldContext_Publication_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Publication_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Publication_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Publication_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Publication_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Publication_description(ctx, field)
 			case "externalLinks":
@@ -38985,47 +38067,6 @@ func (ec *executionContext) fieldContext_Publisher_updatedBy(ctx context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _Publisher_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Publisher) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Publisher_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Publisher_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Publisher",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Publisher_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.Publisher) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Publisher_displayName(ctx, field)
 	if err != nil {
@@ -39055,6 +38096,47 @@ func (ec *executionContext) _Publisher_displayName(ctx context.Context, field gr
 }
 
 func (ec *executionContext) fieldContext_Publisher_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Publisher",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Publisher_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Publisher) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Publisher_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Publisher_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Publisher",
 		Field:      field,
@@ -39195,10 +38277,10 @@ func (ec *executionContext) fieldContext_Publisher_books(ctx context.Context, fi
 				return ec.fieldContext_Book_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Book_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Book_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Book_description(ctx, field)
 			case "externalLinks":
@@ -39421,10 +38503,10 @@ func (ec *executionContext) fieldContext_PublisherEdge_node(ctx context.Context,
 				return ec.fieldContext_Publisher_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Publisher_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Publisher_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Publisher_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Publisher_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Publisher_description(ctx, field)
 			case "externalLinks":
@@ -40402,69 +39484,6 @@ func (ec *executionContext) fieldContext_Query_holderResponsibilities(ctx contex
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_holderResponsibilities_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Query_libraries(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_libraries(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Libraries(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.LibraryOrder), fc.Args["where"].(*ent.LibraryWhereInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*ent.LibraryConnection)
-	fc.Result = res
-	return ec.marshalNLibraryConnection2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibraryConnection(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Query_libraries(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_LibraryConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_LibraryConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_LibraryConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type LibraryConnection", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_libraries_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -42137,47 +41156,6 @@ func (ec *executionContext) fieldContext_Region_updatedBy(ctx context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _Region_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Region) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Region_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Region_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Region",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Region_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.Region) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Region_displayName(ctx, field)
 	if err != nil {
@@ -42207,6 +41185,47 @@ func (ec *executionContext) _Region_displayName(ctx context.Context, field graph
 }
 
 func (ec *executionContext) fieldContext_Region_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Region",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Region_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Region) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Region_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Region_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Region",
 		Field:      field,
@@ -42347,10 +41366,10 @@ func (ec *executionContext) fieldContext_Region_location(ctx context.Context, fi
 				return ec.fieldContext_Location_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Location_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Location_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Location_description(ctx, field)
 			case "externalLinks":
@@ -42563,10 +41582,10 @@ func (ec *executionContext) fieldContext_RegionEdge_node(ctx context.Context, fi
 				return ec.fieldContext_Region_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Region_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Region_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Region_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Region_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Region_description(ctx, field)
 			case "externalLinks":
@@ -42838,47 +41857,6 @@ func (ec *executionContext) fieldContext_Set_updatedBy(ctx context.Context, fiel
 	return fc, nil
 }
 
-func (ec *executionContext) _Set_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Set) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Set_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Set_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Set",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Set_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.Set) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Set_displayName(ctx, field)
 	if err != nil {
@@ -42908,6 +41886,47 @@ func (ec *executionContext) _Set_displayName(ctx context.Context, field graphql.
 }
 
 func (ec *executionContext) fieldContext_Set_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Set",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Set_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Set) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Set_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Set_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Set",
 		Field:      field,
@@ -43048,10 +42067,10 @@ func (ec *executionContext) fieldContext_Set_artifacts(ctx context.Context, fiel
 				return ec.fieldContext_Artifact_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Artifact_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Artifact_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLinks":
@@ -43159,10 +42178,10 @@ func (ec *executionContext) fieldContext_Set_monuments(ctx context.Context, fiel
 				return ec.fieldContext_Monument_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Monument_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Monument_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Monument_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Monument_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Monument_description(ctx, field)
 			case "externalLinks":
@@ -43369,10 +42388,10 @@ func (ec *executionContext) fieldContext_SetEdge_node(ctx context.Context, field
 				return ec.fieldContext_Set_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Set_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Set_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Set_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Set_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Set_description(ctx, field)
 			case "externalLinks":
@@ -43646,47 +42665,6 @@ func (ec *executionContext) fieldContext_Settlement_updatedBy(ctx context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _Settlement_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Settlement) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Settlement_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Settlement_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Settlement",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Settlement_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.Settlement) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Settlement_displayName(ctx, field)
 	if err != nil {
@@ -43716,6 +42694,47 @@ func (ec *executionContext) _Settlement_displayName(ctx context.Context, field g
 }
 
 func (ec *executionContext) fieldContext_Settlement_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Settlement",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Settlement_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Settlement) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Settlement_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Settlement_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Settlement",
 		Field:      field,
@@ -43856,10 +42875,10 @@ func (ec *executionContext) fieldContext_Settlement_location(ctx context.Context
 				return ec.fieldContext_Location_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Location_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Location_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Location_description(ctx, field)
 			case "externalLinks":
@@ -44072,10 +43091,10 @@ func (ec *executionContext) fieldContext_SettlementEdge_node(ctx context.Context
 				return ec.fieldContext_Settlement_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Settlement_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Settlement_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Settlement_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Settlement_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Settlement_description(ctx, field)
 			case "externalLinks":
@@ -44347,47 +43366,6 @@ func (ec *executionContext) fieldContext_Technique_updatedBy(ctx context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _Technique_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Technique) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Technique_abbreviation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Abbreviation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Technique_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Technique",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Technique_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.Technique) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Technique_displayName(ctx, field)
 	if err != nil {
@@ -44417,6 +43395,47 @@ func (ec *executionContext) _Technique_displayName(ctx context.Context, field gr
 }
 
 func (ec *executionContext) fieldContext_Technique_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Technique",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Technique_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Technique) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Technique_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Technique_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Technique",
 		Field:      field,
@@ -44557,10 +43576,10 @@ func (ec *executionContext) fieldContext_Technique_artifacts(ctx context.Context
 				return ec.fieldContext_Artifact_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Artifact_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Artifact_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLinks":
@@ -44813,10 +43832,10 @@ func (ec *executionContext) fieldContext_TechniqueEdge_node(ctx context.Context,
 				return ec.fieldContext_Technique_updatedAt(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Technique_updatedBy(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Technique_abbreviation(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Technique_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Technique_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Technique_description(ctx, field)
 			case "externalLinks":
@@ -46696,7 +45715,7 @@ func (ec *executionContext) unmarshalInputArtGenreWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -47216,141 +46235,6 @@ func (ec *executionContext) unmarshalInputArtGenreWhereInput(ctx context.Context
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -47486,6 +46370,141 @@ func (ec *executionContext) unmarshalInputArtGenreWhereInput(ctx context.Context
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -47676,7 +46695,7 @@ func (ec *executionContext) unmarshalInputArtStyleWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -48196,141 +47215,6 @@ func (ec *executionContext) unmarshalInputArtStyleWhereInput(ctx context.Context
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -48466,6 +47350,141 @@ func (ec *executionContext) unmarshalInputArtStyleWhereInput(ctx context.Context
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -48775,7 +47794,7 @@ func (ec *executionContext) unmarshalInputArtifactWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "deletedAt", "deletedAtNEQ", "deletedAtIn", "deletedAtNotIn", "deletedAtGT", "deletedAtGTE", "deletedAtLT", "deletedAtLTE", "deletedAtIsNil", "deletedAtNotNil", "deletedBy", "deletedByNEQ", "deletedByIn", "deletedByNotIn", "deletedByGT", "deletedByGTE", "deletedByLT", "deletedByLTE", "deletedByContains", "deletedByHasPrefix", "deletedByHasSuffix", "deletedByIsNil", "deletedByNotNil", "deletedByEqualFold", "deletedByContainsFold", "dating", "datingNEQ", "datingIn", "datingNotIn", "datingGT", "datingGTE", "datingLT", "datingLTE", "datingContains", "datingHasPrefix", "datingHasSuffix", "datingIsNil", "datingNotNil", "datingEqualFold", "datingContainsFold", "dimensions", "dimensionsNEQ", "dimensionsIn", "dimensionsNotIn", "dimensionsGT", "dimensionsGTE", "dimensionsLT", "dimensionsLTE", "dimensionsContains", "dimensionsHasPrefix", "dimensionsHasSuffix", "dimensionsIsNil", "dimensionsNotNil", "dimensionsEqualFold", "dimensionsContainsFold", "chemicalComposition", "chemicalCompositionNEQ", "chemicalCompositionIn", "chemicalCompositionNotIn", "chemicalCompositionGT", "chemicalCompositionGTE", "chemicalCompositionLT", "chemicalCompositionLTE", "chemicalCompositionContains", "chemicalCompositionHasPrefix", "chemicalCompositionHasSuffix", "chemicalCompositionIsNil", "chemicalCompositionNotNil", "chemicalCompositionEqualFold", "chemicalCompositionContainsFold", "number", "numberNEQ", "numberIn", "numberNotIn", "numberGT", "numberGTE", "numberLT", "numberLTE", "numberContains", "numberHasPrefix", "numberHasSuffix", "numberIsNil", "numberNotNil", "numberEqualFold", "numberContainsFold", "typology", "typologyNEQ", "typologyIn", "typologyNotIn", "typologyGT", "typologyGTE", "typologyLT", "typologyLTE", "typologyContains", "typologyHasPrefix", "typologyHasSuffix", "typologyIsNil", "typologyNotNil", "typologyEqualFold", "typologyContainsFold", "weight", "weightNEQ", "weightIn", "weightNotIn", "weightGT", "weightGTE", "weightLT", "weightLTE", "weightContains", "weightHasPrefix", "weightHasSuffix", "weightIsNil", "weightNotNil", "weightEqualFold", "weightContainsFold", "admissionDate", "admissionDateNEQ", "admissionDateIn", "admissionDateNotIn", "admissionDateGT", "admissionDateGTE", "admissionDateLT", "admissionDateLTE", "admissionDateIsNil", "admissionDateNotNil", "hasAuthors", "hasAuthorsWith", "hasMediums", "hasMediumsWith", "hasTechniques", "hasTechniquesWith", "hasPeriod", "hasPeriodWith", "hasProjects", "hasProjectsWith", "hasPublications", "hasPublicationsWith", "hasHolders", "hasHoldersWith", "hasCulturalAffiliation", "hasCulturalAffiliationWith", "hasMonument", "hasMonumentWith", "hasModel", "hasModelWith", "hasSet", "hasSetWith", "hasLocation", "hasLocationWith", "hasCollection", "hasCollectionWith", "hasLicense", "hasLicenseWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "deletedAt", "deletedAtNEQ", "deletedAtIn", "deletedAtNotIn", "deletedAtGT", "deletedAtGTE", "deletedAtLT", "deletedAtLTE", "deletedAtIsNil", "deletedAtNotNil", "deletedBy", "deletedByNEQ", "deletedByIn", "deletedByNotIn", "deletedByGT", "deletedByGTE", "deletedByLT", "deletedByLTE", "deletedByContains", "deletedByHasPrefix", "deletedByHasSuffix", "deletedByIsNil", "deletedByNotNil", "deletedByEqualFold", "deletedByContainsFold", "dating", "datingNEQ", "datingIn", "datingNotIn", "datingGT", "datingGTE", "datingLT", "datingLTE", "datingContains", "datingHasPrefix", "datingHasSuffix", "datingIsNil", "datingNotNil", "datingEqualFold", "datingContainsFold", "dimensions", "dimensionsNEQ", "dimensionsIn", "dimensionsNotIn", "dimensionsGT", "dimensionsGTE", "dimensionsLT", "dimensionsLTE", "dimensionsContains", "dimensionsHasPrefix", "dimensionsHasSuffix", "dimensionsIsNil", "dimensionsNotNil", "dimensionsEqualFold", "dimensionsContainsFold", "chemicalComposition", "chemicalCompositionNEQ", "chemicalCompositionIn", "chemicalCompositionNotIn", "chemicalCompositionGT", "chemicalCompositionGTE", "chemicalCompositionLT", "chemicalCompositionLTE", "chemicalCompositionContains", "chemicalCompositionHasPrefix", "chemicalCompositionHasSuffix", "chemicalCompositionIsNil", "chemicalCompositionNotNil", "chemicalCompositionEqualFold", "chemicalCompositionContainsFold", "number", "numberNEQ", "numberIn", "numberNotIn", "numberGT", "numberGTE", "numberLT", "numberLTE", "numberContains", "numberHasPrefix", "numberHasSuffix", "numberIsNil", "numberNotNil", "numberEqualFold", "numberContainsFold", "typology", "typologyNEQ", "typologyIn", "typologyNotIn", "typologyGT", "typologyGTE", "typologyLT", "typologyLTE", "typologyContains", "typologyHasPrefix", "typologyHasSuffix", "typologyIsNil", "typologyNotNil", "typologyEqualFold", "typologyContainsFold", "weight", "weightNEQ", "weightIn", "weightNotIn", "weightGT", "weightGTE", "weightLT", "weightLTE", "weightContains", "weightHasPrefix", "weightHasSuffix", "weightIsNil", "weightNotNil", "weightEqualFold", "weightContainsFold", "admissionDate", "admissionDateNEQ", "admissionDateIn", "admissionDateNotIn", "admissionDateGT", "admissionDateGTE", "admissionDateLT", "admissionDateLTE", "admissionDateIsNil", "admissionDateNotNil", "hasAuthors", "hasAuthorsWith", "hasMediums", "hasMediumsWith", "hasTechniques", "hasTechniquesWith", "hasPeriod", "hasPeriodWith", "hasProjects", "hasProjectsWith", "hasPublications", "hasPublicationsWith", "hasHolders", "hasHoldersWith", "hasCulturalAffiliation", "hasCulturalAffiliationWith", "hasMonument", "hasMonumentWith", "hasModel", "hasModelWith", "hasSet", "hasSetWith", "hasLocation", "hasLocationWith", "hasCollection", "hasCollectionWith", "hasLicense", "hasLicenseWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -49295,141 +48314,6 @@ func (ec *executionContext) unmarshalInputArtifactWhereInput(ctx context.Context
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -49565,6 +48449,141 @@ func (ec *executionContext) unmarshalInputArtifactWhereInput(ctx context.Context
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -51995,7 +51014,7 @@ func (ec *executionContext) unmarshalInputBookGenreWhereInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasBooks", "hasBooksWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasBooks", "hasBooksWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -52515,141 +51534,6 @@ func (ec *executionContext) unmarshalInputBookGenreWhereInput(ctx context.Contex
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -52785,6 +51669,141 @@ func (ec *executionContext) unmarshalInputBookGenreWhereInput(ctx context.Contex
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -52993,7 +52012,7 @@ func (ec *executionContext) unmarshalInputBookWhereInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "year", "yearNEQ", "yearIn", "yearNotIn", "yearGT", "yearGTE", "yearLT", "yearLTE", "yearIsNil", "yearNotNil", "hasAuthors", "hasAuthorsWith", "hasBookGenres", "hasBookGenresWith", "hasCollection", "hasCollectionWith", "hasHolders", "hasHoldersWith", "hasPublisher", "hasPublisherWith", "hasLicense", "hasLicenseWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "year", "yearNEQ", "yearIn", "yearNotIn", "yearGT", "yearGTE", "yearLT", "yearLTE", "yearIsNil", "yearNotNil", "hasAuthors", "hasAuthorsWith", "hasBookGenres", "hasBookGenresWith", "hasCollection", "hasCollectionWith", "hasHolders", "hasHoldersWith", "hasPublisher", "hasPublisherWith", "hasLicense", "hasLicenseWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -53513,141 +52532,6 @@ func (ec *executionContext) unmarshalInputBookWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -53783,6 +52667,141 @@ func (ec *executionContext) unmarshalInputBookWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -54306,7 +53325,7 @@ func (ec *executionContext) unmarshalInputCategoryWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasCollections", "hasCollectionsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasCollections", "hasCollectionsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -54826,141 +53845,6 @@ func (ec *executionContext) unmarshalInputCategoryWhereInput(ctx context.Context
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -55096,6 +53980,141 @@ func (ec *executionContext) unmarshalInputCategoryWhereInput(ctx context.Context
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -55304,7 +54323,7 @@ func (ec *executionContext) unmarshalInputCollectionWhereInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasPeople", "hasPeopleWith", "hasCategory", "hasCategoryWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasPeople", "hasPeopleWith", "hasCategory", "hasCategoryWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -55824,141 +54843,6 @@ func (ec *executionContext) unmarshalInputCollectionWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -56094,6 +54978,141 @@ func (ec *executionContext) unmarshalInputCollectionWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -56356,7 +55375,7 @@ func (ec *executionContext) unmarshalInputCountryWhereInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasLocation", "hasLocationWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasLocation", "hasLocationWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -56876,141 +55895,6 @@ func (ec *executionContext) unmarshalInputCountryWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -57146,6 +56030,141 @@ func (ec *executionContext) unmarshalInputCountryWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -57312,7 +56331,7 @@ func (ec *executionContext) unmarshalInputCreateArtGenreInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -57355,15 +56374,6 @@ func (ec *executionContext) unmarshalInputCreateArtGenreInput(ctx context.Contex
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -57373,6 +56383,15 @@ func (ec *executionContext) unmarshalInputCreateArtGenreInput(ctx context.Contex
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -57404,7 +56423,7 @@ func (ec *executionContext) unmarshalInputCreateArtStyleInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -57447,15 +56466,6 @@ func (ec *executionContext) unmarshalInputCreateArtStyleInput(ctx context.Contex
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -57465,6 +56475,15 @@ func (ec *executionContext) unmarshalInputCreateArtStyleInput(ctx context.Contex
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -57496,7 +56515,7 @@ func (ec *executionContext) unmarshalInputCreateArtifactInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "deletedAt", "deletedBy", "dating", "dimensions", "chemicalComposition", "number", "typology", "weight", "admissionDate", "authorIDs", "mediumIDs", "techniqueIDs", "periodID", "projectIDs", "publicationIDs", "holderIDs", "culturalAffiliationID", "monumentID", "modelID", "setID", "locationID", "collectionID", "licenseID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "deletedAt", "deletedBy", "dating", "dimensions", "chemicalComposition", "number", "typology", "weight", "admissionDate", "authorIDs", "mediumIDs", "techniqueIDs", "periodID", "projectIDs", "publicationIDs", "holderIDs", "culturalAffiliationID", "monumentID", "modelID", "setID", "locationID", "collectionID", "licenseID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -57539,15 +56558,6 @@ func (ec *executionContext) unmarshalInputCreateArtifactInput(ctx context.Contex
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -57557,6 +56567,15 @@ func (ec *executionContext) unmarshalInputCreateArtifactInput(ctx context.Contex
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -57813,7 +56832,7 @@ func (ec *executionContext) unmarshalInputCreateBookGenreInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "bookIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "bookIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -57856,15 +56875,6 @@ func (ec *executionContext) unmarshalInputCreateBookGenreInput(ctx context.Conte
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -57874,6 +56884,15 @@ func (ec *executionContext) unmarshalInputCreateBookGenreInput(ctx context.Conte
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -57914,7 +56933,7 @@ func (ec *executionContext) unmarshalInputCreateBookInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "files", "year", "authorIDs", "bookGenreIDs", "collectionID", "holderIDs", "publisherID", "licenseID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "files", "year", "authorIDs", "bookGenreIDs", "collectionID", "holderIDs", "publisherID", "licenseID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -57957,15 +56976,6 @@ func (ec *executionContext) unmarshalInputCreateBookInput(ctx context.Context, o
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -57975,6 +56985,15 @@ func (ec *executionContext) unmarshalInputCreateBookInput(ctx context.Context, o
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -58096,7 +57115,7 @@ func (ec *executionContext) unmarshalInputCreateCategoryInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "collectionIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "collectionIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -58139,15 +57158,6 @@ func (ec *executionContext) unmarshalInputCreateCategoryInput(ctx context.Contex
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -58157,6 +57167,15 @@ func (ec *executionContext) unmarshalInputCreateCategoryInput(ctx context.Contex
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -58197,7 +57216,7 @@ func (ec *executionContext) unmarshalInputCreateCollectionInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "artifactIDs", "bookIDs", "personIDs", "categoryID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs", "bookIDs", "personIDs", "categoryID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -58240,15 +57259,6 @@ func (ec *executionContext) unmarshalInputCreateCollectionInput(ctx context.Cont
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -58258,6 +57268,15 @@ func (ec *executionContext) unmarshalInputCreateCollectionInput(ctx context.Cont
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -58325,7 +57344,7 @@ func (ec *executionContext) unmarshalInputCreateCountryInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "locationID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "locationID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -58368,15 +57387,6 @@ func (ec *executionContext) unmarshalInputCreateCountryInput(ctx context.Context
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -58386,6 +57396,15 @@ func (ec *executionContext) unmarshalInputCreateCountryInput(ctx context.Context
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -58426,7 +57445,7 @@ func (ec *executionContext) unmarshalInputCreateCultureInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "artifactIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -58469,15 +57488,6 @@ func (ec *executionContext) unmarshalInputCreateCultureInput(ctx context.Context
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -58487,6 +57497,15 @@ func (ec *executionContext) unmarshalInputCreateCultureInput(ctx context.Context
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -58527,7 +57546,7 @@ func (ec *executionContext) unmarshalInputCreateDistrictInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "locationID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "locationID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -58570,15 +57589,6 @@ func (ec *executionContext) unmarshalInputCreateDistrictInput(ctx context.Contex
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -58588,6 +57598,15 @@ func (ec *executionContext) unmarshalInputCreateDistrictInput(ctx context.Contex
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -58747,7 +57766,7 @@ func (ec *executionContext) unmarshalInputCreateHolderResponsibilityInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "holderIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "holderIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -58790,15 +57809,6 @@ func (ec *executionContext) unmarshalInputCreateHolderResponsibilityInput(ctx co
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -58808,6 +57818,15 @@ func (ec *executionContext) unmarshalInputCreateHolderResponsibilityInput(ctx co
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -58841,107 +57860,6 @@ func (ec *executionContext) unmarshalInputCreateHolderResponsibilityInput(ctx co
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputCreateLibraryInput(ctx context.Context, obj interface{}) (ent.CreateLibraryInput, error) {
-	var it ent.CreateLibraryInput
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "bookIDs"}
-	for _, k := range fieldsInOrder {
-		v, ok := asMap[k]
-		if !ok {
-			continue
-		}
-		switch k {
-		case "createdAt":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedAt = data
-		case "createdBy":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedBy = data
-		case "updatedAt":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedAt = data
-		case "updatedBy":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "displayName":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayName"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DisplayName = data
-		case "description":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Description = data
-		case "externalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ExternalLinks = data
-		case "bookIDs":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("bookIDs"))
-			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.BookIDs = data
-		}
-	}
-
-	return it, nil
-}
-
 func (ec *executionContext) unmarshalInputCreateLicenseInput(ctx context.Context, obj interface{}) (ent.CreateLicenseInput, error) {
 	var it ent.CreateLicenseInput
 	asMap := map[string]interface{}{}
@@ -58949,7 +57867,7 @@ func (ec *executionContext) unmarshalInputCreateLicenseInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "artifactIDs", "bookIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs", "bookIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -58992,15 +57910,6 @@ func (ec *executionContext) unmarshalInputCreateLicenseInput(ctx context.Context
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -59010,6 +57919,15 @@ func (ec *executionContext) unmarshalInputCreateLicenseInput(ctx context.Context
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -59059,7 +57977,7 @@ func (ec *executionContext) unmarshalInputCreateLocationInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "artifactIDs", "countryID", "districtID", "settlementID", "regionID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs", "countryID", "districtID", "settlementID", "regionID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -59102,15 +58020,6 @@ func (ec *executionContext) unmarshalInputCreateLocationInput(ctx context.Contex
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -59120,6 +58029,15 @@ func (ec *executionContext) unmarshalInputCreateLocationInput(ctx context.Contex
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -59196,7 +58114,7 @@ func (ec *executionContext) unmarshalInputCreateMediumInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "artifactIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -59239,15 +58157,6 @@ func (ec *executionContext) unmarshalInputCreateMediumInput(ctx context.Context,
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -59257,6 +58166,15 @@ func (ec *executionContext) unmarshalInputCreateMediumInput(ctx context.Context,
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -59297,7 +58215,7 @@ func (ec *executionContext) unmarshalInputCreateModelInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "artifactIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -59340,15 +58258,6 @@ func (ec *executionContext) unmarshalInputCreateModelInput(ctx context.Context, 
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -59358,6 +58267,15 @@ func (ec *executionContext) unmarshalInputCreateModelInput(ctx context.Context, 
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -59398,7 +58316,7 @@ func (ec *executionContext) unmarshalInputCreateMonumentInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "artifactIDs", "setIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs", "setIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -59441,15 +58359,6 @@ func (ec *executionContext) unmarshalInputCreateMonumentInput(ctx context.Contex
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -59459,6 +58368,15 @@ func (ec *executionContext) unmarshalInputCreateMonumentInput(ctx context.Contex
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -59508,7 +58426,7 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "address", "phoneNumbers", "emails", "abbreviation", "displayName", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "previousNames", "isInAConsortium", "consortiumDocumentURL", "personIDs", "holderID", "organizationTypeID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "address", "phoneNumbers", "emails", "displayName", "abbreviation", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "previousNames", "isInAConsortium", "consortiumDocumentURL", "personIDs", "holderID", "organizationTypeID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -59578,15 +58496,6 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.Emails = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -59596,6 +58505,15 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -59699,7 +58617,7 @@ func (ec *executionContext) unmarshalInputCreateOrganizationTypeInput(ctx contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "organizationIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "organizationIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -59742,15 +58660,6 @@ func (ec *executionContext) unmarshalInputCreateOrganizationTypeInput(ctx contex
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -59760,6 +58669,15 @@ func (ec *executionContext) unmarshalInputCreateOrganizationTypeInput(ctx contex
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -59800,7 +58718,7 @@ func (ec *executionContext) unmarshalInputCreatePeriodInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "artifactIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -59843,15 +58761,6 @@ func (ec *executionContext) unmarshalInputCreatePeriodInput(ctx context.Context,
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -59861,6 +58770,15 @@ func (ec *executionContext) unmarshalInputCreatePeriodInput(ctx context.Context,
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -59901,7 +58819,7 @@ func (ec *executionContext) unmarshalInputCreatePersonInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "address", "phoneNumbers", "emails", "abbreviation", "displayName", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "givenName", "familyName", "patronymicName", "beginData", "endDate", "gender", "artifactIDs", "bookIDs", "projectIDs", "publicationIDs", "personRoleIDs", "holderID", "affiliationID", "collectionsID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "address", "phoneNumbers", "emails", "displayName", "abbreviation", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "givenName", "familyName", "patronymicName", "beginData", "endDate", "gender", "artifactIDs", "bookIDs", "projectIDs", "publicationIDs", "personRoleIDs", "holderID", "affiliationID", "collectionsID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -59971,15 +58889,6 @@ func (ec *executionContext) unmarshalInputCreatePersonInput(ctx context.Context,
 				return it, err
 			}
 			it.Emails = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -59989,6 +58898,15 @@ func (ec *executionContext) unmarshalInputCreatePersonInput(ctx context.Context,
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -60164,7 +59082,7 @@ func (ec *executionContext) unmarshalInputCreatePersonRoleInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "personIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "personIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -60207,15 +59125,6 @@ func (ec *executionContext) unmarshalInputCreatePersonRoleInput(ctx context.Cont
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -60225,6 +59134,15 @@ func (ec *executionContext) unmarshalInputCreatePersonRoleInput(ctx context.Cont
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -60265,7 +59183,7 @@ func (ec *executionContext) unmarshalInputCreateProjectInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "beginData", "endDate", "artifactIDs", "teamIDs", "projectTypeID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "beginData", "endDate", "artifactIDs", "teamIDs", "projectTypeID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -60308,15 +59226,6 @@ func (ec *executionContext) unmarshalInputCreateProjectInput(ctx context.Context
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -60326,6 +59235,15 @@ func (ec *executionContext) unmarshalInputCreateProjectInput(ctx context.Context
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -60402,7 +59320,7 @@ func (ec *executionContext) unmarshalInputCreateProjectTypeInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "projectIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "projectIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -60445,15 +59363,6 @@ func (ec *executionContext) unmarshalInputCreateProjectTypeInput(ctx context.Con
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -60463,6 +59372,15 @@ func (ec *executionContext) unmarshalInputCreateProjectTypeInput(ctx context.Con
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -60503,7 +59421,7 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaCategoryInput(ctx c
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -60546,15 +59464,6 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaCategoryInput(ctx c
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -60564,6 +59473,15 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaCategoryInput(ctx c
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -60595,7 +59513,7 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -60638,15 +59556,6 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaInput(ctx context.C
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -60656,6 +59565,15 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaInput(ctx context.C
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -60687,7 +59605,7 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaPictureInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -60730,15 +59648,6 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaPictureInput(ctx co
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -60748,6 +59657,15 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaPictureInput(ctx co
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -60779,7 +59697,7 @@ func (ec *executionContext) unmarshalInputCreatePublicationInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "artifactIDs", "authorIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs", "authorIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -60822,15 +59740,6 @@ func (ec *executionContext) unmarshalInputCreatePublicationInput(ctx context.Con
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -60840,6 +59749,15 @@ func (ec *executionContext) unmarshalInputCreatePublicationInput(ctx context.Con
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -60889,7 +59807,7 @@ func (ec *executionContext) unmarshalInputCreatePublisherInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "bookIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "bookIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -60932,15 +59850,6 @@ func (ec *executionContext) unmarshalInputCreatePublisherInput(ctx context.Conte
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -60950,6 +59859,15 @@ func (ec *executionContext) unmarshalInputCreatePublisherInput(ctx context.Conte
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -60990,7 +59908,7 @@ func (ec *executionContext) unmarshalInputCreateRegionInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "locationID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "locationID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -61033,15 +59951,6 @@ func (ec *executionContext) unmarshalInputCreateRegionInput(ctx context.Context,
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -61051,6 +59960,15 @@ func (ec *executionContext) unmarshalInputCreateRegionInput(ctx context.Context,
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -61091,7 +60009,7 @@ func (ec *executionContext) unmarshalInputCreateSetInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "artifactIDs", "monumentIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs", "monumentIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -61134,15 +60052,6 @@ func (ec *executionContext) unmarshalInputCreateSetInput(ctx context.Context, ob
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -61152,6 +60061,15 @@ func (ec *executionContext) unmarshalInputCreateSetInput(ctx context.Context, ob
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -61201,7 +60119,7 @@ func (ec *executionContext) unmarshalInputCreateSettlementInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "locationID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "locationID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -61244,15 +60162,6 @@ func (ec *executionContext) unmarshalInputCreateSettlementInput(ctx context.Cont
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -61262,6 +60171,15 @@ func (ec *executionContext) unmarshalInputCreateSettlementInput(ctx context.Cont
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -61302,7 +60220,7 @@ func (ec *executionContext) unmarshalInputCreateTechniqueInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "abbreviation", "displayName", "description", "externalLinks", "artifactIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -61345,15 +60263,6 @@ func (ec *executionContext) unmarshalInputCreateTechniqueInput(ctx context.Conte
 				return it, err
 			}
 			it.UpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
 		case "displayName":
 			var err error
 
@@ -61363,6 +60272,15 @@ func (ec *executionContext) unmarshalInputCreateTechniqueInput(ctx context.Conte
 				return it, err
 			}
 			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
 		case "description":
 			var err error
 
@@ -61445,7 +60363,7 @@ func (ec *executionContext) unmarshalInputCultureWhereInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -61965,141 +60883,6 @@ func (ec *executionContext) unmarshalInputCultureWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -62235,6 +61018,141 @@ func (ec *executionContext) unmarshalInputCultureWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -62443,7 +61361,7 @@ func (ec *executionContext) unmarshalInputDistrictWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasLocation", "hasLocationWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasLocation", "hasLocationWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -62963,141 +61881,6 @@ func (ec *executionContext) unmarshalInputDistrictWhereInput(ctx context.Context
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -63233,6 +62016,141 @@ func (ec *executionContext) unmarshalInputDistrictWhereInput(ctx context.Context
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -63483,7 +62401,7 @@ func (ec *executionContext) unmarshalInputHolderResponsibilityWhereInput(ctx con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasHolder", "hasHolderWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasHolder", "hasHolderWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -64003,141 +62921,6 @@ func (ec *executionContext) unmarshalInputHolderResponsibilityWhereInput(ctx con
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -64273,6 +63056,141 @@ func (ec *executionContext) unmarshalInputHolderResponsibilityWhereInput(ctx con
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -65336,1004 +64254,6 @@ func (ec *executionContext) unmarshalInputKeywordWhereInput(ctx context.Context,
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputLibraryOrder(ctx context.Context, obj interface{}) (ent.LibraryOrder, error) {
-	var it ent.LibraryOrder
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	if _, present := asMap["direction"]; !present {
-		asMap["direction"] = "ASC"
-	}
-
-	fieldsInOrder := [...]string{"direction", "field"}
-	for _, k := range fieldsInOrder {
-		v, ok := asMap[k]
-		if !ok {
-			continue
-		}
-		switch k {
-		case "direction":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("direction"))
-			data, err := ec.unmarshalNOrderDirection2entgoᚗioᚋcontribᚋentgqlᚐOrderDirection(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Direction = data
-		case "field":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("field"))
-			data, err := ec.unmarshalNLibraryOrderField2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibraryOrderField(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Field = data
-		}
-	}
-
-	return it, nil
-}
-
-func (ec *executionContext) unmarshalInputLibraryWhereInput(ctx context.Context, obj interface{}) (ent.LibraryWhereInput, error) {
-	var it ent.LibraryWhereInput
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasBooks", "hasBooksWith"}
-	for _, k := range fieldsInOrder {
-		v, ok := asMap[k]
-		if !ok {
-			continue
-		}
-		switch k {
-		case "not":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
-			data, err := ec.unmarshalOLibraryWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibraryWhereInput(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Not = data
-		case "and":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
-			data, err := ec.unmarshalOLibraryWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibraryWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.And = data
-		case "or":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
-			data, err := ec.unmarshalOLibraryWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibraryWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Or = data
-		case "id":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ID = data
-		case "idNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IDNEQ = data
-		case "idIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
-			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IDIn = data
-		case "idNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
-			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IDNotIn = data
-		case "idGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGT"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IDGT = data
-		case "idGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGTE"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IDGTE = data
-		case "idLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLT"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IDLT = data
-		case "idLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLTE"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IDLTE = data
-		case "createdAt":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedAt = data
-		case "createdAtNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtNEQ"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedAtNEQ = data
-		case "createdAtIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtIn"))
-			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedAtIn = data
-		case "createdAtNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtNotIn"))
-			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedAtNotIn = data
-		case "createdAtGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedAtGT = data
-		case "createdAtGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedAtGTE = data
-		case "createdAtLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedAtLT = data
-		case "createdAtLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedAtLTE = data
-		case "createdBy":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedBy = data
-		case "createdByNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByNEQ = data
-		case "createdByIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByIn = data
-		case "createdByNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByNotIn = data
-		case "createdByGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByGT = data
-		case "createdByGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByGTE = data
-		case "createdByLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByLT = data
-		case "createdByLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByLTE = data
-		case "createdByContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByContains = data
-		case "createdByHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByHasPrefix = data
-		case "createdByHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByHasSuffix = data
-		case "createdByIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByIsNil = data
-		case "createdByNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByNotNil = data
-		case "createdByEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByEqualFold = data
-		case "createdByContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByContainsFold = data
-		case "updatedAt":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedAt = data
-		case "updatedAtNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtNEQ"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedAtNEQ = data
-		case "updatedAtIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtIn"))
-			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedAtIn = data
-		case "updatedAtNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtNotIn"))
-			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedAtNotIn = data
-		case "updatedAtGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedAtGT = data
-		case "updatedAtGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedAtGTE = data
-		case "updatedAtLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedAtLT = data
-		case "updatedAtLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedAtLTE = data
-		case "updatedBy":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedBy = data
-		case "updatedByNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByNEQ = data
-		case "updatedByIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByIn = data
-		case "updatedByNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByNotIn = data
-		case "updatedByGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByGT = data
-		case "updatedByGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByGTE = data
-		case "updatedByLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByLT = data
-		case "updatedByLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByLTE = data
-		case "updatedByContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByContains = data
-		case "updatedByHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByHasPrefix = data
-		case "updatedByHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByHasSuffix = data
-		case "updatedByIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByIsNil = data
-		case "updatedByNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByNotNil = data
-		case "updatedByEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByEqualFold = data
-		case "updatedByContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
-		case "displayName":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayName"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DisplayName = data
-		case "displayNameNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DisplayNameNEQ = data
-		case "displayNameIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DisplayNameIn = data
-		case "displayNameNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DisplayNameNotIn = data
-		case "displayNameGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DisplayNameGT = data
-		case "displayNameGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DisplayNameGTE = data
-		case "displayNameLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DisplayNameLT = data
-		case "displayNameLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DisplayNameLTE = data
-		case "displayNameContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DisplayNameContains = data
-		case "displayNameHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DisplayNameHasPrefix = data
-		case "displayNameHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DisplayNameHasSuffix = data
-		case "displayNameIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DisplayNameIsNil = data
-		case "displayNameNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DisplayNameNotNil = data
-		case "displayNameEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DisplayNameEqualFold = data
-		case "displayNameContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DisplayNameContainsFold = data
-		case "description":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Description = data
-		case "descriptionNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DescriptionNEQ = data
-		case "descriptionIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DescriptionIn = data
-		case "descriptionNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DescriptionNotIn = data
-		case "descriptionGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DescriptionGT = data
-		case "descriptionGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DescriptionGTE = data
-		case "descriptionLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DescriptionLT = data
-		case "descriptionLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DescriptionLTE = data
-		case "descriptionContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DescriptionContains = data
-		case "descriptionHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DescriptionHasPrefix = data
-		case "descriptionHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DescriptionHasSuffix = data
-		case "descriptionIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DescriptionIsNil = data
-		case "descriptionNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DescriptionNotNil = data
-		case "descriptionEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DescriptionEqualFold = data
-		case "descriptionContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DescriptionContainsFold = data
-		case "hasBooks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBooks"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasBooks = data
-		case "hasBooksWith":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBooksWith"))
-			data, err := ec.unmarshalOBookWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐBookWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasBooksWith = data
-		}
-	}
-
-	return it, nil
-}
-
 func (ec *executionContext) unmarshalInputLicenseOrder(ctx context.Context, obj interface{}) (ent.LicenseOrder, error) {
 	var it ent.LicenseOrder
 	asMap := map[string]interface{}{}
@@ -66383,7 +64303,7 @@ func (ec *executionContext) unmarshalInputLicenseWhereInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -66903,141 +64823,6 @@ func (ec *executionContext) unmarshalInputLicenseWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -67173,6 +64958,141 @@ func (ec *executionContext) unmarshalInputLicenseWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -67399,7 +65319,7 @@ func (ec *executionContext) unmarshalInputLocationWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasCountry", "hasCountryWith", "hasDistrict", "hasDistrictWith", "hasSettlement", "hasSettlementWith", "hasRegion", "hasRegionWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasCountry", "hasCountryWith", "hasDistrict", "hasDistrictWith", "hasSettlement", "hasSettlementWith", "hasRegion", "hasRegionWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -67919,141 +65839,6 @@ func (ec *executionContext) unmarshalInputLocationWhereInput(ctx context.Context
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -68189,6 +65974,141 @@ func (ec *executionContext) unmarshalInputLocationWhereInput(ctx context.Context
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -68469,7 +66389,7 @@ func (ec *executionContext) unmarshalInputMediumWhereInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -68989,141 +66909,6 @@ func (ec *executionContext) unmarshalInputMediumWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -69259,6 +67044,141 @@ func (ec *executionContext) unmarshalInputMediumWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -69467,7 +67387,7 @@ func (ec *executionContext) unmarshalInputModelWhereInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -69987,141 +67907,6 @@ func (ec *executionContext) unmarshalInputModelWhereInput(ctx context.Context, o
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -70257,6 +68042,141 @@ func (ec *executionContext) unmarshalInputModelWhereInput(ctx context.Context, o
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -70465,7 +68385,7 @@ func (ec *executionContext) unmarshalInputMonumentWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasSets", "hasSetsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasSets", "hasSetsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -70985,141 +68905,6 @@ func (ec *executionContext) unmarshalInputMonumentWhereInput(ctx context.Context
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -71255,6 +69040,141 @@ func (ec *executionContext) unmarshalInputMonumentWhereInput(ctx context.Context
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -71523,7 +69443,7 @@ func (ec *executionContext) unmarshalInputOrganizationTypeWhereInput(ctx context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasOrganizations", "hasOrganizationsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasOrganizations", "hasOrganizationsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -72043,141 +69963,6 @@ func (ec *executionContext) unmarshalInputOrganizationTypeWhereInput(ctx context
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -72313,6 +70098,141 @@ func (ec *executionContext) unmarshalInputOrganizationTypeWhereInput(ctx context
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -72479,7 +70399,7 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "address", "addressNEQ", "addressIn", "addressNotIn", "addressGT", "addressGTE", "addressLT", "addressLTE", "addressContains", "addressHasPrefix", "addressHasSuffix", "addressIsNil", "addressNotNil", "addressEqualFold", "addressContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "isInAConsortium", "isInAConsortiumNEQ", "isInAConsortiumIsNil", "isInAConsortiumNotNil", "consortiumDocumentURL", "consortiumDocumentURLNEQ", "consortiumDocumentURLIn", "consortiumDocumentURLNotIn", "consortiumDocumentURLGT", "consortiumDocumentURLGTE", "consortiumDocumentURLLT", "consortiumDocumentURLLTE", "consortiumDocumentURLContains", "consortiumDocumentURLHasPrefix", "consortiumDocumentURLHasSuffix", "consortiumDocumentURLIsNil", "consortiumDocumentURLNotNil", "consortiumDocumentURLEqualFold", "consortiumDocumentURLContainsFold", "hasPeople", "hasPeopleWith", "hasHolder", "hasHolderWith", "hasOrganizationType", "hasOrganizationTypeWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "address", "addressNEQ", "addressIn", "addressNotIn", "addressGT", "addressGTE", "addressLT", "addressLTE", "addressContains", "addressHasPrefix", "addressHasSuffix", "addressIsNil", "addressNotNil", "addressEqualFold", "addressContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "isInAConsortium", "isInAConsortiumNEQ", "isInAConsortiumIsNil", "isInAConsortiumNotNil", "consortiumDocumentURL", "consortiumDocumentURLNEQ", "consortiumDocumentURLIn", "consortiumDocumentURLNotIn", "consortiumDocumentURLGT", "consortiumDocumentURLGTE", "consortiumDocumentURLLT", "consortiumDocumentURLLTE", "consortiumDocumentURLContains", "consortiumDocumentURLHasPrefix", "consortiumDocumentURLHasSuffix", "consortiumDocumentURLIsNil", "consortiumDocumentURLNotNil", "consortiumDocumentURLEqualFold", "consortiumDocumentURLContainsFold", "hasPeople", "hasPeopleWith", "hasHolder", "hasHolderWith", "hasOrganizationType", "hasOrganizationTypeWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -73134,141 +71054,6 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 				return it, err
 			}
 			it.AddressContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -73404,6 +71189,141 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -73954,7 +71874,7 @@ func (ec *executionContext) unmarshalInputPeriodWhereInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -74474,141 +72394,6 @@ func (ec *executionContext) unmarshalInputPeriodWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -74744,6 +72529,141 @@ func (ec *executionContext) unmarshalInputPeriodWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -74994,7 +72914,7 @@ func (ec *executionContext) unmarshalInputPersonRoleWhereInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasPerson", "hasPersonWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasPerson", "hasPersonWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -75514,141 +73434,6 @@ func (ec *executionContext) unmarshalInputPersonRoleWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -75784,6 +73569,141 @@ func (ec *executionContext) unmarshalInputPersonRoleWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -75950,7 +73870,7 @@ func (ec *executionContext) unmarshalInputPersonWhereInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "address", "addressNEQ", "addressIn", "addressNotIn", "addressGT", "addressGTE", "addressLT", "addressLTE", "addressContains", "addressHasPrefix", "addressHasSuffix", "addressIsNil", "addressNotNil", "addressEqualFold", "addressContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "givenName", "givenNameNEQ", "givenNameIn", "givenNameNotIn", "givenNameGT", "givenNameGTE", "givenNameLT", "givenNameLTE", "givenNameContains", "givenNameHasPrefix", "givenNameHasSuffix", "givenNameIsNil", "givenNameNotNil", "givenNameEqualFold", "givenNameContainsFold", "familyName", "familyNameNEQ", "familyNameIn", "familyNameNotIn", "familyNameGT", "familyNameGTE", "familyNameLT", "familyNameLTE", "familyNameContains", "familyNameHasPrefix", "familyNameHasSuffix", "familyNameIsNil", "familyNameNotNil", "familyNameEqualFold", "familyNameContainsFold", "patronymicName", "patronymicNameNEQ", "patronymicNameIn", "patronymicNameNotIn", "patronymicNameGT", "patronymicNameGTE", "patronymicNameLT", "patronymicNameLTE", "patronymicNameContains", "patronymicNameHasPrefix", "patronymicNameHasSuffix", "patronymicNameIsNil", "patronymicNameNotNil", "patronymicNameEqualFold", "patronymicNameContainsFold", "beginData", "beginDataNEQ", "beginDataIn", "beginDataNotIn", "beginDataGT", "beginDataGTE", "beginDataLT", "beginDataLTE", "beginDataIsNil", "beginDataNotNil", "endDate", "endDateNEQ", "endDateIn", "endDateNotIn", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "gender", "genderNEQ", "genderIn", "genderNotIn", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasProjects", "hasProjectsWith", "hasPublications", "hasPublicationsWith", "hasPersonRoles", "hasPersonRolesWith", "hasHolder", "hasHolderWith", "hasAffiliation", "hasAffiliationWith", "hasCollections", "hasCollectionsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "address", "addressNEQ", "addressIn", "addressNotIn", "addressGT", "addressGTE", "addressLT", "addressLTE", "addressContains", "addressHasPrefix", "addressHasSuffix", "addressIsNil", "addressNotNil", "addressEqualFold", "addressContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "givenName", "givenNameNEQ", "givenNameIn", "givenNameNotIn", "givenNameGT", "givenNameGTE", "givenNameLT", "givenNameLTE", "givenNameContains", "givenNameHasPrefix", "givenNameHasSuffix", "givenNameIsNil", "givenNameNotNil", "givenNameEqualFold", "givenNameContainsFold", "familyName", "familyNameNEQ", "familyNameIn", "familyNameNotIn", "familyNameGT", "familyNameGTE", "familyNameLT", "familyNameLTE", "familyNameContains", "familyNameHasPrefix", "familyNameHasSuffix", "familyNameIsNil", "familyNameNotNil", "familyNameEqualFold", "familyNameContainsFold", "patronymicName", "patronymicNameNEQ", "patronymicNameIn", "patronymicNameNotIn", "patronymicNameGT", "patronymicNameGTE", "patronymicNameLT", "patronymicNameLTE", "patronymicNameContains", "patronymicNameHasPrefix", "patronymicNameHasSuffix", "patronymicNameIsNil", "patronymicNameNotNil", "patronymicNameEqualFold", "patronymicNameContainsFold", "beginData", "beginDataNEQ", "beginDataIn", "beginDataNotIn", "beginDataGT", "beginDataGTE", "beginDataLT", "beginDataLTE", "beginDataIsNil", "beginDataNotNil", "endDate", "endDateNEQ", "endDateIn", "endDateNotIn", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "gender", "genderNEQ", "genderIn", "genderNotIn", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasProjects", "hasProjectsWith", "hasPublications", "hasPublicationsWith", "hasPersonRoles", "hasPersonRolesWith", "hasHolder", "hasHolderWith", "hasAffiliation", "hasAffiliationWith", "hasCollections", "hasCollectionsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -76605,141 +74525,6 @@ func (ec *executionContext) unmarshalInputPersonWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.AddressContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -76875,6 +74660,141 @@ func (ec *executionContext) unmarshalInputPersonWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -78007,7 +75927,7 @@ func (ec *executionContext) unmarshalInputProjectTypeWhereInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasProjects", "hasProjectsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasProjects", "hasProjectsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -78527,141 +76447,6 @@ func (ec *executionContext) unmarshalInputProjectTypeWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -78797,6 +76582,141 @@ func (ec *executionContext) unmarshalInputProjectTypeWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -78963,7 +76883,7 @@ func (ec *executionContext) unmarshalInputProjectWhereInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "beginData", "beginDataNEQ", "beginDataIn", "beginDataNotIn", "beginDataGT", "beginDataGTE", "beginDataLT", "beginDataLTE", "beginDataIsNil", "beginDataNotNil", "endDate", "endDateNEQ", "endDateIn", "endDateNotIn", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "hasArtifacts", "hasArtifactsWith", "hasTeam", "hasTeamWith", "hasProjectType", "hasProjectTypeWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "beginData", "beginDataNEQ", "beginDataIn", "beginDataNotIn", "beginDataGT", "beginDataGTE", "beginDataLT", "beginDataLTE", "beginDataIsNil", "beginDataNotNil", "endDate", "endDateNEQ", "endDateIn", "endDateNotIn", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "hasArtifacts", "hasArtifactsWith", "hasTeam", "hasTeamWith", "hasProjectType", "hasProjectTypeWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -79483,141 +77403,6 @@ func (ec *executionContext) unmarshalInputProjectWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -79753,6 +77538,141 @@ func (ec *executionContext) unmarshalInputProjectWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -80177,7 +78097,7 @@ func (ec *executionContext) unmarshalInputProtectedAreaCategoryWhereInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -80697,141 +78617,6 @@ func (ec *executionContext) unmarshalInputProtectedAreaCategoryWhereInput(ctx co
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -80967,6 +78752,141 @@ func (ec *executionContext) unmarshalInputProtectedAreaCategoryWhereInput(ctx co
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -81199,7 +79119,7 @@ func (ec *executionContext) unmarshalInputProtectedAreaPictureWhereInput(ctx con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -81719,141 +79639,6 @@ func (ec *executionContext) unmarshalInputProtectedAreaPictureWhereInput(ctx con
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -81989,6 +79774,141 @@ func (ec *executionContext) unmarshalInputProtectedAreaPictureWhereInput(ctx con
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -82137,7 +80057,7 @@ func (ec *executionContext) unmarshalInputProtectedAreaWhereInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -82657,141 +80577,6 @@ func (ec *executionContext) unmarshalInputProtectedAreaWhereInput(ctx context.Co
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -82927,6 +80712,141 @@ func (ec *executionContext) unmarshalInputProtectedAreaWhereInput(ctx context.Co
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -83117,7 +81037,7 @@ func (ec *executionContext) unmarshalInputPublicationWhereInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasAuthors", "hasAuthorsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasAuthors", "hasAuthorsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -83637,141 +81557,6 @@ func (ec *executionContext) unmarshalInputPublicationWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -83907,6 +81692,141 @@ func (ec *executionContext) unmarshalInputPublicationWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -84133,7 +82053,7 @@ func (ec *executionContext) unmarshalInputPublisherWhereInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasBooks", "hasBooksWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasBooks", "hasBooksWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -84653,141 +82573,6 @@ func (ec *executionContext) unmarshalInputPublisherWhereInput(ctx context.Contex
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -84923,6 +82708,141 @@ func (ec *executionContext) unmarshalInputPublisherWhereInput(ctx context.Contex
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -85131,7 +83051,7 @@ func (ec *executionContext) unmarshalInputRegionWhereInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasLocation", "hasLocationWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasLocation", "hasLocationWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -85651,141 +83571,6 @@ func (ec *executionContext) unmarshalInputRegionWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -85921,6 +83706,141 @@ func (ec *executionContext) unmarshalInputRegionWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -86129,7 +84049,7 @@ func (ec *executionContext) unmarshalInputSetWhereInput(ctx context.Context, obj
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasMonuments", "hasMonumentsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasMonuments", "hasMonumentsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -86649,141 +84569,6 @@ func (ec *executionContext) unmarshalInputSetWhereInput(ctx context.Context, obj
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -86919,6 +84704,141 @@ func (ec *executionContext) unmarshalInputSetWhereInput(ctx context.Context, obj
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -87145,7 +85065,7 @@ func (ec *executionContext) unmarshalInputSettlementWhereInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasLocation", "hasLocationWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasLocation", "hasLocationWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -87665,141 +85585,6 @@ func (ec *executionContext) unmarshalInputSettlementWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -87935,6 +85720,141 @@ func (ec *executionContext) unmarshalInputSettlementWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -88143,7 +86063,7 @@ func (ec *executionContext) unmarshalInputTechniqueWhereInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -88663,141 +86583,6 @@ func (ec *executionContext) unmarshalInputTechniqueWhereInput(ctx context.Contex
 				return it, err
 			}
 			it.UpdatedByContainsFold = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "abbreviationNEQ":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNEQ = data
-		case "abbreviationIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIn = data
-		case "abbreviationNotIn":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotIn = data
-		case "abbreviationGT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGT = data
-		case "abbreviationGTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationGTE = data
-		case "abbreviationLT":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLT = data
-		case "abbreviationLTE":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationLTE = data
-		case "abbreviationContains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContains = data
-		case "abbreviationHasPrefix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasPrefix = data
-		case "abbreviationHasSuffix":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationHasSuffix = data
-		case "abbreviationIsNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationIsNil = data
-		case "abbreviationNotNil":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationNotNil = data
-		case "abbreviationEqualFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationEqualFold = data
-		case "abbreviationContainsFold":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AbbreviationContainsFold = data
 		case "displayName":
 			var err error
 
@@ -88933,6 +86718,141 @@ func (ec *executionContext) unmarshalInputTechniqueWhereInput(ctx context.Contex
 				return it, err
 			}
 			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
 		case "description":
 			var err error
 
@@ -89099,7 +87019,7 @@ func (ec *executionContext) unmarshalInputUpdateArtGenreInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -89151,24 +87071,6 @@ func (ec *executionContext) unmarshalInputUpdateArtGenreInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -89187,6 +87089,24 @@ func (ec *executionContext) unmarshalInputUpdateArtGenreInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -89245,7 +87165,7 @@ func (ec *executionContext) unmarshalInputUpdateArtStyleInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -89297,24 +87217,6 @@ func (ec *executionContext) unmarshalInputUpdateArtStyleInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -89333,6 +87235,24 @@ func (ec *executionContext) unmarshalInputUpdateArtStyleInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -89391,7 +87311,7 @@ func (ec *executionContext) unmarshalInputUpdateArtifactInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "deletedAt", "clearDeletedAt", "deletedBy", "clearDeletedBy", "dating", "clearDating", "dimensions", "clearDimensions", "chemicalComposition", "clearChemicalComposition", "number", "clearNumber", "typology", "clearTypology", "weight", "clearWeight", "admissionDate", "clearAdmissionDate", "addAuthorIDs", "removeAuthorIDs", "clearAuthors", "addMediumIDs", "removeMediumIDs", "clearMediums", "addTechniqueIDs", "removeTechniqueIDs", "clearTechniques", "periodID", "clearPeriod", "addProjectIDs", "removeProjectIDs", "clearProjects", "addPublicationIDs", "removePublicationIDs", "clearPublications", "addHolderIDs", "removeHolderIDs", "clearHolders", "culturalAffiliationID", "clearCulturalAffiliation", "monumentID", "clearMonument", "modelID", "clearModel", "setID", "clearSet", "locationID", "clearLocation", "collectionID", "clearCollection", "licenseID", "clearLicense"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "deletedAt", "clearDeletedAt", "deletedBy", "clearDeletedBy", "dating", "clearDating", "dimensions", "clearDimensions", "chemicalComposition", "clearChemicalComposition", "number", "clearNumber", "typology", "clearTypology", "weight", "clearWeight", "admissionDate", "clearAdmissionDate", "addAuthorIDs", "removeAuthorIDs", "clearAuthors", "addMediumIDs", "removeMediumIDs", "clearMediums", "addTechniqueIDs", "removeTechniqueIDs", "clearTechniques", "periodID", "clearPeriod", "addProjectIDs", "removeProjectIDs", "clearProjects", "addPublicationIDs", "removePublicationIDs", "clearPublications", "addHolderIDs", "removeHolderIDs", "clearHolders", "culturalAffiliationID", "clearCulturalAffiliation", "monumentID", "clearMonument", "modelID", "clearModel", "setID", "clearSet", "locationID", "clearLocation", "collectionID", "clearCollection", "licenseID", "clearLicense"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -89443,24 +87363,6 @@ func (ec *executionContext) unmarshalInputUpdateArtifactInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -89479,6 +87381,24 @@ func (ec *executionContext) unmarshalInputUpdateArtifactInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -90050,7 +87970,7 @@ func (ec *executionContext) unmarshalInputUpdateBookGenreInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addBookIDs", "removeBookIDs", "clearBooks"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addBookIDs", "removeBookIDs", "clearBooks"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -90102,24 +88022,6 @@ func (ec *executionContext) unmarshalInputUpdateBookGenreInput(ctx context.Conte
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -90138,6 +88040,24 @@ func (ec *executionContext) unmarshalInputUpdateBookGenreInput(ctx context.Conte
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -90223,7 +88143,7 @@ func (ec *executionContext) unmarshalInputUpdateBookInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "files", "appendFiles", "clearFiles", "year", "clearYear", "addAuthorIDs", "removeAuthorIDs", "clearAuthors", "addBookGenreIDs", "removeBookGenreIDs", "clearBookGenres", "collectionID", "clearCollection", "addHolderIDs", "removeHolderIDs", "clearHolders", "publisherID", "clearPublisher", "licenseID", "clearLicense"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "files", "appendFiles", "clearFiles", "year", "clearYear", "addAuthorIDs", "removeAuthorIDs", "clearAuthors", "addBookGenreIDs", "removeBookGenreIDs", "clearBookGenres", "collectionID", "clearCollection", "addHolderIDs", "removeHolderIDs", "clearHolders", "publisherID", "clearPublisher", "licenseID", "clearLicense"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -90275,24 +88195,6 @@ func (ec *executionContext) unmarshalInputUpdateBookInput(ctx context.Context, o
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -90311,6 +88213,24 @@ func (ec *executionContext) unmarshalInputUpdateBookInput(ctx context.Context, o
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -90594,7 +88514,7 @@ func (ec *executionContext) unmarshalInputUpdateCategoryInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addCollectionIDs", "removeCollectionIDs", "clearCollections"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addCollectionIDs", "removeCollectionIDs", "clearCollections"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -90646,24 +88566,6 @@ func (ec *executionContext) unmarshalInputUpdateCategoryInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -90682,6 +88584,24 @@ func (ec *executionContext) unmarshalInputUpdateCategoryInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -90767,7 +88687,7 @@ func (ec *executionContext) unmarshalInputUpdateCollectionInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addPersonIDs", "removePersonIDs", "clearPeople", "categoryID", "clearCategory"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addPersonIDs", "removePersonIDs", "clearPeople", "categoryID", "clearCategory"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -90819,24 +88739,6 @@ func (ec *executionContext) unmarshalInputUpdateCollectionInput(ctx context.Cont
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -90855,6 +88757,24 @@ func (ec *executionContext) unmarshalInputUpdateCollectionInput(ctx context.Cont
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -91012,7 +88932,7 @@ func (ec *executionContext) unmarshalInputUpdateCountryInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "locationID", "clearLocation"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "locationID", "clearLocation"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -91064,24 +88984,6 @@ func (ec *executionContext) unmarshalInputUpdateCountryInput(ctx context.Context
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -91100,6 +89002,24 @@ func (ec *executionContext) unmarshalInputUpdateCountryInput(ctx context.Context
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -91176,7 +89096,7 @@ func (ec *executionContext) unmarshalInputUpdateCultureInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -91228,24 +89148,6 @@ func (ec *executionContext) unmarshalInputUpdateCultureInput(ctx context.Context
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -91264,6 +89166,24 @@ func (ec *executionContext) unmarshalInputUpdateCultureInput(ctx context.Context
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -91349,7 +89269,7 @@ func (ec *executionContext) unmarshalInputUpdateDistrictInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "locationID", "clearLocation"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "locationID", "clearLocation"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -91401,24 +89321,6 @@ func (ec *executionContext) unmarshalInputUpdateDistrictInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -91437,6 +89339,24 @@ func (ec *executionContext) unmarshalInputUpdateDistrictInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -91722,7 +89642,7 @@ func (ec *executionContext) unmarshalInputUpdateHolderResponsibilityInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addHolderIDs", "removeHolderIDs", "clearHolder"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addHolderIDs", "removeHolderIDs", "clearHolder"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -91774,24 +89694,6 @@ func (ec *executionContext) unmarshalInputUpdateHolderResponsibilityInput(ctx co
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -91810,6 +89712,24 @@ func (ec *executionContext) unmarshalInputUpdateHolderResponsibilityInput(ctx co
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -91888,179 +89808,6 @@ func (ec *executionContext) unmarshalInputUpdateHolderResponsibilityInput(ctx co
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputUpdateLibraryInput(ctx context.Context, obj interface{}) (ent.UpdateLibraryInput, error) {
-	var it ent.UpdateLibraryInput
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addBookIDs", "removeBookIDs", "clearBooks"}
-	for _, k := range fieldsInOrder {
-		v, ok := asMap[k]
-		if !ok {
-			continue
-		}
-		switch k {
-		case "createdBy":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedBy = data
-		case "clearCreatedBy":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearCreatedBy"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearCreatedBy = data
-		case "updatedAt":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedAt = data
-		case "updatedBy":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedBy = data
-		case "clearUpdatedBy":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearUpdatedBy"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
-		case "displayName":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayName"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DisplayName = data
-		case "clearDisplayName":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearDisplayName"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearDisplayName = data
-		case "description":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Description = data
-		case "clearDescription":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearDescription"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearDescription = data
-		case "externalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearExternalLinks = data
-		case "addBookIDs":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addBookIDs"))
-			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddBookIDs = data
-		case "removeBookIDs":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeBookIDs"))
-			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveBookIDs = data
-		case "clearBooks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearBooks"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearBooks = data
-		}
-	}
-
-	return it, nil
-}
-
 func (ec *executionContext) unmarshalInputUpdateLicenseInput(ctx context.Context, obj interface{}) (ent.UpdateLicenseInput, error) {
 	var it ent.UpdateLicenseInput
 	asMap := map[string]interface{}{}
@@ -92068,7 +89815,7 @@ func (ec *executionContext) unmarshalInputUpdateLicenseInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -92120,24 +89867,6 @@ func (ec *executionContext) unmarshalInputUpdateLicenseInput(ctx context.Context
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -92156,6 +89885,24 @@ func (ec *executionContext) unmarshalInputUpdateLicenseInput(ctx context.Context
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -92268,7 +90015,7 @@ func (ec *executionContext) unmarshalInputUpdateLocationInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "countryID", "clearCountry", "districtID", "clearDistrict", "settlementID", "clearSettlement", "regionID", "clearRegion"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "countryID", "clearCountry", "districtID", "clearDistrict", "settlementID", "clearSettlement", "regionID", "clearRegion"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -92320,24 +90067,6 @@ func (ec *executionContext) unmarshalInputUpdateLocationInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -92356,6 +90085,24 @@ func (ec *executionContext) unmarshalInputUpdateLocationInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -92513,7 +90260,7 @@ func (ec *executionContext) unmarshalInputUpdateMediumInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -92565,24 +90312,6 @@ func (ec *executionContext) unmarshalInputUpdateMediumInput(ctx context.Context,
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -92601,6 +90330,24 @@ func (ec *executionContext) unmarshalInputUpdateMediumInput(ctx context.Context,
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -92686,7 +90433,7 @@ func (ec *executionContext) unmarshalInputUpdateModelInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -92738,24 +90485,6 @@ func (ec *executionContext) unmarshalInputUpdateModelInput(ctx context.Context, 
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -92774,6 +90503,24 @@ func (ec *executionContext) unmarshalInputUpdateModelInput(ctx context.Context, 
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -92859,7 +90606,7 @@ func (ec *executionContext) unmarshalInputUpdateMonumentInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addSetIDs", "removeSetIDs", "clearSets"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addSetIDs", "removeSetIDs", "clearSets"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -92911,24 +90658,6 @@ func (ec *executionContext) unmarshalInputUpdateMonumentInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -92947,6 +90676,24 @@ func (ec *executionContext) unmarshalInputUpdateMonumentInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -93059,7 +90806,7 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "address", "clearAddress", "phoneNumbers", "appendPhoneNumbers", "clearPhoneNumbers", "emails", "appendEmails", "clearEmails", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "previousNames", "appendPreviousNames", "clearPreviousNames", "isInAConsortium", "clearIsInAConsortium", "consortiumDocumentURL", "clearConsortiumDocumentURL", "addPersonIDs", "removePersonIDs", "clearPeople", "holderID", "clearHolder", "organizationTypeID", "clearOrganizationType"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "address", "clearAddress", "phoneNumbers", "appendPhoneNumbers", "clearPhoneNumbers", "emails", "appendEmails", "clearEmails", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "previousNames", "appendPreviousNames", "clearPreviousNames", "isInAConsortium", "clearIsInAConsortium", "consortiumDocumentURL", "clearConsortiumDocumentURL", "addPersonIDs", "removePersonIDs", "clearPeople", "holderID", "clearHolder", "organizationTypeID", "clearOrganizationType"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -93183,24 +90930,6 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.ClearEmails = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -93219,6 +90948,24 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -93448,7 +91195,7 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationTypeInput(ctx contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addOrganizationIDs", "removeOrganizationIDs", "clearOrganizations"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addOrganizationIDs", "removeOrganizationIDs", "clearOrganizations"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -93500,24 +91247,6 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationTypeInput(ctx contex
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -93536,6 +91265,24 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationTypeInput(ctx contex
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -93621,7 +91368,7 @@ func (ec *executionContext) unmarshalInputUpdatePeriodInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -93673,24 +91420,6 @@ func (ec *executionContext) unmarshalInputUpdatePeriodInput(ctx context.Context,
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -93709,6 +91438,24 @@ func (ec *executionContext) unmarshalInputUpdatePeriodInput(ctx context.Context,
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -93794,7 +91541,7 @@ func (ec *executionContext) unmarshalInputUpdatePersonInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "address", "clearAddress", "phoneNumbers", "appendPhoneNumbers", "clearPhoneNumbers", "emails", "appendEmails", "clearEmails", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "givenName", "clearGivenName", "familyName", "clearFamilyName", "patronymicName", "clearPatronymicName", "beginData", "clearBeginData", "endDate", "clearEndDate", "gender", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addProjectIDs", "removeProjectIDs", "clearProjects", "addPublicationIDs", "removePublicationIDs", "clearPublications", "addPersonRoleIDs", "removePersonRoleIDs", "clearPersonRoles", "holderID", "clearHolder", "affiliationID", "clearAffiliation", "collectionsID", "clearCollections"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "address", "clearAddress", "phoneNumbers", "appendPhoneNumbers", "clearPhoneNumbers", "emails", "appendEmails", "clearEmails", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "givenName", "clearGivenName", "familyName", "clearFamilyName", "patronymicName", "clearPatronymicName", "beginData", "clearBeginData", "endDate", "clearEndDate", "gender", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addProjectIDs", "removeProjectIDs", "clearProjects", "addPublicationIDs", "removePublicationIDs", "clearPublications", "addPersonRoleIDs", "removePersonRoleIDs", "clearPersonRoles", "holderID", "clearHolder", "affiliationID", "clearAffiliation", "collectionsID", "clearCollections"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -93918,24 +91665,6 @@ func (ec *executionContext) unmarshalInputUpdatePersonInput(ctx context.Context,
 				return it, err
 			}
 			it.ClearEmails = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -93954,6 +91683,24 @@ func (ec *executionContext) unmarshalInputUpdatePersonInput(ctx context.Context,
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -94345,7 +92092,7 @@ func (ec *executionContext) unmarshalInputUpdatePersonRoleInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addPersonIDs", "removePersonIDs", "clearPerson"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addPersonIDs", "removePersonIDs", "clearPerson"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -94397,24 +92144,6 @@ func (ec *executionContext) unmarshalInputUpdatePersonRoleInput(ctx context.Cont
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -94433,6 +92162,24 @@ func (ec *executionContext) unmarshalInputUpdatePersonRoleInput(ctx context.Cont
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -94518,7 +92265,7 @@ func (ec *executionContext) unmarshalInputUpdateProjectInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "beginData", "clearBeginData", "endDate", "clearEndDate", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addTeamIDs", "removeTeamIDs", "clearTeam", "projectTypeID", "clearProjectType"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "beginData", "clearBeginData", "endDate", "clearEndDate", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addTeamIDs", "removeTeamIDs", "clearTeam", "projectTypeID", "clearProjectType"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -94570,24 +92317,6 @@ func (ec *executionContext) unmarshalInputUpdateProjectInput(ctx context.Context
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -94606,6 +92335,24 @@ func (ec *executionContext) unmarshalInputUpdateProjectInput(ctx context.Context
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -94772,7 +92519,7 @@ func (ec *executionContext) unmarshalInputUpdateProjectTypeInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addProjectIDs", "removeProjectIDs", "clearProjects"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addProjectIDs", "removeProjectIDs", "clearProjects"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -94824,24 +92571,6 @@ func (ec *executionContext) unmarshalInputUpdateProjectTypeInput(ctx context.Con
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -94860,6 +92589,24 @@ func (ec *executionContext) unmarshalInputUpdateProjectTypeInput(ctx context.Con
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -94945,7 +92692,7 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaCategoryInput(ctx c
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -94997,24 +92744,6 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaCategoryInput(ctx c
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -95033,6 +92762,24 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaCategoryInput(ctx c
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -95091,7 +92838,7 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -95143,24 +92890,6 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaInput(ctx context.C
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -95179,6 +92908,24 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaInput(ctx context.C
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -95237,7 +92984,7 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaPictureInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -95289,24 +93036,6 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaPictureInput(ctx co
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -95325,6 +93054,24 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaPictureInput(ctx co
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -95383,7 +93130,7 @@ func (ec *executionContext) unmarshalInputUpdatePublicationInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addAuthorIDs", "removeAuthorIDs", "clearAuthors"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addAuthorIDs", "removeAuthorIDs", "clearAuthors"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -95435,24 +93182,6 @@ func (ec *executionContext) unmarshalInputUpdatePublicationInput(ctx context.Con
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -95471,6 +93200,24 @@ func (ec *executionContext) unmarshalInputUpdatePublicationInput(ctx context.Con
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -95583,7 +93330,7 @@ func (ec *executionContext) unmarshalInputUpdatePublisherInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addBookIDs", "removeBookIDs", "clearBooks"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addBookIDs", "removeBookIDs", "clearBooks"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -95635,24 +93382,6 @@ func (ec *executionContext) unmarshalInputUpdatePublisherInput(ctx context.Conte
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -95671,6 +93400,24 @@ func (ec *executionContext) unmarshalInputUpdatePublisherInput(ctx context.Conte
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -95756,7 +93503,7 @@ func (ec *executionContext) unmarshalInputUpdateRegionInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "locationID", "clearLocation"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "locationID", "clearLocation"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -95808,24 +93555,6 @@ func (ec *executionContext) unmarshalInputUpdateRegionInput(ctx context.Context,
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -95844,6 +93573,24 @@ func (ec *executionContext) unmarshalInputUpdateRegionInput(ctx context.Context,
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -95920,7 +93667,7 @@ func (ec *executionContext) unmarshalInputUpdateSetInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addMonumentIDs", "removeMonumentIDs", "clearMonuments"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addMonumentIDs", "removeMonumentIDs", "clearMonuments"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -95972,24 +93719,6 @@ func (ec *executionContext) unmarshalInputUpdateSetInput(ctx context.Context, ob
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -96008,6 +93737,24 @@ func (ec *executionContext) unmarshalInputUpdateSetInput(ctx context.Context, ob
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -96120,7 +93867,7 @@ func (ec *executionContext) unmarshalInputUpdateSettlementInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "locationID", "clearLocation"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "locationID", "clearLocation"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -96172,24 +93919,6 @@ func (ec *executionContext) unmarshalInputUpdateSettlementInput(ctx context.Cont
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -96208,6 +93937,24 @@ func (ec *executionContext) unmarshalInputUpdateSettlementInput(ctx context.Cont
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -96284,7 +94031,7 @@ func (ec *executionContext) unmarshalInputUpdateTechniqueInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "abbreviation", "clearAbbreviation", "displayName", "clearDisplayName", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -96336,24 +94083,6 @@ func (ec *executionContext) unmarshalInputUpdateTechniqueInput(ctx context.Conte
 				return it, err
 			}
 			it.ClearUpdatedBy = data
-		case "abbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Abbreviation = data
-		case "clearAbbreviation":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAbbreviation = data
 		case "displayName":
 			var err error
 
@@ -96372,6 +94101,24 @@ func (ec *executionContext) unmarshalInputUpdateTechniqueInput(ctx context.Conte
 				return it, err
 			}
 			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
 		case "description":
 			var err error
 
@@ -96533,11 +94280,6 @@ func (ec *executionContext) _Node(ctx context.Context, sel ast.SelectionSet, obj
 			return graphql.Null
 		}
 		return ec._Keyword(ctx, sel, obj)
-	case *ent.Library:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._Library(ctx, sel, obj)
 	case *ent.License:
 		if obj == nil {
 			return graphql.Null
@@ -96721,10 +94463,10 @@ func (ec *executionContext) _ArtGenre(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "updatedBy":
 			out.Values[i] = ec._ArtGenre_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._ArtGenre_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._ArtGenre_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._ArtGenre_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._ArtGenre_description(ctx, field, obj)
 		case "externalLinks":
@@ -96869,10 +94611,10 @@ func (ec *executionContext) _ArtStyle(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "updatedBy":
 			out.Values[i] = ec._ArtStyle_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._ArtStyle_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._ArtStyle_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._ArtStyle_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._ArtStyle_description(ctx, field, obj)
 		case "externalLinks":
@@ -97017,10 +94759,10 @@ func (ec *executionContext) _Artifact(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "updatedBy":
 			out.Values[i] = ec._Artifact_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._Artifact_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._Artifact_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._Artifact_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Artifact_description(ctx, field, obj)
 		case "externalLinks":
@@ -97796,10 +95538,10 @@ func (ec *executionContext) _Book(ctx context.Context, sel ast.SelectionSet, obj
 			}
 		case "updatedBy":
 			out.Values[i] = ec._Book_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._Book_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._Book_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._Book_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Book_description(ctx, field, obj)
 		case "externalLinks":
@@ -98150,10 +95892,10 @@ func (ec *executionContext) _BookGenre(ctx context.Context, sel ast.SelectionSet
 			}
 		case "updatedBy":
 			out.Values[i] = ec._BookGenre_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._BookGenre_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._BookGenre_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._BookGenre_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._BookGenre_description(ctx, field, obj)
 		case "externalLinks":
@@ -98331,10 +96073,10 @@ func (ec *executionContext) _Category(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "updatedBy":
 			out.Values[i] = ec._Category_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._Category_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._Category_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._Category_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Category_description(ctx, field, obj)
 		case "externalLinks":
@@ -98512,10 +96254,10 @@ func (ec *executionContext) _Collection(ctx context.Context, sel ast.SelectionSe
 			}
 		case "updatedBy":
 			out.Values[i] = ec._Collection_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._Collection_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._Collection_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._Collection_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Collection_description(ctx, field, obj)
 		case "externalLinks":
@@ -98792,10 +96534,10 @@ func (ec *executionContext) _Country(ctx context.Context, sel ast.SelectionSet, 
 			}
 		case "updatedBy":
 			out.Values[i] = ec._Country_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._Country_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._Country_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._Country_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Country_description(ctx, field, obj)
 		case "externalLinks":
@@ -98973,10 +96715,10 @@ func (ec *executionContext) _Culture(ctx context.Context, sel ast.SelectionSet, 
 			}
 		case "updatedBy":
 			out.Values[i] = ec._Culture_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._Culture_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._Culture_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._Culture_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Culture_description(ctx, field, obj)
 		case "externalLinks":
@@ -99154,10 +96896,10 @@ func (ec *executionContext) _District(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "updatedBy":
 			out.Values[i] = ec._District_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._District_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._District_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._District_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._District_description(ctx, field, obj)
 		case "externalLinks":
@@ -99647,10 +97389,10 @@ func (ec *executionContext) _HolderResponsibility(ctx context.Context, sel ast.S
 			}
 		case "updatedBy":
 			out.Values[i] = ec._HolderResponsibility_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._HolderResponsibility_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._HolderResponsibility_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._HolderResponsibility_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._HolderResponsibility_description(ctx, field, obj)
 		case "externalLinks":
@@ -99837,187 +97579,6 @@ func (ec *executionContext) _Keyword(ctx context.Context, sel ast.SelectionSet, 
 	return out
 }
 
-var libraryImplementors = []string{"Library", "Node"}
-
-func (ec *executionContext) _Library(ctx context.Context, sel ast.SelectionSet, obj *ent.Library) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, libraryImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := make(map[string]*graphql.FieldSet)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("Library")
-		case "id":
-			out.Values[i] = ec._Library_id(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
-		case "createdAt":
-			out.Values[i] = ec._Library_createdAt(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
-		case "createdBy":
-			out.Values[i] = ec._Library_createdBy(ctx, field, obj)
-		case "updatedAt":
-			out.Values[i] = ec._Library_updatedAt(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
-		case "updatedBy":
-			out.Values[i] = ec._Library_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._Library_abbreviation(ctx, field, obj)
-		case "displayName":
-			out.Values[i] = ec._Library_displayName(ctx, field, obj)
-		case "description":
-			out.Values[i] = ec._Library_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._Library_externalLinks(ctx, field, obj)
-		case "books":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Library_books(ctx, field, obj)
-				return res
-			}
-
-			if field.Deferrable != nil {
-				dfs, ok := deferred[field.Deferrable.Label]
-				di := 0
-				if ok {
-					dfs.AddField(field)
-					di = len(dfs.Values) - 1
-				} else {
-					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
-					deferred[field.Deferrable.Label] = dfs
-				}
-				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, dfs)
-				})
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
-
-	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
-			Label:    label,
-			Path:     graphql.GetPath(ctx),
-			FieldSet: dfs,
-			Context:  ctx,
-		})
-	}
-
-	return out
-}
-
-var libraryConnectionImplementors = []string{"LibraryConnection"}
-
-func (ec *executionContext) _LibraryConnection(ctx context.Context, sel ast.SelectionSet, obj *ent.LibraryConnection) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, libraryConnectionImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := make(map[string]*graphql.FieldSet)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("LibraryConnection")
-		case "edges":
-			out.Values[i] = ec._LibraryConnection_edges(ctx, field, obj)
-		case "pageInfo":
-			out.Values[i] = ec._LibraryConnection_pageInfo(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "totalCount":
-			out.Values[i] = ec._LibraryConnection_totalCount(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
-
-	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
-			Label:    label,
-			Path:     graphql.GetPath(ctx),
-			FieldSet: dfs,
-			Context:  ctx,
-		})
-	}
-
-	return out
-}
-
-var libraryEdgeImplementors = []string{"LibraryEdge"}
-
-func (ec *executionContext) _LibraryEdge(ctx context.Context, sel ast.SelectionSet, obj *ent.LibraryEdge) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, libraryEdgeImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := make(map[string]*graphql.FieldSet)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("LibraryEdge")
-		case "node":
-			out.Values[i] = ec._LibraryEdge_node(ctx, field, obj)
-		case "cursor":
-			out.Values[i] = ec._LibraryEdge_cursor(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
-
-	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
-			Label:    label,
-			Path:     graphql.GetPath(ctx),
-			FieldSet: dfs,
-			Context:  ctx,
-		})
-	}
-
-	return out
-}
-
 var licenseImplementors = []string{"License", "Node"}
 
 func (ec *executionContext) _License(ctx context.Context, sel ast.SelectionSet, obj *ent.License) graphql.Marshaler {
@@ -100048,10 +97609,10 @@ func (ec *executionContext) _License(ctx context.Context, sel ast.SelectionSet, 
 			}
 		case "updatedBy":
 			out.Values[i] = ec._License_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._License_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._License_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._License_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._License_description(ctx, field, obj)
 		case "externalLinks":
@@ -100262,10 +97823,10 @@ func (ec *executionContext) _Location(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "updatedBy":
 			out.Values[i] = ec._Location_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._Location_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._Location_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._Location_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Location_description(ctx, field, obj)
 		case "externalLinks":
@@ -100575,10 +98136,10 @@ func (ec *executionContext) _Medium(ctx context.Context, sel ast.SelectionSet, o
 			}
 		case "updatedBy":
 			out.Values[i] = ec._Medium_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._Medium_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._Medium_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._Medium_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Medium_description(ctx, field, obj)
 		case "externalLinks":
@@ -100756,10 +98317,10 @@ func (ec *executionContext) _Model(ctx context.Context, sel ast.SelectionSet, ob
 			}
 		case "updatedBy":
 			out.Values[i] = ec._Model_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._Model_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._Model_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._Model_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Model_description(ctx, field, obj)
 		case "externalLinks":
@@ -100937,10 +98498,10 @@ func (ec *executionContext) _Monument(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "updatedBy":
 			out.Values[i] = ec._Monument_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._Monument_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._Monument_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._Monument_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Monument_description(ctx, field, obj)
 		case "externalLinks":
@@ -101465,10 +99026,10 @@ func (ec *executionContext) _Organization(ctx context.Context, sel ast.Selection
 			out.Values[i] = ec._Organization_phoneNumbers(ctx, field, obj)
 		case "emails":
 			out.Values[i] = ec._Organization_emails(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._Organization_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._Organization_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._Organization_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Organization_description(ctx, field, obj)
 		case "externalLinks":
@@ -101722,10 +99283,10 @@ func (ec *executionContext) _OrganizationType(ctx context.Context, sel ast.Selec
 			}
 		case "updatedBy":
 			out.Values[i] = ec._OrganizationType_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._OrganizationType_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._OrganizationType_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._OrganizationType_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._OrganizationType_description(ctx, field, obj)
 		case "externalLinks":
@@ -101951,10 +99512,10 @@ func (ec *executionContext) _Period(ctx context.Context, sel ast.SelectionSet, o
 			}
 		case "updatedBy":
 			out.Values[i] = ec._Period_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._Period_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._Period_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._Period_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Period_description(ctx, field, obj)
 		case "externalLinks":
@@ -102138,10 +99699,10 @@ func (ec *executionContext) _Person(ctx context.Context, sel ast.SelectionSet, o
 			out.Values[i] = ec._Person_phoneNumbers(ctx, field, obj)
 		case "emails":
 			out.Values[i] = ec._Person_emails(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._Person_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._Person_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._Person_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Person_description(ctx, field, obj)
 		case "externalLinks":
@@ -102569,10 +100130,10 @@ func (ec *executionContext) _PersonRole(ctx context.Context, sel ast.SelectionSe
 			}
 		case "updatedBy":
 			out.Values[i] = ec._PersonRole_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._PersonRole_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._PersonRole_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._PersonRole_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._PersonRole_description(ctx, field, obj)
 		case "externalLinks":
@@ -102750,10 +100311,10 @@ func (ec *executionContext) _Project(ctx context.Context, sel ast.SelectionSet, 
 			}
 		case "updatedBy":
 			out.Values[i] = ec._Project_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._Project_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._Project_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._Project_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Project_description(ctx, field, obj)
 		case "externalLinks":
@@ -103001,10 +100562,10 @@ func (ec *executionContext) _ProjectType(ctx context.Context, sel ast.SelectionS
 			}
 		case "updatedBy":
 			out.Values[i] = ec._ProjectType_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._ProjectType_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._ProjectType_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._ProjectType_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._ProjectType_description(ctx, field, obj)
 		case "externalLinks":
@@ -103182,10 +100743,10 @@ func (ec *executionContext) _ProtectedArea(ctx context.Context, sel ast.Selectio
 			}
 		case "updatedBy":
 			out.Values[i] = ec._ProtectedArea_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._ProtectedArea_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._ProtectedArea_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._ProtectedArea_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._ProtectedArea_description(ctx, field, obj)
 		case "externalLinks":
@@ -103243,10 +100804,10 @@ func (ec *executionContext) _ProtectedAreaCategory(ctx context.Context, sel ast.
 			}
 		case "updatedBy":
 			out.Values[i] = ec._ProtectedAreaCategory_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._ProtectedAreaCategory_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._ProtectedAreaCategory_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._ProtectedAreaCategory_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._ProtectedAreaCategory_description(ctx, field, obj)
 		case "externalLinks":
@@ -103478,10 +101039,10 @@ func (ec *executionContext) _ProtectedAreaPicture(ctx context.Context, sel ast.S
 			}
 		case "updatedBy":
 			out.Values[i] = ec._ProtectedAreaPicture_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._ProtectedAreaPicture_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._ProtectedAreaPicture_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._ProtectedAreaPicture_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._ProtectedAreaPicture_description(ctx, field, obj)
 		case "externalLinks":
@@ -103626,10 +101187,10 @@ func (ec *executionContext) _Publication(ctx context.Context, sel ast.SelectionS
 			}
 		case "updatedBy":
 			out.Values[i] = ec._Publication_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._Publication_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._Publication_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._Publication_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Publication_description(ctx, field, obj)
 		case "externalLinks":
@@ -103840,10 +101401,10 @@ func (ec *executionContext) _Publisher(ctx context.Context, sel ast.SelectionSet
 			}
 		case "updatedBy":
 			out.Values[i] = ec._Publisher_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._Publisher_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._Publisher_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._Publisher_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Publisher_description(ctx, field, obj)
 		case "externalLinks":
@@ -104325,28 +101886,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_holderResponsibilities(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx,
-					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "libraries":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_libraries(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -104882,10 +102421,10 @@ func (ec *executionContext) _Region(ctx context.Context, sel ast.SelectionSet, o
 			}
 		case "updatedBy":
 			out.Values[i] = ec._Region_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._Region_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._Region_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._Region_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Region_description(ctx, field, obj)
 		case "externalLinks":
@@ -105063,10 +102602,10 @@ func (ec *executionContext) _Set(ctx context.Context, sel ast.SelectionSet, obj 
 			}
 		case "updatedBy":
 			out.Values[i] = ec._Set_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._Set_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._Set_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._Set_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Set_description(ctx, field, obj)
 		case "externalLinks":
@@ -105277,10 +102816,10 @@ func (ec *executionContext) _Settlement(ctx context.Context, sel ast.SelectionSe
 			}
 		case "updatedBy":
 			out.Values[i] = ec._Settlement_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._Settlement_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._Settlement_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._Settlement_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Settlement_description(ctx, field, obj)
 		case "externalLinks":
@@ -105458,10 +102997,10 @@ func (ec *executionContext) _Technique(ctx context.Context, sel ast.SelectionSet
 			}
 		case "updatedBy":
 			out.Values[i] = ec._Technique_updatedBy(ctx, field, obj)
-		case "abbreviation":
-			out.Values[i] = ec._Technique_abbreviation(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._Technique_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._Technique_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Technique_description(ctx, field, obj)
 		case "externalLinks":
@@ -106758,46 +104297,6 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 
 func (ec *executionContext) unmarshalNKeywordWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐKeywordWhereInput(ctx context.Context, v interface{}) (*ent.KeywordWhereInput, error) {
 	res, err := ec.unmarshalInputKeywordWhereInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNLibraryConnection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibraryConnection(ctx context.Context, sel ast.SelectionSet, v ent.LibraryConnection) graphql.Marshaler {
-	return ec._LibraryConnection(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNLibraryConnection2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibraryConnection(ctx context.Context, sel ast.SelectionSet, v *ent.LibraryConnection) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._LibraryConnection(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalNLibraryOrder2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibraryOrder(ctx context.Context, v interface{}) (*ent.LibraryOrder, error) {
-	res, err := ec.unmarshalInputLibraryOrder(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalNLibraryOrderField2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibraryOrderField(ctx context.Context, v interface{}) (*ent.LibraryOrderField, error) {
-	var res = new(ent.LibraryOrderField)
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNLibraryOrderField2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibraryOrderField(ctx context.Context, sel ast.SelectionSet, v *ent.LibraryOrderField) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return v
-}
-
-func (ec *executionContext) unmarshalNLibraryWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibraryWhereInput(ctx context.Context, v interface{}) (*ent.LibraryWhereInput, error) {
-	res, err := ec.unmarshalInputLibraryWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -110102,109 +107601,6 @@ func (ec *executionContext) unmarshalOKeywordWhereInput2ᚖgithubᚗcomᚋdkrasn
 		return nil, nil
 	}
 	res, err := ec.unmarshalInputKeywordWhereInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOLibrary2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibrary(ctx context.Context, sel ast.SelectionSet, v *ent.Library) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._Library(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalOLibraryEdge2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibraryEdge(ctx context.Context, sel ast.SelectionSet, v []*ent.LibraryEdge) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOLibraryEdge2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibraryEdge(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
-}
-
-func (ec *executionContext) marshalOLibraryEdge2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibraryEdge(ctx context.Context, sel ast.SelectionSet, v *ent.LibraryEdge) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._LibraryEdge(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalOLibraryOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibraryOrderᚄ(ctx context.Context, v interface{}) ([]*ent.LibraryOrder, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var vSlice []interface{}
-	if v != nil {
-		vSlice = graphql.CoerceList(v)
-	}
-	var err error
-	res := make([]*ent.LibraryOrder, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNLibraryOrder2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibraryOrder(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
-func (ec *executionContext) unmarshalOLibraryWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibraryWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.LibraryWhereInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var vSlice []interface{}
-	if v != nil {
-		vSlice = graphql.CoerceList(v)
-	}
-	var err error
-	res := make([]*ent.LibraryWhereInput, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNLibraryWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibraryWhereInput(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
-func (ec *executionContext) unmarshalOLibraryWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLibraryWhereInput(ctx context.Context, v interface{}) (*ent.LibraryWhereInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := ec.unmarshalInputLibraryWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 

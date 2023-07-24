@@ -76,26 +76,6 @@ func (mu *MediumUpdate) ClearUpdatedBy() *MediumUpdate {
 	return mu
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (mu *MediumUpdate) SetAbbreviation(s string) *MediumUpdate {
-	mu.mutation.SetAbbreviation(s)
-	return mu
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (mu *MediumUpdate) SetNillableAbbreviation(s *string) *MediumUpdate {
-	if s != nil {
-		mu.SetAbbreviation(*s)
-	}
-	return mu
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (mu *MediumUpdate) ClearAbbreviation() *MediumUpdate {
-	mu.mutation.ClearAbbreviation()
-	return mu
-}
-
 // SetDisplayName sets the "display_name" field.
 func (mu *MediumUpdate) SetDisplayName(s string) *MediumUpdate {
 	mu.mutation.SetDisplayName(s)
@@ -113,6 +93,26 @@ func (mu *MediumUpdate) SetNillableDisplayName(s *string) *MediumUpdate {
 // ClearDisplayName clears the value of the "display_name" field.
 func (mu *MediumUpdate) ClearDisplayName() *MediumUpdate {
 	mu.mutation.ClearDisplayName()
+	return mu
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (mu *MediumUpdate) SetAbbreviation(s string) *MediumUpdate {
+	mu.mutation.SetAbbreviation(s)
+	return mu
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (mu *MediumUpdate) SetNillableAbbreviation(s *string) *MediumUpdate {
+	if s != nil {
+		mu.SetAbbreviation(*s)
+	}
+	return mu
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (mu *MediumUpdate) ClearAbbreviation() *MediumUpdate {
+	mu.mutation.ClearAbbreviation()
 	return mu
 }
 
@@ -261,17 +261,17 @@ func (mu *MediumUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if mu.mutation.UpdatedByCleared() {
 		_spec.ClearField(medium.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := mu.mutation.Abbreviation(); ok {
-		_spec.SetField(medium.FieldAbbreviation, field.TypeString, value)
-	}
-	if mu.mutation.AbbreviationCleared() {
-		_spec.ClearField(medium.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := mu.mutation.DisplayName(); ok {
 		_spec.SetField(medium.FieldDisplayName, field.TypeString, value)
 	}
 	if mu.mutation.DisplayNameCleared() {
 		_spec.ClearField(medium.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := mu.mutation.Abbreviation(); ok {
+		_spec.SetField(medium.FieldAbbreviation, field.TypeString, value)
+	}
+	if mu.mutation.AbbreviationCleared() {
+		_spec.ClearField(medium.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := mu.mutation.Description(); ok {
 		_spec.SetField(medium.FieldDescription, field.TypeString, value)
@@ -401,26 +401,6 @@ func (muo *MediumUpdateOne) ClearUpdatedBy() *MediumUpdateOne {
 	return muo
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (muo *MediumUpdateOne) SetAbbreviation(s string) *MediumUpdateOne {
-	muo.mutation.SetAbbreviation(s)
-	return muo
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (muo *MediumUpdateOne) SetNillableAbbreviation(s *string) *MediumUpdateOne {
-	if s != nil {
-		muo.SetAbbreviation(*s)
-	}
-	return muo
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (muo *MediumUpdateOne) ClearAbbreviation() *MediumUpdateOne {
-	muo.mutation.ClearAbbreviation()
-	return muo
-}
-
 // SetDisplayName sets the "display_name" field.
 func (muo *MediumUpdateOne) SetDisplayName(s string) *MediumUpdateOne {
 	muo.mutation.SetDisplayName(s)
@@ -438,6 +418,26 @@ func (muo *MediumUpdateOne) SetNillableDisplayName(s *string) *MediumUpdateOne {
 // ClearDisplayName clears the value of the "display_name" field.
 func (muo *MediumUpdateOne) ClearDisplayName() *MediumUpdateOne {
 	muo.mutation.ClearDisplayName()
+	return muo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (muo *MediumUpdateOne) SetAbbreviation(s string) *MediumUpdateOne {
+	muo.mutation.SetAbbreviation(s)
+	return muo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (muo *MediumUpdateOne) SetNillableAbbreviation(s *string) *MediumUpdateOne {
+	if s != nil {
+		muo.SetAbbreviation(*s)
+	}
+	return muo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (muo *MediumUpdateOne) ClearAbbreviation() *MediumUpdateOne {
+	muo.mutation.ClearAbbreviation()
 	return muo
 }
 
@@ -616,17 +616,17 @@ func (muo *MediumUpdateOne) sqlSave(ctx context.Context) (_node *Medium, err err
 	if muo.mutation.UpdatedByCleared() {
 		_spec.ClearField(medium.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := muo.mutation.Abbreviation(); ok {
-		_spec.SetField(medium.FieldAbbreviation, field.TypeString, value)
-	}
-	if muo.mutation.AbbreviationCleared() {
-		_spec.ClearField(medium.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := muo.mutation.DisplayName(); ok {
 		_spec.SetField(medium.FieldDisplayName, field.TypeString, value)
 	}
 	if muo.mutation.DisplayNameCleared() {
 		_spec.ClearField(medium.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := muo.mutation.Abbreviation(); ok {
+		_spec.SetField(medium.FieldAbbreviation, field.TypeString, value)
+	}
+	if muo.mutation.AbbreviationCleared() {
+		_spec.ClearField(medium.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := muo.mutation.Description(); ok {
 		_spec.SetField(medium.FieldDescription, field.TypeString, value)

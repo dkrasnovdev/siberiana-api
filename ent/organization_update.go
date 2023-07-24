@@ -134,26 +134,6 @@ func (ou *OrganizationUpdate) ClearEmails() *OrganizationUpdate {
 	return ou
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (ou *OrganizationUpdate) SetAbbreviation(s string) *OrganizationUpdate {
-	ou.mutation.SetAbbreviation(s)
-	return ou
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (ou *OrganizationUpdate) SetNillableAbbreviation(s *string) *OrganizationUpdate {
-	if s != nil {
-		ou.SetAbbreviation(*s)
-	}
-	return ou
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (ou *OrganizationUpdate) ClearAbbreviation() *OrganizationUpdate {
-	ou.mutation.ClearAbbreviation()
-	return ou
-}
-
 // SetDisplayName sets the "display_name" field.
 func (ou *OrganizationUpdate) SetDisplayName(s string) *OrganizationUpdate {
 	ou.mutation.SetDisplayName(s)
@@ -171,6 +151,26 @@ func (ou *OrganizationUpdate) SetNillableDisplayName(s *string) *OrganizationUpd
 // ClearDisplayName clears the value of the "display_name" field.
 func (ou *OrganizationUpdate) ClearDisplayName() *OrganizationUpdate {
 	ou.mutation.ClearDisplayName()
+	return ou
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (ou *OrganizationUpdate) SetAbbreviation(s string) *OrganizationUpdate {
+	ou.mutation.SetAbbreviation(s)
+	return ou
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (ou *OrganizationUpdate) SetNillableAbbreviation(s *string) *OrganizationUpdate {
+	if s != nil {
+		ou.SetAbbreviation(*s)
+	}
+	return ou
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (ou *OrganizationUpdate) ClearAbbreviation() *OrganizationUpdate {
+	ou.mutation.ClearAbbreviation()
 	return ou
 }
 
@@ -493,17 +493,17 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ou.mutation.EmailsCleared() {
 		_spec.ClearField(organization.FieldEmails, field.TypeJSON)
 	}
-	if value, ok := ou.mutation.Abbreviation(); ok {
-		_spec.SetField(organization.FieldAbbreviation, field.TypeString, value)
-	}
-	if ou.mutation.AbbreviationCleared() {
-		_spec.ClearField(organization.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := ou.mutation.DisplayName(); ok {
 		_spec.SetField(organization.FieldDisplayName, field.TypeString, value)
 	}
 	if ou.mutation.DisplayNameCleared() {
 		_spec.ClearField(organization.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := ou.mutation.Abbreviation(); ok {
+		_spec.SetField(organization.FieldAbbreviation, field.TypeString, value)
+	}
+	if ou.mutation.AbbreviationCleared() {
+		_spec.ClearField(organization.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := ou.mutation.Description(); ok {
 		_spec.SetField(organization.FieldDescription, field.TypeString, value)
@@ -787,26 +787,6 @@ func (ouo *OrganizationUpdateOne) ClearEmails() *OrganizationUpdateOne {
 	return ouo
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (ouo *OrganizationUpdateOne) SetAbbreviation(s string) *OrganizationUpdateOne {
-	ouo.mutation.SetAbbreviation(s)
-	return ouo
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (ouo *OrganizationUpdateOne) SetNillableAbbreviation(s *string) *OrganizationUpdateOne {
-	if s != nil {
-		ouo.SetAbbreviation(*s)
-	}
-	return ouo
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (ouo *OrganizationUpdateOne) ClearAbbreviation() *OrganizationUpdateOne {
-	ouo.mutation.ClearAbbreviation()
-	return ouo
-}
-
 // SetDisplayName sets the "display_name" field.
 func (ouo *OrganizationUpdateOne) SetDisplayName(s string) *OrganizationUpdateOne {
 	ouo.mutation.SetDisplayName(s)
@@ -824,6 +804,26 @@ func (ouo *OrganizationUpdateOne) SetNillableDisplayName(s *string) *Organizatio
 // ClearDisplayName clears the value of the "display_name" field.
 func (ouo *OrganizationUpdateOne) ClearDisplayName() *OrganizationUpdateOne {
 	ouo.mutation.ClearDisplayName()
+	return ouo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (ouo *OrganizationUpdateOne) SetAbbreviation(s string) *OrganizationUpdateOne {
+	ouo.mutation.SetAbbreviation(s)
+	return ouo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (ouo *OrganizationUpdateOne) SetNillableAbbreviation(s *string) *OrganizationUpdateOne {
+	if s != nil {
+		ouo.SetAbbreviation(*s)
+	}
+	return ouo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (ouo *OrganizationUpdateOne) ClearAbbreviation() *OrganizationUpdateOne {
+	ouo.mutation.ClearAbbreviation()
 	return ouo
 }
 
@@ -1176,17 +1176,17 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 	if ouo.mutation.EmailsCleared() {
 		_spec.ClearField(organization.FieldEmails, field.TypeJSON)
 	}
-	if value, ok := ouo.mutation.Abbreviation(); ok {
-		_spec.SetField(organization.FieldAbbreviation, field.TypeString, value)
-	}
-	if ouo.mutation.AbbreviationCleared() {
-		_spec.ClearField(organization.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := ouo.mutation.DisplayName(); ok {
 		_spec.SetField(organization.FieldDisplayName, field.TypeString, value)
 	}
 	if ouo.mutation.DisplayNameCleared() {
 		_spec.ClearField(organization.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := ouo.mutation.Abbreviation(); ok {
+		_spec.SetField(organization.FieldAbbreviation, field.TypeString, value)
+	}
+	if ouo.mutation.AbbreviationCleared() {
+		_spec.ClearField(organization.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := ouo.mutation.Description(); ok {
 		_spec.SetField(organization.FieldDescription, field.TypeString, value)

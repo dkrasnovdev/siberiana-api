@@ -79,20 +79,6 @@ func (pc *ProjectCreate) SetNillableUpdatedBy(s *string) *ProjectCreate {
 	return pc
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (pc *ProjectCreate) SetAbbreviation(s string) *ProjectCreate {
-	pc.mutation.SetAbbreviation(s)
-	return pc
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (pc *ProjectCreate) SetNillableAbbreviation(s *string) *ProjectCreate {
-	if s != nil {
-		pc.SetAbbreviation(*s)
-	}
-	return pc
-}
-
 // SetDisplayName sets the "display_name" field.
 func (pc *ProjectCreate) SetDisplayName(s string) *ProjectCreate {
 	pc.mutation.SetDisplayName(s)
@@ -103,6 +89,20 @@ func (pc *ProjectCreate) SetDisplayName(s string) *ProjectCreate {
 func (pc *ProjectCreate) SetNillableDisplayName(s *string) *ProjectCreate {
 	if s != nil {
 		pc.SetDisplayName(*s)
+	}
+	return pc
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (pc *ProjectCreate) SetAbbreviation(s string) *ProjectCreate {
+	pc.mutation.SetAbbreviation(s)
+	return pc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableAbbreviation(s *string) *ProjectCreate {
+	if s != nil {
+		pc.SetAbbreviation(*s)
 	}
 	return pc
 }
@@ -308,13 +308,13 @@ func (pc *ProjectCreate) createSpec() (*Project, *sqlgraph.CreateSpec) {
 		_spec.SetField(project.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := pc.mutation.Abbreviation(); ok {
-		_spec.SetField(project.FieldAbbreviation, field.TypeString, value)
-		_node.Abbreviation = value
-	}
 	if value, ok := pc.mutation.DisplayName(); ok {
 		_spec.SetField(project.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := pc.mutation.Abbreviation(); ok {
+		_spec.SetField(project.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := pc.mutation.Description(); ok {
 		_spec.SetField(project.FieldDescription, field.TypeString, value)

@@ -90,20 +90,6 @@ func (ac *ArtifactCreate) SetNillableUpdatedBy(s *string) *ArtifactCreate {
 	return ac
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (ac *ArtifactCreate) SetAbbreviation(s string) *ArtifactCreate {
-	ac.mutation.SetAbbreviation(s)
-	return ac
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (ac *ArtifactCreate) SetNillableAbbreviation(s *string) *ArtifactCreate {
-	if s != nil {
-		ac.SetAbbreviation(*s)
-	}
-	return ac
-}
-
 // SetDisplayName sets the "display_name" field.
 func (ac *ArtifactCreate) SetDisplayName(s string) *ArtifactCreate {
 	ac.mutation.SetDisplayName(s)
@@ -114,6 +100,20 @@ func (ac *ArtifactCreate) SetDisplayName(s string) *ArtifactCreate {
 func (ac *ArtifactCreate) SetNillableDisplayName(s *string) *ArtifactCreate {
 	if s != nil {
 		ac.SetDisplayName(*s)
+	}
+	return ac
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (ac *ArtifactCreate) SetAbbreviation(s string) *ArtifactCreate {
+	ac.mutation.SetAbbreviation(s)
+	return ac
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableAbbreviation(s *string) *ArtifactCreate {
+	if s != nil {
+		ac.SetAbbreviation(*s)
 	}
 	return ac
 }
@@ -630,13 +630,13 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 		_spec.SetField(artifact.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := ac.mutation.Abbreviation(); ok {
-		_spec.SetField(artifact.FieldAbbreviation, field.TypeString, value)
-		_node.Abbreviation = value
-	}
 	if value, ok := ac.mutation.DisplayName(); ok {
 		_spec.SetField(artifact.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := ac.mutation.Abbreviation(); ok {
+		_spec.SetField(artifact.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := ac.mutation.Description(); ok {
 		_spec.SetField(artifact.FieldDescription, field.TypeString, value)

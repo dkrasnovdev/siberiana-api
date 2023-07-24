@@ -29,10 +29,10 @@ type Book struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// Abbreviation holds the value of the "abbreviation" field.
-	Abbreviation string `json:"abbreviation,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
 	// ExternalLinks holds the value of the "external_links" field.
@@ -49,7 +49,6 @@ type Book struct {
 	// The values are being populated by the BookQuery when eager-loading is set.
 	Edges            BookEdges `json:"edges"`
 	collection_books *int
-	library_books    *int
 	license_books    *int
 	publisher_books  *int
 	selectValues     sql.SelectValues
@@ -155,17 +154,15 @@ func (*Book) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case book.FieldID, book.FieldYear:
 			values[i] = new(sql.NullInt64)
-		case book.FieldCreatedBy, book.FieldUpdatedBy, book.FieldAbbreviation, book.FieldDisplayName, book.FieldDescription, book.FieldPrimaryImageURL:
+		case book.FieldCreatedBy, book.FieldUpdatedBy, book.FieldDisplayName, book.FieldAbbreviation, book.FieldDescription, book.FieldPrimaryImageURL:
 			values[i] = new(sql.NullString)
 		case book.FieldCreatedAt, book.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		case book.ForeignKeys[0]: // collection_books
 			values[i] = new(sql.NullInt64)
-		case book.ForeignKeys[1]: // library_books
+		case book.ForeignKeys[1]: // license_books
 			values[i] = new(sql.NullInt64)
-		case book.ForeignKeys[2]: // license_books
-			values[i] = new(sql.NullInt64)
-		case book.ForeignKeys[3]: // publisher_books
+		case book.ForeignKeys[2]: // publisher_books
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -212,17 +209,17 @@ func (b *Book) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				b.UpdatedBy = value.String
 			}
-		case book.FieldAbbreviation:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
-			} else if value.Valid {
-				b.Abbreviation = value.String
-			}
 		case book.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
 			} else if value.Valid {
 				b.DisplayName = value.String
+			}
+		case book.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				b.Abbreviation = value.String
 			}
 		case book.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -275,19 +272,12 @@ func (b *Book) assignValues(columns []string, values []any) error {
 			}
 		case book.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field library_books", value)
-			} else if value.Valid {
-				b.library_books = new(int)
-				*b.library_books = int(value.Int64)
-			}
-		case book.ForeignKeys[2]:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field license_books", value)
 			} else if value.Valid {
 				b.license_books = new(int)
 				*b.license_books = int(value.Int64)
 			}
-		case book.ForeignKeys[3]:
+		case book.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field publisher_books", value)
 			} else if value.Valid {
@@ -372,11 +362,11 @@ func (b *Book) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(b.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("abbreviation=")
-	builder.WriteString(b.Abbreviation)
-	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(b.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(b.Abbreviation)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(b.Description)

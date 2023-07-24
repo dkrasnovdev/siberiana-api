@@ -27,7 +27,6 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/heritage-api/ent/keyword"
-	"github.com/dkrasnovdev/heritage-api/ent/library"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/medium"
@@ -124,7 +123,6 @@ func checkColumn(table, column string) error {
 			holder.Table:                holder.ValidColumn,
 			holderresponsibility.Table:  holderresponsibility.ValidColumn,
 			keyword.Table:               keyword.ValidColumn,
-			library.Table:               library.ValidColumn,
 			license.Table:               license.ValidColumn,
 			location.Table:              location.ValidColumn,
 			medium.Table:                medium.ValidColumn,

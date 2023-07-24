@@ -51,9 +51,6 @@ type HolderResponsibility func(*sql.Selector)
 // Keyword is the predicate function for keyword builders.
 type Keyword func(*sql.Selector)
 
-// Library is the predicate function for library builders.
-type Library func(*sql.Selector)
-
 // License is the predicate function for license builders.
 type License func(*sql.Selector)
 

@@ -77,20 +77,6 @@ func (rc *RegionCreate) SetNillableUpdatedBy(s *string) *RegionCreate {
 	return rc
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (rc *RegionCreate) SetAbbreviation(s string) *RegionCreate {
-	rc.mutation.SetAbbreviation(s)
-	return rc
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (rc *RegionCreate) SetNillableAbbreviation(s *string) *RegionCreate {
-	if s != nil {
-		rc.SetAbbreviation(*s)
-	}
-	return rc
-}
-
 // SetDisplayName sets the "display_name" field.
 func (rc *RegionCreate) SetDisplayName(s string) *RegionCreate {
 	rc.mutation.SetDisplayName(s)
@@ -101,6 +87,20 @@ func (rc *RegionCreate) SetDisplayName(s string) *RegionCreate {
 func (rc *RegionCreate) SetNillableDisplayName(s *string) *RegionCreate {
 	if s != nil {
 		rc.SetDisplayName(*s)
+	}
+	return rc
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (rc *RegionCreate) SetAbbreviation(s string) *RegionCreate {
+	rc.mutation.SetAbbreviation(s)
+	return rc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (rc *RegionCreate) SetNillableAbbreviation(s *string) *RegionCreate {
+	if s != nil {
+		rc.SetAbbreviation(*s)
 	}
 	return rc
 }
@@ -248,13 +248,13 @@ func (rc *RegionCreate) createSpec() (*Region, *sqlgraph.CreateSpec) {
 		_spec.SetField(region.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := rc.mutation.Abbreviation(); ok {
-		_spec.SetField(region.FieldAbbreviation, field.TypeString, value)
-		_node.Abbreviation = value
-	}
 	if value, ok := rc.mutation.DisplayName(); ok {
 		_spec.SetField(region.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := rc.mutation.Abbreviation(); ok {
+		_spec.SetField(region.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := rc.mutation.Description(); ok {
 		_spec.SetField(region.FieldDescription, field.TypeString, value)

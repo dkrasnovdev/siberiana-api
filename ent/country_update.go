@@ -76,26 +76,6 @@ func (cu *CountryUpdate) ClearUpdatedBy() *CountryUpdate {
 	return cu
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (cu *CountryUpdate) SetAbbreviation(s string) *CountryUpdate {
-	cu.mutation.SetAbbreviation(s)
-	return cu
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (cu *CountryUpdate) SetNillableAbbreviation(s *string) *CountryUpdate {
-	if s != nil {
-		cu.SetAbbreviation(*s)
-	}
-	return cu
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (cu *CountryUpdate) ClearAbbreviation() *CountryUpdate {
-	cu.mutation.ClearAbbreviation()
-	return cu
-}
-
 // SetDisplayName sets the "display_name" field.
 func (cu *CountryUpdate) SetDisplayName(s string) *CountryUpdate {
 	cu.mutation.SetDisplayName(s)
@@ -113,6 +93,26 @@ func (cu *CountryUpdate) SetNillableDisplayName(s *string) *CountryUpdate {
 // ClearDisplayName clears the value of the "display_name" field.
 func (cu *CountryUpdate) ClearDisplayName() *CountryUpdate {
 	cu.mutation.ClearDisplayName()
+	return cu
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (cu *CountryUpdate) SetAbbreviation(s string) *CountryUpdate {
+	cu.mutation.SetAbbreviation(s)
+	return cu
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (cu *CountryUpdate) SetNillableAbbreviation(s *string) *CountryUpdate {
+	if s != nil {
+		cu.SetAbbreviation(*s)
+	}
+	return cu
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (cu *CountryUpdate) ClearAbbreviation() *CountryUpdate {
+	cu.mutation.ClearAbbreviation()
 	return cu
 }
 
@@ -250,17 +250,17 @@ func (cu *CountryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.UpdatedByCleared() {
 		_spec.ClearField(country.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := cu.mutation.Abbreviation(); ok {
-		_spec.SetField(country.FieldAbbreviation, field.TypeString, value)
-	}
-	if cu.mutation.AbbreviationCleared() {
-		_spec.ClearField(country.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := cu.mutation.DisplayName(); ok {
 		_spec.SetField(country.FieldDisplayName, field.TypeString, value)
 	}
 	if cu.mutation.DisplayNameCleared() {
 		_spec.ClearField(country.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := cu.mutation.Abbreviation(); ok {
+		_spec.SetField(country.FieldAbbreviation, field.TypeString, value)
+	}
+	if cu.mutation.AbbreviationCleared() {
+		_spec.ClearField(country.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := cu.mutation.Description(); ok {
 		_spec.SetField(country.FieldDescription, field.TypeString, value)
@@ -374,26 +374,6 @@ func (cuo *CountryUpdateOne) ClearUpdatedBy() *CountryUpdateOne {
 	return cuo
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (cuo *CountryUpdateOne) SetAbbreviation(s string) *CountryUpdateOne {
-	cuo.mutation.SetAbbreviation(s)
-	return cuo
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (cuo *CountryUpdateOne) SetNillableAbbreviation(s *string) *CountryUpdateOne {
-	if s != nil {
-		cuo.SetAbbreviation(*s)
-	}
-	return cuo
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (cuo *CountryUpdateOne) ClearAbbreviation() *CountryUpdateOne {
-	cuo.mutation.ClearAbbreviation()
-	return cuo
-}
-
 // SetDisplayName sets the "display_name" field.
 func (cuo *CountryUpdateOne) SetDisplayName(s string) *CountryUpdateOne {
 	cuo.mutation.SetDisplayName(s)
@@ -411,6 +391,26 @@ func (cuo *CountryUpdateOne) SetNillableDisplayName(s *string) *CountryUpdateOne
 // ClearDisplayName clears the value of the "display_name" field.
 func (cuo *CountryUpdateOne) ClearDisplayName() *CountryUpdateOne {
 	cuo.mutation.ClearDisplayName()
+	return cuo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (cuo *CountryUpdateOne) SetAbbreviation(s string) *CountryUpdateOne {
+	cuo.mutation.SetAbbreviation(s)
+	return cuo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (cuo *CountryUpdateOne) SetNillableAbbreviation(s *string) *CountryUpdateOne {
+	if s != nil {
+		cuo.SetAbbreviation(*s)
+	}
+	return cuo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (cuo *CountryUpdateOne) ClearAbbreviation() *CountryUpdateOne {
+	cuo.mutation.ClearAbbreviation()
 	return cuo
 }
 
@@ -578,17 +578,17 @@ func (cuo *CountryUpdateOne) sqlSave(ctx context.Context) (_node *Country, err e
 	if cuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(country.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := cuo.mutation.Abbreviation(); ok {
-		_spec.SetField(country.FieldAbbreviation, field.TypeString, value)
-	}
-	if cuo.mutation.AbbreviationCleared() {
-		_spec.ClearField(country.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := cuo.mutation.DisplayName(); ok {
 		_spec.SetField(country.FieldDisplayName, field.TypeString, value)
 	}
 	if cuo.mutation.DisplayNameCleared() {
 		_spec.ClearField(country.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := cuo.mutation.Abbreviation(); ok {
+		_spec.SetField(country.FieldAbbreviation, field.TypeString, value)
+	}
+	if cuo.mutation.AbbreviationCleared() {
+		_spec.ClearField(country.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := cuo.mutation.Description(); ok {
 		_spec.SetField(country.FieldDescription, field.TypeString, value)

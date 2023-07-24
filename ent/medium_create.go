@@ -77,20 +77,6 @@ func (mc *MediumCreate) SetNillableUpdatedBy(s *string) *MediumCreate {
 	return mc
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (mc *MediumCreate) SetAbbreviation(s string) *MediumCreate {
-	mc.mutation.SetAbbreviation(s)
-	return mc
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (mc *MediumCreate) SetNillableAbbreviation(s *string) *MediumCreate {
-	if s != nil {
-		mc.SetAbbreviation(*s)
-	}
-	return mc
-}
-
 // SetDisplayName sets the "display_name" field.
 func (mc *MediumCreate) SetDisplayName(s string) *MediumCreate {
 	mc.mutation.SetDisplayName(s)
@@ -101,6 +87,20 @@ func (mc *MediumCreate) SetDisplayName(s string) *MediumCreate {
 func (mc *MediumCreate) SetNillableDisplayName(s *string) *MediumCreate {
 	if s != nil {
 		mc.SetDisplayName(*s)
+	}
+	return mc
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (mc *MediumCreate) SetAbbreviation(s string) *MediumCreate {
+	mc.mutation.SetAbbreviation(s)
+	return mc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (mc *MediumCreate) SetNillableAbbreviation(s *string) *MediumCreate {
+	if s != nil {
+		mc.SetAbbreviation(*s)
 	}
 	return mc
 }
@@ -244,13 +244,13 @@ func (mc *MediumCreate) createSpec() (*Medium, *sqlgraph.CreateSpec) {
 		_spec.SetField(medium.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := mc.mutation.Abbreviation(); ok {
-		_spec.SetField(medium.FieldAbbreviation, field.TypeString, value)
-		_node.Abbreviation = value
-	}
 	if value, ok := mc.mutation.DisplayName(); ok {
 		_spec.SetField(medium.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := mc.mutation.Abbreviation(); ok {
+		_spec.SetField(medium.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := mc.mutation.Description(); ok {
 		_spec.SetField(medium.FieldDescription, field.TypeString, value)

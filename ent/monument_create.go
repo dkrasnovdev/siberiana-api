@@ -78,20 +78,6 @@ func (mc *MonumentCreate) SetNillableUpdatedBy(s *string) *MonumentCreate {
 	return mc
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (mc *MonumentCreate) SetAbbreviation(s string) *MonumentCreate {
-	mc.mutation.SetAbbreviation(s)
-	return mc
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (mc *MonumentCreate) SetNillableAbbreviation(s *string) *MonumentCreate {
-	if s != nil {
-		mc.SetAbbreviation(*s)
-	}
-	return mc
-}
-
 // SetDisplayName sets the "display_name" field.
 func (mc *MonumentCreate) SetDisplayName(s string) *MonumentCreate {
 	mc.mutation.SetDisplayName(s)
@@ -102,6 +88,20 @@ func (mc *MonumentCreate) SetDisplayName(s string) *MonumentCreate {
 func (mc *MonumentCreate) SetNillableDisplayName(s *string) *MonumentCreate {
 	if s != nil {
 		mc.SetDisplayName(*s)
+	}
+	return mc
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (mc *MonumentCreate) SetAbbreviation(s string) *MonumentCreate {
+	mc.mutation.SetAbbreviation(s)
+	return mc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (mc *MonumentCreate) SetNillableAbbreviation(s *string) *MonumentCreate {
+	if s != nil {
+		mc.SetAbbreviation(*s)
 	}
 	return mc
 }
@@ -260,13 +260,13 @@ func (mc *MonumentCreate) createSpec() (*Monument, *sqlgraph.CreateSpec) {
 		_spec.SetField(monument.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := mc.mutation.Abbreviation(); ok {
-		_spec.SetField(monument.FieldAbbreviation, field.TypeString, value)
-		_node.Abbreviation = value
-	}
 	if value, ok := mc.mutation.DisplayName(); ok {
 		_spec.SetField(monument.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := mc.mutation.Abbreviation(); ok {
+		_spec.SetField(monument.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := mc.mutation.Description(); ok {
 		_spec.SetField(monument.FieldDescription, field.TypeString, value)

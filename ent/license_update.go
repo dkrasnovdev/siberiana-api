@@ -77,26 +77,6 @@ func (lu *LicenseUpdate) ClearUpdatedBy() *LicenseUpdate {
 	return lu
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (lu *LicenseUpdate) SetAbbreviation(s string) *LicenseUpdate {
-	lu.mutation.SetAbbreviation(s)
-	return lu
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (lu *LicenseUpdate) SetNillableAbbreviation(s *string) *LicenseUpdate {
-	if s != nil {
-		lu.SetAbbreviation(*s)
-	}
-	return lu
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (lu *LicenseUpdate) ClearAbbreviation() *LicenseUpdate {
-	lu.mutation.ClearAbbreviation()
-	return lu
-}
-
 // SetDisplayName sets the "display_name" field.
 func (lu *LicenseUpdate) SetDisplayName(s string) *LicenseUpdate {
 	lu.mutation.SetDisplayName(s)
@@ -114,6 +94,26 @@ func (lu *LicenseUpdate) SetNillableDisplayName(s *string) *LicenseUpdate {
 // ClearDisplayName clears the value of the "display_name" field.
 func (lu *LicenseUpdate) ClearDisplayName() *LicenseUpdate {
 	lu.mutation.ClearDisplayName()
+	return lu
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (lu *LicenseUpdate) SetAbbreviation(s string) *LicenseUpdate {
+	lu.mutation.SetAbbreviation(s)
+	return lu
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (lu *LicenseUpdate) SetNillableAbbreviation(s *string) *LicenseUpdate {
+	if s != nil {
+		lu.SetAbbreviation(*s)
+	}
+	return lu
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (lu *LicenseUpdate) ClearAbbreviation() *LicenseUpdate {
+	lu.mutation.ClearAbbreviation()
 	return lu
 }
 
@@ -298,17 +298,17 @@ func (lu *LicenseUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if lu.mutation.UpdatedByCleared() {
 		_spec.ClearField(license.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := lu.mutation.Abbreviation(); ok {
-		_spec.SetField(license.FieldAbbreviation, field.TypeString, value)
-	}
-	if lu.mutation.AbbreviationCleared() {
-		_spec.ClearField(license.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := lu.mutation.DisplayName(); ok {
 		_spec.SetField(license.FieldDisplayName, field.TypeString, value)
 	}
 	if lu.mutation.DisplayNameCleared() {
 		_spec.ClearField(license.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := lu.mutation.Abbreviation(); ok {
+		_spec.SetField(license.FieldAbbreviation, field.TypeString, value)
+	}
+	if lu.mutation.AbbreviationCleared() {
+		_spec.ClearField(license.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := lu.mutation.Description(); ok {
 		_spec.SetField(license.FieldDescription, field.TypeString, value)
@@ -483,26 +483,6 @@ func (luo *LicenseUpdateOne) ClearUpdatedBy() *LicenseUpdateOne {
 	return luo
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (luo *LicenseUpdateOne) SetAbbreviation(s string) *LicenseUpdateOne {
-	luo.mutation.SetAbbreviation(s)
-	return luo
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (luo *LicenseUpdateOne) SetNillableAbbreviation(s *string) *LicenseUpdateOne {
-	if s != nil {
-		luo.SetAbbreviation(*s)
-	}
-	return luo
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (luo *LicenseUpdateOne) ClearAbbreviation() *LicenseUpdateOne {
-	luo.mutation.ClearAbbreviation()
-	return luo
-}
-
 // SetDisplayName sets the "display_name" field.
 func (luo *LicenseUpdateOne) SetDisplayName(s string) *LicenseUpdateOne {
 	luo.mutation.SetDisplayName(s)
@@ -520,6 +500,26 @@ func (luo *LicenseUpdateOne) SetNillableDisplayName(s *string) *LicenseUpdateOne
 // ClearDisplayName clears the value of the "display_name" field.
 func (luo *LicenseUpdateOne) ClearDisplayName() *LicenseUpdateOne {
 	luo.mutation.ClearDisplayName()
+	return luo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (luo *LicenseUpdateOne) SetAbbreviation(s string) *LicenseUpdateOne {
+	luo.mutation.SetAbbreviation(s)
+	return luo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (luo *LicenseUpdateOne) SetNillableAbbreviation(s *string) *LicenseUpdateOne {
+	if s != nil {
+		luo.SetAbbreviation(*s)
+	}
+	return luo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (luo *LicenseUpdateOne) ClearAbbreviation() *LicenseUpdateOne {
+	luo.mutation.ClearAbbreviation()
 	return luo
 }
 
@@ -734,17 +734,17 @@ func (luo *LicenseUpdateOne) sqlSave(ctx context.Context) (_node *License, err e
 	if luo.mutation.UpdatedByCleared() {
 		_spec.ClearField(license.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := luo.mutation.Abbreviation(); ok {
-		_spec.SetField(license.FieldAbbreviation, field.TypeString, value)
-	}
-	if luo.mutation.AbbreviationCleared() {
-		_spec.ClearField(license.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := luo.mutation.DisplayName(); ok {
 		_spec.SetField(license.FieldDisplayName, field.TypeString, value)
 	}
 	if luo.mutation.DisplayNameCleared() {
 		_spec.ClearField(license.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := luo.mutation.Abbreviation(); ok {
+		_spec.SetField(license.FieldAbbreviation, field.TypeString, value)
+	}
+	if luo.mutation.AbbreviationCleared() {
+		_spec.ClearField(license.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := luo.mutation.Description(); ok {
 		_spec.SetField(license.FieldDescription, field.TypeString, value)

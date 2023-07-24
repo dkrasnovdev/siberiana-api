@@ -26,10 +26,10 @@ type ArtGenre struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// Abbreviation holds the value of the "abbreviation" field.
-	Abbreviation string `json:"abbreviation,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
 	// ExternalLinks holds the value of the "external_links" field.
@@ -46,7 +46,7 @@ func (*ArtGenre) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case artgenre.FieldID:
 			values[i] = new(sql.NullInt64)
-		case artgenre.FieldCreatedBy, artgenre.FieldUpdatedBy, artgenre.FieldAbbreviation, artgenre.FieldDisplayName, artgenre.FieldDescription:
+		case artgenre.FieldCreatedBy, artgenre.FieldUpdatedBy, artgenre.FieldDisplayName, artgenre.FieldAbbreviation, artgenre.FieldDescription:
 			values[i] = new(sql.NullString)
 		case artgenre.FieldCreatedAt, artgenre.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -95,17 +95,17 @@ func (ag *ArtGenre) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ag.UpdatedBy = value.String
 			}
-		case artgenre.FieldAbbreviation:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
-			} else if value.Valid {
-				ag.Abbreviation = value.String
-			}
 		case artgenre.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
 			} else if value.Valid {
 				ag.DisplayName = value.String
+			}
+		case artgenre.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				ag.Abbreviation = value.String
 			}
 		case artgenre.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -169,11 +169,11 @@ func (ag *ArtGenre) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(ag.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("abbreviation=")
-	builder.WriteString(ag.Abbreviation)
-	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(ag.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(ag.Abbreviation)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(ag.Description)

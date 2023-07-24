@@ -77,20 +77,6 @@ func (otc *OrganizationTypeCreate) SetNillableUpdatedBy(s *string) *Organization
 	return otc
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (otc *OrganizationTypeCreate) SetAbbreviation(s string) *OrganizationTypeCreate {
-	otc.mutation.SetAbbreviation(s)
-	return otc
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (otc *OrganizationTypeCreate) SetNillableAbbreviation(s *string) *OrganizationTypeCreate {
-	if s != nil {
-		otc.SetAbbreviation(*s)
-	}
-	return otc
-}
-
 // SetDisplayName sets the "display_name" field.
 func (otc *OrganizationTypeCreate) SetDisplayName(s string) *OrganizationTypeCreate {
 	otc.mutation.SetDisplayName(s)
@@ -101,6 +87,20 @@ func (otc *OrganizationTypeCreate) SetDisplayName(s string) *OrganizationTypeCre
 func (otc *OrganizationTypeCreate) SetNillableDisplayName(s *string) *OrganizationTypeCreate {
 	if s != nil {
 		otc.SetDisplayName(*s)
+	}
+	return otc
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (otc *OrganizationTypeCreate) SetAbbreviation(s string) *OrganizationTypeCreate {
+	otc.mutation.SetAbbreviation(s)
+	return otc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (otc *OrganizationTypeCreate) SetNillableAbbreviation(s *string) *OrganizationTypeCreate {
+	if s != nil {
+		otc.SetAbbreviation(*s)
 	}
 	return otc
 }
@@ -244,13 +244,13 @@ func (otc *OrganizationTypeCreate) createSpec() (*OrganizationType, *sqlgraph.Cr
 		_spec.SetField(organizationtype.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := otc.mutation.Abbreviation(); ok {
-		_spec.SetField(organizationtype.FieldAbbreviation, field.TypeString, value)
-		_node.Abbreviation = value
-	}
 	if value, ok := otc.mutation.DisplayName(); ok {
 		_spec.SetField(organizationtype.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := otc.mutation.Abbreviation(); ok {
+		_spec.SetField(organizationtype.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := otc.mutation.Description(); ok {
 		_spec.SetField(organizationtype.FieldDescription, field.TypeString, value)

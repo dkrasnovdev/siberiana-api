@@ -26,10 +26,10 @@ type Set struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// Abbreviation holds the value of the "abbreviation" field.
-	Abbreviation string `json:"abbreviation,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
 	// ExternalLinks holds the value of the "external_links" field.
@@ -83,7 +83,7 @@ func (*Set) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case set.FieldID:
 			values[i] = new(sql.NullInt64)
-		case set.FieldCreatedBy, set.FieldUpdatedBy, set.FieldAbbreviation, set.FieldDisplayName, set.FieldDescription:
+		case set.FieldCreatedBy, set.FieldUpdatedBy, set.FieldDisplayName, set.FieldAbbreviation, set.FieldDescription:
 			values[i] = new(sql.NullString)
 		case set.FieldCreatedAt, set.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -132,17 +132,17 @@ func (s *Set) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.UpdatedBy = value.String
 			}
-		case set.FieldAbbreviation:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
-			} else if value.Valid {
-				s.Abbreviation = value.String
-			}
 		case set.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
 			} else if value.Valid {
 				s.DisplayName = value.String
+			}
+		case set.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				s.Abbreviation = value.String
 			}
 		case set.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -216,11 +216,11 @@ func (s *Set) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(s.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("abbreviation=")
-	builder.WriteString(s.Abbreviation)
-	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(s.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(s.Abbreviation)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(s.Description)

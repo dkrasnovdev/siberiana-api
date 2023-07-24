@@ -25,8 +25,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
@@ -43,8 +43,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
@@ -61,8 +61,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
@@ -167,8 +167,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
@@ -176,7 +176,6 @@ var (
 		{Name: "files", Type: field.TypeJSON, Nullable: true},
 		{Name: "year", Type: field.TypeInt, Nullable: true},
 		{Name: "collection_books", Type: field.TypeInt, Nullable: true},
-		{Name: "library_books", Type: field.TypeInt, Nullable: true},
 		{Name: "license_books", Type: field.TypeInt, Nullable: true},
 		{Name: "publisher_books", Type: field.TypeInt, Nullable: true},
 	}
@@ -193,20 +192,14 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "books_libraries_books",
-				Columns:    []*schema.Column{BooksColumns[14]},
-				RefColumns: []*schema.Column{LibrariesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "books_licenses_books",
-				Columns:    []*schema.Column{BooksColumns[15]},
+				Columns:    []*schema.Column{BooksColumns[14]},
 				RefColumns: []*schema.Column{LicensesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "books_publishers_books",
-				Columns:    []*schema.Column{BooksColumns[16]},
+				Columns:    []*schema.Column{BooksColumns[15]},
 				RefColumns: []*schema.Column{PublishersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -219,8 +212,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
@@ -237,8 +230,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
@@ -255,8 +248,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 		{Name: "category_collections", Type: field.TypeInt, Nullable: true},
@@ -282,8 +275,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 		{Name: "location_country", Type: field.TypeInt, Unique: true, Nullable: true},
@@ -309,8 +302,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
@@ -327,8 +320,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 		{Name: "location_district", Type: field.TypeInt, Unique: true, Nullable: true},
@@ -370,8 +363,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
@@ -391,24 +384,6 @@ var (
 		Columns:    KeywordsColumns,
 		PrimaryKey: []*schema.Column{KeywordsColumns[0]},
 	}
-	// LibrariesColumns holds the columns for the "libraries" table.
-	LibrariesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
-		{Name: "display_name", Type: field.TypeString, Nullable: true},
-		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
-	}
-	// LibrariesTable holds the schema information for the "libraries" table.
-	LibrariesTable = &schema.Table{
-		Name:       "libraries",
-		Columns:    LibrariesColumns,
-		PrimaryKey: []*schema.Column{LibrariesColumns[0]},
-	}
 	// LicensesColumns holds the columns for the "licenses" table.
 	LicensesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -416,8 +391,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
@@ -434,8 +409,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
@@ -452,8 +427,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
@@ -470,8 +445,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
@@ -488,8 +463,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
@@ -509,8 +484,8 @@ var (
 		{Name: "address", Type: field.TypeString, Nullable: true},
 		{Name: "phone_numbers", Type: field.TypeJSON, Nullable: true},
 		{Name: "emails", Type: field.TypeJSON, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
@@ -548,8 +523,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
@@ -566,8 +541,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
@@ -587,8 +562,8 @@ var (
 		{Name: "address", Type: field.TypeString, Nullable: true},
 		{Name: "phone_numbers", Type: field.TypeJSON, Nullable: true},
 		{Name: "emails", Type: field.TypeJSON, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
@@ -636,8 +611,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
@@ -654,8 +629,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 		{Name: "begin_data", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
@@ -683,8 +658,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
@@ -701,8 +676,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
@@ -719,8 +694,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
@@ -737,8 +712,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
@@ -755,8 +730,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
@@ -773,8 +748,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
@@ -791,8 +766,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 		{Name: "location_region", Type: field.TypeInt, Unique: true, Nullable: true},
@@ -818,8 +793,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
@@ -836,8 +811,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 		{Name: "location_settlement", Type: field.TypeInt, Unique: true, Nullable: true},
@@ -863,8 +838,8 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
 	}
@@ -1241,7 +1216,6 @@ var (
 		HoldersTable,
 		HolderResponsibilitiesTable,
 		KeywordsTable,
-		LibrariesTable,
 		LicensesTable,
 		LocationsTable,
 		MediaTable,
@@ -1290,9 +1264,8 @@ func init() {
 	ArtifactsTable.ForeignKeys[6].RefTable = PeriodsTable
 	ArtifactsTable.ForeignKeys[7].RefTable = SetsTable
 	BooksTable.ForeignKeys[0].RefTable = CollectionsTable
-	BooksTable.ForeignKeys[1].RefTable = LibrariesTable
-	BooksTable.ForeignKeys[2].RefTable = LicensesTable
-	BooksTable.ForeignKeys[3].RefTable = PublishersTable
+	BooksTable.ForeignKeys[1].RefTable = LicensesTable
+	BooksTable.ForeignKeys[2].RefTable = PublishersTable
 	CollectionsTable.ForeignKeys[0].RefTable = CategoriesTable
 	CountriesTable.ForeignKeys[0].RefTable = LocationsTable
 	DistrictsTable.ForeignKeys[0].RefTable = LocationsTable

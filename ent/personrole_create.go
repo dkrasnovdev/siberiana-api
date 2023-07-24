@@ -77,20 +77,6 @@ func (prc *PersonRoleCreate) SetNillableUpdatedBy(s *string) *PersonRoleCreate {
 	return prc
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (prc *PersonRoleCreate) SetAbbreviation(s string) *PersonRoleCreate {
-	prc.mutation.SetAbbreviation(s)
-	return prc
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (prc *PersonRoleCreate) SetNillableAbbreviation(s *string) *PersonRoleCreate {
-	if s != nil {
-		prc.SetAbbreviation(*s)
-	}
-	return prc
-}
-
 // SetDisplayName sets the "display_name" field.
 func (prc *PersonRoleCreate) SetDisplayName(s string) *PersonRoleCreate {
 	prc.mutation.SetDisplayName(s)
@@ -101,6 +87,20 @@ func (prc *PersonRoleCreate) SetDisplayName(s string) *PersonRoleCreate {
 func (prc *PersonRoleCreate) SetNillableDisplayName(s *string) *PersonRoleCreate {
 	if s != nil {
 		prc.SetDisplayName(*s)
+	}
+	return prc
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (prc *PersonRoleCreate) SetAbbreviation(s string) *PersonRoleCreate {
+	prc.mutation.SetAbbreviation(s)
+	return prc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (prc *PersonRoleCreate) SetNillableAbbreviation(s *string) *PersonRoleCreate {
+	if s != nil {
+		prc.SetAbbreviation(*s)
 	}
 	return prc
 }
@@ -244,13 +244,13 @@ func (prc *PersonRoleCreate) createSpec() (*PersonRole, *sqlgraph.CreateSpec) {
 		_spec.SetField(personrole.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := prc.mutation.Abbreviation(); ok {
-		_spec.SetField(personrole.FieldAbbreviation, field.TypeString, value)
-		_node.Abbreviation = value
-	}
 	if value, ok := prc.mutation.DisplayName(); ok {
 		_spec.SetField(personrole.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := prc.mutation.Abbreviation(); ok {
+		_spec.SetField(personrole.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := prc.mutation.Description(); ok {
 		_spec.SetField(personrole.FieldDescription, field.TypeString, value)

@@ -76,26 +76,6 @@ func (pu *PublisherUpdate) ClearUpdatedBy() *PublisherUpdate {
 	return pu
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (pu *PublisherUpdate) SetAbbreviation(s string) *PublisherUpdate {
-	pu.mutation.SetAbbreviation(s)
-	return pu
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (pu *PublisherUpdate) SetNillableAbbreviation(s *string) *PublisherUpdate {
-	if s != nil {
-		pu.SetAbbreviation(*s)
-	}
-	return pu
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (pu *PublisherUpdate) ClearAbbreviation() *PublisherUpdate {
-	pu.mutation.ClearAbbreviation()
-	return pu
-}
-
 // SetDisplayName sets the "display_name" field.
 func (pu *PublisherUpdate) SetDisplayName(s string) *PublisherUpdate {
 	pu.mutation.SetDisplayName(s)
@@ -113,6 +93,26 @@ func (pu *PublisherUpdate) SetNillableDisplayName(s *string) *PublisherUpdate {
 // ClearDisplayName clears the value of the "display_name" field.
 func (pu *PublisherUpdate) ClearDisplayName() *PublisherUpdate {
 	pu.mutation.ClearDisplayName()
+	return pu
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (pu *PublisherUpdate) SetAbbreviation(s string) *PublisherUpdate {
+	pu.mutation.SetAbbreviation(s)
+	return pu
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (pu *PublisherUpdate) SetNillableAbbreviation(s *string) *PublisherUpdate {
+	if s != nil {
+		pu.SetAbbreviation(*s)
+	}
+	return pu
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (pu *PublisherUpdate) ClearAbbreviation() *PublisherUpdate {
+	pu.mutation.ClearAbbreviation()
 	return pu
 }
 
@@ -261,17 +261,17 @@ func (pu *PublisherUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.UpdatedByCleared() {
 		_spec.ClearField(publisher.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := pu.mutation.Abbreviation(); ok {
-		_spec.SetField(publisher.FieldAbbreviation, field.TypeString, value)
-	}
-	if pu.mutation.AbbreviationCleared() {
-		_spec.ClearField(publisher.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := pu.mutation.DisplayName(); ok {
 		_spec.SetField(publisher.FieldDisplayName, field.TypeString, value)
 	}
 	if pu.mutation.DisplayNameCleared() {
 		_spec.ClearField(publisher.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := pu.mutation.Abbreviation(); ok {
+		_spec.SetField(publisher.FieldAbbreviation, field.TypeString, value)
+	}
+	if pu.mutation.AbbreviationCleared() {
+		_spec.ClearField(publisher.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := pu.mutation.Description(); ok {
 		_spec.SetField(publisher.FieldDescription, field.TypeString, value)
@@ -401,26 +401,6 @@ func (puo *PublisherUpdateOne) ClearUpdatedBy() *PublisherUpdateOne {
 	return puo
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (puo *PublisherUpdateOne) SetAbbreviation(s string) *PublisherUpdateOne {
-	puo.mutation.SetAbbreviation(s)
-	return puo
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (puo *PublisherUpdateOne) SetNillableAbbreviation(s *string) *PublisherUpdateOne {
-	if s != nil {
-		puo.SetAbbreviation(*s)
-	}
-	return puo
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (puo *PublisherUpdateOne) ClearAbbreviation() *PublisherUpdateOne {
-	puo.mutation.ClearAbbreviation()
-	return puo
-}
-
 // SetDisplayName sets the "display_name" field.
 func (puo *PublisherUpdateOne) SetDisplayName(s string) *PublisherUpdateOne {
 	puo.mutation.SetDisplayName(s)
@@ -438,6 +418,26 @@ func (puo *PublisherUpdateOne) SetNillableDisplayName(s *string) *PublisherUpdat
 // ClearDisplayName clears the value of the "display_name" field.
 func (puo *PublisherUpdateOne) ClearDisplayName() *PublisherUpdateOne {
 	puo.mutation.ClearDisplayName()
+	return puo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (puo *PublisherUpdateOne) SetAbbreviation(s string) *PublisherUpdateOne {
+	puo.mutation.SetAbbreviation(s)
+	return puo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (puo *PublisherUpdateOne) SetNillableAbbreviation(s *string) *PublisherUpdateOne {
+	if s != nil {
+		puo.SetAbbreviation(*s)
+	}
+	return puo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (puo *PublisherUpdateOne) ClearAbbreviation() *PublisherUpdateOne {
+	puo.mutation.ClearAbbreviation()
 	return puo
 }
 
@@ -616,17 +616,17 @@ func (puo *PublisherUpdateOne) sqlSave(ctx context.Context) (_node *Publisher, e
 	if puo.mutation.UpdatedByCleared() {
 		_spec.ClearField(publisher.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := puo.mutation.Abbreviation(); ok {
-		_spec.SetField(publisher.FieldAbbreviation, field.TypeString, value)
-	}
-	if puo.mutation.AbbreviationCleared() {
-		_spec.ClearField(publisher.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := puo.mutation.DisplayName(); ok {
 		_spec.SetField(publisher.FieldDisplayName, field.TypeString, value)
 	}
 	if puo.mutation.DisplayNameCleared() {
 		_spec.ClearField(publisher.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := puo.mutation.Abbreviation(); ok {
+		_spec.SetField(publisher.FieldAbbreviation, field.TypeString, value)
+	}
+	if puo.mutation.AbbreviationCleared() {
+		_spec.ClearField(publisher.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := puo.mutation.Description(); ok {
 		_spec.SetField(publisher.FieldDescription, field.TypeString, value)

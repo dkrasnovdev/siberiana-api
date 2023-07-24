@@ -34,10 +34,10 @@ type Artifact struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// Abbreviation holds the value of the "abbreviation" field.
-	Abbreviation string `json:"abbreviation,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
 	// ExternalLinks holds the value of the "external_links" field.
@@ -289,7 +289,7 @@ func (*Artifact) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case artifact.FieldID:
 			values[i] = new(sql.NullInt64)
-		case artifact.FieldCreatedBy, artifact.FieldUpdatedBy, artifact.FieldAbbreviation, artifact.FieldDisplayName, artifact.FieldDescription, artifact.FieldPrimaryImageURL, artifact.FieldDeletedBy, artifact.FieldDating, artifact.FieldDimensions, artifact.FieldChemicalComposition, artifact.FieldNumber, artifact.FieldTypology, artifact.FieldWeight:
+		case artifact.FieldCreatedBy, artifact.FieldUpdatedBy, artifact.FieldDisplayName, artifact.FieldAbbreviation, artifact.FieldDescription, artifact.FieldPrimaryImageURL, artifact.FieldDeletedBy, artifact.FieldDating, artifact.FieldDimensions, artifact.FieldChemicalComposition, artifact.FieldNumber, artifact.FieldTypology, artifact.FieldWeight:
 			values[i] = new(sql.NullString)
 		case artifact.FieldCreatedAt, artifact.FieldUpdatedAt, artifact.FieldDeletedAt, artifact.FieldAdmissionDate:
 			values[i] = new(sql.NullTime)
@@ -354,17 +354,17 @@ func (a *Artifact) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				a.UpdatedBy = value.String
 			}
-		case artifact.FieldAbbreviation:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
-			} else if value.Valid {
-				a.Abbreviation = value.String
-			}
 		case artifact.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
 			} else if value.Valid {
 				a.DisplayName = value.String
+			}
+		case artifact.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				a.Abbreviation = value.String
 			}
 		case artifact.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -622,11 +622,11 @@ func (a *Artifact) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(a.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("abbreviation=")
-	builder.WriteString(a.Abbreviation)
-	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(a.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(a.Abbreviation)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(a.Description)

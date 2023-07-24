@@ -22,7 +22,6 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/heritage-api/ent/keyword"
-	"github.com/dkrasnovdev/heritage-api/ent/library"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/medium"
@@ -242,23 +241,6 @@ type ArtGenreWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -275,6 +257,23 @@ type ArtGenreWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -527,51 +526,6 @@ func (i *ArtGenreWhereInput) P() (predicate.ArtGenre, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, artgenre.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, artgenre.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, artgenre.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, artgenre.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, artgenre.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, artgenre.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, artgenre.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, artgenre.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, artgenre.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, artgenre.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, artgenre.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, artgenre.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, artgenre.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, artgenre.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, artgenre.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, artgenre.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, artgenre.DisplayNameEQ(*i.DisplayName))
 	}
@@ -616,6 +570,51 @@ func (i *ArtGenreWhereInput) P() (predicate.ArtGenre, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, artgenre.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, artgenre.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, artgenre.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, artgenre.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, artgenre.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, artgenre.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, artgenre.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, artgenre.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, artgenre.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, artgenre.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, artgenre.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, artgenre.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, artgenre.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, artgenre.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, artgenre.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, artgenre.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, artgenre.DescriptionEQ(*i.Description))
@@ -744,23 +743,6 @@ type ArtStyleWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -777,6 +759,23 @@ type ArtStyleWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -1029,51 +1028,6 @@ func (i *ArtStyleWhereInput) P() (predicate.ArtStyle, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, artstyle.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, artstyle.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, artstyle.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, artstyle.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, artstyle.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, artstyle.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, artstyle.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, artstyle.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, artstyle.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, artstyle.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, artstyle.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, artstyle.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, artstyle.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, artstyle.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, artstyle.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, artstyle.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, artstyle.DisplayNameEQ(*i.DisplayName))
 	}
@@ -1118,6 +1072,51 @@ func (i *ArtStyleWhereInput) P() (predicate.ArtStyle, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, artstyle.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, artstyle.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, artstyle.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, artstyle.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, artstyle.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, artstyle.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, artstyle.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, artstyle.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, artstyle.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, artstyle.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, artstyle.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, artstyle.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, artstyle.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, artstyle.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, artstyle.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, artstyle.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, artstyle.DescriptionEQ(*i.Description))
@@ -1246,23 +1245,6 @@ type ArtifactWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -1279,6 +1261,23 @@ type ArtifactWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -1747,51 +1746,6 @@ func (i *ArtifactWhereInput) P() (predicate.Artifact, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, artifact.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, artifact.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, artifact.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, artifact.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, artifact.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, artifact.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, artifact.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, artifact.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, artifact.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, artifact.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, artifact.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, artifact.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, artifact.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, artifact.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, artifact.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, artifact.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, artifact.DisplayNameEQ(*i.DisplayName))
 	}
@@ -1836,6 +1790,51 @@ func (i *ArtifactWhereInput) P() (predicate.Artifact, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, artifact.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, artifact.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, artifact.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, artifact.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, artifact.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, artifact.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, artifact.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, artifact.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, artifact.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, artifact.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, artifact.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, artifact.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, artifact.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, artifact.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, artifact.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, artifact.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, artifact.DescriptionEQ(*i.Description))
@@ -3022,23 +3021,6 @@ type BookWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -3055,6 +3037,23 @@ type BookWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -3360,51 +3359,6 @@ func (i *BookWhereInput) P() (predicate.Book, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, book.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, book.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, book.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, book.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, book.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, book.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, book.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, book.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, book.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, book.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, book.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, book.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, book.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, book.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, book.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, book.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, book.DisplayNameEQ(*i.DisplayName))
 	}
@@ -3449,6 +3403,51 @@ func (i *BookWhereInput) P() (predicate.Book, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, book.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, book.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, book.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, book.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, book.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, book.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, book.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, book.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, book.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, book.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, book.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, book.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, book.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, book.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, book.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, book.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, book.DescriptionEQ(*i.Description))
@@ -3760,23 +3759,6 @@ type BookGenreWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -3793,6 +3775,23 @@ type BookGenreWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -4049,51 +4048,6 @@ func (i *BookGenreWhereInput) P() (predicate.BookGenre, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, bookgenre.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, bookgenre.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, bookgenre.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, bookgenre.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, bookgenre.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, bookgenre.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, bookgenre.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, bookgenre.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, bookgenre.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, bookgenre.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, bookgenre.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, bookgenre.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, bookgenre.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, bookgenre.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, bookgenre.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, bookgenre.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, bookgenre.DisplayNameEQ(*i.DisplayName))
 	}
@@ -4138,6 +4092,51 @@ func (i *BookGenreWhereInput) P() (predicate.BookGenre, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, bookgenre.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, bookgenre.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, bookgenre.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, bookgenre.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, bookgenre.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, bookgenre.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, bookgenre.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, bookgenre.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, bookgenre.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, bookgenre.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, bookgenre.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, bookgenre.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, bookgenre.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, bookgenre.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, bookgenre.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, bookgenre.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, bookgenre.DescriptionEQ(*i.Description))
@@ -4284,23 +4283,6 @@ type CategoryWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -4317,6 +4299,23 @@ type CategoryWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -4573,51 +4572,6 @@ func (i *CategoryWhereInput) P() (predicate.Category, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, category.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, category.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, category.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, category.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, category.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, category.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, category.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, category.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, category.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, category.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, category.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, category.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, category.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, category.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, category.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, category.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, category.DisplayNameEQ(*i.DisplayName))
 	}
@@ -4662,6 +4616,51 @@ func (i *CategoryWhereInput) P() (predicate.Category, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, category.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, category.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, category.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, category.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, category.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, category.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, category.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, category.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, category.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, category.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, category.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, category.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, category.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, category.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, category.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, category.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, category.DescriptionEQ(*i.Description))
@@ -4808,23 +4807,6 @@ type CollectionWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -4841,6 +4823,23 @@ type CollectionWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -5109,51 +5108,6 @@ func (i *CollectionWhereInput) P() (predicate.Collection, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, collection.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, collection.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, collection.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, collection.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, collection.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, collection.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, collection.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, collection.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, collection.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, collection.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, collection.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, collection.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, collection.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, collection.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, collection.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, collection.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, collection.DisplayNameEQ(*i.DisplayName))
 	}
@@ -5198,6 +5152,51 @@ func (i *CollectionWhereInput) P() (predicate.Collection, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, collection.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, collection.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, collection.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, collection.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, collection.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, collection.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, collection.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, collection.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, collection.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, collection.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, collection.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, collection.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, collection.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, collection.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, collection.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, collection.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, collection.DescriptionEQ(*i.Description))
@@ -5398,23 +5397,6 @@ type CountryWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -5431,6 +5413,23 @@ type CountryWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -5687,51 +5686,6 @@ func (i *CountryWhereInput) P() (predicate.Country, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, country.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, country.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, country.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, country.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, country.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, country.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, country.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, country.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, country.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, country.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, country.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, country.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, country.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, country.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, country.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, country.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, country.DisplayNameEQ(*i.DisplayName))
 	}
@@ -5776,6 +5730,51 @@ func (i *CountryWhereInput) P() (predicate.Country, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, country.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, country.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, country.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, country.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, country.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, country.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, country.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, country.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, country.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, country.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, country.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, country.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, country.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, country.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, country.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, country.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, country.DescriptionEQ(*i.Description))
@@ -5922,23 +5921,6 @@ type CultureWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -5955,6 +5937,23 @@ type CultureWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -6211,51 +6210,6 @@ func (i *CultureWhereInput) P() (predicate.Culture, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, culture.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, culture.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, culture.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, culture.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, culture.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, culture.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, culture.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, culture.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, culture.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, culture.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, culture.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, culture.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, culture.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, culture.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, culture.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, culture.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, culture.DisplayNameEQ(*i.DisplayName))
 	}
@@ -6300,6 +6254,51 @@ func (i *CultureWhereInput) P() (predicate.Culture, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, culture.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, culture.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, culture.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, culture.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, culture.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, culture.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, culture.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, culture.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, culture.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, culture.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, culture.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, culture.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, culture.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, culture.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, culture.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, culture.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, culture.DescriptionEQ(*i.Description))
@@ -6446,23 +6445,6 @@ type DistrictWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -6479,6 +6461,23 @@ type DistrictWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -6735,51 +6734,6 @@ func (i *DistrictWhereInput) P() (predicate.District, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, district.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, district.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, district.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, district.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, district.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, district.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, district.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, district.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, district.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, district.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, district.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, district.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, district.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, district.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, district.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, district.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, district.DisplayNameEQ(*i.DisplayName))
 	}
@@ -6824,6 +6778,51 @@ func (i *DistrictWhereInput) P() (predicate.District, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, district.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, district.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, district.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, district.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, district.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, district.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, district.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, district.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, district.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, district.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, district.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, district.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, district.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, district.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, district.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, district.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, district.DescriptionEQ(*i.Description))
@@ -7472,23 +7471,6 @@ type HolderResponsibilityWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -7505,6 +7487,23 @@ type HolderResponsibilityWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -7761,51 +7760,6 @@ func (i *HolderResponsibilityWhereInput) P() (predicate.HolderResponsibility, er
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, holderresponsibility.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, holderresponsibility.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, holderresponsibility.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, holderresponsibility.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, holderresponsibility.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, holderresponsibility.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, holderresponsibility.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, holderresponsibility.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, holderresponsibility.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, holderresponsibility.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, holderresponsibility.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, holderresponsibility.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, holderresponsibility.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, holderresponsibility.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, holderresponsibility.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, holderresponsibility.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, holderresponsibility.DisplayNameEQ(*i.DisplayName))
 	}
@@ -7850,6 +7804,51 @@ func (i *HolderResponsibilityWhereInput) P() (predicate.HolderResponsibility, er
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, holderresponsibility.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, holderresponsibility.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, holderresponsibility.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, holderresponsibility.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, holderresponsibility.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, holderresponsibility.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, holderresponsibility.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, holderresponsibility.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, holderresponsibility.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, holderresponsibility.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, holderresponsibility.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, holderresponsibility.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, holderresponsibility.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, holderresponsibility.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, holderresponsibility.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, holderresponsibility.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, holderresponsibility.DescriptionEQ(*i.Description))
@@ -8049,530 +8048,6 @@ func (i *KeywordWhereInput) P() (predicate.Keyword, error) {
 	}
 }
 
-// LibraryWhereInput represents a where input for filtering Library queries.
-type LibraryWhereInput struct {
-	Predicates []predicate.Library  `json:"-"`
-	Not        *LibraryWhereInput   `json:"not,omitempty"`
-	Or         []*LibraryWhereInput `json:"or,omitempty"`
-	And        []*LibraryWhereInput `json:"and,omitempty"`
-
-	// "id" field predicates.
-	ID      *int  `json:"id,omitempty"`
-	IDNEQ   *int  `json:"idNEQ,omitempty"`
-	IDIn    []int `json:"idIn,omitempty"`
-	IDNotIn []int `json:"idNotIn,omitempty"`
-	IDGT    *int  `json:"idGT,omitempty"`
-	IDGTE   *int  `json:"idGTE,omitempty"`
-	IDLT    *int  `json:"idLT,omitempty"`
-	IDLTE   *int  `json:"idLTE,omitempty"`
-
-	// "created_at" field predicates.
-	CreatedAt      *time.Time  `json:"createdAt,omitempty"`
-	CreatedAtNEQ   *time.Time  `json:"createdAtNEQ,omitempty"`
-	CreatedAtIn    []time.Time `json:"createdAtIn,omitempty"`
-	CreatedAtNotIn []time.Time `json:"createdAtNotIn,omitempty"`
-	CreatedAtGT    *time.Time  `json:"createdAtGT,omitempty"`
-	CreatedAtGTE   *time.Time  `json:"createdAtGTE,omitempty"`
-	CreatedAtLT    *time.Time  `json:"createdAtLT,omitempty"`
-	CreatedAtLTE   *time.Time  `json:"createdAtLTE,omitempty"`
-
-	// "created_by" field predicates.
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGT           *string  `json:"createdByGT,omitempty"`
-	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLT           *string  `json:"createdByLT,omitempty"`
-	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-
-	// "updated_at" field predicates.
-	UpdatedAt      *time.Time  `json:"updatedAt,omitempty"`
-	UpdatedAtNEQ   *time.Time  `json:"updatedAtNEQ,omitempty"`
-	UpdatedAtIn    []time.Time `json:"updatedAtIn,omitempty"`
-	UpdatedAtNotIn []time.Time `json:"updatedAtNotIn,omitempty"`
-	UpdatedAtGT    *time.Time  `json:"updatedAtGT,omitempty"`
-	UpdatedAtGTE   *time.Time  `json:"updatedAtGTE,omitempty"`
-	UpdatedAtLT    *time.Time  `json:"updatedAtLT,omitempty"`
-	UpdatedAtLTE   *time.Time  `json:"updatedAtLTE,omitempty"`
-
-	// "updated_by" field predicates.
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
-
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
-	// "display_name" field predicates.
-	DisplayName             *string  `json:"displayName,omitempty"`
-	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
-	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
-	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
-	DisplayNameGT           *string  `json:"displayNameGT,omitempty"`
-	DisplayNameGTE          *string  `json:"displayNameGTE,omitempty"`
-	DisplayNameLT           *string  `json:"displayNameLT,omitempty"`
-	DisplayNameLTE          *string  `json:"displayNameLTE,omitempty"`
-	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
-	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
-	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
-	DisplayNameIsNil        bool     `json:"displayNameIsNil,omitempty"`
-	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
-	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
-	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
-
-	// "description" field predicates.
-	Description             *string  `json:"description,omitempty"`
-	DescriptionNEQ          *string  `json:"descriptionNEQ,omitempty"`
-	DescriptionIn           []string `json:"descriptionIn,omitempty"`
-	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
-	DescriptionGT           *string  `json:"descriptionGT,omitempty"`
-	DescriptionGTE          *string  `json:"descriptionGTE,omitempty"`
-	DescriptionLT           *string  `json:"descriptionLT,omitempty"`
-	DescriptionLTE          *string  `json:"descriptionLTE,omitempty"`
-	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
-	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
-	DescriptionIsNil        bool     `json:"descriptionIsNil,omitempty"`
-	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
-	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
-	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
-
-	// "books" edge predicates.
-	HasBooks     *bool             `json:"hasBooks,omitempty"`
-	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
-}
-
-// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
-func (i *LibraryWhereInput) AddPredicates(predicates ...predicate.Library) {
-	i.Predicates = append(i.Predicates, predicates...)
-}
-
-// Filter applies the LibraryWhereInput filter on the LibraryQuery builder.
-func (i *LibraryWhereInput) Filter(q *LibraryQuery) (*LibraryQuery, error) {
-	if i == nil {
-		return q, nil
-	}
-	p, err := i.P()
-	if err != nil {
-		if err == ErrEmptyLibraryWhereInput {
-			return q, nil
-		}
-		return nil, err
-	}
-	return q.Where(p), nil
-}
-
-// ErrEmptyLibraryWhereInput is returned in case the LibraryWhereInput is empty.
-var ErrEmptyLibraryWhereInput = errors.New("ent: empty predicate LibraryWhereInput")
-
-// P returns a predicate for filtering libraries.
-// An error is returned if the input is empty or invalid.
-func (i *LibraryWhereInput) P() (predicate.Library, error) {
-	var predicates []predicate.Library
-	if i.Not != nil {
-		p, err := i.Not.P()
-		if err != nil {
-			return nil, fmt.Errorf("%w: field 'not'", err)
-		}
-		predicates = append(predicates, library.Not(p))
-	}
-	switch n := len(i.Or); {
-	case n == 1:
-		p, err := i.Or[0].P()
-		if err != nil {
-			return nil, fmt.Errorf("%w: field 'or'", err)
-		}
-		predicates = append(predicates, p)
-	case n > 1:
-		or := make([]predicate.Library, 0, n)
-		for _, w := range i.Or {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'or'", err)
-			}
-			or = append(or, p)
-		}
-		predicates = append(predicates, library.Or(or...))
-	}
-	switch n := len(i.And); {
-	case n == 1:
-		p, err := i.And[0].P()
-		if err != nil {
-			return nil, fmt.Errorf("%w: field 'and'", err)
-		}
-		predicates = append(predicates, p)
-	case n > 1:
-		and := make([]predicate.Library, 0, n)
-		for _, w := range i.And {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'and'", err)
-			}
-			and = append(and, p)
-		}
-		predicates = append(predicates, library.And(and...))
-	}
-	predicates = append(predicates, i.Predicates...)
-	if i.ID != nil {
-		predicates = append(predicates, library.IDEQ(*i.ID))
-	}
-	if i.IDNEQ != nil {
-		predicates = append(predicates, library.IDNEQ(*i.IDNEQ))
-	}
-	if len(i.IDIn) > 0 {
-		predicates = append(predicates, library.IDIn(i.IDIn...))
-	}
-	if len(i.IDNotIn) > 0 {
-		predicates = append(predicates, library.IDNotIn(i.IDNotIn...))
-	}
-	if i.IDGT != nil {
-		predicates = append(predicates, library.IDGT(*i.IDGT))
-	}
-	if i.IDGTE != nil {
-		predicates = append(predicates, library.IDGTE(*i.IDGTE))
-	}
-	if i.IDLT != nil {
-		predicates = append(predicates, library.IDLT(*i.IDLT))
-	}
-	if i.IDLTE != nil {
-		predicates = append(predicates, library.IDLTE(*i.IDLTE))
-	}
-	if i.CreatedAt != nil {
-		predicates = append(predicates, library.CreatedAtEQ(*i.CreatedAt))
-	}
-	if i.CreatedAtNEQ != nil {
-		predicates = append(predicates, library.CreatedAtNEQ(*i.CreatedAtNEQ))
-	}
-	if len(i.CreatedAtIn) > 0 {
-		predicates = append(predicates, library.CreatedAtIn(i.CreatedAtIn...))
-	}
-	if len(i.CreatedAtNotIn) > 0 {
-		predicates = append(predicates, library.CreatedAtNotIn(i.CreatedAtNotIn...))
-	}
-	if i.CreatedAtGT != nil {
-		predicates = append(predicates, library.CreatedAtGT(*i.CreatedAtGT))
-	}
-	if i.CreatedAtGTE != nil {
-		predicates = append(predicates, library.CreatedAtGTE(*i.CreatedAtGTE))
-	}
-	if i.CreatedAtLT != nil {
-		predicates = append(predicates, library.CreatedAtLT(*i.CreatedAtLT))
-	}
-	if i.CreatedAtLTE != nil {
-		predicates = append(predicates, library.CreatedAtLTE(*i.CreatedAtLTE))
-	}
-	if i.CreatedBy != nil {
-		predicates = append(predicates, library.CreatedByEQ(*i.CreatedBy))
-	}
-	if i.CreatedByNEQ != nil {
-		predicates = append(predicates, library.CreatedByNEQ(*i.CreatedByNEQ))
-	}
-	if len(i.CreatedByIn) > 0 {
-		predicates = append(predicates, library.CreatedByIn(i.CreatedByIn...))
-	}
-	if len(i.CreatedByNotIn) > 0 {
-		predicates = append(predicates, library.CreatedByNotIn(i.CreatedByNotIn...))
-	}
-	if i.CreatedByGT != nil {
-		predicates = append(predicates, library.CreatedByGT(*i.CreatedByGT))
-	}
-	if i.CreatedByGTE != nil {
-		predicates = append(predicates, library.CreatedByGTE(*i.CreatedByGTE))
-	}
-	if i.CreatedByLT != nil {
-		predicates = append(predicates, library.CreatedByLT(*i.CreatedByLT))
-	}
-	if i.CreatedByLTE != nil {
-		predicates = append(predicates, library.CreatedByLTE(*i.CreatedByLTE))
-	}
-	if i.CreatedByContains != nil {
-		predicates = append(predicates, library.CreatedByContains(*i.CreatedByContains))
-	}
-	if i.CreatedByHasPrefix != nil {
-		predicates = append(predicates, library.CreatedByHasPrefix(*i.CreatedByHasPrefix))
-	}
-	if i.CreatedByHasSuffix != nil {
-		predicates = append(predicates, library.CreatedByHasSuffix(*i.CreatedByHasSuffix))
-	}
-	if i.CreatedByIsNil {
-		predicates = append(predicates, library.CreatedByIsNil())
-	}
-	if i.CreatedByNotNil {
-		predicates = append(predicates, library.CreatedByNotNil())
-	}
-	if i.CreatedByEqualFold != nil {
-		predicates = append(predicates, library.CreatedByEqualFold(*i.CreatedByEqualFold))
-	}
-	if i.CreatedByContainsFold != nil {
-		predicates = append(predicates, library.CreatedByContainsFold(*i.CreatedByContainsFold))
-	}
-	if i.UpdatedAt != nil {
-		predicates = append(predicates, library.UpdatedAtEQ(*i.UpdatedAt))
-	}
-	if i.UpdatedAtNEQ != nil {
-		predicates = append(predicates, library.UpdatedAtNEQ(*i.UpdatedAtNEQ))
-	}
-	if len(i.UpdatedAtIn) > 0 {
-		predicates = append(predicates, library.UpdatedAtIn(i.UpdatedAtIn...))
-	}
-	if len(i.UpdatedAtNotIn) > 0 {
-		predicates = append(predicates, library.UpdatedAtNotIn(i.UpdatedAtNotIn...))
-	}
-	if i.UpdatedAtGT != nil {
-		predicates = append(predicates, library.UpdatedAtGT(*i.UpdatedAtGT))
-	}
-	if i.UpdatedAtGTE != nil {
-		predicates = append(predicates, library.UpdatedAtGTE(*i.UpdatedAtGTE))
-	}
-	if i.UpdatedAtLT != nil {
-		predicates = append(predicates, library.UpdatedAtLT(*i.UpdatedAtLT))
-	}
-	if i.UpdatedAtLTE != nil {
-		predicates = append(predicates, library.UpdatedAtLTE(*i.UpdatedAtLTE))
-	}
-	if i.UpdatedBy != nil {
-		predicates = append(predicates, library.UpdatedByEQ(*i.UpdatedBy))
-	}
-	if i.UpdatedByNEQ != nil {
-		predicates = append(predicates, library.UpdatedByNEQ(*i.UpdatedByNEQ))
-	}
-	if len(i.UpdatedByIn) > 0 {
-		predicates = append(predicates, library.UpdatedByIn(i.UpdatedByIn...))
-	}
-	if len(i.UpdatedByNotIn) > 0 {
-		predicates = append(predicates, library.UpdatedByNotIn(i.UpdatedByNotIn...))
-	}
-	if i.UpdatedByGT != nil {
-		predicates = append(predicates, library.UpdatedByGT(*i.UpdatedByGT))
-	}
-	if i.UpdatedByGTE != nil {
-		predicates = append(predicates, library.UpdatedByGTE(*i.UpdatedByGTE))
-	}
-	if i.UpdatedByLT != nil {
-		predicates = append(predicates, library.UpdatedByLT(*i.UpdatedByLT))
-	}
-	if i.UpdatedByLTE != nil {
-		predicates = append(predicates, library.UpdatedByLTE(*i.UpdatedByLTE))
-	}
-	if i.UpdatedByContains != nil {
-		predicates = append(predicates, library.UpdatedByContains(*i.UpdatedByContains))
-	}
-	if i.UpdatedByHasPrefix != nil {
-		predicates = append(predicates, library.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
-	}
-	if i.UpdatedByHasSuffix != nil {
-		predicates = append(predicates, library.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
-	}
-	if i.UpdatedByIsNil {
-		predicates = append(predicates, library.UpdatedByIsNil())
-	}
-	if i.UpdatedByNotNil {
-		predicates = append(predicates, library.UpdatedByNotNil())
-	}
-	if i.UpdatedByEqualFold != nil {
-		predicates = append(predicates, library.UpdatedByEqualFold(*i.UpdatedByEqualFold))
-	}
-	if i.UpdatedByContainsFold != nil {
-		predicates = append(predicates, library.UpdatedByContainsFold(*i.UpdatedByContainsFold))
-	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, library.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, library.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, library.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, library.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, library.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, library.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, library.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, library.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, library.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, library.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, library.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, library.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, library.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, library.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, library.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
-	if i.DisplayName != nil {
-		predicates = append(predicates, library.DisplayNameEQ(*i.DisplayName))
-	}
-	if i.DisplayNameNEQ != nil {
-		predicates = append(predicates, library.DisplayNameNEQ(*i.DisplayNameNEQ))
-	}
-	if len(i.DisplayNameIn) > 0 {
-		predicates = append(predicates, library.DisplayNameIn(i.DisplayNameIn...))
-	}
-	if len(i.DisplayNameNotIn) > 0 {
-		predicates = append(predicates, library.DisplayNameNotIn(i.DisplayNameNotIn...))
-	}
-	if i.DisplayNameGT != nil {
-		predicates = append(predicates, library.DisplayNameGT(*i.DisplayNameGT))
-	}
-	if i.DisplayNameGTE != nil {
-		predicates = append(predicates, library.DisplayNameGTE(*i.DisplayNameGTE))
-	}
-	if i.DisplayNameLT != nil {
-		predicates = append(predicates, library.DisplayNameLT(*i.DisplayNameLT))
-	}
-	if i.DisplayNameLTE != nil {
-		predicates = append(predicates, library.DisplayNameLTE(*i.DisplayNameLTE))
-	}
-	if i.DisplayNameContains != nil {
-		predicates = append(predicates, library.DisplayNameContains(*i.DisplayNameContains))
-	}
-	if i.DisplayNameHasPrefix != nil {
-		predicates = append(predicates, library.DisplayNameHasPrefix(*i.DisplayNameHasPrefix))
-	}
-	if i.DisplayNameHasSuffix != nil {
-		predicates = append(predicates, library.DisplayNameHasSuffix(*i.DisplayNameHasSuffix))
-	}
-	if i.DisplayNameIsNil {
-		predicates = append(predicates, library.DisplayNameIsNil())
-	}
-	if i.DisplayNameNotNil {
-		predicates = append(predicates, library.DisplayNameNotNil())
-	}
-	if i.DisplayNameEqualFold != nil {
-		predicates = append(predicates, library.DisplayNameEqualFold(*i.DisplayNameEqualFold))
-	}
-	if i.DisplayNameContainsFold != nil {
-		predicates = append(predicates, library.DisplayNameContainsFold(*i.DisplayNameContainsFold))
-	}
-	if i.Description != nil {
-		predicates = append(predicates, library.DescriptionEQ(*i.Description))
-	}
-	if i.DescriptionNEQ != nil {
-		predicates = append(predicates, library.DescriptionNEQ(*i.DescriptionNEQ))
-	}
-	if len(i.DescriptionIn) > 0 {
-		predicates = append(predicates, library.DescriptionIn(i.DescriptionIn...))
-	}
-	if len(i.DescriptionNotIn) > 0 {
-		predicates = append(predicates, library.DescriptionNotIn(i.DescriptionNotIn...))
-	}
-	if i.DescriptionGT != nil {
-		predicates = append(predicates, library.DescriptionGT(*i.DescriptionGT))
-	}
-	if i.DescriptionGTE != nil {
-		predicates = append(predicates, library.DescriptionGTE(*i.DescriptionGTE))
-	}
-	if i.DescriptionLT != nil {
-		predicates = append(predicates, library.DescriptionLT(*i.DescriptionLT))
-	}
-	if i.DescriptionLTE != nil {
-		predicates = append(predicates, library.DescriptionLTE(*i.DescriptionLTE))
-	}
-	if i.DescriptionContains != nil {
-		predicates = append(predicates, library.DescriptionContains(*i.DescriptionContains))
-	}
-	if i.DescriptionHasPrefix != nil {
-		predicates = append(predicates, library.DescriptionHasPrefix(*i.DescriptionHasPrefix))
-	}
-	if i.DescriptionHasSuffix != nil {
-		predicates = append(predicates, library.DescriptionHasSuffix(*i.DescriptionHasSuffix))
-	}
-	if i.DescriptionIsNil {
-		predicates = append(predicates, library.DescriptionIsNil())
-	}
-	if i.DescriptionNotNil {
-		predicates = append(predicates, library.DescriptionNotNil())
-	}
-	if i.DescriptionEqualFold != nil {
-		predicates = append(predicates, library.DescriptionEqualFold(*i.DescriptionEqualFold))
-	}
-	if i.DescriptionContainsFold != nil {
-		predicates = append(predicates, library.DescriptionContainsFold(*i.DescriptionContainsFold))
-	}
-
-	if i.HasBooks != nil {
-		p := library.HasBooks()
-		if !*i.HasBooks {
-			p = library.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasBooksWith) > 0 {
-		with := make([]predicate.Book, 0, len(i.HasBooksWith))
-		for _, w := range i.HasBooksWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasBooksWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, library.HasBooksWith(with...))
-	}
-	switch len(predicates) {
-	case 0:
-		return nil, ErrEmptyLibraryWhereInput
-	case 1:
-		return predicates[0], nil
-	default:
-		return library.And(predicates...), nil
-	}
-}
-
 // LicenseWhereInput represents a where input for filtering License queries.
 type LicenseWhereInput struct {
 	Predicates []predicate.License  `json:"-"`
@@ -8644,23 +8119,6 @@ type LicenseWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -8677,6 +8135,23 @@ type LicenseWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -8937,51 +8412,6 @@ func (i *LicenseWhereInput) P() (predicate.License, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, license.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, license.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, license.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, license.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, license.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, license.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, license.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, license.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, license.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, license.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, license.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, license.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, license.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, license.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, license.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, license.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, license.DisplayNameEQ(*i.DisplayName))
 	}
@@ -9026,6 +8456,51 @@ func (i *LicenseWhereInput) P() (predicate.License, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, license.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, license.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, license.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, license.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, license.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, license.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, license.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, license.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, license.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, license.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, license.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, license.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, license.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, license.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, license.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, license.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, license.DescriptionEQ(*i.Description))
@@ -9190,23 +8665,6 @@ type LocationWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -9223,6 +8681,23 @@ type LocationWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -9495,51 +8970,6 @@ func (i *LocationWhereInput) P() (predicate.Location, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, location.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, location.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, location.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, location.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, location.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, location.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, location.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, location.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, location.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, location.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, location.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, location.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, location.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, location.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, location.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, location.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, location.DisplayNameEQ(*i.DisplayName))
 	}
@@ -9584,6 +9014,51 @@ func (i *LocationWhereInput) P() (predicate.Location, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, location.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, location.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, location.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, location.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, location.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, location.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, location.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, location.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, location.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, location.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, location.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, location.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, location.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, location.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, location.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, location.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, location.DescriptionEQ(*i.Description))
@@ -9802,23 +9277,6 @@ type MediumWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -9835,6 +9293,23 @@ type MediumWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -10091,51 +9566,6 @@ func (i *MediumWhereInput) P() (predicate.Medium, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, medium.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, medium.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, medium.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, medium.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, medium.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, medium.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, medium.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, medium.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, medium.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, medium.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, medium.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, medium.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, medium.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, medium.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, medium.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, medium.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, medium.DisplayNameEQ(*i.DisplayName))
 	}
@@ -10180,6 +9610,51 @@ func (i *MediumWhereInput) P() (predicate.Medium, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, medium.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, medium.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, medium.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, medium.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, medium.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, medium.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, medium.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, medium.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, medium.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, medium.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, medium.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, medium.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, medium.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, medium.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, medium.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, medium.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, medium.DescriptionEQ(*i.Description))
@@ -10326,23 +9801,6 @@ type ModelWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -10359,6 +9817,23 @@ type ModelWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -10615,51 +10090,6 @@ func (i *ModelWhereInput) P() (predicate.Model, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, model.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, model.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, model.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, model.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, model.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, model.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, model.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, model.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, model.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, model.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, model.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, model.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, model.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, model.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, model.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, model.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, model.DisplayNameEQ(*i.DisplayName))
 	}
@@ -10704,6 +10134,51 @@ func (i *ModelWhereInput) P() (predicate.Model, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, model.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, model.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, model.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, model.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, model.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, model.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, model.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, model.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, model.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, model.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, model.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, model.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, model.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, model.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, model.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, model.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, model.DescriptionEQ(*i.Description))
@@ -10850,23 +10325,6 @@ type MonumentWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -10883,6 +10341,23 @@ type MonumentWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -11143,51 +10618,6 @@ func (i *MonumentWhereInput) P() (predicate.Monument, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, monument.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, monument.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, monument.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, monument.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, monument.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, monument.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, monument.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, monument.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, monument.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, monument.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, monument.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, monument.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, monument.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, monument.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, monument.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, monument.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, monument.DisplayNameEQ(*i.DisplayName))
 	}
@@ -11232,6 +10662,51 @@ func (i *MonumentWhereInput) P() (predicate.Monument, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, monument.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, monument.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, monument.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, monument.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, monument.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, monument.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, monument.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, monument.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, monument.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, monument.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, monument.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, monument.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, monument.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, monument.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, monument.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, monument.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, monument.DescriptionEQ(*i.Description))
@@ -11413,23 +10888,6 @@ type OrganizationWhereInput struct {
 	AddressEqualFold    *string  `json:"addressEqualFold,omitempty"`
 	AddressContainsFold *string  `json:"addressContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -11446,6 +10904,23 @@ type OrganizationWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -11795,51 +11270,6 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	if i.AddressContainsFold != nil {
 		predicates = append(predicates, organization.AddressContainsFold(*i.AddressContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, organization.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, organization.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, organization.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, organization.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, organization.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, organization.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, organization.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, organization.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, organization.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, organization.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, organization.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, organization.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, organization.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, organization.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, organization.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, organization.DisplayNameEQ(*i.DisplayName))
 	}
@@ -11884,6 +11314,51 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, organization.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, organization.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, organization.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, organization.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, organization.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, organization.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, organization.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, organization.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, organization.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, organization.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, organization.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, organization.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, organization.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, organization.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, organization.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, organization.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, organization.DescriptionEQ(*i.Description))
@@ -12168,23 +11643,6 @@ type OrganizationTypeWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -12201,6 +11659,23 @@ type OrganizationTypeWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -12457,51 +11932,6 @@ func (i *OrganizationTypeWhereInput) P() (predicate.OrganizationType, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, organizationtype.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, organizationtype.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, organizationtype.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, organizationtype.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, organizationtype.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, organizationtype.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, organizationtype.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, organizationtype.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, organizationtype.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, organizationtype.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, organizationtype.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, organizationtype.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, organizationtype.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, organizationtype.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, organizationtype.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, organizationtype.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, organizationtype.DisplayNameEQ(*i.DisplayName))
 	}
@@ -12546,6 +11976,51 @@ func (i *OrganizationTypeWhereInput) P() (predicate.OrganizationType, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, organizationtype.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, organizationtype.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, organizationtype.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, organizationtype.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, organizationtype.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, organizationtype.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, organizationtype.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, organizationtype.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, organizationtype.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, organizationtype.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, organizationtype.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, organizationtype.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, organizationtype.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, organizationtype.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, organizationtype.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, organizationtype.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, organizationtype.DescriptionEQ(*i.Description))
@@ -12692,23 +12167,6 @@ type PeriodWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -12725,6 +12183,23 @@ type PeriodWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -12981,51 +12456,6 @@ func (i *PeriodWhereInput) P() (predicate.Period, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, period.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, period.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, period.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, period.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, period.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, period.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, period.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, period.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, period.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, period.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, period.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, period.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, period.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, period.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, period.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, period.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, period.DisplayNameEQ(*i.DisplayName))
 	}
@@ -13070,6 +12500,51 @@ func (i *PeriodWhereInput) P() (predicate.Period, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, period.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, period.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, period.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, period.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, period.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, period.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, period.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, period.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, period.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, period.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, period.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, period.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, period.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, period.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, period.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, period.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, period.DescriptionEQ(*i.Description))
@@ -13233,23 +12708,6 @@ type PersonWhereInput struct {
 	AddressEqualFold    *string  `json:"addressEqualFold,omitempty"`
 	AddressContainsFold *string  `json:"addressContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -13266,6 +12724,23 @@ type PersonWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -13693,51 +13168,6 @@ func (i *PersonWhereInput) P() (predicate.Person, error) {
 	if i.AddressContainsFold != nil {
 		predicates = append(predicates, person.AddressContainsFold(*i.AddressContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, person.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, person.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, person.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, person.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, person.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, person.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, person.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, person.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, person.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, person.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, person.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, person.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, person.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, person.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, person.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, person.DisplayNameEQ(*i.DisplayName))
 	}
@@ -13782,6 +13212,51 @@ func (i *PersonWhereInput) P() (predicate.Person, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, person.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, person.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, person.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, person.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, person.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, person.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, person.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, person.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, person.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, person.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, person.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, person.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, person.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, person.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, person.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, person.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, person.DescriptionEQ(*i.Description))
@@ -14306,23 +13781,6 @@ type PersonRoleWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -14339,6 +13797,23 @@ type PersonRoleWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -14595,51 +14070,6 @@ func (i *PersonRoleWhereInput) P() (predicate.PersonRole, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, personrole.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, personrole.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, personrole.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, personrole.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, personrole.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, personrole.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, personrole.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, personrole.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, personrole.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, personrole.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, personrole.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, personrole.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, personrole.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, personrole.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, personrole.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, personrole.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, personrole.DisplayNameEQ(*i.DisplayName))
 	}
@@ -14684,6 +14114,51 @@ func (i *PersonRoleWhereInput) P() (predicate.PersonRole, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, personrole.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, personrole.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, personrole.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, personrole.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, personrole.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, personrole.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, personrole.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, personrole.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, personrole.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, personrole.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, personrole.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, personrole.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, personrole.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, personrole.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, personrole.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, personrole.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, personrole.DescriptionEQ(*i.Description))
@@ -14830,23 +14305,6 @@ type ProjectWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -14863,6 +14321,23 @@ type ProjectWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -15151,51 +14626,6 @@ func (i *ProjectWhereInput) P() (predicate.Project, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, project.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, project.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, project.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, project.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, project.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, project.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, project.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, project.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, project.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, project.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, project.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, project.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, project.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, project.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, project.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, project.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, project.DisplayNameEQ(*i.DisplayName))
 	}
@@ -15240,6 +14670,51 @@ func (i *ProjectWhereInput) P() (predicate.Project, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, project.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, project.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, project.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, project.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, project.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, project.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, project.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, project.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, project.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, project.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, project.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, project.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, project.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, project.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, project.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, project.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, project.DescriptionEQ(*i.Description))
@@ -15482,23 +14957,6 @@ type ProjectTypeWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -15515,6 +14973,23 @@ type ProjectTypeWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -15771,51 +15246,6 @@ func (i *ProjectTypeWhereInput) P() (predicate.ProjectType, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, projecttype.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, projecttype.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, projecttype.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, projecttype.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, projecttype.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, projecttype.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, projecttype.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, projecttype.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, projecttype.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, projecttype.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, projecttype.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, projecttype.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, projecttype.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, projecttype.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, projecttype.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, projecttype.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, projecttype.DisplayNameEQ(*i.DisplayName))
 	}
@@ -15860,6 +15290,51 @@ func (i *ProjectTypeWhereInput) P() (predicate.ProjectType, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, projecttype.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, projecttype.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, projecttype.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, projecttype.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, projecttype.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, projecttype.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, projecttype.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, projecttype.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, projecttype.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, projecttype.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, projecttype.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, projecttype.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, projecttype.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, projecttype.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, projecttype.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, projecttype.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, projecttype.DescriptionEQ(*i.Description))
@@ -16006,23 +15481,6 @@ type ProtectedAreaWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -16039,6 +15497,23 @@ type ProtectedAreaWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -16291,51 +15766,6 @@ func (i *ProtectedAreaWhereInput) P() (predicate.ProtectedArea, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, protectedarea.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, protectedarea.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, protectedarea.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, protectedarea.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, protectedarea.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, protectedarea.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, protectedarea.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, protectedarea.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, protectedarea.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, protectedarea.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, protectedarea.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, protectedarea.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, protectedarea.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, protectedarea.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, protectedarea.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, protectedarea.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, protectedarea.DisplayNameEQ(*i.DisplayName))
 	}
@@ -16380,6 +15810,51 @@ func (i *ProtectedAreaWhereInput) P() (predicate.ProtectedArea, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, protectedarea.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, protectedarea.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, protectedarea.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, protectedarea.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, protectedarea.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, protectedarea.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, protectedarea.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, protectedarea.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, protectedarea.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, protectedarea.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, protectedarea.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, protectedarea.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, protectedarea.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, protectedarea.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, protectedarea.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, protectedarea.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, protectedarea.DescriptionEQ(*i.Description))
@@ -16508,23 +15983,6 @@ type ProtectedAreaCategoryWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -16541,6 +15999,23 @@ type ProtectedAreaCategoryWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -16793,51 +16268,6 @@ func (i *ProtectedAreaCategoryWhereInput) P() (predicate.ProtectedAreaCategory, 
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, protectedareacategory.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, protectedareacategory.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, protectedareacategory.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, protectedareacategory.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, protectedareacategory.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, protectedareacategory.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, protectedareacategory.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, protectedareacategory.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, protectedareacategory.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, protectedareacategory.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, protectedareacategory.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, protectedareacategory.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, protectedareacategory.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, protectedareacategory.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, protectedareacategory.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, protectedareacategory.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, protectedareacategory.DisplayNameEQ(*i.DisplayName))
 	}
@@ -16882,6 +16312,51 @@ func (i *ProtectedAreaCategoryWhereInput) P() (predicate.ProtectedAreaCategory, 
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, protectedareacategory.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, protectedareacategory.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, protectedareacategory.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, protectedareacategory.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, protectedareacategory.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, protectedareacategory.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, protectedareacategory.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, protectedareacategory.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, protectedareacategory.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, protectedareacategory.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, protectedareacategory.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, protectedareacategory.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, protectedareacategory.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, protectedareacategory.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, protectedareacategory.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, protectedareacategory.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, protectedareacategory.DescriptionEQ(*i.Description))
@@ -17010,23 +16485,6 @@ type ProtectedAreaPictureWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -17043,6 +16501,23 @@ type ProtectedAreaPictureWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -17295,51 +16770,6 @@ func (i *ProtectedAreaPictureWhereInput) P() (predicate.ProtectedAreaPicture, er
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, protectedareapicture.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, protectedareapicture.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, protectedareapicture.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, protectedareapicture.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, protectedareapicture.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, protectedareapicture.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, protectedareapicture.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, protectedareapicture.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, protectedareapicture.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, protectedareapicture.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, protectedareapicture.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, protectedareapicture.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, protectedareapicture.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, protectedareapicture.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, protectedareapicture.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, protectedareapicture.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, protectedareapicture.DisplayNameEQ(*i.DisplayName))
 	}
@@ -17384,6 +16814,51 @@ func (i *ProtectedAreaPictureWhereInput) P() (predicate.ProtectedAreaPicture, er
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, protectedareapicture.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, protectedareapicture.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, protectedareapicture.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, protectedareapicture.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, protectedareapicture.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, protectedareapicture.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, protectedareapicture.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, protectedareapicture.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, protectedareapicture.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, protectedareapicture.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, protectedareapicture.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, protectedareapicture.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, protectedareapicture.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, protectedareapicture.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, protectedareapicture.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, protectedareapicture.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, protectedareapicture.DescriptionEQ(*i.Description))
@@ -17512,23 +16987,6 @@ type PublicationWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -17545,6 +17003,23 @@ type PublicationWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -17805,51 +17280,6 @@ func (i *PublicationWhereInput) P() (predicate.Publication, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, publication.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, publication.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, publication.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, publication.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, publication.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, publication.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, publication.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, publication.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, publication.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, publication.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, publication.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, publication.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, publication.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, publication.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, publication.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, publication.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, publication.DisplayNameEQ(*i.DisplayName))
 	}
@@ -17894,6 +17324,51 @@ func (i *PublicationWhereInput) P() (predicate.Publication, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, publication.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, publication.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, publication.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, publication.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, publication.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, publication.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, publication.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, publication.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, publication.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, publication.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, publication.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, publication.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, publication.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, publication.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, publication.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, publication.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, publication.DescriptionEQ(*i.Description))
@@ -18058,23 +17533,6 @@ type PublisherWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -18091,6 +17549,23 @@ type PublisherWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -18347,51 +17822,6 @@ func (i *PublisherWhereInput) P() (predicate.Publisher, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, publisher.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, publisher.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, publisher.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, publisher.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, publisher.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, publisher.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, publisher.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, publisher.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, publisher.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, publisher.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, publisher.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, publisher.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, publisher.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, publisher.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, publisher.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, publisher.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, publisher.DisplayNameEQ(*i.DisplayName))
 	}
@@ -18436,6 +17866,51 @@ func (i *PublisherWhereInput) P() (predicate.Publisher, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, publisher.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, publisher.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, publisher.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, publisher.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, publisher.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, publisher.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, publisher.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, publisher.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, publisher.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, publisher.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, publisher.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, publisher.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, publisher.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, publisher.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, publisher.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, publisher.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, publisher.DescriptionEQ(*i.Description))
@@ -18582,23 +18057,6 @@ type RegionWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -18615,6 +18073,23 @@ type RegionWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -18871,51 +18346,6 @@ func (i *RegionWhereInput) P() (predicate.Region, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, region.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, region.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, region.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, region.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, region.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, region.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, region.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, region.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, region.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, region.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, region.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, region.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, region.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, region.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, region.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, region.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, region.DisplayNameEQ(*i.DisplayName))
 	}
@@ -18960,6 +18390,51 @@ func (i *RegionWhereInput) P() (predicate.Region, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, region.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, region.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, region.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, region.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, region.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, region.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, region.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, region.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, region.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, region.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, region.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, region.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, region.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, region.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, region.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, region.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, region.DescriptionEQ(*i.Description))
@@ -19106,23 +18581,6 @@ type SetWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -19139,6 +18597,23 @@ type SetWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -19399,51 +18874,6 @@ func (i *SetWhereInput) P() (predicate.Set, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, set.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, set.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, set.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, set.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, set.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, set.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, set.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, set.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, set.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, set.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, set.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, set.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, set.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, set.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, set.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, set.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, set.DisplayNameEQ(*i.DisplayName))
 	}
@@ -19488,6 +18918,51 @@ func (i *SetWhereInput) P() (predicate.Set, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, set.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, set.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, set.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, set.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, set.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, set.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, set.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, set.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, set.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, set.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, set.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, set.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, set.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, set.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, set.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, set.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, set.DescriptionEQ(*i.Description))
@@ -19652,23 +19127,6 @@ type SettlementWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -19685,6 +19143,23 @@ type SettlementWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -19941,51 +19416,6 @@ func (i *SettlementWhereInput) P() (predicate.Settlement, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, settlement.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, settlement.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, settlement.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, settlement.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, settlement.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, settlement.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, settlement.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, settlement.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, settlement.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, settlement.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, settlement.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, settlement.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, settlement.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, settlement.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, settlement.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, settlement.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, settlement.DisplayNameEQ(*i.DisplayName))
 	}
@@ -20030,6 +19460,51 @@ func (i *SettlementWhereInput) P() (predicate.Settlement, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, settlement.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, settlement.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, settlement.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, settlement.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, settlement.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, settlement.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, settlement.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, settlement.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, settlement.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, settlement.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, settlement.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, settlement.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, settlement.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, settlement.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, settlement.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, settlement.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, settlement.DescriptionEQ(*i.Description))
@@ -20176,23 +19651,6 @@ type TechniqueWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "abbreviation" field predicates.
-	Abbreviation             *string  `json:"abbreviation,omitempty"`
-	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
-	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
-	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
-	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
-	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
-	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
-	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
-	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
-	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
-	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
-	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
-	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
-	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
-	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -20209,6 +19667,23 @@ type TechniqueWhereInput struct {
 	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
 
 	// "description" field predicates.
 	Description             *string  `json:"description,omitempty"`
@@ -20465,51 +19940,6 @@ func (i *TechniqueWhereInput) P() (predicate.Technique, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, technique.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.Abbreviation != nil {
-		predicates = append(predicates, technique.AbbreviationEQ(*i.Abbreviation))
-	}
-	if i.AbbreviationNEQ != nil {
-		predicates = append(predicates, technique.AbbreviationNEQ(*i.AbbreviationNEQ))
-	}
-	if len(i.AbbreviationIn) > 0 {
-		predicates = append(predicates, technique.AbbreviationIn(i.AbbreviationIn...))
-	}
-	if len(i.AbbreviationNotIn) > 0 {
-		predicates = append(predicates, technique.AbbreviationNotIn(i.AbbreviationNotIn...))
-	}
-	if i.AbbreviationGT != nil {
-		predicates = append(predicates, technique.AbbreviationGT(*i.AbbreviationGT))
-	}
-	if i.AbbreviationGTE != nil {
-		predicates = append(predicates, technique.AbbreviationGTE(*i.AbbreviationGTE))
-	}
-	if i.AbbreviationLT != nil {
-		predicates = append(predicates, technique.AbbreviationLT(*i.AbbreviationLT))
-	}
-	if i.AbbreviationLTE != nil {
-		predicates = append(predicates, technique.AbbreviationLTE(*i.AbbreviationLTE))
-	}
-	if i.AbbreviationContains != nil {
-		predicates = append(predicates, technique.AbbreviationContains(*i.AbbreviationContains))
-	}
-	if i.AbbreviationHasPrefix != nil {
-		predicates = append(predicates, technique.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
-	}
-	if i.AbbreviationHasSuffix != nil {
-		predicates = append(predicates, technique.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
-	}
-	if i.AbbreviationIsNil {
-		predicates = append(predicates, technique.AbbreviationIsNil())
-	}
-	if i.AbbreviationNotNil {
-		predicates = append(predicates, technique.AbbreviationNotNil())
-	}
-	if i.AbbreviationEqualFold != nil {
-		predicates = append(predicates, technique.AbbreviationEqualFold(*i.AbbreviationEqualFold))
-	}
-	if i.AbbreviationContainsFold != nil {
-		predicates = append(predicates, technique.AbbreviationContainsFold(*i.AbbreviationContainsFold))
-	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, technique.DisplayNameEQ(*i.DisplayName))
 	}
@@ -20554,6 +19984,51 @@ func (i *TechniqueWhereInput) P() (predicate.Technique, error) {
 	}
 	if i.DisplayNameContainsFold != nil {
 		predicates = append(predicates, technique.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, technique.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, technique.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, technique.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, technique.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, technique.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, technique.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, technique.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, technique.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, technique.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, technique.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, technique.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, technique.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, technique.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, technique.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, technique.AbbreviationContainsFold(*i.AbbreviationContainsFold))
 	}
 	if i.Description != nil {
 		predicates = append(predicates, technique.DescriptionEQ(*i.Description))

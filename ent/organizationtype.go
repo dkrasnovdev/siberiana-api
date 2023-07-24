@@ -26,10 +26,10 @@ type OrganizationType struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// Abbreviation holds the value of the "abbreviation" field.
-	Abbreviation string `json:"abbreviation,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
 	// ExternalLinks holds the value of the "external_links" field.
@@ -71,7 +71,7 @@ func (*OrganizationType) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case organizationtype.FieldID:
 			values[i] = new(sql.NullInt64)
-		case organizationtype.FieldCreatedBy, organizationtype.FieldUpdatedBy, organizationtype.FieldAbbreviation, organizationtype.FieldDisplayName, organizationtype.FieldDescription:
+		case organizationtype.FieldCreatedBy, organizationtype.FieldUpdatedBy, organizationtype.FieldDisplayName, organizationtype.FieldAbbreviation, organizationtype.FieldDescription:
 			values[i] = new(sql.NullString)
 		case organizationtype.FieldCreatedAt, organizationtype.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -120,17 +120,17 @@ func (ot *OrganizationType) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ot.UpdatedBy = value.String
 			}
-		case organizationtype.FieldAbbreviation:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
-			} else if value.Valid {
-				ot.Abbreviation = value.String
-			}
 		case organizationtype.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
 			} else if value.Valid {
 				ot.DisplayName = value.String
+			}
+		case organizationtype.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				ot.Abbreviation = value.String
 			}
 		case organizationtype.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -199,11 +199,11 @@ func (ot *OrganizationType) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(ot.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("abbreviation=")
-	builder.WriteString(ot.Abbreviation)
-	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(ot.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(ot.Abbreviation)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(ot.Description)

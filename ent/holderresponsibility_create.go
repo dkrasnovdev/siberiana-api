@@ -77,20 +77,6 @@ func (hrc *HolderResponsibilityCreate) SetNillableUpdatedBy(s *string) *HolderRe
 	return hrc
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (hrc *HolderResponsibilityCreate) SetAbbreviation(s string) *HolderResponsibilityCreate {
-	hrc.mutation.SetAbbreviation(s)
-	return hrc
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (hrc *HolderResponsibilityCreate) SetNillableAbbreviation(s *string) *HolderResponsibilityCreate {
-	if s != nil {
-		hrc.SetAbbreviation(*s)
-	}
-	return hrc
-}
-
 // SetDisplayName sets the "display_name" field.
 func (hrc *HolderResponsibilityCreate) SetDisplayName(s string) *HolderResponsibilityCreate {
 	hrc.mutation.SetDisplayName(s)
@@ -101,6 +87,20 @@ func (hrc *HolderResponsibilityCreate) SetDisplayName(s string) *HolderResponsib
 func (hrc *HolderResponsibilityCreate) SetNillableDisplayName(s *string) *HolderResponsibilityCreate {
 	if s != nil {
 		hrc.SetDisplayName(*s)
+	}
+	return hrc
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (hrc *HolderResponsibilityCreate) SetAbbreviation(s string) *HolderResponsibilityCreate {
+	hrc.mutation.SetAbbreviation(s)
+	return hrc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (hrc *HolderResponsibilityCreate) SetNillableAbbreviation(s *string) *HolderResponsibilityCreate {
+	if s != nil {
+		hrc.SetAbbreviation(*s)
 	}
 	return hrc
 }
@@ -244,13 +244,13 @@ func (hrc *HolderResponsibilityCreate) createSpec() (*HolderResponsibility, *sql
 		_spec.SetField(holderresponsibility.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := hrc.mutation.Abbreviation(); ok {
-		_spec.SetField(holderresponsibility.FieldAbbreviation, field.TypeString, value)
-		_node.Abbreviation = value
-	}
 	if value, ok := hrc.mutation.DisplayName(); ok {
 		_spec.SetField(holderresponsibility.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := hrc.mutation.Abbreviation(); ok {
+		_spec.SetField(holderresponsibility.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := hrc.mutation.Description(); ok {
 		_spec.SetField(holderresponsibility.FieldDescription, field.TypeString, value)

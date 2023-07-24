@@ -26,10 +26,10 @@ type Period struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// Abbreviation holds the value of the "abbreviation" field.
-	Abbreviation string `json:"abbreviation,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
 	// ExternalLinks holds the value of the "external_links" field.
@@ -71,7 +71,7 @@ func (*Period) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case period.FieldID:
 			values[i] = new(sql.NullInt64)
-		case period.FieldCreatedBy, period.FieldUpdatedBy, period.FieldAbbreviation, period.FieldDisplayName, period.FieldDescription:
+		case period.FieldCreatedBy, period.FieldUpdatedBy, period.FieldDisplayName, period.FieldAbbreviation, period.FieldDescription:
 			values[i] = new(sql.NullString)
 		case period.FieldCreatedAt, period.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -120,17 +120,17 @@ func (pe *Period) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pe.UpdatedBy = value.String
 			}
-		case period.FieldAbbreviation:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
-			} else if value.Valid {
-				pe.Abbreviation = value.String
-			}
 		case period.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
 			} else if value.Valid {
 				pe.DisplayName = value.String
+			}
+		case period.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				pe.Abbreviation = value.String
 			}
 		case period.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -199,11 +199,11 @@ func (pe *Period) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(pe.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("abbreviation=")
-	builder.WriteString(pe.Abbreviation)
-	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(pe.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(pe.Abbreviation)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(pe.Description)

@@ -80,26 +80,6 @@ func (lu *LocationUpdate) ClearUpdatedBy() *LocationUpdate {
 	return lu
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (lu *LocationUpdate) SetAbbreviation(s string) *LocationUpdate {
-	lu.mutation.SetAbbreviation(s)
-	return lu
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (lu *LocationUpdate) SetNillableAbbreviation(s *string) *LocationUpdate {
-	if s != nil {
-		lu.SetAbbreviation(*s)
-	}
-	return lu
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (lu *LocationUpdate) ClearAbbreviation() *LocationUpdate {
-	lu.mutation.ClearAbbreviation()
-	return lu
-}
-
 // SetDisplayName sets the "display_name" field.
 func (lu *LocationUpdate) SetDisplayName(s string) *LocationUpdate {
 	lu.mutation.SetDisplayName(s)
@@ -117,6 +97,26 @@ func (lu *LocationUpdate) SetNillableDisplayName(s *string) *LocationUpdate {
 // ClearDisplayName clears the value of the "display_name" field.
 func (lu *LocationUpdate) ClearDisplayName() *LocationUpdate {
 	lu.mutation.ClearDisplayName()
+	return lu
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (lu *LocationUpdate) SetAbbreviation(s string) *LocationUpdate {
+	lu.mutation.SetAbbreviation(s)
+	return lu
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (lu *LocationUpdate) SetNillableAbbreviation(s *string) *LocationUpdate {
+	if s != nil {
+		lu.SetAbbreviation(*s)
+	}
+	return lu
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (lu *LocationUpdate) ClearAbbreviation() *LocationUpdate {
+	lu.mutation.ClearAbbreviation()
 	return lu
 }
 
@@ -365,17 +365,17 @@ func (lu *LocationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if lu.mutation.UpdatedByCleared() {
 		_spec.ClearField(location.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := lu.mutation.Abbreviation(); ok {
-		_spec.SetField(location.FieldAbbreviation, field.TypeString, value)
-	}
-	if lu.mutation.AbbreviationCleared() {
-		_spec.ClearField(location.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := lu.mutation.DisplayName(); ok {
 		_spec.SetField(location.FieldDisplayName, field.TypeString, value)
 	}
 	if lu.mutation.DisplayNameCleared() {
 		_spec.ClearField(location.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := lu.mutation.Abbreviation(); ok {
+		_spec.SetField(location.FieldAbbreviation, field.TypeString, value)
+	}
+	if lu.mutation.AbbreviationCleared() {
+		_spec.ClearField(location.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := lu.mutation.Description(); ok {
 		_spec.SetField(location.FieldDescription, field.TypeString, value)
@@ -621,26 +621,6 @@ func (luo *LocationUpdateOne) ClearUpdatedBy() *LocationUpdateOne {
 	return luo
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (luo *LocationUpdateOne) SetAbbreviation(s string) *LocationUpdateOne {
-	luo.mutation.SetAbbreviation(s)
-	return luo
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (luo *LocationUpdateOne) SetNillableAbbreviation(s *string) *LocationUpdateOne {
-	if s != nil {
-		luo.SetAbbreviation(*s)
-	}
-	return luo
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (luo *LocationUpdateOne) ClearAbbreviation() *LocationUpdateOne {
-	luo.mutation.ClearAbbreviation()
-	return luo
-}
-
 // SetDisplayName sets the "display_name" field.
 func (luo *LocationUpdateOne) SetDisplayName(s string) *LocationUpdateOne {
 	luo.mutation.SetDisplayName(s)
@@ -658,6 +638,26 @@ func (luo *LocationUpdateOne) SetNillableDisplayName(s *string) *LocationUpdateO
 // ClearDisplayName clears the value of the "display_name" field.
 func (luo *LocationUpdateOne) ClearDisplayName() *LocationUpdateOne {
 	luo.mutation.ClearDisplayName()
+	return luo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (luo *LocationUpdateOne) SetAbbreviation(s string) *LocationUpdateOne {
+	luo.mutation.SetAbbreviation(s)
+	return luo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (luo *LocationUpdateOne) SetNillableAbbreviation(s *string) *LocationUpdateOne {
+	if s != nil {
+		luo.SetAbbreviation(*s)
+	}
+	return luo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (luo *LocationUpdateOne) ClearAbbreviation() *LocationUpdateOne {
+	luo.mutation.ClearAbbreviation()
 	return luo
 }
 
@@ -936,17 +936,17 @@ func (luo *LocationUpdateOne) sqlSave(ctx context.Context) (_node *Location, err
 	if luo.mutation.UpdatedByCleared() {
 		_spec.ClearField(location.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := luo.mutation.Abbreviation(); ok {
-		_spec.SetField(location.FieldAbbreviation, field.TypeString, value)
-	}
-	if luo.mutation.AbbreviationCleared() {
-		_spec.ClearField(location.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := luo.mutation.DisplayName(); ok {
 		_spec.SetField(location.FieldDisplayName, field.TypeString, value)
 	}
 	if luo.mutation.DisplayNameCleared() {
 		_spec.ClearField(location.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := luo.mutation.Abbreviation(); ok {
+		_spec.SetField(location.FieldAbbreviation, field.TypeString, value)
+	}
+	if luo.mutation.AbbreviationCleared() {
+		_spec.ClearField(location.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := luo.mutation.Description(); ok {
 		_spec.SetField(location.FieldDescription, field.TypeString, value)

@@ -76,26 +76,6 @@ func (cu *CultureUpdate) ClearUpdatedBy() *CultureUpdate {
 	return cu
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (cu *CultureUpdate) SetAbbreviation(s string) *CultureUpdate {
-	cu.mutation.SetAbbreviation(s)
-	return cu
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (cu *CultureUpdate) SetNillableAbbreviation(s *string) *CultureUpdate {
-	if s != nil {
-		cu.SetAbbreviation(*s)
-	}
-	return cu
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (cu *CultureUpdate) ClearAbbreviation() *CultureUpdate {
-	cu.mutation.ClearAbbreviation()
-	return cu
-}
-
 // SetDisplayName sets the "display_name" field.
 func (cu *CultureUpdate) SetDisplayName(s string) *CultureUpdate {
 	cu.mutation.SetDisplayName(s)
@@ -113,6 +93,26 @@ func (cu *CultureUpdate) SetNillableDisplayName(s *string) *CultureUpdate {
 // ClearDisplayName clears the value of the "display_name" field.
 func (cu *CultureUpdate) ClearDisplayName() *CultureUpdate {
 	cu.mutation.ClearDisplayName()
+	return cu
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (cu *CultureUpdate) SetAbbreviation(s string) *CultureUpdate {
+	cu.mutation.SetAbbreviation(s)
+	return cu
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (cu *CultureUpdate) SetNillableAbbreviation(s *string) *CultureUpdate {
+	if s != nil {
+		cu.SetAbbreviation(*s)
+	}
+	return cu
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (cu *CultureUpdate) ClearAbbreviation() *CultureUpdate {
+	cu.mutation.ClearAbbreviation()
 	return cu
 }
 
@@ -261,17 +261,17 @@ func (cu *CultureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.UpdatedByCleared() {
 		_spec.ClearField(culture.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := cu.mutation.Abbreviation(); ok {
-		_spec.SetField(culture.FieldAbbreviation, field.TypeString, value)
-	}
-	if cu.mutation.AbbreviationCleared() {
-		_spec.ClearField(culture.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := cu.mutation.DisplayName(); ok {
 		_spec.SetField(culture.FieldDisplayName, field.TypeString, value)
 	}
 	if cu.mutation.DisplayNameCleared() {
 		_spec.ClearField(culture.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := cu.mutation.Abbreviation(); ok {
+		_spec.SetField(culture.FieldAbbreviation, field.TypeString, value)
+	}
+	if cu.mutation.AbbreviationCleared() {
+		_spec.ClearField(culture.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := cu.mutation.Description(); ok {
 		_spec.SetField(culture.FieldDescription, field.TypeString, value)
@@ -401,26 +401,6 @@ func (cuo *CultureUpdateOne) ClearUpdatedBy() *CultureUpdateOne {
 	return cuo
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (cuo *CultureUpdateOne) SetAbbreviation(s string) *CultureUpdateOne {
-	cuo.mutation.SetAbbreviation(s)
-	return cuo
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (cuo *CultureUpdateOne) SetNillableAbbreviation(s *string) *CultureUpdateOne {
-	if s != nil {
-		cuo.SetAbbreviation(*s)
-	}
-	return cuo
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (cuo *CultureUpdateOne) ClearAbbreviation() *CultureUpdateOne {
-	cuo.mutation.ClearAbbreviation()
-	return cuo
-}
-
 // SetDisplayName sets the "display_name" field.
 func (cuo *CultureUpdateOne) SetDisplayName(s string) *CultureUpdateOne {
 	cuo.mutation.SetDisplayName(s)
@@ -438,6 +418,26 @@ func (cuo *CultureUpdateOne) SetNillableDisplayName(s *string) *CultureUpdateOne
 // ClearDisplayName clears the value of the "display_name" field.
 func (cuo *CultureUpdateOne) ClearDisplayName() *CultureUpdateOne {
 	cuo.mutation.ClearDisplayName()
+	return cuo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (cuo *CultureUpdateOne) SetAbbreviation(s string) *CultureUpdateOne {
+	cuo.mutation.SetAbbreviation(s)
+	return cuo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (cuo *CultureUpdateOne) SetNillableAbbreviation(s *string) *CultureUpdateOne {
+	if s != nil {
+		cuo.SetAbbreviation(*s)
+	}
+	return cuo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (cuo *CultureUpdateOne) ClearAbbreviation() *CultureUpdateOne {
+	cuo.mutation.ClearAbbreviation()
 	return cuo
 }
 
@@ -616,17 +616,17 @@ func (cuo *CultureUpdateOne) sqlSave(ctx context.Context) (_node *Culture, err e
 	if cuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(culture.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := cuo.mutation.Abbreviation(); ok {
-		_spec.SetField(culture.FieldAbbreviation, field.TypeString, value)
-	}
-	if cuo.mutation.AbbreviationCleared() {
-		_spec.ClearField(culture.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := cuo.mutation.DisplayName(); ok {
 		_spec.SetField(culture.FieldDisplayName, field.TypeString, value)
 	}
 	if cuo.mutation.DisplayNameCleared() {
 		_spec.ClearField(culture.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := cuo.mutation.Abbreviation(); ok {
+		_spec.SetField(culture.FieldAbbreviation, field.TypeString, value)
+	}
+	if cuo.mutation.AbbreviationCleared() {
+		_spec.ClearField(culture.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := cuo.mutation.Description(); ok {
 		_spec.SetField(culture.FieldDescription, field.TypeString, value)

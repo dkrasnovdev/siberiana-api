@@ -78,26 +78,6 @@ func (pu *ProjectUpdate) ClearUpdatedBy() *ProjectUpdate {
 	return pu
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (pu *ProjectUpdate) SetAbbreviation(s string) *ProjectUpdate {
-	pu.mutation.SetAbbreviation(s)
-	return pu
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (pu *ProjectUpdate) SetNillableAbbreviation(s *string) *ProjectUpdate {
-	if s != nil {
-		pu.SetAbbreviation(*s)
-	}
-	return pu
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (pu *ProjectUpdate) ClearAbbreviation() *ProjectUpdate {
-	pu.mutation.ClearAbbreviation()
-	return pu
-}
-
 // SetDisplayName sets the "display_name" field.
 func (pu *ProjectUpdate) SetDisplayName(s string) *ProjectUpdate {
 	pu.mutation.SetDisplayName(s)
@@ -115,6 +95,26 @@ func (pu *ProjectUpdate) SetNillableDisplayName(s *string) *ProjectUpdate {
 // ClearDisplayName clears the value of the "display_name" field.
 func (pu *ProjectUpdate) ClearDisplayName() *ProjectUpdate {
 	pu.mutation.ClearDisplayName()
+	return pu
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (pu *ProjectUpdate) SetAbbreviation(s string) *ProjectUpdate {
+	pu.mutation.SetAbbreviation(s)
+	return pu
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (pu *ProjectUpdate) SetNillableAbbreviation(s *string) *ProjectUpdate {
+	if s != nil {
+		pu.SetAbbreviation(*s)
+	}
+	return pu
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (pu *ProjectUpdate) ClearAbbreviation() *ProjectUpdate {
+	pu.mutation.ClearAbbreviation()
 	return pu
 }
 
@@ -364,17 +364,17 @@ func (pu *ProjectUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.UpdatedByCleared() {
 		_spec.ClearField(project.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := pu.mutation.Abbreviation(); ok {
-		_spec.SetField(project.FieldAbbreviation, field.TypeString, value)
-	}
-	if pu.mutation.AbbreviationCleared() {
-		_spec.ClearField(project.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := pu.mutation.DisplayName(); ok {
 		_spec.SetField(project.FieldDisplayName, field.TypeString, value)
 	}
 	if pu.mutation.DisplayNameCleared() {
 		_spec.ClearField(project.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := pu.mutation.Abbreviation(); ok {
+		_spec.SetField(project.FieldAbbreviation, field.TypeString, value)
+	}
+	if pu.mutation.AbbreviationCleared() {
+		_spec.ClearField(project.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := pu.mutation.Description(); ok {
 		_spec.SetField(project.FieldDescription, field.TypeString, value)
@@ -590,26 +590,6 @@ func (puo *ProjectUpdateOne) ClearUpdatedBy() *ProjectUpdateOne {
 	return puo
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (puo *ProjectUpdateOne) SetAbbreviation(s string) *ProjectUpdateOne {
-	puo.mutation.SetAbbreviation(s)
-	return puo
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (puo *ProjectUpdateOne) SetNillableAbbreviation(s *string) *ProjectUpdateOne {
-	if s != nil {
-		puo.SetAbbreviation(*s)
-	}
-	return puo
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (puo *ProjectUpdateOne) ClearAbbreviation() *ProjectUpdateOne {
-	puo.mutation.ClearAbbreviation()
-	return puo
-}
-
 // SetDisplayName sets the "display_name" field.
 func (puo *ProjectUpdateOne) SetDisplayName(s string) *ProjectUpdateOne {
 	puo.mutation.SetDisplayName(s)
@@ -627,6 +607,26 @@ func (puo *ProjectUpdateOne) SetNillableDisplayName(s *string) *ProjectUpdateOne
 // ClearDisplayName clears the value of the "display_name" field.
 func (puo *ProjectUpdateOne) ClearDisplayName() *ProjectUpdateOne {
 	puo.mutation.ClearDisplayName()
+	return puo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (puo *ProjectUpdateOne) SetAbbreviation(s string) *ProjectUpdateOne {
+	puo.mutation.SetAbbreviation(s)
+	return puo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (puo *ProjectUpdateOne) SetNillableAbbreviation(s *string) *ProjectUpdateOne {
+	if s != nil {
+		puo.SetAbbreviation(*s)
+	}
+	return puo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (puo *ProjectUpdateOne) ClearAbbreviation() *ProjectUpdateOne {
+	puo.mutation.ClearAbbreviation()
 	return puo
 }
 
@@ -906,17 +906,17 @@ func (puo *ProjectUpdateOne) sqlSave(ctx context.Context) (_node *Project, err e
 	if puo.mutation.UpdatedByCleared() {
 		_spec.ClearField(project.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := puo.mutation.Abbreviation(); ok {
-		_spec.SetField(project.FieldAbbreviation, field.TypeString, value)
-	}
-	if puo.mutation.AbbreviationCleared() {
-		_spec.ClearField(project.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := puo.mutation.DisplayName(); ok {
 		_spec.SetField(project.FieldDisplayName, field.TypeString, value)
 	}
 	if puo.mutation.DisplayNameCleared() {
 		_spec.ClearField(project.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := puo.mutation.Abbreviation(); ok {
+		_spec.SetField(project.FieldAbbreviation, field.TypeString, value)
+	}
+	if puo.mutation.AbbreviationCleared() {
+		_spec.ClearField(project.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := puo.mutation.Description(); ok {
 		_spec.SetField(project.FieldDescription, field.TypeString, value)

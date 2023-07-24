@@ -75,14 +75,14 @@ func UpdatedBy(v string) predicate.Medium {
 	return predicate.Medium(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
-// Abbreviation applies equality check predicate on the "abbreviation" field. It's identical to AbbreviationEQ.
-func Abbreviation(v string) predicate.Medium {
-	return predicate.Medium(sql.FieldEQ(FieldAbbreviation, v))
-}
-
 // DisplayName applies equality check predicate on the "display_name" field. It's identical to DisplayNameEQ.
 func DisplayName(v string) predicate.Medium {
 	return predicate.Medium(sql.FieldEQ(FieldDisplayName, v))
+}
+
+// Abbreviation applies equality check predicate on the "abbreviation" field. It's identical to AbbreviationEQ.
+func Abbreviation(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldEQ(FieldAbbreviation, v))
 }
 
 // Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
@@ -320,81 +320,6 @@ func UpdatedByContainsFold(v string) predicate.Medium {
 	return predicate.Medium(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
-// AbbreviationEQ applies the EQ predicate on the "abbreviation" field.
-func AbbreviationEQ(v string) predicate.Medium {
-	return predicate.Medium(sql.FieldEQ(FieldAbbreviation, v))
-}
-
-// AbbreviationNEQ applies the NEQ predicate on the "abbreviation" field.
-func AbbreviationNEQ(v string) predicate.Medium {
-	return predicate.Medium(sql.FieldNEQ(FieldAbbreviation, v))
-}
-
-// AbbreviationIn applies the In predicate on the "abbreviation" field.
-func AbbreviationIn(vs ...string) predicate.Medium {
-	return predicate.Medium(sql.FieldIn(FieldAbbreviation, vs...))
-}
-
-// AbbreviationNotIn applies the NotIn predicate on the "abbreviation" field.
-func AbbreviationNotIn(vs ...string) predicate.Medium {
-	return predicate.Medium(sql.FieldNotIn(FieldAbbreviation, vs...))
-}
-
-// AbbreviationGT applies the GT predicate on the "abbreviation" field.
-func AbbreviationGT(v string) predicate.Medium {
-	return predicate.Medium(sql.FieldGT(FieldAbbreviation, v))
-}
-
-// AbbreviationGTE applies the GTE predicate on the "abbreviation" field.
-func AbbreviationGTE(v string) predicate.Medium {
-	return predicate.Medium(sql.FieldGTE(FieldAbbreviation, v))
-}
-
-// AbbreviationLT applies the LT predicate on the "abbreviation" field.
-func AbbreviationLT(v string) predicate.Medium {
-	return predicate.Medium(sql.FieldLT(FieldAbbreviation, v))
-}
-
-// AbbreviationLTE applies the LTE predicate on the "abbreviation" field.
-func AbbreviationLTE(v string) predicate.Medium {
-	return predicate.Medium(sql.FieldLTE(FieldAbbreviation, v))
-}
-
-// AbbreviationContains applies the Contains predicate on the "abbreviation" field.
-func AbbreviationContains(v string) predicate.Medium {
-	return predicate.Medium(sql.FieldContains(FieldAbbreviation, v))
-}
-
-// AbbreviationHasPrefix applies the HasPrefix predicate on the "abbreviation" field.
-func AbbreviationHasPrefix(v string) predicate.Medium {
-	return predicate.Medium(sql.FieldHasPrefix(FieldAbbreviation, v))
-}
-
-// AbbreviationHasSuffix applies the HasSuffix predicate on the "abbreviation" field.
-func AbbreviationHasSuffix(v string) predicate.Medium {
-	return predicate.Medium(sql.FieldHasSuffix(FieldAbbreviation, v))
-}
-
-// AbbreviationIsNil applies the IsNil predicate on the "abbreviation" field.
-func AbbreviationIsNil() predicate.Medium {
-	return predicate.Medium(sql.FieldIsNull(FieldAbbreviation))
-}
-
-// AbbreviationNotNil applies the NotNil predicate on the "abbreviation" field.
-func AbbreviationNotNil() predicate.Medium {
-	return predicate.Medium(sql.FieldNotNull(FieldAbbreviation))
-}
-
-// AbbreviationEqualFold applies the EqualFold predicate on the "abbreviation" field.
-func AbbreviationEqualFold(v string) predicate.Medium {
-	return predicate.Medium(sql.FieldEqualFold(FieldAbbreviation, v))
-}
-
-// AbbreviationContainsFold applies the ContainsFold predicate on the "abbreviation" field.
-func AbbreviationContainsFold(v string) predicate.Medium {
-	return predicate.Medium(sql.FieldContainsFold(FieldAbbreviation, v))
-}
-
 // DisplayNameEQ applies the EQ predicate on the "display_name" field.
 func DisplayNameEQ(v string) predicate.Medium {
 	return predicate.Medium(sql.FieldEQ(FieldDisplayName, v))
@@ -468,6 +393,81 @@ func DisplayNameEqualFold(v string) predicate.Medium {
 // DisplayNameContainsFold applies the ContainsFold predicate on the "display_name" field.
 func DisplayNameContainsFold(v string) predicate.Medium {
 	return predicate.Medium(sql.FieldContainsFold(FieldDisplayName, v))
+}
+
+// AbbreviationEQ applies the EQ predicate on the "abbreviation" field.
+func AbbreviationEQ(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldEQ(FieldAbbreviation, v))
+}
+
+// AbbreviationNEQ applies the NEQ predicate on the "abbreviation" field.
+func AbbreviationNEQ(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldNEQ(FieldAbbreviation, v))
+}
+
+// AbbreviationIn applies the In predicate on the "abbreviation" field.
+func AbbreviationIn(vs ...string) predicate.Medium {
+	return predicate.Medium(sql.FieldIn(FieldAbbreviation, vs...))
+}
+
+// AbbreviationNotIn applies the NotIn predicate on the "abbreviation" field.
+func AbbreviationNotIn(vs ...string) predicate.Medium {
+	return predicate.Medium(sql.FieldNotIn(FieldAbbreviation, vs...))
+}
+
+// AbbreviationGT applies the GT predicate on the "abbreviation" field.
+func AbbreviationGT(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldGT(FieldAbbreviation, v))
+}
+
+// AbbreviationGTE applies the GTE predicate on the "abbreviation" field.
+func AbbreviationGTE(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldGTE(FieldAbbreviation, v))
+}
+
+// AbbreviationLT applies the LT predicate on the "abbreviation" field.
+func AbbreviationLT(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldLT(FieldAbbreviation, v))
+}
+
+// AbbreviationLTE applies the LTE predicate on the "abbreviation" field.
+func AbbreviationLTE(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldLTE(FieldAbbreviation, v))
+}
+
+// AbbreviationContains applies the Contains predicate on the "abbreviation" field.
+func AbbreviationContains(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldContains(FieldAbbreviation, v))
+}
+
+// AbbreviationHasPrefix applies the HasPrefix predicate on the "abbreviation" field.
+func AbbreviationHasPrefix(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldHasPrefix(FieldAbbreviation, v))
+}
+
+// AbbreviationHasSuffix applies the HasSuffix predicate on the "abbreviation" field.
+func AbbreviationHasSuffix(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldHasSuffix(FieldAbbreviation, v))
+}
+
+// AbbreviationIsNil applies the IsNil predicate on the "abbreviation" field.
+func AbbreviationIsNil() predicate.Medium {
+	return predicate.Medium(sql.FieldIsNull(FieldAbbreviation))
+}
+
+// AbbreviationNotNil applies the NotNil predicate on the "abbreviation" field.
+func AbbreviationNotNil() predicate.Medium {
+	return predicate.Medium(sql.FieldNotNull(FieldAbbreviation))
+}
+
+// AbbreviationEqualFold applies the EqualFold predicate on the "abbreviation" field.
+func AbbreviationEqualFold(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldEqualFold(FieldAbbreviation, v))
+}
+
+// AbbreviationContainsFold applies the ContainsFold predicate on the "abbreviation" field.
+func AbbreviationContainsFold(v string) predicate.Medium {
+	return predicate.Medium(sql.FieldContainsFold(FieldAbbreviation, v))
 }
 
 // DescriptionEQ applies the EQ predicate on the "description" field.

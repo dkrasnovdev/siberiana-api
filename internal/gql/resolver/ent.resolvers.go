@@ -88,11 +88,6 @@ func (r *queryResolver) HolderResponsibilities(ctx context.Context, after *entgq
 	panic(fmt.Errorf("not implemented: HolderResponsibilities - holderResponsibilities"))
 }
 
-// Libraries is the resolver for the libraries field.
-func (r *queryResolver) Libraries(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.LibraryOrder, where *ent.LibraryWhereInput) (*ent.LibraryConnection, error) {
-	panic(fmt.Errorf("not implemented: Libraries - libraries"))
-}
-
 // Licenses is the resolver for the licenses field.
 func (r *queryResolver) Licenses(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.LicenseOrder, where *ent.LicenseWhereInput) (*ent.LicenseConnection, error) {
 	panic(fmt.Errorf("not implemented: Licenses - licenses"))

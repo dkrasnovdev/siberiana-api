@@ -77,20 +77,6 @@ func (bgc *BookGenreCreate) SetNillableUpdatedBy(s *string) *BookGenreCreate {
 	return bgc
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (bgc *BookGenreCreate) SetAbbreviation(s string) *BookGenreCreate {
-	bgc.mutation.SetAbbreviation(s)
-	return bgc
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (bgc *BookGenreCreate) SetNillableAbbreviation(s *string) *BookGenreCreate {
-	if s != nil {
-		bgc.SetAbbreviation(*s)
-	}
-	return bgc
-}
-
 // SetDisplayName sets the "display_name" field.
 func (bgc *BookGenreCreate) SetDisplayName(s string) *BookGenreCreate {
 	bgc.mutation.SetDisplayName(s)
@@ -101,6 +87,20 @@ func (bgc *BookGenreCreate) SetDisplayName(s string) *BookGenreCreate {
 func (bgc *BookGenreCreate) SetNillableDisplayName(s *string) *BookGenreCreate {
 	if s != nil {
 		bgc.SetDisplayName(*s)
+	}
+	return bgc
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (bgc *BookGenreCreate) SetAbbreviation(s string) *BookGenreCreate {
+	bgc.mutation.SetAbbreviation(s)
+	return bgc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (bgc *BookGenreCreate) SetNillableAbbreviation(s *string) *BookGenreCreate {
+	if s != nil {
+		bgc.SetAbbreviation(*s)
 	}
 	return bgc
 }
@@ -244,13 +244,13 @@ func (bgc *BookGenreCreate) createSpec() (*BookGenre, *sqlgraph.CreateSpec) {
 		_spec.SetField(bookgenre.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := bgc.mutation.Abbreviation(); ok {
-		_spec.SetField(bookgenre.FieldAbbreviation, field.TypeString, value)
-		_node.Abbreviation = value
-	}
 	if value, ok := bgc.mutation.DisplayName(); ok {
 		_spec.SetField(bookgenre.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := bgc.mutation.Abbreviation(); ok {
+		_spec.SetField(bookgenre.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := bgc.mutation.Description(); ok {
 		_spec.SetField(bookgenre.FieldDescription, field.TypeString, value)

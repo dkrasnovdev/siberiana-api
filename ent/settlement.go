@@ -27,10 +27,10 @@ type Settlement struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// Abbreviation holds the value of the "abbreviation" field.
-	Abbreviation string `json:"abbreviation,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
 	// ExternalLinks holds the value of the "external_links" field.
@@ -75,7 +75,7 @@ func (*Settlement) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case settlement.FieldID:
 			values[i] = new(sql.NullInt64)
-		case settlement.FieldCreatedBy, settlement.FieldUpdatedBy, settlement.FieldAbbreviation, settlement.FieldDisplayName, settlement.FieldDescription:
+		case settlement.FieldCreatedBy, settlement.FieldUpdatedBy, settlement.FieldDisplayName, settlement.FieldAbbreviation, settlement.FieldDescription:
 			values[i] = new(sql.NullString)
 		case settlement.FieldCreatedAt, settlement.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -126,17 +126,17 @@ func (s *Settlement) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.UpdatedBy = value.String
 			}
-		case settlement.FieldAbbreviation:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
-			} else if value.Valid {
-				s.Abbreviation = value.String
-			}
 		case settlement.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
 			} else if value.Valid {
 				s.DisplayName = value.String
+			}
+		case settlement.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				s.Abbreviation = value.String
 			}
 		case settlement.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -212,11 +212,11 @@ func (s *Settlement) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(s.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("abbreviation=")
-	builder.WriteString(s.Abbreviation)
-	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(s.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(s.Abbreviation)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(s.Description)

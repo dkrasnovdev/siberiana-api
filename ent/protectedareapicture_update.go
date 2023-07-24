@@ -75,26 +75,6 @@ func (papu *ProtectedAreaPictureUpdate) ClearUpdatedBy() *ProtectedAreaPictureUp
 	return papu
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (papu *ProtectedAreaPictureUpdate) SetAbbreviation(s string) *ProtectedAreaPictureUpdate {
-	papu.mutation.SetAbbreviation(s)
-	return papu
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (papu *ProtectedAreaPictureUpdate) SetNillableAbbreviation(s *string) *ProtectedAreaPictureUpdate {
-	if s != nil {
-		papu.SetAbbreviation(*s)
-	}
-	return papu
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (papu *ProtectedAreaPictureUpdate) ClearAbbreviation() *ProtectedAreaPictureUpdate {
-	papu.mutation.ClearAbbreviation()
-	return papu
-}
-
 // SetDisplayName sets the "display_name" field.
 func (papu *ProtectedAreaPictureUpdate) SetDisplayName(s string) *ProtectedAreaPictureUpdate {
 	papu.mutation.SetDisplayName(s)
@@ -112,6 +92,26 @@ func (papu *ProtectedAreaPictureUpdate) SetNillableDisplayName(s *string) *Prote
 // ClearDisplayName clears the value of the "display_name" field.
 func (papu *ProtectedAreaPictureUpdate) ClearDisplayName() *ProtectedAreaPictureUpdate {
 	papu.mutation.ClearDisplayName()
+	return papu
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (papu *ProtectedAreaPictureUpdate) SetAbbreviation(s string) *ProtectedAreaPictureUpdate {
+	papu.mutation.SetAbbreviation(s)
+	return papu
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (papu *ProtectedAreaPictureUpdate) SetNillableAbbreviation(s *string) *ProtectedAreaPictureUpdate {
+	if s != nil {
+		papu.SetAbbreviation(*s)
+	}
+	return papu
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (papu *ProtectedAreaPictureUpdate) ClearAbbreviation() *ProtectedAreaPictureUpdate {
+	papu.mutation.ClearAbbreviation()
 	return papu
 }
 
@@ -224,17 +224,17 @@ func (papu *ProtectedAreaPictureUpdate) sqlSave(ctx context.Context) (n int, err
 	if papu.mutation.UpdatedByCleared() {
 		_spec.ClearField(protectedareapicture.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := papu.mutation.Abbreviation(); ok {
-		_spec.SetField(protectedareapicture.FieldAbbreviation, field.TypeString, value)
-	}
-	if papu.mutation.AbbreviationCleared() {
-		_spec.ClearField(protectedareapicture.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := papu.mutation.DisplayName(); ok {
 		_spec.SetField(protectedareapicture.FieldDisplayName, field.TypeString, value)
 	}
 	if papu.mutation.DisplayNameCleared() {
 		_spec.ClearField(protectedareapicture.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := papu.mutation.Abbreviation(); ok {
+		_spec.SetField(protectedareapicture.FieldAbbreviation, field.TypeString, value)
+	}
+	if papu.mutation.AbbreviationCleared() {
+		_spec.ClearField(protectedareapicture.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := papu.mutation.Description(); ok {
 		_spec.SetField(protectedareapicture.FieldDescription, field.TypeString, value)
@@ -319,26 +319,6 @@ func (papuo *ProtectedAreaPictureUpdateOne) ClearUpdatedBy() *ProtectedAreaPictu
 	return papuo
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (papuo *ProtectedAreaPictureUpdateOne) SetAbbreviation(s string) *ProtectedAreaPictureUpdateOne {
-	papuo.mutation.SetAbbreviation(s)
-	return papuo
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (papuo *ProtectedAreaPictureUpdateOne) SetNillableAbbreviation(s *string) *ProtectedAreaPictureUpdateOne {
-	if s != nil {
-		papuo.SetAbbreviation(*s)
-	}
-	return papuo
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (papuo *ProtectedAreaPictureUpdateOne) ClearAbbreviation() *ProtectedAreaPictureUpdateOne {
-	papuo.mutation.ClearAbbreviation()
-	return papuo
-}
-
 // SetDisplayName sets the "display_name" field.
 func (papuo *ProtectedAreaPictureUpdateOne) SetDisplayName(s string) *ProtectedAreaPictureUpdateOne {
 	papuo.mutation.SetDisplayName(s)
@@ -356,6 +336,26 @@ func (papuo *ProtectedAreaPictureUpdateOne) SetNillableDisplayName(s *string) *P
 // ClearDisplayName clears the value of the "display_name" field.
 func (papuo *ProtectedAreaPictureUpdateOne) ClearDisplayName() *ProtectedAreaPictureUpdateOne {
 	papuo.mutation.ClearDisplayName()
+	return papuo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (papuo *ProtectedAreaPictureUpdateOne) SetAbbreviation(s string) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.SetAbbreviation(s)
+	return papuo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (papuo *ProtectedAreaPictureUpdateOne) SetNillableAbbreviation(s *string) *ProtectedAreaPictureUpdateOne {
+	if s != nil {
+		papuo.SetAbbreviation(*s)
+	}
+	return papuo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (papuo *ProtectedAreaPictureUpdateOne) ClearAbbreviation() *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.ClearAbbreviation()
 	return papuo
 }
 
@@ -498,17 +498,17 @@ func (papuo *ProtectedAreaPictureUpdateOne) sqlSave(ctx context.Context) (_node 
 	if papuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(protectedareapicture.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := papuo.mutation.Abbreviation(); ok {
-		_spec.SetField(protectedareapicture.FieldAbbreviation, field.TypeString, value)
-	}
-	if papuo.mutation.AbbreviationCleared() {
-		_spec.ClearField(protectedareapicture.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := papuo.mutation.DisplayName(); ok {
 		_spec.SetField(protectedareapicture.FieldDisplayName, field.TypeString, value)
 	}
 	if papuo.mutation.DisplayNameCleared() {
 		_spec.ClearField(protectedareapicture.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := papuo.mutation.Abbreviation(); ok {
+		_spec.SetField(protectedareapicture.FieldAbbreviation, field.TypeString, value)
+	}
+	if papuo.mutation.AbbreviationCleared() {
+		_spec.ClearField(protectedareapicture.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := papuo.mutation.Description(); ok {
 		_spec.SetField(protectedareapicture.FieldDescription, field.TypeString, value)

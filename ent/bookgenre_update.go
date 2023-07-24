@@ -76,26 +76,6 @@ func (bgu *BookGenreUpdate) ClearUpdatedBy() *BookGenreUpdate {
 	return bgu
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (bgu *BookGenreUpdate) SetAbbreviation(s string) *BookGenreUpdate {
-	bgu.mutation.SetAbbreviation(s)
-	return bgu
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (bgu *BookGenreUpdate) SetNillableAbbreviation(s *string) *BookGenreUpdate {
-	if s != nil {
-		bgu.SetAbbreviation(*s)
-	}
-	return bgu
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (bgu *BookGenreUpdate) ClearAbbreviation() *BookGenreUpdate {
-	bgu.mutation.ClearAbbreviation()
-	return bgu
-}
-
 // SetDisplayName sets the "display_name" field.
 func (bgu *BookGenreUpdate) SetDisplayName(s string) *BookGenreUpdate {
 	bgu.mutation.SetDisplayName(s)
@@ -113,6 +93,26 @@ func (bgu *BookGenreUpdate) SetNillableDisplayName(s *string) *BookGenreUpdate {
 // ClearDisplayName clears the value of the "display_name" field.
 func (bgu *BookGenreUpdate) ClearDisplayName() *BookGenreUpdate {
 	bgu.mutation.ClearDisplayName()
+	return bgu
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (bgu *BookGenreUpdate) SetAbbreviation(s string) *BookGenreUpdate {
+	bgu.mutation.SetAbbreviation(s)
+	return bgu
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (bgu *BookGenreUpdate) SetNillableAbbreviation(s *string) *BookGenreUpdate {
+	if s != nil {
+		bgu.SetAbbreviation(*s)
+	}
+	return bgu
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (bgu *BookGenreUpdate) ClearAbbreviation() *BookGenreUpdate {
+	bgu.mutation.ClearAbbreviation()
 	return bgu
 }
 
@@ -261,17 +261,17 @@ func (bgu *BookGenreUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if bgu.mutation.UpdatedByCleared() {
 		_spec.ClearField(bookgenre.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := bgu.mutation.Abbreviation(); ok {
-		_spec.SetField(bookgenre.FieldAbbreviation, field.TypeString, value)
-	}
-	if bgu.mutation.AbbreviationCleared() {
-		_spec.ClearField(bookgenre.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := bgu.mutation.DisplayName(); ok {
 		_spec.SetField(bookgenre.FieldDisplayName, field.TypeString, value)
 	}
 	if bgu.mutation.DisplayNameCleared() {
 		_spec.ClearField(bookgenre.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := bgu.mutation.Abbreviation(); ok {
+		_spec.SetField(bookgenre.FieldAbbreviation, field.TypeString, value)
+	}
+	if bgu.mutation.AbbreviationCleared() {
+		_spec.ClearField(bookgenre.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := bgu.mutation.Description(); ok {
 		_spec.SetField(bookgenre.FieldDescription, field.TypeString, value)
@@ -401,26 +401,6 @@ func (bguo *BookGenreUpdateOne) ClearUpdatedBy() *BookGenreUpdateOne {
 	return bguo
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (bguo *BookGenreUpdateOne) SetAbbreviation(s string) *BookGenreUpdateOne {
-	bguo.mutation.SetAbbreviation(s)
-	return bguo
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (bguo *BookGenreUpdateOne) SetNillableAbbreviation(s *string) *BookGenreUpdateOne {
-	if s != nil {
-		bguo.SetAbbreviation(*s)
-	}
-	return bguo
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (bguo *BookGenreUpdateOne) ClearAbbreviation() *BookGenreUpdateOne {
-	bguo.mutation.ClearAbbreviation()
-	return bguo
-}
-
 // SetDisplayName sets the "display_name" field.
 func (bguo *BookGenreUpdateOne) SetDisplayName(s string) *BookGenreUpdateOne {
 	bguo.mutation.SetDisplayName(s)
@@ -438,6 +418,26 @@ func (bguo *BookGenreUpdateOne) SetNillableDisplayName(s *string) *BookGenreUpda
 // ClearDisplayName clears the value of the "display_name" field.
 func (bguo *BookGenreUpdateOne) ClearDisplayName() *BookGenreUpdateOne {
 	bguo.mutation.ClearDisplayName()
+	return bguo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (bguo *BookGenreUpdateOne) SetAbbreviation(s string) *BookGenreUpdateOne {
+	bguo.mutation.SetAbbreviation(s)
+	return bguo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (bguo *BookGenreUpdateOne) SetNillableAbbreviation(s *string) *BookGenreUpdateOne {
+	if s != nil {
+		bguo.SetAbbreviation(*s)
+	}
+	return bguo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (bguo *BookGenreUpdateOne) ClearAbbreviation() *BookGenreUpdateOne {
+	bguo.mutation.ClearAbbreviation()
 	return bguo
 }
 
@@ -616,17 +616,17 @@ func (bguo *BookGenreUpdateOne) sqlSave(ctx context.Context) (_node *BookGenre, 
 	if bguo.mutation.UpdatedByCleared() {
 		_spec.ClearField(bookgenre.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := bguo.mutation.Abbreviation(); ok {
-		_spec.SetField(bookgenre.FieldAbbreviation, field.TypeString, value)
-	}
-	if bguo.mutation.AbbreviationCleared() {
-		_spec.ClearField(bookgenre.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := bguo.mutation.DisplayName(); ok {
 		_spec.SetField(bookgenre.FieldDisplayName, field.TypeString, value)
 	}
 	if bguo.mutation.DisplayNameCleared() {
 		_spec.ClearField(bookgenre.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := bguo.mutation.Abbreviation(); ok {
+		_spec.SetField(bookgenre.FieldAbbreviation, field.TypeString, value)
+	}
+	if bguo.mutation.AbbreviationCleared() {
+		_spec.ClearField(bookgenre.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := bguo.mutation.Description(); ok {
 		_spec.SetField(bookgenre.FieldDescription, field.TypeString, value)

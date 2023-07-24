@@ -26,10 +26,10 @@ type ProtectedArea struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// Abbreviation holds the value of the "abbreviation" field.
-	Abbreviation string `json:"abbreviation,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
 	// ExternalLinks holds the value of the "external_links" field.
@@ -46,7 +46,7 @@ func (*ProtectedArea) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case protectedarea.FieldID:
 			values[i] = new(sql.NullInt64)
-		case protectedarea.FieldCreatedBy, protectedarea.FieldUpdatedBy, protectedarea.FieldAbbreviation, protectedarea.FieldDisplayName, protectedarea.FieldDescription:
+		case protectedarea.FieldCreatedBy, protectedarea.FieldUpdatedBy, protectedarea.FieldDisplayName, protectedarea.FieldAbbreviation, protectedarea.FieldDescription:
 			values[i] = new(sql.NullString)
 		case protectedarea.FieldCreatedAt, protectedarea.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -95,17 +95,17 @@ func (pa *ProtectedArea) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pa.UpdatedBy = value.String
 			}
-		case protectedarea.FieldAbbreviation:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
-			} else if value.Valid {
-				pa.Abbreviation = value.String
-			}
 		case protectedarea.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
 			} else if value.Valid {
 				pa.DisplayName = value.String
+			}
+		case protectedarea.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				pa.Abbreviation = value.String
 			}
 		case protectedarea.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -169,11 +169,11 @@ func (pa *ProtectedArea) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(pa.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("abbreviation=")
-	builder.WriteString(pa.Abbreviation)
-	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(pa.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(pa.Abbreviation)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(pa.Description)

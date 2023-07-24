@@ -76,26 +76,6 @@ func (du *DistrictUpdate) ClearUpdatedBy() *DistrictUpdate {
 	return du
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (du *DistrictUpdate) SetAbbreviation(s string) *DistrictUpdate {
-	du.mutation.SetAbbreviation(s)
-	return du
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (du *DistrictUpdate) SetNillableAbbreviation(s *string) *DistrictUpdate {
-	if s != nil {
-		du.SetAbbreviation(*s)
-	}
-	return du
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (du *DistrictUpdate) ClearAbbreviation() *DistrictUpdate {
-	du.mutation.ClearAbbreviation()
-	return du
-}
-
 // SetDisplayName sets the "display_name" field.
 func (du *DistrictUpdate) SetDisplayName(s string) *DistrictUpdate {
 	du.mutation.SetDisplayName(s)
@@ -113,6 +93,26 @@ func (du *DistrictUpdate) SetNillableDisplayName(s *string) *DistrictUpdate {
 // ClearDisplayName clears the value of the "display_name" field.
 func (du *DistrictUpdate) ClearDisplayName() *DistrictUpdate {
 	du.mutation.ClearDisplayName()
+	return du
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (du *DistrictUpdate) SetAbbreviation(s string) *DistrictUpdate {
+	du.mutation.SetAbbreviation(s)
+	return du
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (du *DistrictUpdate) SetNillableAbbreviation(s *string) *DistrictUpdate {
+	if s != nil {
+		du.SetAbbreviation(*s)
+	}
+	return du
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (du *DistrictUpdate) ClearAbbreviation() *DistrictUpdate {
+	du.mutation.ClearAbbreviation()
 	return du
 }
 
@@ -250,17 +250,17 @@ func (du *DistrictUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if du.mutation.UpdatedByCleared() {
 		_spec.ClearField(district.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := du.mutation.Abbreviation(); ok {
-		_spec.SetField(district.FieldAbbreviation, field.TypeString, value)
-	}
-	if du.mutation.AbbreviationCleared() {
-		_spec.ClearField(district.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := du.mutation.DisplayName(); ok {
 		_spec.SetField(district.FieldDisplayName, field.TypeString, value)
 	}
 	if du.mutation.DisplayNameCleared() {
 		_spec.ClearField(district.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := du.mutation.Abbreviation(); ok {
+		_spec.SetField(district.FieldAbbreviation, field.TypeString, value)
+	}
+	if du.mutation.AbbreviationCleared() {
+		_spec.ClearField(district.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := du.mutation.Description(); ok {
 		_spec.SetField(district.FieldDescription, field.TypeString, value)
@@ -374,26 +374,6 @@ func (duo *DistrictUpdateOne) ClearUpdatedBy() *DistrictUpdateOne {
 	return duo
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (duo *DistrictUpdateOne) SetAbbreviation(s string) *DistrictUpdateOne {
-	duo.mutation.SetAbbreviation(s)
-	return duo
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (duo *DistrictUpdateOne) SetNillableAbbreviation(s *string) *DistrictUpdateOne {
-	if s != nil {
-		duo.SetAbbreviation(*s)
-	}
-	return duo
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (duo *DistrictUpdateOne) ClearAbbreviation() *DistrictUpdateOne {
-	duo.mutation.ClearAbbreviation()
-	return duo
-}
-
 // SetDisplayName sets the "display_name" field.
 func (duo *DistrictUpdateOne) SetDisplayName(s string) *DistrictUpdateOne {
 	duo.mutation.SetDisplayName(s)
@@ -411,6 +391,26 @@ func (duo *DistrictUpdateOne) SetNillableDisplayName(s *string) *DistrictUpdateO
 // ClearDisplayName clears the value of the "display_name" field.
 func (duo *DistrictUpdateOne) ClearDisplayName() *DistrictUpdateOne {
 	duo.mutation.ClearDisplayName()
+	return duo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (duo *DistrictUpdateOne) SetAbbreviation(s string) *DistrictUpdateOne {
+	duo.mutation.SetAbbreviation(s)
+	return duo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (duo *DistrictUpdateOne) SetNillableAbbreviation(s *string) *DistrictUpdateOne {
+	if s != nil {
+		duo.SetAbbreviation(*s)
+	}
+	return duo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (duo *DistrictUpdateOne) ClearAbbreviation() *DistrictUpdateOne {
+	duo.mutation.ClearAbbreviation()
 	return duo
 }
 
@@ -578,17 +578,17 @@ func (duo *DistrictUpdateOne) sqlSave(ctx context.Context) (_node *District, err
 	if duo.mutation.UpdatedByCleared() {
 		_spec.ClearField(district.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := duo.mutation.Abbreviation(); ok {
-		_spec.SetField(district.FieldAbbreviation, field.TypeString, value)
-	}
-	if duo.mutation.AbbreviationCleared() {
-		_spec.ClearField(district.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := duo.mutation.DisplayName(); ok {
 		_spec.SetField(district.FieldDisplayName, field.TypeString, value)
 	}
 	if duo.mutation.DisplayNameCleared() {
 		_spec.ClearField(district.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := duo.mutation.Abbreviation(); ok {
+		_spec.SetField(district.FieldAbbreviation, field.TypeString, value)
+	}
+	if duo.mutation.AbbreviationCleared() {
+		_spec.ClearField(district.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := duo.mutation.Description(); ok {
 		_spec.SetField(district.FieldDescription, field.TypeString, value)

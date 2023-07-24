@@ -76,26 +76,6 @@ func (otu *OrganizationTypeUpdate) ClearUpdatedBy() *OrganizationTypeUpdate {
 	return otu
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (otu *OrganizationTypeUpdate) SetAbbreviation(s string) *OrganizationTypeUpdate {
-	otu.mutation.SetAbbreviation(s)
-	return otu
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (otu *OrganizationTypeUpdate) SetNillableAbbreviation(s *string) *OrganizationTypeUpdate {
-	if s != nil {
-		otu.SetAbbreviation(*s)
-	}
-	return otu
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (otu *OrganizationTypeUpdate) ClearAbbreviation() *OrganizationTypeUpdate {
-	otu.mutation.ClearAbbreviation()
-	return otu
-}
-
 // SetDisplayName sets the "display_name" field.
 func (otu *OrganizationTypeUpdate) SetDisplayName(s string) *OrganizationTypeUpdate {
 	otu.mutation.SetDisplayName(s)
@@ -113,6 +93,26 @@ func (otu *OrganizationTypeUpdate) SetNillableDisplayName(s *string) *Organizati
 // ClearDisplayName clears the value of the "display_name" field.
 func (otu *OrganizationTypeUpdate) ClearDisplayName() *OrganizationTypeUpdate {
 	otu.mutation.ClearDisplayName()
+	return otu
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (otu *OrganizationTypeUpdate) SetAbbreviation(s string) *OrganizationTypeUpdate {
+	otu.mutation.SetAbbreviation(s)
+	return otu
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (otu *OrganizationTypeUpdate) SetNillableAbbreviation(s *string) *OrganizationTypeUpdate {
+	if s != nil {
+		otu.SetAbbreviation(*s)
+	}
+	return otu
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (otu *OrganizationTypeUpdate) ClearAbbreviation() *OrganizationTypeUpdate {
+	otu.mutation.ClearAbbreviation()
 	return otu
 }
 
@@ -261,17 +261,17 @@ func (otu *OrganizationTypeUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if otu.mutation.UpdatedByCleared() {
 		_spec.ClearField(organizationtype.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := otu.mutation.Abbreviation(); ok {
-		_spec.SetField(organizationtype.FieldAbbreviation, field.TypeString, value)
-	}
-	if otu.mutation.AbbreviationCleared() {
-		_spec.ClearField(organizationtype.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := otu.mutation.DisplayName(); ok {
 		_spec.SetField(organizationtype.FieldDisplayName, field.TypeString, value)
 	}
 	if otu.mutation.DisplayNameCleared() {
 		_spec.ClearField(organizationtype.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := otu.mutation.Abbreviation(); ok {
+		_spec.SetField(organizationtype.FieldAbbreviation, field.TypeString, value)
+	}
+	if otu.mutation.AbbreviationCleared() {
+		_spec.ClearField(organizationtype.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := otu.mutation.Description(); ok {
 		_spec.SetField(organizationtype.FieldDescription, field.TypeString, value)
@@ -401,26 +401,6 @@ func (otuo *OrganizationTypeUpdateOne) ClearUpdatedBy() *OrganizationTypeUpdateO
 	return otuo
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (otuo *OrganizationTypeUpdateOne) SetAbbreviation(s string) *OrganizationTypeUpdateOne {
-	otuo.mutation.SetAbbreviation(s)
-	return otuo
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (otuo *OrganizationTypeUpdateOne) SetNillableAbbreviation(s *string) *OrganizationTypeUpdateOne {
-	if s != nil {
-		otuo.SetAbbreviation(*s)
-	}
-	return otuo
-}
-
-// ClearAbbreviation clears the value of the "abbreviation" field.
-func (otuo *OrganizationTypeUpdateOne) ClearAbbreviation() *OrganizationTypeUpdateOne {
-	otuo.mutation.ClearAbbreviation()
-	return otuo
-}
-
 // SetDisplayName sets the "display_name" field.
 func (otuo *OrganizationTypeUpdateOne) SetDisplayName(s string) *OrganizationTypeUpdateOne {
 	otuo.mutation.SetDisplayName(s)
@@ -438,6 +418,26 @@ func (otuo *OrganizationTypeUpdateOne) SetNillableDisplayName(s *string) *Organi
 // ClearDisplayName clears the value of the "display_name" field.
 func (otuo *OrganizationTypeUpdateOne) ClearDisplayName() *OrganizationTypeUpdateOne {
 	otuo.mutation.ClearDisplayName()
+	return otuo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (otuo *OrganizationTypeUpdateOne) SetAbbreviation(s string) *OrganizationTypeUpdateOne {
+	otuo.mutation.SetAbbreviation(s)
+	return otuo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (otuo *OrganizationTypeUpdateOne) SetNillableAbbreviation(s *string) *OrganizationTypeUpdateOne {
+	if s != nil {
+		otuo.SetAbbreviation(*s)
+	}
+	return otuo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (otuo *OrganizationTypeUpdateOne) ClearAbbreviation() *OrganizationTypeUpdateOne {
+	otuo.mutation.ClearAbbreviation()
 	return otuo
 }
 
@@ -616,17 +616,17 @@ func (otuo *OrganizationTypeUpdateOne) sqlSave(ctx context.Context) (_node *Orga
 	if otuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(organizationtype.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := otuo.mutation.Abbreviation(); ok {
-		_spec.SetField(organizationtype.FieldAbbreviation, field.TypeString, value)
-	}
-	if otuo.mutation.AbbreviationCleared() {
-		_spec.ClearField(organizationtype.FieldAbbreviation, field.TypeString)
-	}
 	if value, ok := otuo.mutation.DisplayName(); ok {
 		_spec.SetField(organizationtype.FieldDisplayName, field.TypeString, value)
 	}
 	if otuo.mutation.DisplayNameCleared() {
 		_spec.ClearField(organizationtype.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := otuo.mutation.Abbreviation(); ok {
+		_spec.SetField(organizationtype.FieldAbbreviation, field.TypeString, value)
+	}
+	if otuo.mutation.AbbreviationCleared() {
+		_spec.ClearField(organizationtype.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := otuo.mutation.Description(); ok {
 		_spec.SetField(organizationtype.FieldDescription, field.TypeString, value)

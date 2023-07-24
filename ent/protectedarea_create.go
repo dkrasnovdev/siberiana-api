@@ -76,20 +76,6 @@ func (pac *ProtectedAreaCreate) SetNillableUpdatedBy(s *string) *ProtectedAreaCr
 	return pac
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (pac *ProtectedAreaCreate) SetAbbreviation(s string) *ProtectedAreaCreate {
-	pac.mutation.SetAbbreviation(s)
-	return pac
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (pac *ProtectedAreaCreate) SetNillableAbbreviation(s *string) *ProtectedAreaCreate {
-	if s != nil {
-		pac.SetAbbreviation(*s)
-	}
-	return pac
-}
-
 // SetDisplayName sets the "display_name" field.
 func (pac *ProtectedAreaCreate) SetDisplayName(s string) *ProtectedAreaCreate {
 	pac.mutation.SetDisplayName(s)
@@ -100,6 +86,20 @@ func (pac *ProtectedAreaCreate) SetDisplayName(s string) *ProtectedAreaCreate {
 func (pac *ProtectedAreaCreate) SetNillableDisplayName(s *string) *ProtectedAreaCreate {
 	if s != nil {
 		pac.SetDisplayName(*s)
+	}
+	return pac
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (pac *ProtectedAreaCreate) SetAbbreviation(s string) *ProtectedAreaCreate {
+	pac.mutation.SetAbbreviation(s)
+	return pac
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (pac *ProtectedAreaCreate) SetNillableAbbreviation(s *string) *ProtectedAreaCreate {
+	if s != nil {
+		pac.SetAbbreviation(*s)
 	}
 	return pac
 }
@@ -228,13 +228,13 @@ func (pac *ProtectedAreaCreate) createSpec() (*ProtectedArea, *sqlgraph.CreateSp
 		_spec.SetField(protectedarea.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := pac.mutation.Abbreviation(); ok {
-		_spec.SetField(protectedarea.FieldAbbreviation, field.TypeString, value)
-		_node.Abbreviation = value
-	}
 	if value, ok := pac.mutation.DisplayName(); ok {
 		_spec.SetField(protectedarea.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := pac.mutation.Abbreviation(); ok {
+		_spec.SetField(protectedarea.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := pac.mutation.Description(); ok {
 		_spec.SetField(protectedarea.FieldDescription, field.TypeString, value)

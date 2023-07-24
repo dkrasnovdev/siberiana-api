@@ -9,8 +9,8 @@ type ArtGenre implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
 }
@@ -109,22 +109,6 @@ input ArtGenreWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -141,6 +125,22 @@ input ArtGenreWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -164,8 +164,8 @@ type ArtStyle implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
 }
@@ -264,22 +264,6 @@ input ArtStyleWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -296,6 +280,22 @@ input ArtStyleWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -337,8 +337,8 @@ type Artifact implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   primaryImageURL: String
@@ -462,22 +462,6 @@ input ArtifactWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -494,6 +478,22 @@ input ArtifactWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -834,8 +834,8 @@ type Book implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   primaryImageURL: String
@@ -871,8 +871,8 @@ type BookGenre implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   books: [Book!]
@@ -972,22 +972,6 @@ input BookGenreWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -1004,6 +988,22 @@ input BookGenreWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -1103,22 +1103,6 @@ input BookWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -1135,6 +1119,22 @@ input BookWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -1203,8 +1203,8 @@ type Category implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   collections: [Collection!]
@@ -1304,22 +1304,6 @@ input CategoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -1336,6 +1320,22 @@ input CategoryWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -1362,8 +1362,8 @@ type Collection implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   artifacts: [Artifact!]
@@ -1466,22 +1466,6 @@ input CollectionWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -1498,6 +1482,22 @@ input CollectionWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -1533,8 +1533,8 @@ type Country implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   location: Location
@@ -1634,22 +1634,6 @@ input CountryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -1666,6 +1650,22 @@ input CountryWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -1695,8 +1695,8 @@ input CreateArtGenreInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
 }
@@ -1709,8 +1709,8 @@ input CreateArtStyleInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
 }
@@ -1723,8 +1723,8 @@ input CreateArtifactInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   primaryImageURL: String
@@ -1762,8 +1762,8 @@ input CreateBookGenreInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   bookIDs: [ID!]
@@ -1777,8 +1777,8 @@ input CreateBookInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   primaryImageURL: String
@@ -1801,8 +1801,8 @@ input CreateCategoryInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   collectionIDs: [ID!]
@@ -1816,8 +1816,8 @@ input CreateCollectionInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   artifactIDs: [ID!]
@@ -1834,8 +1834,8 @@ input CreateCountryInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   locationID: ID
@@ -1849,8 +1849,8 @@ input CreateCultureInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   artifactIDs: [ID!]
@@ -1864,8 +1864,8 @@ input CreateDistrictInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   locationID: ID
@@ -1896,26 +1896,11 @@ input CreateHolderResponsibilityInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   holderIDs: [ID!]
-}
-"""
-CreateLibraryInput is used for create Library object.
-Input was generated by ent.
-"""
-input CreateLibraryInput {
-  createdAt: Time
-  createdBy: String
-  updatedAt: Time
-  updatedBy: String
-  abbreviation: String
-  displayName: String
-  description: String
-  externalLinks: [String!]
-  bookIDs: [ID!]
 }
 """
 CreateLicenseInput is used for create License object.
@@ -1926,8 +1911,8 @@ input CreateLicenseInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   artifactIDs: [ID!]
@@ -1942,8 +1927,8 @@ input CreateLocationInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   artifactIDs: [ID!]
@@ -1961,8 +1946,8 @@ input CreateMediumInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   artifactIDs: [ID!]
@@ -1976,8 +1961,8 @@ input CreateModelInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   artifactIDs: [ID!]
@@ -1991,8 +1976,8 @@ input CreateMonumentInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   artifactIDs: [ID!]
@@ -2010,8 +1995,8 @@ input CreateOrganizationInput {
   address: String
   phoneNumbers: [String!]
   emails: [String!]
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   primaryImageURL: String
@@ -2032,8 +2017,8 @@ input CreateOrganizationTypeInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   organizationIDs: [ID!]
@@ -2047,8 +2032,8 @@ input CreatePeriodInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   artifactIDs: [ID!]
@@ -2065,8 +2050,8 @@ input CreatePersonInput {
   address: String
   phoneNumbers: [String!]
   emails: [String!]
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   primaryImageURL: String
@@ -2095,8 +2080,8 @@ input CreatePersonRoleInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   personIDs: [ID!]
@@ -2110,8 +2095,8 @@ input CreateProjectInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   beginData: Time
@@ -2129,8 +2114,8 @@ input CreateProjectTypeInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   projectIDs: [ID!]
@@ -2144,8 +2129,8 @@ input CreateProtectedAreaCategoryInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
 }
@@ -2158,8 +2143,8 @@ input CreateProtectedAreaInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
 }
@@ -2172,8 +2157,8 @@ input CreateProtectedAreaPictureInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
 }
@@ -2186,8 +2171,8 @@ input CreatePublicationInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   artifactIDs: [ID!]
@@ -2202,8 +2187,8 @@ input CreatePublisherInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   bookIDs: [ID!]
@@ -2217,8 +2202,8 @@ input CreateRegionInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   locationID: ID
@@ -2232,8 +2217,8 @@ input CreateSetInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   artifactIDs: [ID!]
@@ -2248,8 +2233,8 @@ input CreateSettlementInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   locationID: ID
@@ -2263,8 +2248,8 @@ input CreateTechniqueInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   artifactIDs: [ID!]
@@ -2275,8 +2260,8 @@ type Culture implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   artifacts: [Artifact!]
@@ -2376,22 +2361,6 @@ input CultureWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -2408,6 +2377,22 @@ input CultureWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -2439,8 +2424,8 @@ type District implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   location: Location
@@ -2540,22 +2525,6 @@ input DistrictWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -2572,6 +2541,22 @@ input DistrictWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -2640,8 +2625,8 @@ type HolderResponsibility implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   holder: [Holder!]
@@ -2741,22 +2726,6 @@ input HolderResponsibilityWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -2773,6 +2742,22 @@ input HolderResponsibilityWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -2917,173 +2902,14 @@ input KeywordWhereInput {
   idLT: ID
   idLTE: ID
 }
-type Library implements Node {
-  id: ID!
-  createdAt: Time!
-  createdBy: String
-  updatedAt: Time!
-  updatedBy: String
-  abbreviation: String
-  displayName: String
-  description: String
-  externalLinks: [String!]
-  books: [Book!]
-}
-"""A connection to a list of items."""
-type LibraryConnection {
-  """A list of edges."""
-  edges: [LibraryEdge]
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-  """Identifies the total count of items in the connection."""
-  totalCount: Int!
-}
-"""An edge in a connection."""
-type LibraryEdge {
-  """The item at the end of the edge."""
-  node: Library
-  """A cursor for use in pagination."""
-  cursor: Cursor!
-}
-"""Ordering options for Library connections"""
-input LibraryOrder {
-  """The ordering direction."""
-  direction: OrderDirection! = ASC
-  """The field by which to order Libraries."""
-  field: LibraryOrderField!
-}
-"""Properties by which Library connections can be ordered."""
-enum LibraryOrderField {
-  CREATED_AT
-  UPDATED_AT
-}
-"""
-LibraryWhereInput is used for filtering Library objects.
-Input was generated by ent.
-"""
-input LibraryWhereInput {
-  not: LibraryWhereInput
-  and: [LibraryWhereInput!]
-  or: [LibraryWhereInput!]
-  """id field predicates"""
-  id: ID
-  idNEQ: ID
-  idIn: [ID!]
-  idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
-  """created_at field predicates"""
-  createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
-  createdAtGT: Time
-  createdAtGTE: Time
-  createdAtLT: Time
-  createdAtLTE: Time
-  """created_by field predicates"""
-  createdBy: String
-  createdByNEQ: String
-  createdByIn: [String!]
-  createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
-  createdByContains: String
-  createdByHasPrefix: String
-  createdByHasSuffix: String
-  createdByIsNil: Boolean
-  createdByNotNil: Boolean
-  createdByEqualFold: String
-  createdByContainsFold: String
-  """updated_at field predicates"""
-  updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
-  updatedAtGT: Time
-  updatedAtGTE: Time
-  updatedAtLT: Time
-  updatedAtLTE: Time
-  """updated_by field predicates"""
-  updatedBy: String
-  updatedByNEQ: String
-  updatedByIn: [String!]
-  updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
-  updatedByContains: String
-  updatedByHasPrefix: String
-  updatedByHasSuffix: String
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
-  updatedByEqualFold: String
-  updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
-  """display_name field predicates"""
-  displayName: String
-  displayNameNEQ: String
-  displayNameIn: [String!]
-  displayNameNotIn: [String!]
-  displayNameGT: String
-  displayNameGTE: String
-  displayNameLT: String
-  displayNameLTE: String
-  displayNameContains: String
-  displayNameHasPrefix: String
-  displayNameHasSuffix: String
-  displayNameIsNil: Boolean
-  displayNameNotNil: Boolean
-  displayNameEqualFold: String
-  displayNameContainsFold: String
-  """description field predicates"""
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """books edge predicates"""
-  hasBooks: Boolean
-  hasBooksWith: [BookWhereInput!]
-}
 type License implements Node {
   id: ID!
   createdAt: Time!
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   artifacts: [Artifact!]
@@ -3184,22 +3010,6 @@ input LicenseWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -3216,6 +3026,22 @@ input LicenseWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -3245,8 +3071,8 @@ type Location implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   artifacts: [Artifact!]
@@ -3350,22 +3176,6 @@ input LocationWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -3382,6 +3192,22 @@ input LocationWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -3420,8 +3246,8 @@ type Medium implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   artifacts: [Artifact!]
@@ -3521,22 +3347,6 @@ input MediumWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -3553,6 +3363,22 @@ input MediumWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -3579,8 +3405,8 @@ type Model implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   artifacts: [Artifact!]
@@ -3680,22 +3506,6 @@ input ModelWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -3712,6 +3522,22 @@ input ModelWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -3738,8 +3564,8 @@ type Monument implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   artifacts: [Artifact!]
@@ -3840,22 +3666,6 @@ input MonumentWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -3872,6 +3682,22 @@ input MonumentWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -3919,8 +3745,8 @@ type Organization implements Node {
   address: String
   phoneNumbers: [String!]
   emails: [String!]
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   primaryImageURL: String
@@ -3966,8 +3792,8 @@ type OrganizationType implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   organizations: [Organization!]
@@ -4067,22 +3893,6 @@ input OrganizationTypeWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -4099,6 +3909,22 @@ input OrganizationTypeWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -4202,22 +4028,6 @@ input OrganizationWhereInput {
   addressNotNil: Boolean
   addressEqualFold: String
   addressContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -4234,6 +4044,22 @@ input OrganizationWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -4317,8 +4143,8 @@ type Period implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   artifacts: [Artifact!]
@@ -4418,22 +4244,6 @@ input PeriodWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -4450,6 +4260,22 @@ input PeriodWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -4479,8 +4305,8 @@ type Person implements Node {
   address: String
   phoneNumbers: [String!]
   emails: [String!]
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   primaryImageURL: String
@@ -4539,8 +4365,8 @@ type PersonRole implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   person: [Person!]
@@ -4640,22 +4466,6 @@ input PersonRoleWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -4672,6 +4482,22 @@ input PersonRoleWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -4775,22 +4601,6 @@ input PersonWhereInput {
   addressNotNil: Boolean
   addressEqualFold: String
   addressContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -4807,6 +4617,22 @@ input PersonWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -4945,8 +4771,8 @@ type Project implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   beginData: Time
@@ -4989,8 +4815,8 @@ type ProjectType implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   projects: [Project!]
@@ -5090,22 +4916,6 @@ input ProjectTypeWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -5122,6 +4932,22 @@ input ProjectTypeWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -5209,22 +5035,6 @@ input ProjectWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -5241,6 +5051,22 @@ input ProjectWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -5295,8 +5121,8 @@ type ProtectedArea implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
 }
@@ -5306,8 +5132,8 @@ type ProtectedAreaCategory implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
 }
@@ -5406,22 +5232,6 @@ input ProtectedAreaCategoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -5438,6 +5248,22 @@ input ProtectedAreaCategoryWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -5489,8 +5315,8 @@ type ProtectedAreaPicture implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
 }
@@ -5589,22 +5415,6 @@ input ProtectedAreaPictureWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -5621,6 +5431,22 @@ input ProtectedAreaPictureWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -5705,22 +5531,6 @@ input ProtectedAreaWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -5737,6 +5547,22 @@ input ProtectedAreaWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -5760,8 +5586,8 @@ type Publication implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   artifacts: [Artifact!]
@@ -5862,22 +5688,6 @@ input PublicationWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -5894,6 +5704,22 @@ input PublicationWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -5923,8 +5749,8 @@ type Publisher implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   books: [Book!]
@@ -6024,22 +5850,6 @@ input PublisherWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -6056,6 +5866,22 @@ input PublisherWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -6334,25 +6160,6 @@ type Query {
     """Filtering options for HolderResponsibilities returned from the connection."""
     where: HolderResponsibilityWhereInput
   ): HolderResponsibilityConnection!
-  libraries(
-    """Returns the elements in the list that come after the specified cursor."""
-    after: Cursor
-
-    """Returns the first _n_ elements from the list."""
-    first: Int
-
-    """Returns the elements in the list that come before the specified cursor."""
-    before: Cursor
-
-    """Returns the last _n_ elements from the list."""
-    last: Int
-
-    """Ordering options for Libraries returned from the connection."""
-    orderBy: [LibraryOrder!]
-
-    """Filtering options for Libraries returned from the connection."""
-    where: LibraryWhereInput
-  ): LibraryConnection!
   licenses(
     """Returns the elements in the list that come after the specified cursor."""
     after: Cursor
@@ -6759,8 +6566,8 @@ type Region implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   location: Location
@@ -6860,22 +6667,6 @@ input RegionWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -6892,6 +6683,22 @@ input RegionWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -6918,8 +6725,8 @@ type Set implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   artifacts: [Artifact!]
@@ -7020,22 +6827,6 @@ input SetWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -7052,6 +6843,22 @@ input SetWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -7081,8 +6888,8 @@ type Settlement implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   location: Location
@@ -7182,22 +6989,6 @@ input SettlementWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -7214,6 +7005,22 @@ input SettlementWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -7240,8 +7047,8 @@ type Technique implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  abbreviation: String
   displayName: String
+  abbreviation: String
   description: String
   externalLinks: [String!]
   artifacts: [Artifact!]
@@ -7341,22 +7148,6 @@ input TechniqueWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -7373,6 +7164,22 @@ input TechniqueWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
   """description field predicates"""
   description: String
   descriptionNEQ: String
@@ -7405,10 +7212,10 @@ input UpdateArtGenreInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -7425,10 +7232,10 @@ input UpdateArtStyleInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -7445,10 +7252,10 @@ input UpdateArtifactInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -7522,10 +7329,10 @@ input UpdateBookGenreInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -7545,10 +7352,10 @@ input UpdateBookInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -7590,10 +7397,10 @@ input UpdateCategoryInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -7613,10 +7420,10 @@ input UpdateCollectionInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -7644,10 +7451,10 @@ input UpdateCountryInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -7666,10 +7473,10 @@ input UpdateCultureInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -7689,10 +7496,10 @@ input UpdateDistrictInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -7738,10 +7545,10 @@ input UpdateHolderResponsibilityInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -7750,29 +7557,6 @@ input UpdateHolderResponsibilityInput {
   addHolderIDs: [ID!]
   removeHolderIDs: [ID!]
   clearHolder: Boolean
-}
-"""
-UpdateLibraryInput is used for update Library object.
-Input was generated by ent.
-"""
-input UpdateLibraryInput {
-  createdBy: String
-  clearCreatedBy: Boolean
-  updatedAt: Time
-  updatedBy: String
-  clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
-  displayName: String
-  clearDisplayName: Boolean
-  description: String
-  clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
-  addBookIDs: [ID!]
-  removeBookIDs: [ID!]
-  clearBooks: Boolean
 }
 """
 UpdateLicenseInput is used for update License object.
@@ -7784,10 +7568,10 @@ input UpdateLicenseInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -7810,10 +7594,10 @@ input UpdateLocationInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -7841,10 +7625,10 @@ input UpdateMediumInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -7864,10 +7648,10 @@ input UpdateModelInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -7887,10 +7671,10 @@ input UpdateMonumentInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -7921,10 +7705,10 @@ input UpdateOrganizationInput {
   emails: [String!]
   appendEmails: [String!]
   clearEmails: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -7960,10 +7744,10 @@ input UpdateOrganizationTypeInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -7983,10 +7767,10 @@ input UpdatePeriodInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -8014,10 +7798,10 @@ input UpdatePersonInput {
   emails: [String!]
   appendEmails: [String!]
   clearEmails: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -8071,10 +7855,10 @@ input UpdatePersonRoleInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -8094,10 +7878,10 @@ input UpdateProjectInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -8126,10 +7910,10 @@ input UpdateProjectTypeInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -8149,10 +7933,10 @@ input UpdateProtectedAreaCategoryInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -8169,10 +7953,10 @@ input UpdateProtectedAreaInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -8189,10 +7973,10 @@ input UpdateProtectedAreaPictureInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -8209,10 +7993,10 @@ input UpdatePublicationInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -8235,10 +8019,10 @@ input UpdatePublisherInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -8258,10 +8042,10 @@ input UpdateRegionInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -8280,10 +8064,10 @@ input UpdateSetInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -8306,10 +8090,10 @@ input UpdateSettlementInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]
@@ -8328,10 +8112,10 @@ input UpdateTechniqueInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
   displayName: String
   clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
   externalLinks: [String!]

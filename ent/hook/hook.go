@@ -189,18 +189,6 @@ func (f KeywordFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, err
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.KeywordMutation", m)
 }
 
-// The LibraryFunc type is an adapter to allow the use of ordinary
-// function as Library mutator.
-type LibraryFunc func(context.Context, *ent.LibraryMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f LibraryFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.LibraryMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.LibraryMutation", m)
-}
-
 // The LicenseFunc type is an adapter to allow the use of ordinary
 // function as License mutator.
 type LicenseFunc func(context.Context, *ent.LicenseMutation) (ent.Value, error)

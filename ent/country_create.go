@@ -77,20 +77,6 @@ func (cc *CountryCreate) SetNillableUpdatedBy(s *string) *CountryCreate {
 	return cc
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (cc *CountryCreate) SetAbbreviation(s string) *CountryCreate {
-	cc.mutation.SetAbbreviation(s)
-	return cc
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (cc *CountryCreate) SetNillableAbbreviation(s *string) *CountryCreate {
-	if s != nil {
-		cc.SetAbbreviation(*s)
-	}
-	return cc
-}
-
 // SetDisplayName sets the "display_name" field.
 func (cc *CountryCreate) SetDisplayName(s string) *CountryCreate {
 	cc.mutation.SetDisplayName(s)
@@ -101,6 +87,20 @@ func (cc *CountryCreate) SetDisplayName(s string) *CountryCreate {
 func (cc *CountryCreate) SetNillableDisplayName(s *string) *CountryCreate {
 	if s != nil {
 		cc.SetDisplayName(*s)
+	}
+	return cc
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (cc *CountryCreate) SetAbbreviation(s string) *CountryCreate {
+	cc.mutation.SetAbbreviation(s)
+	return cc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (cc *CountryCreate) SetNillableAbbreviation(s *string) *CountryCreate {
+	if s != nil {
+		cc.SetAbbreviation(*s)
 	}
 	return cc
 }
@@ -248,13 +248,13 @@ func (cc *CountryCreate) createSpec() (*Country, *sqlgraph.CreateSpec) {
 		_spec.SetField(country.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := cc.mutation.Abbreviation(); ok {
-		_spec.SetField(country.FieldAbbreviation, field.TypeString, value)
-		_node.Abbreviation = value
-	}
 	if value, ok := cc.mutation.DisplayName(); ok {
 		_spec.SetField(country.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := cc.mutation.Abbreviation(); ok {
+		_spec.SetField(country.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := cc.mutation.Description(); ok {
 		_spec.SetField(country.FieldDescription, field.TypeString, value)

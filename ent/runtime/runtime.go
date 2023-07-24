@@ -19,7 +19,6 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
-	"github.com/dkrasnovdev/heritage-api/ent/library"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/medium"
@@ -399,33 +398,6 @@ func init() {
 	holderresponsibility.DefaultUpdatedAt = holderresponsibilityDescUpdatedAt.Default.(func() time.Time)
 	// holderresponsibility.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	holderresponsibility.UpdateDefaultUpdatedAt = holderresponsibilityDescUpdatedAt.UpdateDefault.(func() time.Time)
-	libraryMixin := schema.Library{}.Mixin()
-	library.Policy = privacy.NewPolicies(schema.Library{})
-	library.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := library.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	libraryMixinHooks0 := libraryMixin[0].Hooks()
-
-	library.Hooks[1] = libraryMixinHooks0[0]
-	libraryMixinFields0 := libraryMixin[0].Fields()
-	_ = libraryMixinFields0
-	libraryFields := schema.Library{}.Fields()
-	_ = libraryFields
-	// libraryDescCreatedAt is the schema descriptor for created_at field.
-	libraryDescCreatedAt := libraryMixinFields0[0].Descriptor()
-	// library.DefaultCreatedAt holds the default value on creation for the created_at field.
-	library.DefaultCreatedAt = libraryDescCreatedAt.Default.(func() time.Time)
-	// libraryDescUpdatedAt is the schema descriptor for updated_at field.
-	libraryDescUpdatedAt := libraryMixinFields0[2].Descriptor()
-	// library.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	library.DefaultUpdatedAt = libraryDescUpdatedAt.Default.(func() time.Time)
-	// library.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	library.UpdateDefaultUpdatedAt = libraryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	licenseMixin := schema.License{}.Mixin()
 	license.Policy = privacy.NewPolicies(schema.License{})
 	license.Hooks[0] = func(next ent.Mutator) ent.Mutator {

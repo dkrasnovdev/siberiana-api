@@ -28,7 +28,6 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/heritage-api/ent/keyword"
-	"github.com/dkrasnovdev/heritage-api/ent/library"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/medium"
@@ -133,11 +132,6 @@ var keywordImplementors = []string{"Keyword", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Keyword) IsNode() {}
-
-var libraryImplementors = []string{"Library", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*Library) IsNode() {}
 
 var licenseImplementors = []string{"License", "Node"}
 
@@ -474,18 +468,6 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 		query := c.Keyword.Query().
 			Where(keyword.ID(id))
 		query, err := query.CollectFields(ctx, keywordImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		n, err := query.Only(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return n, nil
-	case library.Table:
-		query := c.Library.Query().
-			Where(library.ID(id))
-		query, err := query.CollectFields(ctx, libraryImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -1047,22 +1029,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 		query := c.Keyword.Query().
 			Where(keyword.IDIn(ids...))
 		query, err := query.CollectFields(ctx, keywordImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case library.Table:
-		query := c.Library.Query().
-			Where(library.IDIn(ids...))
-		query, err := query.CollectFields(ctx, libraryImplementors...)
 		if err != nil {
 			return nil, err
 		}

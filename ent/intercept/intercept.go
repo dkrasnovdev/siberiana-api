@@ -23,7 +23,6 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/heritage-api/ent/keyword"
-	"github.com/dkrasnovdev/heritage-api/ent/library"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/medium"
@@ -507,33 +506,6 @@ func (f TraverseKeyword) Traverse(ctx context.Context, q ent.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *ent.KeywordQuery", q)
-}
-
-// The LibraryFunc type is an adapter to allow the use of ordinary function as a Querier.
-type LibraryFunc func(context.Context, *ent.LibraryQuery) (ent.Value, error)
-
-// Query calls f(ctx, q).
-func (f LibraryFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
-	if q, ok := q.(*ent.LibraryQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *ent.LibraryQuery", q)
-}
-
-// The TraverseLibrary type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseLibrary func(context.Context, *ent.LibraryQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseLibrary) Intercept(next ent.Querier) ent.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseLibrary) Traverse(ctx context.Context, q ent.Query) error {
-	if q, ok := q.(*ent.LibraryQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *ent.LibraryQuery", q)
 }
 
 // The LicenseFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -1136,8 +1108,6 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.HolderResponsibilityQuery, predicate.HolderResponsibility, holderresponsibility.OrderOption]{typ: ent.TypeHolderResponsibility, tq: q}, nil
 	case *ent.KeywordQuery:
 		return &query[*ent.KeywordQuery, predicate.Keyword, keyword.OrderOption]{typ: ent.TypeKeyword, tq: q}, nil
-	case *ent.LibraryQuery:
-		return &query[*ent.LibraryQuery, predicate.Library, library.OrderOption]{typ: ent.TypeLibrary, tq: q}, nil
 	case *ent.LicenseQuery:
 		return &query[*ent.LicenseQuery, predicate.License, license.OrderOption]{typ: ent.TypeLicense, tq: q}, nil
 	case *ent.LocationQuery:

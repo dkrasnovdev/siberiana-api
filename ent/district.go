@@ -27,10 +27,10 @@ type District struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// Abbreviation holds the value of the "abbreviation" field.
-	Abbreviation string `json:"abbreviation,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
 	// ExternalLinks holds the value of the "external_links" field.
@@ -75,7 +75,7 @@ func (*District) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case district.FieldID:
 			values[i] = new(sql.NullInt64)
-		case district.FieldCreatedBy, district.FieldUpdatedBy, district.FieldAbbreviation, district.FieldDisplayName, district.FieldDescription:
+		case district.FieldCreatedBy, district.FieldUpdatedBy, district.FieldDisplayName, district.FieldAbbreviation, district.FieldDescription:
 			values[i] = new(sql.NullString)
 		case district.FieldCreatedAt, district.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -126,17 +126,17 @@ func (d *District) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				d.UpdatedBy = value.String
 			}
-		case district.FieldAbbreviation:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
-			} else if value.Valid {
-				d.Abbreviation = value.String
-			}
 		case district.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
 			} else if value.Valid {
 				d.DisplayName = value.String
+			}
+		case district.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				d.Abbreviation = value.String
 			}
 		case district.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -212,11 +212,11 @@ func (d *District) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(d.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("abbreviation=")
-	builder.WriteString(d.Abbreviation)
-	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(d.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(d.Abbreviation)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(d.Description)

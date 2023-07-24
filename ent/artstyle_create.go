@@ -76,20 +76,6 @@ func (asc *ArtStyleCreate) SetNillableUpdatedBy(s *string) *ArtStyleCreate {
 	return asc
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (asc *ArtStyleCreate) SetAbbreviation(s string) *ArtStyleCreate {
-	asc.mutation.SetAbbreviation(s)
-	return asc
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (asc *ArtStyleCreate) SetNillableAbbreviation(s *string) *ArtStyleCreate {
-	if s != nil {
-		asc.SetAbbreviation(*s)
-	}
-	return asc
-}
-
 // SetDisplayName sets the "display_name" field.
 func (asc *ArtStyleCreate) SetDisplayName(s string) *ArtStyleCreate {
 	asc.mutation.SetDisplayName(s)
@@ -100,6 +86,20 @@ func (asc *ArtStyleCreate) SetDisplayName(s string) *ArtStyleCreate {
 func (asc *ArtStyleCreate) SetNillableDisplayName(s *string) *ArtStyleCreate {
 	if s != nil {
 		asc.SetDisplayName(*s)
+	}
+	return asc
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (asc *ArtStyleCreate) SetAbbreviation(s string) *ArtStyleCreate {
+	asc.mutation.SetAbbreviation(s)
+	return asc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (asc *ArtStyleCreate) SetNillableAbbreviation(s *string) *ArtStyleCreate {
+	if s != nil {
+		asc.SetAbbreviation(*s)
 	}
 	return asc
 }
@@ -228,13 +228,13 @@ func (asc *ArtStyleCreate) createSpec() (*ArtStyle, *sqlgraph.CreateSpec) {
 		_spec.SetField(artstyle.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := asc.mutation.Abbreviation(); ok {
-		_spec.SetField(artstyle.FieldAbbreviation, field.TypeString, value)
-		_node.Abbreviation = value
-	}
 	if value, ok := asc.mutation.DisplayName(); ok {
 		_spec.SetField(artstyle.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := asc.mutation.Abbreviation(); ok {
+		_spec.SetField(artstyle.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := asc.mutation.Description(); ok {
 		_spec.SetField(artstyle.FieldDescription, field.TypeString, value)

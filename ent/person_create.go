@@ -110,20 +110,6 @@ func (pc *PersonCreate) SetEmails(s []string) *PersonCreate {
 	return pc
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (pc *PersonCreate) SetAbbreviation(s string) *PersonCreate {
-	pc.mutation.SetAbbreviation(s)
-	return pc
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (pc *PersonCreate) SetNillableAbbreviation(s *string) *PersonCreate {
-	if s != nil {
-		pc.SetAbbreviation(*s)
-	}
-	return pc
-}
-
 // SetDisplayName sets the "display_name" field.
 func (pc *PersonCreate) SetDisplayName(s string) *PersonCreate {
 	pc.mutation.SetDisplayName(s)
@@ -134,6 +120,20 @@ func (pc *PersonCreate) SetDisplayName(s string) *PersonCreate {
 func (pc *PersonCreate) SetNillableDisplayName(s *string) *PersonCreate {
 	if s != nil {
 		pc.SetDisplayName(*s)
+	}
+	return pc
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (pc *PersonCreate) SetAbbreviation(s string) *PersonCreate {
+	pc.mutation.SetAbbreviation(s)
+	return pc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (pc *PersonCreate) SetNillableAbbreviation(s *string) *PersonCreate {
+	if s != nil {
+		pc.SetAbbreviation(*s)
 	}
 	return pc
 }
@@ -510,13 +510,13 @@ func (pc *PersonCreate) createSpec() (*Person, *sqlgraph.CreateSpec) {
 		_spec.SetField(person.FieldEmails, field.TypeJSON, value)
 		_node.Emails = value
 	}
-	if value, ok := pc.mutation.Abbreviation(); ok {
-		_spec.SetField(person.FieldAbbreviation, field.TypeString, value)
-		_node.Abbreviation = value
-	}
 	if value, ok := pc.mutation.DisplayName(); ok {
 		_spec.SetField(person.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := pc.mutation.Abbreviation(); ok {
+		_spec.SetField(person.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := pc.mutation.Description(); ok {
 		_spec.SetField(person.FieldDescription, field.TypeString, value)

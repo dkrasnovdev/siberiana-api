@@ -364,18 +364,6 @@ func (hr *HolderResponsibility) Holder(ctx context.Context) (result []*Holder, e
 	return result, err
 }
 
-func (l *Library) Books(ctx context.Context) (result []*Book, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = l.NamedBooks(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = l.Edges.BooksOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = l.QueryBooks().All(ctx)
-	}
-	return result, err
-}
-
 func (l *License) Artifacts(ctx context.Context) (result []*Artifact, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = l.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)

@@ -26,10 +26,10 @@ type HolderResponsibility struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// Abbreviation holds the value of the "abbreviation" field.
-	Abbreviation string `json:"abbreviation,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
 	// ExternalLinks holds the value of the "external_links" field.
@@ -71,7 +71,7 @@ func (*HolderResponsibility) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case holderresponsibility.FieldID:
 			values[i] = new(sql.NullInt64)
-		case holderresponsibility.FieldCreatedBy, holderresponsibility.FieldUpdatedBy, holderresponsibility.FieldAbbreviation, holderresponsibility.FieldDisplayName, holderresponsibility.FieldDescription:
+		case holderresponsibility.FieldCreatedBy, holderresponsibility.FieldUpdatedBy, holderresponsibility.FieldDisplayName, holderresponsibility.FieldAbbreviation, holderresponsibility.FieldDescription:
 			values[i] = new(sql.NullString)
 		case holderresponsibility.FieldCreatedAt, holderresponsibility.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -120,17 +120,17 @@ func (hr *HolderResponsibility) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				hr.UpdatedBy = value.String
 			}
-		case holderresponsibility.FieldAbbreviation:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
-			} else if value.Valid {
-				hr.Abbreviation = value.String
-			}
 		case holderresponsibility.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
 			} else if value.Valid {
 				hr.DisplayName = value.String
+			}
+		case holderresponsibility.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				hr.Abbreviation = value.String
 			}
 		case holderresponsibility.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -199,11 +199,11 @@ func (hr *HolderResponsibility) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(hr.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("abbreviation=")
-	builder.WriteString(hr.Abbreviation)
-	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(hr.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(hr.Abbreviation)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(hr.Description)

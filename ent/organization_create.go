@@ -105,20 +105,6 @@ func (oc *OrganizationCreate) SetEmails(s []string) *OrganizationCreate {
 	return oc
 }
 
-// SetAbbreviation sets the "abbreviation" field.
-func (oc *OrganizationCreate) SetAbbreviation(s string) *OrganizationCreate {
-	oc.mutation.SetAbbreviation(s)
-	return oc
-}
-
-// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableAbbreviation(s *string) *OrganizationCreate {
-	if s != nil {
-		oc.SetAbbreviation(*s)
-	}
-	return oc
-}
-
 // SetDisplayName sets the "display_name" field.
 func (oc *OrganizationCreate) SetDisplayName(s string) *OrganizationCreate {
 	oc.mutation.SetDisplayName(s)
@@ -129,6 +115,20 @@ func (oc *OrganizationCreate) SetDisplayName(s string) *OrganizationCreate {
 func (oc *OrganizationCreate) SetNillableDisplayName(s *string) *OrganizationCreate {
 	if s != nil {
 		oc.SetDisplayName(*s)
+	}
+	return oc
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (oc *OrganizationCreate) SetAbbreviation(s string) *OrganizationCreate {
+	oc.mutation.SetAbbreviation(s)
+	return oc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableAbbreviation(s *string) *OrganizationCreate {
+	if s != nil {
+		oc.SetAbbreviation(*s)
 	}
 	return oc
 }
@@ -376,13 +376,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		_spec.SetField(organization.FieldEmails, field.TypeJSON, value)
 		_node.Emails = value
 	}
-	if value, ok := oc.mutation.Abbreviation(); ok {
-		_spec.SetField(organization.FieldAbbreviation, field.TypeString, value)
-		_node.Abbreviation = value
-	}
 	if value, ok := oc.mutation.DisplayName(); ok {
 		_spec.SetField(organization.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := oc.mutation.Abbreviation(); ok {
+		_spec.SetField(organization.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := oc.mutation.Description(); ok {
 		_spec.SetField(organization.FieldDescription, field.TypeString, value)

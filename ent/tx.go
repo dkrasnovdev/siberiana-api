@@ -42,8 +42,6 @@ type Tx struct {
 	HolderResponsibility *HolderResponsibilityClient
 	// Keyword is the client for interacting with the Keyword builders.
 	Keyword *KeywordClient
-	// Library is the client for interacting with the Library builders.
-	Library *LibraryClient
 	// License is the client for interacting with the License builders.
 	License *LicenseClient
 	// Location is the client for interacting with the Location builders.
@@ -232,7 +230,6 @@ func (tx *Tx) init() {
 	tx.Holder = NewHolderClient(tx.config)
 	tx.HolderResponsibility = NewHolderResponsibilityClient(tx.config)
 	tx.Keyword = NewKeywordClient(tx.config)
-	tx.Library = NewLibraryClient(tx.config)
 	tx.License = NewLicenseClient(tx.config)
 	tx.Location = NewLocationClient(tx.config)
 	tx.Medium = NewMediumClient(tx.config)

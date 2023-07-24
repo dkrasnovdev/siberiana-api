@@ -26,10 +26,10 @@ type PersonRole struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// Abbreviation holds the value of the "abbreviation" field.
-	Abbreviation string `json:"abbreviation,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
 	// ExternalLinks holds the value of the "external_links" field.
@@ -71,7 +71,7 @@ func (*PersonRole) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case personrole.FieldID:
 			values[i] = new(sql.NullInt64)
-		case personrole.FieldCreatedBy, personrole.FieldUpdatedBy, personrole.FieldAbbreviation, personrole.FieldDisplayName, personrole.FieldDescription:
+		case personrole.FieldCreatedBy, personrole.FieldUpdatedBy, personrole.FieldDisplayName, personrole.FieldAbbreviation, personrole.FieldDescription:
 			values[i] = new(sql.NullString)
 		case personrole.FieldCreatedAt, personrole.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -120,17 +120,17 @@ func (pr *PersonRole) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.UpdatedBy = value.String
 			}
-		case personrole.FieldAbbreviation:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
-			} else if value.Valid {
-				pr.Abbreviation = value.String
-			}
 		case personrole.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
 			} else if value.Valid {
 				pr.DisplayName = value.String
+			}
+		case personrole.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				pr.Abbreviation = value.String
 			}
 		case personrole.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -199,11 +199,11 @@ func (pr *PersonRole) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(pr.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("abbreviation=")
-	builder.WriteString(pr.Abbreviation)
-	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(pr.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(pr.Abbreviation)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(pr.Description)

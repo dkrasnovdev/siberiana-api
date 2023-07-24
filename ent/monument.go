@@ -26,10 +26,10 @@ type Monument struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// Abbreviation holds the value of the "abbreviation" field.
-	Abbreviation string `json:"abbreviation,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
 	// ExternalLinks holds the value of the "external_links" field.
@@ -83,7 +83,7 @@ func (*Monument) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case monument.FieldID:
 			values[i] = new(sql.NullInt64)
-		case monument.FieldCreatedBy, monument.FieldUpdatedBy, monument.FieldAbbreviation, monument.FieldDisplayName, monument.FieldDescription:
+		case monument.FieldCreatedBy, monument.FieldUpdatedBy, monument.FieldDisplayName, monument.FieldAbbreviation, monument.FieldDescription:
 			values[i] = new(sql.NullString)
 		case monument.FieldCreatedAt, monument.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -132,17 +132,17 @@ func (m *Monument) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				m.UpdatedBy = value.String
 			}
-		case monument.FieldAbbreviation:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
-			} else if value.Valid {
-				m.Abbreviation = value.String
-			}
 		case monument.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
 			} else if value.Valid {
 				m.DisplayName = value.String
+			}
+		case monument.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				m.Abbreviation = value.String
 			}
 		case monument.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -216,11 +216,11 @@ func (m *Monument) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(m.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("abbreviation=")
-	builder.WriteString(m.Abbreviation)
-	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(m.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(m.Abbreviation)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(m.Description)
