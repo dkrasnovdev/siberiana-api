@@ -57,5 +57,6 @@ func (License) Fields() []ent.Field {
 func (License) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("artifacts", Artifact.Type),
+		edge.To("books", Book.Type),
 	}
 }

@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/library"
 )
 
@@ -108,6 +109,21 @@ func (lc *LibraryCreate) SetNillableDescription(s *string) *LibraryCreate {
 func (lc *LibraryCreate) SetExternalLinks(s []string) *LibraryCreate {
 	lc.mutation.SetExternalLinks(s)
 	return lc
+}
+
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (lc *LibraryCreate) AddBookIDs(ids ...int) *LibraryCreate {
+	lc.mutation.AddBookIDs(ids...)
+	return lc
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (lc *LibraryCreate) AddBooks(b ...*Book) *LibraryCreate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return lc.AddBookIDs(ids...)
 }
 
 // Mutation returns the LibraryMutation object of the builder.
@@ -225,6 +241,22 @@ func (lc *LibraryCreate) createSpec() (*Library, *sqlgraph.CreateSpec) {
 	if value, ok := lc.mutation.ExternalLinks(); ok {
 		_spec.SetField(library.FieldExternalLinks, field.TypeJSON, value)
 		_node.ExternalLinks = value
+	}
+	if nodes := lc.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   library.BooksTable,
+			Columns: []string{library.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

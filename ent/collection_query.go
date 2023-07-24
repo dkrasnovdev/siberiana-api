@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
@@ -27,12 +28,14 @@ type CollectionQuery struct {
 	inters             []Interceptor
 	predicates         []predicate.Collection
 	withArtifacts      *ArtifactQuery
+	withBooks          *BookQuery
 	withPeople         *PersonQuery
 	withCategory       *CategoryQuery
 	withFKs            bool
 	modifiers          []func(*sql.Selector)
 	loadTotal          []func(context.Context, []*Collection) error
 	withNamedArtifacts map[string]*ArtifactQuery
+	withNamedBooks     map[string]*BookQuery
 	withNamedPeople    map[string]*PersonQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -85,6 +88,28 @@ func (cq *CollectionQuery) QueryArtifacts() *ArtifactQuery {
 			sqlgraph.From(collection.Table, collection.FieldID, selector),
 			sqlgraph.To(artifact.Table, artifact.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, collection.ArtifactsTable, collection.ArtifactsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryBooks chains the current query on the "books" edge.
+func (cq *CollectionQuery) QueryBooks() *BookQuery {
+	query := (&BookClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(collection.Table, collection.FieldID, selector),
+			sqlgraph.To(book.Table, book.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, collection.BooksTable, collection.BooksColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
@@ -329,6 +354,7 @@ func (cq *CollectionQuery) Clone() *CollectionQuery {
 		inters:        append([]Interceptor{}, cq.inters...),
 		predicates:    append([]predicate.Collection{}, cq.predicates...),
 		withArtifacts: cq.withArtifacts.Clone(),
+		withBooks:     cq.withBooks.Clone(),
 		withPeople:    cq.withPeople.Clone(),
 		withCategory:  cq.withCategory.Clone(),
 		// clone intermediate query.
@@ -345,6 +371,17 @@ func (cq *CollectionQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *Collecti
 		opt(query)
 	}
 	cq.withArtifacts = query
+	return cq
+}
+
+// WithBooks tells the query-builder to eager-load the nodes that are connected to
+// the "books" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *CollectionQuery) WithBooks(opts ...func(*BookQuery)) *CollectionQuery {
+	query := (&BookClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withBooks = query
 	return cq
 }
 
@@ -455,8 +492,9 @@ func (cq *CollectionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*C
 		nodes       = []*Collection{}
 		withFKs     = cq.withFKs
 		_spec       = cq.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [4]bool{
 			cq.withArtifacts != nil,
+			cq.withBooks != nil,
 			cq.withPeople != nil,
 			cq.withCategory != nil,
 		}
@@ -495,6 +533,13 @@ func (cq *CollectionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*C
 			return nil, err
 		}
 	}
+	if query := cq.withBooks; query != nil {
+		if err := cq.loadBooks(ctx, query, nodes,
+			func(n *Collection) { n.Edges.Books = []*Book{} },
+			func(n *Collection, e *Book) { n.Edges.Books = append(n.Edges.Books, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := cq.withPeople; query != nil {
 		if err := cq.loadPeople(ctx, query, nodes,
 			func(n *Collection) { n.Edges.People = []*Person{} },
@@ -512,6 +557,13 @@ func (cq *CollectionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*C
 		if err := cq.loadArtifacts(ctx, query, nodes,
 			func(n *Collection) { n.appendNamedArtifacts(name) },
 			func(n *Collection, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedBooks {
+		if err := cq.loadBooks(ctx, query, nodes,
+			func(n *Collection) { n.appendNamedBooks(name) },
+			func(n *Collection, e *Book) { n.appendNamedBooks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -556,6 +608,37 @@ func (cq *CollectionQuery) loadArtifacts(ctx context.Context, query *ArtifactQue
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "collection_artifacts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (cq *CollectionQuery) loadBooks(ctx context.Context, query *BookQuery, nodes []*Collection, init func(*Collection), assign func(*Collection, *Book)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Collection)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(collection.BooksColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.collection_books
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "collection_books" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "collection_books" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -720,6 +803,20 @@ func (cq *CollectionQuery) WithNamedArtifacts(name string, opts ...func(*Artifac
 		cq.withNamedArtifacts = make(map[string]*ArtifactQuery)
 	}
 	cq.withNamedArtifacts[name] = query
+	return cq
+}
+
+// WithNamedBooks tells the query-builder to eager-load the nodes that are connected to the "books"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *CollectionQuery) WithNamedBooks(name string, opts ...func(*BookQuery)) *CollectionQuery {
+	query := (&BookClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedBooks == nil {
+		cq.withNamedBooks = make(map[string]*BookQuery)
+	}
+	cq.withNamedBooks[name] = query
 	return cq
 }
 

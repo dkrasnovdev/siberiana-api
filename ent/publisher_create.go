@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/publisher"
 )
 
@@ -108,6 +109,21 @@ func (pc *PublisherCreate) SetNillableDescription(s *string) *PublisherCreate {
 func (pc *PublisherCreate) SetExternalLinks(s []string) *PublisherCreate {
 	pc.mutation.SetExternalLinks(s)
 	return pc
+}
+
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (pc *PublisherCreate) AddBookIDs(ids ...int) *PublisherCreate {
+	pc.mutation.AddBookIDs(ids...)
+	return pc
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (pc *PublisherCreate) AddBooks(b ...*Book) *PublisherCreate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return pc.AddBookIDs(ids...)
 }
 
 // Mutation returns the PublisherMutation object of the builder.
@@ -225,6 +241,22 @@ func (pc *PublisherCreate) createSpec() (*Publisher, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.ExternalLinks(); ok {
 		_spec.SetField(publisher.FieldExternalLinks, field.TypeJSON, value)
 		_node.ExternalLinks = value
+	}
+	if nodes := pc.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   publisher.BooksTable,
+			Columns: []string{publisher.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

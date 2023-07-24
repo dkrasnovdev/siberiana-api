@@ -167,12 +167,46 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
+		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
+		{Name: "files", Type: field.TypeJSON, Nullable: true},
+		{Name: "year", Type: field.TypeInt, Nullable: true},
+		{Name: "collection_books", Type: field.TypeInt, Nullable: true},
+		{Name: "library_books", Type: field.TypeInt, Nullable: true},
+		{Name: "license_books", Type: field.TypeInt, Nullable: true},
+		{Name: "publisher_books", Type: field.TypeInt, Nullable: true},
 	}
 	// BooksTable holds the schema information for the "books" table.
 	BooksTable = &schema.Table{
 		Name:       "books",
 		Columns:    BooksColumns,
 		PrimaryKey: []*schema.Column{BooksColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "books_collections_books",
+				Columns:    []*schema.Column{BooksColumns[12]},
+				RefColumns: []*schema.Column{CollectionsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "books_libraries_books",
+				Columns:    []*schema.Column{BooksColumns[13]},
+				RefColumns: []*schema.Column{LibrariesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "books_licenses_books",
+				Columns:    []*schema.Column{BooksColumns[14]},
+				RefColumns: []*schema.Column{LicensesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "books_publishers_books",
+				Columns:    []*schema.Column{BooksColumns[15]},
+				RefColumns: []*schema.Column{PublishersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// BookGenresColumns holds the columns for the "book_genres" table.
 	BookGenresColumns = []*schema.Column{
@@ -807,6 +841,31 @@ var (
 		Columns:    TechniquesColumns,
 		PrimaryKey: []*schema.Column{TechniquesColumns[0]},
 	}
+	// BookGenreBooksColumns holds the columns for the "book_genre_books" table.
+	BookGenreBooksColumns = []*schema.Column{
+		{Name: "book_genre_id", Type: field.TypeInt},
+		{Name: "book_id", Type: field.TypeInt},
+	}
+	// BookGenreBooksTable holds the schema information for the "book_genre_books" table.
+	BookGenreBooksTable = &schema.Table{
+		Name:       "book_genre_books",
+		Columns:    BookGenreBooksColumns,
+		PrimaryKey: []*schema.Column{BookGenreBooksColumns[0], BookGenreBooksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "book_genre_books_book_genre_id",
+				Columns:    []*schema.Column{BookGenreBooksColumns[0]},
+				RefColumns: []*schema.Column{BookGenresColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "book_genre_books_book_id",
+				Columns:    []*schema.Column{BookGenreBooksColumns[1]},
+				RefColumns: []*schema.Column{BooksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// HolderArtifactsColumns holds the columns for the "holder_artifacts" table.
 	HolderArtifactsColumns = []*schema.Column{
 		{Name: "holder_id", Type: field.TypeInt},
@@ -828,6 +887,31 @@ var (
 				Symbol:     "holder_artifacts_artifact_id",
 				Columns:    []*schema.Column{HolderArtifactsColumns[1]},
 				RefColumns: []*schema.Column{ArtifactsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// HolderBooksColumns holds the columns for the "holder_books" table.
+	HolderBooksColumns = []*schema.Column{
+		{Name: "holder_id", Type: field.TypeInt},
+		{Name: "book_id", Type: field.TypeInt},
+	}
+	// HolderBooksTable holds the schema information for the "holder_books" table.
+	HolderBooksTable = &schema.Table{
+		Name:       "holder_books",
+		Columns:    HolderBooksColumns,
+		PrimaryKey: []*schema.Column{HolderBooksColumns[0], HolderBooksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "holder_books_holder_id",
+				Columns:    []*schema.Column{HolderBooksColumns[0]},
+				RefColumns: []*schema.Column{HoldersColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "holder_books_book_id",
+				Columns:    []*schema.Column{HolderBooksColumns[1]},
+				RefColumns: []*schema.Column{BooksColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -928,6 +1012,31 @@ var (
 				Symbol:     "person_artifacts_artifact_id",
 				Columns:    []*schema.Column{PersonArtifactsColumns[1]},
 				RefColumns: []*schema.Column{ArtifactsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// PersonBooksColumns holds the columns for the "person_books" table.
+	PersonBooksColumns = []*schema.Column{
+		{Name: "person_id", Type: field.TypeInt},
+		{Name: "book_id", Type: field.TypeInt},
+	}
+	// PersonBooksTable holds the schema information for the "person_books" table.
+	PersonBooksTable = &schema.Table{
+		Name:       "person_books",
+		Columns:    PersonBooksColumns,
+		PrimaryKey: []*schema.Column{PersonBooksColumns[0], PersonBooksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "person_books_person_id",
+				Columns:    []*schema.Column{PersonBooksColumns[0]},
+				RefColumns: []*schema.Column{PersonsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "person_books_book_id",
+				Columns:    []*schema.Column{PersonBooksColumns[1]},
+				RefColumns: []*schema.Column{BooksColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -1121,11 +1230,14 @@ var (
 		SetsTable,
 		SettlementsTable,
 		TechniquesTable,
+		BookGenreBooksTable,
 		HolderArtifactsTable,
+		HolderBooksTable,
 		HolderHolderResponsibilitiesTable,
 		MediumArtifactsTable,
 		MonumentSetsTable,
 		PersonArtifactsTable,
+		PersonBooksTable,
 		PersonProjectsTable,
 		PersonPublicationsTable,
 		PersonPersonRolesTable,
@@ -1144,6 +1256,10 @@ func init() {
 	ArtifactsTable.ForeignKeys[5].RefTable = MonumentsTable
 	ArtifactsTable.ForeignKeys[6].RefTable = PeriodsTable
 	ArtifactsTable.ForeignKeys[7].RefTable = SetsTable
+	BooksTable.ForeignKeys[0].RefTable = CollectionsTable
+	BooksTable.ForeignKeys[1].RefTable = LibrariesTable
+	BooksTable.ForeignKeys[2].RefTable = LicensesTable
+	BooksTable.ForeignKeys[3].RefTable = PublishersTable
 	CollectionsTable.ForeignKeys[0].RefTable = CategoriesTable
 	CountriesTable.ForeignKeys[0].RefTable = LocationsTable
 	DistrictsTable.ForeignKeys[0].RefTable = LocationsTable
@@ -1155,8 +1271,12 @@ func init() {
 	ProjectsTable.ForeignKeys[0].RefTable = ProjectTypesTable
 	RegionsTable.ForeignKeys[0].RefTable = LocationsTable
 	SettlementsTable.ForeignKeys[0].RefTable = LocationsTable
+	BookGenreBooksTable.ForeignKeys[0].RefTable = BookGenresTable
+	BookGenreBooksTable.ForeignKeys[1].RefTable = BooksTable
 	HolderArtifactsTable.ForeignKeys[0].RefTable = HoldersTable
 	HolderArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
+	HolderBooksTable.ForeignKeys[0].RefTable = HoldersTable
+	HolderBooksTable.ForeignKeys[1].RefTable = BooksTable
 	HolderHolderResponsibilitiesTable.ForeignKeys[0].RefTable = HoldersTable
 	HolderHolderResponsibilitiesTable.ForeignKeys[1].RefTable = HolderResponsibilitiesTable
 	MediumArtifactsTable.ForeignKeys[0].RefTable = MediaTable
@@ -1165,6 +1285,8 @@ func init() {
 	MonumentSetsTable.ForeignKeys[1].RefTable = SetsTable
 	PersonArtifactsTable.ForeignKeys[0].RefTable = PersonsTable
 	PersonArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
+	PersonBooksTable.ForeignKeys[0].RefTable = PersonsTable
+	PersonBooksTable.ForeignKeys[1].RefTable = BooksTable
 	PersonProjectsTable.ForeignKeys[0].RefTable = PersonsTable
 	PersonProjectsTable.ForeignKeys[1].RefTable = ProjectsTable
 	PersonPublicationsTable.ForeignKeys[0].RefTable = PersonsTable

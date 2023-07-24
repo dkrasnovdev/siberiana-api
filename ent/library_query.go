@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -11,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/library"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
@@ -18,12 +20,14 @@ import (
 // LibraryQuery is the builder for querying Library entities.
 type LibraryQuery struct {
 	config
-	ctx        *QueryContext
-	order      []library.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Library
-	modifiers  []func(*sql.Selector)
-	loadTotal  []func(context.Context, []*Library) error
+	ctx            *QueryContext
+	order          []library.OrderOption
+	inters         []Interceptor
+	predicates     []predicate.Library
+	withBooks      *BookQuery
+	modifiers      []func(*sql.Selector)
+	loadTotal      []func(context.Context, []*Library) error
+	withNamedBooks map[string]*BookQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -58,6 +62,28 @@ func (lq *LibraryQuery) Unique(unique bool) *LibraryQuery {
 func (lq *LibraryQuery) Order(o ...library.OrderOption) *LibraryQuery {
 	lq.order = append(lq.order, o...)
 	return lq
+}
+
+// QueryBooks chains the current query on the "books" edge.
+func (lq *LibraryQuery) QueryBooks() *BookQuery {
+	query := (&BookClient{config: lq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := lq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := lq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(library.Table, library.FieldID, selector),
+			sqlgraph.To(book.Table, book.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, library.BooksTable, library.BooksColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(lq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Library entity from the query.
@@ -252,10 +278,22 @@ func (lq *LibraryQuery) Clone() *LibraryQuery {
 		order:      append([]library.OrderOption{}, lq.order...),
 		inters:     append([]Interceptor{}, lq.inters...),
 		predicates: append([]predicate.Library{}, lq.predicates...),
+		withBooks:  lq.withBooks.Clone(),
 		// clone intermediate query.
 		sql:  lq.sql.Clone(),
 		path: lq.path,
 	}
+}
+
+// WithBooks tells the query-builder to eager-load the nodes that are connected to
+// the "books" edge. The optional arguments are used to configure the query builder of the edge.
+func (lq *LibraryQuery) WithBooks(opts ...func(*BookQuery)) *LibraryQuery {
+	query := (&BookClient{config: lq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	lq.withBooks = query
+	return lq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -340,8 +378,11 @@ func (lq *LibraryQuery) prepareQuery(ctx context.Context) error {
 
 func (lq *LibraryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Library, error) {
 	var (
-		nodes = []*Library{}
-		_spec = lq.querySpec()
+		nodes       = []*Library{}
+		_spec       = lq.querySpec()
+		loadedTypes = [1]bool{
+			lq.withBooks != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Library).scanValues(nil, columns)
@@ -349,6 +390,7 @@ func (lq *LibraryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Libr
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Library{config: lq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(lq.modifiers) > 0 {
@@ -363,12 +405,58 @@ func (lq *LibraryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Libr
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := lq.withBooks; query != nil {
+		if err := lq.loadBooks(ctx, query, nodes,
+			func(n *Library) { n.Edges.Books = []*Book{} },
+			func(n *Library, e *Book) { n.Edges.Books = append(n.Edges.Books, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range lq.withNamedBooks {
+		if err := lq.loadBooks(ctx, query, nodes,
+			func(n *Library) { n.appendNamedBooks(name) },
+			func(n *Library, e *Book) { n.appendNamedBooks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range lq.loadTotal {
 		if err := lq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (lq *LibraryQuery) loadBooks(ctx context.Context, query *BookQuery, nodes []*Library, init func(*Library), assign func(*Library, *Book)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Library)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(library.BooksColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.library_books
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "library_books" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "library_books" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
 }
 
 func (lq *LibraryQuery) sqlCount(ctx context.Context) (int, error) {
@@ -453,6 +541,20 @@ func (lq *LibraryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedBooks tells the query-builder to eager-load the nodes that are connected to the "books"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (lq *LibraryQuery) WithNamedBooks(name string, opts ...func(*BookQuery)) *LibraryQuery {
+	query := (&BookClient{config: lq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if lq.withNamedBooks == nil {
+		lq.withNamedBooks = make(map[string]*BookQuery)
+	}
+	lq.withNamedBooks[name] = query
+	return lq
 }
 
 // LibraryGroupBy is the group-by builder for Library entities.

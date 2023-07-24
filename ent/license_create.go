@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 )
 
@@ -124,6 +125,21 @@ func (lc *LicenseCreate) AddArtifacts(a ...*Artifact) *LicenseCreate {
 		ids[i] = a[i].ID
 	}
 	return lc.AddArtifactIDs(ids...)
+}
+
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (lc *LicenseCreate) AddBookIDs(ids ...int) *LicenseCreate {
+	lc.mutation.AddBookIDs(ids...)
+	return lc
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (lc *LicenseCreate) AddBooks(b ...*Book) *LicenseCreate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return lc.AddBookIDs(ids...)
 }
 
 // Mutation returns the LicenseMutation object of the builder.
@@ -251,6 +267,22 @@ func (lc *LicenseCreate) createSpec() (*License, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := lc.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   license.BooksTable,
+			Columns: []string{license.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

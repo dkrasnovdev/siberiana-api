@@ -32,7 +32,32 @@ type Library struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLinks holds the value of the "external_links" field.
 	ExternalLinks []string `json:"external_links,omitempty"`
-	selectValues  sql.SelectValues
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the LibraryQuery when eager-loading is set.
+	Edges        LibraryEdges `json:"edges"`
+	selectValues sql.SelectValues
+}
+
+// LibraryEdges holds the relations/edges for other nodes in the graph.
+type LibraryEdges struct {
+	// Books holds the value of the books edge.
+	Books []*Book `json:"books,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+	// totalCount holds the count of the edges above.
+	totalCount [1]map[string]int
+
+	namedBooks map[string][]*Book
+}
+
+// BooksOrErr returns the Books value or an error if the edge
+// was not loaded in eager-loading.
+func (e LibraryEdges) BooksOrErr() ([]*Book, error) {
+	if e.loadedTypes[0] {
+		return e.Books, nil
+	}
+	return nil, &NotLoadedError{edge: "books"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -126,6 +151,11 @@ func (l *Library) Value(name string) (ent.Value, error) {
 	return l.selectValues.Get(name)
 }
 
+// QueryBooks queries the "books" edge of the Library entity.
+func (l *Library) QueryBooks() *BookQuery {
+	return NewLibraryClient(l.config).QueryBooks(l)
+}
+
 // Update returns a builder for updating this Library.
 // Note that you need to call Library.Unwrap() before calling this method if this Library
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -171,6 +201,30 @@ func (l *Library) String() string {
 	builder.WriteString(fmt.Sprintf("%v", l.ExternalLinks))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedBooks returns the Books named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (l *Library) NamedBooks(name string) ([]*Book, error) {
+	if l.Edges.namedBooks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := l.Edges.namedBooks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (l *Library) appendNamedBooks(name string, edges ...*Book) {
+	if l.Edges.namedBooks == nil {
+		l.Edges.namedBooks = make(map[string][]*Book)
+	}
+	if len(edges) == 0 {
+		l.Edges.namedBooks[name] = []*Book{}
+	} else {
+		l.Edges.namedBooks[name] = append(l.Edges.namedBooks[name], edges...)
+	}
 }
 
 // Libraries is a parsable slice of Library.

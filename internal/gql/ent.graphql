@@ -786,6 +786,16 @@ type Book implements Node {
   displayName: String
   description: String
   externalLinks: [String!]
+  primaryImageURL: String
+  additionalImagesUrls: [String!]
+  files: [String!]
+  year: Int
+  authors: [Person!]
+  bookGenres: [BookGenre!]
+  collection: Collection
+  holders: [Holder!]
+  publisher: Publisher
+  license: License
 }
 """A connection to a list of items."""
 type BookConnection {
@@ -812,6 +822,7 @@ type BookGenre implements Node {
   displayName: String
   description: String
   externalLinks: [String!]
+  books: [Book!]
 }
 """A connection to a list of items."""
 type BookGenreConnection {
@@ -940,6 +951,9 @@ input BookGenreWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """books edge predicates"""
+  hasBooks: Boolean
+  hasBooksWith: [BookWhereInput!]
 }
 """Ordering options for Book connections"""
 input BookOrder {
@@ -1052,6 +1066,51 @@ input BookWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """primary_image_url field predicates"""
+  primaryImageURL: String
+  primaryImageURLNEQ: String
+  primaryImageURLIn: [String!]
+  primaryImageURLNotIn: [String!]
+  primaryImageURLGT: String
+  primaryImageURLGTE: String
+  primaryImageURLLT: String
+  primaryImageURLLTE: String
+  primaryImageURLContains: String
+  primaryImageURLHasPrefix: String
+  primaryImageURLHasSuffix: String
+  primaryImageURLIsNil: Boolean
+  primaryImageURLNotNil: Boolean
+  primaryImageURLEqualFold: String
+  primaryImageURLContainsFold: String
+  """year field predicates"""
+  year: Int
+  yearNEQ: Int
+  yearIn: [Int!]
+  yearNotIn: [Int!]
+  yearGT: Int
+  yearGTE: Int
+  yearLT: Int
+  yearLTE: Int
+  yearIsNil: Boolean
+  yearNotNil: Boolean
+  """authors edge predicates"""
+  hasAuthors: Boolean
+  hasAuthorsWith: [PersonWhereInput!]
+  """book_genres edge predicates"""
+  hasBookGenres: Boolean
+  hasBookGenresWith: [BookGenreWhereInput!]
+  """collection edge predicates"""
+  hasCollection: Boolean
+  hasCollectionWith: [CollectionWhereInput!]
+  """holders edge predicates"""
+  hasHolders: Boolean
+  hasHoldersWith: [HolderWhereInput!]
+  """publisher edge predicates"""
+  hasPublisher: Boolean
+  hasPublisherWith: [PublisherWhereInput!]
+  """license edge predicates"""
+  hasLicense: Boolean
+  hasLicenseWith: [LicenseWhereInput!]
 }
 type Category implements Node {
   id: ID!
@@ -1205,6 +1264,7 @@ type Collection implements Node {
   description: String
   externalLinks: [String!]
   artifacts: [Artifact!]
+  books: [Book!]
   people: [Person!]
   category: Category
 }
@@ -1338,6 +1398,9 @@ input CollectionWhereInput {
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
+  """books edge predicates"""
+  hasBooks: Boolean
+  hasBooksWith: [BookWhereInput!]
   """people edge predicates"""
   hasPeople: Boolean
   hasPeopleWith: [PersonWhereInput!]
@@ -1563,6 +1626,7 @@ input CreateBookGenreInput {
   displayName: String
   description: String
   externalLinks: [String!]
+  bookIDs: [ID!]
 }
 """
 CreateBookInput is used for create Book object.
@@ -1576,6 +1640,16 @@ input CreateBookInput {
   displayName: String
   description: String
   externalLinks: [String!]
+  primaryImageURL: String
+  additionalImagesUrls: [String!]
+  files: [String!]
+  year: Int
+  authorIDs: [ID!]
+  bookGenreIDs: [ID!]
+  collectionID: ID
+  holderIDs: [ID!]
+  publisherID: ID
+  licenseID: ID
 }
 """
 CreateCategoryInput is used for create Category object.
@@ -1604,6 +1678,7 @@ input CreateCollectionInput {
   description: String
   externalLinks: [String!]
   artifactIDs: [ID!]
+  bookIDs: [ID!]
   personIDs: [ID!]
   categoryID: ID
 }
@@ -1661,6 +1736,7 @@ input CreateHolderInput {
   beginData: Time!
   endDate: Time
   artifactIDs: [ID!]
+  bookIDs: [ID!]
   holderResponsibilityIDs: [ID!]
   personID: ID
   organizationID: ID
@@ -1691,6 +1767,7 @@ input CreateLibraryInput {
   displayName: String
   description: String
   externalLinks: [String!]
+  bookIDs: [ID!]
 }
 """
 CreateLicenseInput is used for create License object.
@@ -1705,6 +1782,7 @@ input CreateLicenseInput {
   description: String
   externalLinks: [String!]
   artifactIDs: [ID!]
+  bookIDs: [ID!]
 }
 """
 CreateLocationInput is used for create Location object.
@@ -1843,6 +1921,7 @@ input CreatePersonInput {
   endDate: Time
   gender: PersonGender!
   artifactIDs: [ID!]
+  bookIDs: [ID!]
   projectIDs: [ID!]
   publicationIDs: [ID!]
   personRoleIDs: [ID!]
@@ -1962,6 +2041,7 @@ input CreatePublisherInput {
   displayName: String
   description: String
   externalLinks: [String!]
+  bookIDs: [ID!]
 }
 """
 CreateRegionInput is used for create Region object.
@@ -2318,6 +2398,7 @@ type Holder implements Node {
   beginData: Time!
   endDate: Time
   artifacts: [Artifact!]
+  books: [Book!]
   holderResponsibilities: [HolderResponsibility!]
   person: Person
   organization: Organization
@@ -2582,6 +2663,9 @@ input HolderWhereInput {
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
+  """books edge predicates"""
+  hasBooks: Boolean
+  hasBooksWith: [BookWhereInput!]
   """holder_responsibilities edge predicates"""
   hasHolderResponsibilities: Boolean
   hasHolderResponsibilitiesWith: [HolderResponsibilityWhereInput!]
@@ -2622,6 +2706,7 @@ type Library implements Node {
   displayName: String
   description: String
   externalLinks: [String!]
+  books: [Book!]
 }
 """A connection to a list of items."""
 type LibraryConnection {
@@ -2750,6 +2835,9 @@ input LibraryWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """books edge predicates"""
+  hasBooks: Boolean
+  hasBooksWith: [BookWhereInput!]
 }
 type License implements Node {
   id: ID!
@@ -2761,6 +2849,7 @@ type License implements Node {
   description: String
   externalLinks: [String!]
   artifacts: [Artifact!]
+  books: [Book!]
 }
 """A connection to a list of items."""
 type LicenseConnection {
@@ -2892,6 +2981,9 @@ input LicenseWhereInput {
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
+  """books edge predicates"""
+  hasBooks: Boolean
+  hasBooksWith: [BookWhereInput!]
 }
 type Location implements Node {
   id: ID!
@@ -4026,6 +4118,7 @@ type Person implements Node {
   endDate: Time
   gender: PersonGender!
   artifacts: [Artifact!]
+  books: [Book!]
   projects: [Project!]
   publications: [Publication!]
   personRoles: [PersonRole!]
@@ -4417,6 +4510,9 @@ input PersonWhereInput {
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
+  """books edge predicates"""
+  hasBooks: Boolean
+  hasBooksWith: [BookWhereInput!]
   """projects edge predicates"""
   hasProjects: Boolean
   hasProjectsWith: [ProjectWhereInput!]
@@ -5321,6 +5417,7 @@ type Publisher implements Node {
   displayName: String
   description: String
   externalLinks: [String!]
+  books: [Book!]
 }
 """A connection to a list of items."""
 type PublisherConnection {
@@ -5449,6 +5546,9 @@ input PublisherWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """books edge predicates"""
+  hasBooks: Boolean
+  hasBooksWith: [BookWhereInput!]
 }
 type Query {
   """Fetches an object given its ID."""
@@ -6829,6 +6929,9 @@ input UpdateBookGenreInput {
   externalLinks: [String!]
   appendExternalLinks: [String!]
   clearExternalLinks: Boolean
+  addBookIDs: [ID!]
+  removeBookIDs: [ID!]
+  clearBooks: Boolean
 }
 """
 UpdateBookInput is used for update Book object.
@@ -6847,6 +6950,31 @@ input UpdateBookInput {
   externalLinks: [String!]
   appendExternalLinks: [String!]
   clearExternalLinks: Boolean
+  primaryImageURL: String
+  clearPrimaryImageURL: Boolean
+  additionalImagesUrls: [String!]
+  appendAdditionalImagesUrls: [String!]
+  clearAdditionalImagesUrls: Boolean
+  files: [String!]
+  appendFiles: [String!]
+  clearFiles: Boolean
+  year: Int
+  clearYear: Boolean
+  addAuthorIDs: [ID!]
+  removeAuthorIDs: [ID!]
+  clearAuthors: Boolean
+  addBookGenreIDs: [ID!]
+  removeBookGenreIDs: [ID!]
+  clearBookGenres: Boolean
+  collectionID: ID
+  clearCollection: Boolean
+  addHolderIDs: [ID!]
+  removeHolderIDs: [ID!]
+  clearHolders: Boolean
+  publisherID: ID
+  clearPublisher: Boolean
+  licenseID: ID
+  clearLicense: Boolean
 }
 """
 UpdateCategoryInput is used for update Category object.
@@ -6889,6 +7017,9 @@ input UpdateCollectionInput {
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
+  addBookIDs: [ID!]
+  removeBookIDs: [ID!]
+  clearBooks: Boolean
   addPersonIDs: [ID!]
   removePersonIDs: [ID!]
   clearPeople: Boolean
@@ -6972,6 +7103,9 @@ input UpdateHolderInput {
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
+  addBookIDs: [ID!]
+  removeBookIDs: [ID!]
+  clearBooks: Boolean
   addHolderResponsibilityIDs: [ID!]
   removeHolderResponsibilityIDs: [ID!]
   clearHolderResponsibilities: Boolean
@@ -7018,6 +7152,9 @@ input UpdateLibraryInput {
   externalLinks: [String!]
   appendExternalLinks: [String!]
   clearExternalLinks: Boolean
+  addBookIDs: [ID!]
+  removeBookIDs: [ID!]
+  clearBooks: Boolean
 }
 """
 UpdateLicenseInput is used for update License object.
@@ -7039,6 +7176,9 @@ input UpdateLicenseInput {
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
+  addBookIDs: [ID!]
+  removeBookIDs: [ID!]
+  clearBooks: Boolean
 }
 """
 UpdateLocationInput is used for update Location object.
@@ -7266,6 +7406,9 @@ input UpdatePersonInput {
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
+  addBookIDs: [ID!]
+  removeBookIDs: [ID!]
+  clearBooks: Boolean
   addProjectIDs: [ID!]
   removeProjectIDs: [ID!]
   clearProjects: Boolean
@@ -7449,6 +7592,9 @@ input UpdatePublisherInput {
   externalLinks: [String!]
   appendExternalLinks: [String!]
   clearExternalLinks: Boolean
+  addBookIDs: [ID!]
+  removeBookIDs: [ID!]
+  clearBooks: Boolean
 }
 """
 UpdateRegionInput is used for update Region object.

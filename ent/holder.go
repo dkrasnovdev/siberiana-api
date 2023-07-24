@@ -41,6 +41,8 @@ type Holder struct {
 type HolderEdges struct {
 	// Artifacts holds the value of the artifacts edge.
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
+	// Books holds the value of the books edge.
+	Books []*Book `json:"books,omitempty"`
 	// HolderResponsibilities holds the value of the holder_responsibilities edge.
 	HolderResponsibilities []*HolderResponsibility `json:"holder_responsibilities,omitempty"`
 	// Person holds the value of the person edge.
@@ -49,11 +51,12 @@ type HolderEdges struct {
 	Organization *Organization `json:"organization,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [5]map[string]int
 
 	namedArtifacts              map[string][]*Artifact
+	namedBooks                  map[string][]*Book
 	namedHolderResponsibilities map[string][]*HolderResponsibility
 }
 
@@ -66,10 +69,19 @@ func (e HolderEdges) ArtifactsOrErr() ([]*Artifact, error) {
 	return nil, &NotLoadedError{edge: "artifacts"}
 }
 
+// BooksOrErr returns the Books value or an error if the edge
+// was not loaded in eager-loading.
+func (e HolderEdges) BooksOrErr() ([]*Book, error) {
+	if e.loadedTypes[1] {
+		return e.Books, nil
+	}
+	return nil, &NotLoadedError{edge: "books"}
+}
+
 // HolderResponsibilitiesOrErr returns the HolderResponsibilities value or an error if the edge
 // was not loaded in eager-loading.
 func (e HolderEdges) HolderResponsibilitiesOrErr() ([]*HolderResponsibility, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.HolderResponsibilities, nil
 	}
 	return nil, &NotLoadedError{edge: "holder_responsibilities"}
@@ -78,7 +90,7 @@ func (e HolderEdges) HolderResponsibilitiesOrErr() ([]*HolderResponsibility, err
 // PersonOrErr returns the Person value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e HolderEdges) PersonOrErr() (*Person, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		if e.Person == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: person.Label}
@@ -91,7 +103,7 @@ func (e HolderEdges) PersonOrErr() (*Person, error) {
 // OrganizationOrErr returns the Organization value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e HolderEdges) OrganizationOrErr() (*Organization, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		if e.Organization == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: organization.Label}
@@ -187,6 +199,11 @@ func (h *Holder) QueryArtifacts() *ArtifactQuery {
 	return NewHolderClient(h.config).QueryArtifacts(h)
 }
 
+// QueryBooks queries the "books" edge of the Holder entity.
+func (h *Holder) QueryBooks() *BookQuery {
+	return NewHolderClient(h.config).QueryBooks(h)
+}
+
 // QueryHolderResponsibilities queries the "holder_responsibilities" edge of the Holder entity.
 func (h *Holder) QueryHolderResponsibilities() *HolderResponsibilityQuery {
 	return NewHolderClient(h.config).QueryHolderResponsibilities(h)
@@ -267,6 +284,30 @@ func (h *Holder) appendNamedArtifacts(name string, edges ...*Artifact) {
 		h.Edges.namedArtifacts[name] = []*Artifact{}
 	} else {
 		h.Edges.namedArtifacts[name] = append(h.Edges.namedArtifacts[name], edges...)
+	}
+}
+
+// NamedBooks returns the Books named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (h *Holder) NamedBooks(name string) ([]*Book, error) {
+	if h.Edges.namedBooks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := h.Edges.namedBooks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (h *Holder) appendNamedBooks(name string, edges ...*Book) {
+	if h.Edges.namedBooks == nil {
+		h.Edges.namedBooks = make(map[string][]*Book)
+	}
+	if len(edges) == 0 {
+		h.Edges.namedBooks[name] = []*Book{}
+	} else {
+		h.Edges.namedBooks[name] = append(h.Edges.namedBooks[name], edges...)
 	}
 }
 

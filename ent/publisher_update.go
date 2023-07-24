@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/publisher"
 )
@@ -133,9 +134,45 @@ func (pu *PublisherUpdate) ClearExternalLinks() *PublisherUpdate {
 	return pu
 }
 
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (pu *PublisherUpdate) AddBookIDs(ids ...int) *PublisherUpdate {
+	pu.mutation.AddBookIDs(ids...)
+	return pu
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (pu *PublisherUpdate) AddBooks(b ...*Book) *PublisherUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return pu.AddBookIDs(ids...)
+}
+
 // Mutation returns the PublisherMutation object of the builder.
 func (pu *PublisherUpdate) Mutation() *PublisherMutation {
 	return pu.mutation
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (pu *PublisherUpdate) ClearBooks() *PublisherUpdate {
+	pu.mutation.ClearBooks()
+	return pu
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (pu *PublisherUpdate) RemoveBookIDs(ids ...int) *PublisherUpdate {
+	pu.mutation.RemoveBookIDs(ids...)
+	return pu
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (pu *PublisherUpdate) RemoveBooks(b ...*Book) *PublisherUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return pu.RemoveBookIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -226,6 +263,51 @@ func (pu *PublisherUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.ExternalLinksCleared() {
 		_spec.ClearField(publisher.FieldExternalLinks, field.TypeJSON)
+	}
+	if pu.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   publisher.BooksTable,
+			Columns: []string{publisher.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedBooksIDs(); len(nodes) > 0 && !pu.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   publisher.BooksTable,
+			Columns: []string{publisher.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   publisher.BooksTable,
+			Columns: []string{publisher.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, pu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -351,9 +433,45 @@ func (puo *PublisherUpdateOne) ClearExternalLinks() *PublisherUpdateOne {
 	return puo
 }
 
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (puo *PublisherUpdateOne) AddBookIDs(ids ...int) *PublisherUpdateOne {
+	puo.mutation.AddBookIDs(ids...)
+	return puo
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (puo *PublisherUpdateOne) AddBooks(b ...*Book) *PublisherUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return puo.AddBookIDs(ids...)
+}
+
 // Mutation returns the PublisherMutation object of the builder.
 func (puo *PublisherUpdateOne) Mutation() *PublisherMutation {
 	return puo.mutation
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (puo *PublisherUpdateOne) ClearBooks() *PublisherUpdateOne {
+	puo.mutation.ClearBooks()
+	return puo
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (puo *PublisherUpdateOne) RemoveBookIDs(ids ...int) *PublisherUpdateOne {
+	puo.mutation.RemoveBookIDs(ids...)
+	return puo
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (puo *PublisherUpdateOne) RemoveBooks(b ...*Book) *PublisherUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return puo.RemoveBookIDs(ids...)
 }
 
 // Where appends a list predicates to the PublisherUpdate builder.
@@ -474,6 +592,51 @@ func (puo *PublisherUpdateOne) sqlSave(ctx context.Context) (_node *Publisher, e
 	}
 	if puo.mutation.ExternalLinksCleared() {
 		_spec.ClearField(publisher.FieldExternalLinks, field.TypeJSON)
+	}
+	if puo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   publisher.BooksTable,
+			Columns: []string{publisher.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedBooksIDs(); len(nodes) > 0 && !puo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   publisher.BooksTable,
+			Columns: []string{publisher.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   publisher.BooksTable,
+			Columns: []string{publisher.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Publisher{config: puo.config}
 	_spec.Assign = _node.assignValues

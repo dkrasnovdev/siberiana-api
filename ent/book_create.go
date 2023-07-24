@@ -11,6 +11,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/book"
+	"github.com/dkrasnovdev/heritage-api/ent/bookgenre"
+	"github.com/dkrasnovdev/heritage-api/ent/collection"
+	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/license"
+	"github.com/dkrasnovdev/heritage-api/ent/person"
+	"github.com/dkrasnovdev/heritage-api/ent/publisher"
 )
 
 // BookCreate is the builder for creating a Book entity.
@@ -110,6 +116,148 @@ func (bc *BookCreate) SetExternalLinks(s []string) *BookCreate {
 	return bc
 }
 
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (bc *BookCreate) SetPrimaryImageURL(s string) *BookCreate {
+	bc.mutation.SetPrimaryImageURL(s)
+	return bc
+}
+
+// SetNillablePrimaryImageURL sets the "primary_image_url" field if the given value is not nil.
+func (bc *BookCreate) SetNillablePrimaryImageURL(s *string) *BookCreate {
+	if s != nil {
+		bc.SetPrimaryImageURL(*s)
+	}
+	return bc
+}
+
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (bc *BookCreate) SetAdditionalImagesUrls(s []string) *BookCreate {
+	bc.mutation.SetAdditionalImagesUrls(s)
+	return bc
+}
+
+// SetFiles sets the "files" field.
+func (bc *BookCreate) SetFiles(s []string) *BookCreate {
+	bc.mutation.SetFiles(s)
+	return bc
+}
+
+// SetYear sets the "year" field.
+func (bc *BookCreate) SetYear(i int) *BookCreate {
+	bc.mutation.SetYear(i)
+	return bc
+}
+
+// SetNillableYear sets the "year" field if the given value is not nil.
+func (bc *BookCreate) SetNillableYear(i *int) *BookCreate {
+	if i != nil {
+		bc.SetYear(*i)
+	}
+	return bc
+}
+
+// AddAuthorIDs adds the "authors" edge to the Person entity by IDs.
+func (bc *BookCreate) AddAuthorIDs(ids ...int) *BookCreate {
+	bc.mutation.AddAuthorIDs(ids...)
+	return bc
+}
+
+// AddAuthors adds the "authors" edges to the Person entity.
+func (bc *BookCreate) AddAuthors(p ...*Person) *BookCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return bc.AddAuthorIDs(ids...)
+}
+
+// AddBookGenreIDs adds the "book_genres" edge to the BookGenre entity by IDs.
+func (bc *BookCreate) AddBookGenreIDs(ids ...int) *BookCreate {
+	bc.mutation.AddBookGenreIDs(ids...)
+	return bc
+}
+
+// AddBookGenres adds the "book_genres" edges to the BookGenre entity.
+func (bc *BookCreate) AddBookGenres(b ...*BookGenre) *BookCreate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return bc.AddBookGenreIDs(ids...)
+}
+
+// SetCollectionID sets the "collection" edge to the Collection entity by ID.
+func (bc *BookCreate) SetCollectionID(id int) *BookCreate {
+	bc.mutation.SetCollectionID(id)
+	return bc
+}
+
+// SetNillableCollectionID sets the "collection" edge to the Collection entity by ID if the given value is not nil.
+func (bc *BookCreate) SetNillableCollectionID(id *int) *BookCreate {
+	if id != nil {
+		bc = bc.SetCollectionID(*id)
+	}
+	return bc
+}
+
+// SetCollection sets the "collection" edge to the Collection entity.
+func (bc *BookCreate) SetCollection(c *Collection) *BookCreate {
+	return bc.SetCollectionID(c.ID)
+}
+
+// AddHolderIDs adds the "holders" edge to the Holder entity by IDs.
+func (bc *BookCreate) AddHolderIDs(ids ...int) *BookCreate {
+	bc.mutation.AddHolderIDs(ids...)
+	return bc
+}
+
+// AddHolders adds the "holders" edges to the Holder entity.
+func (bc *BookCreate) AddHolders(h ...*Holder) *BookCreate {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return bc.AddHolderIDs(ids...)
+}
+
+// SetPublisherID sets the "publisher" edge to the Publisher entity by ID.
+func (bc *BookCreate) SetPublisherID(id int) *BookCreate {
+	bc.mutation.SetPublisherID(id)
+	return bc
+}
+
+// SetNillablePublisherID sets the "publisher" edge to the Publisher entity by ID if the given value is not nil.
+func (bc *BookCreate) SetNillablePublisherID(id *int) *BookCreate {
+	if id != nil {
+		bc = bc.SetPublisherID(*id)
+	}
+	return bc
+}
+
+// SetPublisher sets the "publisher" edge to the Publisher entity.
+func (bc *BookCreate) SetPublisher(p *Publisher) *BookCreate {
+	return bc.SetPublisherID(p.ID)
+}
+
+// SetLicenseID sets the "license" edge to the License entity by ID.
+func (bc *BookCreate) SetLicenseID(id int) *BookCreate {
+	bc.mutation.SetLicenseID(id)
+	return bc
+}
+
+// SetNillableLicenseID sets the "license" edge to the License entity by ID if the given value is not nil.
+func (bc *BookCreate) SetNillableLicenseID(id *int) *BookCreate {
+	if id != nil {
+		bc = bc.SetLicenseID(*id)
+	}
+	return bc
+}
+
+// SetLicense sets the "license" edge to the License entity.
+func (bc *BookCreate) SetLicense(l *License) *BookCreate {
+	return bc.SetLicenseID(l.ID)
+}
+
 // Mutation returns the BookMutation object of the builder.
 func (bc *BookCreate) Mutation() *BookMutation {
 	return bc.mutation
@@ -172,6 +320,11 @@ func (bc *BookCreate) check() error {
 	if _, ok := bc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Book.updated_at"`)}
 	}
+	if v, ok := bc.mutation.Year(); ok {
+		if err := book.YearValidator(v); err != nil {
+			return &ValidationError{Name: "year", err: fmt.Errorf(`ent: validator failed for field "Book.year": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -225,6 +378,121 @@ func (bc *BookCreate) createSpec() (*Book, *sqlgraph.CreateSpec) {
 	if value, ok := bc.mutation.ExternalLinks(); ok {
 		_spec.SetField(book.FieldExternalLinks, field.TypeJSON, value)
 		_node.ExternalLinks = value
+	}
+	if value, ok := bc.mutation.PrimaryImageURL(); ok {
+		_spec.SetField(book.FieldPrimaryImageURL, field.TypeString, value)
+		_node.PrimaryImageURL = value
+	}
+	if value, ok := bc.mutation.AdditionalImagesUrls(); ok {
+		_spec.SetField(book.FieldAdditionalImagesUrls, field.TypeJSON, value)
+		_node.AdditionalImagesUrls = value
+	}
+	if value, ok := bc.mutation.Files(); ok {
+		_spec.SetField(book.FieldFiles, field.TypeJSON, value)
+		_node.Files = value
+	}
+	if value, ok := bc.mutation.Year(); ok {
+		_spec.SetField(book.FieldYear, field.TypeInt, value)
+		_node.Year = value
+	}
+	if nodes := bc.mutation.AuthorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.AuthorsTable,
+			Columns: book.AuthorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := bc.mutation.BookGenresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.BookGenresTable,
+			Columns: book.BookGenresPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bookgenre.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := bc.mutation.CollectionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.CollectionTable,
+			Columns: []string{book.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.collection_books = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := bc.mutation.HoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.HoldersTable,
+			Columns: book.HoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := bc.mutation.PublisherIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.PublisherTable,
+			Columns: []string{book.PublisherColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(publisher.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.publisher_books = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := bc.mutation.LicenseIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.LicenseTable,
+			Columns: []string{book.LicenseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.license_books = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

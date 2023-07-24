@@ -2869,6 +2869,59 @@ type BookWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "primary_image_url" field predicates.
+	PrimaryImageURL             *string  `json:"primaryImageURL,omitempty"`
+	PrimaryImageURLNEQ          *string  `json:"primaryImageURLNEQ,omitempty"`
+	PrimaryImageURLIn           []string `json:"primaryImageURLIn,omitempty"`
+	PrimaryImageURLNotIn        []string `json:"primaryImageURLNotIn,omitempty"`
+	PrimaryImageURLGT           *string  `json:"primaryImageURLGT,omitempty"`
+	PrimaryImageURLGTE          *string  `json:"primaryImageURLGTE,omitempty"`
+	PrimaryImageURLLT           *string  `json:"primaryImageURLLT,omitempty"`
+	PrimaryImageURLLTE          *string  `json:"primaryImageURLLTE,omitempty"`
+	PrimaryImageURLContains     *string  `json:"primaryImageURLContains,omitempty"`
+	PrimaryImageURLHasPrefix    *string  `json:"primaryImageURLHasPrefix,omitempty"`
+	PrimaryImageURLHasSuffix    *string  `json:"primaryImageURLHasSuffix,omitempty"`
+	PrimaryImageURLIsNil        bool     `json:"primaryImageURLIsNil,omitempty"`
+	PrimaryImageURLNotNil       bool     `json:"primaryImageURLNotNil,omitempty"`
+	PrimaryImageURLEqualFold    *string  `json:"primaryImageURLEqualFold,omitempty"`
+	PrimaryImageURLContainsFold *string  `json:"primaryImageURLContainsFold,omitempty"`
+
+	// "year" field predicates.
+	Year       *int  `json:"year,omitempty"`
+	YearNEQ    *int  `json:"yearNEQ,omitempty"`
+	YearIn     []int `json:"yearIn,omitempty"`
+	YearNotIn  []int `json:"yearNotIn,omitempty"`
+	YearGT     *int  `json:"yearGT,omitempty"`
+	YearGTE    *int  `json:"yearGTE,omitempty"`
+	YearLT     *int  `json:"yearLT,omitempty"`
+	YearLTE    *int  `json:"yearLTE,omitempty"`
+	YearIsNil  bool  `json:"yearIsNil,omitempty"`
+	YearNotNil bool  `json:"yearNotNil,omitempty"`
+
+	// "authors" edge predicates.
+	HasAuthors     *bool               `json:"hasAuthors,omitempty"`
+	HasAuthorsWith []*PersonWhereInput `json:"hasAuthorsWith,omitempty"`
+
+	// "book_genres" edge predicates.
+	HasBookGenres     *bool                  `json:"hasBookGenres,omitempty"`
+	HasBookGenresWith []*BookGenreWhereInput `json:"hasBookGenresWith,omitempty"`
+
+	// "collection" edge predicates.
+	HasCollection     *bool                   `json:"hasCollection,omitempty"`
+	HasCollectionWith []*CollectionWhereInput `json:"hasCollectionWith,omitempty"`
+
+	// "holders" edge predicates.
+	HasHolders     *bool               `json:"hasHolders,omitempty"`
+	HasHoldersWith []*HolderWhereInput `json:"hasHoldersWith,omitempty"`
+
+	// "publisher" edge predicates.
+	HasPublisher     *bool                  `json:"hasPublisher,omitempty"`
+	HasPublisherWith []*PublisherWhereInput `json:"hasPublisherWith,omitempty"`
+
+	// "license" edge predicates.
+	HasLicense     *bool                `json:"hasLicense,omitempty"`
+	HasLicenseWith []*LicenseWhereInput `json:"hasLicenseWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -3194,7 +3247,190 @@ func (i *BookWhereInput) P() (predicate.Book, error) {
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, book.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
+	if i.PrimaryImageURL != nil {
+		predicates = append(predicates, book.PrimaryImageURLEQ(*i.PrimaryImageURL))
+	}
+	if i.PrimaryImageURLNEQ != nil {
+		predicates = append(predicates, book.PrimaryImageURLNEQ(*i.PrimaryImageURLNEQ))
+	}
+	if len(i.PrimaryImageURLIn) > 0 {
+		predicates = append(predicates, book.PrimaryImageURLIn(i.PrimaryImageURLIn...))
+	}
+	if len(i.PrimaryImageURLNotIn) > 0 {
+		predicates = append(predicates, book.PrimaryImageURLNotIn(i.PrimaryImageURLNotIn...))
+	}
+	if i.PrimaryImageURLGT != nil {
+		predicates = append(predicates, book.PrimaryImageURLGT(*i.PrimaryImageURLGT))
+	}
+	if i.PrimaryImageURLGTE != nil {
+		predicates = append(predicates, book.PrimaryImageURLGTE(*i.PrimaryImageURLGTE))
+	}
+	if i.PrimaryImageURLLT != nil {
+		predicates = append(predicates, book.PrimaryImageURLLT(*i.PrimaryImageURLLT))
+	}
+	if i.PrimaryImageURLLTE != nil {
+		predicates = append(predicates, book.PrimaryImageURLLTE(*i.PrimaryImageURLLTE))
+	}
+	if i.PrimaryImageURLContains != nil {
+		predicates = append(predicates, book.PrimaryImageURLContains(*i.PrimaryImageURLContains))
+	}
+	if i.PrimaryImageURLHasPrefix != nil {
+		predicates = append(predicates, book.PrimaryImageURLHasPrefix(*i.PrimaryImageURLHasPrefix))
+	}
+	if i.PrimaryImageURLHasSuffix != nil {
+		predicates = append(predicates, book.PrimaryImageURLHasSuffix(*i.PrimaryImageURLHasSuffix))
+	}
+	if i.PrimaryImageURLIsNil {
+		predicates = append(predicates, book.PrimaryImageURLIsNil())
+	}
+	if i.PrimaryImageURLNotNil {
+		predicates = append(predicates, book.PrimaryImageURLNotNil())
+	}
+	if i.PrimaryImageURLEqualFold != nil {
+		predicates = append(predicates, book.PrimaryImageURLEqualFold(*i.PrimaryImageURLEqualFold))
+	}
+	if i.PrimaryImageURLContainsFold != nil {
+		predicates = append(predicates, book.PrimaryImageURLContainsFold(*i.PrimaryImageURLContainsFold))
+	}
+	if i.Year != nil {
+		predicates = append(predicates, book.YearEQ(*i.Year))
+	}
+	if i.YearNEQ != nil {
+		predicates = append(predicates, book.YearNEQ(*i.YearNEQ))
+	}
+	if len(i.YearIn) > 0 {
+		predicates = append(predicates, book.YearIn(i.YearIn...))
+	}
+	if len(i.YearNotIn) > 0 {
+		predicates = append(predicates, book.YearNotIn(i.YearNotIn...))
+	}
+	if i.YearGT != nil {
+		predicates = append(predicates, book.YearGT(*i.YearGT))
+	}
+	if i.YearGTE != nil {
+		predicates = append(predicates, book.YearGTE(*i.YearGTE))
+	}
+	if i.YearLT != nil {
+		predicates = append(predicates, book.YearLT(*i.YearLT))
+	}
+	if i.YearLTE != nil {
+		predicates = append(predicates, book.YearLTE(*i.YearLTE))
+	}
+	if i.YearIsNil {
+		predicates = append(predicates, book.YearIsNil())
+	}
+	if i.YearNotNil {
+		predicates = append(predicates, book.YearNotNil())
+	}
 
+	if i.HasAuthors != nil {
+		p := book.HasAuthors()
+		if !*i.HasAuthors {
+			p = book.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasAuthorsWith) > 0 {
+		with := make([]predicate.Person, 0, len(i.HasAuthorsWith))
+		for _, w := range i.HasAuthorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasAuthorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, book.HasAuthorsWith(with...))
+	}
+	if i.HasBookGenres != nil {
+		p := book.HasBookGenres()
+		if !*i.HasBookGenres {
+			p = book.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBookGenresWith) > 0 {
+		with := make([]predicate.BookGenre, 0, len(i.HasBookGenresWith))
+		for _, w := range i.HasBookGenresWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBookGenresWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, book.HasBookGenresWith(with...))
+	}
+	if i.HasCollection != nil {
+		p := book.HasCollection()
+		if !*i.HasCollection {
+			p = book.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCollectionWith) > 0 {
+		with := make([]predicate.Collection, 0, len(i.HasCollectionWith))
+		for _, w := range i.HasCollectionWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCollectionWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, book.HasCollectionWith(with...))
+	}
+	if i.HasHolders != nil {
+		p := book.HasHolders()
+		if !*i.HasHolders {
+			p = book.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasHoldersWith) > 0 {
+		with := make([]predicate.Holder, 0, len(i.HasHoldersWith))
+		for _, w := range i.HasHoldersWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasHoldersWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, book.HasHoldersWith(with...))
+	}
+	if i.HasPublisher != nil {
+		p := book.HasPublisher()
+		if !*i.HasPublisher {
+			p = book.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasPublisherWith) > 0 {
+		with := make([]predicate.Publisher, 0, len(i.HasPublisherWith))
+		for _, w := range i.HasPublisherWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasPublisherWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, book.HasPublisherWith(with...))
+	}
+	if i.HasLicense != nil {
+		p := book.HasLicense()
+		if !*i.HasLicense {
+			p = book.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasLicenseWith) > 0 {
+		with := make([]predicate.License, 0, len(i.HasLicenseWith))
+		for _, w := range i.HasLicenseWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasLicenseWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, book.HasLicenseWith(with...))
+	}
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyBookWhereInput
@@ -3309,6 +3545,10 @@ type BookGenreWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "books" edge predicates.
+	HasBooks     *bool             `json:"hasBooks,omitempty"`
+	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -3635,6 +3875,24 @@ func (i *BookGenreWhereInput) P() (predicate.BookGenre, error) {
 		predicates = append(predicates, bookgenre.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
 
+	if i.HasBooks != nil {
+		p := bookgenre.HasBooks()
+		if !*i.HasBooks {
+			p = bookgenre.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBooksWith) > 0 {
+		with := make([]predicate.Book, 0, len(i.HasBooksWith))
+		for _, w := range i.HasBooksWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBooksWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, bookgenre.HasBooksWith(with...))
+	}
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyBookGenreWhereInput
@@ -4216,6 +4474,10 @@ type CollectionWhereInput struct {
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
 
+	// "books" edge predicates.
+	HasBooks     *bool             `json:"hasBooks,omitempty"`
+	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
+
 	// "people" edge predicates.
 	HasPeople     *bool               `json:"hasPeople,omitempty"`
 	HasPeopleWith []*PersonWhereInput `json:"hasPeopleWith,omitempty"`
@@ -4566,6 +4828,24 @@ func (i *CollectionWhereInput) P() (predicate.Collection, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, collection.HasArtifactsWith(with...))
+	}
+	if i.HasBooks != nil {
+		p := collection.HasBooks()
+		if !*i.HasBooks {
+			p = collection.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBooksWith) > 0 {
+		with := make([]predicate.Book, 0, len(i.HasBooksWith))
+		for _, w := range i.HasBooksWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBooksWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, collection.HasBooksWith(with...))
 	}
 	if i.HasPeople != nil {
 		p := collection.HasPeople()
@@ -6096,6 +6376,10 @@ type HolderWhereInput struct {
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
 
+	// "books" edge predicates.
+	HasBooks     *bool             `json:"hasBooks,omitempty"`
+	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
+
 	// "holder_responsibilities" edge predicates.
 	HasHolderResponsibilities     *bool                             `json:"hasHolderResponsibilities,omitempty"`
 	HasHolderResponsibilitiesWith []*HolderResponsibilityWhereInput `json:"hasHolderResponsibilitiesWith,omitempty"`
@@ -6414,6 +6698,24 @@ func (i *HolderWhereInput) P() (predicate.Holder, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, holder.HasArtifactsWith(with...))
+	}
+	if i.HasBooks != nil {
+		p := holder.HasBooks()
+		if !*i.HasBooks {
+			p = holder.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBooksWith) > 0 {
+		with := make([]predicate.Book, 0, len(i.HasBooksWith))
+		for _, w := range i.HasBooksWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBooksWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, holder.HasBooksWith(with...))
 	}
 	if i.HasHolderResponsibilities != nil {
 		p := holder.HasHolderResponsibilities()
@@ -7169,6 +7471,10 @@ type LibraryWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "books" edge predicates.
+	HasBooks     *bool             `json:"hasBooks,omitempty"`
+	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -7495,6 +7801,24 @@ func (i *LibraryWhereInput) P() (predicate.Library, error) {
 		predicates = append(predicates, library.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
 
+	if i.HasBooks != nil {
+		p := library.HasBooks()
+		if !*i.HasBooks {
+			p = library.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBooksWith) > 0 {
+		with := make([]predicate.Book, 0, len(i.HasBooksWith))
+		for _, w := range i.HasBooksWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBooksWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, library.HasBooksWith(with...))
+	}
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyLibraryWhereInput
@@ -7613,6 +7937,10 @@ type LicenseWhereInput struct {
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
+
+	// "books" edge predicates.
+	HasBooks     *bool             `json:"hasBooks,omitempty"`
+	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -7956,6 +8284,24 @@ func (i *LicenseWhereInput) P() (predicate.License, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, license.HasArtifactsWith(with...))
+	}
+	if i.HasBooks != nil {
+		p := license.HasBooks()
+		if !*i.HasBooks {
+			p = license.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBooksWith) > 0 {
+		with := make([]predicate.Book, 0, len(i.HasBooksWith))
+		for _, w := range i.HasBooksWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBooksWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, license.HasBooksWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -11783,6 +12129,10 @@ type PersonWhereInput struct {
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
 
+	// "books" edge predicates.
+	HasBooks     *bool             `json:"hasBooks,omitempty"`
+	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
+
 	// "projects" edge predicates.
 	HasProjects     *bool                `json:"hasProjects,omitempty"`
 	HasProjectsWith []*ProjectWhereInput `json:"hasProjectsWith,omitempty"`
@@ -12446,6 +12796,24 @@ func (i *PersonWhereInput) P() (predicate.Person, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, person.HasArtifactsWith(with...))
+	}
+	if i.HasBooks != nil {
+		p := person.HasBooks()
+		if !*i.HasBooks {
+			p = person.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBooksWith) > 0 {
+		with := make([]predicate.Book, 0, len(i.HasBooksWith))
+		for _, w := range i.HasBooksWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBooksWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, person.HasBooksWith(with...))
 	}
 	if i.HasProjects != nil {
 		p := person.HasProjects()
@@ -15987,6 +16355,10 @@ type PublisherWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "books" edge predicates.
+	HasBooks     *bool             `json:"hasBooks,omitempty"`
+	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -16313,6 +16685,24 @@ func (i *PublisherWhereInput) P() (predicate.Publisher, error) {
 		predicates = append(predicates, publisher.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
 
+	if i.HasBooks != nil {
+		p := publisher.HasBooks()
+		if !*i.HasBooks {
+			p = publisher.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBooksWith) > 0 {
+		with := make([]predicate.Book, 0, len(i.HasBooksWith))
+		for _, w := range i.HasBooksWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBooksWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, publisher.HasBooksWith(with...))
+	}
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyPublisherWhereInput

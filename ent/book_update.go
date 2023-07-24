@@ -13,7 +13,13 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/book"
+	"github.com/dkrasnovdev/heritage-api/ent/bookgenre"
+	"github.com/dkrasnovdev/heritage-api/ent/collection"
+	"github.com/dkrasnovdev/heritage-api/ent/holder"
+	"github.com/dkrasnovdev/heritage-api/ent/license"
+	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/heritage-api/ent/publisher"
 )
 
 // BookUpdate is the builder for updating Book entities.
@@ -133,9 +139,275 @@ func (bu *BookUpdate) ClearExternalLinks() *BookUpdate {
 	return bu
 }
 
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (bu *BookUpdate) SetPrimaryImageURL(s string) *BookUpdate {
+	bu.mutation.SetPrimaryImageURL(s)
+	return bu
+}
+
+// SetNillablePrimaryImageURL sets the "primary_image_url" field if the given value is not nil.
+func (bu *BookUpdate) SetNillablePrimaryImageURL(s *string) *BookUpdate {
+	if s != nil {
+		bu.SetPrimaryImageURL(*s)
+	}
+	return bu
+}
+
+// ClearPrimaryImageURL clears the value of the "primary_image_url" field.
+func (bu *BookUpdate) ClearPrimaryImageURL() *BookUpdate {
+	bu.mutation.ClearPrimaryImageURL()
+	return bu
+}
+
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (bu *BookUpdate) SetAdditionalImagesUrls(s []string) *BookUpdate {
+	bu.mutation.SetAdditionalImagesUrls(s)
+	return bu
+}
+
+// AppendAdditionalImagesUrls appends s to the "additional_images_urls" field.
+func (bu *BookUpdate) AppendAdditionalImagesUrls(s []string) *BookUpdate {
+	bu.mutation.AppendAdditionalImagesUrls(s)
+	return bu
+}
+
+// ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
+func (bu *BookUpdate) ClearAdditionalImagesUrls() *BookUpdate {
+	bu.mutation.ClearAdditionalImagesUrls()
+	return bu
+}
+
+// SetFiles sets the "files" field.
+func (bu *BookUpdate) SetFiles(s []string) *BookUpdate {
+	bu.mutation.SetFiles(s)
+	return bu
+}
+
+// AppendFiles appends s to the "files" field.
+func (bu *BookUpdate) AppendFiles(s []string) *BookUpdate {
+	bu.mutation.AppendFiles(s)
+	return bu
+}
+
+// ClearFiles clears the value of the "files" field.
+func (bu *BookUpdate) ClearFiles() *BookUpdate {
+	bu.mutation.ClearFiles()
+	return bu
+}
+
+// SetYear sets the "year" field.
+func (bu *BookUpdate) SetYear(i int) *BookUpdate {
+	bu.mutation.ResetYear()
+	bu.mutation.SetYear(i)
+	return bu
+}
+
+// SetNillableYear sets the "year" field if the given value is not nil.
+func (bu *BookUpdate) SetNillableYear(i *int) *BookUpdate {
+	if i != nil {
+		bu.SetYear(*i)
+	}
+	return bu
+}
+
+// AddYear adds i to the "year" field.
+func (bu *BookUpdate) AddYear(i int) *BookUpdate {
+	bu.mutation.AddYear(i)
+	return bu
+}
+
+// ClearYear clears the value of the "year" field.
+func (bu *BookUpdate) ClearYear() *BookUpdate {
+	bu.mutation.ClearYear()
+	return bu
+}
+
+// AddAuthorIDs adds the "authors" edge to the Person entity by IDs.
+func (bu *BookUpdate) AddAuthorIDs(ids ...int) *BookUpdate {
+	bu.mutation.AddAuthorIDs(ids...)
+	return bu
+}
+
+// AddAuthors adds the "authors" edges to the Person entity.
+func (bu *BookUpdate) AddAuthors(p ...*Person) *BookUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return bu.AddAuthorIDs(ids...)
+}
+
+// AddBookGenreIDs adds the "book_genres" edge to the BookGenre entity by IDs.
+func (bu *BookUpdate) AddBookGenreIDs(ids ...int) *BookUpdate {
+	bu.mutation.AddBookGenreIDs(ids...)
+	return bu
+}
+
+// AddBookGenres adds the "book_genres" edges to the BookGenre entity.
+func (bu *BookUpdate) AddBookGenres(b ...*BookGenre) *BookUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return bu.AddBookGenreIDs(ids...)
+}
+
+// SetCollectionID sets the "collection" edge to the Collection entity by ID.
+func (bu *BookUpdate) SetCollectionID(id int) *BookUpdate {
+	bu.mutation.SetCollectionID(id)
+	return bu
+}
+
+// SetNillableCollectionID sets the "collection" edge to the Collection entity by ID if the given value is not nil.
+func (bu *BookUpdate) SetNillableCollectionID(id *int) *BookUpdate {
+	if id != nil {
+		bu = bu.SetCollectionID(*id)
+	}
+	return bu
+}
+
+// SetCollection sets the "collection" edge to the Collection entity.
+func (bu *BookUpdate) SetCollection(c *Collection) *BookUpdate {
+	return bu.SetCollectionID(c.ID)
+}
+
+// AddHolderIDs adds the "holders" edge to the Holder entity by IDs.
+func (bu *BookUpdate) AddHolderIDs(ids ...int) *BookUpdate {
+	bu.mutation.AddHolderIDs(ids...)
+	return bu
+}
+
+// AddHolders adds the "holders" edges to the Holder entity.
+func (bu *BookUpdate) AddHolders(h ...*Holder) *BookUpdate {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return bu.AddHolderIDs(ids...)
+}
+
+// SetPublisherID sets the "publisher" edge to the Publisher entity by ID.
+func (bu *BookUpdate) SetPublisherID(id int) *BookUpdate {
+	bu.mutation.SetPublisherID(id)
+	return bu
+}
+
+// SetNillablePublisherID sets the "publisher" edge to the Publisher entity by ID if the given value is not nil.
+func (bu *BookUpdate) SetNillablePublisherID(id *int) *BookUpdate {
+	if id != nil {
+		bu = bu.SetPublisherID(*id)
+	}
+	return bu
+}
+
+// SetPublisher sets the "publisher" edge to the Publisher entity.
+func (bu *BookUpdate) SetPublisher(p *Publisher) *BookUpdate {
+	return bu.SetPublisherID(p.ID)
+}
+
+// SetLicenseID sets the "license" edge to the License entity by ID.
+func (bu *BookUpdate) SetLicenseID(id int) *BookUpdate {
+	bu.mutation.SetLicenseID(id)
+	return bu
+}
+
+// SetNillableLicenseID sets the "license" edge to the License entity by ID if the given value is not nil.
+func (bu *BookUpdate) SetNillableLicenseID(id *int) *BookUpdate {
+	if id != nil {
+		bu = bu.SetLicenseID(*id)
+	}
+	return bu
+}
+
+// SetLicense sets the "license" edge to the License entity.
+func (bu *BookUpdate) SetLicense(l *License) *BookUpdate {
+	return bu.SetLicenseID(l.ID)
+}
+
 // Mutation returns the BookMutation object of the builder.
 func (bu *BookUpdate) Mutation() *BookMutation {
 	return bu.mutation
+}
+
+// ClearAuthors clears all "authors" edges to the Person entity.
+func (bu *BookUpdate) ClearAuthors() *BookUpdate {
+	bu.mutation.ClearAuthors()
+	return bu
+}
+
+// RemoveAuthorIDs removes the "authors" edge to Person entities by IDs.
+func (bu *BookUpdate) RemoveAuthorIDs(ids ...int) *BookUpdate {
+	bu.mutation.RemoveAuthorIDs(ids...)
+	return bu
+}
+
+// RemoveAuthors removes "authors" edges to Person entities.
+func (bu *BookUpdate) RemoveAuthors(p ...*Person) *BookUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return bu.RemoveAuthorIDs(ids...)
+}
+
+// ClearBookGenres clears all "book_genres" edges to the BookGenre entity.
+func (bu *BookUpdate) ClearBookGenres() *BookUpdate {
+	bu.mutation.ClearBookGenres()
+	return bu
+}
+
+// RemoveBookGenreIDs removes the "book_genres" edge to BookGenre entities by IDs.
+func (bu *BookUpdate) RemoveBookGenreIDs(ids ...int) *BookUpdate {
+	bu.mutation.RemoveBookGenreIDs(ids...)
+	return bu
+}
+
+// RemoveBookGenres removes "book_genres" edges to BookGenre entities.
+func (bu *BookUpdate) RemoveBookGenres(b ...*BookGenre) *BookUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return bu.RemoveBookGenreIDs(ids...)
+}
+
+// ClearCollection clears the "collection" edge to the Collection entity.
+func (bu *BookUpdate) ClearCollection() *BookUpdate {
+	bu.mutation.ClearCollection()
+	return bu
+}
+
+// ClearHolders clears all "holders" edges to the Holder entity.
+func (bu *BookUpdate) ClearHolders() *BookUpdate {
+	bu.mutation.ClearHolders()
+	return bu
+}
+
+// RemoveHolderIDs removes the "holders" edge to Holder entities by IDs.
+func (bu *BookUpdate) RemoveHolderIDs(ids ...int) *BookUpdate {
+	bu.mutation.RemoveHolderIDs(ids...)
+	return bu
+}
+
+// RemoveHolders removes "holders" edges to Holder entities.
+func (bu *BookUpdate) RemoveHolders(h ...*Holder) *BookUpdate {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return bu.RemoveHolderIDs(ids...)
+}
+
+// ClearPublisher clears the "publisher" edge to the Publisher entity.
+func (bu *BookUpdate) ClearPublisher() *BookUpdate {
+	bu.mutation.ClearPublisher()
+	return bu
+}
+
+// ClearLicense clears the "license" edge to the License entity.
+func (bu *BookUpdate) ClearLicense() *BookUpdate {
+	bu.mutation.ClearLicense()
+	return bu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -180,7 +452,20 @@ func (bu *BookUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (bu *BookUpdate) check() error {
+	if v, ok := bu.mutation.Year(); ok {
+		if err := book.YearValidator(v); err != nil {
+			return &ValidationError{Name: "year", err: fmt.Errorf(`ent: validator failed for field "Book.year": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (bu *BookUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := bu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(book.Table, book.Columns, sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt))
 	if ps := bu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -226,6 +511,265 @@ func (bu *BookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if bu.mutation.ExternalLinksCleared() {
 		_spec.ClearField(book.FieldExternalLinks, field.TypeJSON)
+	}
+	if value, ok := bu.mutation.PrimaryImageURL(); ok {
+		_spec.SetField(book.FieldPrimaryImageURL, field.TypeString, value)
+	}
+	if bu.mutation.PrimaryImageURLCleared() {
+		_spec.ClearField(book.FieldPrimaryImageURL, field.TypeString)
+	}
+	if value, ok := bu.mutation.AdditionalImagesUrls(); ok {
+		_spec.SetField(book.FieldAdditionalImagesUrls, field.TypeJSON, value)
+	}
+	if value, ok := bu.mutation.AppendedAdditionalImagesUrls(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, book.FieldAdditionalImagesUrls, value)
+		})
+	}
+	if bu.mutation.AdditionalImagesUrlsCleared() {
+		_spec.ClearField(book.FieldAdditionalImagesUrls, field.TypeJSON)
+	}
+	if value, ok := bu.mutation.Files(); ok {
+		_spec.SetField(book.FieldFiles, field.TypeJSON, value)
+	}
+	if value, ok := bu.mutation.AppendedFiles(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, book.FieldFiles, value)
+		})
+	}
+	if bu.mutation.FilesCleared() {
+		_spec.ClearField(book.FieldFiles, field.TypeJSON)
+	}
+	if value, ok := bu.mutation.Year(); ok {
+		_spec.SetField(book.FieldYear, field.TypeInt, value)
+	}
+	if value, ok := bu.mutation.AddedYear(); ok {
+		_spec.AddField(book.FieldYear, field.TypeInt, value)
+	}
+	if bu.mutation.YearCleared() {
+		_spec.ClearField(book.FieldYear, field.TypeInt)
+	}
+	if bu.mutation.AuthorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.AuthorsTable,
+			Columns: book.AuthorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.RemovedAuthorsIDs(); len(nodes) > 0 && !bu.mutation.AuthorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.AuthorsTable,
+			Columns: book.AuthorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.AuthorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.AuthorsTable,
+			Columns: book.AuthorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if bu.mutation.BookGenresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.BookGenresTable,
+			Columns: book.BookGenresPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bookgenre.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.RemovedBookGenresIDs(); len(nodes) > 0 && !bu.mutation.BookGenresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.BookGenresTable,
+			Columns: book.BookGenresPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bookgenre.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.BookGenresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.BookGenresTable,
+			Columns: book.BookGenresPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bookgenre.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if bu.mutation.CollectionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.CollectionTable,
+			Columns: []string{book.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.CollectionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.CollectionTable,
+			Columns: []string{book.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if bu.mutation.HoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.HoldersTable,
+			Columns: book.HoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.RemovedHoldersIDs(); len(nodes) > 0 && !bu.mutation.HoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.HoldersTable,
+			Columns: book.HoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.HoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.HoldersTable,
+			Columns: book.HoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if bu.mutation.PublisherCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.PublisherTable,
+			Columns: []string{book.PublisherColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(publisher.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.PublisherIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.PublisherTable,
+			Columns: []string{book.PublisherColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(publisher.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if bu.mutation.LicenseCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.LicenseTable,
+			Columns: []string{book.LicenseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.LicenseIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.LicenseTable,
+			Columns: []string{book.LicenseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, bu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -351,9 +895,275 @@ func (buo *BookUpdateOne) ClearExternalLinks() *BookUpdateOne {
 	return buo
 }
 
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (buo *BookUpdateOne) SetPrimaryImageURL(s string) *BookUpdateOne {
+	buo.mutation.SetPrimaryImageURL(s)
+	return buo
+}
+
+// SetNillablePrimaryImageURL sets the "primary_image_url" field if the given value is not nil.
+func (buo *BookUpdateOne) SetNillablePrimaryImageURL(s *string) *BookUpdateOne {
+	if s != nil {
+		buo.SetPrimaryImageURL(*s)
+	}
+	return buo
+}
+
+// ClearPrimaryImageURL clears the value of the "primary_image_url" field.
+func (buo *BookUpdateOne) ClearPrimaryImageURL() *BookUpdateOne {
+	buo.mutation.ClearPrimaryImageURL()
+	return buo
+}
+
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (buo *BookUpdateOne) SetAdditionalImagesUrls(s []string) *BookUpdateOne {
+	buo.mutation.SetAdditionalImagesUrls(s)
+	return buo
+}
+
+// AppendAdditionalImagesUrls appends s to the "additional_images_urls" field.
+func (buo *BookUpdateOne) AppendAdditionalImagesUrls(s []string) *BookUpdateOne {
+	buo.mutation.AppendAdditionalImagesUrls(s)
+	return buo
+}
+
+// ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
+func (buo *BookUpdateOne) ClearAdditionalImagesUrls() *BookUpdateOne {
+	buo.mutation.ClearAdditionalImagesUrls()
+	return buo
+}
+
+// SetFiles sets the "files" field.
+func (buo *BookUpdateOne) SetFiles(s []string) *BookUpdateOne {
+	buo.mutation.SetFiles(s)
+	return buo
+}
+
+// AppendFiles appends s to the "files" field.
+func (buo *BookUpdateOne) AppendFiles(s []string) *BookUpdateOne {
+	buo.mutation.AppendFiles(s)
+	return buo
+}
+
+// ClearFiles clears the value of the "files" field.
+func (buo *BookUpdateOne) ClearFiles() *BookUpdateOne {
+	buo.mutation.ClearFiles()
+	return buo
+}
+
+// SetYear sets the "year" field.
+func (buo *BookUpdateOne) SetYear(i int) *BookUpdateOne {
+	buo.mutation.ResetYear()
+	buo.mutation.SetYear(i)
+	return buo
+}
+
+// SetNillableYear sets the "year" field if the given value is not nil.
+func (buo *BookUpdateOne) SetNillableYear(i *int) *BookUpdateOne {
+	if i != nil {
+		buo.SetYear(*i)
+	}
+	return buo
+}
+
+// AddYear adds i to the "year" field.
+func (buo *BookUpdateOne) AddYear(i int) *BookUpdateOne {
+	buo.mutation.AddYear(i)
+	return buo
+}
+
+// ClearYear clears the value of the "year" field.
+func (buo *BookUpdateOne) ClearYear() *BookUpdateOne {
+	buo.mutation.ClearYear()
+	return buo
+}
+
+// AddAuthorIDs adds the "authors" edge to the Person entity by IDs.
+func (buo *BookUpdateOne) AddAuthorIDs(ids ...int) *BookUpdateOne {
+	buo.mutation.AddAuthorIDs(ids...)
+	return buo
+}
+
+// AddAuthors adds the "authors" edges to the Person entity.
+func (buo *BookUpdateOne) AddAuthors(p ...*Person) *BookUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return buo.AddAuthorIDs(ids...)
+}
+
+// AddBookGenreIDs adds the "book_genres" edge to the BookGenre entity by IDs.
+func (buo *BookUpdateOne) AddBookGenreIDs(ids ...int) *BookUpdateOne {
+	buo.mutation.AddBookGenreIDs(ids...)
+	return buo
+}
+
+// AddBookGenres adds the "book_genres" edges to the BookGenre entity.
+func (buo *BookUpdateOne) AddBookGenres(b ...*BookGenre) *BookUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return buo.AddBookGenreIDs(ids...)
+}
+
+// SetCollectionID sets the "collection" edge to the Collection entity by ID.
+func (buo *BookUpdateOne) SetCollectionID(id int) *BookUpdateOne {
+	buo.mutation.SetCollectionID(id)
+	return buo
+}
+
+// SetNillableCollectionID sets the "collection" edge to the Collection entity by ID if the given value is not nil.
+func (buo *BookUpdateOne) SetNillableCollectionID(id *int) *BookUpdateOne {
+	if id != nil {
+		buo = buo.SetCollectionID(*id)
+	}
+	return buo
+}
+
+// SetCollection sets the "collection" edge to the Collection entity.
+func (buo *BookUpdateOne) SetCollection(c *Collection) *BookUpdateOne {
+	return buo.SetCollectionID(c.ID)
+}
+
+// AddHolderIDs adds the "holders" edge to the Holder entity by IDs.
+func (buo *BookUpdateOne) AddHolderIDs(ids ...int) *BookUpdateOne {
+	buo.mutation.AddHolderIDs(ids...)
+	return buo
+}
+
+// AddHolders adds the "holders" edges to the Holder entity.
+func (buo *BookUpdateOne) AddHolders(h ...*Holder) *BookUpdateOne {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return buo.AddHolderIDs(ids...)
+}
+
+// SetPublisherID sets the "publisher" edge to the Publisher entity by ID.
+func (buo *BookUpdateOne) SetPublisherID(id int) *BookUpdateOne {
+	buo.mutation.SetPublisherID(id)
+	return buo
+}
+
+// SetNillablePublisherID sets the "publisher" edge to the Publisher entity by ID if the given value is not nil.
+func (buo *BookUpdateOne) SetNillablePublisherID(id *int) *BookUpdateOne {
+	if id != nil {
+		buo = buo.SetPublisherID(*id)
+	}
+	return buo
+}
+
+// SetPublisher sets the "publisher" edge to the Publisher entity.
+func (buo *BookUpdateOne) SetPublisher(p *Publisher) *BookUpdateOne {
+	return buo.SetPublisherID(p.ID)
+}
+
+// SetLicenseID sets the "license" edge to the License entity by ID.
+func (buo *BookUpdateOne) SetLicenseID(id int) *BookUpdateOne {
+	buo.mutation.SetLicenseID(id)
+	return buo
+}
+
+// SetNillableLicenseID sets the "license" edge to the License entity by ID if the given value is not nil.
+func (buo *BookUpdateOne) SetNillableLicenseID(id *int) *BookUpdateOne {
+	if id != nil {
+		buo = buo.SetLicenseID(*id)
+	}
+	return buo
+}
+
+// SetLicense sets the "license" edge to the License entity.
+func (buo *BookUpdateOne) SetLicense(l *License) *BookUpdateOne {
+	return buo.SetLicenseID(l.ID)
+}
+
 // Mutation returns the BookMutation object of the builder.
 func (buo *BookUpdateOne) Mutation() *BookMutation {
 	return buo.mutation
+}
+
+// ClearAuthors clears all "authors" edges to the Person entity.
+func (buo *BookUpdateOne) ClearAuthors() *BookUpdateOne {
+	buo.mutation.ClearAuthors()
+	return buo
+}
+
+// RemoveAuthorIDs removes the "authors" edge to Person entities by IDs.
+func (buo *BookUpdateOne) RemoveAuthorIDs(ids ...int) *BookUpdateOne {
+	buo.mutation.RemoveAuthorIDs(ids...)
+	return buo
+}
+
+// RemoveAuthors removes "authors" edges to Person entities.
+func (buo *BookUpdateOne) RemoveAuthors(p ...*Person) *BookUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return buo.RemoveAuthorIDs(ids...)
+}
+
+// ClearBookGenres clears all "book_genres" edges to the BookGenre entity.
+func (buo *BookUpdateOne) ClearBookGenres() *BookUpdateOne {
+	buo.mutation.ClearBookGenres()
+	return buo
+}
+
+// RemoveBookGenreIDs removes the "book_genres" edge to BookGenre entities by IDs.
+func (buo *BookUpdateOne) RemoveBookGenreIDs(ids ...int) *BookUpdateOne {
+	buo.mutation.RemoveBookGenreIDs(ids...)
+	return buo
+}
+
+// RemoveBookGenres removes "book_genres" edges to BookGenre entities.
+func (buo *BookUpdateOne) RemoveBookGenres(b ...*BookGenre) *BookUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return buo.RemoveBookGenreIDs(ids...)
+}
+
+// ClearCollection clears the "collection" edge to the Collection entity.
+func (buo *BookUpdateOne) ClearCollection() *BookUpdateOne {
+	buo.mutation.ClearCollection()
+	return buo
+}
+
+// ClearHolders clears all "holders" edges to the Holder entity.
+func (buo *BookUpdateOne) ClearHolders() *BookUpdateOne {
+	buo.mutation.ClearHolders()
+	return buo
+}
+
+// RemoveHolderIDs removes the "holders" edge to Holder entities by IDs.
+func (buo *BookUpdateOne) RemoveHolderIDs(ids ...int) *BookUpdateOne {
+	buo.mutation.RemoveHolderIDs(ids...)
+	return buo
+}
+
+// RemoveHolders removes "holders" edges to Holder entities.
+func (buo *BookUpdateOne) RemoveHolders(h ...*Holder) *BookUpdateOne {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return buo.RemoveHolderIDs(ids...)
+}
+
+// ClearPublisher clears the "publisher" edge to the Publisher entity.
+func (buo *BookUpdateOne) ClearPublisher() *BookUpdateOne {
+	buo.mutation.ClearPublisher()
+	return buo
+}
+
+// ClearLicense clears the "license" edge to the License entity.
+func (buo *BookUpdateOne) ClearLicense() *BookUpdateOne {
+	buo.mutation.ClearLicense()
+	return buo
 }
 
 // Where appends a list predicates to the BookUpdate builder.
@@ -411,7 +1221,20 @@ func (buo *BookUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (buo *BookUpdateOne) check() error {
+	if v, ok := buo.mutation.Year(); ok {
+		if err := book.YearValidator(v); err != nil {
+			return &ValidationError{Name: "year", err: fmt.Errorf(`ent: validator failed for field "Book.year": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (buo *BookUpdateOne) sqlSave(ctx context.Context) (_node *Book, err error) {
+	if err := buo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(book.Table, book.Columns, sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt))
 	id, ok := buo.mutation.ID()
 	if !ok {
@@ -474,6 +1297,265 @@ func (buo *BookUpdateOne) sqlSave(ctx context.Context) (_node *Book, err error) 
 	}
 	if buo.mutation.ExternalLinksCleared() {
 		_spec.ClearField(book.FieldExternalLinks, field.TypeJSON)
+	}
+	if value, ok := buo.mutation.PrimaryImageURL(); ok {
+		_spec.SetField(book.FieldPrimaryImageURL, field.TypeString, value)
+	}
+	if buo.mutation.PrimaryImageURLCleared() {
+		_spec.ClearField(book.FieldPrimaryImageURL, field.TypeString)
+	}
+	if value, ok := buo.mutation.AdditionalImagesUrls(); ok {
+		_spec.SetField(book.FieldAdditionalImagesUrls, field.TypeJSON, value)
+	}
+	if value, ok := buo.mutation.AppendedAdditionalImagesUrls(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, book.FieldAdditionalImagesUrls, value)
+		})
+	}
+	if buo.mutation.AdditionalImagesUrlsCleared() {
+		_spec.ClearField(book.FieldAdditionalImagesUrls, field.TypeJSON)
+	}
+	if value, ok := buo.mutation.Files(); ok {
+		_spec.SetField(book.FieldFiles, field.TypeJSON, value)
+	}
+	if value, ok := buo.mutation.AppendedFiles(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, book.FieldFiles, value)
+		})
+	}
+	if buo.mutation.FilesCleared() {
+		_spec.ClearField(book.FieldFiles, field.TypeJSON)
+	}
+	if value, ok := buo.mutation.Year(); ok {
+		_spec.SetField(book.FieldYear, field.TypeInt, value)
+	}
+	if value, ok := buo.mutation.AddedYear(); ok {
+		_spec.AddField(book.FieldYear, field.TypeInt, value)
+	}
+	if buo.mutation.YearCleared() {
+		_spec.ClearField(book.FieldYear, field.TypeInt)
+	}
+	if buo.mutation.AuthorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.AuthorsTable,
+			Columns: book.AuthorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.RemovedAuthorsIDs(); len(nodes) > 0 && !buo.mutation.AuthorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.AuthorsTable,
+			Columns: book.AuthorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.AuthorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.AuthorsTable,
+			Columns: book.AuthorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if buo.mutation.BookGenresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.BookGenresTable,
+			Columns: book.BookGenresPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bookgenre.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.RemovedBookGenresIDs(); len(nodes) > 0 && !buo.mutation.BookGenresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.BookGenresTable,
+			Columns: book.BookGenresPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bookgenre.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.BookGenresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.BookGenresTable,
+			Columns: book.BookGenresPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bookgenre.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if buo.mutation.CollectionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.CollectionTable,
+			Columns: []string{book.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.CollectionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.CollectionTable,
+			Columns: []string{book.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if buo.mutation.HoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.HoldersTable,
+			Columns: book.HoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.RemovedHoldersIDs(); len(nodes) > 0 && !buo.mutation.HoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.HoldersTable,
+			Columns: book.HoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.HoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.HoldersTable,
+			Columns: book.HoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if buo.mutation.PublisherCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.PublisherTable,
+			Columns: []string{book.PublisherColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(publisher.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.PublisherIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.PublisherTable,
+			Columns: []string{book.PublisherColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(publisher.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if buo.mutation.LicenseCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.LicenseTable,
+			Columns: []string{book.LicenseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.LicenseIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.LicenseTable,
+			Columns: []string{book.LicenseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Book{config: buo.config}
 	_spec.Assign = _node.assignValues

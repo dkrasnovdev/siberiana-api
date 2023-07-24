@@ -32,7 +32,32 @@ type BookGenre struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLinks holds the value of the "external_links" field.
 	ExternalLinks []string `json:"external_links,omitempty"`
-	selectValues  sql.SelectValues
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the BookGenreQuery when eager-loading is set.
+	Edges        BookGenreEdges `json:"edges"`
+	selectValues sql.SelectValues
+}
+
+// BookGenreEdges holds the relations/edges for other nodes in the graph.
+type BookGenreEdges struct {
+	// Books holds the value of the books edge.
+	Books []*Book `json:"books,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+	// totalCount holds the count of the edges above.
+	totalCount [1]map[string]int
+
+	namedBooks map[string][]*Book
+}
+
+// BooksOrErr returns the Books value or an error if the edge
+// was not loaded in eager-loading.
+func (e BookGenreEdges) BooksOrErr() ([]*Book, error) {
+	if e.loadedTypes[0] {
+		return e.Books, nil
+	}
+	return nil, &NotLoadedError{edge: "books"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -126,6 +151,11 @@ func (bg *BookGenre) Value(name string) (ent.Value, error) {
 	return bg.selectValues.Get(name)
 }
 
+// QueryBooks queries the "books" edge of the BookGenre entity.
+func (bg *BookGenre) QueryBooks() *BookQuery {
+	return NewBookGenreClient(bg.config).QueryBooks(bg)
+}
+
 // Update returns a builder for updating this BookGenre.
 // Note that you need to call BookGenre.Unwrap() before calling this method if this BookGenre
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -171,6 +201,30 @@ func (bg *BookGenre) String() string {
 	builder.WriteString(fmt.Sprintf("%v", bg.ExternalLinks))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedBooks returns the Books named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (bg *BookGenre) NamedBooks(name string) ([]*Book, error) {
+	if bg.Edges.namedBooks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := bg.Edges.namedBooks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (bg *BookGenre) appendNamedBooks(name string, edges ...*Book) {
+	if bg.Edges.namedBooks == nil {
+		bg.Edges.namedBooks = make(map[string][]*Book)
+	}
+	if len(edges) == 0 {
+		bg.Edges.namedBooks[name] = []*Book{}
+	} else {
+		bg.Edges.namedBooks[name] = append(bg.Edges.namedBooks[name], edges...)
+	}
 }
 
 // BookGenres is a parsable slice of BookGenre.

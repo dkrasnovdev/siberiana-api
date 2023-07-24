@@ -144,6 +144,78 @@ func (a *Artifact) License(ctx context.Context) (*License, error) {
 	return result, MaskNotFound(err)
 }
 
+func (b *Book) Authors(ctx context.Context) (result []*Person, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = b.NamedAuthors(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = b.Edges.AuthorsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = b.QueryAuthors().All(ctx)
+	}
+	return result, err
+}
+
+func (b *Book) BookGenres(ctx context.Context) (result []*BookGenre, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = b.NamedBookGenres(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = b.Edges.BookGenresOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = b.QueryBookGenres().All(ctx)
+	}
+	return result, err
+}
+
+func (b *Book) Collection(ctx context.Context) (*Collection, error) {
+	result, err := b.Edges.CollectionOrErr()
+	if IsNotLoaded(err) {
+		result, err = b.QueryCollection().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (b *Book) Holders(ctx context.Context) (result []*Holder, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = b.NamedHolders(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = b.Edges.HoldersOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = b.QueryHolders().All(ctx)
+	}
+	return result, err
+}
+
+func (b *Book) Publisher(ctx context.Context) (*Publisher, error) {
+	result, err := b.Edges.PublisherOrErr()
+	if IsNotLoaded(err) {
+		result, err = b.QueryPublisher().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (b *Book) License(ctx context.Context) (*License, error) {
+	result, err := b.Edges.LicenseOrErr()
+	if IsNotLoaded(err) {
+		result, err = b.QueryLicense().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (bg *BookGenre) Books(ctx context.Context) (result []*Book, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = bg.NamedBooks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = bg.Edges.BooksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = bg.QueryBooks().All(ctx)
+	}
+	return result, err
+}
+
 func (c *Category) Collections(ctx context.Context) (result []*Collection, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = c.NamedCollections(graphql.GetFieldContext(ctx).Field.Alias)
@@ -164,6 +236,18 @@ func (c *Collection) Artifacts(ctx context.Context) (result []*Artifact, err err
 	}
 	if IsNotLoaded(err) {
 		result, err = c.QueryArtifacts().All(ctx)
+	}
+	return result, err
+}
+
+func (c *Collection) Books(ctx context.Context) (result []*Book, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedBooks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.BooksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = c.QueryBooks().All(ctx)
 	}
 	return result, err
 }
@@ -228,6 +312,18 @@ func (h *Holder) Artifacts(ctx context.Context) (result []*Artifact, err error) 
 	return result, err
 }
 
+func (h *Holder) Books(ctx context.Context) (result []*Book, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = h.NamedBooks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = h.Edges.BooksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = h.QueryBooks().All(ctx)
+	}
+	return result, err
+}
+
 func (h *Holder) HolderResponsibilities(ctx context.Context) (result []*HolderResponsibility, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = h.NamedHolderResponsibilities(graphql.GetFieldContext(ctx).Field.Alias)
@@ -268,6 +364,18 @@ func (hr *HolderResponsibility) Holder(ctx context.Context) (result []*Holder, e
 	return result, err
 }
 
+func (l *Library) Books(ctx context.Context) (result []*Book, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = l.NamedBooks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = l.Edges.BooksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = l.QueryBooks().All(ctx)
+	}
+	return result, err
+}
+
 func (l *License) Artifacts(ctx context.Context) (result []*Artifact, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = l.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
@@ -276,6 +384,18 @@ func (l *License) Artifacts(ctx context.Context) (result []*Artifact, err error)
 	}
 	if IsNotLoaded(err) {
 		result, err = l.QueryArtifacts().All(ctx)
+	}
+	return result, err
+}
+
+func (l *License) Books(ctx context.Context) (result []*Book, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = l.NamedBooks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = l.Edges.BooksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = l.QueryBooks().All(ctx)
 	}
 	return result, err
 }
@@ -436,6 +556,18 @@ func (pe *Person) Artifacts(ctx context.Context) (result []*Artifact, err error)
 	return result, err
 }
 
+func (pe *Person) Books(ctx context.Context) (result []*Book, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pe.NamedBooks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pe.Edges.BooksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pe.QueryBooks().All(ctx)
+	}
+	return result, err
+}
+
 func (pe *Person) Projects(ctx context.Context) (result []*Project, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = pe.NamedProjects(graphql.GetFieldContext(ctx).Field.Alias)
@@ -572,6 +704,18 @@ func (pu *Publication) Authors(ctx context.Context) (result []*Person, err error
 	}
 	if IsNotLoaded(err) {
 		result, err = pu.QueryAuthors().All(ctx)
+	}
+	return result, err
+}
+
+func (pu *Publisher) Books(ctx context.Context) (result []*Book, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pu.NamedBooks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pu.Edges.BooksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pu.QueryBooks().All(ctx)
 	}
 	return result, err
 }

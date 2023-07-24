@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
@@ -151,6 +152,21 @@ func (cu *CollectionUpdate) AddArtifacts(a ...*Artifact) *CollectionUpdate {
 	return cu.AddArtifactIDs(ids...)
 }
 
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (cu *CollectionUpdate) AddBookIDs(ids ...int) *CollectionUpdate {
+	cu.mutation.AddBookIDs(ids...)
+	return cu
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (cu *CollectionUpdate) AddBooks(b ...*Book) *CollectionUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return cu.AddBookIDs(ids...)
+}
+
 // AddPersonIDs adds the "people" edge to the Person entity by IDs.
 func (cu *CollectionUpdate) AddPersonIDs(ids ...int) *CollectionUpdate {
 	cu.mutation.AddPersonIDs(ids...)
@@ -209,6 +225,27 @@ func (cu *CollectionUpdate) RemoveArtifacts(a ...*Artifact) *CollectionUpdate {
 		ids[i] = a[i].ID
 	}
 	return cu.RemoveArtifactIDs(ids...)
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (cu *CollectionUpdate) ClearBooks() *CollectionUpdate {
+	cu.mutation.ClearBooks()
+	return cu
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (cu *CollectionUpdate) RemoveBookIDs(ids ...int) *CollectionUpdate {
+	cu.mutation.RemoveBookIDs(ids...)
+	return cu
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (cu *CollectionUpdate) RemoveBooks(b ...*Book) *CollectionUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return cu.RemoveBookIDs(ids...)
 }
 
 // ClearPeople clears all "people" edges to the Person entity.
@@ -365,6 +402,51 @@ func (cu *CollectionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cu.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.BooksTable,
+			Columns: []string{collection.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.RemovedBooksIDs(); len(nodes) > 0 && !cu.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.BooksTable,
+			Columns: []string{collection.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.BooksTable,
+			Columns: []string{collection.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -585,6 +667,21 @@ func (cuo *CollectionUpdateOne) AddArtifacts(a ...*Artifact) *CollectionUpdateOn
 	return cuo.AddArtifactIDs(ids...)
 }
 
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (cuo *CollectionUpdateOne) AddBookIDs(ids ...int) *CollectionUpdateOne {
+	cuo.mutation.AddBookIDs(ids...)
+	return cuo
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (cuo *CollectionUpdateOne) AddBooks(b ...*Book) *CollectionUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return cuo.AddBookIDs(ids...)
+}
+
 // AddPersonIDs adds the "people" edge to the Person entity by IDs.
 func (cuo *CollectionUpdateOne) AddPersonIDs(ids ...int) *CollectionUpdateOne {
 	cuo.mutation.AddPersonIDs(ids...)
@@ -643,6 +740,27 @@ func (cuo *CollectionUpdateOne) RemoveArtifacts(a ...*Artifact) *CollectionUpdat
 		ids[i] = a[i].ID
 	}
 	return cuo.RemoveArtifactIDs(ids...)
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (cuo *CollectionUpdateOne) ClearBooks() *CollectionUpdateOne {
+	cuo.mutation.ClearBooks()
+	return cuo
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (cuo *CollectionUpdateOne) RemoveBookIDs(ids ...int) *CollectionUpdateOne {
+	cuo.mutation.RemoveBookIDs(ids...)
+	return cuo
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (cuo *CollectionUpdateOne) RemoveBooks(b ...*Book) *CollectionUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return cuo.RemoveBookIDs(ids...)
 }
 
 // ClearPeople clears all "people" edges to the Person entity.
@@ -829,6 +947,51 @@ func (cuo *CollectionUpdateOne) sqlSave(ctx context.Context) (_node *Collection,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cuo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.BooksTable,
+			Columns: []string{collection.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.RemovedBooksIDs(); len(nodes) > 0 && !cuo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.BooksTable,
+			Columns: []string{collection.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.BooksTable,
+			Columns: []string{collection.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

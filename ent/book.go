@@ -11,6 +11,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/dkrasnovdev/heritage-api/ent/book"
+	"github.com/dkrasnovdev/heritage-api/ent/collection"
+	"github.com/dkrasnovdev/heritage-api/ent/license"
+	"github.com/dkrasnovdev/heritage-api/ent/publisher"
 )
 
 // Book is the model entity for the Book schema.
@@ -32,7 +35,113 @@ type Book struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLinks holds the value of the "external_links" field.
 	ExternalLinks []string `json:"external_links,omitempty"`
-	selectValues  sql.SelectValues
+	// PrimaryImageURL holds the value of the "primary_image_url" field.
+	PrimaryImageURL string `json:"primary_image_url,omitempty"`
+	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
+	AdditionalImagesUrls []string `json:"additional_images_urls,omitempty"`
+	// Files holds the value of the "files" field.
+	Files []string `json:"files,omitempty"`
+	// Year holds the value of the "year" field.
+	Year int `json:"year,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the BookQuery when eager-loading is set.
+	Edges            BookEdges `json:"edges"`
+	collection_books *int
+	library_books    *int
+	license_books    *int
+	publisher_books  *int
+	selectValues     sql.SelectValues
+}
+
+// BookEdges holds the relations/edges for other nodes in the graph.
+type BookEdges struct {
+	// Authors holds the value of the authors edge.
+	Authors []*Person `json:"authors,omitempty"`
+	// BookGenres holds the value of the book_genres edge.
+	BookGenres []*BookGenre `json:"book_genres,omitempty"`
+	// Collection holds the value of the collection edge.
+	Collection *Collection `json:"collection,omitempty"`
+	// Holders holds the value of the holders edge.
+	Holders []*Holder `json:"holders,omitempty"`
+	// Publisher holds the value of the publisher edge.
+	Publisher *Publisher `json:"publisher,omitempty"`
+	// License holds the value of the license edge.
+	License *License `json:"license,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [6]bool
+	// totalCount holds the count of the edges above.
+	totalCount [6]map[string]int
+
+	namedAuthors    map[string][]*Person
+	namedBookGenres map[string][]*BookGenre
+	namedHolders    map[string][]*Holder
+}
+
+// AuthorsOrErr returns the Authors value or an error if the edge
+// was not loaded in eager-loading.
+func (e BookEdges) AuthorsOrErr() ([]*Person, error) {
+	if e.loadedTypes[0] {
+		return e.Authors, nil
+	}
+	return nil, &NotLoadedError{edge: "authors"}
+}
+
+// BookGenresOrErr returns the BookGenres value or an error if the edge
+// was not loaded in eager-loading.
+func (e BookEdges) BookGenresOrErr() ([]*BookGenre, error) {
+	if e.loadedTypes[1] {
+		return e.BookGenres, nil
+	}
+	return nil, &NotLoadedError{edge: "book_genres"}
+}
+
+// CollectionOrErr returns the Collection value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e BookEdges) CollectionOrErr() (*Collection, error) {
+	if e.loadedTypes[2] {
+		if e.Collection == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: collection.Label}
+		}
+		return e.Collection, nil
+	}
+	return nil, &NotLoadedError{edge: "collection"}
+}
+
+// HoldersOrErr returns the Holders value or an error if the edge
+// was not loaded in eager-loading.
+func (e BookEdges) HoldersOrErr() ([]*Holder, error) {
+	if e.loadedTypes[3] {
+		return e.Holders, nil
+	}
+	return nil, &NotLoadedError{edge: "holders"}
+}
+
+// PublisherOrErr returns the Publisher value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e BookEdges) PublisherOrErr() (*Publisher, error) {
+	if e.loadedTypes[4] {
+		if e.Publisher == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: publisher.Label}
+		}
+		return e.Publisher, nil
+	}
+	return nil, &NotLoadedError{edge: "publisher"}
+}
+
+// LicenseOrErr returns the License value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e BookEdges) LicenseOrErr() (*License, error) {
+	if e.loadedTypes[5] {
+		if e.License == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: license.Label}
+		}
+		return e.License, nil
+	}
+	return nil, &NotLoadedError{edge: "license"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -40,14 +149,22 @@ func (*Book) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case book.FieldExternalLinks:
+		case book.FieldExternalLinks, book.FieldAdditionalImagesUrls, book.FieldFiles:
 			values[i] = new([]byte)
-		case book.FieldID:
+		case book.FieldID, book.FieldYear:
 			values[i] = new(sql.NullInt64)
-		case book.FieldCreatedBy, book.FieldUpdatedBy, book.FieldDisplayName, book.FieldDescription:
+		case book.FieldCreatedBy, book.FieldUpdatedBy, book.FieldDisplayName, book.FieldDescription, book.FieldPrimaryImageURL:
 			values[i] = new(sql.NullString)
 		case book.FieldCreatedAt, book.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
+		case book.ForeignKeys[0]: // collection_books
+			values[i] = new(sql.NullInt64)
+		case book.ForeignKeys[1]: // library_books
+			values[i] = new(sql.NullInt64)
+		case book.ForeignKeys[2]: // license_books
+			values[i] = new(sql.NullInt64)
+		case book.ForeignKeys[3]: // publisher_books
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -113,6 +230,62 @@ func (b *Book) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field external_links: %w", err)
 				}
 			}
+		case book.FieldPrimaryImageURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field primary_image_url", values[i])
+			} else if value.Valid {
+				b.PrimaryImageURL = value.String
+			}
+		case book.FieldAdditionalImagesUrls:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field additional_images_urls", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &b.AdditionalImagesUrls); err != nil {
+					return fmt.Errorf("unmarshal field additional_images_urls: %w", err)
+				}
+			}
+		case book.FieldFiles:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field files", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &b.Files); err != nil {
+					return fmt.Errorf("unmarshal field files: %w", err)
+				}
+			}
+		case book.FieldYear:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field year", values[i])
+			} else if value.Valid {
+				b.Year = int(value.Int64)
+			}
+		case book.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field collection_books", value)
+			} else if value.Valid {
+				b.collection_books = new(int)
+				*b.collection_books = int(value.Int64)
+			}
+		case book.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field library_books", value)
+			} else if value.Valid {
+				b.library_books = new(int)
+				*b.library_books = int(value.Int64)
+			}
+		case book.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field license_books", value)
+			} else if value.Valid {
+				b.license_books = new(int)
+				*b.license_books = int(value.Int64)
+			}
+		case book.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field publisher_books", value)
+			} else if value.Valid {
+				b.publisher_books = new(int)
+				*b.publisher_books = int(value.Int64)
+			}
 		default:
 			b.selectValues.Set(columns[i], values[i])
 		}
@@ -124,6 +297,36 @@ func (b *Book) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (b *Book) Value(name string) (ent.Value, error) {
 	return b.selectValues.Get(name)
+}
+
+// QueryAuthors queries the "authors" edge of the Book entity.
+func (b *Book) QueryAuthors() *PersonQuery {
+	return NewBookClient(b.config).QueryAuthors(b)
+}
+
+// QueryBookGenres queries the "book_genres" edge of the Book entity.
+func (b *Book) QueryBookGenres() *BookGenreQuery {
+	return NewBookClient(b.config).QueryBookGenres(b)
+}
+
+// QueryCollection queries the "collection" edge of the Book entity.
+func (b *Book) QueryCollection() *CollectionQuery {
+	return NewBookClient(b.config).QueryCollection(b)
+}
+
+// QueryHolders queries the "holders" edge of the Book entity.
+func (b *Book) QueryHolders() *HolderQuery {
+	return NewBookClient(b.config).QueryHolders(b)
+}
+
+// QueryPublisher queries the "publisher" edge of the Book entity.
+func (b *Book) QueryPublisher() *PublisherQuery {
+	return NewBookClient(b.config).QueryPublisher(b)
+}
+
+// QueryLicense queries the "license" edge of the Book entity.
+func (b *Book) QueryLicense() *LicenseQuery {
+	return NewBookClient(b.config).QueryLicense(b)
 }
 
 // Update returns a builder for updating this Book.
@@ -169,8 +372,92 @@ func (b *Book) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_links=")
 	builder.WriteString(fmt.Sprintf("%v", b.ExternalLinks))
+	builder.WriteString(", ")
+	builder.WriteString("primary_image_url=")
+	builder.WriteString(b.PrimaryImageURL)
+	builder.WriteString(", ")
+	builder.WriteString("additional_images_urls=")
+	builder.WriteString(fmt.Sprintf("%v", b.AdditionalImagesUrls))
+	builder.WriteString(", ")
+	builder.WriteString("files=")
+	builder.WriteString(fmt.Sprintf("%v", b.Files))
+	builder.WriteString(", ")
+	builder.WriteString("year=")
+	builder.WriteString(fmt.Sprintf("%v", b.Year))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedAuthors returns the Authors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (b *Book) NamedAuthors(name string) ([]*Person, error) {
+	if b.Edges.namedAuthors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := b.Edges.namedAuthors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (b *Book) appendNamedAuthors(name string, edges ...*Person) {
+	if b.Edges.namedAuthors == nil {
+		b.Edges.namedAuthors = make(map[string][]*Person)
+	}
+	if len(edges) == 0 {
+		b.Edges.namedAuthors[name] = []*Person{}
+	} else {
+		b.Edges.namedAuthors[name] = append(b.Edges.namedAuthors[name], edges...)
+	}
+}
+
+// NamedBookGenres returns the BookGenres named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (b *Book) NamedBookGenres(name string) ([]*BookGenre, error) {
+	if b.Edges.namedBookGenres == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := b.Edges.namedBookGenres[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (b *Book) appendNamedBookGenres(name string, edges ...*BookGenre) {
+	if b.Edges.namedBookGenres == nil {
+		b.Edges.namedBookGenres = make(map[string][]*BookGenre)
+	}
+	if len(edges) == 0 {
+		b.Edges.namedBookGenres[name] = []*BookGenre{}
+	} else {
+		b.Edges.namedBookGenres[name] = append(b.Edges.namedBookGenres[name], edges...)
+	}
+}
+
+// NamedHolders returns the Holders named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (b *Book) NamedHolders(name string) ([]*Holder, error) {
+	if b.Edges.namedHolders == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := b.Edges.namedHolders[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (b *Book) appendNamedHolders(name string, edges ...*Holder) {
+	if b.Edges.namedHolders == nil {
+		b.Edges.namedHolders = make(map[string][]*Holder)
+	}
+	if len(edges) == 0 {
+		b.Edges.namedHolders[name] = []*Holder{}
+	} else {
+		b.Edges.namedHolders[name] = append(b.Edges.namedHolders[name], edges...)
+	}
 }
 
 // Books is a parsable slice of Book.

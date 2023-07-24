@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/bookgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
@@ -133,9 +134,45 @@ func (bgu *BookGenreUpdate) ClearExternalLinks() *BookGenreUpdate {
 	return bgu
 }
 
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (bgu *BookGenreUpdate) AddBookIDs(ids ...int) *BookGenreUpdate {
+	bgu.mutation.AddBookIDs(ids...)
+	return bgu
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (bgu *BookGenreUpdate) AddBooks(b ...*Book) *BookGenreUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return bgu.AddBookIDs(ids...)
+}
+
 // Mutation returns the BookGenreMutation object of the builder.
 func (bgu *BookGenreUpdate) Mutation() *BookGenreMutation {
 	return bgu.mutation
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (bgu *BookGenreUpdate) ClearBooks() *BookGenreUpdate {
+	bgu.mutation.ClearBooks()
+	return bgu
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (bgu *BookGenreUpdate) RemoveBookIDs(ids ...int) *BookGenreUpdate {
+	bgu.mutation.RemoveBookIDs(ids...)
+	return bgu
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (bgu *BookGenreUpdate) RemoveBooks(b ...*Book) *BookGenreUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return bgu.RemoveBookIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -226,6 +263,51 @@ func (bgu *BookGenreUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if bgu.mutation.ExternalLinksCleared() {
 		_spec.ClearField(bookgenre.FieldExternalLinks, field.TypeJSON)
+	}
+	if bgu.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   bookgenre.BooksTable,
+			Columns: bookgenre.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bgu.mutation.RemovedBooksIDs(); len(nodes) > 0 && !bgu.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   bookgenre.BooksTable,
+			Columns: bookgenre.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bgu.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   bookgenre.BooksTable,
+			Columns: bookgenre.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, bgu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -351,9 +433,45 @@ func (bguo *BookGenreUpdateOne) ClearExternalLinks() *BookGenreUpdateOne {
 	return bguo
 }
 
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (bguo *BookGenreUpdateOne) AddBookIDs(ids ...int) *BookGenreUpdateOne {
+	bguo.mutation.AddBookIDs(ids...)
+	return bguo
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (bguo *BookGenreUpdateOne) AddBooks(b ...*Book) *BookGenreUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return bguo.AddBookIDs(ids...)
+}
+
 // Mutation returns the BookGenreMutation object of the builder.
 func (bguo *BookGenreUpdateOne) Mutation() *BookGenreMutation {
 	return bguo.mutation
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (bguo *BookGenreUpdateOne) ClearBooks() *BookGenreUpdateOne {
+	bguo.mutation.ClearBooks()
+	return bguo
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (bguo *BookGenreUpdateOne) RemoveBookIDs(ids ...int) *BookGenreUpdateOne {
+	bguo.mutation.RemoveBookIDs(ids...)
+	return bguo
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (bguo *BookGenreUpdateOne) RemoveBooks(b ...*Book) *BookGenreUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return bguo.RemoveBookIDs(ids...)
 }
 
 // Where appends a list predicates to the BookGenreUpdate builder.
@@ -474,6 +592,51 @@ func (bguo *BookGenreUpdateOne) sqlSave(ctx context.Context) (_node *BookGenre, 
 	}
 	if bguo.mutation.ExternalLinksCleared() {
 		_spec.ClearField(bookgenre.FieldExternalLinks, field.TypeJSON)
+	}
+	if bguo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   bookgenre.BooksTable,
+			Columns: bookgenre.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bguo.mutation.RemovedBooksIDs(); len(nodes) > 0 && !bguo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   bookgenre.BooksTable,
+			Columns: bookgenre.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bguo.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   bookgenre.BooksTable,
+			Columns: bookgenre.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &BookGenre{config: bguo.config}
 	_spec.Assign = _node.assignValues

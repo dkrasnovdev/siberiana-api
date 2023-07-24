@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/library"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
@@ -133,9 +134,45 @@ func (lu *LibraryUpdate) ClearExternalLinks() *LibraryUpdate {
 	return lu
 }
 
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (lu *LibraryUpdate) AddBookIDs(ids ...int) *LibraryUpdate {
+	lu.mutation.AddBookIDs(ids...)
+	return lu
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (lu *LibraryUpdate) AddBooks(b ...*Book) *LibraryUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return lu.AddBookIDs(ids...)
+}
+
 // Mutation returns the LibraryMutation object of the builder.
 func (lu *LibraryUpdate) Mutation() *LibraryMutation {
 	return lu.mutation
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (lu *LibraryUpdate) ClearBooks() *LibraryUpdate {
+	lu.mutation.ClearBooks()
+	return lu
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (lu *LibraryUpdate) RemoveBookIDs(ids ...int) *LibraryUpdate {
+	lu.mutation.RemoveBookIDs(ids...)
+	return lu
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (lu *LibraryUpdate) RemoveBooks(b ...*Book) *LibraryUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return lu.RemoveBookIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -226,6 +263,51 @@ func (lu *LibraryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if lu.mutation.ExternalLinksCleared() {
 		_spec.ClearField(library.FieldExternalLinks, field.TypeJSON)
+	}
+	if lu.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   library.BooksTable,
+			Columns: []string{library.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := lu.mutation.RemovedBooksIDs(); len(nodes) > 0 && !lu.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   library.BooksTable,
+			Columns: []string{library.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := lu.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   library.BooksTable,
+			Columns: []string{library.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, lu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -351,9 +433,45 @@ func (luo *LibraryUpdateOne) ClearExternalLinks() *LibraryUpdateOne {
 	return luo
 }
 
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (luo *LibraryUpdateOne) AddBookIDs(ids ...int) *LibraryUpdateOne {
+	luo.mutation.AddBookIDs(ids...)
+	return luo
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (luo *LibraryUpdateOne) AddBooks(b ...*Book) *LibraryUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return luo.AddBookIDs(ids...)
+}
+
 // Mutation returns the LibraryMutation object of the builder.
 func (luo *LibraryUpdateOne) Mutation() *LibraryMutation {
 	return luo.mutation
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (luo *LibraryUpdateOne) ClearBooks() *LibraryUpdateOne {
+	luo.mutation.ClearBooks()
+	return luo
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (luo *LibraryUpdateOne) RemoveBookIDs(ids ...int) *LibraryUpdateOne {
+	luo.mutation.RemoveBookIDs(ids...)
+	return luo
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (luo *LibraryUpdateOne) RemoveBooks(b ...*Book) *LibraryUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return luo.RemoveBookIDs(ids...)
 }
 
 // Where appends a list predicates to the LibraryUpdate builder.
@@ -474,6 +592,51 @@ func (luo *LibraryUpdateOne) sqlSave(ctx context.Context) (_node *Library, err e
 	}
 	if luo.mutation.ExternalLinksCleared() {
 		_spec.ClearField(library.FieldExternalLinks, field.TypeJSON)
+	}
+	if luo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   library.BooksTable,
+			Columns: []string{library.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := luo.mutation.RemovedBooksIDs(); len(nodes) > 0 && !luo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   library.BooksTable,
+			Columns: []string{library.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := luo.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   library.BooksTable,
+			Columns: []string{library.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Library{config: luo.config}
 	_spec.Assign = _node.assignValues

@@ -179,6 +179,10 @@ func init() {
 	book.DefaultUpdatedAt = bookDescUpdatedAt.Default.(func() time.Time)
 	// book.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	book.UpdateDefaultUpdatedAt = bookDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// bookDescYear is the schema descriptor for year field.
+	bookDescYear := bookFields[1].Descriptor()
+	// book.YearValidator is a validator for the "year" field. It is called by the builders before save.
+	book.YearValidator = bookDescYear.Validators[0].(func(int) error)
 	bookgenreMixin := schema.BookGenre{}.Mixin()
 	bookgenre.Policy = privacy.NewPolicies(schema.BookGenre{})
 	bookgenre.Hooks[0] = func(next ent.Mutator) ent.Mutator {

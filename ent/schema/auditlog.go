@@ -54,8 +54,3 @@ func (AuditLog) Fields() []ent.Field {
 			Annotations(entgql.OrderField("CREATED_AT")),
 	}
 }
-
-// Edges of the AuditLog.
-func (AuditLog) Edges() []ent.Edge {
-	return nil
-}

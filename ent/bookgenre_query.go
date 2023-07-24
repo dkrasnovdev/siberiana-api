@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -11,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/bookgenre"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
@@ -18,12 +20,14 @@ import (
 // BookGenreQuery is the builder for querying BookGenre entities.
 type BookGenreQuery struct {
 	config
-	ctx        *QueryContext
-	order      []bookgenre.OrderOption
-	inters     []Interceptor
-	predicates []predicate.BookGenre
-	modifiers  []func(*sql.Selector)
-	loadTotal  []func(context.Context, []*BookGenre) error
+	ctx            *QueryContext
+	order          []bookgenre.OrderOption
+	inters         []Interceptor
+	predicates     []predicate.BookGenre
+	withBooks      *BookQuery
+	modifiers      []func(*sql.Selector)
+	loadTotal      []func(context.Context, []*BookGenre) error
+	withNamedBooks map[string]*BookQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -58,6 +62,28 @@ func (bgq *BookGenreQuery) Unique(unique bool) *BookGenreQuery {
 func (bgq *BookGenreQuery) Order(o ...bookgenre.OrderOption) *BookGenreQuery {
 	bgq.order = append(bgq.order, o...)
 	return bgq
+}
+
+// QueryBooks chains the current query on the "books" edge.
+func (bgq *BookGenreQuery) QueryBooks() *BookQuery {
+	query := (&BookClient{config: bgq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := bgq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := bgq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(bookgenre.Table, bookgenre.FieldID, selector),
+			sqlgraph.To(book.Table, book.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, bookgenre.BooksTable, bookgenre.BooksPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(bgq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first BookGenre entity from the query.
@@ -252,10 +278,22 @@ func (bgq *BookGenreQuery) Clone() *BookGenreQuery {
 		order:      append([]bookgenre.OrderOption{}, bgq.order...),
 		inters:     append([]Interceptor{}, bgq.inters...),
 		predicates: append([]predicate.BookGenre{}, bgq.predicates...),
+		withBooks:  bgq.withBooks.Clone(),
 		// clone intermediate query.
 		sql:  bgq.sql.Clone(),
 		path: bgq.path,
 	}
+}
+
+// WithBooks tells the query-builder to eager-load the nodes that are connected to
+// the "books" edge. The optional arguments are used to configure the query builder of the edge.
+func (bgq *BookGenreQuery) WithBooks(opts ...func(*BookQuery)) *BookGenreQuery {
+	query := (&BookClient{config: bgq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	bgq.withBooks = query
+	return bgq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -340,8 +378,11 @@ func (bgq *BookGenreQuery) prepareQuery(ctx context.Context) error {
 
 func (bgq *BookGenreQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*BookGenre, error) {
 	var (
-		nodes = []*BookGenre{}
-		_spec = bgq.querySpec()
+		nodes       = []*BookGenre{}
+		_spec       = bgq.querySpec()
+		loadedTypes = [1]bool{
+			bgq.withBooks != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*BookGenre).scanValues(nil, columns)
@@ -349,6 +390,7 @@ func (bgq *BookGenreQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*B
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &BookGenre{config: bgq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(bgq.modifiers) > 0 {
@@ -363,12 +405,88 @@ func (bgq *BookGenreQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*B
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := bgq.withBooks; query != nil {
+		if err := bgq.loadBooks(ctx, query, nodes,
+			func(n *BookGenre) { n.Edges.Books = []*Book{} },
+			func(n *BookGenre, e *Book) { n.Edges.Books = append(n.Edges.Books, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range bgq.withNamedBooks {
+		if err := bgq.loadBooks(ctx, query, nodes,
+			func(n *BookGenre) { n.appendNamedBooks(name) },
+			func(n *BookGenre, e *Book) { n.appendNamedBooks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range bgq.loadTotal {
 		if err := bgq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (bgq *BookGenreQuery) loadBooks(ctx context.Context, query *BookQuery, nodes []*BookGenre, init func(*BookGenre), assign func(*BookGenre, *Book)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*BookGenre)
+	nids := make(map[int]map[*BookGenre]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(bookgenre.BooksTable)
+		s.Join(joinT).On(s.C(book.FieldID), joinT.C(bookgenre.BooksPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(bookgenre.BooksPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(bookgenre.BooksPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*BookGenre]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Book](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "books" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
 }
 
 func (bgq *BookGenreQuery) sqlCount(ctx context.Context) (int, error) {
@@ -453,6 +571,20 @@ func (bgq *BookGenreQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedBooks tells the query-builder to eager-load the nodes that are connected to the "books"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (bgq *BookGenreQuery) WithNamedBooks(name string, opts ...func(*BookQuery)) *BookGenreQuery {
+	query := (&BookClient{config: bgq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if bgq.withNamedBooks == nil {
+		bgq.withNamedBooks = make(map[string]*BookQuery)
+	}
+	bgq.withNamedBooks[name] = query
+	return bgq
 }
 
 // BookGenreGroupBy is the group-by builder for BookGenre entities.

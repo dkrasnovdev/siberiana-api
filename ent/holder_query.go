@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
@@ -28,12 +29,14 @@ type HolderQuery struct {
 	inters                          []Interceptor
 	predicates                      []predicate.Holder
 	withArtifacts                   *ArtifactQuery
+	withBooks                       *BookQuery
 	withHolderResponsibilities      *HolderResponsibilityQuery
 	withPerson                      *PersonQuery
 	withOrganization                *OrganizationQuery
 	modifiers                       []func(*sql.Selector)
 	loadTotal                       []func(context.Context, []*Holder) error
 	withNamedArtifacts              map[string]*ArtifactQuery
+	withNamedBooks                  map[string]*BookQuery
 	withNamedHolderResponsibilities map[string]*HolderResponsibilityQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -86,6 +89,28 @@ func (hq *HolderQuery) QueryArtifacts() *ArtifactQuery {
 			sqlgraph.From(holder.Table, holder.FieldID, selector),
 			sqlgraph.To(artifact.Table, artifact.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, holder.ArtifactsTable, holder.ArtifactsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(hq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryBooks chains the current query on the "books" edge.
+func (hq *HolderQuery) QueryBooks() *BookQuery {
+	query := (&BookClient{config: hq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := hq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := hq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(holder.Table, holder.FieldID, selector),
+			sqlgraph.To(book.Table, book.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, holder.BooksTable, holder.BooksPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(hq.driver.Dialect(), step)
 		return fromU, nil
@@ -352,6 +377,7 @@ func (hq *HolderQuery) Clone() *HolderQuery {
 		inters:                     append([]Interceptor{}, hq.inters...),
 		predicates:                 append([]predicate.Holder{}, hq.predicates...),
 		withArtifacts:              hq.withArtifacts.Clone(),
+		withBooks:                  hq.withBooks.Clone(),
 		withHolderResponsibilities: hq.withHolderResponsibilities.Clone(),
 		withPerson:                 hq.withPerson.Clone(),
 		withOrganization:           hq.withOrganization.Clone(),
@@ -369,6 +395,17 @@ func (hq *HolderQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *HolderQuery 
 		opt(query)
 	}
 	hq.withArtifacts = query
+	return hq
+}
+
+// WithBooks tells the query-builder to eager-load the nodes that are connected to
+// the "books" edge. The optional arguments are used to configure the query builder of the edge.
+func (hq *HolderQuery) WithBooks(opts ...func(*BookQuery)) *HolderQuery {
+	query := (&BookClient{config: hq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	hq.withBooks = query
 	return hq
 }
 
@@ -489,8 +526,9 @@ func (hq *HolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Holde
 	var (
 		nodes       = []*Holder{}
 		_spec       = hq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [5]bool{
 			hq.withArtifacts != nil,
+			hq.withBooks != nil,
 			hq.withHolderResponsibilities != nil,
 			hq.withPerson != nil,
 			hq.withOrganization != nil,
@@ -524,6 +562,13 @@ func (hq *HolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Holde
 			return nil, err
 		}
 	}
+	if query := hq.withBooks; query != nil {
+		if err := hq.loadBooks(ctx, query, nodes,
+			func(n *Holder) { n.Edges.Books = []*Book{} },
+			func(n *Holder, e *Book) { n.Edges.Books = append(n.Edges.Books, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := hq.withHolderResponsibilities; query != nil {
 		if err := hq.loadHolderResponsibilities(ctx, query, nodes,
 			func(n *Holder) { n.Edges.HolderResponsibilities = []*HolderResponsibility{} },
@@ -549,6 +594,13 @@ func (hq *HolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Holde
 		if err := hq.loadArtifacts(ctx, query, nodes,
 			func(n *Holder) { n.appendNamedArtifacts(name) },
 			func(n *Holder, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range hq.withNamedBooks {
+		if err := hq.loadBooks(ctx, query, nodes,
+			func(n *Holder) { n.appendNamedBooks(name) },
+			func(n *Holder, e *Book) { n.appendNamedBooks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -621,6 +673,67 @@ func (hq *HolderQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, 
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "artifacts" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (hq *HolderQuery) loadBooks(ctx context.Context, query *BookQuery, nodes []*Holder, init func(*Holder), assign func(*Holder, *Book)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Holder)
+	nids := make(map[int]map[*Holder]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(holder.BooksTable)
+		s.Join(joinT).On(s.C(book.FieldID), joinT.C(holder.BooksPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(holder.BooksPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(holder.BooksPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Holder]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Book](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "books" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -841,6 +954,20 @@ func (hq *HolderQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQue
 		hq.withNamedArtifacts = make(map[string]*ArtifactQuery)
 	}
 	hq.withNamedArtifacts[name] = query
+	return hq
+}
+
+// WithNamedBooks tells the query-builder to eager-load the nodes that are connected to the "books"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (hq *HolderQuery) WithNamedBooks(name string, opts ...func(*BookQuery)) *HolderQuery {
+	query := (&BookClient{config: hq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if hq.withNamedBooks == nil {
+		hq.withNamedBooks = make(map[string]*BookQuery)
+	}
+	hq.withNamedBooks[name] = query
 	return hq
 }
 

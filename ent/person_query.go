@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
@@ -31,6 +32,7 @@ type PersonQuery struct {
 	inters                []Interceptor
 	predicates            []predicate.Person
 	withArtifacts         *ArtifactQuery
+	withBooks             *BookQuery
 	withProjects          *ProjectQuery
 	withPublications      *PublicationQuery
 	withPersonRoles       *PersonRoleQuery
@@ -41,6 +43,7 @@ type PersonQuery struct {
 	modifiers             []func(*sql.Selector)
 	loadTotal             []func(context.Context, []*Person) error
 	withNamedArtifacts    map[string]*ArtifactQuery
+	withNamedBooks        map[string]*BookQuery
 	withNamedProjects     map[string]*ProjectQuery
 	withNamedPublications map[string]*PublicationQuery
 	withNamedPersonRoles  map[string]*PersonRoleQuery
@@ -95,6 +98,28 @@ func (pq *PersonQuery) QueryArtifacts() *ArtifactQuery {
 			sqlgraph.From(person.Table, person.FieldID, selector),
 			sqlgraph.To(artifact.Table, artifact.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, person.ArtifactsTable, person.ArtifactsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryBooks chains the current query on the "books" edge.
+func (pq *PersonQuery) QueryBooks() *BookQuery {
+	query := (&BookClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, selector),
+			sqlgraph.To(book.Table, book.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, person.BooksTable, person.BooksPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -427,6 +452,7 @@ func (pq *PersonQuery) Clone() *PersonQuery {
 		inters:           append([]Interceptor{}, pq.inters...),
 		predicates:       append([]predicate.Person{}, pq.predicates...),
 		withArtifacts:    pq.withArtifacts.Clone(),
+		withBooks:        pq.withBooks.Clone(),
 		withProjects:     pq.withProjects.Clone(),
 		withPublications: pq.withPublications.Clone(),
 		withPersonRoles:  pq.withPersonRoles.Clone(),
@@ -447,6 +473,17 @@ func (pq *PersonQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *PersonQuery 
 		opt(query)
 	}
 	pq.withArtifacts = query
+	return pq
+}
+
+// WithBooks tells the query-builder to eager-load the nodes that are connected to
+// the "books" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonQuery) WithBooks(opts ...func(*BookQuery)) *PersonQuery {
+	query := (&BookClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withBooks = query
 	return pq
 }
 
@@ -601,8 +638,9 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 		nodes       = []*Person{}
 		withFKs     = pq.withFKs
 		_spec       = pq.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [8]bool{
 			pq.withArtifacts != nil,
+			pq.withBooks != nil,
 			pq.withProjects != nil,
 			pq.withPublications != nil,
 			pq.withPersonRoles != nil,
@@ -642,6 +680,13 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 		if err := pq.loadArtifacts(ctx, query, nodes,
 			func(n *Person) { n.Edges.Artifacts = []*Artifact{} },
 			func(n *Person, e *Artifact) { n.Edges.Artifacts = append(n.Edges.Artifacts, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pq.withBooks; query != nil {
+		if err := pq.loadBooks(ctx, query, nodes,
+			func(n *Person) { n.Edges.Books = []*Book{} },
+			func(n *Person, e *Book) { n.Edges.Books = append(n.Edges.Books, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -688,6 +733,13 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 		if err := pq.loadArtifacts(ctx, query, nodes,
 			func(n *Person) { n.appendNamedArtifacts(name) },
 			func(n *Person, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pq.withNamedBooks {
+		if err := pq.loadBooks(ctx, query, nodes,
+			func(n *Person) { n.appendNamedBooks(name) },
+			func(n *Person, e *Book) { n.appendNamedBooks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -774,6 +826,67 @@ func (pq *PersonQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, 
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "artifacts" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (pq *PersonQuery) loadBooks(ctx context.Context, query *BookQuery, nodes []*Person, init func(*Person), assign func(*Person, *Book)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Person)
+	nids := make(map[int]map[*Person]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(person.BooksTable)
+		s.Join(joinT).On(s.C(book.FieldID), joinT.C(person.BooksPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(person.BooksPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(person.BooksPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Person]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Book](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "books" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -1156,6 +1269,20 @@ func (pq *PersonQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQue
 		pq.withNamedArtifacts = make(map[string]*ArtifactQuery)
 	}
 	pq.withNamedArtifacts[name] = query
+	return pq
+}
+
+// WithNamedBooks tells the query-builder to eager-load the nodes that are connected to the "books"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonQuery) WithNamedBooks(name string, opts ...func(*BookQuery)) *PersonQuery {
+	query := (&BookClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedBooks == nil {
+		pq.withNamedBooks = make(map[string]*BookQuery)
+	}
+	pq.withNamedBooks[name] = query
 	return pq
 }
 

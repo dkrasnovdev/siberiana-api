@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
@@ -25,9 +26,11 @@ type LicenseQuery struct {
 	inters             []Interceptor
 	predicates         []predicate.License
 	withArtifacts      *ArtifactQuery
+	withBooks          *BookQuery
 	modifiers          []func(*sql.Selector)
 	loadTotal          []func(context.Context, []*License) error
 	withNamedArtifacts map[string]*ArtifactQuery
+	withNamedBooks     map[string]*BookQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -79,6 +82,28 @@ func (lq *LicenseQuery) QueryArtifacts() *ArtifactQuery {
 			sqlgraph.From(license.Table, license.FieldID, selector),
 			sqlgraph.To(artifact.Table, artifact.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, license.ArtifactsTable, license.ArtifactsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(lq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryBooks chains the current query on the "books" edge.
+func (lq *LicenseQuery) QueryBooks() *BookQuery {
+	query := (&BookClient{config: lq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := lq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := lq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(license.Table, license.FieldID, selector),
+			sqlgraph.To(book.Table, book.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, license.BooksTable, license.BooksColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(lq.driver.Dialect(), step)
 		return fromU, nil
@@ -279,6 +304,7 @@ func (lq *LicenseQuery) Clone() *LicenseQuery {
 		inters:        append([]Interceptor{}, lq.inters...),
 		predicates:    append([]predicate.License{}, lq.predicates...),
 		withArtifacts: lq.withArtifacts.Clone(),
+		withBooks:     lq.withBooks.Clone(),
 		// clone intermediate query.
 		sql:  lq.sql.Clone(),
 		path: lq.path,
@@ -293,6 +319,17 @@ func (lq *LicenseQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *LicenseQuer
 		opt(query)
 	}
 	lq.withArtifacts = query
+	return lq
+}
+
+// WithBooks tells the query-builder to eager-load the nodes that are connected to
+// the "books" edge. The optional arguments are used to configure the query builder of the edge.
+func (lq *LicenseQuery) WithBooks(opts ...func(*BookQuery)) *LicenseQuery {
+	query := (&BookClient{config: lq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	lq.withBooks = query
 	return lq
 }
 
@@ -380,8 +417,9 @@ func (lq *LicenseQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Lice
 	var (
 		nodes       = []*License{}
 		_spec       = lq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [2]bool{
 			lq.withArtifacts != nil,
+			lq.withBooks != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -412,10 +450,24 @@ func (lq *LicenseQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Lice
 			return nil, err
 		}
 	}
+	if query := lq.withBooks; query != nil {
+		if err := lq.loadBooks(ctx, query, nodes,
+			func(n *License) { n.Edges.Books = []*Book{} },
+			func(n *License, e *Book) { n.Edges.Books = append(n.Edges.Books, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range lq.withNamedArtifacts {
 		if err := lq.loadArtifacts(ctx, query, nodes,
 			func(n *License) { n.appendNamedArtifacts(name) },
 			func(n *License, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range lq.withNamedBooks {
+		if err := lq.loadBooks(ctx, query, nodes,
+			func(n *License) { n.appendNamedBooks(name) },
+			func(n *License, e *Book) { n.appendNamedBooks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -453,6 +505,37 @@ func (lq *LicenseQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery,
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "license_artifacts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (lq *LicenseQuery) loadBooks(ctx context.Context, query *BookQuery, nodes []*License, init func(*License), assign func(*License, *Book)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*License)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(license.BooksColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.license_books
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "license_books" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "license_books" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -554,6 +637,20 @@ func (lq *LicenseQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQu
 		lq.withNamedArtifacts = make(map[string]*ArtifactQuery)
 	}
 	lq.withNamedArtifacts[name] = query
+	return lq
+}
+
+// WithNamedBooks tells the query-builder to eager-load the nodes that are connected to the "books"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (lq *LicenseQuery) WithNamedBooks(name string, opts ...func(*BookQuery)) *LicenseQuery {
+	query := (&BookClient{config: lq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if lq.withNamedBooks == nil {
+		lq.withNamedBooks = make(map[string]*BookQuery)
+	}
+	lq.withNamedBooks[name] = query
 	return lq
 }
 

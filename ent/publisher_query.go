@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -11,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/publisher"
 )
@@ -18,12 +20,14 @@ import (
 // PublisherQuery is the builder for querying Publisher entities.
 type PublisherQuery struct {
 	config
-	ctx        *QueryContext
-	order      []publisher.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Publisher
-	modifiers  []func(*sql.Selector)
-	loadTotal  []func(context.Context, []*Publisher) error
+	ctx            *QueryContext
+	order          []publisher.OrderOption
+	inters         []Interceptor
+	predicates     []predicate.Publisher
+	withBooks      *BookQuery
+	modifiers      []func(*sql.Selector)
+	loadTotal      []func(context.Context, []*Publisher) error
+	withNamedBooks map[string]*BookQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -58,6 +62,28 @@ func (pq *PublisherQuery) Unique(unique bool) *PublisherQuery {
 func (pq *PublisherQuery) Order(o ...publisher.OrderOption) *PublisherQuery {
 	pq.order = append(pq.order, o...)
 	return pq
+}
+
+// QueryBooks chains the current query on the "books" edge.
+func (pq *PublisherQuery) QueryBooks() *BookQuery {
+	query := (&BookClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(publisher.Table, publisher.FieldID, selector),
+			sqlgraph.To(book.Table, book.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, publisher.BooksTable, publisher.BooksColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Publisher entity from the query.
@@ -252,10 +278,22 @@ func (pq *PublisherQuery) Clone() *PublisherQuery {
 		order:      append([]publisher.OrderOption{}, pq.order...),
 		inters:     append([]Interceptor{}, pq.inters...),
 		predicates: append([]predicate.Publisher{}, pq.predicates...),
+		withBooks:  pq.withBooks.Clone(),
 		// clone intermediate query.
 		sql:  pq.sql.Clone(),
 		path: pq.path,
 	}
+}
+
+// WithBooks tells the query-builder to eager-load the nodes that are connected to
+// the "books" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *PublisherQuery) WithBooks(opts ...func(*BookQuery)) *PublisherQuery {
+	query := (&BookClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withBooks = query
+	return pq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -340,8 +378,11 @@ func (pq *PublisherQuery) prepareQuery(ctx context.Context) error {
 
 func (pq *PublisherQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Publisher, error) {
 	var (
-		nodes = []*Publisher{}
-		_spec = pq.querySpec()
+		nodes       = []*Publisher{}
+		_spec       = pq.querySpec()
+		loadedTypes = [1]bool{
+			pq.withBooks != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Publisher).scanValues(nil, columns)
@@ -349,6 +390,7 @@ func (pq *PublisherQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pu
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Publisher{config: pq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(pq.modifiers) > 0 {
@@ -363,12 +405,58 @@ func (pq *PublisherQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pu
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := pq.withBooks; query != nil {
+		if err := pq.loadBooks(ctx, query, nodes,
+			func(n *Publisher) { n.Edges.Books = []*Book{} },
+			func(n *Publisher, e *Book) { n.Edges.Books = append(n.Edges.Books, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pq.withNamedBooks {
+		if err := pq.loadBooks(ctx, query, nodes,
+			func(n *Publisher) { n.appendNamedBooks(name) },
+			func(n *Publisher, e *Book) { n.appendNamedBooks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range pq.loadTotal {
 		if err := pq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (pq *PublisherQuery) loadBooks(ctx context.Context, query *BookQuery, nodes []*Publisher, init func(*Publisher), assign func(*Publisher, *Book)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Publisher)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(publisher.BooksColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.publisher_books
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "publisher_books" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "publisher_books" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
 }
 
 func (pq *PublisherQuery) sqlCount(ctx context.Context) (int, error) {
@@ -453,6 +541,20 @@ func (pq *PublisherQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedBooks tells the query-builder to eager-load the nodes that are connected to the "books"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *PublisherQuery) WithNamedBooks(name string, opts ...func(*BookQuery)) *PublisherQuery {
+	query := (&BookClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedBooks == nil {
+		pq.withNamedBooks = make(map[string]*BookQuery)
+	}
+	pq.withNamedBooks[name] = query
+	return pq
 }
 
 // PublisherGroupBy is the group-by builder for Publisher entities.

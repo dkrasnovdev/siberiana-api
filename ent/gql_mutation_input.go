@@ -668,13 +668,23 @@ func (c *ArtifactUpdateOne) SetInput(i UpdateArtifactInput) *ArtifactUpdateOne {
 
 // CreateBookInput represents a mutation input for creating books.
 type CreateBookInput struct {
-	CreatedAt     *time.Time
-	CreatedBy     *string
-	UpdatedAt     *time.Time
-	UpdatedBy     *string
-	DisplayName   *string
-	Description   *string
-	ExternalLinks []string
+	CreatedAt            *time.Time
+	CreatedBy            *string
+	UpdatedAt            *time.Time
+	UpdatedBy            *string
+	DisplayName          *string
+	Description          *string
+	ExternalLinks        []string
+	PrimaryImageURL      *string
+	AdditionalImagesUrls []string
+	Files                []string
+	Year                 *int
+	AuthorIDs            []int
+	BookGenreIDs         []int
+	CollectionID         *int
+	HolderIDs            []int
+	PublisherID          *int
+	LicenseID            *int
 }
 
 // Mutate applies the CreateBookInput on the BookMutation builder.
@@ -700,6 +710,36 @@ func (i *CreateBookInput) Mutate(m *BookMutation) {
 	if v := i.ExternalLinks; v != nil {
 		m.SetExternalLinks(v)
 	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
+	}
+	if v := i.Files; v != nil {
+		m.SetFiles(v)
+	}
+	if v := i.Year; v != nil {
+		m.SetYear(*v)
+	}
+	if v := i.AuthorIDs; len(v) > 0 {
+		m.AddAuthorIDs(v...)
+	}
+	if v := i.BookGenreIDs; len(v) > 0 {
+		m.AddBookGenreIDs(v...)
+	}
+	if v := i.CollectionID; v != nil {
+		m.SetCollectionID(*v)
+	}
+	if v := i.HolderIDs; len(v) > 0 {
+		m.AddHolderIDs(v...)
+	}
+	if v := i.PublisherID; v != nil {
+		m.SetPublisherID(*v)
+	}
+	if v := i.LicenseID; v != nil {
+		m.SetLicenseID(*v)
+	}
 }
 
 // SetInput applies the change-set in the CreateBookInput on the BookCreate builder.
@@ -710,18 +750,43 @@ func (c *BookCreate) SetInput(i CreateBookInput) *BookCreate {
 
 // UpdateBookInput represents a mutation input for updating books.
 type UpdateBookInput struct {
-	ClearCreatedBy      bool
-	CreatedBy           *string
-	UpdatedAt           *time.Time
-	ClearUpdatedBy      bool
-	UpdatedBy           *string
-	ClearDisplayName    bool
-	DisplayName         *string
-	ClearDescription    bool
-	Description         *string
-	ClearExternalLinks  bool
-	ExternalLinks       []string
-	AppendExternalLinks []string
+	ClearCreatedBy             bool
+	CreatedBy                  *string
+	UpdatedAt                  *time.Time
+	ClearUpdatedBy             bool
+	UpdatedBy                  *string
+	ClearDisplayName           bool
+	DisplayName                *string
+	ClearDescription           bool
+	Description                *string
+	ClearExternalLinks         bool
+	ExternalLinks              []string
+	AppendExternalLinks        []string
+	ClearPrimaryImageURL       bool
+	PrimaryImageURL            *string
+	ClearAdditionalImagesUrls  bool
+	AdditionalImagesUrls       []string
+	AppendAdditionalImagesUrls []string
+	ClearFiles                 bool
+	Files                      []string
+	AppendFiles                []string
+	ClearYear                  bool
+	Year                       *int
+	ClearAuthors               bool
+	AddAuthorIDs               []int
+	RemoveAuthorIDs            []int
+	ClearBookGenres            bool
+	AddBookGenreIDs            []int
+	RemoveBookGenreIDs         []int
+	ClearCollection            bool
+	CollectionID               *int
+	ClearHolders               bool
+	AddHolderIDs               []int
+	RemoveHolderIDs            []int
+	ClearPublisher             bool
+	PublisherID                *int
+	ClearLicense               bool
+	LicenseID                  *int
 }
 
 // Mutate applies the UpdateBookInput on the BookMutation builder.
@@ -762,6 +827,81 @@ func (i *UpdateBookInput) Mutate(m *BookMutation) {
 	if i.AppendExternalLinks != nil {
 		m.AppendExternalLinks(i.ExternalLinks)
 	}
+	if i.ClearPrimaryImageURL {
+		m.ClearPrimaryImageURL()
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if i.ClearAdditionalImagesUrls {
+		m.ClearAdditionalImagesUrls()
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
+	}
+	if i.AppendAdditionalImagesUrls != nil {
+		m.AppendAdditionalImagesUrls(i.AdditionalImagesUrls)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.Files; v != nil {
+		m.SetFiles(v)
+	}
+	if i.AppendFiles != nil {
+		m.AppendFiles(i.Files)
+	}
+	if i.ClearYear {
+		m.ClearYear()
+	}
+	if v := i.Year; v != nil {
+		m.SetYear(*v)
+	}
+	if i.ClearAuthors {
+		m.ClearAuthors()
+	}
+	if v := i.AddAuthorIDs; len(v) > 0 {
+		m.AddAuthorIDs(v...)
+	}
+	if v := i.RemoveAuthorIDs; len(v) > 0 {
+		m.RemoveAuthorIDs(v...)
+	}
+	if i.ClearBookGenres {
+		m.ClearBookGenres()
+	}
+	if v := i.AddBookGenreIDs; len(v) > 0 {
+		m.AddBookGenreIDs(v...)
+	}
+	if v := i.RemoveBookGenreIDs; len(v) > 0 {
+		m.RemoveBookGenreIDs(v...)
+	}
+	if i.ClearCollection {
+		m.ClearCollection()
+	}
+	if v := i.CollectionID; v != nil {
+		m.SetCollectionID(*v)
+	}
+	if i.ClearHolders {
+		m.ClearHolders()
+	}
+	if v := i.AddHolderIDs; len(v) > 0 {
+		m.AddHolderIDs(v...)
+	}
+	if v := i.RemoveHolderIDs; len(v) > 0 {
+		m.RemoveHolderIDs(v...)
+	}
+	if i.ClearPublisher {
+		m.ClearPublisher()
+	}
+	if v := i.PublisherID; v != nil {
+		m.SetPublisherID(*v)
+	}
+	if i.ClearLicense {
+		m.ClearLicense()
+	}
+	if v := i.LicenseID; v != nil {
+		m.SetLicenseID(*v)
+	}
 }
 
 // SetInput applies the change-set in the UpdateBookInput on the BookUpdate builder.
@@ -785,6 +925,7 @@ type CreateBookGenreInput struct {
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
+	BookIDs       []int
 }
 
 // Mutate applies the CreateBookGenreInput on the BookGenreMutation builder.
@@ -810,6 +951,9 @@ func (i *CreateBookGenreInput) Mutate(m *BookGenreMutation) {
 	if v := i.ExternalLinks; v != nil {
 		m.SetExternalLinks(v)
 	}
+	if v := i.BookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateBookGenreInput on the BookGenreCreate builder.
@@ -832,6 +976,9 @@ type UpdateBookGenreInput struct {
 	ClearExternalLinks  bool
 	ExternalLinks       []string
 	AppendExternalLinks []string
+	ClearBooks          bool
+	AddBookIDs          []int
+	RemoveBookIDs       []int
 }
 
 // Mutate applies the UpdateBookGenreInput on the BookGenreMutation builder.
@@ -871,6 +1018,15 @@ func (i *UpdateBookGenreInput) Mutate(m *BookGenreMutation) {
 	}
 	if i.AppendExternalLinks != nil {
 		m.AppendExternalLinks(i.ExternalLinks)
+	}
+	if i.ClearBooks {
+		m.ClearBooks()
+	}
+	if v := i.AddBookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
+	if v := i.RemoveBookIDs; len(v) > 0 {
+		m.RemoveBookIDs(v...)
 	}
 }
 
@@ -1022,6 +1178,7 @@ type CreateCollectionInput struct {
 	Description   *string
 	ExternalLinks []string
 	ArtifactIDs   []int
+	BookIDs       []int
 	PersonIDs     []int
 	CategoryID    *int
 }
@@ -1051,6 +1208,9 @@ func (i *CreateCollectionInput) Mutate(m *CollectionMutation) {
 	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
+	}
+	if v := i.BookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
 	}
 	if v := i.PersonIDs; len(v) > 0 {
 		m.AddPersonIDs(v...)
@@ -1083,6 +1243,9 @@ type UpdateCollectionInput struct {
 	ClearArtifacts      bool
 	AddArtifactIDs      []int
 	RemoveArtifactIDs   []int
+	ClearBooks          bool
+	AddBookIDs          []int
+	RemoveBookIDs       []int
 	ClearPeople         bool
 	AddPersonIDs        []int
 	RemovePersonIDs     []int
@@ -1136,6 +1299,15 @@ func (i *UpdateCollectionInput) Mutate(m *CollectionMutation) {
 	}
 	if v := i.RemoveArtifactIDs; len(v) > 0 {
 		m.RemoveArtifactIDs(v...)
+	}
+	if i.ClearBooks {
+		m.ClearBooks()
+	}
+	if v := i.AddBookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
+	if v := i.RemoveBookIDs; len(v) > 0 {
+		m.RemoveBookIDs(v...)
 	}
 	if i.ClearPeople {
 		m.ClearPeople()
@@ -1545,6 +1717,7 @@ type CreateHolderInput struct {
 	BeginData               time.Time
 	EndDate                 *time.Time
 	ArtifactIDs             []int
+	BookIDs                 []int
 	HolderResponsibilityIDs []int
 	PersonID                *int
 	OrganizationID          *int
@@ -1570,6 +1743,9 @@ func (i *CreateHolderInput) Mutate(m *HolderMutation) {
 	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
+	}
+	if v := i.BookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
 	}
 	if v := i.HolderResponsibilityIDs; len(v) > 0 {
 		m.AddHolderResponsibilityIDs(v...)
@@ -1601,6 +1777,9 @@ type UpdateHolderInput struct {
 	ClearArtifacts                bool
 	AddArtifactIDs                []int
 	RemoveArtifactIDs             []int
+	ClearBooks                    bool
+	AddBookIDs                    []int
+	RemoveBookIDs                 []int
 	ClearHolderResponsibilities   bool
 	AddHolderResponsibilityIDs    []int
 	RemoveHolderResponsibilityIDs []int
@@ -1644,6 +1823,15 @@ func (i *UpdateHolderInput) Mutate(m *HolderMutation) {
 	}
 	if v := i.RemoveArtifactIDs; len(v) > 0 {
 		m.RemoveArtifactIDs(v...)
+	}
+	if i.ClearBooks {
+		m.ClearBooks()
+	}
+	if v := i.AddBookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
+	if v := i.RemoveBookIDs; len(v) > 0 {
+		m.RemoveBookIDs(v...)
 	}
 	if i.ClearHolderResponsibilities {
 		m.ClearHolderResponsibilities()
@@ -1815,6 +2003,7 @@ type CreateLibraryInput struct {
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
+	BookIDs       []int
 }
 
 // Mutate applies the CreateLibraryInput on the LibraryMutation builder.
@@ -1840,6 +2029,9 @@ func (i *CreateLibraryInput) Mutate(m *LibraryMutation) {
 	if v := i.ExternalLinks; v != nil {
 		m.SetExternalLinks(v)
 	}
+	if v := i.BookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateLibraryInput on the LibraryCreate builder.
@@ -1862,6 +2054,9 @@ type UpdateLibraryInput struct {
 	ClearExternalLinks  bool
 	ExternalLinks       []string
 	AppendExternalLinks []string
+	ClearBooks          bool
+	AddBookIDs          []int
+	RemoveBookIDs       []int
 }
 
 // Mutate applies the UpdateLibraryInput on the LibraryMutation builder.
@@ -1902,6 +2097,15 @@ func (i *UpdateLibraryInput) Mutate(m *LibraryMutation) {
 	if i.AppendExternalLinks != nil {
 		m.AppendExternalLinks(i.ExternalLinks)
 	}
+	if i.ClearBooks {
+		m.ClearBooks()
+	}
+	if v := i.AddBookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
+	if v := i.RemoveBookIDs; len(v) > 0 {
+		m.RemoveBookIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateLibraryInput on the LibraryUpdate builder.
@@ -1926,6 +2130,7 @@ type CreateLicenseInput struct {
 	Description   *string
 	ExternalLinks []string
 	ArtifactIDs   []int
+	BookIDs       []int
 }
 
 // Mutate applies the CreateLicenseInput on the LicenseMutation builder.
@@ -1954,6 +2159,9 @@ func (i *CreateLicenseInput) Mutate(m *LicenseMutation) {
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
+	if v := i.BookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateLicenseInput on the LicenseCreate builder.
@@ -1979,6 +2187,9 @@ type UpdateLicenseInput struct {
 	ClearArtifacts      bool
 	AddArtifactIDs      []int
 	RemoveArtifactIDs   []int
+	ClearBooks          bool
+	AddBookIDs          []int
+	RemoveBookIDs       []int
 }
 
 // Mutate applies the UpdateLicenseInput on the LicenseMutation builder.
@@ -2027,6 +2238,15 @@ func (i *UpdateLicenseInput) Mutate(m *LicenseMutation) {
 	}
 	if v := i.RemoveArtifactIDs; len(v) > 0 {
 		m.RemoveArtifactIDs(v...)
+	}
+	if i.ClearBooks {
+		m.ClearBooks()
+	}
+	if v := i.AddBookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
+	if v := i.RemoveBookIDs; len(v) > 0 {
+		m.RemoveBookIDs(v...)
 	}
 }
 
@@ -3145,6 +3365,7 @@ type CreatePersonInput struct {
 	EndDate              *time.Time
 	Gender               person.Gender
 	ArtifactIDs          []int
+	BookIDs              []int
 	ProjectIDs           []int
 	PublicationIDs       []int
 	PersonRoleIDs        []int
@@ -3209,6 +3430,9 @@ func (i *CreatePersonInput) Mutate(m *PersonMutation) {
 	m.SetGender(i.Gender)
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
+	}
+	if v := i.BookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
 	}
 	if v := i.ProjectIDs; len(v) > 0 {
 		m.AddProjectIDs(v...)
@@ -3277,6 +3501,9 @@ type UpdatePersonInput struct {
 	ClearArtifacts             bool
 	AddArtifactIDs             []int
 	RemoveArtifactIDs          []int
+	ClearBooks                 bool
+	AddBookIDs                 []int
+	RemoveBookIDs              []int
 	ClearProjects              bool
 	AddProjectIDs              []int
 	RemoveProjectIDs           []int
@@ -3412,6 +3639,15 @@ func (i *UpdatePersonInput) Mutate(m *PersonMutation) {
 	}
 	if v := i.RemoveArtifactIDs; len(v) > 0 {
 		m.RemoveArtifactIDs(v...)
+	}
+	if i.ClearBooks {
+		m.ClearBooks()
+	}
+	if v := i.AddBookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
+	if v := i.RemoveBookIDs; len(v) > 0 {
+		m.RemoveBookIDs(v...)
 	}
 	if i.ClearProjects {
 		m.ClearProjects()
@@ -4383,6 +4619,7 @@ type CreatePublisherInput struct {
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
+	BookIDs       []int
 }
 
 // Mutate applies the CreatePublisherInput on the PublisherMutation builder.
@@ -4408,6 +4645,9 @@ func (i *CreatePublisherInput) Mutate(m *PublisherMutation) {
 	if v := i.ExternalLinks; v != nil {
 		m.SetExternalLinks(v)
 	}
+	if v := i.BookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreatePublisherInput on the PublisherCreate builder.
@@ -4430,6 +4670,9 @@ type UpdatePublisherInput struct {
 	ClearExternalLinks  bool
 	ExternalLinks       []string
 	AppendExternalLinks []string
+	ClearBooks          bool
+	AddBookIDs          []int
+	RemoveBookIDs       []int
 }
 
 // Mutate applies the UpdatePublisherInput on the PublisherMutation builder.
@@ -4469,6 +4712,15 @@ func (i *UpdatePublisherInput) Mutate(m *PublisherMutation) {
 	}
 	if i.AppendExternalLinks != nil {
 		m.AppendExternalLinks(i.ExternalLinks)
+	}
+	if i.ClearBooks {
+		m.ClearBooks()
+	}
+	if v := i.AddBookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
+	if v := i.RemoveBookIDs; len(v) > 0 {
+		m.RemoveBookIDs(v...)
 	}
 }
 

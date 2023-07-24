@@ -42,13 +42,16 @@ type License struct {
 type LicenseEdges struct {
 	// Artifacts holds the value of the artifacts edge.
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
+	// Books holds the value of the books edge.
+	Books []*Book `json:"books,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [2]map[string]int
 
 	namedArtifacts map[string][]*Artifact
+	namedBooks     map[string][]*Book
 }
 
 // ArtifactsOrErr returns the Artifacts value or an error if the edge
@@ -58,6 +61,15 @@ func (e LicenseEdges) ArtifactsOrErr() ([]*Artifact, error) {
 		return e.Artifacts, nil
 	}
 	return nil, &NotLoadedError{edge: "artifacts"}
+}
+
+// BooksOrErr returns the Books value or an error if the edge
+// was not loaded in eager-loading.
+func (e LicenseEdges) BooksOrErr() ([]*Book, error) {
+	if e.loadedTypes[1] {
+		return e.Books, nil
+	}
+	return nil, &NotLoadedError{edge: "books"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -156,6 +168,11 @@ func (l *License) QueryArtifacts() *ArtifactQuery {
 	return NewLicenseClient(l.config).QueryArtifacts(l)
 }
 
+// QueryBooks queries the "books" edge of the License entity.
+func (l *License) QueryBooks() *BookQuery {
+	return NewLicenseClient(l.config).QueryBooks(l)
+}
+
 // Update returns a builder for updating this License.
 // Note that you need to call License.Unwrap() before calling this method if this License
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -224,6 +241,30 @@ func (l *License) appendNamedArtifacts(name string, edges ...*Artifact) {
 		l.Edges.namedArtifacts[name] = []*Artifact{}
 	} else {
 		l.Edges.namedArtifacts[name] = append(l.Edges.namedArtifacts[name], edges...)
+	}
+}
+
+// NamedBooks returns the Books named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (l *License) NamedBooks(name string) ([]*Book, error) {
+	if l.Edges.namedBooks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := l.Edges.namedBooks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (l *License) appendNamedBooks(name string, edges ...*Book) {
+	if l.Edges.namedBooks == nil {
+		l.Edges.namedBooks = make(map[string][]*Book)
+	}
+	if len(edges) == 0 {
+		l.Edges.namedBooks[name] = []*Book{}
+	} else {
+		l.Edges.namedBooks[name] = append(l.Edges.namedBooks[name], edges...)
 	}
 }
 

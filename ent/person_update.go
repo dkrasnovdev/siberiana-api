@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
@@ -355,6 +356,21 @@ func (pu *PersonUpdate) AddArtifacts(a ...*Artifact) *PersonUpdate {
 	return pu.AddArtifactIDs(ids...)
 }
 
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (pu *PersonUpdate) AddBookIDs(ids ...int) *PersonUpdate {
+	pu.mutation.AddBookIDs(ids...)
+	return pu
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (pu *PersonUpdate) AddBooks(b ...*Book) *PersonUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return pu.AddBookIDs(ids...)
+}
+
 // AddProjectIDs adds the "projects" edge to the Project entity by IDs.
 func (pu *PersonUpdate) AddProjectIDs(ids ...int) *PersonUpdate {
 	pu.mutation.AddProjectIDs(ids...)
@@ -481,6 +497,27 @@ func (pu *PersonUpdate) RemoveArtifacts(a ...*Artifact) *PersonUpdate {
 		ids[i] = a[i].ID
 	}
 	return pu.RemoveArtifactIDs(ids...)
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (pu *PersonUpdate) ClearBooks() *PersonUpdate {
+	pu.mutation.ClearBooks()
+	return pu
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (pu *PersonUpdate) RemoveBookIDs(ids ...int) *PersonUpdate {
+	pu.mutation.RemoveBookIDs(ids...)
+	return pu
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (pu *PersonUpdate) RemoveBooks(b ...*Book) *PersonUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return pu.RemoveBookIDs(ids...)
 }
 
 // ClearProjects clears all "projects" edges to the Project entity.
@@ -782,6 +819,51 @@ func (pu *PersonUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.BooksTable,
+			Columns: person.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedBooksIDs(); len(nodes) > 0 && !pu.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.BooksTable,
+			Columns: person.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.BooksTable,
+			Columns: person.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1350,6 +1432,21 @@ func (puo *PersonUpdateOne) AddArtifacts(a ...*Artifact) *PersonUpdateOne {
 	return puo.AddArtifactIDs(ids...)
 }
 
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (puo *PersonUpdateOne) AddBookIDs(ids ...int) *PersonUpdateOne {
+	puo.mutation.AddBookIDs(ids...)
+	return puo
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (puo *PersonUpdateOne) AddBooks(b ...*Book) *PersonUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return puo.AddBookIDs(ids...)
+}
+
 // AddProjectIDs adds the "projects" edge to the Project entity by IDs.
 func (puo *PersonUpdateOne) AddProjectIDs(ids ...int) *PersonUpdateOne {
 	puo.mutation.AddProjectIDs(ids...)
@@ -1476,6 +1573,27 @@ func (puo *PersonUpdateOne) RemoveArtifacts(a ...*Artifact) *PersonUpdateOne {
 		ids[i] = a[i].ID
 	}
 	return puo.RemoveArtifactIDs(ids...)
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (puo *PersonUpdateOne) ClearBooks() *PersonUpdateOne {
+	puo.mutation.ClearBooks()
+	return puo
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (puo *PersonUpdateOne) RemoveBookIDs(ids ...int) *PersonUpdateOne {
+	puo.mutation.RemoveBookIDs(ids...)
+	return puo
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (puo *PersonUpdateOne) RemoveBooks(b ...*Book) *PersonUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return puo.RemoveBookIDs(ids...)
 }
 
 // ClearProjects clears all "projects" edges to the Project entity.
@@ -1807,6 +1925,51 @@ func (puo *PersonUpdateOne) sqlSave(ctx context.Context) (_node *Person, err err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.BooksTable,
+			Columns: person.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedBooksIDs(); len(nodes) > 0 && !puo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.BooksTable,
+			Columns: person.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.BooksTable,
+			Columns: person.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

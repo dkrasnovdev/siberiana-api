@@ -829,6 +829,72 @@ func (b *BookQuery) collectField(ctx context.Context, opCtx *graphql.OperationCo
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+		case "authors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PersonClient{config: b.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personImplementors)...); err != nil {
+				return err
+			}
+			b.WithNamedAuthors(alias, func(wq *PersonQuery) {
+				*wq = *query
+			})
+		case "bookGenres":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&BookGenreClient{config: b.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, bookgenreImplementors)...); err != nil {
+				return err
+			}
+			b.WithNamedBookGenres(alias, func(wq *BookGenreQuery) {
+				*wq = *query
+			})
+		case "collection":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CollectionClient{config: b.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, collectionImplementors)...); err != nil {
+				return err
+			}
+			b.withCollection = query
+		case "holders":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&HolderClient{config: b.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, holderImplementors)...); err != nil {
+				return err
+			}
+			b.WithNamedHolders(alias, func(wq *HolderQuery) {
+				*wq = *query
+			})
+		case "publisher":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PublisherClient{config: b.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, publisherImplementors)...); err != nil {
+				return err
+			}
+			b.withPublisher = query
+		case "license":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&LicenseClient{config: b.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, licenseImplementors)...); err != nil {
+				return err
+			}
+			b.withLicense = query
 		case "createdAt":
 			if _, ok := fieldSeen[book.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, book.FieldCreatedAt)
@@ -863,6 +929,26 @@ func (b *BookQuery) collectField(ctx context.Context, opCtx *graphql.OperationCo
 			if _, ok := fieldSeen[book.FieldExternalLinks]; !ok {
 				selectedFields = append(selectedFields, book.FieldExternalLinks)
 				fieldSeen[book.FieldExternalLinks] = struct{}{}
+			}
+		case "primaryImageURL":
+			if _, ok := fieldSeen[book.FieldPrimaryImageURL]; !ok {
+				selectedFields = append(selectedFields, book.FieldPrimaryImageURL)
+				fieldSeen[book.FieldPrimaryImageURL] = struct{}{}
+			}
+		case "additionalImagesUrls":
+			if _, ok := fieldSeen[book.FieldAdditionalImagesUrls]; !ok {
+				selectedFields = append(selectedFields, book.FieldAdditionalImagesUrls)
+				fieldSeen[book.FieldAdditionalImagesUrls] = struct{}{}
+			}
+		case "files":
+			if _, ok := fieldSeen[book.FieldFiles]; !ok {
+				selectedFields = append(selectedFields, book.FieldFiles)
+				fieldSeen[book.FieldFiles] = struct{}{}
+			}
+		case "year":
+			if _, ok := fieldSeen[book.FieldYear]; !ok {
+				selectedFields = append(selectedFields, book.FieldYear)
+				fieldSeen[book.FieldYear] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -954,6 +1040,18 @@ func (bg *BookGenreQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+		case "books":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&BookClient{config: bg.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, bookImplementors)...); err != nil {
+				return err
+			}
+			bg.WithNamedBooks(alias, func(wq *BookQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[bookgenre.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, bookgenre.FieldCreatedAt)
@@ -1226,6 +1324,18 @@ func (c *CollectionQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 				return err
 			}
 			c.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
+		case "books":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&BookClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, bookImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedBooks(alias, func(wq *BookQuery) {
 				*wq = *query
 			})
 		case "people":
@@ -1794,6 +1904,18 @@ func (h *HolderQuery) collectField(ctx context.Context, opCtx *graphql.Operation
 			h.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
 				*wq = *query
 			})
+		case "books":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&BookClient{config: h.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, bookImplementors)...); err != nil {
+				return err
+			}
+			h.WithNamedBooks(alias, func(wq *BookQuery) {
+				*wq = *query
+			})
 		case "holderResponsibilities":
 			var (
 				alias = field.Alias
@@ -2129,6 +2251,18 @@ func (l *LibraryQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+		case "books":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&BookClient{config: l.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, bookImplementors)...); err != nil {
+				return err
+			}
+			l.WithNamedBooks(alias, func(wq *BookQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[library.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, library.FieldCreatedAt)
@@ -2264,6 +2398,18 @@ func (l *LicenseQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 				return err
 			}
 			l.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
+		case "books":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&BookClient{config: l.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, bookImplementors)...); err != nil {
+				return err
+			}
+			l.WithNamedBooks(alias, func(wq *BookQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -3466,6 +3612,18 @@ func (pe *PersonQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 				return err
 			}
 			pe.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
+		case "books":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&BookClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, bookImplementors)...); err != nil {
+				return err
+			}
+			pe.WithNamedBooks(alias, func(wq *BookQuery) {
 				*wq = *query
 			})
 		case "projects":
@@ -4681,6 +4839,18 @@ func (pu *PublisherQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+		case "books":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&BookClient{config: pu.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, bookImplementors)...); err != nil {
+				return err
+			}
+			pu.WithNamedBooks(alias, func(wq *BookQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[publisher.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, publisher.FieldCreatedAt)

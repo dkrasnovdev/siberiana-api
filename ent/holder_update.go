@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
@@ -119,6 +120,21 @@ func (hu *HolderUpdate) AddArtifacts(a ...*Artifact) *HolderUpdate {
 	return hu.AddArtifactIDs(ids...)
 }
 
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (hu *HolderUpdate) AddBookIDs(ids ...int) *HolderUpdate {
+	hu.mutation.AddBookIDs(ids...)
+	return hu
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (hu *HolderUpdate) AddBooks(b ...*Book) *HolderUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return hu.AddBookIDs(ids...)
+}
+
 // AddHolderResponsibilityIDs adds the "holder_responsibilities" edge to the HolderResponsibility entity by IDs.
 func (hu *HolderUpdate) AddHolderResponsibilityIDs(ids ...int) *HolderUpdate {
 	hu.mutation.AddHolderResponsibilityIDs(ids...)
@@ -196,6 +212,27 @@ func (hu *HolderUpdate) RemoveArtifacts(a ...*Artifact) *HolderUpdate {
 		ids[i] = a[i].ID
 	}
 	return hu.RemoveArtifactIDs(ids...)
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (hu *HolderUpdate) ClearBooks() *HolderUpdate {
+	hu.mutation.ClearBooks()
+	return hu
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (hu *HolderUpdate) RemoveBookIDs(ids ...int) *HolderUpdate {
+	hu.mutation.RemoveBookIDs(ids...)
+	return hu
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (hu *HolderUpdate) RemoveBooks(b ...*Book) *HolderUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return hu.RemoveBookIDs(ids...)
 }
 
 // ClearHolderResponsibilities clears all "holder_responsibilities" edges to the HolderResponsibility entity.
@@ -344,6 +381,51 @@ func (hu *HolderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if hu.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   holder.BooksTable,
+			Columns: holder.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := hu.mutation.RemovedBooksIDs(); len(nodes) > 0 && !hu.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   holder.BooksTable,
+			Columns: holder.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := hu.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   holder.BooksTable,
+			Columns: holder.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -561,6 +643,21 @@ func (huo *HolderUpdateOne) AddArtifacts(a ...*Artifact) *HolderUpdateOne {
 	return huo.AddArtifactIDs(ids...)
 }
 
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (huo *HolderUpdateOne) AddBookIDs(ids ...int) *HolderUpdateOne {
+	huo.mutation.AddBookIDs(ids...)
+	return huo
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (huo *HolderUpdateOne) AddBooks(b ...*Book) *HolderUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return huo.AddBookIDs(ids...)
+}
+
 // AddHolderResponsibilityIDs adds the "holder_responsibilities" edge to the HolderResponsibility entity by IDs.
 func (huo *HolderUpdateOne) AddHolderResponsibilityIDs(ids ...int) *HolderUpdateOne {
 	huo.mutation.AddHolderResponsibilityIDs(ids...)
@@ -638,6 +735,27 @@ func (huo *HolderUpdateOne) RemoveArtifacts(a ...*Artifact) *HolderUpdateOne {
 		ids[i] = a[i].ID
 	}
 	return huo.RemoveArtifactIDs(ids...)
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (huo *HolderUpdateOne) ClearBooks() *HolderUpdateOne {
+	huo.mutation.ClearBooks()
+	return huo
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (huo *HolderUpdateOne) RemoveBookIDs(ids ...int) *HolderUpdateOne {
+	huo.mutation.RemoveBookIDs(ids...)
+	return huo
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (huo *HolderUpdateOne) RemoveBooks(b ...*Book) *HolderUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return huo.RemoveBookIDs(ids...)
 }
 
 // ClearHolderResponsibilities clears all "holder_responsibilities" edges to the HolderResponsibility entity.
@@ -816,6 +934,51 @@ func (huo *HolderUpdateOne) sqlSave(ctx context.Context) (_node *Holder, err err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if huo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   holder.BooksTable,
+			Columns: holder.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := huo.mutation.RemovedBooksIDs(); len(nodes) > 0 && !huo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   holder.BooksTable,
+			Columns: holder.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := huo.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   holder.BooksTable,
+			Columns: holder.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

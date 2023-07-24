@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -28,8 +29,64 @@ const (
 	FieldDescription = "description"
 	// FieldExternalLinks holds the string denoting the external_links field in the database.
 	FieldExternalLinks = "external_links"
+	// FieldPrimaryImageURL holds the string denoting the primary_image_url field in the database.
+	FieldPrimaryImageURL = "primary_image_url"
+	// FieldAdditionalImagesUrls holds the string denoting the additional_images_urls field in the database.
+	FieldAdditionalImagesUrls = "additional_images_urls"
+	// FieldFiles holds the string denoting the files field in the database.
+	FieldFiles = "files"
+	// FieldYear holds the string denoting the year field in the database.
+	FieldYear = "year"
+	// EdgeAuthors holds the string denoting the authors edge name in mutations.
+	EdgeAuthors = "authors"
+	// EdgeBookGenres holds the string denoting the book_genres edge name in mutations.
+	EdgeBookGenres = "book_genres"
+	// EdgeCollection holds the string denoting the collection edge name in mutations.
+	EdgeCollection = "collection"
+	// EdgeHolders holds the string denoting the holders edge name in mutations.
+	EdgeHolders = "holders"
+	// EdgePublisher holds the string denoting the publisher edge name in mutations.
+	EdgePublisher = "publisher"
+	// EdgeLicense holds the string denoting the license edge name in mutations.
+	EdgeLicense = "license"
 	// Table holds the table name of the book in the database.
 	Table = "books"
+	// AuthorsTable is the table that holds the authors relation/edge. The primary key declared below.
+	AuthorsTable = "person_books"
+	// AuthorsInverseTable is the table name for the Person entity.
+	// It exists in this package in order to avoid circular dependency with the "person" package.
+	AuthorsInverseTable = "persons"
+	// BookGenresTable is the table that holds the book_genres relation/edge. The primary key declared below.
+	BookGenresTable = "book_genre_books"
+	// BookGenresInverseTable is the table name for the BookGenre entity.
+	// It exists in this package in order to avoid circular dependency with the "bookgenre" package.
+	BookGenresInverseTable = "book_genres"
+	// CollectionTable is the table that holds the collection relation/edge.
+	CollectionTable = "books"
+	// CollectionInverseTable is the table name for the Collection entity.
+	// It exists in this package in order to avoid circular dependency with the "collection" package.
+	CollectionInverseTable = "collections"
+	// CollectionColumn is the table column denoting the collection relation/edge.
+	CollectionColumn = "collection_books"
+	// HoldersTable is the table that holds the holders relation/edge. The primary key declared below.
+	HoldersTable = "holder_books"
+	// HoldersInverseTable is the table name for the Holder entity.
+	// It exists in this package in order to avoid circular dependency with the "holder" package.
+	HoldersInverseTable = "holders"
+	// PublisherTable is the table that holds the publisher relation/edge.
+	PublisherTable = "books"
+	// PublisherInverseTable is the table name for the Publisher entity.
+	// It exists in this package in order to avoid circular dependency with the "publisher" package.
+	PublisherInverseTable = "publishers"
+	// PublisherColumn is the table column denoting the publisher relation/edge.
+	PublisherColumn = "publisher_books"
+	// LicenseTable is the table that holds the license relation/edge.
+	LicenseTable = "books"
+	// LicenseInverseTable is the table name for the License entity.
+	// It exists in this package in order to avoid circular dependency with the "license" package.
+	LicenseInverseTable = "licenses"
+	// LicenseColumn is the table column denoting the license relation/edge.
+	LicenseColumn = "license_books"
 )
 
 // Columns holds all SQL columns for book fields.
@@ -42,12 +99,42 @@ var Columns = []string{
 	FieldDisplayName,
 	FieldDescription,
 	FieldExternalLinks,
+	FieldPrimaryImageURL,
+	FieldAdditionalImagesUrls,
+	FieldFiles,
+	FieldYear,
 }
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "books"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"collection_books",
+	"library_books",
+	"license_books",
+	"publisher_books",
+}
+
+var (
+	// AuthorsPrimaryKey and AuthorsColumn2 are the table columns denoting the
+	// primary key for the authors relation (M2M).
+	AuthorsPrimaryKey = []string{"person_id", "book_id"}
+	// BookGenresPrimaryKey and BookGenresColumn2 are the table columns denoting the
+	// primary key for the book_genres relation (M2M).
+	BookGenresPrimaryKey = []string{"book_genre_id", "book_id"}
+	// HoldersPrimaryKey and HoldersColumn2 are the table columns denoting the
+	// primary key for the holders relation (M2M).
+	HoldersPrimaryKey = []string{"holder_id", "book_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -68,6 +155,8 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// YearValidator is a validator for the "year" field. It is called by the builders before save.
+	YearValidator func(int) error
 )
 
 // OrderOption defines the ordering options for the Book queries.
@@ -106,4 +195,119 @@ func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByPrimaryImageURL orders the results by the primary_image_url field.
+func ByPrimaryImageURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPrimaryImageURL, opts...).ToFunc()
+}
+
+// ByYear orders the results by the year field.
+func ByYear(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldYear, opts...).ToFunc()
+}
+
+// ByAuthorsCount orders the results by authors count.
+func ByAuthorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAuthorsStep(), opts...)
+	}
+}
+
+// ByAuthors orders the results by authors terms.
+func ByAuthors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAuthorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByBookGenresCount orders the results by book_genres count.
+func ByBookGenresCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newBookGenresStep(), opts...)
+	}
+}
+
+// ByBookGenres orders the results by book_genres terms.
+func ByBookGenres(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newBookGenresStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByCollectionField orders the results by collection field.
+func ByCollectionField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCollectionStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByHoldersCount orders the results by holders count.
+func ByHoldersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newHoldersStep(), opts...)
+	}
+}
+
+// ByHolders orders the results by holders terms.
+func ByHolders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newHoldersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByPublisherField orders the results by publisher field.
+func ByPublisherField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPublisherStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByLicenseField orders the results by license field.
+func ByLicenseField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newLicenseStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newAuthorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AuthorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, AuthorsTable, AuthorsPrimaryKey...),
+	)
+}
+func newBookGenresStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(BookGenresInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, BookGenresTable, BookGenresPrimaryKey...),
+	)
+}
+func newCollectionStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CollectionInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, CollectionTable, CollectionColumn),
+	)
+}
+func newHoldersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(HoldersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, HoldersTable, HoldersPrimaryKey...),
+	)
+}
+func newPublisherStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PublisherInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, PublisherTable, PublisherColumn),
+	)
+}
+func newLicenseStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(LicenseInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, LicenseTable, LicenseColumn),
+	)
 }

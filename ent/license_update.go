@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
@@ -149,6 +150,21 @@ func (lu *LicenseUpdate) AddArtifacts(a ...*Artifact) *LicenseUpdate {
 	return lu.AddArtifactIDs(ids...)
 }
 
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (lu *LicenseUpdate) AddBookIDs(ids ...int) *LicenseUpdate {
+	lu.mutation.AddBookIDs(ids...)
+	return lu
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (lu *LicenseUpdate) AddBooks(b ...*Book) *LicenseUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return lu.AddBookIDs(ids...)
+}
+
 // Mutation returns the LicenseMutation object of the builder.
 func (lu *LicenseUpdate) Mutation() *LicenseMutation {
 	return lu.mutation
@@ -173,6 +189,27 @@ func (lu *LicenseUpdate) RemoveArtifacts(a ...*Artifact) *LicenseUpdate {
 		ids[i] = a[i].ID
 	}
 	return lu.RemoveArtifactIDs(ids...)
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (lu *LicenseUpdate) ClearBooks() *LicenseUpdate {
+	lu.mutation.ClearBooks()
+	return lu
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (lu *LicenseUpdate) RemoveBookIDs(ids ...int) *LicenseUpdate {
+	lu.mutation.RemoveBookIDs(ids...)
+	return lu
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (lu *LicenseUpdate) RemoveBooks(b ...*Book) *LicenseUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return lu.RemoveBookIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -302,6 +339,51 @@ func (lu *LicenseUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if lu.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   license.BooksTable,
+			Columns: []string{license.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := lu.mutation.RemovedBooksIDs(); len(nodes) > 0 && !lu.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   license.BooksTable,
+			Columns: []string{license.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := lu.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   license.BooksTable,
+			Columns: []string{license.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -448,6 +530,21 @@ func (luo *LicenseUpdateOne) AddArtifacts(a ...*Artifact) *LicenseUpdateOne {
 	return luo.AddArtifactIDs(ids...)
 }
 
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (luo *LicenseUpdateOne) AddBookIDs(ids ...int) *LicenseUpdateOne {
+	luo.mutation.AddBookIDs(ids...)
+	return luo
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (luo *LicenseUpdateOne) AddBooks(b ...*Book) *LicenseUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return luo.AddBookIDs(ids...)
+}
+
 // Mutation returns the LicenseMutation object of the builder.
 func (luo *LicenseUpdateOne) Mutation() *LicenseMutation {
 	return luo.mutation
@@ -472,6 +569,27 @@ func (luo *LicenseUpdateOne) RemoveArtifacts(a ...*Artifact) *LicenseUpdateOne {
 		ids[i] = a[i].ID
 	}
 	return luo.RemoveArtifactIDs(ids...)
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (luo *LicenseUpdateOne) ClearBooks() *LicenseUpdateOne {
+	luo.mutation.ClearBooks()
+	return luo
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (luo *LicenseUpdateOne) RemoveBookIDs(ids ...int) *LicenseUpdateOne {
+	luo.mutation.RemoveBookIDs(ids...)
+	return luo
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (luo *LicenseUpdateOne) RemoveBooks(b ...*Book) *LicenseUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return luo.RemoveBookIDs(ids...)
 }
 
 // Where appends a list predicates to the LicenseUpdate builder.
@@ -631,6 +749,51 @@ func (luo *LicenseUpdateOne) sqlSave(ctx context.Context) (_node *License, err e
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if luo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   license.BooksTable,
+			Columns: []string{license.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := luo.mutation.RemovedBooksIDs(); len(nodes) > 0 && !luo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   license.BooksTable,
+			Columns: []string{license.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := luo.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   license.BooksTable,
+			Columns: []string{license.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

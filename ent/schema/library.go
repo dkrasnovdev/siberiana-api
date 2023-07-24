@@ -4,6 +4,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/edge"
 	"github.com/dkrasnovdev/heritage-api/ent/privacy"
 	"github.com/dkrasnovdev/heritage-api/internal/ent/mixin"
 	rule "github.com/dkrasnovdev/heritage-api/internal/ent/privacy"
@@ -54,5 +55,7 @@ func (Library) Fields() []ent.Field {
 
 // Edges of the Library.
 func (Library) Edges() []ent.Edge {
-	return nil
+	return []ent.Edge{
+		edge.To("books", Book.Type),
+	}
 }
