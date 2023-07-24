@@ -79,6 +79,26 @@ func (cu *CollectionUpdate) ClearUpdatedBy() *CollectionUpdate {
 	return cu
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (cu *CollectionUpdate) SetAbbreviation(s string) *CollectionUpdate {
+	cu.mutation.SetAbbreviation(s)
+	return cu
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (cu *CollectionUpdate) SetNillableAbbreviation(s *string) *CollectionUpdate {
+	if s != nil {
+		cu.SetAbbreviation(*s)
+	}
+	return cu
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (cu *CollectionUpdate) ClearAbbreviation() *CollectionUpdate {
+	cu.mutation.ClearAbbreviation()
+	return cu
+}
+
 // SetDisplayName sets the "display_name" field.
 func (cu *CollectionUpdate) SetDisplayName(s string) *CollectionUpdate {
 	cu.mutation.SetDisplayName(s)
@@ -341,6 +361,12 @@ func (cu *CollectionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.UpdatedByCleared() {
 		_spec.ClearField(collection.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := cu.mutation.Abbreviation(); ok {
+		_spec.SetField(collection.FieldAbbreviation, field.TypeString, value)
+	}
+	if cu.mutation.AbbreviationCleared() {
+		_spec.ClearField(collection.FieldAbbreviation, field.TypeString)
+	}
 	if value, ok := cu.mutation.DisplayName(); ok {
 		_spec.SetField(collection.FieldDisplayName, field.TypeString, value)
 	}
@@ -591,6 +617,26 @@ func (cuo *CollectionUpdateOne) SetNillableUpdatedBy(s *string) *CollectionUpdat
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (cuo *CollectionUpdateOne) ClearUpdatedBy() *CollectionUpdateOne {
 	cuo.mutation.ClearUpdatedBy()
+	return cuo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (cuo *CollectionUpdateOne) SetAbbreviation(s string) *CollectionUpdateOne {
+	cuo.mutation.SetAbbreviation(s)
+	return cuo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (cuo *CollectionUpdateOne) SetNillableAbbreviation(s *string) *CollectionUpdateOne {
+	if s != nil {
+		cuo.SetAbbreviation(*s)
+	}
+	return cuo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (cuo *CollectionUpdateOne) ClearAbbreviation() *CollectionUpdateOne {
+	cuo.mutation.ClearAbbreviation()
 	return cuo
 }
 
@@ -885,6 +931,12 @@ func (cuo *CollectionUpdateOne) sqlSave(ctx context.Context) (_node *Collection,
 	}
 	if cuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(collection.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := cuo.mutation.Abbreviation(); ok {
+		_spec.SetField(collection.FieldAbbreviation, field.TypeString, value)
+	}
+	if cuo.mutation.AbbreviationCleared() {
+		_spec.ClearField(collection.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := cuo.mutation.DisplayName(); ok {
 		_spec.SetField(collection.FieldDisplayName, field.TypeString, value)

@@ -26,6 +26,8 @@ type ProtectedAreaCategory struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
@@ -44,7 +46,7 @@ func (*ProtectedAreaCategory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case protectedareacategory.FieldID:
 			values[i] = new(sql.NullInt64)
-		case protectedareacategory.FieldCreatedBy, protectedareacategory.FieldUpdatedBy, protectedareacategory.FieldDisplayName, protectedareacategory.FieldDescription:
+		case protectedareacategory.FieldCreatedBy, protectedareacategory.FieldUpdatedBy, protectedareacategory.FieldAbbreviation, protectedareacategory.FieldDisplayName, protectedareacategory.FieldDescription:
 			values[i] = new(sql.NullString)
 		case protectedareacategory.FieldCreatedAt, protectedareacategory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -92,6 +94,12 @@ func (pac *ProtectedAreaCategory) assignValues(columns []string, values []any) e
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				pac.UpdatedBy = value.String
+			}
+		case protectedareacategory.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				pac.Abbreviation = value.String
 			}
 		case protectedareacategory.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -160,6 +168,9 @@ func (pac *ProtectedAreaCategory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(pac.UpdatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(pac.Abbreviation)
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(pac.DisplayName)

@@ -76,6 +76,20 @@ func (pac *ProtectedAreaCreate) SetNillableUpdatedBy(s *string) *ProtectedAreaCr
 	return pac
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (pac *ProtectedAreaCreate) SetAbbreviation(s string) *ProtectedAreaCreate {
+	pac.mutation.SetAbbreviation(s)
+	return pac
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (pac *ProtectedAreaCreate) SetNillableAbbreviation(s *string) *ProtectedAreaCreate {
+	if s != nil {
+		pac.SetAbbreviation(*s)
+	}
+	return pac
+}
+
 // SetDisplayName sets the "display_name" field.
 func (pac *ProtectedAreaCreate) SetDisplayName(s string) *ProtectedAreaCreate {
 	pac.mutation.SetDisplayName(s)
@@ -213,6 +227,10 @@ func (pac *ProtectedAreaCreate) createSpec() (*ProtectedArea, *sqlgraph.CreateSp
 	if value, ok := pac.mutation.UpdatedBy(); ok {
 		_spec.SetField(protectedarea.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := pac.mutation.Abbreviation(); ok {
+		_spec.SetField(protectedarea.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := pac.mutation.DisplayName(); ok {
 		_spec.SetField(protectedarea.FieldDisplayName, field.TypeString, value)

@@ -34,6 +34,8 @@ type Organization struct {
 	PhoneNumbers []string `json:"phone_numbers,omitempty"`
 	// Emails holds the value of the "emails" field.
 	Emails []string `json:"emails,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
@@ -121,7 +123,7 @@ func (*Organization) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case organization.FieldID:
 			values[i] = new(sql.NullInt64)
-		case organization.FieldCreatedBy, organization.FieldUpdatedBy, organization.FieldAddress, organization.FieldDisplayName, organization.FieldDescription, organization.FieldPrimaryImageURL, organization.FieldConsortiumDocumentURL:
+		case organization.FieldCreatedBy, organization.FieldUpdatedBy, organization.FieldAddress, organization.FieldAbbreviation, organization.FieldDisplayName, organization.FieldDescription, organization.FieldPrimaryImageURL, organization.FieldConsortiumDocumentURL:
 			values[i] = new(sql.NullString)
 		case organization.FieldCreatedAt, organization.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -195,6 +197,12 @@ func (o *Organization) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &o.Emails); err != nil {
 					return fmt.Errorf("unmarshal field emails: %w", err)
 				}
+			}
+		case organization.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				o.Abbreviation = value.String
 			}
 		case organization.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -335,6 +343,9 @@ func (o *Organization) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("emails=")
 	builder.WriteString(fmt.Sprintf("%v", o.Emails))
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(o.Abbreviation)
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(o.DisplayName)

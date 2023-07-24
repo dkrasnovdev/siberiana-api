@@ -75,6 +75,26 @@ func (asu *ArtStyleUpdate) ClearUpdatedBy() *ArtStyleUpdate {
 	return asu
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (asu *ArtStyleUpdate) SetAbbreviation(s string) *ArtStyleUpdate {
+	asu.mutation.SetAbbreviation(s)
+	return asu
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (asu *ArtStyleUpdate) SetNillableAbbreviation(s *string) *ArtStyleUpdate {
+	if s != nil {
+		asu.SetAbbreviation(*s)
+	}
+	return asu
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (asu *ArtStyleUpdate) ClearAbbreviation() *ArtStyleUpdate {
+	asu.mutation.ClearAbbreviation()
+	return asu
+}
+
 // SetDisplayName sets the "display_name" field.
 func (asu *ArtStyleUpdate) SetDisplayName(s string) *ArtStyleUpdate {
 	asu.mutation.SetDisplayName(s)
@@ -204,6 +224,12 @@ func (asu *ArtStyleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if asu.mutation.UpdatedByCleared() {
 		_spec.ClearField(artstyle.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := asu.mutation.Abbreviation(); ok {
+		_spec.SetField(artstyle.FieldAbbreviation, field.TypeString, value)
+	}
+	if asu.mutation.AbbreviationCleared() {
+		_spec.ClearField(artstyle.FieldAbbreviation, field.TypeString)
+	}
 	if value, ok := asu.mutation.DisplayName(); ok {
 		_spec.SetField(artstyle.FieldDisplayName, field.TypeString, value)
 	}
@@ -290,6 +316,26 @@ func (asuo *ArtStyleUpdateOne) SetNillableUpdatedBy(s *string) *ArtStyleUpdateOn
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (asuo *ArtStyleUpdateOne) ClearUpdatedBy() *ArtStyleUpdateOne {
 	asuo.mutation.ClearUpdatedBy()
+	return asuo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (asuo *ArtStyleUpdateOne) SetAbbreviation(s string) *ArtStyleUpdateOne {
+	asuo.mutation.SetAbbreviation(s)
+	return asuo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (asuo *ArtStyleUpdateOne) SetNillableAbbreviation(s *string) *ArtStyleUpdateOne {
+	if s != nil {
+		asuo.SetAbbreviation(*s)
+	}
+	return asuo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (asuo *ArtStyleUpdateOne) ClearAbbreviation() *ArtStyleUpdateOne {
+	asuo.mutation.ClearAbbreviation()
 	return asuo
 }
 
@@ -451,6 +497,12 @@ func (asuo *ArtStyleUpdateOne) sqlSave(ctx context.Context) (_node *ArtStyle, er
 	}
 	if asuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(artstyle.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := asuo.mutation.Abbreviation(); ok {
+		_spec.SetField(artstyle.FieldAbbreviation, field.TypeString, value)
+	}
+	if asuo.mutation.AbbreviationCleared() {
+		_spec.ClearField(artstyle.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := asuo.mutation.DisplayName(); ok {
 		_spec.SetField(artstyle.FieldDisplayName, field.TypeString, value)

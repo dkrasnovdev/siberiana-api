@@ -80,6 +80,20 @@ func (cc *CollectionCreate) SetNillableUpdatedBy(s *string) *CollectionCreate {
 	return cc
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (cc *CollectionCreate) SetAbbreviation(s string) *CollectionCreate {
+	cc.mutation.SetAbbreviation(s)
+	return cc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (cc *CollectionCreate) SetNillableAbbreviation(s *string) *CollectionCreate {
+	if s != nil {
+		cc.SetAbbreviation(*s)
+	}
+	return cc
+}
+
 // SetDisplayName sets the "display_name" field.
 func (cc *CollectionCreate) SetDisplayName(s string) *CollectionCreate {
 	cc.mutation.SetDisplayName(s)
@@ -281,6 +295,10 @@ func (cc *CollectionCreate) createSpec() (*Collection, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.UpdatedBy(); ok {
 		_spec.SetField(collection.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := cc.mutation.Abbreviation(); ok {
+		_spec.SetField(collection.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := cc.mutation.DisplayName(); ok {
 		_spec.SetField(collection.FieldDisplayName, field.TypeString, value)

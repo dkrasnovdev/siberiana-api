@@ -76,6 +76,26 @@ func (pu *PeriodUpdate) ClearUpdatedBy() *PeriodUpdate {
 	return pu
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (pu *PeriodUpdate) SetAbbreviation(s string) *PeriodUpdate {
+	pu.mutation.SetAbbreviation(s)
+	return pu
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (pu *PeriodUpdate) SetNillableAbbreviation(s *string) *PeriodUpdate {
+	if s != nil {
+		pu.SetAbbreviation(*s)
+	}
+	return pu
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (pu *PeriodUpdate) ClearAbbreviation() *PeriodUpdate {
+	pu.mutation.ClearAbbreviation()
+	return pu
+}
+
 // SetDisplayName sets the "display_name" field.
 func (pu *PeriodUpdate) SetDisplayName(s string) *PeriodUpdate {
 	pu.mutation.SetDisplayName(s)
@@ -241,6 +261,12 @@ func (pu *PeriodUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.UpdatedByCleared() {
 		_spec.ClearField(period.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := pu.mutation.Abbreviation(); ok {
+		_spec.SetField(period.FieldAbbreviation, field.TypeString, value)
+	}
+	if pu.mutation.AbbreviationCleared() {
+		_spec.ClearField(period.FieldAbbreviation, field.TypeString)
+	}
 	if value, ok := pu.mutation.DisplayName(); ok {
 		_spec.SetField(period.FieldDisplayName, field.TypeString, value)
 	}
@@ -372,6 +398,26 @@ func (puo *PeriodUpdateOne) SetNillableUpdatedBy(s *string) *PeriodUpdateOne {
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (puo *PeriodUpdateOne) ClearUpdatedBy() *PeriodUpdateOne {
 	puo.mutation.ClearUpdatedBy()
+	return puo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (puo *PeriodUpdateOne) SetAbbreviation(s string) *PeriodUpdateOne {
+	puo.mutation.SetAbbreviation(s)
+	return puo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (puo *PeriodUpdateOne) SetNillableAbbreviation(s *string) *PeriodUpdateOne {
+	if s != nil {
+		puo.SetAbbreviation(*s)
+	}
+	return puo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (puo *PeriodUpdateOne) ClearAbbreviation() *PeriodUpdateOne {
+	puo.mutation.ClearAbbreviation()
 	return puo
 }
 
@@ -569,6 +615,12 @@ func (puo *PeriodUpdateOne) sqlSave(ctx context.Context) (_node *Period, err err
 	}
 	if puo.mutation.UpdatedByCleared() {
 		_spec.ClearField(period.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := puo.mutation.Abbreviation(); ok {
+		_spec.SetField(period.FieldAbbreviation, field.TypeString, value)
+	}
+	if puo.mutation.AbbreviationCleared() {
+		_spec.ClearField(period.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := puo.mutation.DisplayName(); ok {
 		_spec.SetField(period.FieldDisplayName, field.TypeString, value)

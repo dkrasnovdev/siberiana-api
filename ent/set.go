@@ -26,6 +26,8 @@ type Set struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
@@ -81,7 +83,7 @@ func (*Set) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case set.FieldID:
 			values[i] = new(sql.NullInt64)
-		case set.FieldCreatedBy, set.FieldUpdatedBy, set.FieldDisplayName, set.FieldDescription:
+		case set.FieldCreatedBy, set.FieldUpdatedBy, set.FieldAbbreviation, set.FieldDisplayName, set.FieldDescription:
 			values[i] = new(sql.NullString)
 		case set.FieldCreatedAt, set.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -129,6 +131,12 @@ func (s *Set) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				s.UpdatedBy = value.String
+			}
+		case set.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				s.Abbreviation = value.String
 			}
 		case set.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -207,6 +215,9 @@ func (s *Set) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(s.UpdatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(s.Abbreviation)
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(s.DisplayName)

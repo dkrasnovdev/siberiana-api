@@ -82,6 +82,20 @@ func (bc *BookCreate) SetNillableUpdatedBy(s *string) *BookCreate {
 	return bc
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (bc *BookCreate) SetAbbreviation(s string) *BookCreate {
+	bc.mutation.SetAbbreviation(s)
+	return bc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (bc *BookCreate) SetNillableAbbreviation(s *string) *BookCreate {
+	if s != nil {
+		bc.SetAbbreviation(*s)
+	}
+	return bc
+}
+
 // SetDisplayName sets the "display_name" field.
 func (bc *BookCreate) SetDisplayName(s string) *BookCreate {
 	bc.mutation.SetDisplayName(s)
@@ -366,6 +380,10 @@ func (bc *BookCreate) createSpec() (*Book, *sqlgraph.CreateSpec) {
 	if value, ok := bc.mutation.UpdatedBy(); ok {
 		_spec.SetField(book.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := bc.mutation.Abbreviation(); ok {
+		_spec.SetField(book.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := bc.mutation.DisplayName(); ok {
 		_spec.SetField(book.FieldDisplayName, field.TypeString, value)

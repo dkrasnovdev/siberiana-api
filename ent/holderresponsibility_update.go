@@ -76,6 +76,26 @@ func (hru *HolderResponsibilityUpdate) ClearUpdatedBy() *HolderResponsibilityUpd
 	return hru
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (hru *HolderResponsibilityUpdate) SetAbbreviation(s string) *HolderResponsibilityUpdate {
+	hru.mutation.SetAbbreviation(s)
+	return hru
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (hru *HolderResponsibilityUpdate) SetNillableAbbreviation(s *string) *HolderResponsibilityUpdate {
+	if s != nil {
+		hru.SetAbbreviation(*s)
+	}
+	return hru
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (hru *HolderResponsibilityUpdate) ClearAbbreviation() *HolderResponsibilityUpdate {
+	hru.mutation.ClearAbbreviation()
+	return hru
+}
+
 // SetDisplayName sets the "display_name" field.
 func (hru *HolderResponsibilityUpdate) SetDisplayName(s string) *HolderResponsibilityUpdate {
 	hru.mutation.SetDisplayName(s)
@@ -241,6 +261,12 @@ func (hru *HolderResponsibilityUpdate) sqlSave(ctx context.Context) (n int, err 
 	if hru.mutation.UpdatedByCleared() {
 		_spec.ClearField(holderresponsibility.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := hru.mutation.Abbreviation(); ok {
+		_spec.SetField(holderresponsibility.FieldAbbreviation, field.TypeString, value)
+	}
+	if hru.mutation.AbbreviationCleared() {
+		_spec.ClearField(holderresponsibility.FieldAbbreviation, field.TypeString)
+	}
 	if value, ok := hru.mutation.DisplayName(); ok {
 		_spec.SetField(holderresponsibility.FieldDisplayName, field.TypeString, value)
 	}
@@ -372,6 +398,26 @@ func (hruo *HolderResponsibilityUpdateOne) SetNillableUpdatedBy(s *string) *Hold
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (hruo *HolderResponsibilityUpdateOne) ClearUpdatedBy() *HolderResponsibilityUpdateOne {
 	hruo.mutation.ClearUpdatedBy()
+	return hruo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (hruo *HolderResponsibilityUpdateOne) SetAbbreviation(s string) *HolderResponsibilityUpdateOne {
+	hruo.mutation.SetAbbreviation(s)
+	return hruo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (hruo *HolderResponsibilityUpdateOne) SetNillableAbbreviation(s *string) *HolderResponsibilityUpdateOne {
+	if s != nil {
+		hruo.SetAbbreviation(*s)
+	}
+	return hruo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (hruo *HolderResponsibilityUpdateOne) ClearAbbreviation() *HolderResponsibilityUpdateOne {
+	hruo.mutation.ClearAbbreviation()
 	return hruo
 }
 
@@ -569,6 +615,12 @@ func (hruo *HolderResponsibilityUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if hruo.mutation.UpdatedByCleared() {
 		_spec.ClearField(holderresponsibility.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := hruo.mutation.Abbreviation(); ok {
+		_spec.SetField(holderresponsibility.FieldAbbreviation, field.TypeString, value)
+	}
+	if hruo.mutation.AbbreviationCleared() {
+		_spec.ClearField(holderresponsibility.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := hruo.mutation.DisplayName(); ok {
 		_spec.SetField(holderresponsibility.FieldDisplayName, field.TypeString, value)

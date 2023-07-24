@@ -75,6 +75,11 @@ func UpdatedBy(v string) predicate.Publication {
 	return predicate.Publication(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
+// Abbreviation applies equality check predicate on the "abbreviation" field. It's identical to AbbreviationEQ.
+func Abbreviation(v string) predicate.Publication {
+	return predicate.Publication(sql.FieldEQ(FieldAbbreviation, v))
+}
+
 // DisplayName applies equality check predicate on the "display_name" field. It's identical to DisplayNameEQ.
 func DisplayName(v string) predicate.Publication {
 	return predicate.Publication(sql.FieldEQ(FieldDisplayName, v))
@@ -313,6 +318,81 @@ func UpdatedByEqualFold(v string) predicate.Publication {
 // UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
 func UpdatedByContainsFold(v string) predicate.Publication {
 	return predicate.Publication(sql.FieldContainsFold(FieldUpdatedBy, v))
+}
+
+// AbbreviationEQ applies the EQ predicate on the "abbreviation" field.
+func AbbreviationEQ(v string) predicate.Publication {
+	return predicate.Publication(sql.FieldEQ(FieldAbbreviation, v))
+}
+
+// AbbreviationNEQ applies the NEQ predicate on the "abbreviation" field.
+func AbbreviationNEQ(v string) predicate.Publication {
+	return predicate.Publication(sql.FieldNEQ(FieldAbbreviation, v))
+}
+
+// AbbreviationIn applies the In predicate on the "abbreviation" field.
+func AbbreviationIn(vs ...string) predicate.Publication {
+	return predicate.Publication(sql.FieldIn(FieldAbbreviation, vs...))
+}
+
+// AbbreviationNotIn applies the NotIn predicate on the "abbreviation" field.
+func AbbreviationNotIn(vs ...string) predicate.Publication {
+	return predicate.Publication(sql.FieldNotIn(FieldAbbreviation, vs...))
+}
+
+// AbbreviationGT applies the GT predicate on the "abbreviation" field.
+func AbbreviationGT(v string) predicate.Publication {
+	return predicate.Publication(sql.FieldGT(FieldAbbreviation, v))
+}
+
+// AbbreviationGTE applies the GTE predicate on the "abbreviation" field.
+func AbbreviationGTE(v string) predicate.Publication {
+	return predicate.Publication(sql.FieldGTE(FieldAbbreviation, v))
+}
+
+// AbbreviationLT applies the LT predicate on the "abbreviation" field.
+func AbbreviationLT(v string) predicate.Publication {
+	return predicate.Publication(sql.FieldLT(FieldAbbreviation, v))
+}
+
+// AbbreviationLTE applies the LTE predicate on the "abbreviation" field.
+func AbbreviationLTE(v string) predicate.Publication {
+	return predicate.Publication(sql.FieldLTE(FieldAbbreviation, v))
+}
+
+// AbbreviationContains applies the Contains predicate on the "abbreviation" field.
+func AbbreviationContains(v string) predicate.Publication {
+	return predicate.Publication(sql.FieldContains(FieldAbbreviation, v))
+}
+
+// AbbreviationHasPrefix applies the HasPrefix predicate on the "abbreviation" field.
+func AbbreviationHasPrefix(v string) predicate.Publication {
+	return predicate.Publication(sql.FieldHasPrefix(FieldAbbreviation, v))
+}
+
+// AbbreviationHasSuffix applies the HasSuffix predicate on the "abbreviation" field.
+func AbbreviationHasSuffix(v string) predicate.Publication {
+	return predicate.Publication(sql.FieldHasSuffix(FieldAbbreviation, v))
+}
+
+// AbbreviationIsNil applies the IsNil predicate on the "abbreviation" field.
+func AbbreviationIsNil() predicate.Publication {
+	return predicate.Publication(sql.FieldIsNull(FieldAbbreviation))
+}
+
+// AbbreviationNotNil applies the NotNil predicate on the "abbreviation" field.
+func AbbreviationNotNil() predicate.Publication {
+	return predicate.Publication(sql.FieldNotNull(FieldAbbreviation))
+}
+
+// AbbreviationEqualFold applies the EqualFold predicate on the "abbreviation" field.
+func AbbreviationEqualFold(v string) predicate.Publication {
+	return predicate.Publication(sql.FieldEqualFold(FieldAbbreviation, v))
+}
+
+// AbbreviationContainsFold applies the ContainsFold predicate on the "abbreviation" field.
+func AbbreviationContainsFold(v string) predicate.Publication {
+	return predicate.Publication(sql.FieldContainsFold(FieldAbbreviation, v))
 }
 
 // DisplayNameEQ applies the EQ predicate on the "display_name" field.

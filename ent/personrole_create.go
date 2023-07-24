@@ -77,6 +77,20 @@ func (prc *PersonRoleCreate) SetNillableUpdatedBy(s *string) *PersonRoleCreate {
 	return prc
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (prc *PersonRoleCreate) SetAbbreviation(s string) *PersonRoleCreate {
+	prc.mutation.SetAbbreviation(s)
+	return prc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (prc *PersonRoleCreate) SetNillableAbbreviation(s *string) *PersonRoleCreate {
+	if s != nil {
+		prc.SetAbbreviation(*s)
+	}
+	return prc
+}
+
 // SetDisplayName sets the "display_name" field.
 func (prc *PersonRoleCreate) SetDisplayName(s string) *PersonRoleCreate {
 	prc.mutation.SetDisplayName(s)
@@ -229,6 +243,10 @@ func (prc *PersonRoleCreate) createSpec() (*PersonRole, *sqlgraph.CreateSpec) {
 	if value, ok := prc.mutation.UpdatedBy(); ok {
 		_spec.SetField(personrole.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := prc.mutation.Abbreviation(); ok {
+		_spec.SetField(personrole.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := prc.mutation.DisplayName(); ok {
 		_spec.SetField(personrole.FieldDisplayName, field.TypeString, value)

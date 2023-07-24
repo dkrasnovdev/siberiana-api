@@ -77,6 +77,20 @@ func (dc *DistrictCreate) SetNillableUpdatedBy(s *string) *DistrictCreate {
 	return dc
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (dc *DistrictCreate) SetAbbreviation(s string) *DistrictCreate {
+	dc.mutation.SetAbbreviation(s)
+	return dc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (dc *DistrictCreate) SetNillableAbbreviation(s *string) *DistrictCreate {
+	if s != nil {
+		dc.SetAbbreviation(*s)
+	}
+	return dc
+}
+
 // SetDisplayName sets the "display_name" field.
 func (dc *DistrictCreate) SetDisplayName(s string) *DistrictCreate {
 	dc.mutation.SetDisplayName(s)
@@ -233,6 +247,10 @@ func (dc *DistrictCreate) createSpec() (*District, *sqlgraph.CreateSpec) {
 	if value, ok := dc.mutation.UpdatedBy(); ok {
 		_spec.SetField(district.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := dc.mutation.Abbreviation(); ok {
+		_spec.SetField(district.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := dc.mutation.DisplayName(); ok {
 		_spec.SetField(district.FieldDisplayName, field.TypeString, value)

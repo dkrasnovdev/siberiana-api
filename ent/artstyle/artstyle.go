@@ -22,6 +22,8 @@ const (
 	FieldUpdatedAt = "updated_at"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
+	// FieldAbbreviation holds the string denoting the abbreviation field in the database.
+	FieldAbbreviation = "abbreviation"
 	// FieldDisplayName holds the string denoting the display_name field in the database.
 	FieldDisplayName = "display_name"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -39,6 +41,7 @@ var Columns = []string{
 	FieldCreatedBy,
 	FieldUpdatedAt,
 	FieldUpdatedBy,
+	FieldAbbreviation,
 	FieldDisplayName,
 	FieldDescription,
 	FieldExternalLinks,
@@ -96,6 +99,11 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedBy orders the results by the updated_by field.
 func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
+}
+
+// ByAbbreviation orders the results by the abbreviation field.
+func ByAbbreviation(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAbbreviation, opts...).ToFunc()
 }
 
 // ByDisplayName orders the results by the display_name field.

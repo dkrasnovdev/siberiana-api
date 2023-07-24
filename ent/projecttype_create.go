@@ -77,6 +77,20 @@ func (ptc *ProjectTypeCreate) SetNillableUpdatedBy(s *string) *ProjectTypeCreate
 	return ptc
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (ptc *ProjectTypeCreate) SetAbbreviation(s string) *ProjectTypeCreate {
+	ptc.mutation.SetAbbreviation(s)
+	return ptc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (ptc *ProjectTypeCreate) SetNillableAbbreviation(s *string) *ProjectTypeCreate {
+	if s != nil {
+		ptc.SetAbbreviation(*s)
+	}
+	return ptc
+}
+
 // SetDisplayName sets the "display_name" field.
 func (ptc *ProjectTypeCreate) SetDisplayName(s string) *ProjectTypeCreate {
 	ptc.mutation.SetDisplayName(s)
@@ -229,6 +243,10 @@ func (ptc *ProjectTypeCreate) createSpec() (*ProjectType, *sqlgraph.CreateSpec) 
 	if value, ok := ptc.mutation.UpdatedBy(); ok {
 		_spec.SetField(projecttype.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := ptc.mutation.Abbreviation(); ok {
+		_spec.SetField(projecttype.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := ptc.mutation.DisplayName(); ok {
 		_spec.SetField(projecttype.FieldDisplayName, field.TypeString, value)

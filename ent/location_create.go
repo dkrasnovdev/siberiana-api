@@ -81,6 +81,20 @@ func (lc *LocationCreate) SetNillableUpdatedBy(s *string) *LocationCreate {
 	return lc
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (lc *LocationCreate) SetAbbreviation(s string) *LocationCreate {
+	lc.mutation.SetAbbreviation(s)
+	return lc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (lc *LocationCreate) SetNillableAbbreviation(s *string) *LocationCreate {
+	if s != nil {
+		lc.SetAbbreviation(*s)
+	}
+	return lc
+}
+
 // SetDisplayName sets the "display_name" field.
 func (lc *LocationCreate) SetDisplayName(s string) *LocationCreate {
 	lc.mutation.SetDisplayName(s)
@@ -309,6 +323,10 @@ func (lc *LocationCreate) createSpec() (*Location, *sqlgraph.CreateSpec) {
 	if value, ok := lc.mutation.UpdatedBy(); ok {
 		_spec.SetField(location.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := lc.mutation.Abbreviation(); ok {
+		_spec.SetField(location.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := lc.mutation.DisplayName(); ok {
 		_spec.SetField(location.FieldDisplayName, field.TypeString, value)

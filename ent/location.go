@@ -30,6 +30,8 @@ type Location struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
@@ -133,7 +135,7 @@ func (*Location) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case location.FieldID:
 			values[i] = new(sql.NullInt64)
-		case location.FieldCreatedBy, location.FieldUpdatedBy, location.FieldDisplayName, location.FieldDescription:
+		case location.FieldCreatedBy, location.FieldUpdatedBy, location.FieldAbbreviation, location.FieldDisplayName, location.FieldDescription:
 			values[i] = new(sql.NullString)
 		case location.FieldCreatedAt, location.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -181,6 +183,12 @@ func (l *Location) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				l.UpdatedBy = value.String
+			}
+		case location.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				l.Abbreviation = value.String
 			}
 		case location.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -274,6 +282,9 @@ func (l *Location) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(l.UpdatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(l.Abbreviation)
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(l.DisplayName)

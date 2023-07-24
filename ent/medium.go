@@ -26,6 +26,8 @@ type Medium struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
@@ -69,7 +71,7 @@ func (*Medium) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case medium.FieldID:
 			values[i] = new(sql.NullInt64)
-		case medium.FieldCreatedBy, medium.FieldUpdatedBy, medium.FieldDisplayName, medium.FieldDescription:
+		case medium.FieldCreatedBy, medium.FieldUpdatedBy, medium.FieldAbbreviation, medium.FieldDisplayName, medium.FieldDescription:
 			values[i] = new(sql.NullString)
 		case medium.FieldCreatedAt, medium.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -117,6 +119,12 @@ func (m *Medium) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				m.UpdatedBy = value.String
+			}
+		case medium.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				m.Abbreviation = value.String
 			}
 		case medium.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -190,6 +198,9 @@ func (m *Medium) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(m.UpdatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(m.Abbreviation)
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(m.DisplayName)

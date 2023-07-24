@@ -26,6 +26,8 @@ type ArtStyle struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
@@ -44,7 +46,7 @@ func (*ArtStyle) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case artstyle.FieldID:
 			values[i] = new(sql.NullInt64)
-		case artstyle.FieldCreatedBy, artstyle.FieldUpdatedBy, artstyle.FieldDisplayName, artstyle.FieldDescription:
+		case artstyle.FieldCreatedBy, artstyle.FieldUpdatedBy, artstyle.FieldAbbreviation, artstyle.FieldDisplayName, artstyle.FieldDescription:
 			values[i] = new(sql.NullString)
 		case artstyle.FieldCreatedAt, artstyle.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -92,6 +94,12 @@ func (as *ArtStyle) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				as.UpdatedBy = value.String
+			}
+		case artstyle.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				as.Abbreviation = value.String
 			}
 		case artstyle.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -160,6 +168,9 @@ func (as *ArtStyle) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(as.UpdatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(as.Abbreviation)
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(as.DisplayName)

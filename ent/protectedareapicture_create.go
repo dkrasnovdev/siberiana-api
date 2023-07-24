@@ -76,6 +76,20 @@ func (papc *ProtectedAreaPictureCreate) SetNillableUpdatedBy(s *string) *Protect
 	return papc
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (papc *ProtectedAreaPictureCreate) SetAbbreviation(s string) *ProtectedAreaPictureCreate {
+	papc.mutation.SetAbbreviation(s)
+	return papc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (papc *ProtectedAreaPictureCreate) SetNillableAbbreviation(s *string) *ProtectedAreaPictureCreate {
+	if s != nil {
+		papc.SetAbbreviation(*s)
+	}
+	return papc
+}
+
 // SetDisplayName sets the "display_name" field.
 func (papc *ProtectedAreaPictureCreate) SetDisplayName(s string) *ProtectedAreaPictureCreate {
 	papc.mutation.SetDisplayName(s)
@@ -213,6 +227,10 @@ func (papc *ProtectedAreaPictureCreate) createSpec() (*ProtectedAreaPicture, *sq
 	if value, ok := papc.mutation.UpdatedBy(); ok {
 		_spec.SetField(protectedareapicture.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := papc.mutation.Abbreviation(); ok {
+		_spec.SetField(protectedareapicture.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := papc.mutation.DisplayName(); ok {
 		_spec.SetField(protectedareapicture.FieldDisplayName, field.TypeString, value)

@@ -81,6 +81,26 @@ func (bu *BookUpdate) ClearUpdatedBy() *BookUpdate {
 	return bu
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (bu *BookUpdate) SetAbbreviation(s string) *BookUpdate {
+	bu.mutation.SetAbbreviation(s)
+	return bu
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (bu *BookUpdate) SetNillableAbbreviation(s *string) *BookUpdate {
+	if s != nil {
+		bu.SetAbbreviation(*s)
+	}
+	return bu
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (bu *BookUpdate) ClearAbbreviation() *BookUpdate {
+	bu.mutation.ClearAbbreviation()
+	return bu
+}
+
 // SetDisplayName sets the "display_name" field.
 func (bu *BookUpdate) SetDisplayName(s string) *BookUpdate {
 	bu.mutation.SetDisplayName(s)
@@ -489,6 +509,12 @@ func (bu *BookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if bu.mutation.UpdatedByCleared() {
 		_spec.ClearField(book.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := bu.mutation.Abbreviation(); ok {
+		_spec.SetField(book.FieldAbbreviation, field.TypeString, value)
+	}
+	if bu.mutation.AbbreviationCleared() {
+		_spec.ClearField(book.FieldAbbreviation, field.TypeString)
+	}
 	if value, ok := bu.mutation.DisplayName(); ok {
 		_spec.SetField(book.FieldDisplayName, field.TypeString, value)
 	}
@@ -834,6 +860,26 @@ func (buo *BookUpdateOne) SetNillableUpdatedBy(s *string) *BookUpdateOne {
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (buo *BookUpdateOne) ClearUpdatedBy() *BookUpdateOne {
 	buo.mutation.ClearUpdatedBy()
+	return buo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (buo *BookUpdateOne) SetAbbreviation(s string) *BookUpdateOne {
+	buo.mutation.SetAbbreviation(s)
+	return buo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (buo *BookUpdateOne) SetNillableAbbreviation(s *string) *BookUpdateOne {
+	if s != nil {
+		buo.SetAbbreviation(*s)
+	}
+	return buo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (buo *BookUpdateOne) ClearAbbreviation() *BookUpdateOne {
+	buo.mutation.ClearAbbreviation()
 	return buo
 }
 
@@ -1274,6 +1320,12 @@ func (buo *BookUpdateOne) sqlSave(ctx context.Context) (_node *Book, err error) 
 	}
 	if buo.mutation.UpdatedByCleared() {
 		_spec.ClearField(book.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := buo.mutation.Abbreviation(); ok {
+		_spec.SetField(book.FieldAbbreviation, field.TypeString, value)
+	}
+	if buo.mutation.AbbreviationCleared() {
+		_spec.ClearField(book.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := buo.mutation.DisplayName(); ok {
 		_spec.SetField(book.FieldDisplayName, field.TypeString, value)

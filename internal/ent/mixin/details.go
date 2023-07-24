@@ -12,6 +12,8 @@ type DetailsMixin struct {
 
 func (DetailsMixin) Fields() []ent.Field {
 	return []ent.Field{
+		field.String("abbreviation").
+			Optional(),
 		field.String("display_name").
 			Optional(),
 		field.String("description").

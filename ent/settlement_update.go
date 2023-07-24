@@ -76,6 +76,26 @@ func (su *SettlementUpdate) ClearUpdatedBy() *SettlementUpdate {
 	return su
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (su *SettlementUpdate) SetAbbreviation(s string) *SettlementUpdate {
+	su.mutation.SetAbbreviation(s)
+	return su
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (su *SettlementUpdate) SetNillableAbbreviation(s *string) *SettlementUpdate {
+	if s != nil {
+		su.SetAbbreviation(*s)
+	}
+	return su
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (su *SettlementUpdate) ClearAbbreviation() *SettlementUpdate {
+	su.mutation.ClearAbbreviation()
+	return su
+}
+
 // SetDisplayName sets the "display_name" field.
 func (su *SettlementUpdate) SetDisplayName(s string) *SettlementUpdate {
 	su.mutation.SetDisplayName(s)
@@ -230,6 +250,12 @@ func (su *SettlementUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.UpdatedByCleared() {
 		_spec.ClearField(settlement.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := su.mutation.Abbreviation(); ok {
+		_spec.SetField(settlement.FieldAbbreviation, field.TypeString, value)
+	}
+	if su.mutation.AbbreviationCleared() {
+		_spec.ClearField(settlement.FieldAbbreviation, field.TypeString)
+	}
 	if value, ok := su.mutation.DisplayName(); ok {
 		_spec.SetField(settlement.FieldDisplayName, field.TypeString, value)
 	}
@@ -345,6 +371,26 @@ func (suo *SettlementUpdateOne) SetNillableUpdatedBy(s *string) *SettlementUpdat
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (suo *SettlementUpdateOne) ClearUpdatedBy() *SettlementUpdateOne {
 	suo.mutation.ClearUpdatedBy()
+	return suo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (suo *SettlementUpdateOne) SetAbbreviation(s string) *SettlementUpdateOne {
+	suo.mutation.SetAbbreviation(s)
+	return suo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (suo *SettlementUpdateOne) SetNillableAbbreviation(s *string) *SettlementUpdateOne {
+	if s != nil {
+		suo.SetAbbreviation(*s)
+	}
+	return suo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (suo *SettlementUpdateOne) ClearAbbreviation() *SettlementUpdateOne {
+	suo.mutation.ClearAbbreviation()
 	return suo
 }
 
@@ -531,6 +577,12 @@ func (suo *SettlementUpdateOne) sqlSave(ctx context.Context) (_node *Settlement,
 	}
 	if suo.mutation.UpdatedByCleared() {
 		_spec.ClearField(settlement.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := suo.mutation.Abbreviation(); ok {
+		_spec.SetField(settlement.FieldAbbreviation, field.TypeString, value)
+	}
+	if suo.mutation.AbbreviationCleared() {
+		_spec.ClearField(settlement.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := suo.mutation.DisplayName(); ok {
 		_spec.SetField(settlement.FieldDisplayName, field.TypeString, value)

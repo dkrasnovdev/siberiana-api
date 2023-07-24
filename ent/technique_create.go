@@ -77,6 +77,20 @@ func (tc *TechniqueCreate) SetNillableUpdatedBy(s *string) *TechniqueCreate {
 	return tc
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (tc *TechniqueCreate) SetAbbreviation(s string) *TechniqueCreate {
+	tc.mutation.SetAbbreviation(s)
+	return tc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (tc *TechniqueCreate) SetNillableAbbreviation(s *string) *TechniqueCreate {
+	if s != nil {
+		tc.SetAbbreviation(*s)
+	}
+	return tc
+}
+
 // SetDisplayName sets the "display_name" field.
 func (tc *TechniqueCreate) SetDisplayName(s string) *TechniqueCreate {
 	tc.mutation.SetDisplayName(s)
@@ -229,6 +243,10 @@ func (tc *TechniqueCreate) createSpec() (*Technique, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.UpdatedBy(); ok {
 		_spec.SetField(technique.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := tc.mutation.Abbreviation(); ok {
+		_spec.SetField(technique.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := tc.mutation.DisplayName(); ok {
 		_spec.SetField(technique.FieldDisplayName, field.TypeString, value)

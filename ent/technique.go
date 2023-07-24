@@ -26,6 +26,8 @@ type Technique struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
@@ -69,7 +71,7 @@ func (*Technique) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case technique.FieldID:
 			values[i] = new(sql.NullInt64)
-		case technique.FieldCreatedBy, technique.FieldUpdatedBy, technique.FieldDisplayName, technique.FieldDescription:
+		case technique.FieldCreatedBy, technique.FieldUpdatedBy, technique.FieldAbbreviation, technique.FieldDisplayName, technique.FieldDescription:
 			values[i] = new(sql.NullString)
 		case technique.FieldCreatedAt, technique.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -117,6 +119,12 @@ func (t *Technique) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				t.UpdatedBy = value.String
+			}
+		case technique.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				t.Abbreviation = value.String
 			}
 		case technique.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -190,6 +198,9 @@ func (t *Technique) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(t.UpdatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(t.Abbreviation)
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(t.DisplayName)

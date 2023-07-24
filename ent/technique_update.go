@@ -76,6 +76,26 @@ func (tu *TechniqueUpdate) ClearUpdatedBy() *TechniqueUpdate {
 	return tu
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (tu *TechniqueUpdate) SetAbbreviation(s string) *TechniqueUpdate {
+	tu.mutation.SetAbbreviation(s)
+	return tu
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (tu *TechniqueUpdate) SetNillableAbbreviation(s *string) *TechniqueUpdate {
+	if s != nil {
+		tu.SetAbbreviation(*s)
+	}
+	return tu
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (tu *TechniqueUpdate) ClearAbbreviation() *TechniqueUpdate {
+	tu.mutation.ClearAbbreviation()
+	return tu
+}
+
 // SetDisplayName sets the "display_name" field.
 func (tu *TechniqueUpdate) SetDisplayName(s string) *TechniqueUpdate {
 	tu.mutation.SetDisplayName(s)
@@ -241,6 +261,12 @@ func (tu *TechniqueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tu.mutation.UpdatedByCleared() {
 		_spec.ClearField(technique.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := tu.mutation.Abbreviation(); ok {
+		_spec.SetField(technique.FieldAbbreviation, field.TypeString, value)
+	}
+	if tu.mutation.AbbreviationCleared() {
+		_spec.ClearField(technique.FieldAbbreviation, field.TypeString)
+	}
 	if value, ok := tu.mutation.DisplayName(); ok {
 		_spec.SetField(technique.FieldDisplayName, field.TypeString, value)
 	}
@@ -372,6 +398,26 @@ func (tuo *TechniqueUpdateOne) SetNillableUpdatedBy(s *string) *TechniqueUpdateO
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (tuo *TechniqueUpdateOne) ClearUpdatedBy() *TechniqueUpdateOne {
 	tuo.mutation.ClearUpdatedBy()
+	return tuo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (tuo *TechniqueUpdateOne) SetAbbreviation(s string) *TechniqueUpdateOne {
+	tuo.mutation.SetAbbreviation(s)
+	return tuo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (tuo *TechniqueUpdateOne) SetNillableAbbreviation(s *string) *TechniqueUpdateOne {
+	if s != nil {
+		tuo.SetAbbreviation(*s)
+	}
+	return tuo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (tuo *TechniqueUpdateOne) ClearAbbreviation() *TechniqueUpdateOne {
+	tuo.mutation.ClearAbbreviation()
 	return tuo
 }
 
@@ -569,6 +615,12 @@ func (tuo *TechniqueUpdateOne) sqlSave(ctx context.Context) (_node *Technique, e
 	}
 	if tuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(technique.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := tuo.mutation.Abbreviation(); ok {
+		_spec.SetField(technique.FieldAbbreviation, field.TypeString, value)
+	}
+	if tuo.mutation.AbbreviationCleared() {
+		_spec.ClearField(technique.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := tuo.mutation.DisplayName(); ok {
 		_spec.SetField(technique.FieldDisplayName, field.TypeString, value)

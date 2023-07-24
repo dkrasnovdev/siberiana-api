@@ -32,6 +32,8 @@ const (
 	FieldPhoneNumbers = "phone_numbers"
 	// FieldEmails holds the string denoting the emails field in the database.
 	FieldEmails = "emails"
+	// FieldAbbreviation holds the string denoting the abbreviation field in the database.
+	FieldAbbreviation = "abbreviation"
 	// FieldDisplayName holds the string denoting the display_name field in the database.
 	FieldDisplayName = "display_name"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -130,6 +132,7 @@ var Columns = []string{
 	FieldAddress,
 	FieldPhoneNumbers,
 	FieldEmails,
+	FieldAbbreviation,
 	FieldDisplayName,
 	FieldDescription,
 	FieldExternalLinks,
@@ -254,6 +257,11 @@ func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByAddress orders the results by the address field.
 func ByAddress(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAddress, opts...).ToFunc()
+}
+
+// ByAbbreviation orders the results by the abbreviation field.
+func ByAbbreviation(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAbbreviation, opts...).ToFunc()
 }
 
 // ByDisplayName orders the results by the display_name field.

@@ -26,6 +26,8 @@ type ProtectedAreaPicture struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
@@ -44,7 +46,7 @@ func (*ProtectedAreaPicture) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case protectedareapicture.FieldID:
 			values[i] = new(sql.NullInt64)
-		case protectedareapicture.FieldCreatedBy, protectedareapicture.FieldUpdatedBy, protectedareapicture.FieldDisplayName, protectedareapicture.FieldDescription:
+		case protectedareapicture.FieldCreatedBy, protectedareapicture.FieldUpdatedBy, protectedareapicture.FieldAbbreviation, protectedareapicture.FieldDisplayName, protectedareapicture.FieldDescription:
 			values[i] = new(sql.NullString)
 		case protectedareapicture.FieldCreatedAt, protectedareapicture.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -92,6 +94,12 @@ func (pap *ProtectedAreaPicture) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				pap.UpdatedBy = value.String
+			}
+		case protectedareapicture.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				pap.Abbreviation = value.String
 			}
 		case protectedareapicture.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -160,6 +168,9 @@ func (pap *ProtectedAreaPicture) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(pap.UpdatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(pap.Abbreviation)
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(pap.DisplayName)

@@ -371,6 +371,7 @@ type ArtGenreMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -649,6 +650,55 @@ func (m *ArtGenreMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, artgenre.FieldUpdatedBy)
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (m *ArtGenreMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *ArtGenreMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the ArtGenre entity.
+// If the ArtGenre object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtGenreMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *ArtGenreMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[artgenre.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *ArtGenreMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[artgenre.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *ArtGenreMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, artgenre.FieldAbbreviation)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *ArtGenreMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -846,7 +896,7 @@ func (m *ArtGenreMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArtGenreMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, artgenre.FieldCreatedAt)
 	}
@@ -858,6 +908,9 @@ func (m *ArtGenreMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, artgenre.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, artgenre.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, artgenre.FieldDisplayName)
@@ -884,6 +937,8 @@ func (m *ArtGenreMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case artgenre.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case artgenre.FieldAbbreviation:
+		return m.Abbreviation()
 	case artgenre.FieldDisplayName:
 		return m.DisplayName()
 	case artgenre.FieldDescription:
@@ -907,6 +962,8 @@ func (m *ArtGenreMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldUpdatedAt(ctx)
 	case artgenre.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case artgenre.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case artgenre.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case artgenre.FieldDescription:
@@ -949,6 +1006,13 @@ func (m *ArtGenreMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case artgenre.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case artgenre.FieldDisplayName:
 		v, ok := value.(string)
@@ -1007,6 +1071,9 @@ func (m *ArtGenreMutation) ClearedFields() []string {
 	if m.FieldCleared(artgenre.FieldUpdatedBy) {
 		fields = append(fields, artgenre.FieldUpdatedBy)
 	}
+	if m.FieldCleared(artgenre.FieldAbbreviation) {
+		fields = append(fields, artgenre.FieldAbbreviation)
+	}
 	if m.FieldCleared(artgenre.FieldDisplayName) {
 		fields = append(fields, artgenre.FieldDisplayName)
 	}
@@ -1036,6 +1103,9 @@ func (m *ArtGenreMutation) ClearField(name string) error {
 	case artgenre.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case artgenre.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case artgenre.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -1064,6 +1134,9 @@ func (m *ArtGenreMutation) ResetField(name string) error {
 		return nil
 	case artgenre.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case artgenre.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case artgenre.FieldDisplayName:
 		m.ResetDisplayName()
@@ -1136,6 +1209,7 @@ type ArtStyleMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -1414,6 +1488,55 @@ func (m *ArtStyleMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, artstyle.FieldUpdatedBy)
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (m *ArtStyleMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *ArtStyleMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the ArtStyle entity.
+// If the ArtStyle object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtStyleMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *ArtStyleMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[artstyle.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *ArtStyleMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[artstyle.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *ArtStyleMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, artstyle.FieldAbbreviation)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *ArtStyleMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -1611,7 +1734,7 @@ func (m *ArtStyleMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArtStyleMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, artstyle.FieldCreatedAt)
 	}
@@ -1623,6 +1746,9 @@ func (m *ArtStyleMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, artstyle.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, artstyle.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, artstyle.FieldDisplayName)
@@ -1649,6 +1775,8 @@ func (m *ArtStyleMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case artstyle.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case artstyle.FieldAbbreviation:
+		return m.Abbreviation()
 	case artstyle.FieldDisplayName:
 		return m.DisplayName()
 	case artstyle.FieldDescription:
@@ -1672,6 +1800,8 @@ func (m *ArtStyleMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldUpdatedAt(ctx)
 	case artstyle.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case artstyle.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case artstyle.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case artstyle.FieldDescription:
@@ -1714,6 +1844,13 @@ func (m *ArtStyleMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case artstyle.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case artstyle.FieldDisplayName:
 		v, ok := value.(string)
@@ -1772,6 +1909,9 @@ func (m *ArtStyleMutation) ClearedFields() []string {
 	if m.FieldCleared(artstyle.FieldUpdatedBy) {
 		fields = append(fields, artstyle.FieldUpdatedBy)
 	}
+	if m.FieldCleared(artstyle.FieldAbbreviation) {
+		fields = append(fields, artstyle.FieldAbbreviation)
+	}
 	if m.FieldCleared(artstyle.FieldDisplayName) {
 		fields = append(fields, artstyle.FieldDisplayName)
 	}
@@ -1801,6 +1941,9 @@ func (m *ArtStyleMutation) ClearField(name string) error {
 	case artstyle.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case artstyle.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case artstyle.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -1829,6 +1972,9 @@ func (m *ArtStyleMutation) ResetField(name string) error {
 		return nil
 	case artstyle.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case artstyle.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case artstyle.FieldDisplayName:
 		m.ResetDisplayName()
@@ -1901,6 +2047,7 @@ type ArtifactMutation struct {
 	created_by                   *string
 	updated_at                   *time.Time
 	updated_by                   *string
+	abbreviation                 *string
 	display_name                 *string
 	description                  *string
 	external_links               *[]string
@@ -2223,6 +2370,55 @@ func (m *ArtifactMutation) UpdatedByCleared() bool {
 func (m *ArtifactMutation) ResetUpdatedBy() {
 	m.updated_by = nil
 	delete(m.clearedFields, artifact.FieldUpdatedBy)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *ArtifactMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *ArtifactMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Artifact entity.
+// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtifactMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *ArtifactMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[artifact.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *ArtifactMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[artifact.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *ArtifactMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, artifact.FieldAbbreviation)
 }
 
 // SetDisplayName sets the "display_name" field.
@@ -3613,7 +3809,7 @@ func (m *ArtifactMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArtifactMutation) Fields() []string {
-	fields := make([]string, 0, 18)
+	fields := make([]string, 0, 19)
 	if m.created_at != nil {
 		fields = append(fields, artifact.FieldCreatedAt)
 	}
@@ -3625,6 +3821,9 @@ func (m *ArtifactMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, artifact.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, artifact.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, artifact.FieldDisplayName)
@@ -3684,6 +3883,8 @@ func (m *ArtifactMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case artifact.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case artifact.FieldAbbreviation:
+		return m.Abbreviation()
 	case artifact.FieldDisplayName:
 		return m.DisplayName()
 	case artifact.FieldDescription:
@@ -3729,6 +3930,8 @@ func (m *ArtifactMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldUpdatedAt(ctx)
 	case artifact.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case artifact.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case artifact.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case artifact.FieldDescription:
@@ -3793,6 +3996,13 @@ func (m *ArtifactMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case artifact.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case artifact.FieldDisplayName:
 		v, ok := value.(string)
@@ -3928,6 +4138,9 @@ func (m *ArtifactMutation) ClearedFields() []string {
 	if m.FieldCleared(artifact.FieldUpdatedBy) {
 		fields = append(fields, artifact.FieldUpdatedBy)
 	}
+	if m.FieldCleared(artifact.FieldAbbreviation) {
+		fields = append(fields, artifact.FieldAbbreviation)
+	}
 	if m.FieldCleared(artifact.FieldDisplayName) {
 		fields = append(fields, artifact.FieldDisplayName)
 	}
@@ -3990,6 +4203,9 @@ func (m *ArtifactMutation) ClearField(name string) error {
 	case artifact.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case artifact.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case artifact.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -4051,6 +4267,9 @@ func (m *ArtifactMutation) ResetField(name string) error {
 		return nil
 	case artifact.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case artifact.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case artifact.FieldDisplayName:
 		m.ResetDisplayName()
@@ -5484,6 +5703,7 @@ type BookMutation struct {
 	created_by                   *string
 	updated_at                   *time.Time
 	updated_by                   *string
+	abbreviation                 *string
 	display_name                 *string
 	description                  *string
 	external_links               *[]string
@@ -5782,6 +6002,55 @@ func (m *BookMutation) UpdatedByCleared() bool {
 func (m *BookMutation) ResetUpdatedBy() {
 	m.updated_by = nil
 	delete(m.clearedFields, book.FieldUpdatedBy)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *BookMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *BookMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Book entity.
+// If the Book object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BookMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *BookMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[book.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *BookMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[book.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *BookMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, book.FieldAbbreviation)
 }
 
 // SetDisplayName sets the "display_name" field.
@@ -6509,7 +6778,7 @@ func (m *BookMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *BookMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 12)
 	if m.created_at != nil {
 		fields = append(fields, book.FieldCreatedAt)
 	}
@@ -6521,6 +6790,9 @@ func (m *BookMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, book.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, book.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, book.FieldDisplayName)
@@ -6559,6 +6831,8 @@ func (m *BookMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case book.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case book.FieldAbbreviation:
+		return m.Abbreviation()
 	case book.FieldDisplayName:
 		return m.DisplayName()
 	case book.FieldDescription:
@@ -6590,6 +6864,8 @@ func (m *BookMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldUpdatedAt(ctx)
 	case book.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case book.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case book.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case book.FieldDescription:
@@ -6640,6 +6916,13 @@ func (m *BookMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case book.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case book.FieldDisplayName:
 		v, ok := value.(string)
@@ -6741,6 +7024,9 @@ func (m *BookMutation) ClearedFields() []string {
 	if m.FieldCleared(book.FieldUpdatedBy) {
 		fields = append(fields, book.FieldUpdatedBy)
 	}
+	if m.FieldCleared(book.FieldAbbreviation) {
+		fields = append(fields, book.FieldAbbreviation)
+	}
 	if m.FieldCleared(book.FieldDisplayName) {
 		fields = append(fields, book.FieldDisplayName)
 	}
@@ -6782,6 +7068,9 @@ func (m *BookMutation) ClearField(name string) error {
 	case book.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case book.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case book.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -6822,6 +7111,9 @@ func (m *BookMutation) ResetField(name string) error {
 		return nil
 	case book.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case book.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case book.FieldDisplayName:
 		m.ResetDisplayName()
@@ -7048,6 +7340,7 @@ type BookGenreMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -7329,6 +7622,55 @@ func (m *BookGenreMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, bookgenre.FieldUpdatedBy)
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (m *BookGenreMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *BookGenreMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the BookGenre entity.
+// If the BookGenre object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BookGenreMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *BookGenreMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[bookgenre.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *BookGenreMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[bookgenre.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *BookGenreMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, bookgenre.FieldAbbreviation)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *BookGenreMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -7580,7 +7922,7 @@ func (m *BookGenreMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *BookGenreMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, bookgenre.FieldCreatedAt)
 	}
@@ -7592,6 +7934,9 @@ func (m *BookGenreMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, bookgenre.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, bookgenre.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, bookgenre.FieldDisplayName)
@@ -7618,6 +7963,8 @@ func (m *BookGenreMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case bookgenre.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case bookgenre.FieldAbbreviation:
+		return m.Abbreviation()
 	case bookgenre.FieldDisplayName:
 		return m.DisplayName()
 	case bookgenre.FieldDescription:
@@ -7641,6 +7988,8 @@ func (m *BookGenreMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldUpdatedAt(ctx)
 	case bookgenre.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case bookgenre.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case bookgenre.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case bookgenre.FieldDescription:
@@ -7683,6 +8032,13 @@ func (m *BookGenreMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case bookgenre.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case bookgenre.FieldDisplayName:
 		v, ok := value.(string)
@@ -7741,6 +8097,9 @@ func (m *BookGenreMutation) ClearedFields() []string {
 	if m.FieldCleared(bookgenre.FieldUpdatedBy) {
 		fields = append(fields, bookgenre.FieldUpdatedBy)
 	}
+	if m.FieldCleared(bookgenre.FieldAbbreviation) {
+		fields = append(fields, bookgenre.FieldAbbreviation)
+	}
 	if m.FieldCleared(bookgenre.FieldDisplayName) {
 		fields = append(fields, bookgenre.FieldDisplayName)
 	}
@@ -7770,6 +8129,9 @@ func (m *BookGenreMutation) ClearField(name string) error {
 	case bookgenre.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case bookgenre.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case bookgenre.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -7798,6 +8160,9 @@ func (m *BookGenreMutation) ResetField(name string) error {
 		return nil
 	case bookgenre.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case bookgenre.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case bookgenre.FieldDisplayName:
 		m.ResetDisplayName()
@@ -7906,6 +8271,7 @@ type CategoryMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -8187,6 +8553,55 @@ func (m *CategoryMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, category.FieldUpdatedBy)
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (m *CategoryMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *CategoryMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *CategoryMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[category.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *CategoryMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[category.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *CategoryMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, category.FieldAbbreviation)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *CategoryMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -8438,7 +8853,7 @@ func (m *CategoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CategoryMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, category.FieldCreatedAt)
 	}
@@ -8450,6 +8865,9 @@ func (m *CategoryMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, category.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, category.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, category.FieldDisplayName)
@@ -8476,6 +8894,8 @@ func (m *CategoryMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case category.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case category.FieldAbbreviation:
+		return m.Abbreviation()
 	case category.FieldDisplayName:
 		return m.DisplayName()
 	case category.FieldDescription:
@@ -8499,6 +8919,8 @@ func (m *CategoryMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldUpdatedAt(ctx)
 	case category.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case category.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case category.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case category.FieldDescription:
@@ -8541,6 +8963,13 @@ func (m *CategoryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case category.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case category.FieldDisplayName:
 		v, ok := value.(string)
@@ -8599,6 +9028,9 @@ func (m *CategoryMutation) ClearedFields() []string {
 	if m.FieldCleared(category.FieldUpdatedBy) {
 		fields = append(fields, category.FieldUpdatedBy)
 	}
+	if m.FieldCleared(category.FieldAbbreviation) {
+		fields = append(fields, category.FieldAbbreviation)
+	}
 	if m.FieldCleared(category.FieldDisplayName) {
 		fields = append(fields, category.FieldDisplayName)
 	}
@@ -8628,6 +9060,9 @@ func (m *CategoryMutation) ClearField(name string) error {
 	case category.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case category.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case category.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -8656,6 +9091,9 @@ func (m *CategoryMutation) ResetField(name string) error {
 		return nil
 	case category.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case category.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case category.FieldDisplayName:
 		m.ResetDisplayName()
@@ -8764,6 +9202,7 @@ type CollectionMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -9051,6 +9490,55 @@ func (m *CollectionMutation) UpdatedByCleared() bool {
 func (m *CollectionMutation) ResetUpdatedBy() {
 	m.updated_by = nil
 	delete(m.clearedFields, collection.FieldUpdatedBy)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *CollectionMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *CollectionMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Collection entity.
+// If the Collection object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CollectionMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *CollectionMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[collection.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *CollectionMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[collection.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *CollectionMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, collection.FieldAbbreviation)
 }
 
 // SetDisplayName sets the "display_name" field.
@@ -9451,7 +9939,7 @@ func (m *CollectionMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CollectionMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, collection.FieldCreatedAt)
 	}
@@ -9463,6 +9951,9 @@ func (m *CollectionMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, collection.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, collection.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, collection.FieldDisplayName)
@@ -9489,6 +9980,8 @@ func (m *CollectionMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case collection.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case collection.FieldAbbreviation:
+		return m.Abbreviation()
 	case collection.FieldDisplayName:
 		return m.DisplayName()
 	case collection.FieldDescription:
@@ -9512,6 +10005,8 @@ func (m *CollectionMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldUpdatedAt(ctx)
 	case collection.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case collection.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case collection.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case collection.FieldDescription:
@@ -9554,6 +10049,13 @@ func (m *CollectionMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case collection.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case collection.FieldDisplayName:
 		v, ok := value.(string)
@@ -9612,6 +10114,9 @@ func (m *CollectionMutation) ClearedFields() []string {
 	if m.FieldCleared(collection.FieldUpdatedBy) {
 		fields = append(fields, collection.FieldUpdatedBy)
 	}
+	if m.FieldCleared(collection.FieldAbbreviation) {
+		fields = append(fields, collection.FieldAbbreviation)
+	}
 	if m.FieldCleared(collection.FieldDisplayName) {
 		fields = append(fields, collection.FieldDisplayName)
 	}
@@ -9641,6 +10146,9 @@ func (m *CollectionMutation) ClearField(name string) error {
 	case collection.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case collection.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case collection.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -9669,6 +10177,9 @@ func (m *CollectionMutation) ResetField(name string) error {
 		return nil
 	case collection.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case collection.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case collection.FieldDisplayName:
 		m.ResetDisplayName()
@@ -9847,6 +10358,7 @@ type CountryMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -10127,6 +10639,55 @@ func (m *CountryMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, country.FieldUpdatedBy)
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (m *CountryMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *CountryMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Country entity.
+// If the Country object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CountryMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *CountryMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[country.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *CountryMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[country.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *CountryMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, country.FieldAbbreviation)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *CountryMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -10363,7 +10924,7 @@ func (m *CountryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CountryMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, country.FieldCreatedAt)
 	}
@@ -10375,6 +10936,9 @@ func (m *CountryMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, country.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, country.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, country.FieldDisplayName)
@@ -10401,6 +10965,8 @@ func (m *CountryMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case country.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case country.FieldAbbreviation:
+		return m.Abbreviation()
 	case country.FieldDisplayName:
 		return m.DisplayName()
 	case country.FieldDescription:
@@ -10424,6 +10990,8 @@ func (m *CountryMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldUpdatedAt(ctx)
 	case country.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case country.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case country.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case country.FieldDescription:
@@ -10466,6 +11034,13 @@ func (m *CountryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case country.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case country.FieldDisplayName:
 		v, ok := value.(string)
@@ -10524,6 +11099,9 @@ func (m *CountryMutation) ClearedFields() []string {
 	if m.FieldCleared(country.FieldUpdatedBy) {
 		fields = append(fields, country.FieldUpdatedBy)
 	}
+	if m.FieldCleared(country.FieldAbbreviation) {
+		fields = append(fields, country.FieldAbbreviation)
+	}
 	if m.FieldCleared(country.FieldDisplayName) {
 		fields = append(fields, country.FieldDisplayName)
 	}
@@ -10553,6 +11131,9 @@ func (m *CountryMutation) ClearField(name string) error {
 	case country.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case country.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case country.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -10581,6 +11162,9 @@ func (m *CountryMutation) ResetField(name string) error {
 		return nil
 	case country.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case country.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case country.FieldDisplayName:
 		m.ResetDisplayName()
@@ -10679,6 +11263,7 @@ type CultureMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -10960,6 +11545,55 @@ func (m *CultureMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, culture.FieldUpdatedBy)
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (m *CultureMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *CultureMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Culture entity.
+// If the Culture object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CultureMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *CultureMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[culture.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *CultureMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[culture.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *CultureMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, culture.FieldAbbreviation)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *CultureMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -11211,7 +11845,7 @@ func (m *CultureMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CultureMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, culture.FieldCreatedAt)
 	}
@@ -11223,6 +11857,9 @@ func (m *CultureMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, culture.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, culture.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, culture.FieldDisplayName)
@@ -11249,6 +11886,8 @@ func (m *CultureMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case culture.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case culture.FieldAbbreviation:
+		return m.Abbreviation()
 	case culture.FieldDisplayName:
 		return m.DisplayName()
 	case culture.FieldDescription:
@@ -11272,6 +11911,8 @@ func (m *CultureMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldUpdatedAt(ctx)
 	case culture.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case culture.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case culture.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case culture.FieldDescription:
@@ -11314,6 +11955,13 @@ func (m *CultureMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case culture.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case culture.FieldDisplayName:
 		v, ok := value.(string)
@@ -11372,6 +12020,9 @@ func (m *CultureMutation) ClearedFields() []string {
 	if m.FieldCleared(culture.FieldUpdatedBy) {
 		fields = append(fields, culture.FieldUpdatedBy)
 	}
+	if m.FieldCleared(culture.FieldAbbreviation) {
+		fields = append(fields, culture.FieldAbbreviation)
+	}
 	if m.FieldCleared(culture.FieldDisplayName) {
 		fields = append(fields, culture.FieldDisplayName)
 	}
@@ -11401,6 +12052,9 @@ func (m *CultureMutation) ClearField(name string) error {
 	case culture.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case culture.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case culture.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -11429,6 +12083,9 @@ func (m *CultureMutation) ResetField(name string) error {
 		return nil
 	case culture.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case culture.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case culture.FieldDisplayName:
 		m.ResetDisplayName()
@@ -11537,6 +12194,7 @@ type DistrictMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -11817,6 +12475,55 @@ func (m *DistrictMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, district.FieldUpdatedBy)
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (m *DistrictMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *DistrictMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the District entity.
+// If the District object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DistrictMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *DistrictMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[district.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *DistrictMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[district.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *DistrictMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, district.FieldAbbreviation)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *DistrictMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -12053,7 +12760,7 @@ func (m *DistrictMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *DistrictMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, district.FieldCreatedAt)
 	}
@@ -12065,6 +12772,9 @@ func (m *DistrictMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, district.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, district.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, district.FieldDisplayName)
@@ -12091,6 +12801,8 @@ func (m *DistrictMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case district.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case district.FieldAbbreviation:
+		return m.Abbreviation()
 	case district.FieldDisplayName:
 		return m.DisplayName()
 	case district.FieldDescription:
@@ -12114,6 +12826,8 @@ func (m *DistrictMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldUpdatedAt(ctx)
 	case district.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case district.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case district.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case district.FieldDescription:
@@ -12156,6 +12870,13 @@ func (m *DistrictMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case district.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case district.FieldDisplayName:
 		v, ok := value.(string)
@@ -12214,6 +12935,9 @@ func (m *DistrictMutation) ClearedFields() []string {
 	if m.FieldCleared(district.FieldUpdatedBy) {
 		fields = append(fields, district.FieldUpdatedBy)
 	}
+	if m.FieldCleared(district.FieldAbbreviation) {
+		fields = append(fields, district.FieldAbbreviation)
+	}
 	if m.FieldCleared(district.FieldDisplayName) {
 		fields = append(fields, district.FieldDisplayName)
 	}
@@ -12243,6 +12967,9 @@ func (m *DistrictMutation) ClearField(name string) error {
 	case district.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case district.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case district.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -12271,6 +12998,9 @@ func (m *DistrictMutation) ResetField(name string) error {
 		return nil
 	case district.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case district.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case district.FieldDisplayName:
 		m.ResetDisplayName()
@@ -13402,6 +14132,7 @@ type HolderResponsibilityMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -13683,6 +14414,55 @@ func (m *HolderResponsibilityMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, holderresponsibility.FieldUpdatedBy)
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (m *HolderResponsibilityMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *HolderResponsibilityMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the HolderResponsibility entity.
+// If the HolderResponsibility object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *HolderResponsibilityMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *HolderResponsibilityMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[holderresponsibility.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *HolderResponsibilityMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[holderresponsibility.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *HolderResponsibilityMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, holderresponsibility.FieldAbbreviation)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *HolderResponsibilityMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -13934,7 +14714,7 @@ func (m *HolderResponsibilityMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *HolderResponsibilityMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, holderresponsibility.FieldCreatedAt)
 	}
@@ -13946,6 +14726,9 @@ func (m *HolderResponsibilityMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, holderresponsibility.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, holderresponsibility.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, holderresponsibility.FieldDisplayName)
@@ -13972,6 +14755,8 @@ func (m *HolderResponsibilityMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case holderresponsibility.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case holderresponsibility.FieldAbbreviation:
+		return m.Abbreviation()
 	case holderresponsibility.FieldDisplayName:
 		return m.DisplayName()
 	case holderresponsibility.FieldDescription:
@@ -13995,6 +14780,8 @@ func (m *HolderResponsibilityMutation) OldField(ctx context.Context, name string
 		return m.OldUpdatedAt(ctx)
 	case holderresponsibility.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case holderresponsibility.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case holderresponsibility.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case holderresponsibility.FieldDescription:
@@ -14037,6 +14824,13 @@ func (m *HolderResponsibilityMutation) SetField(name string, value ent.Value) er
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case holderresponsibility.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case holderresponsibility.FieldDisplayName:
 		v, ok := value.(string)
@@ -14095,6 +14889,9 @@ func (m *HolderResponsibilityMutation) ClearedFields() []string {
 	if m.FieldCleared(holderresponsibility.FieldUpdatedBy) {
 		fields = append(fields, holderresponsibility.FieldUpdatedBy)
 	}
+	if m.FieldCleared(holderresponsibility.FieldAbbreviation) {
+		fields = append(fields, holderresponsibility.FieldAbbreviation)
+	}
 	if m.FieldCleared(holderresponsibility.FieldDisplayName) {
 		fields = append(fields, holderresponsibility.FieldDisplayName)
 	}
@@ -14124,6 +14921,9 @@ func (m *HolderResponsibilityMutation) ClearField(name string) error {
 	case holderresponsibility.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case holderresponsibility.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case holderresponsibility.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -14152,6 +14952,9 @@ func (m *HolderResponsibilityMutation) ResetField(name string) error {
 		return nil
 	case holderresponsibility.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case holderresponsibility.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case holderresponsibility.FieldDisplayName:
 		m.ResetDisplayName()
@@ -14524,6 +15327,7 @@ type LibraryMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -14805,6 +15609,55 @@ func (m *LibraryMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, library.FieldUpdatedBy)
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (m *LibraryMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *LibraryMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Library entity.
+// If the Library object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LibraryMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *LibraryMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[library.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *LibraryMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[library.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *LibraryMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, library.FieldAbbreviation)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *LibraryMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -15056,7 +15909,7 @@ func (m *LibraryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *LibraryMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, library.FieldCreatedAt)
 	}
@@ -15068,6 +15921,9 @@ func (m *LibraryMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, library.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, library.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, library.FieldDisplayName)
@@ -15094,6 +15950,8 @@ func (m *LibraryMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case library.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case library.FieldAbbreviation:
+		return m.Abbreviation()
 	case library.FieldDisplayName:
 		return m.DisplayName()
 	case library.FieldDescription:
@@ -15117,6 +15975,8 @@ func (m *LibraryMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldUpdatedAt(ctx)
 	case library.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case library.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case library.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case library.FieldDescription:
@@ -15159,6 +16019,13 @@ func (m *LibraryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case library.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case library.FieldDisplayName:
 		v, ok := value.(string)
@@ -15217,6 +16084,9 @@ func (m *LibraryMutation) ClearedFields() []string {
 	if m.FieldCleared(library.FieldUpdatedBy) {
 		fields = append(fields, library.FieldUpdatedBy)
 	}
+	if m.FieldCleared(library.FieldAbbreviation) {
+		fields = append(fields, library.FieldAbbreviation)
+	}
 	if m.FieldCleared(library.FieldDisplayName) {
 		fields = append(fields, library.FieldDisplayName)
 	}
@@ -15246,6 +16116,9 @@ func (m *LibraryMutation) ClearField(name string) error {
 	case library.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case library.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case library.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -15274,6 +16147,9 @@ func (m *LibraryMutation) ResetField(name string) error {
 		return nil
 	case library.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case library.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case library.FieldDisplayName:
 		m.ResetDisplayName()
@@ -15382,6 +16258,7 @@ type LicenseMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -15664,6 +16541,55 @@ func (m *LicenseMutation) UpdatedByCleared() bool {
 func (m *LicenseMutation) ResetUpdatedBy() {
 	m.updated_by = nil
 	delete(m.clearedFields, license.FieldUpdatedBy)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *LicenseMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *LicenseMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the License entity.
+// If the License object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LicenseMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *LicenseMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[license.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *LicenseMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[license.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *LicenseMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, license.FieldAbbreviation)
 }
 
 // SetDisplayName sets the "display_name" field.
@@ -15971,7 +16897,7 @@ func (m *LicenseMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *LicenseMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, license.FieldCreatedAt)
 	}
@@ -15983,6 +16909,9 @@ func (m *LicenseMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, license.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, license.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, license.FieldDisplayName)
@@ -16009,6 +16938,8 @@ func (m *LicenseMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case license.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case license.FieldAbbreviation:
+		return m.Abbreviation()
 	case license.FieldDisplayName:
 		return m.DisplayName()
 	case license.FieldDescription:
@@ -16032,6 +16963,8 @@ func (m *LicenseMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldUpdatedAt(ctx)
 	case license.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case license.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case license.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case license.FieldDescription:
@@ -16074,6 +17007,13 @@ func (m *LicenseMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case license.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case license.FieldDisplayName:
 		v, ok := value.(string)
@@ -16132,6 +17072,9 @@ func (m *LicenseMutation) ClearedFields() []string {
 	if m.FieldCleared(license.FieldUpdatedBy) {
 		fields = append(fields, license.FieldUpdatedBy)
 	}
+	if m.FieldCleared(license.FieldAbbreviation) {
+		fields = append(fields, license.FieldAbbreviation)
+	}
 	if m.FieldCleared(license.FieldDisplayName) {
 		fields = append(fields, license.FieldDisplayName)
 	}
@@ -16161,6 +17104,9 @@ func (m *LicenseMutation) ClearField(name string) error {
 	case license.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case license.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case license.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -16189,6 +17135,9 @@ func (m *LicenseMutation) ResetField(name string) error {
 		return nil
 	case license.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case license.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case license.FieldDisplayName:
 		m.ResetDisplayName()
@@ -16323,6 +17272,7 @@ type LocationMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -16610,6 +17560,55 @@ func (m *LocationMutation) UpdatedByCleared() bool {
 func (m *LocationMutation) ResetUpdatedBy() {
 	m.updated_by = nil
 	delete(m.clearedFields, location.FieldUpdatedBy)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *LocationMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *LocationMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Location entity.
+// If the Location object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LocationMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *LocationMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[location.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *LocationMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[location.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *LocationMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, location.FieldAbbreviation)
 }
 
 // SetDisplayName sets the "display_name" field.
@@ -17019,7 +18018,7 @@ func (m *LocationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *LocationMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, location.FieldCreatedAt)
 	}
@@ -17031,6 +18030,9 @@ func (m *LocationMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, location.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, location.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, location.FieldDisplayName)
@@ -17057,6 +18059,8 @@ func (m *LocationMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case location.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case location.FieldAbbreviation:
+		return m.Abbreviation()
 	case location.FieldDisplayName:
 		return m.DisplayName()
 	case location.FieldDescription:
@@ -17080,6 +18084,8 @@ func (m *LocationMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldUpdatedAt(ctx)
 	case location.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case location.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case location.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case location.FieldDescription:
@@ -17122,6 +18128,13 @@ func (m *LocationMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case location.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case location.FieldDisplayName:
 		v, ok := value.(string)
@@ -17180,6 +18193,9 @@ func (m *LocationMutation) ClearedFields() []string {
 	if m.FieldCleared(location.FieldUpdatedBy) {
 		fields = append(fields, location.FieldUpdatedBy)
 	}
+	if m.FieldCleared(location.FieldAbbreviation) {
+		fields = append(fields, location.FieldAbbreviation)
+	}
 	if m.FieldCleared(location.FieldDisplayName) {
 		fields = append(fields, location.FieldDisplayName)
 	}
@@ -17209,6 +18225,9 @@ func (m *LocationMutation) ClearField(name string) error {
 	case location.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case location.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case location.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -17237,6 +18256,9 @@ func (m *LocationMutation) ResetField(name string) error {
 		return nil
 	case location.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case location.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case location.FieldDisplayName:
 		m.ResetDisplayName()
@@ -17417,6 +18439,7 @@ type MediumMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -17698,6 +18721,55 @@ func (m *MediumMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, medium.FieldUpdatedBy)
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (m *MediumMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *MediumMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Medium entity.
+// If the Medium object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MediumMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *MediumMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[medium.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *MediumMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[medium.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *MediumMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, medium.FieldAbbreviation)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *MediumMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -17949,7 +19021,7 @@ func (m *MediumMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MediumMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, medium.FieldCreatedAt)
 	}
@@ -17961,6 +19033,9 @@ func (m *MediumMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, medium.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, medium.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, medium.FieldDisplayName)
@@ -17987,6 +19062,8 @@ func (m *MediumMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case medium.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case medium.FieldAbbreviation:
+		return m.Abbreviation()
 	case medium.FieldDisplayName:
 		return m.DisplayName()
 	case medium.FieldDescription:
@@ -18010,6 +19087,8 @@ func (m *MediumMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldUpdatedAt(ctx)
 	case medium.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case medium.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case medium.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case medium.FieldDescription:
@@ -18052,6 +19131,13 @@ func (m *MediumMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case medium.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case medium.FieldDisplayName:
 		v, ok := value.(string)
@@ -18110,6 +19196,9 @@ func (m *MediumMutation) ClearedFields() []string {
 	if m.FieldCleared(medium.FieldUpdatedBy) {
 		fields = append(fields, medium.FieldUpdatedBy)
 	}
+	if m.FieldCleared(medium.FieldAbbreviation) {
+		fields = append(fields, medium.FieldAbbreviation)
+	}
 	if m.FieldCleared(medium.FieldDisplayName) {
 		fields = append(fields, medium.FieldDisplayName)
 	}
@@ -18139,6 +19228,9 @@ func (m *MediumMutation) ClearField(name string) error {
 	case medium.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case medium.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case medium.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -18167,6 +19259,9 @@ func (m *MediumMutation) ResetField(name string) error {
 		return nil
 	case medium.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case medium.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case medium.FieldDisplayName:
 		m.ResetDisplayName()
@@ -18275,6 +19370,7 @@ type ModelMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -18556,6 +19652,55 @@ func (m *ModelMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, model.FieldUpdatedBy)
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (m *ModelMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *ModelMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Model entity.
+// If the Model object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ModelMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *ModelMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[model.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *ModelMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[model.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *ModelMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, model.FieldAbbreviation)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *ModelMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -18807,7 +19952,7 @@ func (m *ModelMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ModelMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, model.FieldCreatedAt)
 	}
@@ -18819,6 +19964,9 @@ func (m *ModelMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, model.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, model.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, model.FieldDisplayName)
@@ -18845,6 +19993,8 @@ func (m *ModelMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case model.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case model.FieldAbbreviation:
+		return m.Abbreviation()
 	case model.FieldDisplayName:
 		return m.DisplayName()
 	case model.FieldDescription:
@@ -18868,6 +20018,8 @@ func (m *ModelMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldUpdatedAt(ctx)
 	case model.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case model.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case model.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case model.FieldDescription:
@@ -18910,6 +20062,13 @@ func (m *ModelMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case model.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case model.FieldDisplayName:
 		v, ok := value.(string)
@@ -18968,6 +20127,9 @@ func (m *ModelMutation) ClearedFields() []string {
 	if m.FieldCleared(model.FieldUpdatedBy) {
 		fields = append(fields, model.FieldUpdatedBy)
 	}
+	if m.FieldCleared(model.FieldAbbreviation) {
+		fields = append(fields, model.FieldAbbreviation)
+	}
 	if m.FieldCleared(model.FieldDisplayName) {
 		fields = append(fields, model.FieldDisplayName)
 	}
@@ -18997,6 +20159,9 @@ func (m *ModelMutation) ClearField(name string) error {
 	case model.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case model.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case model.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -19025,6 +20190,9 @@ func (m *ModelMutation) ResetField(name string) error {
 		return nil
 	case model.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case model.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case model.FieldDisplayName:
 		m.ResetDisplayName()
@@ -19133,6 +20301,7 @@ type MonumentMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -19415,6 +20584,55 @@ func (m *MonumentMutation) UpdatedByCleared() bool {
 func (m *MonumentMutation) ResetUpdatedBy() {
 	m.updated_by = nil
 	delete(m.clearedFields, monument.FieldUpdatedBy)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *MonumentMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *MonumentMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Monument entity.
+// If the Monument object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MonumentMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *MonumentMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[monument.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *MonumentMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[monument.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *MonumentMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, monument.FieldAbbreviation)
 }
 
 // SetDisplayName sets the "display_name" field.
@@ -19722,7 +20940,7 @@ func (m *MonumentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MonumentMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, monument.FieldCreatedAt)
 	}
@@ -19734,6 +20952,9 @@ func (m *MonumentMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, monument.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, monument.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, monument.FieldDisplayName)
@@ -19760,6 +20981,8 @@ func (m *MonumentMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case monument.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case monument.FieldAbbreviation:
+		return m.Abbreviation()
 	case monument.FieldDisplayName:
 		return m.DisplayName()
 	case monument.FieldDescription:
@@ -19783,6 +21006,8 @@ func (m *MonumentMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldUpdatedAt(ctx)
 	case monument.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case monument.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case monument.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case monument.FieldDescription:
@@ -19825,6 +21050,13 @@ func (m *MonumentMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case monument.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case monument.FieldDisplayName:
 		v, ok := value.(string)
@@ -19883,6 +21115,9 @@ func (m *MonumentMutation) ClearedFields() []string {
 	if m.FieldCleared(monument.FieldUpdatedBy) {
 		fields = append(fields, monument.FieldUpdatedBy)
 	}
+	if m.FieldCleared(monument.FieldAbbreviation) {
+		fields = append(fields, monument.FieldAbbreviation)
+	}
 	if m.FieldCleared(monument.FieldDisplayName) {
 		fields = append(fields, monument.FieldDisplayName)
 	}
@@ -19912,6 +21147,9 @@ func (m *MonumentMutation) ClearField(name string) error {
 	case monument.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case monument.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case monument.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -19940,6 +21178,9 @@ func (m *MonumentMutation) ResetField(name string) error {
 		return nil
 	case monument.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case monument.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case monument.FieldDisplayName:
 		m.ResetDisplayName()
@@ -20079,6 +21320,7 @@ type OrganizationMutation struct {
 	appendphone_numbers          []string
 	emails                       *[]string
 	appendemails                 []string
+	abbreviation                 *string
 	display_name                 *string
 	description                  *string
 	external_links               *[]string
@@ -20548,6 +21790,55 @@ func (m *OrganizationMutation) ResetEmails() {
 	m.emails = nil
 	m.appendemails = nil
 	delete(m.clearedFields, organization.FieldEmails)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *OrganizationMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *OrganizationMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Organization entity.
+// If the Organization object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *OrganizationMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[organization.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *OrganizationMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[organization.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *OrganizationMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, organization.FieldAbbreviation)
 }
 
 // SetDisplayName sets the "display_name" field.
@@ -21156,7 +22447,7 @@ func (m *OrganizationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrganizationMutation) Fields() []string {
-	fields := make([]string, 0, 15)
+	fields := make([]string, 0, 16)
 	if m.created_at != nil {
 		fields = append(fields, organization.FieldCreatedAt)
 	}
@@ -21177,6 +22468,9 @@ func (m *OrganizationMutation) Fields() []string {
 	}
 	if m.emails != nil {
 		fields = append(fields, organization.FieldEmails)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, organization.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, organization.FieldDisplayName)
@@ -21224,6 +22518,8 @@ func (m *OrganizationMutation) Field(name string) (ent.Value, bool) {
 		return m.PhoneNumbers()
 	case organization.FieldEmails:
 		return m.Emails()
+	case organization.FieldAbbreviation:
+		return m.Abbreviation()
 	case organization.FieldDisplayName:
 		return m.DisplayName()
 	case organization.FieldDescription:
@@ -21263,6 +22559,8 @@ func (m *OrganizationMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldPhoneNumbers(ctx)
 	case organization.FieldEmails:
 		return m.OldEmails(ctx)
+	case organization.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case organization.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case organization.FieldDescription:
@@ -21336,6 +22634,13 @@ func (m *OrganizationMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetEmails(v)
+		return nil
+	case organization.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case organization.FieldDisplayName:
 		v, ok := value.(string)
@@ -21438,6 +22743,9 @@ func (m *OrganizationMutation) ClearedFields() []string {
 	if m.FieldCleared(organization.FieldEmails) {
 		fields = append(fields, organization.FieldEmails)
 	}
+	if m.FieldCleared(organization.FieldAbbreviation) {
+		fields = append(fields, organization.FieldAbbreviation)
+	}
 	if m.FieldCleared(organization.FieldDisplayName) {
 		fields = append(fields, organization.FieldDisplayName)
 	}
@@ -21491,6 +22799,9 @@ func (m *OrganizationMutation) ClearField(name string) error {
 	case organization.FieldEmails:
 		m.ClearEmails()
 		return nil
+	case organization.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case organization.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -21543,6 +22854,9 @@ func (m *OrganizationMutation) ResetField(name string) error {
 		return nil
 	case organization.FieldEmails:
 		m.ResetEmails()
+		return nil
+	case organization.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case organization.FieldDisplayName:
 		m.ResetDisplayName()
@@ -21702,6 +23016,7 @@ type OrganizationTypeMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -21983,6 +23298,55 @@ func (m *OrganizationTypeMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, organizationtype.FieldUpdatedBy)
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (m *OrganizationTypeMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *OrganizationTypeMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the OrganizationType entity.
+// If the OrganizationType object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationTypeMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *OrganizationTypeMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[organizationtype.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *OrganizationTypeMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[organizationtype.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *OrganizationTypeMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, organizationtype.FieldAbbreviation)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *OrganizationTypeMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -22234,7 +23598,7 @@ func (m *OrganizationTypeMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrganizationTypeMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, organizationtype.FieldCreatedAt)
 	}
@@ -22246,6 +23610,9 @@ func (m *OrganizationTypeMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, organizationtype.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, organizationtype.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, organizationtype.FieldDisplayName)
@@ -22272,6 +23639,8 @@ func (m *OrganizationTypeMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case organizationtype.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case organizationtype.FieldAbbreviation:
+		return m.Abbreviation()
 	case organizationtype.FieldDisplayName:
 		return m.DisplayName()
 	case organizationtype.FieldDescription:
@@ -22295,6 +23664,8 @@ func (m *OrganizationTypeMutation) OldField(ctx context.Context, name string) (e
 		return m.OldUpdatedAt(ctx)
 	case organizationtype.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case organizationtype.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case organizationtype.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case organizationtype.FieldDescription:
@@ -22337,6 +23708,13 @@ func (m *OrganizationTypeMutation) SetField(name string, value ent.Value) error 
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case organizationtype.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case organizationtype.FieldDisplayName:
 		v, ok := value.(string)
@@ -22395,6 +23773,9 @@ func (m *OrganizationTypeMutation) ClearedFields() []string {
 	if m.FieldCleared(organizationtype.FieldUpdatedBy) {
 		fields = append(fields, organizationtype.FieldUpdatedBy)
 	}
+	if m.FieldCleared(organizationtype.FieldAbbreviation) {
+		fields = append(fields, organizationtype.FieldAbbreviation)
+	}
 	if m.FieldCleared(organizationtype.FieldDisplayName) {
 		fields = append(fields, organizationtype.FieldDisplayName)
 	}
@@ -22424,6 +23805,9 @@ func (m *OrganizationTypeMutation) ClearField(name string) error {
 	case organizationtype.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case organizationtype.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case organizationtype.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -22452,6 +23836,9 @@ func (m *OrganizationTypeMutation) ResetField(name string) error {
 		return nil
 	case organizationtype.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case organizationtype.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case organizationtype.FieldDisplayName:
 		m.ResetDisplayName()
@@ -22560,6 +23947,7 @@ type PeriodMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -22841,6 +24229,55 @@ func (m *PeriodMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, period.FieldUpdatedBy)
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (m *PeriodMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *PeriodMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Period entity.
+// If the Period object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PeriodMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *PeriodMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[period.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *PeriodMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[period.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *PeriodMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, period.FieldAbbreviation)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *PeriodMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -23092,7 +24529,7 @@ func (m *PeriodMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PeriodMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, period.FieldCreatedAt)
 	}
@@ -23104,6 +24541,9 @@ func (m *PeriodMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, period.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, period.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, period.FieldDisplayName)
@@ -23130,6 +24570,8 @@ func (m *PeriodMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case period.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case period.FieldAbbreviation:
+		return m.Abbreviation()
 	case period.FieldDisplayName:
 		return m.DisplayName()
 	case period.FieldDescription:
@@ -23153,6 +24595,8 @@ func (m *PeriodMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldUpdatedAt(ctx)
 	case period.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case period.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case period.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case period.FieldDescription:
@@ -23195,6 +24639,13 @@ func (m *PeriodMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case period.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case period.FieldDisplayName:
 		v, ok := value.(string)
@@ -23253,6 +24704,9 @@ func (m *PeriodMutation) ClearedFields() []string {
 	if m.FieldCleared(period.FieldUpdatedBy) {
 		fields = append(fields, period.FieldUpdatedBy)
 	}
+	if m.FieldCleared(period.FieldAbbreviation) {
+		fields = append(fields, period.FieldAbbreviation)
+	}
 	if m.FieldCleared(period.FieldDisplayName) {
 		fields = append(fields, period.FieldDisplayName)
 	}
@@ -23282,6 +24736,9 @@ func (m *PeriodMutation) ClearField(name string) error {
 	case period.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case period.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case period.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -23310,6 +24767,9 @@ func (m *PeriodMutation) ResetField(name string) error {
 		return nil
 	case period.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case period.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case period.FieldDisplayName:
 		m.ResetDisplayName()
@@ -23423,6 +24883,7 @@ type PersonMutation struct {
 	appendphone_numbers          []string
 	emails                       *[]string
 	appendemails                 []string
+	abbreviation                 *string
 	display_name                 *string
 	description                  *string
 	external_links               *[]string
@@ -23908,6 +25369,55 @@ func (m *PersonMutation) ResetEmails() {
 	m.emails = nil
 	m.appendemails = nil
 	delete(m.clearedFields, person.FieldEmails)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *PersonMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *PersonMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Person entity.
+// If the Person object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *PersonMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[person.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *PersonMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[person.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *PersonMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, person.FieldAbbreviation)
 }
 
 // SetDisplayName sets the "display_name" field.
@@ -24889,7 +26399,7 @@ func (m *PersonMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PersonMutation) Fields() []string {
-	fields := make([]string, 0, 18)
+	fields := make([]string, 0, 19)
 	if m.created_at != nil {
 		fields = append(fields, person.FieldCreatedAt)
 	}
@@ -24910,6 +26420,9 @@ func (m *PersonMutation) Fields() []string {
 	}
 	if m.emails != nil {
 		fields = append(fields, person.FieldEmails)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, person.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, person.FieldDisplayName)
@@ -24966,6 +26479,8 @@ func (m *PersonMutation) Field(name string) (ent.Value, bool) {
 		return m.PhoneNumbers()
 	case person.FieldEmails:
 		return m.Emails()
+	case person.FieldAbbreviation:
+		return m.Abbreviation()
 	case person.FieldDisplayName:
 		return m.DisplayName()
 	case person.FieldDescription:
@@ -25011,6 +26526,8 @@ func (m *PersonMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldPhoneNumbers(ctx)
 	case person.FieldEmails:
 		return m.OldEmails(ctx)
+	case person.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case person.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case person.FieldDescription:
@@ -25090,6 +26607,13 @@ func (m *PersonMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetEmails(v)
+		return nil
+	case person.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case person.FieldDisplayName:
 		v, ok := value.(string)
@@ -25213,6 +26737,9 @@ func (m *PersonMutation) ClearedFields() []string {
 	if m.FieldCleared(person.FieldEmails) {
 		fields = append(fields, person.FieldEmails)
 	}
+	if m.FieldCleared(person.FieldAbbreviation) {
+		fields = append(fields, person.FieldAbbreviation)
+	}
 	if m.FieldCleared(person.FieldDisplayName) {
 		fields = append(fields, person.FieldDisplayName)
 	}
@@ -25272,6 +26799,9 @@ func (m *PersonMutation) ClearField(name string) error {
 	case person.FieldEmails:
 		m.ClearEmails()
 		return nil
+	case person.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case person.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -25330,6 +26860,9 @@ func (m *PersonMutation) ResetField(name string) error {
 		return nil
 	case person.FieldEmails:
 		m.ResetEmails()
+		return nil
+	case person.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case person.FieldDisplayName:
 		m.ResetDisplayName()
@@ -25620,6 +27153,7 @@ type PersonRoleMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -25901,6 +27435,55 @@ func (m *PersonRoleMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, personrole.FieldUpdatedBy)
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (m *PersonRoleMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *PersonRoleMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the PersonRole entity.
+// If the PersonRole object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonRoleMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *PersonRoleMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[personrole.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *PersonRoleMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[personrole.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *PersonRoleMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, personrole.FieldAbbreviation)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *PersonRoleMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -26152,7 +27735,7 @@ func (m *PersonRoleMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PersonRoleMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, personrole.FieldCreatedAt)
 	}
@@ -26164,6 +27747,9 @@ func (m *PersonRoleMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, personrole.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, personrole.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, personrole.FieldDisplayName)
@@ -26190,6 +27776,8 @@ func (m *PersonRoleMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case personrole.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case personrole.FieldAbbreviation:
+		return m.Abbreviation()
 	case personrole.FieldDisplayName:
 		return m.DisplayName()
 	case personrole.FieldDescription:
@@ -26213,6 +27801,8 @@ func (m *PersonRoleMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldUpdatedAt(ctx)
 	case personrole.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case personrole.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case personrole.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case personrole.FieldDescription:
@@ -26255,6 +27845,13 @@ func (m *PersonRoleMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case personrole.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case personrole.FieldDisplayName:
 		v, ok := value.(string)
@@ -26313,6 +27910,9 @@ func (m *PersonRoleMutation) ClearedFields() []string {
 	if m.FieldCleared(personrole.FieldUpdatedBy) {
 		fields = append(fields, personrole.FieldUpdatedBy)
 	}
+	if m.FieldCleared(personrole.FieldAbbreviation) {
+		fields = append(fields, personrole.FieldAbbreviation)
+	}
 	if m.FieldCleared(personrole.FieldDisplayName) {
 		fields = append(fields, personrole.FieldDisplayName)
 	}
@@ -26342,6 +27942,9 @@ func (m *PersonRoleMutation) ClearField(name string) error {
 	case personrole.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case personrole.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case personrole.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -26370,6 +27973,9 @@ func (m *PersonRoleMutation) ResetField(name string) error {
 		return nil
 	case personrole.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case personrole.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case personrole.FieldDisplayName:
 		m.ResetDisplayName()
@@ -26478,6 +28084,7 @@ type ProjectMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -26764,6 +28371,55 @@ func (m *ProjectMutation) UpdatedByCleared() bool {
 func (m *ProjectMutation) ResetUpdatedBy() {
 	m.updated_by = nil
 	delete(m.clearedFields, project.FieldUpdatedBy)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *ProjectMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *ProjectMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Project entity.
+// If the Project object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProjectMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *ProjectMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[project.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *ProjectMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[project.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *ProjectMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, project.FieldAbbreviation)
 }
 
 // SetDisplayName sets the "display_name" field.
@@ -27208,7 +28864,7 @@ func (m *ProjectMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProjectMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 10)
 	if m.created_at != nil {
 		fields = append(fields, project.FieldCreatedAt)
 	}
@@ -27220,6 +28876,9 @@ func (m *ProjectMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, project.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, project.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, project.FieldDisplayName)
@@ -27252,6 +28911,8 @@ func (m *ProjectMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case project.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case project.FieldAbbreviation:
+		return m.Abbreviation()
 	case project.FieldDisplayName:
 		return m.DisplayName()
 	case project.FieldDescription:
@@ -27279,6 +28940,8 @@ func (m *ProjectMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldUpdatedAt(ctx)
 	case project.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case project.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case project.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case project.FieldDescription:
@@ -27325,6 +28988,13 @@ func (m *ProjectMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case project.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case project.FieldDisplayName:
 		v, ok := value.(string)
@@ -27397,6 +29067,9 @@ func (m *ProjectMutation) ClearedFields() []string {
 	if m.FieldCleared(project.FieldUpdatedBy) {
 		fields = append(fields, project.FieldUpdatedBy)
 	}
+	if m.FieldCleared(project.FieldAbbreviation) {
+		fields = append(fields, project.FieldAbbreviation)
+	}
 	if m.FieldCleared(project.FieldDisplayName) {
 		fields = append(fields, project.FieldDisplayName)
 	}
@@ -27432,6 +29105,9 @@ func (m *ProjectMutation) ClearField(name string) error {
 	case project.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case project.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case project.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -27466,6 +29142,9 @@ func (m *ProjectMutation) ResetField(name string) error {
 		return nil
 	case project.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case project.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case project.FieldDisplayName:
 		m.ResetDisplayName()
@@ -27624,6 +29303,7 @@ type ProjectTypeMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -27905,6 +29585,55 @@ func (m *ProjectTypeMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, projecttype.FieldUpdatedBy)
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (m *ProjectTypeMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *ProjectTypeMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the ProjectType entity.
+// If the ProjectType object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProjectTypeMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *ProjectTypeMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[projecttype.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *ProjectTypeMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[projecttype.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *ProjectTypeMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, projecttype.FieldAbbreviation)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *ProjectTypeMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -28156,7 +29885,7 @@ func (m *ProjectTypeMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProjectTypeMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, projecttype.FieldCreatedAt)
 	}
@@ -28168,6 +29897,9 @@ func (m *ProjectTypeMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, projecttype.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, projecttype.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, projecttype.FieldDisplayName)
@@ -28194,6 +29926,8 @@ func (m *ProjectTypeMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case projecttype.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case projecttype.FieldAbbreviation:
+		return m.Abbreviation()
 	case projecttype.FieldDisplayName:
 		return m.DisplayName()
 	case projecttype.FieldDescription:
@@ -28217,6 +29951,8 @@ func (m *ProjectTypeMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldUpdatedAt(ctx)
 	case projecttype.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case projecttype.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case projecttype.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case projecttype.FieldDescription:
@@ -28259,6 +29995,13 @@ func (m *ProjectTypeMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case projecttype.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case projecttype.FieldDisplayName:
 		v, ok := value.(string)
@@ -28317,6 +30060,9 @@ func (m *ProjectTypeMutation) ClearedFields() []string {
 	if m.FieldCleared(projecttype.FieldUpdatedBy) {
 		fields = append(fields, projecttype.FieldUpdatedBy)
 	}
+	if m.FieldCleared(projecttype.FieldAbbreviation) {
+		fields = append(fields, projecttype.FieldAbbreviation)
+	}
 	if m.FieldCleared(projecttype.FieldDisplayName) {
 		fields = append(fields, projecttype.FieldDisplayName)
 	}
@@ -28346,6 +30092,9 @@ func (m *ProjectTypeMutation) ClearField(name string) error {
 	case projecttype.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case projecttype.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case projecttype.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -28374,6 +30123,9 @@ func (m *ProjectTypeMutation) ResetField(name string) error {
 		return nil
 	case projecttype.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case projecttype.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case projecttype.FieldDisplayName:
 		m.ResetDisplayName()
@@ -28482,6 +30234,7 @@ type ProtectedAreaMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -28760,6 +30513,55 @@ func (m *ProtectedAreaMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, protectedarea.FieldUpdatedBy)
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (m *ProtectedAreaMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *ProtectedAreaMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the ProtectedArea entity.
+// If the ProtectedArea object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *ProtectedAreaMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[protectedarea.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *ProtectedAreaMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[protectedarea.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *ProtectedAreaMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, protectedarea.FieldAbbreviation)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *ProtectedAreaMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -28957,7 +30759,7 @@ func (m *ProtectedAreaMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProtectedAreaMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, protectedarea.FieldCreatedAt)
 	}
@@ -28969,6 +30771,9 @@ func (m *ProtectedAreaMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, protectedarea.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, protectedarea.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, protectedarea.FieldDisplayName)
@@ -28995,6 +30800,8 @@ func (m *ProtectedAreaMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case protectedarea.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case protectedarea.FieldAbbreviation:
+		return m.Abbreviation()
 	case protectedarea.FieldDisplayName:
 		return m.DisplayName()
 	case protectedarea.FieldDescription:
@@ -29018,6 +30825,8 @@ func (m *ProtectedAreaMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldUpdatedAt(ctx)
 	case protectedarea.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case protectedarea.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case protectedarea.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case protectedarea.FieldDescription:
@@ -29060,6 +30869,13 @@ func (m *ProtectedAreaMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case protectedarea.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case protectedarea.FieldDisplayName:
 		v, ok := value.(string)
@@ -29118,6 +30934,9 @@ func (m *ProtectedAreaMutation) ClearedFields() []string {
 	if m.FieldCleared(protectedarea.FieldUpdatedBy) {
 		fields = append(fields, protectedarea.FieldUpdatedBy)
 	}
+	if m.FieldCleared(protectedarea.FieldAbbreviation) {
+		fields = append(fields, protectedarea.FieldAbbreviation)
+	}
 	if m.FieldCleared(protectedarea.FieldDisplayName) {
 		fields = append(fields, protectedarea.FieldDisplayName)
 	}
@@ -29147,6 +30966,9 @@ func (m *ProtectedAreaMutation) ClearField(name string) error {
 	case protectedarea.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case protectedarea.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case protectedarea.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -29175,6 +30997,9 @@ func (m *ProtectedAreaMutation) ResetField(name string) error {
 		return nil
 	case protectedarea.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case protectedarea.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case protectedarea.FieldDisplayName:
 		m.ResetDisplayName()
@@ -29247,6 +31072,7 @@ type ProtectedAreaCategoryMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -29525,6 +31351,55 @@ func (m *ProtectedAreaCategoryMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, protectedareacategory.FieldUpdatedBy)
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (m *ProtectedAreaCategoryMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *ProtectedAreaCategoryMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the ProtectedAreaCategory entity.
+// If the ProtectedAreaCategory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaCategoryMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *ProtectedAreaCategoryMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[protectedareacategory.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *ProtectedAreaCategoryMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[protectedareacategory.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *ProtectedAreaCategoryMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, protectedareacategory.FieldAbbreviation)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *ProtectedAreaCategoryMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -29722,7 +31597,7 @@ func (m *ProtectedAreaCategoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProtectedAreaCategoryMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, protectedareacategory.FieldCreatedAt)
 	}
@@ -29734,6 +31609,9 @@ func (m *ProtectedAreaCategoryMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, protectedareacategory.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, protectedareacategory.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, protectedareacategory.FieldDisplayName)
@@ -29760,6 +31638,8 @@ func (m *ProtectedAreaCategoryMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case protectedareacategory.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case protectedareacategory.FieldAbbreviation:
+		return m.Abbreviation()
 	case protectedareacategory.FieldDisplayName:
 		return m.DisplayName()
 	case protectedareacategory.FieldDescription:
@@ -29783,6 +31663,8 @@ func (m *ProtectedAreaCategoryMutation) OldField(ctx context.Context, name strin
 		return m.OldUpdatedAt(ctx)
 	case protectedareacategory.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case protectedareacategory.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case protectedareacategory.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case protectedareacategory.FieldDescription:
@@ -29825,6 +31707,13 @@ func (m *ProtectedAreaCategoryMutation) SetField(name string, value ent.Value) e
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case protectedareacategory.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case protectedareacategory.FieldDisplayName:
 		v, ok := value.(string)
@@ -29883,6 +31772,9 @@ func (m *ProtectedAreaCategoryMutation) ClearedFields() []string {
 	if m.FieldCleared(protectedareacategory.FieldUpdatedBy) {
 		fields = append(fields, protectedareacategory.FieldUpdatedBy)
 	}
+	if m.FieldCleared(protectedareacategory.FieldAbbreviation) {
+		fields = append(fields, protectedareacategory.FieldAbbreviation)
+	}
 	if m.FieldCleared(protectedareacategory.FieldDisplayName) {
 		fields = append(fields, protectedareacategory.FieldDisplayName)
 	}
@@ -29912,6 +31804,9 @@ func (m *ProtectedAreaCategoryMutation) ClearField(name string) error {
 	case protectedareacategory.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case protectedareacategory.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case protectedareacategory.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -29940,6 +31835,9 @@ func (m *ProtectedAreaCategoryMutation) ResetField(name string) error {
 		return nil
 	case protectedareacategory.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case protectedareacategory.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case protectedareacategory.FieldDisplayName:
 		m.ResetDisplayName()
@@ -30012,6 +31910,7 @@ type ProtectedAreaPictureMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -30290,6 +32189,55 @@ func (m *ProtectedAreaPictureMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, protectedareapicture.FieldUpdatedBy)
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (m *ProtectedAreaPictureMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *ProtectedAreaPictureMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the ProtectedAreaPicture entity.
+// If the ProtectedAreaPicture object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaPictureMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *ProtectedAreaPictureMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[protectedareapicture.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *ProtectedAreaPictureMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[protectedareapicture.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *ProtectedAreaPictureMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, protectedareapicture.FieldAbbreviation)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *ProtectedAreaPictureMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -30487,7 +32435,7 @@ func (m *ProtectedAreaPictureMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProtectedAreaPictureMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, protectedareapicture.FieldCreatedAt)
 	}
@@ -30499,6 +32447,9 @@ func (m *ProtectedAreaPictureMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, protectedareapicture.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, protectedareapicture.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, protectedareapicture.FieldDisplayName)
@@ -30525,6 +32476,8 @@ func (m *ProtectedAreaPictureMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case protectedareapicture.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case protectedareapicture.FieldAbbreviation:
+		return m.Abbreviation()
 	case protectedareapicture.FieldDisplayName:
 		return m.DisplayName()
 	case protectedareapicture.FieldDescription:
@@ -30548,6 +32501,8 @@ func (m *ProtectedAreaPictureMutation) OldField(ctx context.Context, name string
 		return m.OldUpdatedAt(ctx)
 	case protectedareapicture.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case protectedareapicture.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case protectedareapicture.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case protectedareapicture.FieldDescription:
@@ -30590,6 +32545,13 @@ func (m *ProtectedAreaPictureMutation) SetField(name string, value ent.Value) er
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case protectedareapicture.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case protectedareapicture.FieldDisplayName:
 		v, ok := value.(string)
@@ -30648,6 +32610,9 @@ func (m *ProtectedAreaPictureMutation) ClearedFields() []string {
 	if m.FieldCleared(protectedareapicture.FieldUpdatedBy) {
 		fields = append(fields, protectedareapicture.FieldUpdatedBy)
 	}
+	if m.FieldCleared(protectedareapicture.FieldAbbreviation) {
+		fields = append(fields, protectedareapicture.FieldAbbreviation)
+	}
 	if m.FieldCleared(protectedareapicture.FieldDisplayName) {
 		fields = append(fields, protectedareapicture.FieldDisplayName)
 	}
@@ -30677,6 +32642,9 @@ func (m *ProtectedAreaPictureMutation) ClearField(name string) error {
 	case protectedareapicture.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case protectedareapicture.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case protectedareapicture.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -30705,6 +32673,9 @@ func (m *ProtectedAreaPictureMutation) ResetField(name string) error {
 		return nil
 	case protectedareapicture.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case protectedareapicture.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case protectedareapicture.FieldDisplayName:
 		m.ResetDisplayName()
@@ -30777,6 +32748,7 @@ type PublicationMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -31059,6 +33031,55 @@ func (m *PublicationMutation) UpdatedByCleared() bool {
 func (m *PublicationMutation) ResetUpdatedBy() {
 	m.updated_by = nil
 	delete(m.clearedFields, publication.FieldUpdatedBy)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *PublicationMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *PublicationMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Publication entity.
+// If the Publication object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PublicationMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *PublicationMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[publication.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *PublicationMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[publication.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *PublicationMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, publication.FieldAbbreviation)
 }
 
 // SetDisplayName sets the "display_name" field.
@@ -31366,7 +33387,7 @@ func (m *PublicationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PublicationMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, publication.FieldCreatedAt)
 	}
@@ -31378,6 +33399,9 @@ func (m *PublicationMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, publication.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, publication.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, publication.FieldDisplayName)
@@ -31404,6 +33428,8 @@ func (m *PublicationMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case publication.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case publication.FieldAbbreviation:
+		return m.Abbreviation()
 	case publication.FieldDisplayName:
 		return m.DisplayName()
 	case publication.FieldDescription:
@@ -31427,6 +33453,8 @@ func (m *PublicationMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldUpdatedAt(ctx)
 	case publication.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case publication.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case publication.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case publication.FieldDescription:
@@ -31469,6 +33497,13 @@ func (m *PublicationMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case publication.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case publication.FieldDisplayName:
 		v, ok := value.(string)
@@ -31527,6 +33562,9 @@ func (m *PublicationMutation) ClearedFields() []string {
 	if m.FieldCleared(publication.FieldUpdatedBy) {
 		fields = append(fields, publication.FieldUpdatedBy)
 	}
+	if m.FieldCleared(publication.FieldAbbreviation) {
+		fields = append(fields, publication.FieldAbbreviation)
+	}
 	if m.FieldCleared(publication.FieldDisplayName) {
 		fields = append(fields, publication.FieldDisplayName)
 	}
@@ -31556,6 +33594,9 @@ func (m *PublicationMutation) ClearField(name string) error {
 	case publication.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case publication.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case publication.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -31584,6 +33625,9 @@ func (m *PublicationMutation) ResetField(name string) error {
 		return nil
 	case publication.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case publication.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case publication.FieldDisplayName:
 		m.ResetDisplayName()
@@ -31718,6 +33762,7 @@ type PublisherMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -31999,6 +34044,55 @@ func (m *PublisherMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, publisher.FieldUpdatedBy)
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (m *PublisherMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *PublisherMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Publisher entity.
+// If the Publisher object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PublisherMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *PublisherMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[publisher.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *PublisherMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[publisher.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *PublisherMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, publisher.FieldAbbreviation)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *PublisherMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -32250,7 +34344,7 @@ func (m *PublisherMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PublisherMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, publisher.FieldCreatedAt)
 	}
@@ -32262,6 +34356,9 @@ func (m *PublisherMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, publisher.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, publisher.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, publisher.FieldDisplayName)
@@ -32288,6 +34385,8 @@ func (m *PublisherMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case publisher.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case publisher.FieldAbbreviation:
+		return m.Abbreviation()
 	case publisher.FieldDisplayName:
 		return m.DisplayName()
 	case publisher.FieldDescription:
@@ -32311,6 +34410,8 @@ func (m *PublisherMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldUpdatedAt(ctx)
 	case publisher.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case publisher.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case publisher.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case publisher.FieldDescription:
@@ -32353,6 +34454,13 @@ func (m *PublisherMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case publisher.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case publisher.FieldDisplayName:
 		v, ok := value.(string)
@@ -32411,6 +34519,9 @@ func (m *PublisherMutation) ClearedFields() []string {
 	if m.FieldCleared(publisher.FieldUpdatedBy) {
 		fields = append(fields, publisher.FieldUpdatedBy)
 	}
+	if m.FieldCleared(publisher.FieldAbbreviation) {
+		fields = append(fields, publisher.FieldAbbreviation)
+	}
 	if m.FieldCleared(publisher.FieldDisplayName) {
 		fields = append(fields, publisher.FieldDisplayName)
 	}
@@ -32440,6 +34551,9 @@ func (m *PublisherMutation) ClearField(name string) error {
 	case publisher.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case publisher.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case publisher.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -32468,6 +34582,9 @@ func (m *PublisherMutation) ResetField(name string) error {
 		return nil
 	case publisher.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case publisher.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case publisher.FieldDisplayName:
 		m.ResetDisplayName()
@@ -32576,6 +34693,7 @@ type RegionMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -32856,6 +34974,55 @@ func (m *RegionMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, region.FieldUpdatedBy)
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (m *RegionMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *RegionMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Region entity.
+// If the Region object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RegionMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *RegionMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[region.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *RegionMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[region.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *RegionMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, region.FieldAbbreviation)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *RegionMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -33092,7 +35259,7 @@ func (m *RegionMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *RegionMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, region.FieldCreatedAt)
 	}
@@ -33104,6 +35271,9 @@ func (m *RegionMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, region.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, region.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, region.FieldDisplayName)
@@ -33130,6 +35300,8 @@ func (m *RegionMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case region.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case region.FieldAbbreviation:
+		return m.Abbreviation()
 	case region.FieldDisplayName:
 		return m.DisplayName()
 	case region.FieldDescription:
@@ -33153,6 +35325,8 @@ func (m *RegionMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldUpdatedAt(ctx)
 	case region.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case region.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case region.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case region.FieldDescription:
@@ -33195,6 +35369,13 @@ func (m *RegionMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case region.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case region.FieldDisplayName:
 		v, ok := value.(string)
@@ -33253,6 +35434,9 @@ func (m *RegionMutation) ClearedFields() []string {
 	if m.FieldCleared(region.FieldUpdatedBy) {
 		fields = append(fields, region.FieldUpdatedBy)
 	}
+	if m.FieldCleared(region.FieldAbbreviation) {
+		fields = append(fields, region.FieldAbbreviation)
+	}
 	if m.FieldCleared(region.FieldDisplayName) {
 		fields = append(fields, region.FieldDisplayName)
 	}
@@ -33282,6 +35466,9 @@ func (m *RegionMutation) ClearField(name string) error {
 	case region.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case region.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case region.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -33310,6 +35497,9 @@ func (m *RegionMutation) ResetField(name string) error {
 		return nil
 	case region.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case region.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case region.FieldDisplayName:
 		m.ResetDisplayName()
@@ -33408,6 +35598,7 @@ type SetMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -33690,6 +35881,55 @@ func (m *SetMutation) UpdatedByCleared() bool {
 func (m *SetMutation) ResetUpdatedBy() {
 	m.updated_by = nil
 	delete(m.clearedFields, set.FieldUpdatedBy)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *SetMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *SetMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Set entity.
+// If the Set object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SetMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *SetMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[set.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *SetMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[set.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *SetMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, set.FieldAbbreviation)
 }
 
 // SetDisplayName sets the "display_name" field.
@@ -33997,7 +36237,7 @@ func (m *SetMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SetMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, set.FieldCreatedAt)
 	}
@@ -34009,6 +36249,9 @@ func (m *SetMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, set.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, set.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, set.FieldDisplayName)
@@ -34035,6 +36278,8 @@ func (m *SetMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case set.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case set.FieldAbbreviation:
+		return m.Abbreviation()
 	case set.FieldDisplayName:
 		return m.DisplayName()
 	case set.FieldDescription:
@@ -34058,6 +36303,8 @@ func (m *SetMutation) OldField(ctx context.Context, name string) (ent.Value, err
 		return m.OldUpdatedAt(ctx)
 	case set.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case set.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case set.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case set.FieldDescription:
@@ -34100,6 +36347,13 @@ func (m *SetMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case set.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case set.FieldDisplayName:
 		v, ok := value.(string)
@@ -34158,6 +36412,9 @@ func (m *SetMutation) ClearedFields() []string {
 	if m.FieldCleared(set.FieldUpdatedBy) {
 		fields = append(fields, set.FieldUpdatedBy)
 	}
+	if m.FieldCleared(set.FieldAbbreviation) {
+		fields = append(fields, set.FieldAbbreviation)
+	}
 	if m.FieldCleared(set.FieldDisplayName) {
 		fields = append(fields, set.FieldDisplayName)
 	}
@@ -34187,6 +36444,9 @@ func (m *SetMutation) ClearField(name string) error {
 	case set.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case set.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case set.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -34215,6 +36475,9 @@ func (m *SetMutation) ResetField(name string) error {
 		return nil
 	case set.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case set.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case set.FieldDisplayName:
 		m.ResetDisplayName()
@@ -34349,6 +36612,7 @@ type SettlementMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -34629,6 +36893,55 @@ func (m *SettlementMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, settlement.FieldUpdatedBy)
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (m *SettlementMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *SettlementMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Settlement entity.
+// If the Settlement object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettlementMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *SettlementMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[settlement.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *SettlementMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[settlement.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *SettlementMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, settlement.FieldAbbreviation)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *SettlementMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -34865,7 +37178,7 @@ func (m *SettlementMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SettlementMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, settlement.FieldCreatedAt)
 	}
@@ -34877,6 +37190,9 @@ func (m *SettlementMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, settlement.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, settlement.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, settlement.FieldDisplayName)
@@ -34903,6 +37219,8 @@ func (m *SettlementMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case settlement.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case settlement.FieldAbbreviation:
+		return m.Abbreviation()
 	case settlement.FieldDisplayName:
 		return m.DisplayName()
 	case settlement.FieldDescription:
@@ -34926,6 +37244,8 @@ func (m *SettlementMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldUpdatedAt(ctx)
 	case settlement.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case settlement.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case settlement.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case settlement.FieldDescription:
@@ -34968,6 +37288,13 @@ func (m *SettlementMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case settlement.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case settlement.FieldDisplayName:
 		v, ok := value.(string)
@@ -35026,6 +37353,9 @@ func (m *SettlementMutation) ClearedFields() []string {
 	if m.FieldCleared(settlement.FieldUpdatedBy) {
 		fields = append(fields, settlement.FieldUpdatedBy)
 	}
+	if m.FieldCleared(settlement.FieldAbbreviation) {
+		fields = append(fields, settlement.FieldAbbreviation)
+	}
 	if m.FieldCleared(settlement.FieldDisplayName) {
 		fields = append(fields, settlement.FieldDisplayName)
 	}
@@ -35055,6 +37385,9 @@ func (m *SettlementMutation) ClearField(name string) error {
 	case settlement.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case settlement.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case settlement.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -35083,6 +37416,9 @@ func (m *SettlementMutation) ResetField(name string) error {
 		return nil
 	case settlement.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case settlement.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case settlement.FieldDisplayName:
 		m.ResetDisplayName()
@@ -35181,6 +37517,7 @@ type TechniqueMutation struct {
 	created_by           *string
 	updated_at           *time.Time
 	updated_by           *string
+	abbreviation         *string
 	display_name         *string
 	description          *string
 	external_links       *[]string
@@ -35462,6 +37799,55 @@ func (m *TechniqueMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, technique.FieldUpdatedBy)
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (m *TechniqueMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *TechniqueMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Technique entity.
+// If the Technique object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TechniqueMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *TechniqueMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[technique.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *TechniqueMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[technique.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *TechniqueMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, technique.FieldAbbreviation)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *TechniqueMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -35713,7 +38099,7 @@ func (m *TechniqueMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TechniqueMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, technique.FieldCreatedAt)
 	}
@@ -35725,6 +38111,9 @@ func (m *TechniqueMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, technique.FieldUpdatedBy)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, technique.FieldAbbreviation)
 	}
 	if m.display_name != nil {
 		fields = append(fields, technique.FieldDisplayName)
@@ -35751,6 +38140,8 @@ func (m *TechniqueMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case technique.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case technique.FieldAbbreviation:
+		return m.Abbreviation()
 	case technique.FieldDisplayName:
 		return m.DisplayName()
 	case technique.FieldDescription:
@@ -35774,6 +38165,8 @@ func (m *TechniqueMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldUpdatedAt(ctx)
 	case technique.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case technique.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
 	case technique.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case technique.FieldDescription:
@@ -35816,6 +38209,13 @@ func (m *TechniqueMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case technique.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
 		return nil
 	case technique.FieldDisplayName:
 		v, ok := value.(string)
@@ -35874,6 +38274,9 @@ func (m *TechniqueMutation) ClearedFields() []string {
 	if m.FieldCleared(technique.FieldUpdatedBy) {
 		fields = append(fields, technique.FieldUpdatedBy)
 	}
+	if m.FieldCleared(technique.FieldAbbreviation) {
+		fields = append(fields, technique.FieldAbbreviation)
+	}
 	if m.FieldCleared(technique.FieldDisplayName) {
 		fields = append(fields, technique.FieldDisplayName)
 	}
@@ -35903,6 +38306,9 @@ func (m *TechniqueMutation) ClearField(name string) error {
 	case technique.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case technique.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
 	case technique.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -35931,6 +38337,9 @@ func (m *TechniqueMutation) ResetField(name string) error {
 		return nil
 	case technique.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case technique.FieldAbbreviation:
+		m.ResetAbbreviation()
 		return nil
 	case technique.FieldDisplayName:
 		m.ResetDisplayName()

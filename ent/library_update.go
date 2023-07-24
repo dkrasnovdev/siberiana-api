@@ -76,6 +76,26 @@ func (lu *LibraryUpdate) ClearUpdatedBy() *LibraryUpdate {
 	return lu
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (lu *LibraryUpdate) SetAbbreviation(s string) *LibraryUpdate {
+	lu.mutation.SetAbbreviation(s)
+	return lu
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (lu *LibraryUpdate) SetNillableAbbreviation(s *string) *LibraryUpdate {
+	if s != nil {
+		lu.SetAbbreviation(*s)
+	}
+	return lu
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (lu *LibraryUpdate) ClearAbbreviation() *LibraryUpdate {
+	lu.mutation.ClearAbbreviation()
+	return lu
+}
+
 // SetDisplayName sets the "display_name" field.
 func (lu *LibraryUpdate) SetDisplayName(s string) *LibraryUpdate {
 	lu.mutation.SetDisplayName(s)
@@ -241,6 +261,12 @@ func (lu *LibraryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if lu.mutation.UpdatedByCleared() {
 		_spec.ClearField(library.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := lu.mutation.Abbreviation(); ok {
+		_spec.SetField(library.FieldAbbreviation, field.TypeString, value)
+	}
+	if lu.mutation.AbbreviationCleared() {
+		_spec.ClearField(library.FieldAbbreviation, field.TypeString)
+	}
 	if value, ok := lu.mutation.DisplayName(); ok {
 		_spec.SetField(library.FieldDisplayName, field.TypeString, value)
 	}
@@ -372,6 +398,26 @@ func (luo *LibraryUpdateOne) SetNillableUpdatedBy(s *string) *LibraryUpdateOne {
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (luo *LibraryUpdateOne) ClearUpdatedBy() *LibraryUpdateOne {
 	luo.mutation.ClearUpdatedBy()
+	return luo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (luo *LibraryUpdateOne) SetAbbreviation(s string) *LibraryUpdateOne {
+	luo.mutation.SetAbbreviation(s)
+	return luo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (luo *LibraryUpdateOne) SetNillableAbbreviation(s *string) *LibraryUpdateOne {
+	if s != nil {
+		luo.SetAbbreviation(*s)
+	}
+	return luo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (luo *LibraryUpdateOne) ClearAbbreviation() *LibraryUpdateOne {
+	luo.mutation.ClearAbbreviation()
 	return luo
 }
 
@@ -569,6 +615,12 @@ func (luo *LibraryUpdateOne) sqlSave(ctx context.Context) (_node *Library, err e
 	}
 	if luo.mutation.UpdatedByCleared() {
 		_spec.ClearField(library.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := luo.mutation.Abbreviation(); ok {
+		_spec.SetField(library.FieldAbbreviation, field.TypeString, value)
+	}
+	if luo.mutation.AbbreviationCleared() {
+		_spec.ClearField(library.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := luo.mutation.DisplayName(); ok {
 		_spec.SetField(library.FieldDisplayName, field.TypeString, value)

@@ -76,6 +76,26 @@ func (ru *RegionUpdate) ClearUpdatedBy() *RegionUpdate {
 	return ru
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (ru *RegionUpdate) SetAbbreviation(s string) *RegionUpdate {
+	ru.mutation.SetAbbreviation(s)
+	return ru
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (ru *RegionUpdate) SetNillableAbbreviation(s *string) *RegionUpdate {
+	if s != nil {
+		ru.SetAbbreviation(*s)
+	}
+	return ru
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (ru *RegionUpdate) ClearAbbreviation() *RegionUpdate {
+	ru.mutation.ClearAbbreviation()
+	return ru
+}
+
 // SetDisplayName sets the "display_name" field.
 func (ru *RegionUpdate) SetDisplayName(s string) *RegionUpdate {
 	ru.mutation.SetDisplayName(s)
@@ -230,6 +250,12 @@ func (ru *RegionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ru.mutation.UpdatedByCleared() {
 		_spec.ClearField(region.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := ru.mutation.Abbreviation(); ok {
+		_spec.SetField(region.FieldAbbreviation, field.TypeString, value)
+	}
+	if ru.mutation.AbbreviationCleared() {
+		_spec.ClearField(region.FieldAbbreviation, field.TypeString)
+	}
 	if value, ok := ru.mutation.DisplayName(); ok {
 		_spec.SetField(region.FieldDisplayName, field.TypeString, value)
 	}
@@ -345,6 +371,26 @@ func (ruo *RegionUpdateOne) SetNillableUpdatedBy(s *string) *RegionUpdateOne {
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (ruo *RegionUpdateOne) ClearUpdatedBy() *RegionUpdateOne {
 	ruo.mutation.ClearUpdatedBy()
+	return ruo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (ruo *RegionUpdateOne) SetAbbreviation(s string) *RegionUpdateOne {
+	ruo.mutation.SetAbbreviation(s)
+	return ruo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (ruo *RegionUpdateOne) SetNillableAbbreviation(s *string) *RegionUpdateOne {
+	if s != nil {
+		ruo.SetAbbreviation(*s)
+	}
+	return ruo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (ruo *RegionUpdateOne) ClearAbbreviation() *RegionUpdateOne {
+	ruo.mutation.ClearAbbreviation()
 	return ruo
 }
 
@@ -531,6 +577,12 @@ func (ruo *RegionUpdateOne) sqlSave(ctx context.Context) (_node *Region, err err
 	}
 	if ruo.mutation.UpdatedByCleared() {
 		_spec.ClearField(region.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := ruo.mutation.Abbreviation(); ok {
+		_spec.SetField(region.FieldAbbreviation, field.TypeString, value)
+	}
+	if ruo.mutation.AbbreviationCleared() {
+		_spec.ClearField(region.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := ruo.mutation.DisplayName(); ok {
 		_spec.SetField(region.FieldDisplayName, field.TypeString, value)

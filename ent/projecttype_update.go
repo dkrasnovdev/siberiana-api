@@ -76,6 +76,26 @@ func (ptu *ProjectTypeUpdate) ClearUpdatedBy() *ProjectTypeUpdate {
 	return ptu
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (ptu *ProjectTypeUpdate) SetAbbreviation(s string) *ProjectTypeUpdate {
+	ptu.mutation.SetAbbreviation(s)
+	return ptu
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (ptu *ProjectTypeUpdate) SetNillableAbbreviation(s *string) *ProjectTypeUpdate {
+	if s != nil {
+		ptu.SetAbbreviation(*s)
+	}
+	return ptu
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (ptu *ProjectTypeUpdate) ClearAbbreviation() *ProjectTypeUpdate {
+	ptu.mutation.ClearAbbreviation()
+	return ptu
+}
+
 // SetDisplayName sets the "display_name" field.
 func (ptu *ProjectTypeUpdate) SetDisplayName(s string) *ProjectTypeUpdate {
 	ptu.mutation.SetDisplayName(s)
@@ -241,6 +261,12 @@ func (ptu *ProjectTypeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ptu.mutation.UpdatedByCleared() {
 		_spec.ClearField(projecttype.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := ptu.mutation.Abbreviation(); ok {
+		_spec.SetField(projecttype.FieldAbbreviation, field.TypeString, value)
+	}
+	if ptu.mutation.AbbreviationCleared() {
+		_spec.ClearField(projecttype.FieldAbbreviation, field.TypeString)
+	}
 	if value, ok := ptu.mutation.DisplayName(); ok {
 		_spec.SetField(projecttype.FieldDisplayName, field.TypeString, value)
 	}
@@ -372,6 +398,26 @@ func (ptuo *ProjectTypeUpdateOne) SetNillableUpdatedBy(s *string) *ProjectTypeUp
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (ptuo *ProjectTypeUpdateOne) ClearUpdatedBy() *ProjectTypeUpdateOne {
 	ptuo.mutation.ClearUpdatedBy()
+	return ptuo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (ptuo *ProjectTypeUpdateOne) SetAbbreviation(s string) *ProjectTypeUpdateOne {
+	ptuo.mutation.SetAbbreviation(s)
+	return ptuo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (ptuo *ProjectTypeUpdateOne) SetNillableAbbreviation(s *string) *ProjectTypeUpdateOne {
+	if s != nil {
+		ptuo.SetAbbreviation(*s)
+	}
+	return ptuo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (ptuo *ProjectTypeUpdateOne) ClearAbbreviation() *ProjectTypeUpdateOne {
+	ptuo.mutation.ClearAbbreviation()
 	return ptuo
 }
 
@@ -569,6 +615,12 @@ func (ptuo *ProjectTypeUpdateOne) sqlSave(ctx context.Context) (_node *ProjectTy
 	}
 	if ptuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(projecttype.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := ptuo.mutation.Abbreviation(); ok {
+		_spec.SetField(projecttype.FieldAbbreviation, field.TypeString, value)
+	}
+	if ptuo.mutation.AbbreviationCleared() {
+		_spec.ClearField(projecttype.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := ptuo.mutation.DisplayName(); ok {
 		_spec.SetField(projecttype.FieldDisplayName, field.TypeString, value)

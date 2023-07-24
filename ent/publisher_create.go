@@ -77,6 +77,20 @@ func (pc *PublisherCreate) SetNillableUpdatedBy(s *string) *PublisherCreate {
 	return pc
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (pc *PublisherCreate) SetAbbreviation(s string) *PublisherCreate {
+	pc.mutation.SetAbbreviation(s)
+	return pc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (pc *PublisherCreate) SetNillableAbbreviation(s *string) *PublisherCreate {
+	if s != nil {
+		pc.SetAbbreviation(*s)
+	}
+	return pc
+}
+
 // SetDisplayName sets the "display_name" field.
 func (pc *PublisherCreate) SetDisplayName(s string) *PublisherCreate {
 	pc.mutation.SetDisplayName(s)
@@ -229,6 +243,10 @@ func (pc *PublisherCreate) createSpec() (*Publisher, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.UpdatedBy(); ok {
 		_spec.SetField(publisher.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := pc.mutation.Abbreviation(); ok {
+		_spec.SetField(publisher.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := pc.mutation.DisplayName(); ok {
 		_spec.SetField(publisher.FieldDisplayName, field.TypeString, value)

@@ -26,6 +26,8 @@ type Culture struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
@@ -69,7 +71,7 @@ func (*Culture) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case culture.FieldID:
 			values[i] = new(sql.NullInt64)
-		case culture.FieldCreatedBy, culture.FieldUpdatedBy, culture.FieldDisplayName, culture.FieldDescription:
+		case culture.FieldCreatedBy, culture.FieldUpdatedBy, culture.FieldAbbreviation, culture.FieldDisplayName, culture.FieldDescription:
 			values[i] = new(sql.NullString)
 		case culture.FieldCreatedAt, culture.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -117,6 +119,12 @@ func (c *Culture) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				c.UpdatedBy = value.String
+			}
+		case culture.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				c.Abbreviation = value.String
 			}
 		case culture.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -190,6 +198,9 @@ func (c *Culture) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(c.UpdatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(c.Abbreviation)
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(c.DisplayName)

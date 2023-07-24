@@ -76,6 +76,20 @@ func (pacc *ProtectedAreaCategoryCreate) SetNillableUpdatedBy(s *string) *Protec
 	return pacc
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (pacc *ProtectedAreaCategoryCreate) SetAbbreviation(s string) *ProtectedAreaCategoryCreate {
+	pacc.mutation.SetAbbreviation(s)
+	return pacc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (pacc *ProtectedAreaCategoryCreate) SetNillableAbbreviation(s *string) *ProtectedAreaCategoryCreate {
+	if s != nil {
+		pacc.SetAbbreviation(*s)
+	}
+	return pacc
+}
+
 // SetDisplayName sets the "display_name" field.
 func (pacc *ProtectedAreaCategoryCreate) SetDisplayName(s string) *ProtectedAreaCategoryCreate {
 	pacc.mutation.SetDisplayName(s)
@@ -213,6 +227,10 @@ func (pacc *ProtectedAreaCategoryCreate) createSpec() (*ProtectedAreaCategory, *
 	if value, ok := pacc.mutation.UpdatedBy(); ok {
 		_spec.SetField(protectedareacategory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := pacc.mutation.Abbreviation(); ok {
+		_spec.SetField(protectedareacategory.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := pacc.mutation.DisplayName(); ok {
 		_spec.SetField(protectedareacategory.FieldDisplayName, field.TypeString, value)

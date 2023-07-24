@@ -14,6 +14,7 @@ type CreateArtGenreInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -32,6 +33,9 @@ func (i *CreateArtGenreInput) Mutate(m *ArtGenreMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -57,6 +61,8 @@ type UpdateArtGenreInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -82,6 +88,12 @@ func (i *UpdateArtGenreInput) Mutate(m *ArtGenreMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -124,6 +136,7 @@ type CreateArtStyleInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -142,6 +155,9 @@ func (i *CreateArtStyleInput) Mutate(m *ArtStyleMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -167,6 +183,8 @@ type UpdateArtStyleInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -192,6 +210,12 @@ func (i *UpdateArtStyleInput) Mutate(m *ArtStyleMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -234,6 +258,7 @@ type CreateArtifactInput struct {
 	CreatedBy             *string
 	UpdatedAt             *time.Time
 	UpdatedBy             *string
+	Abbreviation          *string
 	DisplayName           *string
 	Description           *string
 	ExternalLinks         []string
@@ -277,6 +302,9 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -377,6 +405,8 @@ type UpdateArtifactInput struct {
 	UpdatedAt                  *time.Time
 	ClearUpdatedBy             bool
 	UpdatedBy                  *string
+	ClearAbbreviation          bool
+	Abbreviation               *string
 	ClearDisplayName           bool
 	DisplayName                *string
 	ClearDescription           bool
@@ -459,6 +489,12 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -672,6 +708,7 @@ type CreateBookInput struct {
 	CreatedBy            *string
 	UpdatedAt            *time.Time
 	UpdatedBy            *string
+	Abbreviation         *string
 	DisplayName          *string
 	Description          *string
 	ExternalLinks        []string
@@ -700,6 +737,9 @@ func (i *CreateBookInput) Mutate(m *BookMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -755,6 +795,8 @@ type UpdateBookInput struct {
 	UpdatedAt                  *time.Time
 	ClearUpdatedBy             bool
 	UpdatedBy                  *string
+	ClearAbbreviation          bool
+	Abbreviation               *string
 	ClearDisplayName           bool
 	DisplayName                *string
 	ClearDescription           bool
@@ -805,6 +847,12 @@ func (i *UpdateBookInput) Mutate(m *BookMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -922,6 +970,7 @@ type CreateBookGenreInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -941,6 +990,9 @@ func (i *CreateBookGenreInput) Mutate(m *BookGenreMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -969,6 +1021,8 @@ type UpdateBookGenreInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -997,6 +1051,12 @@ func (i *UpdateBookGenreInput) Mutate(m *BookGenreMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -1048,6 +1108,7 @@ type CreateCategoryInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -1067,6 +1128,9 @@ func (i *CreateCategoryInput) Mutate(m *CategoryMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -1095,6 +1159,8 @@ type UpdateCategoryInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -1123,6 +1189,12 @@ func (i *UpdateCategoryInput) Mutate(m *CategoryMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -1174,6 +1246,7 @@ type CreateCollectionInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -1196,6 +1269,9 @@ func (i *CreateCollectionInput) Mutate(m *CollectionMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -1233,6 +1309,8 @@ type UpdateCollectionInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -1269,6 +1347,12 @@ func (i *UpdateCollectionInput) Mutate(m *CollectionMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -1344,6 +1428,7 @@ type CreateCountryInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -1363,6 +1448,9 @@ func (i *CreateCountryInput) Mutate(m *CountryMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -1391,6 +1479,8 @@ type UpdateCountryInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -1418,6 +1508,12 @@ func (i *UpdateCountryInput) Mutate(m *CountryMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -1466,6 +1562,7 @@ type CreateCultureInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -1485,6 +1582,9 @@ func (i *CreateCultureInput) Mutate(m *CultureMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -1513,6 +1613,8 @@ type UpdateCultureInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -1541,6 +1643,12 @@ func (i *UpdateCultureInput) Mutate(m *CultureMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -1592,6 +1700,7 @@ type CreateDistrictInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -1611,6 +1720,9 @@ func (i *CreateDistrictInput) Mutate(m *DistrictMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -1639,6 +1751,8 @@ type UpdateDistrictInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -1666,6 +1780,12 @@ func (i *UpdateDistrictInput) Mutate(m *DistrictMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -1874,6 +1994,7 @@ type CreateHolderResponsibilityInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -1893,6 +2014,9 @@ func (i *CreateHolderResponsibilityInput) Mutate(m *HolderResponsibilityMutation
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -1921,6 +2045,8 @@ type UpdateHolderResponsibilityInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -1949,6 +2075,12 @@ func (i *UpdateHolderResponsibilityInput) Mutate(m *HolderResponsibilityMutation
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -2000,6 +2132,7 @@ type CreateLibraryInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -2019,6 +2152,9 @@ func (i *CreateLibraryInput) Mutate(m *LibraryMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -2047,6 +2183,8 @@ type UpdateLibraryInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -2075,6 +2213,12 @@ func (i *UpdateLibraryInput) Mutate(m *LibraryMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -2126,6 +2270,7 @@ type CreateLicenseInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -2146,6 +2291,9 @@ func (i *CreateLicenseInput) Mutate(m *LicenseMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -2177,6 +2325,8 @@ type UpdateLicenseInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -2208,6 +2358,12 @@ func (i *UpdateLicenseInput) Mutate(m *LicenseMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -2268,6 +2424,7 @@ type CreateLocationInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -2291,6 +2448,9 @@ func (i *CreateLocationInput) Mutate(m *LocationMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -2331,6 +2491,8 @@ type UpdateLocationInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -2367,6 +2529,12 @@ func (i *UpdateLocationInput) Mutate(m *LocationMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -2442,6 +2610,7 @@ type CreateMediumInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -2461,6 +2630,9 @@ func (i *CreateMediumInput) Mutate(m *MediumMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -2489,6 +2661,8 @@ type UpdateMediumInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -2517,6 +2691,12 @@ func (i *UpdateMediumInput) Mutate(m *MediumMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -2568,6 +2748,7 @@ type CreateModelInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -2587,6 +2768,9 @@ func (i *CreateModelInput) Mutate(m *ModelMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -2615,6 +2799,8 @@ type UpdateModelInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -2643,6 +2829,12 @@ func (i *UpdateModelInput) Mutate(m *ModelMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -2694,6 +2886,7 @@ type CreateMonumentInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -2714,6 +2907,9 @@ func (i *CreateMonumentInput) Mutate(m *MonumentMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -2745,6 +2941,8 @@ type UpdateMonumentInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -2776,6 +2974,12 @@ func (i *UpdateMonumentInput) Mutate(m *MonumentMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -2839,6 +3043,7 @@ type CreateOrganizationInput struct {
 	Address               *string
 	PhoneNumbers          []string
 	Emails                []string
+	Abbreviation          *string
 	DisplayName           *string
 	Description           *string
 	ExternalLinks         []string
@@ -2874,6 +3079,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.Emails; v != nil {
 		m.SetEmails(v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -2931,6 +3139,8 @@ type UpdateOrganizationInput struct {
 	ClearEmails                bool
 	Emails                     []string
 	AppendEmails               []string
+	ClearAbbreviation          bool
+	Abbreviation               *string
 	ClearDisplayName           bool
 	DisplayName                *string
 	ClearDescription           bool
@@ -2999,6 +3209,12 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if i.AppendEmails != nil {
 		m.AppendEmails(i.Emails)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -3098,6 +3314,7 @@ type CreateOrganizationTypeInput struct {
 	CreatedBy       *string
 	UpdatedAt       *time.Time
 	UpdatedBy       *string
+	Abbreviation    *string
 	DisplayName     *string
 	Description     *string
 	ExternalLinks   []string
@@ -3117,6 +3334,9 @@ func (i *CreateOrganizationTypeInput) Mutate(m *OrganizationTypeMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -3145,6 +3365,8 @@ type UpdateOrganizationTypeInput struct {
 	UpdatedAt             *time.Time
 	ClearUpdatedBy        bool
 	UpdatedBy             *string
+	ClearAbbreviation     bool
+	Abbreviation          *string
 	ClearDisplayName      bool
 	DisplayName           *string
 	ClearDescription      bool
@@ -3173,6 +3395,12 @@ func (i *UpdateOrganizationTypeInput) Mutate(m *OrganizationTypeMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -3224,6 +3452,7 @@ type CreatePeriodInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -3243,6 +3472,9 @@ func (i *CreatePeriodInput) Mutate(m *PeriodMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -3271,6 +3503,8 @@ type UpdatePeriodInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -3299,6 +3533,12 @@ func (i *UpdatePeriodInput) Mutate(m *PeriodMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -3353,6 +3593,7 @@ type CreatePersonInput struct {
 	Address              *string
 	PhoneNumbers         []string
 	Emails               []string
+	Abbreviation         *string
 	DisplayName          *string
 	Description          *string
 	ExternalLinks        []string
@@ -3396,6 +3637,9 @@ func (i *CreatePersonInput) Mutate(m *PersonMutation) {
 	}
 	if v := i.Emails; v != nil {
 		m.SetEmails(v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -3475,6 +3719,8 @@ type UpdatePersonInput struct {
 	ClearEmails                bool
 	Emails                     []string
 	AppendEmails               []string
+	ClearAbbreviation          bool
+	Abbreviation               *string
 	ClearDisplayName           bool
 	DisplayName                *string
 	ClearDescription           bool
@@ -3561,6 +3807,12 @@ func (i *UpdatePersonInput) Mutate(m *PersonMutation) {
 	}
 	if i.AppendEmails != nil {
 		m.AppendEmails(i.Emails)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -3714,6 +3966,7 @@ type CreatePersonRoleInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -3733,6 +3986,9 @@ func (i *CreatePersonRoleInput) Mutate(m *PersonRoleMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -3761,6 +4017,8 @@ type UpdatePersonRoleInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -3789,6 +4047,12 @@ func (i *UpdatePersonRoleInput) Mutate(m *PersonRoleMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -3840,6 +4104,7 @@ type CreateProjectInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -3863,6 +4128,9 @@ func (i *CreateProjectInput) Mutate(m *ProjectMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -3903,6 +4171,8 @@ type UpdateProjectInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -3940,6 +4210,12 @@ func (i *UpdateProjectInput) Mutate(m *ProjectMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -4018,6 +4294,7 @@ type CreateProjectTypeInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -4037,6 +4314,9 @@ func (i *CreateProjectTypeInput) Mutate(m *ProjectTypeMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -4065,6 +4345,8 @@ type UpdateProjectTypeInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -4093,6 +4375,12 @@ func (i *UpdateProjectTypeInput) Mutate(m *ProjectTypeMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -4144,6 +4432,7 @@ type CreateProtectedAreaInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -4162,6 +4451,9 @@ func (i *CreateProtectedAreaInput) Mutate(m *ProtectedAreaMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -4187,6 +4479,8 @@ type UpdateProtectedAreaInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -4212,6 +4506,12 @@ func (i *UpdateProtectedAreaInput) Mutate(m *ProtectedAreaMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -4254,6 +4554,7 @@ type CreateProtectedAreaCategoryInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -4272,6 +4573,9 @@ func (i *CreateProtectedAreaCategoryInput) Mutate(m *ProtectedAreaCategoryMutati
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -4297,6 +4601,8 @@ type UpdateProtectedAreaCategoryInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -4322,6 +4628,12 @@ func (i *UpdateProtectedAreaCategoryInput) Mutate(m *ProtectedAreaCategoryMutati
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -4364,6 +4676,7 @@ type CreateProtectedAreaPictureInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -4382,6 +4695,9 @@ func (i *CreateProtectedAreaPictureInput) Mutate(m *ProtectedAreaPictureMutation
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -4407,6 +4723,8 @@ type UpdateProtectedAreaPictureInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -4432,6 +4750,12 @@ func (i *UpdateProtectedAreaPictureInput) Mutate(m *ProtectedAreaPictureMutation
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -4474,6 +4798,7 @@ type CreatePublicationInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -4494,6 +4819,9 @@ func (i *CreatePublicationInput) Mutate(m *PublicationMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -4525,6 +4853,8 @@ type UpdatePublicationInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -4556,6 +4886,12 @@ func (i *UpdatePublicationInput) Mutate(m *PublicationMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -4616,6 +4952,7 @@ type CreatePublisherInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -4635,6 +4972,9 @@ func (i *CreatePublisherInput) Mutate(m *PublisherMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -4663,6 +5003,8 @@ type UpdatePublisherInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -4691,6 +5033,12 @@ func (i *UpdatePublisherInput) Mutate(m *PublisherMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -4742,6 +5090,7 @@ type CreateRegionInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -4761,6 +5110,9 @@ func (i *CreateRegionInput) Mutate(m *RegionMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -4789,6 +5141,8 @@ type UpdateRegionInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -4816,6 +5170,12 @@ func (i *UpdateRegionInput) Mutate(m *RegionMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -4864,6 +5224,7 @@ type CreateSetInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -4884,6 +5245,9 @@ func (i *CreateSetInput) Mutate(m *SetMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -4915,6 +5279,8 @@ type UpdateSetInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -4946,6 +5312,12 @@ func (i *UpdateSetInput) Mutate(m *SetMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -5006,6 +5378,7 @@ type CreateSettlementInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -5025,6 +5398,9 @@ func (i *CreateSettlementInput) Mutate(m *SettlementMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -5053,6 +5429,8 @@ type UpdateSettlementInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -5080,6 +5458,12 @@ func (i *UpdateSettlementInput) Mutate(m *SettlementMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -5128,6 +5512,7 @@ type CreateTechniqueInput struct {
 	CreatedBy     *string
 	UpdatedAt     *time.Time
 	UpdatedBy     *string
+	Abbreviation  *string
 	DisplayName   *string
 	Description   *string
 	ExternalLinks []string
@@ -5147,6 +5532,9 @@ func (i *CreateTechniqueInput) Mutate(m *TechniqueMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -5175,6 +5563,8 @@ type UpdateTechniqueInput struct {
 	UpdatedAt           *time.Time
 	ClearUpdatedBy      bool
 	UpdatedBy           *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
 	ClearDisplayName    bool
 	DisplayName         *string
 	ClearDescription    bool
@@ -5203,6 +5593,12 @@ func (i *UpdateTechniqueInput) Mutate(m *TechniqueMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()

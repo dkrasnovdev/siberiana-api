@@ -132,6 +132,11 @@ func (ag *ArtGenreQuery) collectField(ctx context.Context, opCtx *graphql.Operat
 				selectedFields = append(selectedFields, artgenre.FieldUpdatedBy)
 				fieldSeen[artgenre.FieldUpdatedBy] = struct{}{}
 			}
+		case "abbreviation":
+			if _, ok := fieldSeen[artgenre.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, artgenre.FieldAbbreviation)
+				fieldSeen[artgenre.FieldAbbreviation] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[artgenre.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, artgenre.FieldDisplayName)
@@ -256,6 +261,11 @@ func (as *ArtStyleQuery) collectField(ctx context.Context, opCtx *graphql.Operat
 			if _, ok := fieldSeen[artstyle.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, artstyle.FieldUpdatedBy)
 				fieldSeen[artstyle.FieldUpdatedBy] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[artstyle.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, artstyle.FieldAbbreviation)
+				fieldSeen[artstyle.FieldAbbreviation] = struct{}{}
 			}
 		case "displayName":
 			if _, ok := fieldSeen[artstyle.FieldDisplayName]; !ok {
@@ -533,6 +543,11 @@ func (a *ArtifactQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 			if _, ok := fieldSeen[artifact.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, artifact.FieldUpdatedBy)
 				fieldSeen[artifact.FieldUpdatedBy] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[artifact.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldAbbreviation)
+				fieldSeen[artifact.FieldAbbreviation] = struct{}{}
 			}
 		case "displayName":
 			if _, ok := fieldSeen[artifact.FieldDisplayName]; !ok {
@@ -915,6 +930,11 @@ func (b *BookQuery) collectField(ctx context.Context, opCtx *graphql.OperationCo
 				selectedFields = append(selectedFields, book.FieldUpdatedBy)
 				fieldSeen[book.FieldUpdatedBy] = struct{}{}
 			}
+		case "abbreviation":
+			if _, ok := fieldSeen[book.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, book.FieldAbbreviation)
+				fieldSeen[book.FieldAbbreviation] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[book.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, book.FieldDisplayName)
@@ -1072,6 +1092,11 @@ func (bg *BookGenreQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 				selectedFields = append(selectedFields, bookgenre.FieldUpdatedBy)
 				fieldSeen[bookgenre.FieldUpdatedBy] = struct{}{}
 			}
+		case "abbreviation":
+			if _, ok := fieldSeen[bookgenre.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, bookgenre.FieldAbbreviation)
+				fieldSeen[bookgenre.FieldAbbreviation] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[bookgenre.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, bookgenre.FieldDisplayName)
@@ -1208,6 +1233,11 @@ func (c *CategoryQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 			if _, ok := fieldSeen[category.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, category.FieldUpdatedBy)
 				fieldSeen[category.FieldUpdatedBy] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[category.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, category.FieldAbbreviation)
+				fieldSeen[category.FieldAbbreviation] = struct{}{}
 			}
 		case "displayName":
 			if _, ok := fieldSeen[category.FieldDisplayName]; !ok {
@@ -1380,6 +1410,11 @@ func (c *CollectionQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 				selectedFields = append(selectedFields, collection.FieldUpdatedBy)
 				fieldSeen[collection.FieldUpdatedBy] = struct{}{}
 			}
+		case "abbreviation":
+			if _, ok := fieldSeen[collection.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, collection.FieldAbbreviation)
+				fieldSeen[collection.FieldAbbreviation] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[collection.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, collection.FieldDisplayName)
@@ -1514,6 +1549,11 @@ func (c *CountryQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 			if _, ok := fieldSeen[country.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, country.FieldUpdatedBy)
 				fieldSeen[country.FieldUpdatedBy] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[country.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, country.FieldAbbreviation)
+				fieldSeen[country.FieldAbbreviation] = struct{}{}
 			}
 		case "displayName":
 			if _, ok := fieldSeen[country.FieldDisplayName]; !ok {
@@ -1652,6 +1692,11 @@ func (c *CultureQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 				selectedFields = append(selectedFields, culture.FieldUpdatedBy)
 				fieldSeen[culture.FieldUpdatedBy] = struct{}{}
 			}
+		case "abbreviation":
+			if _, ok := fieldSeen[culture.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, culture.FieldAbbreviation)
+				fieldSeen[culture.FieldAbbreviation] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[culture.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, culture.FieldDisplayName)
@@ -1786,6 +1831,11 @@ func (d *DistrictQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 			if _, ok := fieldSeen[district.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, district.FieldUpdatedBy)
 				fieldSeen[district.FieldUpdatedBy] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[district.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, district.FieldAbbreviation)
+				fieldSeen[district.FieldAbbreviation] = struct{}{}
 			}
 		case "displayName":
 			if _, ok := fieldSeen[district.FieldDisplayName]; !ok {
@@ -2100,6 +2150,11 @@ func (hr *HolderResponsibilityQuery) collectField(ctx context.Context, opCtx *gr
 				selectedFields = append(selectedFields, holderresponsibility.FieldUpdatedBy)
 				fieldSeen[holderresponsibility.FieldUpdatedBy] = struct{}{}
 			}
+		case "abbreviation":
+			if _, ok := fieldSeen[holderresponsibility.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, holderresponsibility.FieldAbbreviation)
+				fieldSeen[holderresponsibility.FieldAbbreviation] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[holderresponsibility.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, holderresponsibility.FieldDisplayName)
@@ -2283,6 +2338,11 @@ func (l *LibraryQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 				selectedFields = append(selectedFields, library.FieldUpdatedBy)
 				fieldSeen[library.FieldUpdatedBy] = struct{}{}
 			}
+		case "abbreviation":
+			if _, ok := fieldSeen[library.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, library.FieldAbbreviation)
+				fieldSeen[library.FieldAbbreviation] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[library.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, library.FieldDisplayName)
@@ -2431,6 +2491,11 @@ func (l *LicenseQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 			if _, ok := fieldSeen[license.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, license.FieldUpdatedBy)
 				fieldSeen[license.FieldUpdatedBy] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[license.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, license.FieldAbbreviation)
+				fieldSeen[license.FieldAbbreviation] = struct{}{}
 			}
 		case "displayName":
 			if _, ok := fieldSeen[license.FieldDisplayName]; !ok {
@@ -2609,6 +2674,11 @@ func (l *LocationQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				selectedFields = append(selectedFields, location.FieldUpdatedBy)
 				fieldSeen[location.FieldUpdatedBy] = struct{}{}
 			}
+		case "abbreviation":
+			if _, ok := fieldSeen[location.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, location.FieldAbbreviation)
+				fieldSeen[location.FieldAbbreviation] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[location.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, location.FieldDisplayName)
@@ -2746,6 +2816,11 @@ func (m *MediumQuery) collectField(ctx context.Context, opCtx *graphql.Operation
 				selectedFields = append(selectedFields, medium.FieldUpdatedBy)
 				fieldSeen[medium.FieldUpdatedBy] = struct{}{}
 			}
+		case "abbreviation":
+			if _, ok := fieldSeen[medium.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, medium.FieldAbbreviation)
+				fieldSeen[medium.FieldAbbreviation] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[medium.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, medium.FieldDisplayName)
@@ -2882,6 +2957,11 @@ func (m *ModelQuery) collectField(ctx context.Context, opCtx *graphql.OperationC
 			if _, ok := fieldSeen[model.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, model.FieldUpdatedBy)
 				fieldSeen[model.FieldUpdatedBy] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[model.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, model.FieldAbbreviation)
+				fieldSeen[model.FieldAbbreviation] = struct{}{}
 			}
 		case "displayName":
 			if _, ok := fieldSeen[model.FieldDisplayName]; !ok {
@@ -3031,6 +3111,11 @@ func (m *MonumentQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 			if _, ok := fieldSeen[monument.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, monument.FieldUpdatedBy)
 				fieldSeen[monument.FieldUpdatedBy] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[monument.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, monument.FieldAbbreviation)
+				fieldSeen[monument.FieldAbbreviation] = struct{}{}
 			}
 		case "displayName":
 			if _, ok := fieldSeen[monument.FieldDisplayName]; !ok {
@@ -3204,6 +3289,11 @@ func (o *OrganizationQuery) collectField(ctx context.Context, opCtx *graphql.Ope
 				selectedFields = append(selectedFields, organization.FieldEmails)
 				fieldSeen[organization.FieldEmails] = struct{}{}
 			}
+		case "abbreviation":
+			if _, ok := fieldSeen[organization.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, organization.FieldAbbreviation)
+				fieldSeen[organization.FieldAbbreviation] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[organization.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, organization.FieldDisplayName)
@@ -3360,6 +3450,11 @@ func (ot *OrganizationTypeQuery) collectField(ctx context.Context, opCtx *graphq
 				selectedFields = append(selectedFields, organizationtype.FieldUpdatedBy)
 				fieldSeen[organizationtype.FieldUpdatedBy] = struct{}{}
 			}
+		case "abbreviation":
+			if _, ok := fieldSeen[organizationtype.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, organizationtype.FieldAbbreviation)
+				fieldSeen[organizationtype.FieldAbbreviation] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[organizationtype.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, organizationtype.FieldDisplayName)
@@ -3496,6 +3591,11 @@ func (pe *PeriodQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 			if _, ok := fieldSeen[period.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, period.FieldUpdatedBy)
 				fieldSeen[period.FieldUpdatedBy] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[period.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, period.FieldAbbreviation)
+				fieldSeen[period.FieldAbbreviation] = struct{}{}
 			}
 		case "displayName":
 			if _, ok := fieldSeen[period.FieldDisplayName]; !ok {
@@ -3727,6 +3827,11 @@ func (pe *PersonQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 				selectedFields = append(selectedFields, person.FieldEmails)
 				fieldSeen[person.FieldEmails] = struct{}{}
 			}
+		case "abbreviation":
+			if _, ok := fieldSeen[person.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, person.FieldAbbreviation)
+				fieldSeen[person.FieldAbbreviation] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[person.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, person.FieldDisplayName)
@@ -3904,6 +4009,11 @@ func (pr *PersonRoleQuery) collectField(ctx context.Context, opCtx *graphql.Oper
 				selectedFields = append(selectedFields, personrole.FieldUpdatedBy)
 				fieldSeen[personrole.FieldUpdatedBy] = struct{}{}
 			}
+		case "abbreviation":
+			if _, ok := fieldSeen[personrole.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, personrole.FieldAbbreviation)
+				fieldSeen[personrole.FieldAbbreviation] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[personrole.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, personrole.FieldDisplayName)
@@ -4063,6 +4173,11 @@ func (pr *ProjectQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				selectedFields = append(selectedFields, project.FieldUpdatedBy)
 				fieldSeen[project.FieldUpdatedBy] = struct{}{}
 			}
+		case "abbreviation":
+			if _, ok := fieldSeen[project.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, project.FieldAbbreviation)
+				fieldSeen[project.FieldAbbreviation] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[project.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, project.FieldDisplayName)
@@ -4210,6 +4325,11 @@ func (pt *ProjectTypeQuery) collectField(ctx context.Context, opCtx *graphql.Ope
 				selectedFields = append(selectedFields, projecttype.FieldUpdatedBy)
 				fieldSeen[projecttype.FieldUpdatedBy] = struct{}{}
 			}
+		case "abbreviation":
+			if _, ok := fieldSeen[projecttype.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, projecttype.FieldAbbreviation)
+				fieldSeen[projecttype.FieldAbbreviation] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[projecttype.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, projecttype.FieldDisplayName)
@@ -4334,6 +4454,11 @@ func (pa *ProtectedAreaQuery) collectField(ctx context.Context, opCtx *graphql.O
 			if _, ok := fieldSeen[protectedarea.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, protectedarea.FieldUpdatedBy)
 				fieldSeen[protectedarea.FieldUpdatedBy] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[protectedarea.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, protectedarea.FieldAbbreviation)
+				fieldSeen[protectedarea.FieldAbbreviation] = struct{}{}
 			}
 		case "displayName":
 			if _, ok := fieldSeen[protectedarea.FieldDisplayName]; !ok {
@@ -4460,6 +4585,11 @@ func (pac *ProtectedAreaCategoryQuery) collectField(ctx context.Context, opCtx *
 				selectedFields = append(selectedFields, protectedareacategory.FieldUpdatedBy)
 				fieldSeen[protectedareacategory.FieldUpdatedBy] = struct{}{}
 			}
+		case "abbreviation":
+			if _, ok := fieldSeen[protectedareacategory.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, protectedareacategory.FieldAbbreviation)
+				fieldSeen[protectedareacategory.FieldAbbreviation] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[protectedareacategory.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, protectedareacategory.FieldDisplayName)
@@ -4584,6 +4714,11 @@ func (pap *ProtectedAreaPictureQuery) collectField(ctx context.Context, opCtx *g
 			if _, ok := fieldSeen[protectedareapicture.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, protectedareapicture.FieldUpdatedBy)
 				fieldSeen[protectedareapicture.FieldUpdatedBy] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[protectedareapicture.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, protectedareapicture.FieldAbbreviation)
+				fieldSeen[protectedareapicture.FieldAbbreviation] = struct{}{}
 			}
 		case "displayName":
 			if _, ok := fieldSeen[protectedareapicture.FieldDisplayName]; !ok {
@@ -4734,6 +4869,11 @@ func (pu *PublicationQuery) collectField(ctx context.Context, opCtx *graphql.Ope
 				selectedFields = append(selectedFields, publication.FieldUpdatedBy)
 				fieldSeen[publication.FieldUpdatedBy] = struct{}{}
 			}
+		case "abbreviation":
+			if _, ok := fieldSeen[publication.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, publication.FieldAbbreviation)
+				fieldSeen[publication.FieldAbbreviation] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[publication.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, publication.FieldDisplayName)
@@ -4871,6 +5011,11 @@ func (pu *PublisherQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 				selectedFields = append(selectedFields, publisher.FieldUpdatedBy)
 				fieldSeen[publisher.FieldUpdatedBy] = struct{}{}
 			}
+		case "abbreviation":
+			if _, ok := fieldSeen[publisher.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, publisher.FieldAbbreviation)
+				fieldSeen[publisher.FieldAbbreviation] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[publisher.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, publisher.FieldDisplayName)
@@ -5005,6 +5150,11 @@ func (r *RegionQuery) collectField(ctx context.Context, opCtx *graphql.Operation
 			if _, ok := fieldSeen[region.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, region.FieldUpdatedBy)
 				fieldSeen[region.FieldUpdatedBy] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[region.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, region.FieldAbbreviation)
+				fieldSeen[region.FieldAbbreviation] = struct{}{}
 			}
 		case "displayName":
 			if _, ok := fieldSeen[region.FieldDisplayName]; !ok {
@@ -5155,6 +5305,11 @@ func (s *SetQuery) collectField(ctx context.Context, opCtx *graphql.OperationCon
 				selectedFields = append(selectedFields, set.FieldUpdatedBy)
 				fieldSeen[set.FieldUpdatedBy] = struct{}{}
 			}
+		case "abbreviation":
+			if _, ok := fieldSeen[set.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, set.FieldAbbreviation)
+				fieldSeen[set.FieldAbbreviation] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[set.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, set.FieldDisplayName)
@@ -5289,6 +5444,11 @@ func (s *SettlementQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 			if _, ok := fieldSeen[settlement.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, settlement.FieldUpdatedBy)
 				fieldSeen[settlement.FieldUpdatedBy] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[settlement.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, settlement.FieldAbbreviation)
+				fieldSeen[settlement.FieldAbbreviation] = struct{}{}
 			}
 		case "displayName":
 			if _, ok := fieldSeen[settlement.FieldDisplayName]; !ok {
@@ -5426,6 +5586,11 @@ func (t *TechniqueQuery) collectField(ctx context.Context, opCtx *graphql.Operat
 			if _, ok := fieldSeen[technique.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, technique.FieldUpdatedBy)
 				fieldSeen[technique.FieldUpdatedBy] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[technique.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, technique.FieldAbbreviation)
+				fieldSeen[technique.FieldAbbreviation] = struct{}{}
 			}
 		case "displayName":
 			if _, ok := fieldSeen[technique.FieldDisplayName]; !ok {

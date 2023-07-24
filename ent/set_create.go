@@ -78,6 +78,20 @@ func (sc *SetCreate) SetNillableUpdatedBy(s *string) *SetCreate {
 	return sc
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (sc *SetCreate) SetAbbreviation(s string) *SetCreate {
+	sc.mutation.SetAbbreviation(s)
+	return sc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (sc *SetCreate) SetNillableAbbreviation(s *string) *SetCreate {
+	if s != nil {
+		sc.SetAbbreviation(*s)
+	}
+	return sc
+}
+
 // SetDisplayName sets the "display_name" field.
 func (sc *SetCreate) SetDisplayName(s string) *SetCreate {
 	sc.mutation.SetDisplayName(s)
@@ -245,6 +259,10 @@ func (sc *SetCreate) createSpec() (*Set, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.UpdatedBy(); ok {
 		_spec.SetField(set.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := sc.mutation.Abbreviation(); ok {
+		_spec.SetField(set.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := sc.mutation.DisplayName(); ok {
 		_spec.SetField(set.FieldDisplayName, field.TypeString, value)

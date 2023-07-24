@@ -78,6 +78,20 @@ func (lc *LicenseCreate) SetNillableUpdatedBy(s *string) *LicenseCreate {
 	return lc
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (lc *LicenseCreate) SetAbbreviation(s string) *LicenseCreate {
+	lc.mutation.SetAbbreviation(s)
+	return lc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (lc *LicenseCreate) SetNillableAbbreviation(s *string) *LicenseCreate {
+	if s != nil {
+		lc.SetAbbreviation(*s)
+	}
+	return lc
+}
+
 // SetDisplayName sets the "display_name" field.
 func (lc *LicenseCreate) SetDisplayName(s string) *LicenseCreate {
 	lc.mutation.SetDisplayName(s)
@@ -245,6 +259,10 @@ func (lc *LicenseCreate) createSpec() (*License, *sqlgraph.CreateSpec) {
 	if value, ok := lc.mutation.UpdatedBy(); ok {
 		_spec.SetField(license.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := lc.mutation.Abbreviation(); ok {
+		_spec.SetField(license.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := lc.mutation.DisplayName(); ok {
 		_spec.SetField(license.FieldDisplayName, field.TypeString, value)

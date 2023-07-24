@@ -29,6 +29,8 @@ type Book struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
@@ -153,7 +155,7 @@ func (*Book) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case book.FieldID, book.FieldYear:
 			values[i] = new(sql.NullInt64)
-		case book.FieldCreatedBy, book.FieldUpdatedBy, book.FieldDisplayName, book.FieldDescription, book.FieldPrimaryImageURL:
+		case book.FieldCreatedBy, book.FieldUpdatedBy, book.FieldAbbreviation, book.FieldDisplayName, book.FieldDescription, book.FieldPrimaryImageURL:
 			values[i] = new(sql.NullString)
 		case book.FieldCreatedAt, book.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -209,6 +211,12 @@ func (b *Book) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				b.UpdatedBy = value.String
+			}
+		case book.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				b.Abbreviation = value.String
 			}
 		case book.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -363,6 +371,9 @@ func (b *Book) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(b.UpdatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(b.Abbreviation)
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(b.DisplayName)

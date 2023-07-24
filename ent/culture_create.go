@@ -77,6 +77,20 @@ func (cc *CultureCreate) SetNillableUpdatedBy(s *string) *CultureCreate {
 	return cc
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (cc *CultureCreate) SetAbbreviation(s string) *CultureCreate {
+	cc.mutation.SetAbbreviation(s)
+	return cc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (cc *CultureCreate) SetNillableAbbreviation(s *string) *CultureCreate {
+	if s != nil {
+		cc.SetAbbreviation(*s)
+	}
+	return cc
+}
+
 // SetDisplayName sets the "display_name" field.
 func (cc *CultureCreate) SetDisplayName(s string) *CultureCreate {
 	cc.mutation.SetDisplayName(s)
@@ -229,6 +243,10 @@ func (cc *CultureCreate) createSpec() (*Culture, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.UpdatedBy(); ok {
 		_spec.SetField(culture.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := cc.mutation.Abbreviation(); ok {
+		_spec.SetField(culture.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := cc.mutation.DisplayName(); ok {
 		_spec.SetField(culture.FieldDisplayName, field.TypeString, value)

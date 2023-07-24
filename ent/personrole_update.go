@@ -76,6 +76,26 @@ func (pru *PersonRoleUpdate) ClearUpdatedBy() *PersonRoleUpdate {
 	return pru
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (pru *PersonRoleUpdate) SetAbbreviation(s string) *PersonRoleUpdate {
+	pru.mutation.SetAbbreviation(s)
+	return pru
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (pru *PersonRoleUpdate) SetNillableAbbreviation(s *string) *PersonRoleUpdate {
+	if s != nil {
+		pru.SetAbbreviation(*s)
+	}
+	return pru
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (pru *PersonRoleUpdate) ClearAbbreviation() *PersonRoleUpdate {
+	pru.mutation.ClearAbbreviation()
+	return pru
+}
+
 // SetDisplayName sets the "display_name" field.
 func (pru *PersonRoleUpdate) SetDisplayName(s string) *PersonRoleUpdate {
 	pru.mutation.SetDisplayName(s)
@@ -241,6 +261,12 @@ func (pru *PersonRoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pru.mutation.UpdatedByCleared() {
 		_spec.ClearField(personrole.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := pru.mutation.Abbreviation(); ok {
+		_spec.SetField(personrole.FieldAbbreviation, field.TypeString, value)
+	}
+	if pru.mutation.AbbreviationCleared() {
+		_spec.ClearField(personrole.FieldAbbreviation, field.TypeString)
+	}
 	if value, ok := pru.mutation.DisplayName(); ok {
 		_spec.SetField(personrole.FieldDisplayName, field.TypeString, value)
 	}
@@ -372,6 +398,26 @@ func (pruo *PersonRoleUpdateOne) SetNillableUpdatedBy(s *string) *PersonRoleUpda
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (pruo *PersonRoleUpdateOne) ClearUpdatedBy() *PersonRoleUpdateOne {
 	pruo.mutation.ClearUpdatedBy()
+	return pruo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (pruo *PersonRoleUpdateOne) SetAbbreviation(s string) *PersonRoleUpdateOne {
+	pruo.mutation.SetAbbreviation(s)
+	return pruo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (pruo *PersonRoleUpdateOne) SetNillableAbbreviation(s *string) *PersonRoleUpdateOne {
+	if s != nil {
+		pruo.SetAbbreviation(*s)
+	}
+	return pruo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (pruo *PersonRoleUpdateOne) ClearAbbreviation() *PersonRoleUpdateOne {
+	pruo.mutation.ClearAbbreviation()
 	return pruo
 }
 
@@ -569,6 +615,12 @@ func (pruo *PersonRoleUpdateOne) sqlSave(ctx context.Context) (_node *PersonRole
 	}
 	if pruo.mutation.UpdatedByCleared() {
 		_spec.ClearField(personrole.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := pruo.mutation.Abbreviation(); ok {
+		_spec.SetField(personrole.FieldAbbreviation, field.TypeString, value)
+	}
+	if pruo.mutation.AbbreviationCleared() {
+		_spec.ClearField(personrole.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := pruo.mutation.DisplayName(); ok {
 		_spec.SetField(personrole.FieldDisplayName, field.TypeString, value)

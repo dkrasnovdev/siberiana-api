@@ -35,6 +35,8 @@ type Person struct {
 	PhoneNumbers []string `json:"phone_numbers,omitempty"`
 	// Emails holds the value of the "emails" field.
 	Emails []string `json:"emails,omitempty"`
+	// Abbreviation holds the value of the "abbreviation" field.
+	Abbreviation string `json:"abbreviation,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
@@ -190,7 +192,7 @@ func (*Person) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case person.FieldID:
 			values[i] = new(sql.NullInt64)
-		case person.FieldCreatedBy, person.FieldUpdatedBy, person.FieldAddress, person.FieldDisplayName, person.FieldDescription, person.FieldPrimaryImageURL, person.FieldGivenName, person.FieldFamilyName, person.FieldPatronymicName, person.FieldGender:
+		case person.FieldCreatedBy, person.FieldUpdatedBy, person.FieldAddress, person.FieldAbbreviation, person.FieldDisplayName, person.FieldDescription, person.FieldPrimaryImageURL, person.FieldGivenName, person.FieldFamilyName, person.FieldPatronymicName, person.FieldGender:
 			values[i] = new(sql.NullString)
 		case person.FieldCreatedAt, person.FieldUpdatedAt, person.FieldBeginData, person.FieldEndDate:
 			values[i] = new(sql.NullTime)
@@ -266,6 +268,12 @@ func (pe *Person) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &pe.Emails); err != nil {
 					return fmt.Errorf("unmarshal field emails: %w", err)
 				}
+			}
+		case person.FieldAbbreviation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field abbreviation", values[i])
+			} else if value.Valid {
+				pe.Abbreviation = value.String
 			}
 		case person.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -454,6 +462,9 @@ func (pe *Person) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("emails=")
 	builder.WriteString(fmt.Sprintf("%v", pe.Emails))
+	builder.WriteString(", ")
+	builder.WriteString("abbreviation=")
+	builder.WriteString(pe.Abbreviation)
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(pe.DisplayName)

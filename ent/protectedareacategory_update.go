@@ -75,6 +75,26 @@ func (pacu *ProtectedAreaCategoryUpdate) ClearUpdatedBy() *ProtectedAreaCategory
 	return pacu
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (pacu *ProtectedAreaCategoryUpdate) SetAbbreviation(s string) *ProtectedAreaCategoryUpdate {
+	pacu.mutation.SetAbbreviation(s)
+	return pacu
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (pacu *ProtectedAreaCategoryUpdate) SetNillableAbbreviation(s *string) *ProtectedAreaCategoryUpdate {
+	if s != nil {
+		pacu.SetAbbreviation(*s)
+	}
+	return pacu
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (pacu *ProtectedAreaCategoryUpdate) ClearAbbreviation() *ProtectedAreaCategoryUpdate {
+	pacu.mutation.ClearAbbreviation()
+	return pacu
+}
+
 // SetDisplayName sets the "display_name" field.
 func (pacu *ProtectedAreaCategoryUpdate) SetDisplayName(s string) *ProtectedAreaCategoryUpdate {
 	pacu.mutation.SetDisplayName(s)
@@ -204,6 +224,12 @@ func (pacu *ProtectedAreaCategoryUpdate) sqlSave(ctx context.Context) (n int, er
 	if pacu.mutation.UpdatedByCleared() {
 		_spec.ClearField(protectedareacategory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := pacu.mutation.Abbreviation(); ok {
+		_spec.SetField(protectedareacategory.FieldAbbreviation, field.TypeString, value)
+	}
+	if pacu.mutation.AbbreviationCleared() {
+		_spec.ClearField(protectedareacategory.FieldAbbreviation, field.TypeString)
+	}
 	if value, ok := pacu.mutation.DisplayName(); ok {
 		_spec.SetField(protectedareacategory.FieldDisplayName, field.TypeString, value)
 	}
@@ -290,6 +316,26 @@ func (pacuo *ProtectedAreaCategoryUpdateOne) SetNillableUpdatedBy(s *string) *Pr
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (pacuo *ProtectedAreaCategoryUpdateOne) ClearUpdatedBy() *ProtectedAreaCategoryUpdateOne {
 	pacuo.mutation.ClearUpdatedBy()
+	return pacuo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (pacuo *ProtectedAreaCategoryUpdateOne) SetAbbreviation(s string) *ProtectedAreaCategoryUpdateOne {
+	pacuo.mutation.SetAbbreviation(s)
+	return pacuo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (pacuo *ProtectedAreaCategoryUpdateOne) SetNillableAbbreviation(s *string) *ProtectedAreaCategoryUpdateOne {
+	if s != nil {
+		pacuo.SetAbbreviation(*s)
+	}
+	return pacuo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (pacuo *ProtectedAreaCategoryUpdateOne) ClearAbbreviation() *ProtectedAreaCategoryUpdateOne {
+	pacuo.mutation.ClearAbbreviation()
 	return pacuo
 }
 
@@ -451,6 +497,12 @@ func (pacuo *ProtectedAreaCategoryUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if pacuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(protectedareacategory.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := pacuo.mutation.Abbreviation(); ok {
+		_spec.SetField(protectedareacategory.FieldAbbreviation, field.TypeString, value)
+	}
+	if pacuo.mutation.AbbreviationCleared() {
+		_spec.ClearField(protectedareacategory.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := pacuo.mutation.DisplayName(); ok {
 		_spec.SetField(protectedareacategory.FieldDisplayName, field.TypeString, value)

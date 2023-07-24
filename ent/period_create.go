@@ -77,6 +77,20 @@ func (pc *PeriodCreate) SetNillableUpdatedBy(s *string) *PeriodCreate {
 	return pc
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (pc *PeriodCreate) SetAbbreviation(s string) *PeriodCreate {
+	pc.mutation.SetAbbreviation(s)
+	return pc
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (pc *PeriodCreate) SetNillableAbbreviation(s *string) *PeriodCreate {
+	if s != nil {
+		pc.SetAbbreviation(*s)
+	}
+	return pc
+}
+
 // SetDisplayName sets the "display_name" field.
 func (pc *PeriodCreate) SetDisplayName(s string) *PeriodCreate {
 	pc.mutation.SetDisplayName(s)
@@ -229,6 +243,10 @@ func (pc *PeriodCreate) createSpec() (*Period, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.UpdatedBy(); ok {
 		_spec.SetField(period.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := pc.mutation.Abbreviation(); ok {
+		_spec.SetField(period.FieldAbbreviation, field.TypeString, value)
+		_node.Abbreviation = value
 	}
 	if value, ok := pc.mutation.DisplayName(); ok {
 		_spec.SetField(period.FieldDisplayName, field.TypeString, value)

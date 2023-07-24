@@ -89,6 +89,26 @@ func (au *ArtifactUpdate) ClearUpdatedBy() *ArtifactUpdate {
 	return au
 }
 
+// SetAbbreviation sets the "abbreviation" field.
+func (au *ArtifactUpdate) SetAbbreviation(s string) *ArtifactUpdate {
+	au.mutation.SetAbbreviation(s)
+	return au
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableAbbreviation(s *string) *ArtifactUpdate {
+	if s != nil {
+		au.SetAbbreviation(*s)
+	}
+	return au
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (au *ArtifactUpdate) ClearAbbreviation() *ArtifactUpdate {
+	au.mutation.ClearAbbreviation()
+	return au
+}
+
 // SetDisplayName sets the "display_name" field.
 func (au *ArtifactUpdate) SetDisplayName(s string) *ArtifactUpdate {
 	au.mutation.SetDisplayName(s)
@@ -852,6 +872,12 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if au.mutation.UpdatedByCleared() {
 		_spec.ClearField(artifact.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := au.mutation.Abbreviation(); ok {
+		_spec.SetField(artifact.FieldAbbreviation, field.TypeString, value)
+	}
+	if au.mutation.AbbreviationCleared() {
+		_spec.ClearField(artifact.FieldAbbreviation, field.TypeString)
+	}
 	if value, ok := au.mutation.DisplayName(); ok {
 		_spec.SetField(artifact.FieldDisplayName, field.TypeString, value)
 	}
@@ -1511,6 +1537,26 @@ func (auo *ArtifactUpdateOne) SetNillableUpdatedBy(s *string) *ArtifactUpdateOne
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (auo *ArtifactUpdateOne) ClearUpdatedBy() *ArtifactUpdateOne {
 	auo.mutation.ClearUpdatedBy()
+	return auo
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (auo *ArtifactUpdateOne) SetAbbreviation(s string) *ArtifactUpdateOne {
+	auo.mutation.SetAbbreviation(s)
+	return auo
+}
+
+// SetNillableAbbreviation sets the "abbreviation" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableAbbreviation(s *string) *ArtifactUpdateOne {
+	if s != nil {
+		auo.SetAbbreviation(*s)
+	}
+	return auo
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (auo *ArtifactUpdateOne) ClearAbbreviation() *ArtifactUpdateOne {
+	auo.mutation.ClearAbbreviation()
 	return auo
 }
 
@@ -2306,6 +2352,12 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 	}
 	if auo.mutation.UpdatedByCleared() {
 		_spec.ClearField(artifact.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := auo.mutation.Abbreviation(); ok {
+		_spec.SetField(artifact.FieldAbbreviation, field.TypeString, value)
+	}
+	if auo.mutation.AbbreviationCleared() {
+		_spec.ClearField(artifact.FieldAbbreviation, field.TypeString)
 	}
 	if value, ok := auo.mutation.DisplayName(); ok {
 		_spec.SetField(artifact.FieldDisplayName, field.TypeString, value)
