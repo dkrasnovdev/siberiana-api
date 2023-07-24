@@ -46,6 +46,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/set"
 	"github.com/dkrasnovdev/heritage-api/ent/settlement"
 	"github.com/dkrasnovdev/heritage-api/ent/technique"
+	"github.com/dkrasnovdev/heritage-api/internal/ent/types"
 )
 
 const (
@@ -16569,6 +16570,7 @@ type LocationMutation struct {
 	description                    *string
 	external_links                 *[]string
 	appendexternal_links           []string
+	geometry                       *types.Geometry
 	clearedFields                  map[string]struct{}
 	artifacts                      map[int]struct{}
 	removedartifacts               map[int]struct{}
@@ -17072,6 +17074,55 @@ func (m *LocationMutation) ResetExternalLinks() {
 	delete(m.clearedFields, location.FieldExternalLinks)
 }
 
+// SetGeometry sets the "geometry" field.
+func (m *LocationMutation) SetGeometry(t types.Geometry) {
+	m.geometry = &t
+}
+
+// Geometry returns the value of the "geometry" field in the mutation.
+func (m *LocationMutation) Geometry() (r types.Geometry, exists bool) {
+	v := m.geometry
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldGeometry returns the old "geometry" field's value of the Location entity.
+// If the Location object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LocationMutation) OldGeometry(ctx context.Context) (v *types.Geometry, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldGeometry is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldGeometry requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldGeometry: %w", err)
+	}
+	return oldValue.Geometry, nil
+}
+
+// ClearGeometry clears the value of the "geometry" field.
+func (m *LocationMutation) ClearGeometry() {
+	m.geometry = nil
+	m.clearedFields[location.FieldGeometry] = struct{}{}
+}
+
+// GeometryCleared returns if the "geometry" field was cleared in this mutation.
+func (m *LocationMutation) GeometryCleared() bool {
+	_, ok := m.clearedFields[location.FieldGeometry]
+	return ok
+}
+
+// ResetGeometry resets all changes to the "geometry" field.
+func (m *LocationMutation) ResetGeometry() {
+	m.geometry = nil
+	delete(m.clearedFields, location.FieldGeometry)
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
 func (m *LocationMutation) AddArtifactIDs(ids ...int) {
 	if m.artifacts == nil {
@@ -17424,7 +17475,7 @@ func (m *LocationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *LocationMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, location.FieldCreatedAt)
 	}
@@ -17448,6 +17499,9 @@ func (m *LocationMutation) Fields() []string {
 	}
 	if m.external_links != nil {
 		fields = append(fields, location.FieldExternalLinks)
+	}
+	if m.geometry != nil {
+		fields = append(fields, location.FieldGeometry)
 	}
 	return fields
 }
@@ -17473,6 +17527,8 @@ func (m *LocationMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case location.FieldExternalLinks:
 		return m.ExternalLinks()
+	case location.FieldGeometry:
+		return m.Geometry()
 	}
 	return nil, false
 }
@@ -17498,6 +17554,8 @@ func (m *LocationMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldDescription(ctx)
 	case location.FieldExternalLinks:
 		return m.OldExternalLinks(ctx)
+	case location.FieldGeometry:
+		return m.OldGeometry(ctx)
 	}
 	return nil, fmt.Errorf("unknown Location field %s", name)
 }
@@ -17563,6 +17621,13 @@ func (m *LocationMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLinks(v)
 		return nil
+	case location.FieldGeometry:
+		v, ok := value.(types.Geometry)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetGeometry(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Location field %s", name)
 }
@@ -17611,6 +17676,9 @@ func (m *LocationMutation) ClearedFields() []string {
 	if m.FieldCleared(location.FieldExternalLinks) {
 		fields = append(fields, location.FieldExternalLinks)
 	}
+	if m.FieldCleared(location.FieldGeometry) {
+		fields = append(fields, location.FieldGeometry)
+	}
 	return fields
 }
 
@@ -17643,6 +17711,9 @@ func (m *LocationMutation) ClearField(name string) error {
 	case location.FieldExternalLinks:
 		m.ClearExternalLinks()
 		return nil
+	case location.FieldGeometry:
+		m.ClearGeometry()
+		return nil
 	}
 	return fmt.Errorf("unknown Location nullable field %s", name)
 }
@@ -17674,6 +17745,9 @@ func (m *LocationMutation) ResetField(name string) error {
 		return nil
 	case location.FieldExternalLinks:
 		m.ResetExternalLinks()
+		return nil
+	case location.FieldGeometry:
+		m.ResetGeometry()
 		return nil
 	}
 	return fmt.Errorf("unknown Location field %s", name)

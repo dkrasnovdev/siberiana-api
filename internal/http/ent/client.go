@@ -1,17 +1,22 @@
+// Package ent provides functions to create a new ent client and apply schema migrations to the database.
+
 package ent
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"log"
 
 	"github.com/dkrasnovdev/heritage-api/config"
 	"github.com/dkrasnovdev/heritage-api/ent"
 	"github.com/dkrasnovdev/heritage-api/ent/migrate"
-	"github.com/dkrasnovdev/heritage-api/internal/ent/hook"
+	mig "github.com/dkrasnovdev/heritage-api/internal/ent/migrate"
 
+	"entgo.io/ent/dialect"
+	entsql "entgo.io/ent/dialect/sql"
 	_ "github.com/dkrasnovdev/heritage-api/ent/runtime"
-	_ "github.com/lib/pq"
+	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
 // NewClient creates a new ent client and applies schema migrations to the database.
@@ -22,39 +27,23 @@ func NewClient(env config.Config) *ent.Client {
 		env.HOST, env.PORT, env.POSTGRES_USER, env.POSTGRES_PASSWORD, env.POSTGRES_DB, env.SSL_MODE)
 
 	// Open a connection to the PostgreSQL database.
-	client, err := ent.Open("postgres", psql)
+	db, err := sql.Open("pgx", psql)
 	if err != nil {
 		log.Fatalf("failed opening connection to postgres: %v", err)
 	}
 
+	// Create an ent driver using the SQL database connection.
+	driver := entsql.OpenDB(dialect.Postgres, db)
+	client := ent.NewClient(ent.Driver(driver))
+
 	// Apply schema migrations to the database.
 	if err := client.Schema.Create(
 		context.Background(),
+		mig.EnablePostgisOption(db),
 		migrate.WithGlobalUniqueID(true),
 	); err != nil {
-		log.Fatal("opening ent client", err)
+		log.Fatal("failed to apply schema migrations", err)
 	}
-
-	// Attach hooks for various entity types to log changes.
-	client.Artifact.Use(hook.ArtifactLogger(client))
-	client.Category.Use(hook.CategoryLogger(client))
-	client.Collection.Use(hook.CollectionLogger(client))
-	client.Culture.Use(hook.CultureLogger(client))
-	client.District.Use(hook.DistrictLogger(client))
-	client.Holder.Use(hook.HolderLogger(client))
-	client.License.Use(hook.LicenseLogger(client))
-	client.Location.Use(hook.LocationLogger(client))
-	client.Medium.Use(hook.MediumLogger(client))
-	client.Model.Use(hook.ModelLogger(client))
-	client.Monument.Use(hook.MonumentLogger(client))
-	client.Organization.Use(hook.OrganizationLogger(client))
-	client.Person.Use(hook.PersonLogger(client))
-	client.Project.Use(hook.ProjectLogger(client))
-	client.Publication.Use(hook.PublicationLogger(client))
-	client.Region.Use(hook.RegionLogger(client))
-	client.Set.Use(hook.SetLogger(client))
-	client.Settlement.Use(hook.SettlementLogger(client))
-	client.Technique.Use(hook.TechniqueLogger(client))
 
 	return client
 }

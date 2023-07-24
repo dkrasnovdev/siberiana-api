@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/heritage-api/internal/ent/types"
 )
 
 // ID filters vertices based on their ID field.
@@ -88,6 +89,11 @@ func Abbreviation(v string) predicate.Location {
 // Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
 func Description(v string) predicate.Location {
 	return predicate.Location(sql.FieldEQ(FieldDescription, v))
+}
+
+// Geometry applies equality check predicate on the "geometry" field. It's identical to GeometryEQ.
+func Geometry(v types.Geometry) predicate.Location {
+	return predicate.Location(sql.FieldEQ(FieldGeometry, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -553,6 +559,56 @@ func ExternalLinksIsNil() predicate.Location {
 // ExternalLinksNotNil applies the NotNil predicate on the "external_links" field.
 func ExternalLinksNotNil() predicate.Location {
 	return predicate.Location(sql.FieldNotNull(FieldExternalLinks))
+}
+
+// GeometryEQ applies the EQ predicate on the "geometry" field.
+func GeometryEQ(v types.Geometry) predicate.Location {
+	return predicate.Location(sql.FieldEQ(FieldGeometry, v))
+}
+
+// GeometryNEQ applies the NEQ predicate on the "geometry" field.
+func GeometryNEQ(v types.Geometry) predicate.Location {
+	return predicate.Location(sql.FieldNEQ(FieldGeometry, v))
+}
+
+// GeometryIn applies the In predicate on the "geometry" field.
+func GeometryIn(vs ...types.Geometry) predicate.Location {
+	return predicate.Location(sql.FieldIn(FieldGeometry, vs...))
+}
+
+// GeometryNotIn applies the NotIn predicate on the "geometry" field.
+func GeometryNotIn(vs ...types.Geometry) predicate.Location {
+	return predicate.Location(sql.FieldNotIn(FieldGeometry, vs...))
+}
+
+// GeometryGT applies the GT predicate on the "geometry" field.
+func GeometryGT(v types.Geometry) predicate.Location {
+	return predicate.Location(sql.FieldGT(FieldGeometry, v))
+}
+
+// GeometryGTE applies the GTE predicate on the "geometry" field.
+func GeometryGTE(v types.Geometry) predicate.Location {
+	return predicate.Location(sql.FieldGTE(FieldGeometry, v))
+}
+
+// GeometryLT applies the LT predicate on the "geometry" field.
+func GeometryLT(v types.Geometry) predicate.Location {
+	return predicate.Location(sql.FieldLT(FieldGeometry, v))
+}
+
+// GeometryLTE applies the LTE predicate on the "geometry" field.
+func GeometryLTE(v types.Geometry) predicate.Location {
+	return predicate.Location(sql.FieldLTE(FieldGeometry, v))
+}
+
+// GeometryIsNil applies the IsNil predicate on the "geometry" field.
+func GeometryIsNil() predicate.Location {
+	return predicate.Location(sql.FieldIsNull(FieldGeometry))
+}
+
+// GeometryNotNil applies the NotNil predicate on the "geometry" field.
+func GeometryNotNil() predicate.Location {
+	return predicate.Location(sql.FieldNotNull(FieldGeometry))
 }
 
 // HasArtifacts applies the HasEdge predicate on the "artifacts" edge.

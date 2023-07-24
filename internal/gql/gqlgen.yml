@@ -1,7 +1,8 @@
 # schema tells gqlgen where the GraphQL schema is located.
 schema:
-  - mutation.graphql
   - ent.graphql
+  - geometry.graphql
+  - mutation.graphql
 
 # resolver reports where the resolver implementations go.
 resolver:
@@ -58,3 +59,6 @@ models:
   Node:
     model:
       - github.com/dkrasnovdev/heritage-api/ent.Noder
+  Geometry:
+    model:
+      - github.com/dkrasnovdev/heritage-api/internal/ent/types.Geometry

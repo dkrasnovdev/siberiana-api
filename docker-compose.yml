@@ -21,6 +21,9 @@ services:
 
   postgres:
     container_name: postgres_db
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.postgres
     image: postgres:latest
     environment:
       POSTGRES_DB: ${POSTGRES_DB}

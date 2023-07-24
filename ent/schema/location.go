@@ -5,9 +5,11 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
+	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/privacy"
 	"github.com/dkrasnovdev/heritage-api/internal/ent/mixin"
 	rule "github.com/dkrasnovdev/heritage-api/internal/ent/privacy"
+	"github.com/dkrasnovdev/heritage-api/internal/ent/types"
 )
 
 // Location holds the schema definition for the Location entity.
@@ -50,7 +52,12 @@ func (Location) Annotations() []schema.Annotation {
 
 // Fields of the Location.
 func (Location) Fields() []ent.Field {
-	return nil
+	return []ent.Field{
+		field.Other("geometry", types.Geometry{}).
+			Optional().
+			Nillable().
+			SchemaType(types.GeometrySchemaType()),
+	}
 }
 
 // Edges of the Location.

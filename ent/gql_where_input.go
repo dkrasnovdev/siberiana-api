@@ -44,6 +44,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/set"
 	"github.com/dkrasnovdev/heritage-api/ent/settlement"
 	"github.com/dkrasnovdev/heritage-api/ent/technique"
+	"github.com/dkrasnovdev/heritage-api/internal/ent/types"
 )
 
 // ArtWhereInput represents a where input for filtering Art queries.
@@ -8782,6 +8783,18 @@ type LocationWhereInput struct {
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 
+	// "geometry" field predicates.
+	Geometry       *types.Geometry  `json:"geometry,omitempty"`
+	GeometryNEQ    *types.Geometry  `json:"geometryNEQ,omitempty"`
+	GeometryIn     []types.Geometry `json:"geometryIn,omitempty"`
+	GeometryNotIn  []types.Geometry `json:"geometryNotIn,omitempty"`
+	GeometryGT     *types.Geometry  `json:"geometryGT,omitempty"`
+	GeometryGTE    *types.Geometry  `json:"geometryGTE,omitempty"`
+	GeometryLT     *types.Geometry  `json:"geometryLT,omitempty"`
+	GeometryLTE    *types.Geometry  `json:"geometryLTE,omitempty"`
+	GeometryIsNil  bool             `json:"geometryIsNil,omitempty"`
+	GeometryNotNil bool             `json:"geometryNotNil,omitempty"`
+
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
@@ -9178,6 +9191,36 @@ func (i *LocationWhereInput) P() (predicate.Location, error) {
 	}
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, location.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.Geometry != nil {
+		predicates = append(predicates, location.GeometryEQ(*i.Geometry))
+	}
+	if i.GeometryNEQ != nil {
+		predicates = append(predicates, location.GeometryNEQ(*i.GeometryNEQ))
+	}
+	if len(i.GeometryIn) > 0 {
+		predicates = append(predicates, location.GeometryIn(i.GeometryIn...))
+	}
+	if len(i.GeometryNotIn) > 0 {
+		predicates = append(predicates, location.GeometryNotIn(i.GeometryNotIn...))
+	}
+	if i.GeometryGT != nil {
+		predicates = append(predicates, location.GeometryGT(*i.GeometryGT))
+	}
+	if i.GeometryGTE != nil {
+		predicates = append(predicates, location.GeometryGTE(*i.GeometryGTE))
+	}
+	if i.GeometryLT != nil {
+		predicates = append(predicates, location.GeometryLT(*i.GeometryLT))
+	}
+	if i.GeometryLTE != nil {
+		predicates = append(predicates, location.GeometryLTE(*i.GeometryLTE))
+	}
+	if i.GeometryIsNil {
+		predicates = append(predicates, location.GeometryIsNil())
+	}
+	if i.GeometryNotNil {
+		predicates = append(predicates, location.GeometryNotNil())
 	}
 
 	if i.HasArtifacts != nil {

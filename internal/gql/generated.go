@@ -18,6 +18,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/introspection"
 	"github.com/dkrasnovdev/heritage-api/ent"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
+	"github.com/dkrasnovdev/heritage-api/internal/ent/types"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -443,6 +444,7 @@ type ComplexityRoot struct {
 		DisplayName           func(childComplexity int) int
 		District              func(childComplexity int) int
 		ExternalLinks         func(childComplexity int) int
+		Geometry              func(childComplexity int) int
 		ID                    func(childComplexity int) int
 		ProtectedAreaPictures func(childComplexity int) int
 		Region                func(childComplexity int) int
@@ -2977,6 +2979,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Location.ExternalLinks(childComplexity), true
+
+	case "Location.geometry":
+		if e.complexity.Location.Geometry == nil {
+			break
+		}
+
+		return e.complexity.Location.Geometry(childComplexity), true
 
 	case "Location.id":
 		if e.complexity.Location.ID == nil {
@@ -6514,7 +6523,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 	return introspection.WrapTypeFromDef(parsedSchema, parsedSchema.Types[name]), nil
 }
 
-//go:embed "mutation.graphql" "ent.graphql"
+//go:embed "ent.graphql" "geometry.graphql" "mutation.graphql"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -6526,8 +6535,9 @@ func sourceData(filename string) string {
 }
 
 var sources = []*ast.Source{
-	{Name: "mutation.graphql", Input: sourceData("mutation.graphql"), BuiltIn: false},
 	{Name: "ent.graphql", Input: sourceData("ent.graphql"), BuiltIn: false},
+	{Name: "geometry.graphql", Input: sourceData("geometry.graphql"), BuiltIn: false},
+	{Name: "mutation.graphql", Input: sourceData("mutation.graphql"), BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
@@ -12329,6 +12339,8 @@ func (ec *executionContext) fieldContext_Artifact_location(ctx context.Context, 
 				return ec.fieldContext_Location_description(ctx, field)
 			case "externalLinks":
 				return ec.fieldContext_Location_externalLinks(ctx, field)
+			case "geometry":
+				return ec.fieldContext_Location_geometry(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Location_artifacts(ctx, field)
 			case "books":
@@ -14482,6 +14494,8 @@ func (ec *executionContext) fieldContext_Book_location(ctx context.Context, fiel
 				return ec.fieldContext_Location_description(ctx, field)
 			case "externalLinks":
 				return ec.fieldContext_Location_externalLinks(ctx, field)
+			case "geometry":
+				return ec.fieldContext_Location_geometry(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Location_artifacts(ctx, field)
 			case "books":
@@ -17690,6 +17704,8 @@ func (ec *executionContext) fieldContext_Country_location(ctx context.Context, f
 				return ec.fieldContext_Location_description(ctx, field)
 			case "externalLinks":
 				return ec.fieldContext_Location_externalLinks(ctx, field)
+			case "geometry":
+				return ec.fieldContext_Location_geometry(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Location_artifacts(ctx, field)
 			case "books":
@@ -19136,6 +19152,8 @@ func (ec *executionContext) fieldContext_District_location(ctx context.Context, 
 				return ec.fieldContext_Location_description(ctx, field)
 			case "externalLinks":
 				return ec.fieldContext_Location_externalLinks(ctx, field)
+			case "geometry":
+				return ec.fieldContext_Location_geometry(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Location_artifacts(ctx, field)
 			case "books":
@@ -22425,6 +22443,47 @@ func (ec *executionContext) fieldContext_Location_externalLinks(ctx context.Cont
 	return fc, nil
 }
 
+func (ec *executionContext) _Location_geometry(ctx context.Context, field graphql.CollectedField, obj *ent.Location) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Location_geometry(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Geometry, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*types.Geometry)
+	fc.Result = res
+	return ec.marshalOGeometry2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Location_geometry(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Location",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Geometry does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Location_artifacts(ctx context.Context, field graphql.CollectedField, obj *ent.Location) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Location_artifacts(ctx, field)
 	if err != nil {
@@ -23145,6 +23204,8 @@ func (ec *executionContext) fieldContext_LocationEdge_node(ctx context.Context, 
 				return ec.fieldContext_Location_description(ctx, field)
 			case "externalLinks":
 				return ec.fieldContext_Location_externalLinks(ctx, field)
+			case "geometry":
+				return ec.fieldContext_Location_geometry(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Location_artifacts(ctx, field)
 			case "books":
@@ -26763,6 +26824,8 @@ func (ec *executionContext) fieldContext_Mutation_createLocation(ctx context.Con
 				return ec.fieldContext_Location_description(ctx, field)
 			case "externalLinks":
 				return ec.fieldContext_Location_externalLinks(ctx, field)
+			case "geometry":
+				return ec.fieldContext_Location_geometry(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Location_artifacts(ctx, field)
 			case "books":
@@ -26852,6 +26915,8 @@ func (ec *executionContext) fieldContext_Mutation_updateLocation(ctx context.Con
 				return ec.fieldContext_Location_description(ctx, field)
 			case "externalLinks":
 				return ec.fieldContext_Location_externalLinks(ctx, field)
+			case "geometry":
+				return ec.fieldContext_Location_geometry(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Location_artifacts(ctx, field)
 			case "books":
@@ -37956,6 +38021,8 @@ func (ec *executionContext) fieldContext_ProtectedAreaPicture_location(ctx conte
 				return ec.fieldContext_Location_description(ctx, field)
 			case "externalLinks":
 				return ec.fieldContext_Location_externalLinks(ctx, field)
+			case "geometry":
+				return ec.fieldContext_Location_geometry(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Location_artifacts(ctx, field)
 			case "books":
@@ -42673,6 +42740,8 @@ func (ec *executionContext) fieldContext_Region_location(ctx context.Context, fi
 				return ec.fieldContext_Location_description(ctx, field)
 			case "externalLinks":
 				return ec.fieldContext_Location_externalLinks(ctx, field)
+			case "geometry":
+				return ec.fieldContext_Location_geometry(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Location_artifacts(ctx, field)
 			case "books":
@@ -44186,6 +44255,8 @@ func (ec *executionContext) fieldContext_Settlement_location(ctx context.Context
 				return ec.fieldContext_Location_description(ctx, field)
 			case "externalLinks":
 				return ec.fieldContext_Location_externalLinks(ctx, field)
+			case "geometry":
+				return ec.fieldContext_Location_geometry(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Location_artifacts(ctx, field)
 			case "books":
@@ -59347,7 +59418,7 @@ func (ec *executionContext) unmarshalInputCreateLocationInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs", "bookIDs", "protectedAreaPictureIDs", "countryID", "districtID", "settlementID", "regionID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "geometry", "artifactIDs", "bookIDs", "protectedAreaPictureIDs", "countryID", "districtID", "settlementID", "regionID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -59426,6 +59497,15 @@ func (ec *executionContext) unmarshalInputCreateLocationInput(ctx context.Contex
 				return it, err
 			}
 			it.ExternalLinks = data
+		case "geometry":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometry"))
+			data, err := ec.unmarshalOGeometry2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Geometry = data
 		case "artifactIDs":
 			var err error
 
@@ -66833,7 +66913,7 @@ func (ec *executionContext) unmarshalInputLocationWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasProtectedAreaPictures", "hasProtectedAreaPicturesWith", "hasCountry", "hasCountryWith", "hasDistrict", "hasDistrictWith", "hasSettlement", "hasSettlementWith", "hasRegion", "hasRegionWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "geometry", "geometryNEQ", "geometryIn", "geometryNotIn", "geometryGT", "geometryGTE", "geometryLT", "geometryLTE", "geometryIsNil", "geometryNotNil", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasProtectedAreaPictures", "hasProtectedAreaPicturesWith", "hasCountry", "hasCountryWith", "hasDistrict", "hasDistrictWith", "hasSettlement", "hasSettlementWith", "hasRegion", "hasRegionWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -67758,6 +67838,96 @@ func (ec *executionContext) unmarshalInputLocationWhereInput(ctx context.Context
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "geometry":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometry"))
+			data, err := ec.unmarshalOGeometry2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Geometry = data
+		case "geometryNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometryNEQ"))
+			data, err := ec.unmarshalOGeometry2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.GeometryNEQ = data
+		case "geometryIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometryIn"))
+			data, err := ec.unmarshalOGeometry2ᚕgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometryᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.GeometryIn = data
+		case "geometryNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometryNotIn"))
+			data, err := ec.unmarshalOGeometry2ᚕgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometryᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.GeometryNotIn = data
+		case "geometryGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometryGT"))
+			data, err := ec.unmarshalOGeometry2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.GeometryGT = data
+		case "geometryGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometryGTE"))
+			data, err := ec.unmarshalOGeometry2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.GeometryGTE = data
+		case "geometryLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometryLT"))
+			data, err := ec.unmarshalOGeometry2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.GeometryLT = data
+		case "geometryLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometryLTE"))
+			data, err := ec.unmarshalOGeometry2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.GeometryLTE = data
+		case "geometryIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometryIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.GeometryIsNil = data
+		case "geometryNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometryNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.GeometryNotNil = data
 		case "hasArtifacts":
 			var err error
 
@@ -92213,7 +92383,7 @@ func (ec *executionContext) unmarshalInputUpdateLocationInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addProtectedAreaPictureIDs", "removeProtectedAreaPictureIDs", "clearProtectedAreaPictures", "countryID", "clearCountry", "districtID", "clearDistrict", "settlementID", "clearSettlement", "regionID", "clearRegion"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "geometry", "clearGeometry", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addProtectedAreaPictureIDs", "removeProtectedAreaPictureIDs", "clearProtectedAreaPictures", "countryID", "clearCountry", "districtID", "clearDistrict", "settlementID", "clearSettlement", "regionID", "clearRegion"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -92346,6 +92516,24 @@ func (ec *executionContext) unmarshalInputUpdateLocationInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearExternalLinks = data
+		case "geometry":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("geometry"))
+			data, err := ec.unmarshalOGeometry2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Geometry = data
+		case "clearGeometry":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearGeometry"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearGeometry = data
 		case "addArtifactIDs":
 			var err error
 
@@ -100425,6 +100613,8 @@ func (ec *executionContext) _Location(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._Location_description(ctx, field, obj)
 		case "externalLinks":
 			out.Values[i] = ec._Location_externalLinks(ctx, field, obj)
+		case "geometry":
+			out.Values[i] = ec._Location_geometry(ctx, field, obj)
 		case "artifacts":
 			field := field
 
@@ -107030,6 +107220,16 @@ func (ec *executionContext) unmarshalNDistrictWhereInput2ᚖgithubᚗcomᚋdkras
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) unmarshalNGeometry2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx context.Context, v interface{}) (types.Geometry, error) {
+	var res types.Geometry
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNGeometry2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx context.Context, sel ast.SelectionSet, v types.Geometry) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) marshalNHolder2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolder(ctx context.Context, sel ast.SelectionSet, v ent.Holder) graphql.Marshaler {
 	return ec._Holder(ctx, sel, &v)
 }
@@ -110077,6 +110277,60 @@ func (ec *executionContext) unmarshalODistrictWhereInput2ᚖgithubᚗcomᚋdkras
 	}
 	res, err := ec.unmarshalInputDistrictWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOGeometry2ᚕgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometryᚄ(ctx context.Context, v interface{}) ([]types.Geometry, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]types.Geometry, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNGeometry2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOGeometry2ᚕgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometryᚄ(ctx context.Context, sel ast.SelectionSet, v []types.Geometry) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNGeometry2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOGeometry2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx context.Context, v interface{}) (*types.Geometry, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(types.Geometry)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOGeometry2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋinternalᚋentᚋtypesᚐGeometry(ctx context.Context, sel ast.SelectionSet, v *types.Geometry) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) marshalOHolder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐHolderᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Holder) graphql.Marshaler {

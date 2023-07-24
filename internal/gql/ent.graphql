@@ -1942,6 +1942,7 @@ input CreateLocationInput {
   abbreviation: String
   description: String
   externalLinks: [String!]
+  geometry: Geometry
   artifactIDs: [ID!]
   bookIDs: [ID!]
   protectedAreaPictureIDs: [ID!]
@@ -3104,6 +3105,7 @@ type Location implements Node {
   abbreviation: String
   description: String
   externalLinks: [String!]
+  geometry: Geometry
   artifacts: [Artifact!]
   books: [Book!]
   protectedAreaPictures: [ProtectedAreaPicture!]
@@ -3255,6 +3257,17 @@ input LocationWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """geometry field predicates"""
+  geometry: Geometry
+  geometryNEQ: Geometry
+  geometryIn: [Geometry!]
+  geometryNotIn: [Geometry!]
+  geometryGT: Geometry
+  geometryGTE: Geometry
+  geometryLT: Geometry
+  geometryLTE: Geometry
+  geometryIsNil: Boolean
+  geometryNotNil: Boolean
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -7735,6 +7748,8 @@ input UpdateLocationInput {
   externalLinks: [String!]
   appendExternalLinks: [String!]
   clearExternalLinks: Boolean
+  geometry: Geometry
+  clearGeometry: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean

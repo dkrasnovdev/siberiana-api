@@ -15,6 +15,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
 	"github.com/dkrasnovdev/heritage-api/ent/settlement"
+	"github.com/dkrasnovdev/heritage-api/internal/ent/types"
 )
 
 // Location is the model entity for the Location schema.
@@ -38,6 +39,8 @@ type Location struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLinks holds the value of the "external_links" field.
 	ExternalLinks []string `json:"external_links,omitempty"`
+	// Geometry holds the value of the "geometry" field.
+	Geometry *types.Geometry `json:"geometry,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the LocationQuery when eager-loading is set.
 	Edges        LocationEdges `json:"edges"`
@@ -155,6 +158,8 @@ func (*Location) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case location.FieldGeometry:
+			values[i] = &sql.NullScanner{S: new(types.Geometry)}
 		case location.FieldExternalLinks:
 			values[i] = new([]byte)
 		case location.FieldID:
@@ -233,6 +238,13 @@ func (l *Location) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &l.ExternalLinks); err != nil {
 					return fmt.Errorf("unmarshal field external_links: %w", err)
 				}
+			}
+		case location.FieldGeometry:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field geometry", values[i])
+			} else if value.Valid {
+				l.Geometry = new(types.Geometry)
+				*l.Geometry = *value.S.(*types.Geometry)
 			}
 		default:
 			l.selectValues.Set(columns[i], values[i])
@@ -328,6 +340,11 @@ func (l *Location) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_links=")
 	builder.WriteString(fmt.Sprintf("%v", l.ExternalLinks))
+	builder.WriteString(", ")
+	if v := l.Geometry; v != nil {
+		builder.WriteString("geometry=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

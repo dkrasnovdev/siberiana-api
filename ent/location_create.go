@@ -18,6 +18,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
 	"github.com/dkrasnovdev/heritage-api/ent/settlement"
+	"github.com/dkrasnovdev/heritage-api/internal/ent/types"
 )
 
 // LocationCreate is the builder for creating a Location entity.
@@ -128,6 +129,20 @@ func (lc *LocationCreate) SetNillableDescription(s *string) *LocationCreate {
 // SetExternalLinks sets the "external_links" field.
 func (lc *LocationCreate) SetExternalLinks(s []string) *LocationCreate {
 	lc.mutation.SetExternalLinks(s)
+	return lc
+}
+
+// SetGeometry sets the "geometry" field.
+func (lc *LocationCreate) SetGeometry(t types.Geometry) *LocationCreate {
+	lc.mutation.SetGeometry(t)
+	return lc
+}
+
+// SetNillableGeometry sets the "geometry" field if the given value is not nil.
+func (lc *LocationCreate) SetNillableGeometry(t *types.Geometry) *LocationCreate {
+	if t != nil {
+		lc.SetGeometry(*t)
+	}
 	return lc
 }
 
@@ -371,6 +386,10 @@ func (lc *LocationCreate) createSpec() (*Location, *sqlgraph.CreateSpec) {
 	if value, ok := lc.mutation.ExternalLinks(); ok {
 		_spec.SetField(location.FieldExternalLinks, field.TypeJSON, value)
 		_node.ExternalLinks = value
+	}
+	if value, ok := lc.mutation.Geometry(); ok {
+		_spec.SetField(location.FieldGeometry, field.TypeOther, value)
+		_node.Geometry = &value
 	}
 	if nodes := lc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

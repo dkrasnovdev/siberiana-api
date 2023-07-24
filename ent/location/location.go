@@ -31,6 +31,8 @@ const (
 	FieldDescription = "description"
 	// FieldExternalLinks holds the string denoting the external_links field in the database.
 	FieldExternalLinks = "external_links"
+	// FieldGeometry holds the string denoting the geometry field in the database.
+	FieldGeometry = "geometry"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
 	// EdgeBooks holds the string denoting the books edge name in mutations.
@@ -109,6 +111,7 @@ var Columns = []string{
 	FieldAbbreviation,
 	FieldDescription,
 	FieldExternalLinks,
+	FieldGeometry,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -178,6 +181,11 @@ func ByAbbreviation(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByGeometry orders the results by the geometry field.
+func ByGeometry(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldGeometry, opts...).ToFunc()
 }
 
 // ByArtifactsCount orders the results by artifacts count.

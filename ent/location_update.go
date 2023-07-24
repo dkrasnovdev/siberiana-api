@@ -21,6 +21,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
 	"github.com/dkrasnovdev/heritage-api/ent/settlement"
+	"github.com/dkrasnovdev/heritage-api/internal/ent/types"
 )
 
 // LocationUpdate is the builder for updating Location entities.
@@ -157,6 +158,26 @@ func (lu *LocationUpdate) AppendExternalLinks(s []string) *LocationUpdate {
 // ClearExternalLinks clears the value of the "external_links" field.
 func (lu *LocationUpdate) ClearExternalLinks() *LocationUpdate {
 	lu.mutation.ClearExternalLinks()
+	return lu
+}
+
+// SetGeometry sets the "geometry" field.
+func (lu *LocationUpdate) SetGeometry(t types.Geometry) *LocationUpdate {
+	lu.mutation.SetGeometry(t)
+	return lu
+}
+
+// SetNillableGeometry sets the "geometry" field if the given value is not nil.
+func (lu *LocationUpdate) SetNillableGeometry(t *types.Geometry) *LocationUpdate {
+	if t != nil {
+		lu.SetGeometry(*t)
+	}
+	return lu
+}
+
+// ClearGeometry clears the value of the "geometry" field.
+func (lu *LocationUpdate) ClearGeometry() *LocationUpdate {
+	lu.mutation.ClearGeometry()
 	return lu
 }
 
@@ -467,6 +488,12 @@ func (lu *LocationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if lu.mutation.ExternalLinksCleared() {
 		_spec.ClearField(location.FieldExternalLinks, field.TypeJSON)
+	}
+	if value, ok := lu.mutation.Geometry(); ok {
+		_spec.SetField(location.FieldGeometry, field.TypeOther, value)
+	}
+	if lu.mutation.GeometryCleared() {
+		_spec.ClearField(location.FieldGeometry, field.TypeOther)
 	}
 	if lu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -863,6 +890,26 @@ func (luo *LocationUpdateOne) ClearExternalLinks() *LocationUpdateOne {
 	return luo
 }
 
+// SetGeometry sets the "geometry" field.
+func (luo *LocationUpdateOne) SetGeometry(t types.Geometry) *LocationUpdateOne {
+	luo.mutation.SetGeometry(t)
+	return luo
+}
+
+// SetNillableGeometry sets the "geometry" field if the given value is not nil.
+func (luo *LocationUpdateOne) SetNillableGeometry(t *types.Geometry) *LocationUpdateOne {
+	if t != nil {
+		luo.SetGeometry(*t)
+	}
+	return luo
+}
+
+// ClearGeometry clears the value of the "geometry" field.
+func (luo *LocationUpdateOne) ClearGeometry() *LocationUpdateOne {
+	luo.mutation.ClearGeometry()
+	return luo
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (luo *LocationUpdateOne) AddArtifactIDs(ids ...int) *LocationUpdateOne {
 	luo.mutation.AddArtifactIDs(ids...)
@@ -1200,6 +1247,12 @@ func (luo *LocationUpdateOne) sqlSave(ctx context.Context) (_node *Location, err
 	}
 	if luo.mutation.ExternalLinksCleared() {
 		_spec.ClearField(location.FieldExternalLinks, field.TypeJSON)
+	}
+	if value, ok := luo.mutation.Geometry(); ok {
+		_spec.SetField(location.FieldGeometry, field.TypeOther, value)
+	}
+	if luo.mutation.GeometryCleared() {
+		_spec.ClearField(location.FieldGeometry, field.TypeOther)
 	}
 	if luo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

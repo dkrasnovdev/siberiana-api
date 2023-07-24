@@ -2609,6 +2609,11 @@ func (l *LocationQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				selectedFields = append(selectedFields, location.FieldExternalLinks)
 				fieldSeen[location.FieldExternalLinks] = struct{}{}
 			}
+		case "geometry":
+			if _, ok := fieldSeen[location.FieldGeometry]; !ok {
+				selectedFields = append(selectedFields, location.FieldGeometry)
+				fieldSeen[location.FieldGeometry] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

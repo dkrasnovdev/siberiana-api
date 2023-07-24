@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/dkrasnovdev/heritage-api/ent/person"
+	"github.com/dkrasnovdev/heritage-api/internal/ent/types"
 )
 
 // CreateArtGenreInput represents a mutation input for creating artgenres.
@@ -2334,6 +2335,7 @@ type CreateLocationInput struct {
 	Abbreviation            *string
 	Description             *string
 	ExternalLinks           []string
+	Geometry                *types.Geometry
 	ArtifactIDs             []int
 	BookIDs                 []int
 	ProtectedAreaPictureIDs []int
@@ -2368,6 +2370,9 @@ func (i *CreateLocationInput) Mutate(m *LocationMutation) {
 	}
 	if v := i.ExternalLinks; v != nil {
 		m.SetExternalLinks(v)
+	}
+	if v := i.Geometry; v != nil {
+		m.SetGeometry(*v)
 	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
@@ -2414,6 +2419,8 @@ type UpdateLocationInput struct {
 	ClearExternalLinks            bool
 	ExternalLinks                 []string
 	AppendExternalLinks           []string
+	ClearGeometry                 bool
+	Geometry                      *types.Geometry
 	ClearArtifacts                bool
 	AddArtifactIDs                []int
 	RemoveArtifactIDs             []int
@@ -2476,6 +2483,12 @@ func (i *UpdateLocationInput) Mutate(m *LocationMutation) {
 	}
 	if i.AppendExternalLinks != nil {
 		m.AppendExternalLinks(i.ExternalLinks)
+	}
+	if i.ClearGeometry {
+		m.ClearGeometry()
+	}
+	if v := i.Geometry; v != nil {
+		m.SetGeometry(*v)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()

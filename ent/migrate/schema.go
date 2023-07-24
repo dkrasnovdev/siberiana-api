@@ -420,6 +420,7 @@ var (
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "geometry", Type: field.TypeOther, Nullable: true, SchemaType: map[string]string{"postgres": "geometry"}},
 	}
 	// LocationsTable holds the schema information for the "locations" table.
 	LocationsTable = &schema.Table{
