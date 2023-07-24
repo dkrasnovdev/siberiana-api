@@ -253,19 +253,20 @@ type ComplexityRoot struct {
 	}
 
 	Collection struct {
-		Abbreviation  func(childComplexity int) int
-		Artifacts     func(childComplexity int) int
-		Books         func(childComplexity int) int
-		Category      func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		People        func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation          func(childComplexity int) int
+		Artifacts             func(childComplexity int) int
+		Books                 func(childComplexity int) int
+		Category              func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Description           func(childComplexity int) int
+		DisplayName           func(childComplexity int) int
+		ExternalLinks         func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		People                func(childComplexity int) int
+		ProtectedAreaPictures func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
 	}
 
 	CollectionConnection struct {
@@ -406,17 +407,18 @@ type ComplexityRoot struct {
 	}
 
 	License struct {
-		Abbreviation  func(childComplexity int) int
-		Artifacts     func(childComplexity int) int
-		Books         func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation          func(childComplexity int) int
+		Artifacts             func(childComplexity int) int
+		Books                 func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Description           func(childComplexity int) int
+		DisplayName           func(childComplexity int) int
+		ExternalLinks         func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		ProtectedAreaPictures func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
 	}
 
 	LicenseConnection struct {
@@ -431,21 +433,22 @@ type ComplexityRoot struct {
 	}
 
 	Location struct {
-		Abbreviation  func(childComplexity int) int
-		Artifacts     func(childComplexity int) int
-		Books         func(childComplexity int) int
-		Country       func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		District      func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Region        func(childComplexity int) int
-		Settlement    func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation          func(childComplexity int) int
+		Artifacts             func(childComplexity int) int
+		Books                 func(childComplexity int) int
+		Country               func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Description           func(childComplexity int) int
+		DisplayName           func(childComplexity int) int
+		District              func(childComplexity int) int
+		ExternalLinks         func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		ProtectedAreaPictures func(childComplexity int) int
+		Region                func(childComplexity int) int
+		Settlement            func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
 	}
 
 	LocationConnection struct {
@@ -781,27 +784,32 @@ type ComplexityRoot struct {
 	}
 
 	ProtectedArea struct {
-		Abbreviation  func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation          func(childComplexity int) int
+		Area                  func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Description           func(childComplexity int) int
+		DisplayName           func(childComplexity int) int
+		EstablishmentDate     func(childComplexity int) int
+		ExternalLinks         func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		ProtectedAreaCategory func(childComplexity int) int
+		ProtectedAreaPictures func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
 	}
 
 	ProtectedAreaCategory struct {
-		Abbreviation  func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation   func(childComplexity int) int
+		CreatedAt      func(childComplexity int) int
+		CreatedBy      func(childComplexity int) int
+		Description    func(childComplexity int) int
+		DisplayName    func(childComplexity int) int
+		ExternalLinks  func(childComplexity int) int
+		ID             func(childComplexity int) int
+		ProtectedAreas func(childComplexity int) int
+		UpdatedAt      func(childComplexity int) int
+		UpdatedBy      func(childComplexity int) int
 	}
 
 	ProtectedAreaCategoryConnection struct {
@@ -827,15 +835,22 @@ type ComplexityRoot struct {
 	}
 
 	ProtectedAreaPicture struct {
-		Abbreviation  func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation         func(childComplexity int) int
+		AdditionalImagesUrls func(childComplexity int) int
+		Collection           func(childComplexity int) int
+		CreatedAt            func(childComplexity int) int
+		CreatedBy            func(childComplexity int) int
+		Description          func(childComplexity int) int
+		DisplayName          func(childComplexity int) int
+		ExternalLinks        func(childComplexity int) int
+		ID                   func(childComplexity int) int
+		License              func(childComplexity int) int
+		Location             func(childComplexity int) int
+		PrimaryImageURL      func(childComplexity int) int
+		ProtectedArea        func(childComplexity int) int
+		ShootingDate         func(childComplexity int) int
+		UpdatedAt            func(childComplexity int) int
+		UpdatedBy            func(childComplexity int) int
 	}
 
 	ProtectedAreaPictureConnection struct {
@@ -2172,6 +2187,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Collection.People(childComplexity), true
 
+	case "Collection.protectedAreaPictures":
+		if e.complexity.Collection.ProtectedAreaPictures == nil {
+			break
+		}
+
+		return e.complexity.Collection.ProtectedAreaPictures(childComplexity), true
+
 	case "Collection.updatedAt":
 		if e.complexity.Collection.UpdatedAt == nil {
 			break
@@ -2830,6 +2852,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.License.ID(childComplexity), true
 
+	case "License.protectedAreaPictures":
+		if e.complexity.License.ProtectedAreaPictures == nil {
+			break
+		}
+
+		return e.complexity.License.ProtectedAreaPictures(childComplexity), true
+
 	case "License.updatedAt":
 		if e.complexity.License.UpdatedAt == nil {
 			break
@@ -2955,6 +2984,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Location.ID(childComplexity), true
+
+	case "Location.protectedAreaPictures":
+		if e.complexity.Location.ProtectedAreaPictures == nil {
+			break
+		}
+
+		return e.complexity.Location.ProtectedAreaPictures(childComplexity), true
 
 	case "Location.region":
 		if e.complexity.Location.Region == nil {
@@ -4791,6 +4827,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ProtectedArea.Abbreviation(childComplexity), true
 
+	case "ProtectedArea.area":
+		if e.complexity.ProtectedArea.Area == nil {
+			break
+		}
+
+		return e.complexity.ProtectedArea.Area(childComplexity), true
+
 	case "ProtectedArea.createdAt":
 		if e.complexity.ProtectedArea.CreatedAt == nil {
 			break
@@ -4819,6 +4862,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ProtectedArea.DisplayName(childComplexity), true
 
+	case "ProtectedArea.establishmentDate":
+		if e.complexity.ProtectedArea.EstablishmentDate == nil {
+			break
+		}
+
+		return e.complexity.ProtectedArea.EstablishmentDate(childComplexity), true
+
 	case "ProtectedArea.externalLinks":
 		if e.complexity.ProtectedArea.ExternalLinks == nil {
 			break
@@ -4832,6 +4882,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ProtectedArea.ID(childComplexity), true
+
+	case "ProtectedArea.protectedAreaCategory":
+		if e.complexity.ProtectedArea.ProtectedAreaCategory == nil {
+			break
+		}
+
+		return e.complexity.ProtectedArea.ProtectedAreaCategory(childComplexity), true
+
+	case "ProtectedArea.protectedAreaPictures":
+		if e.complexity.ProtectedArea.ProtectedAreaPictures == nil {
+			break
+		}
+
+		return e.complexity.ProtectedArea.ProtectedAreaPictures(childComplexity), true
 
 	case "ProtectedArea.updatedAt":
 		if e.complexity.ProtectedArea.UpdatedAt == nil {
@@ -4895,6 +4959,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ProtectedAreaCategory.ID(childComplexity), true
+
+	case "ProtectedAreaCategory.protectedAreas":
+		if e.complexity.ProtectedAreaCategory.ProtectedAreas == nil {
+			break
+		}
+
+		return e.complexity.ProtectedAreaCategory.ProtectedAreas(childComplexity), true
 
 	case "ProtectedAreaCategory.updatedAt":
 		if e.complexity.ProtectedAreaCategory.UpdatedAt == nil {
@@ -4987,6 +5058,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ProtectedAreaPicture.Abbreviation(childComplexity), true
 
+	case "ProtectedAreaPicture.additionalImagesUrls":
+		if e.complexity.ProtectedAreaPicture.AdditionalImagesUrls == nil {
+			break
+		}
+
+		return e.complexity.ProtectedAreaPicture.AdditionalImagesUrls(childComplexity), true
+
+	case "ProtectedAreaPicture.collection":
+		if e.complexity.ProtectedAreaPicture.Collection == nil {
+			break
+		}
+
+		return e.complexity.ProtectedAreaPicture.Collection(childComplexity), true
+
 	case "ProtectedAreaPicture.createdAt":
 		if e.complexity.ProtectedAreaPicture.CreatedAt == nil {
 			break
@@ -5028,6 +5113,41 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ProtectedAreaPicture.ID(childComplexity), true
+
+	case "ProtectedAreaPicture.license":
+		if e.complexity.ProtectedAreaPicture.License == nil {
+			break
+		}
+
+		return e.complexity.ProtectedAreaPicture.License(childComplexity), true
+
+	case "ProtectedAreaPicture.location":
+		if e.complexity.ProtectedAreaPicture.Location == nil {
+			break
+		}
+
+		return e.complexity.ProtectedAreaPicture.Location(childComplexity), true
+
+	case "ProtectedAreaPicture.primaryImageURL":
+		if e.complexity.ProtectedAreaPicture.PrimaryImageURL == nil {
+			break
+		}
+
+		return e.complexity.ProtectedAreaPicture.PrimaryImageURL(childComplexity), true
+
+	case "ProtectedAreaPicture.protectedArea":
+		if e.complexity.ProtectedAreaPicture.ProtectedArea == nil {
+			break
+		}
+
+		return e.complexity.ProtectedAreaPicture.ProtectedArea(childComplexity), true
+
+	case "ProtectedAreaPicture.shootingDate":
+		if e.complexity.ProtectedAreaPicture.ShootingDate == nil {
+			break
+		}
+
+		return e.complexity.ProtectedAreaPicture.ShootingDate(childComplexity), true
 
 	case "ProtectedAreaPicture.updatedAt":
 		if e.complexity.ProtectedAreaPicture.UpdatedAt == nil {
@@ -12213,6 +12333,8 @@ func (ec *executionContext) fieldContext_Artifact_location(ctx context.Context, 
 				return ec.fieldContext_Location_artifacts(ctx, field)
 			case "books":
 				return ec.fieldContext_Location_books(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_Location_protectedAreaPictures(ctx, field)
 			case "country":
 				return ec.fieldContext_Location_country(ctx, field)
 			case "district":
@@ -12288,6 +12410,8 @@ func (ec *executionContext) fieldContext_Artifact_collection(ctx context.Context
 				return ec.fieldContext_Collection_books(ctx, field)
 			case "people":
 				return ec.fieldContext_Collection_people(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_Collection_protectedAreaPictures(ctx, field)
 			case "category":
 				return ec.fieldContext_Collection_category(ctx, field)
 			}
@@ -12355,6 +12479,8 @@ func (ec *executionContext) fieldContext_Artifact_license(ctx context.Context, f
 				return ec.fieldContext_License_artifacts(ctx, field)
 			case "books":
 				return ec.fieldContext_License_books(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_License_protectedAreaPictures(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type License", field.Name)
 		},
@@ -14094,6 +14220,8 @@ func (ec *executionContext) fieldContext_Book_collection(ctx context.Context, fi
 				return ec.fieldContext_Collection_books(ctx, field)
 			case "people":
 				return ec.fieldContext_Collection_people(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_Collection_protectedAreaPictures(ctx, field)
 			case "category":
 				return ec.fieldContext_Collection_category(ctx, field)
 			}
@@ -14291,6 +14419,8 @@ func (ec *executionContext) fieldContext_Book_license(ctx context.Context, field
 				return ec.fieldContext_License_artifacts(ctx, field)
 			case "books":
 				return ec.fieldContext_License_books(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_License_protectedAreaPictures(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type License", field.Name)
 		},
@@ -14356,6 +14486,8 @@ func (ec *executionContext) fieldContext_Book_location(ctx context.Context, fiel
 				return ec.fieldContext_Location_artifacts(ctx, field)
 			case "books":
 				return ec.fieldContext_Location_books(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_Location_protectedAreaPictures(ctx, field)
 			case "country":
 				return ec.fieldContext_Location_country(ctx, field)
 			case "district":
@@ -15794,6 +15926,8 @@ func (ec *executionContext) fieldContext_Category_collections(ctx context.Contex
 				return ec.fieldContext_Collection_books(ctx, field)
 			case "people":
 				return ec.fieldContext_Collection_people(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_Collection_protectedAreaPictures(ctx, field)
 			case "category":
 				return ec.fieldContext_Collection_category(ctx, field)
 			}
@@ -16726,6 +16860,81 @@ func (ec *executionContext) fieldContext_Collection_people(ctx context.Context, 
 	return fc, nil
 }
 
+func (ec *executionContext) _Collection_protectedAreaPictures(ctx context.Context, field graphql.CollectedField, obj *ent.Collection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Collection_protectedAreaPictures(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ProtectedAreaPictures(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.ProtectedAreaPicture)
+	fc.Result = res
+	return ec.marshalOProtectedAreaPicture2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPictureᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Collection_protectedAreaPictures(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Collection",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ProtectedAreaPicture_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ProtectedAreaPicture_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ProtectedAreaPicture_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ProtectedAreaPicture_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ProtectedAreaPicture_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_ProtectedAreaPicture_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ProtectedAreaPicture_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_ProtectedAreaPicture_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_ProtectedAreaPicture_externalLinks(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_ProtectedAreaPicture_primaryImageURL(ctx, field)
+			case "additionalImagesUrls":
+				return ec.fieldContext_ProtectedAreaPicture_additionalImagesUrls(ctx, field)
+			case "shootingDate":
+				return ec.fieldContext_ProtectedAreaPicture_shootingDate(ctx, field)
+			case "collection":
+				return ec.fieldContext_ProtectedAreaPicture_collection(ctx, field)
+			case "protectedArea":
+				return ec.fieldContext_ProtectedAreaPicture_protectedArea(ctx, field)
+			case "location":
+				return ec.fieldContext_ProtectedAreaPicture_location(ctx, field)
+			case "license":
+				return ec.fieldContext_ProtectedAreaPicture_license(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProtectedAreaPicture", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Collection_category(ctx context.Context, field graphql.CollectedField, obj *ent.Collection) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Collection_category(ctx, field)
 	if err != nil {
@@ -16994,6 +17203,8 @@ func (ec *executionContext) fieldContext_CollectionEdge_node(ctx context.Context
 				return ec.fieldContext_Collection_books(ctx, field)
 			case "people":
 				return ec.fieldContext_Collection_people(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_Collection_protectedAreaPictures(ctx, field)
 			case "category":
 				return ec.fieldContext_Collection_category(ctx, field)
 			}
@@ -17483,6 +17694,8 @@ func (ec *executionContext) fieldContext_Country_location(ctx context.Context, f
 				return ec.fieldContext_Location_artifacts(ctx, field)
 			case "books":
 				return ec.fieldContext_Location_books(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_Location_protectedAreaPictures(ctx, field)
 			case "country":
 				return ec.fieldContext_Location_country(ctx, field)
 			case "district":
@@ -18927,6 +19140,8 @@ func (ec *executionContext) fieldContext_District_location(ctx context.Context, 
 				return ec.fieldContext_Location_artifacts(ctx, field)
 			case "books":
 				return ec.fieldContext_Location_books(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_Location_protectedAreaPictures(ctx, field)
 			case "country":
 				return ec.fieldContext_Location_country(ctx, field)
 			case "district":
@@ -21501,6 +21716,81 @@ func (ec *executionContext) fieldContext_License_books(ctx context.Context, fiel
 	return fc, nil
 }
 
+func (ec *executionContext) _License_protectedAreaPictures(ctx context.Context, field graphql.CollectedField, obj *ent.License) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_License_protectedAreaPictures(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ProtectedAreaPictures(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.ProtectedAreaPicture)
+	fc.Result = res
+	return ec.marshalOProtectedAreaPicture2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPictureᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_License_protectedAreaPictures(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "License",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ProtectedAreaPicture_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ProtectedAreaPicture_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ProtectedAreaPicture_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ProtectedAreaPicture_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ProtectedAreaPicture_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_ProtectedAreaPicture_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ProtectedAreaPicture_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_ProtectedAreaPicture_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_ProtectedAreaPicture_externalLinks(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_ProtectedAreaPicture_primaryImageURL(ctx, field)
+			case "additionalImagesUrls":
+				return ec.fieldContext_ProtectedAreaPicture_additionalImagesUrls(ctx, field)
+			case "shootingDate":
+				return ec.fieldContext_ProtectedAreaPicture_shootingDate(ctx, field)
+			case "collection":
+				return ec.fieldContext_ProtectedAreaPicture_collection(ctx, field)
+			case "protectedArea":
+				return ec.fieldContext_ProtectedAreaPicture_protectedArea(ctx, field)
+			case "location":
+				return ec.fieldContext_ProtectedAreaPicture_location(ctx, field)
+			case "license":
+				return ec.fieldContext_ProtectedAreaPicture_license(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProtectedAreaPicture", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _LicenseConnection_edges(ctx context.Context, field graphql.CollectedField, obj *ent.LicenseConnection) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_LicenseConnection_edges(ctx, field)
 	if err != nil {
@@ -21704,6 +21994,8 @@ func (ec *executionContext) fieldContext_LicenseEdge_node(ctx context.Context, f
 				return ec.fieldContext_License_artifacts(ctx, field)
 			case "books":
 				return ec.fieldContext_License_books(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_License_protectedAreaPictures(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type License", field.Name)
 		},
@@ -22327,6 +22619,81 @@ func (ec *executionContext) fieldContext_Location_books(ctx context.Context, fie
 	return fc, nil
 }
 
+func (ec *executionContext) _Location_protectedAreaPictures(ctx context.Context, field graphql.CollectedField, obj *ent.Location) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Location_protectedAreaPictures(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ProtectedAreaPictures(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.ProtectedAreaPicture)
+	fc.Result = res
+	return ec.marshalOProtectedAreaPicture2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPictureᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Location_protectedAreaPictures(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Location",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ProtectedAreaPicture_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ProtectedAreaPicture_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ProtectedAreaPicture_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ProtectedAreaPicture_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ProtectedAreaPicture_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_ProtectedAreaPicture_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ProtectedAreaPicture_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_ProtectedAreaPicture_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_ProtectedAreaPicture_externalLinks(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_ProtectedAreaPicture_primaryImageURL(ctx, field)
+			case "additionalImagesUrls":
+				return ec.fieldContext_ProtectedAreaPicture_additionalImagesUrls(ctx, field)
+			case "shootingDate":
+				return ec.fieldContext_ProtectedAreaPicture_shootingDate(ctx, field)
+			case "collection":
+				return ec.fieldContext_ProtectedAreaPicture_collection(ctx, field)
+			case "protectedArea":
+				return ec.fieldContext_ProtectedAreaPicture_protectedArea(ctx, field)
+			case "location":
+				return ec.fieldContext_ProtectedAreaPicture_location(ctx, field)
+			case "license":
+				return ec.fieldContext_ProtectedAreaPicture_license(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProtectedAreaPicture", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Location_country(ctx context.Context, field graphql.CollectedField, obj *ent.Location) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Location_country(ctx, field)
 	if err != nil {
@@ -22782,6 +23149,8 @@ func (ec *executionContext) fieldContext_LocationEdge_node(ctx context.Context, 
 				return ec.fieldContext_Location_artifacts(ctx, field)
 			case "books":
 				return ec.fieldContext_Location_books(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_Location_protectedAreaPictures(ctx, field)
 			case "country":
 				return ec.fieldContext_Location_country(ctx, field)
 			case "district":
@@ -25598,6 +25967,8 @@ func (ec *executionContext) fieldContext_Mutation_createCollection(ctx context.C
 				return ec.fieldContext_Collection_books(ctx, field)
 			case "people":
 				return ec.fieldContext_Collection_people(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_Collection_protectedAreaPictures(ctx, field)
 			case "category":
 				return ec.fieldContext_Collection_category(ctx, field)
 			}
@@ -25681,6 +26052,8 @@ func (ec *executionContext) fieldContext_Mutation_updateCollection(ctx context.C
 				return ec.fieldContext_Collection_books(ctx, field)
 			case "people":
 				return ec.fieldContext_Collection_people(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_Collection_protectedAreaPictures(ctx, field)
 			case "category":
 				return ec.fieldContext_Collection_category(ctx, field)
 			}
@@ -26232,6 +26605,8 @@ func (ec *executionContext) fieldContext_Mutation_createLicense(ctx context.Cont
 				return ec.fieldContext_License_artifacts(ctx, field)
 			case "books":
 				return ec.fieldContext_License_books(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_License_protectedAreaPictures(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type License", field.Name)
 		},
@@ -26311,6 +26686,8 @@ func (ec *executionContext) fieldContext_Mutation_updateLicense(ctx context.Cont
 				return ec.fieldContext_License_artifacts(ctx, field)
 			case "books":
 				return ec.fieldContext_License_books(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_License_protectedAreaPictures(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type License", field.Name)
 		},
@@ -26390,6 +26767,8 @@ func (ec *executionContext) fieldContext_Mutation_createLocation(ctx context.Con
 				return ec.fieldContext_Location_artifacts(ctx, field)
 			case "books":
 				return ec.fieldContext_Location_books(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_Location_protectedAreaPictures(ctx, field)
 			case "country":
 				return ec.fieldContext_Location_country(ctx, field)
 			case "district":
@@ -26477,6 +26856,8 @@ func (ec *executionContext) fieldContext_Mutation_updateLocation(ctx context.Con
 				return ec.fieldContext_Location_artifacts(ctx, field)
 			case "books":
 				return ec.fieldContext_Location_books(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_Location_protectedAreaPictures(ctx, field)
 			case "country":
 				return ec.fieldContext_Location_country(ctx, field)
 			case "district":
@@ -32603,6 +32984,8 @@ func (ec *executionContext) fieldContext_Person_collections(ctx context.Context,
 				return ec.fieldContext_Collection_books(ctx, field)
 			case "people":
 				return ec.fieldContext_Collection_people(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_Collection_protectedAreaPictures(ctx, field)
 			case "category":
 				return ec.fieldContext_Collection_category(ctx, field)
 			}
@@ -35701,6 +36084,226 @@ func (ec *executionContext) fieldContext_ProtectedArea_externalLinks(ctx context
 	return fc, nil
 }
 
+func (ec *executionContext) _ProtectedArea_area(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedArea) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProtectedArea_area(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Area, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProtectedArea_area(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProtectedArea",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProtectedArea_establishmentDate(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedArea) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProtectedArea_establishmentDate(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EstablishmentDate, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(time.Time)
+	fc.Result = res
+	return ec.marshalOTime2timeᚐTime(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProtectedArea_establishmentDate(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProtectedArea",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Time does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProtectedArea_protectedAreaPictures(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedArea) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProtectedArea_protectedAreaPictures(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ProtectedAreaPictures(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.ProtectedAreaPicture)
+	fc.Result = res
+	return ec.marshalOProtectedAreaPicture2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPictureᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProtectedArea_protectedAreaPictures(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProtectedArea",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ProtectedAreaPicture_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ProtectedAreaPicture_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ProtectedAreaPicture_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ProtectedAreaPicture_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ProtectedAreaPicture_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_ProtectedAreaPicture_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ProtectedAreaPicture_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_ProtectedAreaPicture_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_ProtectedAreaPicture_externalLinks(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_ProtectedAreaPicture_primaryImageURL(ctx, field)
+			case "additionalImagesUrls":
+				return ec.fieldContext_ProtectedAreaPicture_additionalImagesUrls(ctx, field)
+			case "shootingDate":
+				return ec.fieldContext_ProtectedAreaPicture_shootingDate(ctx, field)
+			case "collection":
+				return ec.fieldContext_ProtectedAreaPicture_collection(ctx, field)
+			case "protectedArea":
+				return ec.fieldContext_ProtectedAreaPicture_protectedArea(ctx, field)
+			case "location":
+				return ec.fieldContext_ProtectedAreaPicture_location(ctx, field)
+			case "license":
+				return ec.fieldContext_ProtectedAreaPicture_license(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProtectedAreaPicture", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProtectedArea_protectedAreaCategory(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedArea) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProtectedArea_protectedAreaCategory(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ProtectedAreaCategory(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*ent.ProtectedAreaCategory)
+	fc.Result = res
+	return ec.marshalOProtectedAreaCategory2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaCategory(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProtectedArea_protectedAreaCategory(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProtectedArea",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ProtectedAreaCategory_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ProtectedAreaCategory_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ProtectedAreaCategory_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ProtectedAreaCategory_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ProtectedAreaCategory_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_ProtectedAreaCategory_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ProtectedAreaCategory_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_ProtectedAreaCategory_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_ProtectedAreaCategory_externalLinks(ctx, field)
+			case "protectedAreas":
+				return ec.fieldContext_ProtectedAreaCategory_protectedAreas(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProtectedAreaCategory", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ProtectedAreaCategory_id(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaCategory) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ProtectedAreaCategory_id(ctx, field)
 	if err != nil {
@@ -36079,6 +36682,75 @@ func (ec *executionContext) fieldContext_ProtectedAreaCategory_externalLinks(ctx
 	return fc, nil
 }
 
+func (ec *executionContext) _ProtectedAreaCategory_protectedAreas(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaCategory) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProtectedAreaCategory_protectedAreas(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ProtectedAreas(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.ProtectedArea)
+	fc.Result = res
+	return ec.marshalOProtectedArea2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProtectedAreaCategory_protectedAreas(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProtectedAreaCategory",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ProtectedArea_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ProtectedArea_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ProtectedArea_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ProtectedArea_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ProtectedArea_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_ProtectedArea_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ProtectedArea_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_ProtectedArea_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_ProtectedArea_externalLinks(ctx, field)
+			case "area":
+				return ec.fieldContext_ProtectedArea_area(ctx, field)
+			case "establishmentDate":
+				return ec.fieldContext_ProtectedArea_establishmentDate(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_ProtectedArea_protectedAreaPictures(ctx, field)
+			case "protectedAreaCategory":
+				return ec.fieldContext_ProtectedArea_protectedAreaCategory(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProtectedArea", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ProtectedAreaCategoryConnection_edges(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaCategoryConnection) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ProtectedAreaCategoryConnection_edges(ctx, field)
 	if err != nil {
@@ -36278,6 +36950,8 @@ func (ec *executionContext) fieldContext_ProtectedAreaCategoryEdge_node(ctx cont
 				return ec.fieldContext_ProtectedAreaCategory_description(ctx, field)
 			case "externalLinks":
 				return ec.fieldContext_ProtectedAreaCategory_externalLinks(ctx, field)
+			case "protectedAreas":
+				return ec.fieldContext_ProtectedAreaCategory_protectedAreas(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ProtectedAreaCategory", field.Name)
 		},
@@ -36528,6 +37202,14 @@ func (ec *executionContext) fieldContext_ProtectedAreaEdge_node(ctx context.Cont
 				return ec.fieldContext_ProtectedArea_description(ctx, field)
 			case "externalLinks":
 				return ec.fieldContext_ProtectedArea_externalLinks(ctx, field)
+			case "area":
+				return ec.fieldContext_ProtectedArea_area(ctx, field)
+			case "establishmentDate":
+				return ec.fieldContext_ProtectedArea_establishmentDate(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_ProtectedArea_protectedAreaPictures(ctx, field)
+			case "protectedAreaCategory":
+				return ec.fieldContext_ProtectedArea_protectedAreaCategory(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ProtectedArea", field.Name)
 		},
@@ -36957,6 +37639,411 @@ func (ec *executionContext) fieldContext_ProtectedAreaPicture_externalLinks(ctx 
 	return fc, nil
 }
 
+func (ec *executionContext) _ProtectedAreaPicture_primaryImageURL(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaPicture) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProtectedAreaPicture_primaryImageURL(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PrimaryImageURL, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProtectedAreaPicture_primaryImageURL(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProtectedAreaPicture",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProtectedAreaPicture_additionalImagesUrls(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaPicture) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProtectedAreaPicture_additionalImagesUrls(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AdditionalImagesUrls, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProtectedAreaPicture_additionalImagesUrls(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProtectedAreaPicture",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProtectedAreaPicture_shootingDate(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaPicture) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProtectedAreaPicture_shootingDate(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ShootingDate, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(time.Time)
+	fc.Result = res
+	return ec.marshalOTime2timeᚐTime(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProtectedAreaPicture_shootingDate(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProtectedAreaPicture",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Time does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProtectedAreaPicture_collection(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaPicture) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProtectedAreaPicture_collection(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Collection(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Collection)
+	fc.Result = res
+	return ec.marshalOCollection2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCollection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProtectedAreaPicture_collection(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProtectedAreaPicture",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Collection_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Collection_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Collection_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Collection_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Collection_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Collection_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Collection_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Collection_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_Collection_externalLinks(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Collection_artifacts(ctx, field)
+			case "books":
+				return ec.fieldContext_Collection_books(ctx, field)
+			case "people":
+				return ec.fieldContext_Collection_people(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_Collection_protectedAreaPictures(ctx, field)
+			case "category":
+				return ec.fieldContext_Collection_category(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Collection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProtectedAreaPicture_protectedArea(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaPicture) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProtectedAreaPicture_protectedArea(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ProtectedArea(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*ent.ProtectedArea)
+	fc.Result = res
+	return ec.marshalOProtectedArea2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedArea(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProtectedAreaPicture_protectedArea(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProtectedAreaPicture",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ProtectedArea_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ProtectedArea_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ProtectedArea_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ProtectedArea_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ProtectedArea_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_ProtectedArea_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_ProtectedArea_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_ProtectedArea_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_ProtectedArea_externalLinks(ctx, field)
+			case "area":
+				return ec.fieldContext_ProtectedArea_area(ctx, field)
+			case "establishmentDate":
+				return ec.fieldContext_ProtectedArea_establishmentDate(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_ProtectedArea_protectedAreaPictures(ctx, field)
+			case "protectedAreaCategory":
+				return ec.fieldContext_ProtectedArea_protectedAreaCategory(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProtectedArea", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProtectedAreaPicture_location(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaPicture) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProtectedAreaPicture_location(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Location(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Location)
+	fc.Result = res
+	return ec.marshalOLocation2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLocation(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProtectedAreaPicture_location(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProtectedAreaPicture",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Location_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Location_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Location_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Location_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Location_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Location_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Location_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Location_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_Location_externalLinks(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Location_artifacts(ctx, field)
+			case "books":
+				return ec.fieldContext_Location_books(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_Location_protectedAreaPictures(ctx, field)
+			case "country":
+				return ec.fieldContext_Location_country(ctx, field)
+			case "district":
+				return ec.fieldContext_Location_district(ctx, field)
+			case "settlement":
+				return ec.fieldContext_Location_settlement(ctx, field)
+			case "region":
+				return ec.fieldContext_Location_region(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Location", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProtectedAreaPicture_license(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaPicture) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProtectedAreaPicture_license(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.License(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*ent.License)
+	fc.Result = res
+	return ec.marshalOLicense2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLicense(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProtectedAreaPicture_license(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProtectedAreaPicture",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_License_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_License_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_License_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_License_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_License_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_License_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_License_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_License_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_License_externalLinks(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_License_artifacts(ctx, field)
+			case "books":
+				return ec.fieldContext_License_books(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_License_protectedAreaPictures(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type License", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ProtectedAreaPictureConnection_edges(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaPictureConnection) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ProtectedAreaPictureConnection_edges(ctx, field)
 	if err != nil {
@@ -37156,6 +38243,20 @@ func (ec *executionContext) fieldContext_ProtectedAreaPictureEdge_node(ctx conte
 				return ec.fieldContext_ProtectedAreaPicture_description(ctx, field)
 			case "externalLinks":
 				return ec.fieldContext_ProtectedAreaPicture_externalLinks(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_ProtectedAreaPicture_primaryImageURL(ctx, field)
+			case "additionalImagesUrls":
+				return ec.fieldContext_ProtectedAreaPicture_additionalImagesUrls(ctx, field)
+			case "shootingDate":
+				return ec.fieldContext_ProtectedAreaPicture_shootingDate(ctx, field)
+			case "collection":
+				return ec.fieldContext_ProtectedAreaPicture_collection(ctx, field)
+			case "protectedArea":
+				return ec.fieldContext_ProtectedAreaPicture_protectedArea(ctx, field)
+			case "location":
+				return ec.fieldContext_ProtectedAreaPicture_location(ctx, field)
+			case "license":
+				return ec.fieldContext_ProtectedAreaPicture_license(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ProtectedAreaPicture", field.Name)
 		},
@@ -41576,6 +42677,8 @@ func (ec *executionContext) fieldContext_Region_location(ctx context.Context, fi
 				return ec.fieldContext_Location_artifacts(ctx, field)
 			case "books":
 				return ec.fieldContext_Location_books(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_Location_protectedAreaPictures(ctx, field)
 			case "country":
 				return ec.fieldContext_Location_country(ctx, field)
 			case "district":
@@ -43087,6 +44190,8 @@ func (ec *executionContext) fieldContext_Settlement_location(ctx context.Context
 				return ec.fieldContext_Location_artifacts(ctx, field)
 			case "books":
 				return ec.fieldContext_Location_books(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_Location_protectedAreaPictures(ctx, field)
 			case "country":
 				return ec.fieldContext_Location_country(ctx, field)
 			case "district":
@@ -54543,7 +55648,7 @@ func (ec *executionContext) unmarshalInputCollectionWhereInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasPeople", "hasPeopleWith", "hasCategory", "hasCategoryWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasPeople", "hasPeopleWith", "hasProtectedAreaPictures", "hasProtectedAreaPicturesWith", "hasCategory", "hasCategoryWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -55522,6 +56627,24 @@ func (ec *executionContext) unmarshalInputCollectionWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.HasPeopleWith = data
+		case "hasProtectedAreaPictures":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProtectedAreaPictures"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasProtectedAreaPictures = data
+		case "hasProtectedAreaPicturesWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProtectedAreaPicturesWith"))
+			data, err := ec.unmarshalOProtectedAreaPictureWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPictureWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasProtectedAreaPicturesWith = data
 		case "hasCategory":
 			var err error
 
@@ -57445,7 +58568,7 @@ func (ec *executionContext) unmarshalInputCreateCollectionInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs", "bookIDs", "personIDs", "categoryID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs", "bookIDs", "personIDs", "protectedAreaPictureIDs", "categoryID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -57551,6 +58674,15 @@ func (ec *executionContext) unmarshalInputCreateCollectionInput(ctx context.Cont
 				return it, err
 			}
 			it.PersonIDs = data
+		case "protectedAreaPictureIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("protectedAreaPictureIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ProtectedAreaPictureIDs = data
 		case "categoryID":
 			var err error
 
@@ -58096,7 +59228,7 @@ func (ec *executionContext) unmarshalInputCreateLicenseInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs", "bookIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs", "bookIDs", "protectedAreaPictureIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -58193,6 +59325,15 @@ func (ec *executionContext) unmarshalInputCreateLicenseInput(ctx context.Context
 				return it, err
 			}
 			it.BookIDs = data
+		case "protectedAreaPictureIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("protectedAreaPictureIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ProtectedAreaPictureIDs = data
 		}
 	}
 
@@ -58206,7 +59347,7 @@ func (ec *executionContext) unmarshalInputCreateLocationInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs", "bookIDs", "countryID", "districtID", "settlementID", "regionID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs", "bookIDs", "protectedAreaPictureIDs", "countryID", "districtID", "settlementID", "regionID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -58303,6 +59444,15 @@ func (ec *executionContext) unmarshalInputCreateLocationInput(ctx context.Contex
 				return it, err
 			}
 			it.BookIDs = data
+		case "protectedAreaPictureIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("protectedAreaPictureIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ProtectedAreaPictureIDs = data
 		case "countryID":
 			var err error
 
@@ -59659,7 +60809,7 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaCategoryInput(ctx c
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "protectedAreaIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -59738,6 +60888,15 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaCategoryInput(ctx c
 				return it, err
 			}
 			it.ExternalLinks = data
+		case "protectedAreaIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("protectedAreaIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ProtectedAreaIDs = data
 		}
 	}
 
@@ -59751,7 +60910,7 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "area", "establishmentDate", "protectedAreaPictureIDs", "protectedAreaCategoryID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -59830,6 +60989,42 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaInput(ctx context.C
 				return it, err
 			}
 			it.ExternalLinks = data
+		case "area":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("area"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Area = data
+		case "establishmentDate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("establishmentDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EstablishmentDate = data
+		case "protectedAreaPictureIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("protectedAreaPictureIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ProtectedAreaPictureIDs = data
+		case "protectedAreaCategoryID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("protectedAreaCategoryID"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ProtectedAreaCategoryID = data
 		}
 	}
 
@@ -59843,7 +61038,7 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaPictureInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "shootingDate", "collectionID", "protectedAreaID", "locationID", "licenseID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -59922,6 +61117,69 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaPictureInput(ctx co
 				return it, err
 			}
 			it.ExternalLinks = data
+		case "primaryImageURL":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURL"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURL = data
+		case "additionalImagesUrls":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("additionalImagesUrls"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AdditionalImagesUrls = data
+		case "shootingDate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shootingDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShootingDate = data
+		case "collectionID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("collectionID"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CollectionID = data
+		case "protectedAreaID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("protectedAreaID"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ProtectedAreaID = data
+		case "locationID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("locationID"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LocationID = data
+		case "licenseID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("licenseID"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LicenseID = data
 		}
 	}
 
@@ -64541,7 +65799,7 @@ func (ec *executionContext) unmarshalInputLicenseWhereInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasProtectedAreaPictures", "hasProtectedAreaPicturesWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -65502,6 +66760,24 @@ func (ec *executionContext) unmarshalInputLicenseWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.HasBooksWith = data
+		case "hasProtectedAreaPictures":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProtectedAreaPictures"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasProtectedAreaPictures = data
+		case "hasProtectedAreaPicturesWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProtectedAreaPicturesWith"))
+			data, err := ec.unmarshalOProtectedAreaPictureWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPictureWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasProtectedAreaPicturesWith = data
 		}
 	}
 
@@ -65557,7 +66833,7 @@ func (ec *executionContext) unmarshalInputLocationWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasCountry", "hasCountryWith", "hasDistrict", "hasDistrictWith", "hasSettlement", "hasSettlementWith", "hasRegion", "hasRegionWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasProtectedAreaPictures", "hasProtectedAreaPicturesWith", "hasCountry", "hasCountryWith", "hasDistrict", "hasDistrictWith", "hasSettlement", "hasSettlementWith", "hasRegion", "hasRegionWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -66518,6 +67794,24 @@ func (ec *executionContext) unmarshalInputLocationWhereInput(ctx context.Context
 				return it, err
 			}
 			it.HasBooksWith = data
+		case "hasProtectedAreaPictures":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProtectedAreaPictures"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasProtectedAreaPictures = data
+		case "hasProtectedAreaPicturesWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProtectedAreaPicturesWith"))
+			data, err := ec.unmarshalOProtectedAreaPictureWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPictureWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasProtectedAreaPicturesWith = data
 		case "hasCountry":
 			var err error
 
@@ -78353,7 +79647,7 @@ func (ec *executionContext) unmarshalInputProtectedAreaCategoryWhereInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasProtectedAreas", "hasProtectedAreasWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -79278,6 +80572,24 @@ func (ec *executionContext) unmarshalInputProtectedAreaCategoryWhereInput(ctx co
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "hasProtectedAreas":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProtectedAreas"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasProtectedAreas = data
+		case "hasProtectedAreasWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProtectedAreasWith"))
+			data, err := ec.unmarshalOProtectedAreaWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasProtectedAreasWith = data
 		}
 	}
 
@@ -79375,7 +80687,7 @@ func (ec *executionContext) unmarshalInputProtectedAreaPictureWhereInput(ctx con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "shootingDate", "shootingDateNEQ", "shootingDateIn", "shootingDateNotIn", "shootingDateGT", "shootingDateGTE", "shootingDateLT", "shootingDateLTE", "shootingDateIsNil", "shootingDateNotNil", "hasCollection", "hasCollectionWith", "hasProtectedArea", "hasProtectedAreaWith", "hasLocation", "hasLocationWith", "hasLicense", "hasLicenseWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -80300,6 +81612,303 @@ func (ec *executionContext) unmarshalInputProtectedAreaPictureWhereInput(ctx con
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "primaryImageURL":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURL"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURL = data
+		case "primaryImageURLNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLNEQ = data
+		case "primaryImageURLIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLIn = data
+		case "primaryImageURLNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLNotIn = data
+		case "primaryImageURLGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLGT = data
+		case "primaryImageURLGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLGTE = data
+		case "primaryImageURLLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLLT = data
+		case "primaryImageURLLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLLTE = data
+		case "primaryImageURLContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLContains = data
+		case "primaryImageURLHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLHasPrefix = data
+		case "primaryImageURLHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLHasSuffix = data
+		case "primaryImageURLIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLIsNil = data
+		case "primaryImageURLNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLNotNil = data
+		case "primaryImageURLEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLEqualFold = data
+		case "primaryImageURLContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURLContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURLContainsFold = data
+		case "shootingDate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shootingDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShootingDate = data
+		case "shootingDateNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shootingDateNEQ"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShootingDateNEQ = data
+		case "shootingDateIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shootingDateIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShootingDateIn = data
+		case "shootingDateNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shootingDateNotIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShootingDateNotIn = data
+		case "shootingDateGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shootingDateGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShootingDateGT = data
+		case "shootingDateGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shootingDateGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShootingDateGTE = data
+		case "shootingDateLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shootingDateLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShootingDateLT = data
+		case "shootingDateLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shootingDateLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShootingDateLTE = data
+		case "shootingDateIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shootingDateIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShootingDateIsNil = data
+		case "shootingDateNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shootingDateNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShootingDateNotNil = data
+		case "hasCollection":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCollection"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasCollection = data
+		case "hasCollectionWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCollectionWith"))
+			data, err := ec.unmarshalOCollectionWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐCollectionWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasCollectionWith = data
+		case "hasProtectedArea":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProtectedArea"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasProtectedArea = data
+		case "hasProtectedAreaWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProtectedAreaWith"))
+			data, err := ec.unmarshalOProtectedAreaWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasProtectedAreaWith = data
+		case "hasLocation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLocation"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasLocation = data
+		case "hasLocationWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLocationWith"))
+			data, err := ec.unmarshalOLocationWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLocationWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasLocationWith = data
+		case "hasLicense":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLicense"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasLicense = data
+		case "hasLicenseWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLicenseWith"))
+			data, err := ec.unmarshalOLicenseWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLicenseWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasLicenseWith = data
 		}
 	}
 
@@ -80313,7 +81922,7 @@ func (ec *executionContext) unmarshalInputProtectedAreaWhereInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "area", "areaNEQ", "areaIn", "areaNotIn", "areaGT", "areaGTE", "areaLT", "areaLTE", "areaContains", "areaHasPrefix", "areaHasSuffix", "areaIsNil", "areaNotNil", "areaEqualFold", "areaContainsFold", "establishmentDate", "establishmentDateNEQ", "establishmentDateIn", "establishmentDateNotIn", "establishmentDateGT", "establishmentDateGTE", "establishmentDateLT", "establishmentDateLTE", "establishmentDateIsNil", "establishmentDateNotNil", "hasProtectedAreaPictures", "hasProtectedAreaPicturesWith", "hasProtectedAreaCategory", "hasProtectedAreaCategoryWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -81238,6 +82847,267 @@ func (ec *executionContext) unmarshalInputProtectedAreaWhereInput(ctx context.Co
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "area":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("area"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Area = data
+		case "areaNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("areaNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AreaNEQ = data
+		case "areaIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("areaIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AreaIn = data
+		case "areaNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("areaNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AreaNotIn = data
+		case "areaGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("areaGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AreaGT = data
+		case "areaGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("areaGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AreaGTE = data
+		case "areaLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("areaLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AreaLT = data
+		case "areaLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("areaLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AreaLTE = data
+		case "areaContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("areaContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AreaContains = data
+		case "areaHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("areaHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AreaHasPrefix = data
+		case "areaHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("areaHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AreaHasSuffix = data
+		case "areaIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("areaIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AreaIsNil = data
+		case "areaNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("areaNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AreaNotNil = data
+		case "areaEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("areaEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AreaEqualFold = data
+		case "areaContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("areaContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AreaContainsFold = data
+		case "establishmentDate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("establishmentDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EstablishmentDate = data
+		case "establishmentDateNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("establishmentDateNEQ"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EstablishmentDateNEQ = data
+		case "establishmentDateIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("establishmentDateIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EstablishmentDateIn = data
+		case "establishmentDateNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("establishmentDateNotIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EstablishmentDateNotIn = data
+		case "establishmentDateGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("establishmentDateGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EstablishmentDateGT = data
+		case "establishmentDateGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("establishmentDateGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EstablishmentDateGTE = data
+		case "establishmentDateLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("establishmentDateLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EstablishmentDateLT = data
+		case "establishmentDateLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("establishmentDateLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EstablishmentDateLTE = data
+		case "establishmentDateIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("establishmentDateIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EstablishmentDateIsNil = data
+		case "establishmentDateNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("establishmentDateNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EstablishmentDateNotNil = data
+		case "hasProtectedAreaPictures":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProtectedAreaPictures"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasProtectedAreaPictures = data
+		case "hasProtectedAreaPicturesWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProtectedAreaPicturesWith"))
+			data, err := ec.unmarshalOProtectedAreaPictureWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPictureWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasProtectedAreaPicturesWith = data
+		case "hasProtectedAreaCategory":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProtectedAreaCategory"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasProtectedAreaCategory = data
+		case "hasProtectedAreaCategoryWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProtectedAreaCategoryWith"))
+			data, err := ec.unmarshalOProtectedAreaCategoryWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaCategoryWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasProtectedAreaCategoryWith = data
 		}
 	}
 
@@ -88961,7 +90831,7 @@ func (ec *executionContext) unmarshalInputUpdateCollectionInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addPersonIDs", "removePersonIDs", "clearPeople", "categoryID", "clearCategory"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addPersonIDs", "removePersonIDs", "clearPeople", "addProtectedAreaPictureIDs", "removeProtectedAreaPictureIDs", "clearProtectedAreaPictures", "categoryID", "clearCategory"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -89175,6 +91045,33 @@ func (ec *executionContext) unmarshalInputUpdateCollectionInput(ctx context.Cont
 				return it, err
 			}
 			it.ClearPeople = data
+		case "addProtectedAreaPictureIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addProtectedAreaPictureIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddProtectedAreaPictureIDs = data
+		case "removeProtectedAreaPictureIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeProtectedAreaPictureIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveProtectedAreaPictureIDs = data
+		case "clearProtectedAreaPictures":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearProtectedAreaPictures"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearProtectedAreaPictures = data
 		case "categoryID":
 			var err error
 
@@ -90089,7 +91986,7 @@ func (ec *executionContext) unmarshalInputUpdateLicenseInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addProtectedAreaPictureIDs", "removeProtectedAreaPictureIDs", "clearProtectedAreaPictures"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -90276,6 +92173,33 @@ func (ec *executionContext) unmarshalInputUpdateLicenseInput(ctx context.Context
 				return it, err
 			}
 			it.ClearBooks = data
+		case "addProtectedAreaPictureIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addProtectedAreaPictureIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddProtectedAreaPictureIDs = data
+		case "removeProtectedAreaPictureIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeProtectedAreaPictureIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveProtectedAreaPictureIDs = data
+		case "clearProtectedAreaPictures":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearProtectedAreaPictures"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearProtectedAreaPictures = data
 		}
 	}
 
@@ -90289,7 +92213,7 @@ func (ec *executionContext) unmarshalInputUpdateLocationInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "countryID", "clearCountry", "districtID", "clearDistrict", "settlementID", "clearSettlement", "regionID", "clearRegion"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addProtectedAreaPictureIDs", "removeProtectedAreaPictureIDs", "clearProtectedAreaPictures", "countryID", "clearCountry", "districtID", "clearDistrict", "settlementID", "clearSettlement", "regionID", "clearRegion"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -90476,6 +92400,33 @@ func (ec *executionContext) unmarshalInputUpdateLocationInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearBooks = data
+		case "addProtectedAreaPictureIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addProtectedAreaPictureIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddProtectedAreaPictureIDs = data
+		case "removeProtectedAreaPictureIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeProtectedAreaPictureIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveProtectedAreaPictureIDs = data
+		case "clearProtectedAreaPictures":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearProtectedAreaPictures"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearProtectedAreaPictures = data
 		case "countryID":
 			var err error
 
@@ -92993,7 +94944,7 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaCategoryInput(ctx c
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addProtectedAreaIDs", "removeProtectedAreaIDs", "clearProtectedAreas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -93126,6 +95077,33 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaCategoryInput(ctx c
 				return it, err
 			}
 			it.ClearExternalLinks = data
+		case "addProtectedAreaIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addProtectedAreaIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddProtectedAreaIDs = data
+		case "removeProtectedAreaIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeProtectedAreaIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveProtectedAreaIDs = data
+		case "clearProtectedAreas":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearProtectedAreas"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearProtectedAreas = data
 		}
 	}
 
@@ -93139,7 +95117,7 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "area", "clearArea", "establishmentDate", "clearEstablishmentDate", "addProtectedAreaPictureIDs", "removeProtectedAreaPictureIDs", "clearProtectedAreaPictures", "protectedAreaCategoryID", "clearProtectedAreaCategory"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -93272,6 +95250,87 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaInput(ctx context.C
 				return it, err
 			}
 			it.ClearExternalLinks = data
+		case "area":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("area"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Area = data
+		case "clearArea":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearArea"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearArea = data
+		case "establishmentDate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("establishmentDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EstablishmentDate = data
+		case "clearEstablishmentDate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearEstablishmentDate"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearEstablishmentDate = data
+		case "addProtectedAreaPictureIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addProtectedAreaPictureIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddProtectedAreaPictureIDs = data
+		case "removeProtectedAreaPictureIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeProtectedAreaPictureIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveProtectedAreaPictureIDs = data
+		case "clearProtectedAreaPictures":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearProtectedAreaPictures"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearProtectedAreaPictures = data
+		case "protectedAreaCategoryID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("protectedAreaCategoryID"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ProtectedAreaCategoryID = data
+		case "clearProtectedAreaCategory":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearProtectedAreaCategory"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearProtectedAreaCategory = data
 		}
 	}
 
@@ -93285,7 +95344,7 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaPictureInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "shootingDate", "clearShootingDate", "collectionID", "clearCollection", "protectedAreaID", "clearProtectedArea", "locationID", "clearLocation", "licenseID", "clearLicense"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -93418,6 +95477,141 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaPictureInput(ctx co
 				return it, err
 			}
 			it.ClearExternalLinks = data
+		case "primaryImageURL":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryImageURL"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryImageURL = data
+		case "clearPrimaryImageURL":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearPrimaryImageURL"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearPrimaryImageURL = data
+		case "additionalImagesUrls":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("additionalImagesUrls"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AdditionalImagesUrls = data
+		case "appendAdditionalImagesUrls":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendAdditionalImagesUrls"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AppendAdditionalImagesUrls = data
+		case "clearAdditionalImagesUrls":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAdditionalImagesUrls"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAdditionalImagesUrls = data
+		case "shootingDate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shootingDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShootingDate = data
+		case "clearShootingDate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearShootingDate"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearShootingDate = data
+		case "collectionID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("collectionID"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CollectionID = data
+		case "clearCollection":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearCollection"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearCollection = data
+		case "protectedAreaID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("protectedAreaID"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ProtectedAreaID = data
+		case "clearProtectedArea":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearProtectedArea"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearProtectedArea = data
+		case "locationID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("locationID"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LocationID = data
+		case "clearLocation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearLocation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearLocation = data
+		case "licenseID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("licenseID"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LicenseID = data
+		case "clearLicense":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearLicense"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearLicense = data
 		}
 	}
 
@@ -96695,6 +98889,39 @@ func (ec *executionContext) _Collection(ctx context.Context, sel ast.SelectionSe
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "protectedAreaPictures":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Collection_protectedAreaPictures(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "category":
 			field := field
 
@@ -98017,6 +100244,39 @@ func (ec *executionContext) _License(ctx context.Context, sel ast.SelectionSet, 
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "protectedAreaPictures":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._License_protectedAreaPictures(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -98208,6 +100468,39 @@ func (ec *executionContext) _Location(ctx context.Context, sel ast.SelectionSet,
 					}
 				}()
 				res = ec._Location_books(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "protectedAreaPictures":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Location_protectedAreaPictures(ctx, field, obj)
 				return res
 			}
 
@@ -101094,19 +103387,19 @@ func (ec *executionContext) _ProtectedArea(ctx context.Context, sel ast.Selectio
 		case "id":
 			out.Values[i] = ec._ProtectedArea_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "createdAt":
 			out.Values[i] = ec._ProtectedArea_createdAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "createdBy":
 			out.Values[i] = ec._ProtectedArea_createdBy(ctx, field, obj)
 		case "updatedAt":
 			out.Values[i] = ec._ProtectedArea_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "updatedBy":
 			out.Values[i] = ec._ProtectedArea_updatedBy(ctx, field, obj)
@@ -101118,6 +103411,76 @@ func (ec *executionContext) _ProtectedArea(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._ProtectedArea_description(ctx, field, obj)
 		case "externalLinks":
 			out.Values[i] = ec._ProtectedArea_externalLinks(ctx, field, obj)
+		case "area":
+			out.Values[i] = ec._ProtectedArea_area(ctx, field, obj)
+		case "establishmentDate":
+			out.Values[i] = ec._ProtectedArea_establishmentDate(ctx, field, obj)
+		case "protectedAreaPictures":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._ProtectedArea_protectedAreaPictures(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "protectedAreaCategory":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._ProtectedArea_protectedAreaCategory(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -101155,19 +103518,19 @@ func (ec *executionContext) _ProtectedAreaCategory(ctx context.Context, sel ast.
 		case "id":
 			out.Values[i] = ec._ProtectedAreaCategory_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "createdAt":
 			out.Values[i] = ec._ProtectedAreaCategory_createdAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "createdBy":
 			out.Values[i] = ec._ProtectedAreaCategory_createdBy(ctx, field, obj)
 		case "updatedAt":
 			out.Values[i] = ec._ProtectedAreaCategory_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "updatedBy":
 			out.Values[i] = ec._ProtectedAreaCategory_updatedBy(ctx, field, obj)
@@ -101179,6 +103542,39 @@ func (ec *executionContext) _ProtectedAreaCategory(ctx context.Context, sel ast.
 			out.Values[i] = ec._ProtectedAreaCategory_description(ctx, field, obj)
 		case "externalLinks":
 			out.Values[i] = ec._ProtectedAreaCategory_externalLinks(ctx, field, obj)
+		case "protectedAreas":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._ProtectedAreaCategory_protectedAreas(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -101390,19 +103786,19 @@ func (ec *executionContext) _ProtectedAreaPicture(ctx context.Context, sel ast.S
 		case "id":
 			out.Values[i] = ec._ProtectedAreaPicture_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "createdAt":
 			out.Values[i] = ec._ProtectedAreaPicture_createdAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "createdBy":
 			out.Values[i] = ec._ProtectedAreaPicture_createdBy(ctx, field, obj)
 		case "updatedAt":
 			out.Values[i] = ec._ProtectedAreaPicture_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "updatedBy":
 			out.Values[i] = ec._ProtectedAreaPicture_updatedBy(ctx, field, obj)
@@ -101414,6 +103810,144 @@ func (ec *executionContext) _ProtectedAreaPicture(ctx context.Context, sel ast.S
 			out.Values[i] = ec._ProtectedAreaPicture_description(ctx, field, obj)
 		case "externalLinks":
 			out.Values[i] = ec._ProtectedAreaPicture_externalLinks(ctx, field, obj)
+		case "primaryImageURL":
+			out.Values[i] = ec._ProtectedAreaPicture_primaryImageURL(ctx, field, obj)
+		case "additionalImagesUrls":
+			out.Values[i] = ec._ProtectedAreaPicture_additionalImagesUrls(ctx, field, obj)
+		case "shootingDate":
+			out.Values[i] = ec._ProtectedAreaPicture_shootingDate(ctx, field, obj)
+		case "collection":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._ProtectedAreaPicture_collection(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "protectedArea":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._ProtectedAreaPicture_protectedArea(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "location":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._ProtectedAreaPicture_location(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "license":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._ProtectedAreaPicture_license(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -105326,6 +107860,16 @@ func (ec *executionContext) unmarshalNProjectWhereInput2ᚖgithubᚗcomᚋdkrasn
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalNProtectedArea2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedArea(ctx context.Context, sel ast.SelectionSet, v *ent.ProtectedArea) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ProtectedArea(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNProtectedAreaCategoryConnection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaCategoryConnection(ctx context.Context, sel ast.SelectionSet, v ent.ProtectedAreaCategoryConnection) graphql.Marshaler {
 	return ec._ProtectedAreaCategoryConnection(ctx, sel, &v)
 }
@@ -105399,6 +107943,16 @@ func (ec *executionContext) marshalNProtectedAreaOrderField2ᚖgithubᚗcomᚋdk
 		return graphql.Null
 	}
 	return v
+}
+
+func (ec *executionContext) marshalNProtectedAreaPicture2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPicture(ctx context.Context, sel ast.SelectionSet, v *ent.ProtectedAreaPicture) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ProtectedAreaPicture(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNProtectedAreaPictureConnection2githubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPictureConnection(ctx context.Context, sel ast.SelectionSet, v ent.ProtectedAreaPictureConnection) graphql.Marshaler {
@@ -109567,6 +112121,53 @@ func (ec *executionContext) unmarshalOProjectWhereInput2ᚖgithubᚗcomᚋdkrasn
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalOProtectedArea2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.ProtectedArea) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNProtectedArea2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedArea(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
 func (ec *executionContext) marshalOProtectedArea2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedArea(ctx context.Context, sel ast.SelectionSet, v *ent.ProtectedArea) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -109743,6 +112344,53 @@ func (ec *executionContext) unmarshalOProtectedAreaOrder2ᚕᚖgithubᚗcomᚋdk
 		}
 	}
 	return res, nil
+}
+
+func (ec *executionContext) marshalOProtectedAreaPicture2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPictureᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.ProtectedAreaPicture) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNProtectedAreaPicture2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPicture(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) marshalOProtectedAreaPicture2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐProtectedAreaPicture(ctx context.Context, sel ast.SelectionSet, v *ent.ProtectedAreaPicture) graphql.Marshaler {

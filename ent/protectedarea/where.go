@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
 
@@ -87,6 +88,16 @@ func Abbreviation(v string) predicate.ProtectedArea {
 // Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
 func Description(v string) predicate.ProtectedArea {
 	return predicate.ProtectedArea(sql.FieldEQ(FieldDescription, v))
+}
+
+// Area applies equality check predicate on the "area" field. It's identical to AreaEQ.
+func Area(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldEQ(FieldArea, v))
+}
+
+// EstablishmentDate applies equality check predicate on the "establishment_date" field. It's identical to EstablishmentDateEQ.
+func EstablishmentDate(v time.Time) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldEQ(FieldEstablishmentDate, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -552,6 +563,177 @@ func ExternalLinksIsNil() predicate.ProtectedArea {
 // ExternalLinksNotNil applies the NotNil predicate on the "external_links" field.
 func ExternalLinksNotNil() predicate.ProtectedArea {
 	return predicate.ProtectedArea(sql.FieldNotNull(FieldExternalLinks))
+}
+
+// AreaEQ applies the EQ predicate on the "area" field.
+func AreaEQ(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldEQ(FieldArea, v))
+}
+
+// AreaNEQ applies the NEQ predicate on the "area" field.
+func AreaNEQ(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldNEQ(FieldArea, v))
+}
+
+// AreaIn applies the In predicate on the "area" field.
+func AreaIn(vs ...string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldIn(FieldArea, vs...))
+}
+
+// AreaNotIn applies the NotIn predicate on the "area" field.
+func AreaNotIn(vs ...string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldNotIn(FieldArea, vs...))
+}
+
+// AreaGT applies the GT predicate on the "area" field.
+func AreaGT(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldGT(FieldArea, v))
+}
+
+// AreaGTE applies the GTE predicate on the "area" field.
+func AreaGTE(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldGTE(FieldArea, v))
+}
+
+// AreaLT applies the LT predicate on the "area" field.
+func AreaLT(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldLT(FieldArea, v))
+}
+
+// AreaLTE applies the LTE predicate on the "area" field.
+func AreaLTE(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldLTE(FieldArea, v))
+}
+
+// AreaContains applies the Contains predicate on the "area" field.
+func AreaContains(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldContains(FieldArea, v))
+}
+
+// AreaHasPrefix applies the HasPrefix predicate on the "area" field.
+func AreaHasPrefix(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldHasPrefix(FieldArea, v))
+}
+
+// AreaHasSuffix applies the HasSuffix predicate on the "area" field.
+func AreaHasSuffix(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldHasSuffix(FieldArea, v))
+}
+
+// AreaIsNil applies the IsNil predicate on the "area" field.
+func AreaIsNil() predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldIsNull(FieldArea))
+}
+
+// AreaNotNil applies the NotNil predicate on the "area" field.
+func AreaNotNil() predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldNotNull(FieldArea))
+}
+
+// AreaEqualFold applies the EqualFold predicate on the "area" field.
+func AreaEqualFold(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldEqualFold(FieldArea, v))
+}
+
+// AreaContainsFold applies the ContainsFold predicate on the "area" field.
+func AreaContainsFold(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldContainsFold(FieldArea, v))
+}
+
+// EstablishmentDateEQ applies the EQ predicate on the "establishment_date" field.
+func EstablishmentDateEQ(v time.Time) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldEQ(FieldEstablishmentDate, v))
+}
+
+// EstablishmentDateNEQ applies the NEQ predicate on the "establishment_date" field.
+func EstablishmentDateNEQ(v time.Time) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldNEQ(FieldEstablishmentDate, v))
+}
+
+// EstablishmentDateIn applies the In predicate on the "establishment_date" field.
+func EstablishmentDateIn(vs ...time.Time) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldIn(FieldEstablishmentDate, vs...))
+}
+
+// EstablishmentDateNotIn applies the NotIn predicate on the "establishment_date" field.
+func EstablishmentDateNotIn(vs ...time.Time) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldNotIn(FieldEstablishmentDate, vs...))
+}
+
+// EstablishmentDateGT applies the GT predicate on the "establishment_date" field.
+func EstablishmentDateGT(v time.Time) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldGT(FieldEstablishmentDate, v))
+}
+
+// EstablishmentDateGTE applies the GTE predicate on the "establishment_date" field.
+func EstablishmentDateGTE(v time.Time) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldGTE(FieldEstablishmentDate, v))
+}
+
+// EstablishmentDateLT applies the LT predicate on the "establishment_date" field.
+func EstablishmentDateLT(v time.Time) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldLT(FieldEstablishmentDate, v))
+}
+
+// EstablishmentDateLTE applies the LTE predicate on the "establishment_date" field.
+func EstablishmentDateLTE(v time.Time) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldLTE(FieldEstablishmentDate, v))
+}
+
+// EstablishmentDateIsNil applies the IsNil predicate on the "establishment_date" field.
+func EstablishmentDateIsNil() predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldIsNull(FieldEstablishmentDate))
+}
+
+// EstablishmentDateNotNil applies the NotNil predicate on the "establishment_date" field.
+func EstablishmentDateNotNil() predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldNotNull(FieldEstablishmentDate))
+}
+
+// HasProtectedAreaPictures applies the HasEdge predicate on the "protected_area_pictures" edge.
+func HasProtectedAreaPictures() predicate.ProtectedArea {
+	return predicate.ProtectedArea(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ProtectedAreaPicturesTable, ProtectedAreaPicturesColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProtectedAreaPicturesWith applies the HasEdge predicate on the "protected_area_pictures" edge with a given conditions (other predicates).
+func HasProtectedAreaPicturesWith(preds ...predicate.ProtectedAreaPicture) predicate.ProtectedArea {
+	return predicate.ProtectedArea(func(s *sql.Selector) {
+		step := newProtectedAreaPicturesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasProtectedAreaCategory applies the HasEdge predicate on the "protected_area_category" edge.
+func HasProtectedAreaCategory() predicate.ProtectedArea {
+	return predicate.ProtectedArea(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, ProtectedAreaCategoryTable, ProtectedAreaCategoryColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProtectedAreaCategoryWith applies the HasEdge predicate on the "protected_area_category" edge with a given conditions (other predicates).
+func HasProtectedAreaCategoryWith(preds ...predicate.ProtectedAreaCategory) predicate.ProtectedArea {
+	return predicate.ProtectedArea(func(s *sql.Selector) {
+		step := newProtectedAreaCategoryStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

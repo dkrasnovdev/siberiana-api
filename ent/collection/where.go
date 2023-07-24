@@ -624,6 +624,29 @@ func HasPeopleWith(preds ...predicate.Person) predicate.Collection {
 	})
 }
 
+// HasProtectedAreaPictures applies the HasEdge predicate on the "protected_area_pictures" edge.
+func HasProtectedAreaPictures() predicate.Collection {
+	return predicate.Collection(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ProtectedAreaPicturesTable, ProtectedAreaPicturesColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProtectedAreaPicturesWith applies the HasEdge predicate on the "protected_area_pictures" edge with a given conditions (other predicates).
+func HasProtectedAreaPicturesWith(preds ...predicate.ProtectedAreaPicture) predicate.Collection {
+	return predicate.Collection(func(s *sql.Selector) {
+		step := newProtectedAreaPicturesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasCategory applies the HasEdge predicate on the "category" edge.
 func HasCategory() predicate.Collection {
 	return predicate.Collection(func(s *sql.Selector) {

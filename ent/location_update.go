@@ -18,6 +18,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
 	"github.com/dkrasnovdev/heritage-api/ent/settlement"
 )
@@ -189,6 +190,21 @@ func (lu *LocationUpdate) AddBooks(b ...*Book) *LocationUpdate {
 	return lu.AddBookIDs(ids...)
 }
 
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (lu *LocationUpdate) AddProtectedAreaPictureIDs(ids ...int) *LocationUpdate {
+	lu.mutation.AddProtectedAreaPictureIDs(ids...)
+	return lu
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (lu *LocationUpdate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *LocationUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return lu.AddProtectedAreaPictureIDs(ids...)
+}
+
 // SetCountryID sets the "country" edge to the Country entity by ID.
 func (lu *LocationUpdate) SetCountryID(id int) *LocationUpdate {
 	lu.mutation.SetCountryID(id)
@@ -310,6 +326,27 @@ func (lu *LocationUpdate) RemoveBooks(b ...*Book) *LocationUpdate {
 		ids[i] = b[i].ID
 	}
 	return lu.RemoveBookIDs(ids...)
+}
+
+// ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (lu *LocationUpdate) ClearProtectedAreaPictures() *LocationUpdate {
+	lu.mutation.ClearProtectedAreaPictures()
+	return lu
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to ProtectedAreaPicture entities by IDs.
+func (lu *LocationUpdate) RemoveProtectedAreaPictureIDs(ids ...int) *LocationUpdate {
+	lu.mutation.RemoveProtectedAreaPictureIDs(ids...)
+	return lu
+}
+
+// RemoveProtectedAreaPictures removes "protected_area_pictures" edges to ProtectedAreaPicture entities.
+func (lu *LocationUpdate) RemoveProtectedAreaPictures(p ...*ProtectedAreaPicture) *LocationUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return lu.RemoveProtectedAreaPictureIDs(ids...)
 }
 
 // ClearCountry clears the "country" edge to the Country entity.
@@ -514,6 +551,51 @@ func (lu *LocationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if lu.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   location.ProtectedAreaPicturesTable,
+			Columns: []string{location.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := lu.mutation.RemovedProtectedAreaPicturesIDs(); len(nodes) > 0 && !lu.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   location.ProtectedAreaPicturesTable,
+			Columns: []string{location.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := lu.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   location.ProtectedAreaPicturesTable,
+			Columns: []string{location.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -811,6 +893,21 @@ func (luo *LocationUpdateOne) AddBooks(b ...*Book) *LocationUpdateOne {
 	return luo.AddBookIDs(ids...)
 }
 
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (luo *LocationUpdateOne) AddProtectedAreaPictureIDs(ids ...int) *LocationUpdateOne {
+	luo.mutation.AddProtectedAreaPictureIDs(ids...)
+	return luo
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (luo *LocationUpdateOne) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *LocationUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return luo.AddProtectedAreaPictureIDs(ids...)
+}
+
 // SetCountryID sets the "country" edge to the Country entity by ID.
 func (luo *LocationUpdateOne) SetCountryID(id int) *LocationUpdateOne {
 	luo.mutation.SetCountryID(id)
@@ -932,6 +1029,27 @@ func (luo *LocationUpdateOne) RemoveBooks(b ...*Book) *LocationUpdateOne {
 		ids[i] = b[i].ID
 	}
 	return luo.RemoveBookIDs(ids...)
+}
+
+// ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (luo *LocationUpdateOne) ClearProtectedAreaPictures() *LocationUpdateOne {
+	luo.mutation.ClearProtectedAreaPictures()
+	return luo
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to ProtectedAreaPicture entities by IDs.
+func (luo *LocationUpdateOne) RemoveProtectedAreaPictureIDs(ids ...int) *LocationUpdateOne {
+	luo.mutation.RemoveProtectedAreaPictureIDs(ids...)
+	return luo
+}
+
+// RemoveProtectedAreaPictures removes "protected_area_pictures" edges to ProtectedAreaPicture entities.
+func (luo *LocationUpdateOne) RemoveProtectedAreaPictures(p ...*ProtectedAreaPicture) *LocationUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return luo.RemoveProtectedAreaPictureIDs(ids...)
 }
 
 // ClearCountry clears the "country" edge to the Country entity.
@@ -1166,6 +1284,51 @@ func (luo *LocationUpdateOne) sqlSave(ctx context.Context) (_node *Location, err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if luo.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   location.ProtectedAreaPicturesTable,
+			Columns: []string{location.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := luo.mutation.RemovedProtectedAreaPicturesIDs(); len(nodes) > 0 && !luo.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   location.ProtectedAreaPicturesTable,
+			Columns: []string{location.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := luo.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   location.ProtectedAreaPicturesTable,
+			Columns: []string{location.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

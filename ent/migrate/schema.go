@@ -687,12 +687,23 @@ var (
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "area", Type: field.TypeString, Nullable: true},
+		{Name: "establishment_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "protected_area_category_protected_areas", Type: field.TypeInt, Nullable: true},
 	}
 	// ProtectedAreasTable holds the schema information for the "protected_areas" table.
 	ProtectedAreasTable = &schema.Table{
 		Name:       "protected_areas",
 		Columns:    ProtectedAreasColumns,
 		PrimaryKey: []*schema.Column{ProtectedAreasColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "protected_areas_protected_area_categories_protected_areas",
+				Columns:    []*schema.Column{ProtectedAreasColumns[11]},
+				RefColumns: []*schema.Column{ProtectedAreaCategoriesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// ProtectedAreaCategoriesColumns holds the columns for the "protected_area_categories" table.
 	ProtectedAreaCategoriesColumns = []*schema.Column{
@@ -723,12 +734,45 @@ var (
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
+		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
+		{Name: "shooting_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "collection_protected_area_pictures", Type: field.TypeInt, Nullable: true},
+		{Name: "license_protected_area_pictures", Type: field.TypeInt, Nullable: true},
+		{Name: "location_protected_area_pictures", Type: field.TypeInt, Nullable: true},
+		{Name: "protected_area_protected_area_pictures", Type: field.TypeInt, Nullable: true},
 	}
 	// ProtectedAreaPicturesTable holds the schema information for the "protected_area_pictures" table.
 	ProtectedAreaPicturesTable = &schema.Table{
 		Name:       "protected_area_pictures",
 		Columns:    ProtectedAreaPicturesColumns,
 		PrimaryKey: []*schema.Column{ProtectedAreaPicturesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "protected_area_pictures_collections_protected_area_pictures",
+				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[12]},
+				RefColumns: []*schema.Column{CollectionsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "protected_area_pictures_licenses_protected_area_pictures",
+				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[13]},
+				RefColumns: []*schema.Column{LicensesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "protected_area_pictures_locations_protected_area_pictures",
+				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[14]},
+				RefColumns: []*schema.Column{LocationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "protected_area_pictures_protected_areas_protected_area_pictures",
+				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[15]},
+				RefColumns: []*schema.Column{ProtectedAreasColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// PublicationsColumns holds the columns for the "publications" table.
 	PublicationsColumns = []*schema.Column{
@@ -1283,6 +1327,11 @@ func init() {
 	PersonsTable.ForeignKeys[1].RefTable = HoldersTable
 	PersonsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	ProjectsTable.ForeignKeys[0].RefTable = ProjectTypesTable
+	ProtectedAreasTable.ForeignKeys[0].RefTable = ProtectedAreaCategoriesTable
+	ProtectedAreaPicturesTable.ForeignKeys[0].RefTable = CollectionsTable
+	ProtectedAreaPicturesTable.ForeignKeys[1].RefTable = LicensesTable
+	ProtectedAreaPicturesTable.ForeignKeys[2].RefTable = LocationsTable
+	ProtectedAreaPicturesTable.ForeignKeys[3].RefTable = ProtectedAreasTable
 	RegionsTable.ForeignKeys[0].RefTable = LocationsTable
 	SettlementsTable.ForeignKeys[0].RefTable = LocationsTable
 	BookGenreBooksTable.ForeignKeys[0].RefTable = BookGenresTable

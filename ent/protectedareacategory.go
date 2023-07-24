@@ -34,7 +34,32 @@ type ProtectedAreaCategory struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLinks holds the value of the "external_links" field.
 	ExternalLinks []string `json:"external_links,omitempty"`
-	selectValues  sql.SelectValues
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the ProtectedAreaCategoryQuery when eager-loading is set.
+	Edges        ProtectedAreaCategoryEdges `json:"edges"`
+	selectValues sql.SelectValues
+}
+
+// ProtectedAreaCategoryEdges holds the relations/edges for other nodes in the graph.
+type ProtectedAreaCategoryEdges struct {
+	// ProtectedAreas holds the value of the protected_areas edge.
+	ProtectedAreas []*ProtectedArea `json:"protected_areas,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+	// totalCount holds the count of the edges above.
+	totalCount [1]map[string]int
+
+	namedProtectedAreas map[string][]*ProtectedArea
+}
+
+// ProtectedAreasOrErr returns the ProtectedAreas value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProtectedAreaCategoryEdges) ProtectedAreasOrErr() ([]*ProtectedArea, error) {
+	if e.loadedTypes[0] {
+		return e.ProtectedAreas, nil
+	}
+	return nil, &NotLoadedError{edge: "protected_areas"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -134,6 +159,11 @@ func (pac *ProtectedAreaCategory) Value(name string) (ent.Value, error) {
 	return pac.selectValues.Get(name)
 }
 
+// QueryProtectedAreas queries the "protected_areas" edge of the ProtectedAreaCategory entity.
+func (pac *ProtectedAreaCategory) QueryProtectedAreas() *ProtectedAreaQuery {
+	return NewProtectedAreaCategoryClient(pac.config).QueryProtectedAreas(pac)
+}
+
 // Update returns a builder for updating this ProtectedAreaCategory.
 // Note that you need to call ProtectedAreaCategory.Unwrap() before calling this method if this ProtectedAreaCategory
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -182,6 +212,30 @@ func (pac *ProtectedAreaCategory) String() string {
 	builder.WriteString(fmt.Sprintf("%v", pac.ExternalLinks))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedProtectedAreas returns the ProtectedAreas named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pac *ProtectedAreaCategory) NamedProtectedAreas(name string) ([]*ProtectedArea, error) {
+	if pac.Edges.namedProtectedAreas == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pac.Edges.namedProtectedAreas[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pac *ProtectedAreaCategory) appendNamedProtectedAreas(name string, edges ...*ProtectedArea) {
+	if pac.Edges.namedProtectedAreas == nil {
+		pac.Edges.namedProtectedAreas = make(map[string][]*ProtectedArea)
+	}
+	if len(edges) == 0 {
+		pac.Edges.namedProtectedAreas[name] = []*ProtectedArea{}
+	} else {
+		pac.Edges.namedProtectedAreas[name] = append(pac.Edges.namedProtectedAreas[name], edges...)
+	}
 }
 
 // ProtectedAreaCategories is a parsable slice of ProtectedAreaCategory.

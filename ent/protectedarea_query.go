@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -13,17 +14,23 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 )
 
 // ProtectedAreaQuery is the builder for querying ProtectedArea entities.
 type ProtectedAreaQuery struct {
 	config
-	ctx        *QueryContext
-	order      []protectedarea.OrderOption
-	inters     []Interceptor
-	predicates []predicate.ProtectedArea
-	modifiers  []func(*sql.Selector)
-	loadTotal  []func(context.Context, []*ProtectedArea) error
+	ctx                            *QueryContext
+	order                          []protectedarea.OrderOption
+	inters                         []Interceptor
+	predicates                     []predicate.ProtectedArea
+	withProtectedAreaPictures      *ProtectedAreaPictureQuery
+	withProtectedAreaCategory      *ProtectedAreaCategoryQuery
+	withFKs                        bool
+	modifiers                      []func(*sql.Selector)
+	loadTotal                      []func(context.Context, []*ProtectedArea) error
+	withNamedProtectedAreaPictures map[string]*ProtectedAreaPictureQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -58,6 +65,50 @@ func (paq *ProtectedAreaQuery) Unique(unique bool) *ProtectedAreaQuery {
 func (paq *ProtectedAreaQuery) Order(o ...protectedarea.OrderOption) *ProtectedAreaQuery {
 	paq.order = append(paq.order, o...)
 	return paq
+}
+
+// QueryProtectedAreaPictures chains the current query on the "protected_area_pictures" edge.
+func (paq *ProtectedAreaQuery) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery {
+	query := (&ProtectedAreaPictureClient{config: paq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := paq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := paq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedarea.Table, protectedarea.FieldID, selector),
+			sqlgraph.To(protectedareapicture.Table, protectedareapicture.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, protectedarea.ProtectedAreaPicturesTable, protectedarea.ProtectedAreaPicturesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(paq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProtectedAreaCategory chains the current query on the "protected_area_category" edge.
+func (paq *ProtectedAreaQuery) QueryProtectedAreaCategory() *ProtectedAreaCategoryQuery {
+	query := (&ProtectedAreaCategoryClient{config: paq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := paq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := paq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedarea.Table, protectedarea.FieldID, selector),
+			sqlgraph.To(protectedareacategory.Table, protectedareacategory.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, protectedarea.ProtectedAreaCategoryTable, protectedarea.ProtectedAreaCategoryColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(paq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first ProtectedArea entity from the query.
@@ -247,15 +298,39 @@ func (paq *ProtectedAreaQuery) Clone() *ProtectedAreaQuery {
 		return nil
 	}
 	return &ProtectedAreaQuery{
-		config:     paq.config,
-		ctx:        paq.ctx.Clone(),
-		order:      append([]protectedarea.OrderOption{}, paq.order...),
-		inters:     append([]Interceptor{}, paq.inters...),
-		predicates: append([]predicate.ProtectedArea{}, paq.predicates...),
+		config:                    paq.config,
+		ctx:                       paq.ctx.Clone(),
+		order:                     append([]protectedarea.OrderOption{}, paq.order...),
+		inters:                    append([]Interceptor{}, paq.inters...),
+		predicates:                append([]predicate.ProtectedArea{}, paq.predicates...),
+		withProtectedAreaPictures: paq.withProtectedAreaPictures.Clone(),
+		withProtectedAreaCategory: paq.withProtectedAreaCategory.Clone(),
 		// clone intermediate query.
 		sql:  paq.sql.Clone(),
 		path: paq.path,
 	}
+}
+
+// WithProtectedAreaPictures tells the query-builder to eager-load the nodes that are connected to
+// the "protected_area_pictures" edge. The optional arguments are used to configure the query builder of the edge.
+func (paq *ProtectedAreaQuery) WithProtectedAreaPictures(opts ...func(*ProtectedAreaPictureQuery)) *ProtectedAreaQuery {
+	query := (&ProtectedAreaPictureClient{config: paq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	paq.withProtectedAreaPictures = query
+	return paq
+}
+
+// WithProtectedAreaCategory tells the query-builder to eager-load the nodes that are connected to
+// the "protected_area_category" edge. The optional arguments are used to configure the query builder of the edge.
+func (paq *ProtectedAreaQuery) WithProtectedAreaCategory(opts ...func(*ProtectedAreaCategoryQuery)) *ProtectedAreaQuery {
+	query := (&ProtectedAreaCategoryClient{config: paq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	paq.withProtectedAreaCategory = query
+	return paq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -340,15 +415,27 @@ func (paq *ProtectedAreaQuery) prepareQuery(ctx context.Context) error {
 
 func (paq *ProtectedAreaQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ProtectedArea, error) {
 	var (
-		nodes = []*ProtectedArea{}
-		_spec = paq.querySpec()
+		nodes       = []*ProtectedArea{}
+		withFKs     = paq.withFKs
+		_spec       = paq.querySpec()
+		loadedTypes = [2]bool{
+			paq.withProtectedAreaPictures != nil,
+			paq.withProtectedAreaCategory != nil,
+		}
 	)
+	if paq.withProtectedAreaCategory != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, protectedarea.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ProtectedArea).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &ProtectedArea{config: paq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(paq.modifiers) > 0 {
@@ -363,12 +450,98 @@ func (paq *ProtectedAreaQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := paq.withProtectedAreaPictures; query != nil {
+		if err := paq.loadProtectedAreaPictures(ctx, query, nodes,
+			func(n *ProtectedArea) { n.Edges.ProtectedAreaPictures = []*ProtectedAreaPicture{} },
+			func(n *ProtectedArea, e *ProtectedAreaPicture) {
+				n.Edges.ProtectedAreaPictures = append(n.Edges.ProtectedAreaPictures, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := paq.withProtectedAreaCategory; query != nil {
+		if err := paq.loadProtectedAreaCategory(ctx, query, nodes, nil,
+			func(n *ProtectedArea, e *ProtectedAreaCategory) { n.Edges.ProtectedAreaCategory = e }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range paq.withNamedProtectedAreaPictures {
+		if err := paq.loadProtectedAreaPictures(ctx, query, nodes,
+			func(n *ProtectedArea) { n.appendNamedProtectedAreaPictures(name) },
+			func(n *ProtectedArea, e *ProtectedAreaPicture) { n.appendNamedProtectedAreaPictures(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range paq.loadTotal {
 		if err := paq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (paq *ProtectedAreaQuery) loadProtectedAreaPictures(ctx context.Context, query *ProtectedAreaPictureQuery, nodes []*ProtectedArea, init func(*ProtectedArea), assign func(*ProtectedArea, *ProtectedAreaPicture)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*ProtectedArea)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.ProtectedAreaPicture(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(protectedarea.ProtectedAreaPicturesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.protected_area_protected_area_pictures
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "protected_area_protected_area_pictures" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "protected_area_protected_area_pictures" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (paq *ProtectedAreaQuery) loadProtectedAreaCategory(ctx context.Context, query *ProtectedAreaCategoryQuery, nodes []*ProtectedArea, init func(*ProtectedArea), assign func(*ProtectedArea, *ProtectedAreaCategory)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*ProtectedArea)
+	for i := range nodes {
+		if nodes[i].protected_area_category_protected_areas == nil {
+			continue
+		}
+		fk := *nodes[i].protected_area_category_protected_areas
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(protectedareacategory.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "protected_area_category_protected_areas" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (paq *ProtectedAreaQuery) sqlCount(ctx context.Context) (int, error) {
@@ -453,6 +626,20 @@ func (paq *ProtectedAreaQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedProtectedAreaPictures tells the query-builder to eager-load the nodes that are connected to the "protected_area_pictures"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (paq *ProtectedAreaQuery) WithNamedProtectedAreaPictures(name string, opts ...func(*ProtectedAreaPictureQuery)) *ProtectedAreaQuery {
+	query := (&ProtectedAreaPictureClient{config: paq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if paq.withNamedProtectedAreaPictures == nil {
+		paq.withNamedProtectedAreaPictures = make(map[string]*ProtectedAreaPictureQuery)
+	}
+	paq.withNamedProtectedAreaPictures[name] = query
+	return paq
 }
 
 // ProtectedAreaGroupBy is the group-by builder for ProtectedArea entities.

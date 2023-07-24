@@ -1951,6 +1951,22 @@ func (c *CollectionClient) QueryPeople(co *Collection) *PersonQuery {
 	return query
 }
 
+// QueryProtectedAreaPictures queries the protected_area_pictures edge of a Collection.
+func (c *CollectionClient) QueryProtectedAreaPictures(co *Collection) *ProtectedAreaPictureQuery {
+	query := (&ProtectedAreaPictureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(collection.Table, collection.FieldID, id),
+			sqlgraph.To(protectedareapicture.Table, protectedareapicture.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, collection.ProtectedAreaPicturesTable, collection.ProtectedAreaPicturesColumn),
+		)
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryCategory queries the category edge of a Collection.
 func (c *CollectionClient) QueryCategory(co *Collection) *CategoryQuery {
 	query := (&CategoryClient{config: c.config}).Query()
@@ -2975,6 +2991,22 @@ func (c *LicenseClient) QueryBooks(l *License) *BookQuery {
 	return query
 }
 
+// QueryProtectedAreaPictures queries the protected_area_pictures edge of a License.
+func (c *LicenseClient) QueryProtectedAreaPictures(l *License) *ProtectedAreaPictureQuery {
+	query := (&ProtectedAreaPictureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := l.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(license.Table, license.FieldID, id),
+			sqlgraph.To(protectedareapicture.Table, protectedareapicture.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, license.ProtectedAreaPicturesTable, license.ProtectedAreaPicturesColumn),
+		)
+		fromV = sqlgraph.Neighbors(l.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *LicenseClient) Hooks() []Hook {
 	hooks := c.hooks.License
@@ -3119,6 +3151,22 @@ func (c *LocationClient) QueryBooks(l *Location) *BookQuery {
 			sqlgraph.From(location.Table, location.FieldID, id),
 			sqlgraph.To(book.Table, book.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, location.BooksTable, location.BooksColumn),
+		)
+		fromV = sqlgraph.Neighbors(l.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProtectedAreaPictures queries the protected_area_pictures edge of a Location.
+func (c *LocationClient) QueryProtectedAreaPictures(l *Location) *ProtectedAreaPictureQuery {
+	query := (&ProtectedAreaPictureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := l.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(location.Table, location.FieldID, id),
+			sqlgraph.To(protectedareapicture.Table, protectedareapicture.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, location.ProtectedAreaPicturesTable, location.ProtectedAreaPicturesColumn),
 		)
 		fromV = sqlgraph.Neighbors(l.driver.Dialect(), step)
 		return fromV, nil
@@ -4851,6 +4899,38 @@ func (c *ProtectedAreaClient) GetX(ctx context.Context, id int) *ProtectedArea {
 	return obj
 }
 
+// QueryProtectedAreaPictures queries the protected_area_pictures edge of a ProtectedArea.
+func (c *ProtectedAreaClient) QueryProtectedAreaPictures(pa *ProtectedArea) *ProtectedAreaPictureQuery {
+	query := (&ProtectedAreaPictureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pa.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedarea.Table, protectedarea.FieldID, id),
+			sqlgraph.To(protectedareapicture.Table, protectedareapicture.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, protectedarea.ProtectedAreaPicturesTable, protectedarea.ProtectedAreaPicturesColumn),
+		)
+		fromV = sqlgraph.Neighbors(pa.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProtectedAreaCategory queries the protected_area_category edge of a ProtectedArea.
+func (c *ProtectedAreaClient) QueryProtectedAreaCategory(pa *ProtectedArea) *ProtectedAreaCategoryQuery {
+	query := (&ProtectedAreaCategoryClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pa.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedarea.Table, protectedarea.FieldID, id),
+			sqlgraph.To(protectedareacategory.Table, protectedareacategory.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, protectedarea.ProtectedAreaCategoryTable, protectedarea.ProtectedAreaCategoryColumn),
+		)
+		fromV = sqlgraph.Neighbors(pa.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ProtectedAreaClient) Hooks() []Hook {
 	hooks := c.hooks.ProtectedArea
@@ -4970,6 +5050,22 @@ func (c *ProtectedAreaCategoryClient) GetX(ctx context.Context, id int) *Protect
 	return obj
 }
 
+// QueryProtectedAreas queries the protected_areas edge of a ProtectedAreaCategory.
+func (c *ProtectedAreaCategoryClient) QueryProtectedAreas(pac *ProtectedAreaCategory) *ProtectedAreaQuery {
+	query := (&ProtectedAreaClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pac.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedareacategory.Table, protectedareacategory.FieldID, id),
+			sqlgraph.To(protectedarea.Table, protectedarea.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, protectedareacategory.ProtectedAreasTable, protectedareacategory.ProtectedAreasColumn),
+		)
+		fromV = sqlgraph.Neighbors(pac.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ProtectedAreaCategoryClient) Hooks() []Hook {
 	hooks := c.hooks.ProtectedAreaCategory
@@ -5087,6 +5183,70 @@ func (c *ProtectedAreaPictureClient) GetX(ctx context.Context, id int) *Protecte
 		panic(err)
 	}
 	return obj
+}
+
+// QueryCollection queries the collection edge of a ProtectedAreaPicture.
+func (c *ProtectedAreaPictureClient) QueryCollection(pap *ProtectedAreaPicture) *CollectionQuery {
+	query := (&CollectionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pap.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedareapicture.Table, protectedareapicture.FieldID, id),
+			sqlgraph.To(collection.Table, collection.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, protectedareapicture.CollectionTable, protectedareapicture.CollectionColumn),
+		)
+		fromV = sqlgraph.Neighbors(pap.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProtectedArea queries the protected_area edge of a ProtectedAreaPicture.
+func (c *ProtectedAreaPictureClient) QueryProtectedArea(pap *ProtectedAreaPicture) *ProtectedAreaQuery {
+	query := (&ProtectedAreaClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pap.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedareapicture.Table, protectedareapicture.FieldID, id),
+			sqlgraph.To(protectedarea.Table, protectedarea.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, protectedareapicture.ProtectedAreaTable, protectedareapicture.ProtectedAreaColumn),
+		)
+		fromV = sqlgraph.Neighbors(pap.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryLocation queries the location edge of a ProtectedAreaPicture.
+func (c *ProtectedAreaPictureClient) QueryLocation(pap *ProtectedAreaPicture) *LocationQuery {
+	query := (&LocationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pap.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedareapicture.Table, protectedareapicture.FieldID, id),
+			sqlgraph.To(location.Table, location.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, protectedareapicture.LocationTable, protectedareapicture.LocationColumn),
+		)
+		fromV = sqlgraph.Neighbors(pap.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryLicense queries the license edge of a ProtectedAreaPicture.
+func (c *ProtectedAreaPictureClient) QueryLicense(pap *ProtectedAreaPicture) *LicenseQuery {
+	query := (&LicenseClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pap.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedareapicture.Table, protectedareapicture.FieldID, id),
+			sqlgraph.To(license.Table, license.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, protectedareapicture.LicenseTable, protectedareapicture.LicenseColumn),
+		)
+		fromV = sqlgraph.Neighbors(pap.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.

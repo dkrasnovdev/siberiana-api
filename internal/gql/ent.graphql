@@ -1373,6 +1373,7 @@ type Collection implements Node {
   artifacts: [Artifact!]
   books: [Book!]
   people: [Person!]
+  protectedAreaPictures: [ProtectedAreaPicture!]
   category: Category
 }
 """A connection to a list of items."""
@@ -1527,6 +1528,9 @@ input CollectionWhereInput {
   """people edge predicates"""
   hasPeople: Boolean
   hasPeopleWith: [PersonWhereInput!]
+  """protected_area_pictures edge predicates"""
+  hasProtectedAreaPictures: Boolean
+  hasProtectedAreaPicturesWith: [ProtectedAreaPictureWhereInput!]
   """category edge predicates"""
   hasCategory: Boolean
   hasCategoryWith: [CategoryWhereInput!]
@@ -1828,6 +1832,7 @@ input CreateCollectionInput {
   artifactIDs: [ID!]
   bookIDs: [ID!]
   personIDs: [ID!]
+  protectedAreaPictureIDs: [ID!]
   categoryID: ID
 }
 """
@@ -1922,6 +1927,7 @@ input CreateLicenseInput {
   externalLinks: [String!]
   artifactIDs: [ID!]
   bookIDs: [ID!]
+  protectedAreaPictureIDs: [ID!]
 }
 """
 CreateLocationInput is used for create Location object.
@@ -1938,6 +1944,7 @@ input CreateLocationInput {
   externalLinks: [String!]
   artifactIDs: [ID!]
   bookIDs: [ID!]
+  protectedAreaPictureIDs: [ID!]
   countryID: ID
   districtID: ID
   settlementID: ID
@@ -2139,6 +2146,7 @@ input CreateProtectedAreaCategoryInput {
   abbreviation: String
   description: String
   externalLinks: [String!]
+  protectedAreaIDs: [ID!]
 }
 """
 CreateProtectedAreaInput is used for create ProtectedArea object.
@@ -2153,6 +2161,10 @@ input CreateProtectedAreaInput {
   abbreviation: String
   description: String
   externalLinks: [String!]
+  area: String
+  establishmentDate: Time
+  protectedAreaPictureIDs: [ID!]
+  protectedAreaCategoryID: ID
 }
 """
 CreateProtectedAreaPictureInput is used for create ProtectedAreaPicture object.
@@ -2167,6 +2179,13 @@ input CreateProtectedAreaPictureInput {
   abbreviation: String
   description: String
   externalLinks: [String!]
+  primaryImageURL: String
+  additionalImagesUrls: [String!]
+  shootingDate: Time
+  collectionID: ID
+  protectedAreaID: ID
+  locationID: ID
+  licenseID: ID
 }
 """
 CreatePublicationInput is used for create Publication object.
@@ -2920,6 +2939,7 @@ type License implements Node {
   externalLinks: [String!]
   artifacts: [Artifact!]
   books: [Book!]
+  protectedAreaPictures: [ProtectedAreaPicture!]
 }
 """A connection to a list of items."""
 type LicenseConnection {
@@ -3070,6 +3090,9 @@ input LicenseWhereInput {
   """books edge predicates"""
   hasBooks: Boolean
   hasBooksWith: [BookWhereInput!]
+  """protected_area_pictures edge predicates"""
+  hasProtectedAreaPictures: Boolean
+  hasProtectedAreaPicturesWith: [ProtectedAreaPictureWhereInput!]
 }
 type Location implements Node {
   id: ID!
@@ -3083,6 +3106,7 @@ type Location implements Node {
   externalLinks: [String!]
   artifacts: [Artifact!]
   books: [Book!]
+  protectedAreaPictures: [ProtectedAreaPicture!]
   country: Country
   district: District
   settlement: Settlement
@@ -3237,6 +3261,9 @@ input LocationWhereInput {
   """books edge predicates"""
   hasBooks: Boolean
   hasBooksWith: [BookWhereInput!]
+  """protected_area_pictures edge predicates"""
+  hasProtectedAreaPictures: Boolean
+  hasProtectedAreaPicturesWith: [ProtectedAreaPictureWhereInput!]
   """country edge predicates"""
   hasCountry: Boolean
   hasCountryWith: [CountryWhereInput!]
@@ -5135,6 +5162,10 @@ type ProtectedArea implements Node {
   abbreviation: String
   description: String
   externalLinks: [String!]
+  area: String
+  establishmentDate: Time
+  protectedAreaPictures: [ProtectedAreaPicture!]
+  protectedAreaCategory: ProtectedAreaCategory
 }
 type ProtectedAreaCategory implements Node {
   id: ID!
@@ -5146,6 +5177,7 @@ type ProtectedAreaCategory implements Node {
   abbreviation: String
   description: String
   externalLinks: [String!]
+  protectedAreas: [ProtectedArea!]
 }
 """A connection to a list of items."""
 type ProtectedAreaCategoryConnection {
@@ -5290,6 +5322,9 @@ input ProtectedAreaCategoryWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """protected_areas edge predicates"""
+  hasProtectedAreas: Boolean
+  hasProtectedAreasWith: [ProtectedAreaWhereInput!]
 }
 """A connection to a list of items."""
 type ProtectedAreaConnection {
@@ -5329,6 +5364,13 @@ type ProtectedAreaPicture implements Node {
   abbreviation: String
   description: String
   externalLinks: [String!]
+  primaryImageURL: String
+  additionalImagesUrls: [String!]
+  shootingDate: Time
+  collection: Collection
+  protectedArea: ProtectedArea
+  location: Location
+  license: License
 }
 """A connection to a list of items."""
 type ProtectedAreaPictureConnection {
@@ -5473,6 +5515,45 @@ input ProtectedAreaPictureWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """primary_image_url field predicates"""
+  primaryImageURL: String
+  primaryImageURLNEQ: String
+  primaryImageURLIn: [String!]
+  primaryImageURLNotIn: [String!]
+  primaryImageURLGT: String
+  primaryImageURLGTE: String
+  primaryImageURLLT: String
+  primaryImageURLLTE: String
+  primaryImageURLContains: String
+  primaryImageURLHasPrefix: String
+  primaryImageURLHasSuffix: String
+  primaryImageURLIsNil: Boolean
+  primaryImageURLNotNil: Boolean
+  primaryImageURLEqualFold: String
+  primaryImageURLContainsFold: String
+  """shooting_date field predicates"""
+  shootingDate: Time
+  shootingDateNEQ: Time
+  shootingDateIn: [Time!]
+  shootingDateNotIn: [Time!]
+  shootingDateGT: Time
+  shootingDateGTE: Time
+  shootingDateLT: Time
+  shootingDateLTE: Time
+  shootingDateIsNil: Boolean
+  shootingDateNotNil: Boolean
+  """collection edge predicates"""
+  hasCollection: Boolean
+  hasCollectionWith: [CollectionWhereInput!]
+  """protected_area edge predicates"""
+  hasProtectedArea: Boolean
+  hasProtectedAreaWith: [ProtectedAreaWhereInput!]
+  """location edge predicates"""
+  hasLocation: Boolean
+  hasLocationWith: [LocationWhereInput!]
+  """license edge predicates"""
+  hasLicense: Boolean
+  hasLicenseWith: [LicenseWhereInput!]
 }
 """
 ProtectedAreaWhereInput is used for filtering ProtectedArea objects.
@@ -5589,6 +5670,39 @@ input ProtectedAreaWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """area field predicates"""
+  area: String
+  areaNEQ: String
+  areaIn: [String!]
+  areaNotIn: [String!]
+  areaGT: String
+  areaGTE: String
+  areaLT: String
+  areaLTE: String
+  areaContains: String
+  areaHasPrefix: String
+  areaHasSuffix: String
+  areaIsNil: Boolean
+  areaNotNil: Boolean
+  areaEqualFold: String
+  areaContainsFold: String
+  """establishment_date field predicates"""
+  establishmentDate: Time
+  establishmentDateNEQ: Time
+  establishmentDateIn: [Time!]
+  establishmentDateNotIn: [Time!]
+  establishmentDateGT: Time
+  establishmentDateGTE: Time
+  establishmentDateLT: Time
+  establishmentDateLTE: Time
+  establishmentDateIsNil: Boolean
+  establishmentDateNotNil: Boolean
+  """protected_area_pictures edge predicates"""
+  hasProtectedAreaPictures: Boolean
+  hasProtectedAreaPicturesWith: [ProtectedAreaPictureWhereInput!]
+  """protected_area_category edge predicates"""
+  hasProtectedAreaCategory: Boolean
+  hasProtectedAreaCategoryWith: [ProtectedAreaCategoryWhereInput!]
 }
 type Publication implements Node {
   id: ID!
@@ -7450,6 +7564,9 @@ input UpdateCollectionInput {
   addPersonIDs: [ID!]
   removePersonIDs: [ID!]
   clearPeople: Boolean
+  addProtectedAreaPictureIDs: [ID!]
+  removeProtectedAreaPictureIDs: [ID!]
+  clearProtectedAreaPictures: Boolean
   categoryID: ID
   clearCategory: Boolean
 }
@@ -7595,6 +7712,9 @@ input UpdateLicenseInput {
   addBookIDs: [ID!]
   removeBookIDs: [ID!]
   clearBooks: Boolean
+  addProtectedAreaPictureIDs: [ID!]
+  removeProtectedAreaPictureIDs: [ID!]
+  clearProtectedAreaPictures: Boolean
 }
 """
 UpdateLocationInput is used for update Location object.
@@ -7621,6 +7741,9 @@ input UpdateLocationInput {
   addBookIDs: [ID!]
   removeBookIDs: [ID!]
   clearBooks: Boolean
+  addProtectedAreaPictureIDs: [ID!]
+  removeProtectedAreaPictureIDs: [ID!]
+  clearProtectedAreaPictures: Boolean
   countryID: ID
   clearCountry: Boolean
   districtID: ID
@@ -7957,6 +8080,9 @@ input UpdateProtectedAreaCategoryInput {
   externalLinks: [String!]
   appendExternalLinks: [String!]
   clearExternalLinks: Boolean
+  addProtectedAreaIDs: [ID!]
+  removeProtectedAreaIDs: [ID!]
+  clearProtectedAreas: Boolean
 }
 """
 UpdateProtectedAreaInput is used for update ProtectedArea object.
@@ -7977,6 +8103,15 @@ input UpdateProtectedAreaInput {
   externalLinks: [String!]
   appendExternalLinks: [String!]
   clearExternalLinks: Boolean
+  area: String
+  clearArea: Boolean
+  establishmentDate: Time
+  clearEstablishmentDate: Boolean
+  addProtectedAreaPictureIDs: [ID!]
+  removeProtectedAreaPictureIDs: [ID!]
+  clearProtectedAreaPictures: Boolean
+  protectedAreaCategoryID: ID
+  clearProtectedAreaCategory: Boolean
 }
 """
 UpdateProtectedAreaPictureInput is used for update ProtectedAreaPicture object.
@@ -7997,6 +8132,21 @@ input UpdateProtectedAreaPictureInput {
   externalLinks: [String!]
   appendExternalLinks: [String!]
   clearExternalLinks: Boolean
+  primaryImageURL: String
+  clearPrimaryImageURL: Boolean
+  additionalImagesUrls: [String!]
+  appendAdditionalImagesUrls: [String!]
+  clearAdditionalImagesUrls: Boolean
+  shootingDate: Time
+  clearShootingDate: Boolean
+  collectionID: ID
+  clearCollection: Boolean
+  protectedAreaID: ID
+  clearProtectedArea: Boolean
+  locationID: ID
+  clearLocation: Boolean
+  licenseID: ID
+  clearLicense: Boolean
 }
 """
 UpdatePublicationInput is used for update Publication object.

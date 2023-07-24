@@ -35,6 +35,8 @@ const (
 	EdgeArtifacts = "artifacts"
 	// EdgeBooks holds the string denoting the books edge name in mutations.
 	EdgeBooks = "books"
+	// EdgeProtectedAreaPictures holds the string denoting the protected_area_pictures edge name in mutations.
+	EdgeProtectedAreaPictures = "protected_area_pictures"
 	// EdgeCountry holds the string denoting the country edge name in mutations.
 	EdgeCountry = "country"
 	// EdgeDistrict holds the string denoting the district edge name in mutations.
@@ -59,6 +61,13 @@ const (
 	BooksInverseTable = "books"
 	// BooksColumn is the table column denoting the books relation/edge.
 	BooksColumn = "location_books"
+	// ProtectedAreaPicturesTable is the table that holds the protected_area_pictures relation/edge.
+	ProtectedAreaPicturesTable = "protected_area_pictures"
+	// ProtectedAreaPicturesInverseTable is the table name for the ProtectedAreaPicture entity.
+	// It exists in this package in order to avoid circular dependency with the "protectedareapicture" package.
+	ProtectedAreaPicturesInverseTable = "protected_area_pictures"
+	// ProtectedAreaPicturesColumn is the table column denoting the protected_area_pictures relation/edge.
+	ProtectedAreaPicturesColumn = "location_protected_area_pictures"
 	// CountryTable is the table that holds the country relation/edge.
 	CountryTable = "countries"
 	// CountryInverseTable is the table name for the Country entity.
@@ -199,6 +208,20 @@ func ByBooks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByProtectedAreaPicturesCount orders the results by protected_area_pictures count.
+func ByProtectedAreaPicturesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProtectedAreaPicturesStep(), opts...)
+	}
+}
+
+// ByProtectedAreaPictures orders the results by protected_area_pictures terms.
+func ByProtectedAreaPictures(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProtectedAreaPicturesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByCountryField orders the results by country field.
 func ByCountryField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -238,6 +261,13 @@ func newBooksStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(BooksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, BooksTable, BooksColumn),
+	)
+}
+func newProtectedAreaPicturesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProtectedAreaPicturesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ProtectedAreaPicturesTable, ProtectedAreaPicturesColumn),
 	)
 }
 func newCountryStep() *sqlgraph.Step {

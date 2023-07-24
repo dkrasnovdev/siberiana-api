@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -30,8 +31,50 @@ const (
 	FieldDescription = "description"
 	// FieldExternalLinks holds the string denoting the external_links field in the database.
 	FieldExternalLinks = "external_links"
+	// FieldPrimaryImageURL holds the string denoting the primary_image_url field in the database.
+	FieldPrimaryImageURL = "primary_image_url"
+	// FieldAdditionalImagesUrls holds the string denoting the additional_images_urls field in the database.
+	FieldAdditionalImagesUrls = "additional_images_urls"
+	// FieldShootingDate holds the string denoting the shooting_date field in the database.
+	FieldShootingDate = "shooting_date"
+	// EdgeCollection holds the string denoting the collection edge name in mutations.
+	EdgeCollection = "collection"
+	// EdgeProtectedArea holds the string denoting the protected_area edge name in mutations.
+	EdgeProtectedArea = "protected_area"
+	// EdgeLocation holds the string denoting the location edge name in mutations.
+	EdgeLocation = "location"
+	// EdgeLicense holds the string denoting the license edge name in mutations.
+	EdgeLicense = "license"
 	// Table holds the table name of the protectedareapicture in the database.
 	Table = "protected_area_pictures"
+	// CollectionTable is the table that holds the collection relation/edge.
+	CollectionTable = "protected_area_pictures"
+	// CollectionInverseTable is the table name for the Collection entity.
+	// It exists in this package in order to avoid circular dependency with the "collection" package.
+	CollectionInverseTable = "collections"
+	// CollectionColumn is the table column denoting the collection relation/edge.
+	CollectionColumn = "collection_protected_area_pictures"
+	// ProtectedAreaTable is the table that holds the protected_area relation/edge.
+	ProtectedAreaTable = "protected_area_pictures"
+	// ProtectedAreaInverseTable is the table name for the ProtectedArea entity.
+	// It exists in this package in order to avoid circular dependency with the "protectedarea" package.
+	ProtectedAreaInverseTable = "protected_areas"
+	// ProtectedAreaColumn is the table column denoting the protected_area relation/edge.
+	ProtectedAreaColumn = "protected_area_protected_area_pictures"
+	// LocationTable is the table that holds the location relation/edge.
+	LocationTable = "protected_area_pictures"
+	// LocationInverseTable is the table name for the Location entity.
+	// It exists in this package in order to avoid circular dependency with the "location" package.
+	LocationInverseTable = "locations"
+	// LocationColumn is the table column denoting the location relation/edge.
+	LocationColumn = "location_protected_area_pictures"
+	// LicenseTable is the table that holds the license relation/edge.
+	LicenseTable = "protected_area_pictures"
+	// LicenseInverseTable is the table name for the License entity.
+	// It exists in this package in order to avoid circular dependency with the "license" package.
+	LicenseInverseTable = "licenses"
+	// LicenseColumn is the table column denoting the license relation/edge.
+	LicenseColumn = "license_protected_area_pictures"
 )
 
 // Columns holds all SQL columns for protectedareapicture fields.
@@ -45,12 +88,29 @@ var Columns = []string{
 	FieldAbbreviation,
 	FieldDescription,
 	FieldExternalLinks,
+	FieldPrimaryImageURL,
+	FieldAdditionalImagesUrls,
+	FieldShootingDate,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "protected_area_pictures"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"collection_protected_area_pictures",
+	"license_protected_area_pictures",
+	"location_protected_area_pictures",
+	"protected_area_protected_area_pictures",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -114,4 +174,70 @@ func ByAbbreviation(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByPrimaryImageURL orders the results by the primary_image_url field.
+func ByPrimaryImageURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPrimaryImageURL, opts...).ToFunc()
+}
+
+// ByShootingDate orders the results by the shooting_date field.
+func ByShootingDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldShootingDate, opts...).ToFunc()
+}
+
+// ByCollectionField orders the results by collection field.
+func ByCollectionField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCollectionStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByProtectedAreaField orders the results by protected_area field.
+func ByProtectedAreaField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProtectedAreaStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByLocationField orders the results by location field.
+func ByLocationField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newLocationStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByLicenseField orders the results by license field.
+func ByLicenseField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newLicenseStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newCollectionStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CollectionInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, CollectionTable, CollectionColumn),
+	)
+}
+func newProtectedAreaStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProtectedAreaInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, ProtectedAreaTable, ProtectedAreaColumn),
+	)
+}
+func newLocationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(LocationInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, LocationTable, LocationColumn),
+	)
+}
+func newLicenseStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(LicenseInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, LicenseTable, LicenseColumn),
+	)
 }

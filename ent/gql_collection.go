@@ -1389,6 +1389,18 @@ func (c *CollectionQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 			c.WithNamedPeople(alias, func(wq *PersonQuery) {
 				*wq = *query
 			})
+		case "protectedAreaPictures":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProtectedAreaPictureClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, protectedareapictureImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedProtectedAreaPictures(alias, func(wq *ProtectedAreaPictureQuery) {
+				*wq = *query
+			})
 		case "category":
 			var (
 				alias = field.Alias
@@ -2339,6 +2351,18 @@ func (l *LicenseQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 			l.WithNamedBooks(alias, func(wq *BookQuery) {
 				*wq = *query
 			})
+		case "protectedAreaPictures":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProtectedAreaPictureClient{config: l.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, protectedareapictureImplementors)...); err != nil {
+				return err
+			}
+			l.WithNamedProtectedAreaPictures(alias, func(wq *ProtectedAreaPictureQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[license.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, license.FieldCreatedAt)
@@ -2491,6 +2515,18 @@ func (l *LocationQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				return err
 			}
 			l.WithNamedBooks(alias, func(wq *BookQuery) {
+				*wq = *query
+			})
+		case "protectedAreaPictures":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProtectedAreaPictureClient{config: l.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, protectedareapictureImplementors)...); err != nil {
+				return err
+			}
+			l.WithNamedProtectedAreaPictures(alias, func(wq *ProtectedAreaPictureQuery) {
 				*wq = *query
 			})
 		case "country":
@@ -4314,6 +4350,28 @@ func (pa *ProtectedAreaQuery) collectField(ctx context.Context, opCtx *graphql.O
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+		case "protectedAreaPictures":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProtectedAreaPictureClient{config: pa.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, protectedareapictureImplementors)...); err != nil {
+				return err
+			}
+			pa.WithNamedProtectedAreaPictures(alias, func(wq *ProtectedAreaPictureQuery) {
+				*wq = *query
+			})
+		case "protectedAreaCategory":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProtectedAreaCategoryClient{config: pa.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, protectedareacategoryImplementors)...); err != nil {
+				return err
+			}
+			pa.withProtectedAreaCategory = query
 		case "createdAt":
 			if _, ok := fieldSeen[protectedarea.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, protectedarea.FieldCreatedAt)
@@ -4353,6 +4411,16 @@ func (pa *ProtectedAreaQuery) collectField(ctx context.Context, opCtx *graphql.O
 			if _, ok := fieldSeen[protectedarea.FieldExternalLinks]; !ok {
 				selectedFields = append(selectedFields, protectedarea.FieldExternalLinks)
 				fieldSeen[protectedarea.FieldExternalLinks] = struct{}{}
+			}
+		case "area":
+			if _, ok := fieldSeen[protectedarea.FieldArea]; !ok {
+				selectedFields = append(selectedFields, protectedarea.FieldArea)
+				fieldSeen[protectedarea.FieldArea] = struct{}{}
+			}
+		case "establishmentDate":
+			if _, ok := fieldSeen[protectedarea.FieldEstablishmentDate]; !ok {
+				selectedFields = append(selectedFields, protectedarea.FieldEstablishmentDate)
+				fieldSeen[protectedarea.FieldEstablishmentDate] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -4444,6 +4512,18 @@ func (pac *ProtectedAreaCategoryQuery) collectField(ctx context.Context, opCtx *
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+		case "protectedAreas":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProtectedAreaClient{config: pac.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, protectedareaImplementors)...); err != nil {
+				return err
+			}
+			pac.WithNamedProtectedAreas(alias, func(wq *ProtectedAreaQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[protectedareacategory.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, protectedareacategory.FieldCreatedAt)
@@ -4574,6 +4654,46 @@ func (pap *ProtectedAreaPictureQuery) collectField(ctx context.Context, opCtx *g
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+		case "collection":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CollectionClient{config: pap.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, collectionImplementors)...); err != nil {
+				return err
+			}
+			pap.withCollection = query
+		case "protectedArea":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProtectedAreaClient{config: pap.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, protectedareaImplementors)...); err != nil {
+				return err
+			}
+			pap.withProtectedArea = query
+		case "location":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&LocationClient{config: pap.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, locationImplementors)...); err != nil {
+				return err
+			}
+			pap.withLocation = query
+		case "license":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&LicenseClient{config: pap.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, licenseImplementors)...); err != nil {
+				return err
+			}
+			pap.withLicense = query
 		case "createdAt":
 			if _, ok := fieldSeen[protectedareapicture.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, protectedareapicture.FieldCreatedAt)
@@ -4613,6 +4733,21 @@ func (pap *ProtectedAreaPictureQuery) collectField(ctx context.Context, opCtx *g
 			if _, ok := fieldSeen[protectedareapicture.FieldExternalLinks]; !ok {
 				selectedFields = append(selectedFields, protectedareapicture.FieldExternalLinks)
 				fieldSeen[protectedareapicture.FieldExternalLinks] = struct{}{}
+			}
+		case "primaryImageURL":
+			if _, ok := fieldSeen[protectedareapicture.FieldPrimaryImageURL]; !ok {
+				selectedFields = append(selectedFields, protectedareapicture.FieldPrimaryImageURL)
+				fieldSeen[protectedareapicture.FieldPrimaryImageURL] = struct{}{}
+			}
+		case "additionalImagesUrls":
+			if _, ok := fieldSeen[protectedareapicture.FieldAdditionalImagesUrls]; !ok {
+				selectedFields = append(selectedFields, protectedareapicture.FieldAdditionalImagesUrls)
+				fieldSeen[protectedareapicture.FieldAdditionalImagesUrls] = struct{}{}
+			}
+		case "shootingDate":
+			if _, ok := fieldSeen[protectedareapicture.FieldShootingDate]; !ok {
+				selectedFields = append(selectedFields, protectedareapicture.FieldShootingDate)
+				fieldSeen[protectedareapicture.FieldShootingDate] = struct{}{}
 			}
 		case "id":
 		case "__typename":

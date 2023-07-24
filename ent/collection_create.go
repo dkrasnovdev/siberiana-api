@@ -15,6 +15,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 )
 
 // CollectionCreate is the builder for creating a Collection entity.
@@ -171,6 +172,21 @@ func (cc *CollectionCreate) AddPeople(p ...*Person) *CollectionCreate {
 		ids[i] = p[i].ID
 	}
 	return cc.AddPersonIDs(ids...)
+}
+
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (cc *CollectionCreate) AddProtectedAreaPictureIDs(ids ...int) *CollectionCreate {
+	cc.mutation.AddProtectedAreaPictureIDs(ids...)
+	return cc
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (cc *CollectionCreate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *CollectionCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cc.AddProtectedAreaPictureIDs(ids...)
 }
 
 // SetCategoryID sets the "category" edge to the Category entity by ID.
@@ -353,6 +369,22 @@ func (cc *CollectionCreate) createSpec() (*Collection, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.ProtectedAreaPicturesTable,
+			Columns: []string{collection.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

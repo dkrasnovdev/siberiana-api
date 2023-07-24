@@ -59,6 +59,7 @@ func (Collection) Edges() []ent.Edge {
 		edge.To("artifacts", Artifact.Type),
 		edge.To("books", Book.Type),
 		edge.To("people", Person.Type),
+		edge.To("protected_area_pictures", ProtectedAreaPicture.Type),
 		edge.From("category", Category.Type).Ref("collections").Unique(),
 	}
 }

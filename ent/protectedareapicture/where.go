@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
 
@@ -87,6 +88,16 @@ func Abbreviation(v string) predicate.ProtectedAreaPicture {
 // Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
 func Description(v string) predicate.ProtectedAreaPicture {
 	return predicate.ProtectedAreaPicture(sql.FieldEQ(FieldDescription, v))
+}
+
+// PrimaryImageURL applies equality check predicate on the "primary_image_url" field. It's identical to PrimaryImageURLEQ.
+func PrimaryImageURL(v string) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldEQ(FieldPrimaryImageURL, v))
+}
+
+// ShootingDate applies equality check predicate on the "shooting_date" field. It's identical to ShootingDateEQ.
+func ShootingDate(v time.Time) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldEQ(FieldShootingDate, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -552,6 +563,233 @@ func ExternalLinksIsNil() predicate.ProtectedAreaPicture {
 // ExternalLinksNotNil applies the NotNil predicate on the "external_links" field.
 func ExternalLinksNotNil() predicate.ProtectedAreaPicture {
 	return predicate.ProtectedAreaPicture(sql.FieldNotNull(FieldExternalLinks))
+}
+
+// PrimaryImageURLEQ applies the EQ predicate on the "primary_image_url" field.
+func PrimaryImageURLEQ(v string) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldEQ(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLNEQ applies the NEQ predicate on the "primary_image_url" field.
+func PrimaryImageURLNEQ(v string) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldNEQ(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLIn applies the In predicate on the "primary_image_url" field.
+func PrimaryImageURLIn(vs ...string) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldIn(FieldPrimaryImageURL, vs...))
+}
+
+// PrimaryImageURLNotIn applies the NotIn predicate on the "primary_image_url" field.
+func PrimaryImageURLNotIn(vs ...string) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldNotIn(FieldPrimaryImageURL, vs...))
+}
+
+// PrimaryImageURLGT applies the GT predicate on the "primary_image_url" field.
+func PrimaryImageURLGT(v string) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldGT(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLGTE applies the GTE predicate on the "primary_image_url" field.
+func PrimaryImageURLGTE(v string) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldGTE(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLLT applies the LT predicate on the "primary_image_url" field.
+func PrimaryImageURLLT(v string) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldLT(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLLTE applies the LTE predicate on the "primary_image_url" field.
+func PrimaryImageURLLTE(v string) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldLTE(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLContains applies the Contains predicate on the "primary_image_url" field.
+func PrimaryImageURLContains(v string) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldContains(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLHasPrefix applies the HasPrefix predicate on the "primary_image_url" field.
+func PrimaryImageURLHasPrefix(v string) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldHasPrefix(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLHasSuffix applies the HasSuffix predicate on the "primary_image_url" field.
+func PrimaryImageURLHasSuffix(v string) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldHasSuffix(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLIsNil applies the IsNil predicate on the "primary_image_url" field.
+func PrimaryImageURLIsNil() predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldIsNull(FieldPrimaryImageURL))
+}
+
+// PrimaryImageURLNotNil applies the NotNil predicate on the "primary_image_url" field.
+func PrimaryImageURLNotNil() predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldNotNull(FieldPrimaryImageURL))
+}
+
+// PrimaryImageURLEqualFold applies the EqualFold predicate on the "primary_image_url" field.
+func PrimaryImageURLEqualFold(v string) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldEqualFold(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLContainsFold applies the ContainsFold predicate on the "primary_image_url" field.
+func PrimaryImageURLContainsFold(v string) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldContainsFold(FieldPrimaryImageURL, v))
+}
+
+// AdditionalImagesUrlsIsNil applies the IsNil predicate on the "additional_images_urls" field.
+func AdditionalImagesUrlsIsNil() predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldIsNull(FieldAdditionalImagesUrls))
+}
+
+// AdditionalImagesUrlsNotNil applies the NotNil predicate on the "additional_images_urls" field.
+func AdditionalImagesUrlsNotNil() predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldNotNull(FieldAdditionalImagesUrls))
+}
+
+// ShootingDateEQ applies the EQ predicate on the "shooting_date" field.
+func ShootingDateEQ(v time.Time) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldEQ(FieldShootingDate, v))
+}
+
+// ShootingDateNEQ applies the NEQ predicate on the "shooting_date" field.
+func ShootingDateNEQ(v time.Time) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldNEQ(FieldShootingDate, v))
+}
+
+// ShootingDateIn applies the In predicate on the "shooting_date" field.
+func ShootingDateIn(vs ...time.Time) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldIn(FieldShootingDate, vs...))
+}
+
+// ShootingDateNotIn applies the NotIn predicate on the "shooting_date" field.
+func ShootingDateNotIn(vs ...time.Time) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldNotIn(FieldShootingDate, vs...))
+}
+
+// ShootingDateGT applies the GT predicate on the "shooting_date" field.
+func ShootingDateGT(v time.Time) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldGT(FieldShootingDate, v))
+}
+
+// ShootingDateGTE applies the GTE predicate on the "shooting_date" field.
+func ShootingDateGTE(v time.Time) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldGTE(FieldShootingDate, v))
+}
+
+// ShootingDateLT applies the LT predicate on the "shooting_date" field.
+func ShootingDateLT(v time.Time) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldLT(FieldShootingDate, v))
+}
+
+// ShootingDateLTE applies the LTE predicate on the "shooting_date" field.
+func ShootingDateLTE(v time.Time) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldLTE(FieldShootingDate, v))
+}
+
+// ShootingDateIsNil applies the IsNil predicate on the "shooting_date" field.
+func ShootingDateIsNil() predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldIsNull(FieldShootingDate))
+}
+
+// ShootingDateNotNil applies the NotNil predicate on the "shooting_date" field.
+func ShootingDateNotNil() predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldNotNull(FieldShootingDate))
+}
+
+// HasCollection applies the HasEdge predicate on the "collection" edge.
+func HasCollection() predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, CollectionTable, CollectionColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCollectionWith applies the HasEdge predicate on the "collection" edge with a given conditions (other predicates).
+func HasCollectionWith(preds ...predicate.Collection) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(func(s *sql.Selector) {
+		step := newCollectionStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasProtectedArea applies the HasEdge predicate on the "protected_area" edge.
+func HasProtectedArea() predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, ProtectedAreaTable, ProtectedAreaColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProtectedAreaWith applies the HasEdge predicate on the "protected_area" edge with a given conditions (other predicates).
+func HasProtectedAreaWith(preds ...predicate.ProtectedArea) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(func(s *sql.Selector) {
+		step := newProtectedAreaStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasLocation applies the HasEdge predicate on the "location" edge.
+func HasLocation() predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, LocationTable, LocationColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasLocationWith applies the HasEdge predicate on the "location" edge with a given conditions (other predicates).
+func HasLocationWith(preds ...predicate.Location) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(func(s *sql.Selector) {
+		step := newLocationStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasLicense applies the HasEdge predicate on the "license" edge.
+func HasLicense() predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, LicenseTable, LicenseColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasLicenseWith applies the HasEdge predicate on the "license" edge with a given conditions (other predicates).
+func HasLicenseWith(preds ...predicate.License) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(func(s *sql.Selector) {
+		step := newLicenseStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

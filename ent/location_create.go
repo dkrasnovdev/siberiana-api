@@ -15,6 +15,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/country"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
 	"github.com/dkrasnovdev/heritage-api/ent/settlement"
 )
@@ -158,6 +159,21 @@ func (lc *LocationCreate) AddBooks(b ...*Book) *LocationCreate {
 		ids[i] = b[i].ID
 	}
 	return lc.AddBookIDs(ids...)
+}
+
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (lc *LocationCreate) AddProtectedAreaPictureIDs(ids ...int) *LocationCreate {
+	lc.mutation.AddProtectedAreaPictureIDs(ids...)
+	return lc
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (lc *LocationCreate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *LocationCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return lc.AddProtectedAreaPictureIDs(ids...)
 }
 
 // SetCountryID sets the "country" edge to the Country entity by ID.
@@ -381,6 +397,22 @@ func (lc *LocationCreate) createSpec() (*Location, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := lc.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   location.ProtectedAreaPicturesTable,
+			Columns: []string{location.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

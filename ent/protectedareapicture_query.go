@@ -11,19 +11,28 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/collection"
+	"github.com/dkrasnovdev/heritage-api/ent/license"
+	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 )
 
 // ProtectedAreaPictureQuery is the builder for querying ProtectedAreaPicture entities.
 type ProtectedAreaPictureQuery struct {
 	config
-	ctx        *QueryContext
-	order      []protectedareapicture.OrderOption
-	inters     []Interceptor
-	predicates []predicate.ProtectedAreaPicture
-	modifiers  []func(*sql.Selector)
-	loadTotal  []func(context.Context, []*ProtectedAreaPicture) error
+	ctx               *QueryContext
+	order             []protectedareapicture.OrderOption
+	inters            []Interceptor
+	predicates        []predicate.ProtectedAreaPicture
+	withCollection    *CollectionQuery
+	withProtectedArea *ProtectedAreaQuery
+	withLocation      *LocationQuery
+	withLicense       *LicenseQuery
+	withFKs           bool
+	modifiers         []func(*sql.Selector)
+	loadTotal         []func(context.Context, []*ProtectedAreaPicture) error
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -58,6 +67,94 @@ func (papq *ProtectedAreaPictureQuery) Unique(unique bool) *ProtectedAreaPicture
 func (papq *ProtectedAreaPictureQuery) Order(o ...protectedareapicture.OrderOption) *ProtectedAreaPictureQuery {
 	papq.order = append(papq.order, o...)
 	return papq
+}
+
+// QueryCollection chains the current query on the "collection" edge.
+func (papq *ProtectedAreaPictureQuery) QueryCollection() *CollectionQuery {
+	query := (&CollectionClient{config: papq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := papq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := papq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedareapicture.Table, protectedareapicture.FieldID, selector),
+			sqlgraph.To(collection.Table, collection.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, protectedareapicture.CollectionTable, protectedareapicture.CollectionColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(papq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProtectedArea chains the current query on the "protected_area" edge.
+func (papq *ProtectedAreaPictureQuery) QueryProtectedArea() *ProtectedAreaQuery {
+	query := (&ProtectedAreaClient{config: papq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := papq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := papq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedareapicture.Table, protectedareapicture.FieldID, selector),
+			sqlgraph.To(protectedarea.Table, protectedarea.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, protectedareapicture.ProtectedAreaTable, protectedareapicture.ProtectedAreaColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(papq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryLocation chains the current query on the "location" edge.
+func (papq *ProtectedAreaPictureQuery) QueryLocation() *LocationQuery {
+	query := (&LocationClient{config: papq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := papq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := papq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedareapicture.Table, protectedareapicture.FieldID, selector),
+			sqlgraph.To(location.Table, location.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, protectedareapicture.LocationTable, protectedareapicture.LocationColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(papq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryLicense chains the current query on the "license" edge.
+func (papq *ProtectedAreaPictureQuery) QueryLicense() *LicenseQuery {
+	query := (&LicenseClient{config: papq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := papq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := papq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedareapicture.Table, protectedareapicture.FieldID, selector),
+			sqlgraph.To(license.Table, license.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, protectedareapicture.LicenseTable, protectedareapicture.LicenseColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(papq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first ProtectedAreaPicture entity from the query.
@@ -247,15 +344,63 @@ func (papq *ProtectedAreaPictureQuery) Clone() *ProtectedAreaPictureQuery {
 		return nil
 	}
 	return &ProtectedAreaPictureQuery{
-		config:     papq.config,
-		ctx:        papq.ctx.Clone(),
-		order:      append([]protectedareapicture.OrderOption{}, papq.order...),
-		inters:     append([]Interceptor{}, papq.inters...),
-		predicates: append([]predicate.ProtectedAreaPicture{}, papq.predicates...),
+		config:            papq.config,
+		ctx:               papq.ctx.Clone(),
+		order:             append([]protectedareapicture.OrderOption{}, papq.order...),
+		inters:            append([]Interceptor{}, papq.inters...),
+		predicates:        append([]predicate.ProtectedAreaPicture{}, papq.predicates...),
+		withCollection:    papq.withCollection.Clone(),
+		withProtectedArea: papq.withProtectedArea.Clone(),
+		withLocation:      papq.withLocation.Clone(),
+		withLicense:       papq.withLicense.Clone(),
 		// clone intermediate query.
 		sql:  papq.sql.Clone(),
 		path: papq.path,
 	}
+}
+
+// WithCollection tells the query-builder to eager-load the nodes that are connected to
+// the "collection" edge. The optional arguments are used to configure the query builder of the edge.
+func (papq *ProtectedAreaPictureQuery) WithCollection(opts ...func(*CollectionQuery)) *ProtectedAreaPictureQuery {
+	query := (&CollectionClient{config: papq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	papq.withCollection = query
+	return papq
+}
+
+// WithProtectedArea tells the query-builder to eager-load the nodes that are connected to
+// the "protected_area" edge. The optional arguments are used to configure the query builder of the edge.
+func (papq *ProtectedAreaPictureQuery) WithProtectedArea(opts ...func(*ProtectedAreaQuery)) *ProtectedAreaPictureQuery {
+	query := (&ProtectedAreaClient{config: papq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	papq.withProtectedArea = query
+	return papq
+}
+
+// WithLocation tells the query-builder to eager-load the nodes that are connected to
+// the "location" edge. The optional arguments are used to configure the query builder of the edge.
+func (papq *ProtectedAreaPictureQuery) WithLocation(opts ...func(*LocationQuery)) *ProtectedAreaPictureQuery {
+	query := (&LocationClient{config: papq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	papq.withLocation = query
+	return papq
+}
+
+// WithLicense tells the query-builder to eager-load the nodes that are connected to
+// the "license" edge. The optional arguments are used to configure the query builder of the edge.
+func (papq *ProtectedAreaPictureQuery) WithLicense(opts ...func(*LicenseQuery)) *ProtectedAreaPictureQuery {
+	query := (&LicenseClient{config: papq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	papq.withLicense = query
+	return papq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -340,15 +485,29 @@ func (papq *ProtectedAreaPictureQuery) prepareQuery(ctx context.Context) error {
 
 func (papq *ProtectedAreaPictureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ProtectedAreaPicture, error) {
 	var (
-		nodes = []*ProtectedAreaPicture{}
-		_spec = papq.querySpec()
+		nodes       = []*ProtectedAreaPicture{}
+		withFKs     = papq.withFKs
+		_spec       = papq.querySpec()
+		loadedTypes = [4]bool{
+			papq.withCollection != nil,
+			papq.withProtectedArea != nil,
+			papq.withLocation != nil,
+			papq.withLicense != nil,
+		}
 	)
+	if papq.withCollection != nil || papq.withProtectedArea != nil || papq.withLocation != nil || papq.withLicense != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, protectedareapicture.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ProtectedAreaPicture).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &ProtectedAreaPicture{config: papq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(papq.modifiers) > 0 {
@@ -363,12 +522,165 @@ func (papq *ProtectedAreaPictureQuery) sqlAll(ctx context.Context, hooks ...quer
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := papq.withCollection; query != nil {
+		if err := papq.loadCollection(ctx, query, nodes, nil,
+			func(n *ProtectedAreaPicture, e *Collection) { n.Edges.Collection = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := papq.withProtectedArea; query != nil {
+		if err := papq.loadProtectedArea(ctx, query, nodes, nil,
+			func(n *ProtectedAreaPicture, e *ProtectedArea) { n.Edges.ProtectedArea = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := papq.withLocation; query != nil {
+		if err := papq.loadLocation(ctx, query, nodes, nil,
+			func(n *ProtectedAreaPicture, e *Location) { n.Edges.Location = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := papq.withLicense; query != nil {
+		if err := papq.loadLicense(ctx, query, nodes, nil,
+			func(n *ProtectedAreaPicture, e *License) { n.Edges.License = e }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range papq.loadTotal {
 		if err := papq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (papq *ProtectedAreaPictureQuery) loadCollection(ctx context.Context, query *CollectionQuery, nodes []*ProtectedAreaPicture, init func(*ProtectedAreaPicture), assign func(*ProtectedAreaPicture, *Collection)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*ProtectedAreaPicture)
+	for i := range nodes {
+		if nodes[i].collection_protected_area_pictures == nil {
+			continue
+		}
+		fk := *nodes[i].collection_protected_area_pictures
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(collection.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "collection_protected_area_pictures" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (papq *ProtectedAreaPictureQuery) loadProtectedArea(ctx context.Context, query *ProtectedAreaQuery, nodes []*ProtectedAreaPicture, init func(*ProtectedAreaPicture), assign func(*ProtectedAreaPicture, *ProtectedArea)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*ProtectedAreaPicture)
+	for i := range nodes {
+		if nodes[i].protected_area_protected_area_pictures == nil {
+			continue
+		}
+		fk := *nodes[i].protected_area_protected_area_pictures
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(protectedarea.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "protected_area_protected_area_pictures" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (papq *ProtectedAreaPictureQuery) loadLocation(ctx context.Context, query *LocationQuery, nodes []*ProtectedAreaPicture, init func(*ProtectedAreaPicture), assign func(*ProtectedAreaPicture, *Location)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*ProtectedAreaPicture)
+	for i := range nodes {
+		if nodes[i].location_protected_area_pictures == nil {
+			continue
+		}
+		fk := *nodes[i].location_protected_area_pictures
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(location.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "location_protected_area_pictures" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (papq *ProtectedAreaPictureQuery) loadLicense(ctx context.Context, query *LicenseQuery, nodes []*ProtectedAreaPicture, init func(*ProtectedAreaPicture), assign func(*ProtectedAreaPicture, *License)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*ProtectedAreaPicture)
+	for i := range nodes {
+		if nodes[i].license_protected_area_pictures == nil {
+			continue
+		}
+		fk := *nodes[i].license_protected_area_pictures
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(license.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "license_protected_area_pictures" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (papq *ProtectedAreaPictureQuery) sqlCount(ctx context.Context) (int, error) {

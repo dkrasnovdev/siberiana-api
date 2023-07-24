@@ -14,6 +14,8 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 )
 
 // ProtectedAreaUpdate is the builder for updating ProtectedArea entities.
@@ -153,9 +155,110 @@ func (pau *ProtectedAreaUpdate) ClearExternalLinks() *ProtectedAreaUpdate {
 	return pau
 }
 
+// SetArea sets the "area" field.
+func (pau *ProtectedAreaUpdate) SetArea(s string) *ProtectedAreaUpdate {
+	pau.mutation.SetArea(s)
+	return pau
+}
+
+// SetNillableArea sets the "area" field if the given value is not nil.
+func (pau *ProtectedAreaUpdate) SetNillableArea(s *string) *ProtectedAreaUpdate {
+	if s != nil {
+		pau.SetArea(*s)
+	}
+	return pau
+}
+
+// ClearArea clears the value of the "area" field.
+func (pau *ProtectedAreaUpdate) ClearArea() *ProtectedAreaUpdate {
+	pau.mutation.ClearArea()
+	return pau
+}
+
+// SetEstablishmentDate sets the "establishment_date" field.
+func (pau *ProtectedAreaUpdate) SetEstablishmentDate(t time.Time) *ProtectedAreaUpdate {
+	pau.mutation.SetEstablishmentDate(t)
+	return pau
+}
+
+// SetNillableEstablishmentDate sets the "establishment_date" field if the given value is not nil.
+func (pau *ProtectedAreaUpdate) SetNillableEstablishmentDate(t *time.Time) *ProtectedAreaUpdate {
+	if t != nil {
+		pau.SetEstablishmentDate(*t)
+	}
+	return pau
+}
+
+// ClearEstablishmentDate clears the value of the "establishment_date" field.
+func (pau *ProtectedAreaUpdate) ClearEstablishmentDate() *ProtectedAreaUpdate {
+	pau.mutation.ClearEstablishmentDate()
+	return pau
+}
+
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (pau *ProtectedAreaUpdate) AddProtectedAreaPictureIDs(ids ...int) *ProtectedAreaUpdate {
+	pau.mutation.AddProtectedAreaPictureIDs(ids...)
+	return pau
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (pau *ProtectedAreaUpdate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *ProtectedAreaUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pau.AddProtectedAreaPictureIDs(ids...)
+}
+
+// SetProtectedAreaCategoryID sets the "protected_area_category" edge to the ProtectedAreaCategory entity by ID.
+func (pau *ProtectedAreaUpdate) SetProtectedAreaCategoryID(id int) *ProtectedAreaUpdate {
+	pau.mutation.SetProtectedAreaCategoryID(id)
+	return pau
+}
+
+// SetNillableProtectedAreaCategoryID sets the "protected_area_category" edge to the ProtectedAreaCategory entity by ID if the given value is not nil.
+func (pau *ProtectedAreaUpdate) SetNillableProtectedAreaCategoryID(id *int) *ProtectedAreaUpdate {
+	if id != nil {
+		pau = pau.SetProtectedAreaCategoryID(*id)
+	}
+	return pau
+}
+
+// SetProtectedAreaCategory sets the "protected_area_category" edge to the ProtectedAreaCategory entity.
+func (pau *ProtectedAreaUpdate) SetProtectedAreaCategory(p *ProtectedAreaCategory) *ProtectedAreaUpdate {
+	return pau.SetProtectedAreaCategoryID(p.ID)
+}
+
 // Mutation returns the ProtectedAreaMutation object of the builder.
 func (pau *ProtectedAreaUpdate) Mutation() *ProtectedAreaMutation {
 	return pau.mutation
+}
+
+// ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (pau *ProtectedAreaUpdate) ClearProtectedAreaPictures() *ProtectedAreaUpdate {
+	pau.mutation.ClearProtectedAreaPictures()
+	return pau
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to ProtectedAreaPicture entities by IDs.
+func (pau *ProtectedAreaUpdate) RemoveProtectedAreaPictureIDs(ids ...int) *ProtectedAreaUpdate {
+	pau.mutation.RemoveProtectedAreaPictureIDs(ids...)
+	return pau
+}
+
+// RemoveProtectedAreaPictures removes "protected_area_pictures" edges to ProtectedAreaPicture entities.
+func (pau *ProtectedAreaUpdate) RemoveProtectedAreaPictures(p ...*ProtectedAreaPicture) *ProtectedAreaUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pau.RemoveProtectedAreaPictureIDs(ids...)
+}
+
+// ClearProtectedAreaCategory clears the "protected_area_category" edge to the ProtectedAreaCategory entity.
+func (pau *ProtectedAreaUpdate) ClearProtectedAreaCategory() *ProtectedAreaUpdate {
+	pau.mutation.ClearProtectedAreaCategory()
+	return pau
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -252,6 +355,92 @@ func (pau *ProtectedAreaUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	if pau.mutation.ExternalLinksCleared() {
 		_spec.ClearField(protectedarea.FieldExternalLinks, field.TypeJSON)
+	}
+	if value, ok := pau.mutation.Area(); ok {
+		_spec.SetField(protectedarea.FieldArea, field.TypeString, value)
+	}
+	if pau.mutation.AreaCleared() {
+		_spec.ClearField(protectedarea.FieldArea, field.TypeString)
+	}
+	if value, ok := pau.mutation.EstablishmentDate(); ok {
+		_spec.SetField(protectedarea.FieldEstablishmentDate, field.TypeTime, value)
+	}
+	if pau.mutation.EstablishmentDateCleared() {
+		_spec.ClearField(protectedarea.FieldEstablishmentDate, field.TypeTime)
+	}
+	if pau.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   protectedarea.ProtectedAreaPicturesTable,
+			Columns: []string{protectedarea.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pau.mutation.RemovedProtectedAreaPicturesIDs(); len(nodes) > 0 && !pau.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   protectedarea.ProtectedAreaPicturesTable,
+			Columns: []string{protectedarea.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pau.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   protectedarea.ProtectedAreaPicturesTable,
+			Columns: []string{protectedarea.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pau.mutation.ProtectedAreaCategoryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedarea.ProtectedAreaCategoryTable,
+			Columns: []string{protectedarea.ProtectedAreaCategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareacategory.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pau.mutation.ProtectedAreaCategoryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedarea.ProtectedAreaCategoryTable,
+			Columns: []string{protectedarea.ProtectedAreaCategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareacategory.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, pau.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -397,9 +586,110 @@ func (pauo *ProtectedAreaUpdateOne) ClearExternalLinks() *ProtectedAreaUpdateOne
 	return pauo
 }
 
+// SetArea sets the "area" field.
+func (pauo *ProtectedAreaUpdateOne) SetArea(s string) *ProtectedAreaUpdateOne {
+	pauo.mutation.SetArea(s)
+	return pauo
+}
+
+// SetNillableArea sets the "area" field if the given value is not nil.
+func (pauo *ProtectedAreaUpdateOne) SetNillableArea(s *string) *ProtectedAreaUpdateOne {
+	if s != nil {
+		pauo.SetArea(*s)
+	}
+	return pauo
+}
+
+// ClearArea clears the value of the "area" field.
+func (pauo *ProtectedAreaUpdateOne) ClearArea() *ProtectedAreaUpdateOne {
+	pauo.mutation.ClearArea()
+	return pauo
+}
+
+// SetEstablishmentDate sets the "establishment_date" field.
+func (pauo *ProtectedAreaUpdateOne) SetEstablishmentDate(t time.Time) *ProtectedAreaUpdateOne {
+	pauo.mutation.SetEstablishmentDate(t)
+	return pauo
+}
+
+// SetNillableEstablishmentDate sets the "establishment_date" field if the given value is not nil.
+func (pauo *ProtectedAreaUpdateOne) SetNillableEstablishmentDate(t *time.Time) *ProtectedAreaUpdateOne {
+	if t != nil {
+		pauo.SetEstablishmentDate(*t)
+	}
+	return pauo
+}
+
+// ClearEstablishmentDate clears the value of the "establishment_date" field.
+func (pauo *ProtectedAreaUpdateOne) ClearEstablishmentDate() *ProtectedAreaUpdateOne {
+	pauo.mutation.ClearEstablishmentDate()
+	return pauo
+}
+
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (pauo *ProtectedAreaUpdateOne) AddProtectedAreaPictureIDs(ids ...int) *ProtectedAreaUpdateOne {
+	pauo.mutation.AddProtectedAreaPictureIDs(ids...)
+	return pauo
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (pauo *ProtectedAreaUpdateOne) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *ProtectedAreaUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pauo.AddProtectedAreaPictureIDs(ids...)
+}
+
+// SetProtectedAreaCategoryID sets the "protected_area_category" edge to the ProtectedAreaCategory entity by ID.
+func (pauo *ProtectedAreaUpdateOne) SetProtectedAreaCategoryID(id int) *ProtectedAreaUpdateOne {
+	pauo.mutation.SetProtectedAreaCategoryID(id)
+	return pauo
+}
+
+// SetNillableProtectedAreaCategoryID sets the "protected_area_category" edge to the ProtectedAreaCategory entity by ID if the given value is not nil.
+func (pauo *ProtectedAreaUpdateOne) SetNillableProtectedAreaCategoryID(id *int) *ProtectedAreaUpdateOne {
+	if id != nil {
+		pauo = pauo.SetProtectedAreaCategoryID(*id)
+	}
+	return pauo
+}
+
+// SetProtectedAreaCategory sets the "protected_area_category" edge to the ProtectedAreaCategory entity.
+func (pauo *ProtectedAreaUpdateOne) SetProtectedAreaCategory(p *ProtectedAreaCategory) *ProtectedAreaUpdateOne {
+	return pauo.SetProtectedAreaCategoryID(p.ID)
+}
+
 // Mutation returns the ProtectedAreaMutation object of the builder.
 func (pauo *ProtectedAreaUpdateOne) Mutation() *ProtectedAreaMutation {
 	return pauo.mutation
+}
+
+// ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (pauo *ProtectedAreaUpdateOne) ClearProtectedAreaPictures() *ProtectedAreaUpdateOne {
+	pauo.mutation.ClearProtectedAreaPictures()
+	return pauo
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to ProtectedAreaPicture entities by IDs.
+func (pauo *ProtectedAreaUpdateOne) RemoveProtectedAreaPictureIDs(ids ...int) *ProtectedAreaUpdateOne {
+	pauo.mutation.RemoveProtectedAreaPictureIDs(ids...)
+	return pauo
+}
+
+// RemoveProtectedAreaPictures removes "protected_area_pictures" edges to ProtectedAreaPicture entities.
+func (pauo *ProtectedAreaUpdateOne) RemoveProtectedAreaPictures(p ...*ProtectedAreaPicture) *ProtectedAreaUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pauo.RemoveProtectedAreaPictureIDs(ids...)
+}
+
+// ClearProtectedAreaCategory clears the "protected_area_category" edge to the ProtectedAreaCategory entity.
+func (pauo *ProtectedAreaUpdateOne) ClearProtectedAreaCategory() *ProtectedAreaUpdateOne {
+	pauo.mutation.ClearProtectedAreaCategory()
+	return pauo
 }
 
 // Where appends a list predicates to the ProtectedAreaUpdate builder.
@@ -526,6 +816,92 @@ func (pauo *ProtectedAreaUpdateOne) sqlSave(ctx context.Context) (_node *Protect
 	}
 	if pauo.mutation.ExternalLinksCleared() {
 		_spec.ClearField(protectedarea.FieldExternalLinks, field.TypeJSON)
+	}
+	if value, ok := pauo.mutation.Area(); ok {
+		_spec.SetField(protectedarea.FieldArea, field.TypeString, value)
+	}
+	if pauo.mutation.AreaCleared() {
+		_spec.ClearField(protectedarea.FieldArea, field.TypeString)
+	}
+	if value, ok := pauo.mutation.EstablishmentDate(); ok {
+		_spec.SetField(protectedarea.FieldEstablishmentDate, field.TypeTime, value)
+	}
+	if pauo.mutation.EstablishmentDateCleared() {
+		_spec.ClearField(protectedarea.FieldEstablishmentDate, field.TypeTime)
+	}
+	if pauo.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   protectedarea.ProtectedAreaPicturesTable,
+			Columns: []string{protectedarea.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pauo.mutation.RemovedProtectedAreaPicturesIDs(); len(nodes) > 0 && !pauo.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   protectedarea.ProtectedAreaPicturesTable,
+			Columns: []string{protectedarea.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pauo.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   protectedarea.ProtectedAreaPicturesTable,
+			Columns: []string{protectedarea.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pauo.mutation.ProtectedAreaCategoryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedarea.ProtectedAreaCategoryTable,
+			Columns: []string{protectedarea.ProtectedAreaCategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareacategory.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pauo.mutation.ProtectedAreaCategoryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedarea.ProtectedAreaCategoryTable,
+			Columns: []string{protectedarea.ProtectedAreaCategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareacategory.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &ProtectedArea{config: pauo.config}
 	_spec.Assign = _node.assignValues

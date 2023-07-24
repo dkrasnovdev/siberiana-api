@@ -272,6 +272,18 @@ func (c *Collection) People(ctx context.Context) (result []*Person, err error) {
 	return result, err
 }
 
+func (c *Collection) ProtectedAreaPictures(ctx context.Context) (result []*ProtectedAreaPicture, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedProtectedAreaPictures(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.ProtectedAreaPicturesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = c.QueryProtectedAreaPictures().All(ctx)
+	}
+	return result, err
+}
+
 func (c *Collection) Category(ctx context.Context) (*Category, error) {
 	result, err := c.Edges.CategoryOrErr()
 	if IsNotLoaded(err) {
@@ -396,6 +408,18 @@ func (l *License) Books(ctx context.Context) (result []*Book, err error) {
 	return result, err
 }
 
+func (l *License) ProtectedAreaPictures(ctx context.Context) (result []*ProtectedAreaPicture, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = l.NamedProtectedAreaPictures(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = l.Edges.ProtectedAreaPicturesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = l.QueryProtectedAreaPictures().All(ctx)
+	}
+	return result, err
+}
+
 func (l *Location) Artifacts(ctx context.Context) (result []*Artifact, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = l.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
@@ -416,6 +440,18 @@ func (l *Location) Books(ctx context.Context) (result []*Book, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = l.QueryBooks().All(ctx)
+	}
+	return result, err
+}
+
+func (l *Location) ProtectedAreaPictures(ctx context.Context) (result []*ProtectedAreaPicture, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = l.NamedProtectedAreaPictures(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = l.Edges.ProtectedAreaPicturesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = l.QueryProtectedAreaPictures().All(ctx)
 	}
 	return result, err
 }
@@ -690,6 +726,70 @@ func (pt *ProjectType) Projects(ctx context.Context) (result []*Project, err err
 		result, err = pt.QueryProjects().All(ctx)
 	}
 	return result, err
+}
+
+func (pa *ProtectedArea) ProtectedAreaPictures(ctx context.Context) (result []*ProtectedAreaPicture, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pa.NamedProtectedAreaPictures(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pa.Edges.ProtectedAreaPicturesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pa.QueryProtectedAreaPictures().All(ctx)
+	}
+	return result, err
+}
+
+func (pa *ProtectedArea) ProtectedAreaCategory(ctx context.Context) (*ProtectedAreaCategory, error) {
+	result, err := pa.Edges.ProtectedAreaCategoryOrErr()
+	if IsNotLoaded(err) {
+		result, err = pa.QueryProtectedAreaCategory().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pac *ProtectedAreaCategory) ProtectedAreas(ctx context.Context) (result []*ProtectedArea, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pac.NamedProtectedAreas(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pac.Edges.ProtectedAreasOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pac.QueryProtectedAreas().All(ctx)
+	}
+	return result, err
+}
+
+func (pap *ProtectedAreaPicture) Collection(ctx context.Context) (*Collection, error) {
+	result, err := pap.Edges.CollectionOrErr()
+	if IsNotLoaded(err) {
+		result, err = pap.QueryCollection().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pap *ProtectedAreaPicture) ProtectedArea(ctx context.Context) (*ProtectedArea, error) {
+	result, err := pap.Edges.ProtectedAreaOrErr()
+	if IsNotLoaded(err) {
+		result, err = pap.QueryProtectedArea().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pap *ProtectedAreaPicture) Location(ctx context.Context) (*Location, error) {
+	result, err := pap.Edges.LocationOrErr()
+	if IsNotLoaded(err) {
+		result, err = pap.QueryLocation().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pap *ProtectedAreaPicture) License(ctx context.Context) (*License, error) {
+	result, err := pap.Edges.LicenseOrErr()
+	if IsNotLoaded(err) {
+		result, err = pap.QueryLicense().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (pu *Publication) Artifacts(ctx context.Context) (result []*Artifact, err error) {

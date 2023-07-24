@@ -16,21 +16,24 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 )
 
 // LicenseQuery is the builder for querying License entities.
 type LicenseQuery struct {
 	config
-	ctx                *QueryContext
-	order              []license.OrderOption
-	inters             []Interceptor
-	predicates         []predicate.License
-	withArtifacts      *ArtifactQuery
-	withBooks          *BookQuery
-	modifiers          []func(*sql.Selector)
-	loadTotal          []func(context.Context, []*License) error
-	withNamedArtifacts map[string]*ArtifactQuery
-	withNamedBooks     map[string]*BookQuery
+	ctx                            *QueryContext
+	order                          []license.OrderOption
+	inters                         []Interceptor
+	predicates                     []predicate.License
+	withArtifacts                  *ArtifactQuery
+	withBooks                      *BookQuery
+	withProtectedAreaPictures      *ProtectedAreaPictureQuery
+	modifiers                      []func(*sql.Selector)
+	loadTotal                      []func(context.Context, []*License) error
+	withNamedArtifacts             map[string]*ArtifactQuery
+	withNamedBooks                 map[string]*BookQuery
+	withNamedProtectedAreaPictures map[string]*ProtectedAreaPictureQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -104,6 +107,28 @@ func (lq *LicenseQuery) QueryBooks() *BookQuery {
 			sqlgraph.From(license.Table, license.FieldID, selector),
 			sqlgraph.To(book.Table, book.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, license.BooksTable, license.BooksColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(lq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProtectedAreaPictures chains the current query on the "protected_area_pictures" edge.
+func (lq *LicenseQuery) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery {
+	query := (&ProtectedAreaPictureClient{config: lq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := lq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := lq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(license.Table, license.FieldID, selector),
+			sqlgraph.To(protectedareapicture.Table, protectedareapicture.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, license.ProtectedAreaPicturesTable, license.ProtectedAreaPicturesColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(lq.driver.Dialect(), step)
 		return fromU, nil
@@ -298,13 +323,14 @@ func (lq *LicenseQuery) Clone() *LicenseQuery {
 		return nil
 	}
 	return &LicenseQuery{
-		config:        lq.config,
-		ctx:           lq.ctx.Clone(),
-		order:         append([]license.OrderOption{}, lq.order...),
-		inters:        append([]Interceptor{}, lq.inters...),
-		predicates:    append([]predicate.License{}, lq.predicates...),
-		withArtifacts: lq.withArtifacts.Clone(),
-		withBooks:     lq.withBooks.Clone(),
+		config:                    lq.config,
+		ctx:                       lq.ctx.Clone(),
+		order:                     append([]license.OrderOption{}, lq.order...),
+		inters:                    append([]Interceptor{}, lq.inters...),
+		predicates:                append([]predicate.License{}, lq.predicates...),
+		withArtifacts:             lq.withArtifacts.Clone(),
+		withBooks:                 lq.withBooks.Clone(),
+		withProtectedAreaPictures: lq.withProtectedAreaPictures.Clone(),
 		// clone intermediate query.
 		sql:  lq.sql.Clone(),
 		path: lq.path,
@@ -330,6 +356,17 @@ func (lq *LicenseQuery) WithBooks(opts ...func(*BookQuery)) *LicenseQuery {
 		opt(query)
 	}
 	lq.withBooks = query
+	return lq
+}
+
+// WithProtectedAreaPictures tells the query-builder to eager-load the nodes that are connected to
+// the "protected_area_pictures" edge. The optional arguments are used to configure the query builder of the edge.
+func (lq *LicenseQuery) WithProtectedAreaPictures(opts ...func(*ProtectedAreaPictureQuery)) *LicenseQuery {
+	query := (&ProtectedAreaPictureClient{config: lq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	lq.withProtectedAreaPictures = query
 	return lq
 }
 
@@ -417,9 +454,10 @@ func (lq *LicenseQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Lice
 	var (
 		nodes       = []*License{}
 		_spec       = lq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [3]bool{
 			lq.withArtifacts != nil,
 			lq.withBooks != nil,
+			lq.withProtectedAreaPictures != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -457,6 +495,15 @@ func (lq *LicenseQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Lice
 			return nil, err
 		}
 	}
+	if query := lq.withProtectedAreaPictures; query != nil {
+		if err := lq.loadProtectedAreaPictures(ctx, query, nodes,
+			func(n *License) { n.Edges.ProtectedAreaPictures = []*ProtectedAreaPicture{} },
+			func(n *License, e *ProtectedAreaPicture) {
+				n.Edges.ProtectedAreaPictures = append(n.Edges.ProtectedAreaPictures, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range lq.withNamedArtifacts {
 		if err := lq.loadArtifacts(ctx, query, nodes,
 			func(n *License) { n.appendNamedArtifacts(name) },
@@ -468,6 +515,13 @@ func (lq *LicenseQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Lice
 		if err := lq.loadBooks(ctx, query, nodes,
 			func(n *License) { n.appendNamedBooks(name) },
 			func(n *License, e *Book) { n.appendNamedBooks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range lq.withNamedProtectedAreaPictures {
+		if err := lq.loadProtectedAreaPictures(ctx, query, nodes,
+			func(n *License) { n.appendNamedProtectedAreaPictures(name) },
+			func(n *License, e *ProtectedAreaPicture) { n.appendNamedProtectedAreaPictures(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -536,6 +590,37 @@ func (lq *LicenseQuery) loadBooks(ctx context.Context, query *BookQuery, nodes [
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "license_books" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (lq *LicenseQuery) loadProtectedAreaPictures(ctx context.Context, query *ProtectedAreaPictureQuery, nodes []*License, init func(*License), assign func(*License, *ProtectedAreaPicture)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*License)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.ProtectedAreaPicture(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(license.ProtectedAreaPicturesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.license_protected_area_pictures
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "license_protected_area_pictures" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "license_protected_area_pictures" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -651,6 +736,20 @@ func (lq *LicenseQuery) WithNamedBooks(name string, opts ...func(*BookQuery)) *L
 		lq.withNamedBooks = make(map[string]*BookQuery)
 	}
 	lq.withNamedBooks[name] = query
+	return lq
+}
+
+// WithNamedProtectedAreaPictures tells the query-builder to eager-load the nodes that are connected to the "protected_area_pictures"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (lq *LicenseQuery) WithNamedProtectedAreaPictures(name string, opts ...func(*ProtectedAreaPictureQuery)) *LicenseQuery {
+	query := (&ProtectedAreaPictureClient{config: lq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if lq.withNamedProtectedAreaPictures == nil {
+		lq.withNamedProtectedAreaPictures = make(map[string]*ProtectedAreaPictureQuery)
+	}
+	lq.withNamedProtectedAreaPictures[name] = query
 	return lq
 }
 

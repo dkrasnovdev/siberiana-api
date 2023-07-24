@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 )
 
@@ -552,6 +553,29 @@ func ExternalLinksIsNil() predicate.ProtectedAreaCategory {
 // ExternalLinksNotNil applies the NotNil predicate on the "external_links" field.
 func ExternalLinksNotNil() predicate.ProtectedAreaCategory {
 	return predicate.ProtectedAreaCategory(sql.FieldNotNull(FieldExternalLinks))
+}
+
+// HasProtectedAreas applies the HasEdge predicate on the "protected_areas" edge.
+func HasProtectedAreas() predicate.ProtectedAreaCategory {
+	return predicate.ProtectedAreaCategory(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ProtectedAreasTable, ProtectedAreasColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProtectedAreasWith applies the HasEdge predicate on the "protected_areas" edge with a given conditions (other predicates).
+func HasProtectedAreasWith(preds ...predicate.ProtectedArea) predicate.ProtectedAreaCategory {
+	return predicate.ProtectedAreaCategory(func(s *sql.Selector) {
+		step := newProtectedAreasStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

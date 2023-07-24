@@ -58,5 +58,6 @@ func (License) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("artifacts", Artifact.Type),
 		edge.To("books", Book.Type),
+		edge.To("protected_area_pictures", ProtectedAreaPicture.Type),
 	}
 }

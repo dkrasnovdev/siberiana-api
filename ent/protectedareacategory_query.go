@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -12,18 +13,21 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
 )
 
 // ProtectedAreaCategoryQuery is the builder for querying ProtectedAreaCategory entities.
 type ProtectedAreaCategoryQuery struct {
 	config
-	ctx        *QueryContext
-	order      []protectedareacategory.OrderOption
-	inters     []Interceptor
-	predicates []predicate.ProtectedAreaCategory
-	modifiers  []func(*sql.Selector)
-	loadTotal  []func(context.Context, []*ProtectedAreaCategory) error
+	ctx                     *QueryContext
+	order                   []protectedareacategory.OrderOption
+	inters                  []Interceptor
+	predicates              []predicate.ProtectedAreaCategory
+	withProtectedAreas      *ProtectedAreaQuery
+	modifiers               []func(*sql.Selector)
+	loadTotal               []func(context.Context, []*ProtectedAreaCategory) error
+	withNamedProtectedAreas map[string]*ProtectedAreaQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -58,6 +62,28 @@ func (pacq *ProtectedAreaCategoryQuery) Unique(unique bool) *ProtectedAreaCatego
 func (pacq *ProtectedAreaCategoryQuery) Order(o ...protectedareacategory.OrderOption) *ProtectedAreaCategoryQuery {
 	pacq.order = append(pacq.order, o...)
 	return pacq
+}
+
+// QueryProtectedAreas chains the current query on the "protected_areas" edge.
+func (pacq *ProtectedAreaCategoryQuery) QueryProtectedAreas() *ProtectedAreaQuery {
+	query := (&ProtectedAreaClient{config: pacq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pacq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pacq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedareacategory.Table, protectedareacategory.FieldID, selector),
+			sqlgraph.To(protectedarea.Table, protectedarea.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, protectedareacategory.ProtectedAreasTable, protectedareacategory.ProtectedAreasColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(pacq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first ProtectedAreaCategory entity from the query.
@@ -247,15 +273,27 @@ func (pacq *ProtectedAreaCategoryQuery) Clone() *ProtectedAreaCategoryQuery {
 		return nil
 	}
 	return &ProtectedAreaCategoryQuery{
-		config:     pacq.config,
-		ctx:        pacq.ctx.Clone(),
-		order:      append([]protectedareacategory.OrderOption{}, pacq.order...),
-		inters:     append([]Interceptor{}, pacq.inters...),
-		predicates: append([]predicate.ProtectedAreaCategory{}, pacq.predicates...),
+		config:             pacq.config,
+		ctx:                pacq.ctx.Clone(),
+		order:              append([]protectedareacategory.OrderOption{}, pacq.order...),
+		inters:             append([]Interceptor{}, pacq.inters...),
+		predicates:         append([]predicate.ProtectedAreaCategory{}, pacq.predicates...),
+		withProtectedAreas: pacq.withProtectedAreas.Clone(),
 		// clone intermediate query.
 		sql:  pacq.sql.Clone(),
 		path: pacq.path,
 	}
+}
+
+// WithProtectedAreas tells the query-builder to eager-load the nodes that are connected to
+// the "protected_areas" edge. The optional arguments are used to configure the query builder of the edge.
+func (pacq *ProtectedAreaCategoryQuery) WithProtectedAreas(opts ...func(*ProtectedAreaQuery)) *ProtectedAreaCategoryQuery {
+	query := (&ProtectedAreaClient{config: pacq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pacq.withProtectedAreas = query
+	return pacq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -340,8 +378,11 @@ func (pacq *ProtectedAreaCategoryQuery) prepareQuery(ctx context.Context) error 
 
 func (pacq *ProtectedAreaCategoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ProtectedAreaCategory, error) {
 	var (
-		nodes = []*ProtectedAreaCategory{}
-		_spec = pacq.querySpec()
+		nodes       = []*ProtectedAreaCategory{}
+		_spec       = pacq.querySpec()
+		loadedTypes = [1]bool{
+			pacq.withProtectedAreas != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ProtectedAreaCategory).scanValues(nil, columns)
@@ -349,6 +390,7 @@ func (pacq *ProtectedAreaCategoryQuery) sqlAll(ctx context.Context, hooks ...que
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &ProtectedAreaCategory{config: pacq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(pacq.modifiers) > 0 {
@@ -363,12 +405,60 @@ func (pacq *ProtectedAreaCategoryQuery) sqlAll(ctx context.Context, hooks ...que
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := pacq.withProtectedAreas; query != nil {
+		if err := pacq.loadProtectedAreas(ctx, query, nodes,
+			func(n *ProtectedAreaCategory) { n.Edges.ProtectedAreas = []*ProtectedArea{} },
+			func(n *ProtectedAreaCategory, e *ProtectedArea) {
+				n.Edges.ProtectedAreas = append(n.Edges.ProtectedAreas, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pacq.withNamedProtectedAreas {
+		if err := pacq.loadProtectedAreas(ctx, query, nodes,
+			func(n *ProtectedAreaCategory) { n.appendNamedProtectedAreas(name) },
+			func(n *ProtectedAreaCategory, e *ProtectedArea) { n.appendNamedProtectedAreas(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range pacq.loadTotal {
 		if err := pacq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (pacq *ProtectedAreaCategoryQuery) loadProtectedAreas(ctx context.Context, query *ProtectedAreaQuery, nodes []*ProtectedAreaCategory, init func(*ProtectedAreaCategory), assign func(*ProtectedAreaCategory, *ProtectedArea)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*ProtectedAreaCategory)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.ProtectedArea(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(protectedareacategory.ProtectedAreasColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.protected_area_category_protected_areas
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "protected_area_category_protected_areas" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "protected_area_category_protected_areas" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
 }
 
 func (pacq *ProtectedAreaCategoryQuery) sqlCount(ctx context.Context) (int, error) {
@@ -453,6 +543,20 @@ func (pacq *ProtectedAreaCategoryQuery) sqlQuery(ctx context.Context) *sql.Selec
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedProtectedAreas tells the query-builder to eager-load the nodes that are connected to the "protected_areas"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pacq *ProtectedAreaCategoryQuery) WithNamedProtectedAreas(name string, opts ...func(*ProtectedAreaQuery)) *ProtectedAreaCategoryQuery {
+	query := (&ProtectedAreaClient{config: pacq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pacq.withNamedProtectedAreas == nil {
+		pacq.withNamedProtectedAreas = make(map[string]*ProtectedAreaQuery)
+	}
+	pacq.withNamedProtectedAreas[name] = query
+	return pacq
 }
 
 // ProtectedAreaCategoryGroupBy is the group-by builder for ProtectedAreaCategory entities.

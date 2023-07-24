@@ -37,6 +37,8 @@ const (
 	EdgeBooks = "books"
 	// EdgePeople holds the string denoting the people edge name in mutations.
 	EdgePeople = "people"
+	// EdgeProtectedAreaPictures holds the string denoting the protected_area_pictures edge name in mutations.
+	EdgeProtectedAreaPictures = "protected_area_pictures"
 	// EdgeCategory holds the string denoting the category edge name in mutations.
 	EdgeCategory = "category"
 	// Table holds the table name of the collection in the database.
@@ -62,6 +64,13 @@ const (
 	PeopleInverseTable = "persons"
 	// PeopleColumn is the table column denoting the people relation/edge.
 	PeopleColumn = "collection_people"
+	// ProtectedAreaPicturesTable is the table that holds the protected_area_pictures relation/edge.
+	ProtectedAreaPicturesTable = "protected_area_pictures"
+	// ProtectedAreaPicturesInverseTable is the table name for the ProtectedAreaPicture entity.
+	// It exists in this package in order to avoid circular dependency with the "protectedareapicture" package.
+	ProtectedAreaPicturesInverseTable = "protected_area_pictures"
+	// ProtectedAreaPicturesColumn is the table column denoting the protected_area_pictures relation/edge.
+	ProtectedAreaPicturesColumn = "collection_protected_area_pictures"
 	// CategoryTable is the table that holds the category relation/edge.
 	CategoryTable = "collections"
 	// CategoryInverseTable is the table name for the Category entity.
@@ -206,6 +215,20 @@ func ByPeople(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByProtectedAreaPicturesCount orders the results by protected_area_pictures count.
+func ByProtectedAreaPicturesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProtectedAreaPicturesStep(), opts...)
+	}
+}
+
+// ByProtectedAreaPictures orders the results by protected_area_pictures terms.
+func ByProtectedAreaPictures(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProtectedAreaPicturesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByCategoryField orders the results by category field.
 func ByCategoryField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -231,6 +254,13 @@ func newPeopleStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PeopleInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, PeopleTable, PeopleColumn),
+	)
+}
+func newProtectedAreaPicturesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProtectedAreaPicturesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ProtectedAreaPicturesTable, ProtectedAreaPicturesColumn),
 	)
 }
 func newCategoryStep() *sqlgraph.Step {

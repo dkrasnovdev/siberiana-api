@@ -50,17 +50,20 @@ type CollectionEdges struct {
 	Books []*Book `json:"books,omitempty"`
 	// People holds the value of the people edge.
 	People []*Person `json:"people,omitempty"`
+	// ProtectedAreaPictures holds the value of the protected_area_pictures edge.
+	ProtectedAreaPictures []*ProtectedAreaPicture `json:"protected_area_pictures,omitempty"`
 	// Category holds the value of the category edge.
 	Category *Category `json:"category,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [5]map[string]int
 
-	namedArtifacts map[string][]*Artifact
-	namedBooks     map[string][]*Book
-	namedPeople    map[string][]*Person
+	namedArtifacts             map[string][]*Artifact
+	namedBooks                 map[string][]*Book
+	namedPeople                map[string][]*Person
+	namedProtectedAreaPictures map[string][]*ProtectedAreaPicture
 }
 
 // ArtifactsOrErr returns the Artifacts value or an error if the edge
@@ -90,10 +93,19 @@ func (e CollectionEdges) PeopleOrErr() ([]*Person, error) {
 	return nil, &NotLoadedError{edge: "people"}
 }
 
+// ProtectedAreaPicturesOrErr returns the ProtectedAreaPictures value or an error if the edge
+// was not loaded in eager-loading.
+func (e CollectionEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, error) {
+	if e.loadedTypes[3] {
+		return e.ProtectedAreaPictures, nil
+	}
+	return nil, &NotLoadedError{edge: "protected_area_pictures"}
+}
+
 // CategoryOrErr returns the Category value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e CollectionEdges) CategoryOrErr() (*Category, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		if e.Category == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: category.Label}
@@ -224,6 +236,11 @@ func (c *Collection) QueryPeople() *PersonQuery {
 	return NewCollectionClient(c.config).QueryPeople(c)
 }
 
+// QueryProtectedAreaPictures queries the "protected_area_pictures" edge of the Collection entity.
+func (c *Collection) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery {
+	return NewCollectionClient(c.config).QueryProtectedAreaPictures(c)
+}
+
 // QueryCategory queries the "category" edge of the Collection entity.
 func (c *Collection) QueryCategory() *CategoryQuery {
 	return NewCollectionClient(c.config).QueryCategory(c)
@@ -348,6 +365,30 @@ func (c *Collection) appendNamedPeople(name string, edges ...*Person) {
 		c.Edges.namedPeople[name] = []*Person{}
 	} else {
 		c.Edges.namedPeople[name] = append(c.Edges.namedPeople[name], edges...)
+	}
+}
+
+// NamedProtectedAreaPictures returns the ProtectedAreaPictures named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Collection) NamedProtectedAreaPictures(name string) ([]*ProtectedAreaPicture, error) {
+	if c.Edges.namedProtectedAreaPictures == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedProtectedAreaPictures[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Collection) appendNamedProtectedAreaPictures(name string, edges ...*ProtectedAreaPicture) {
+	if c.Edges.namedProtectedAreaPictures == nil {
+		c.Edges.namedProtectedAreaPictures = make(map[string][]*ProtectedAreaPicture)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedProtectedAreaPictures[name] = []*ProtectedAreaPicture{}
+	} else {
+		c.Edges.namedProtectedAreaPictures[name] = append(c.Edges.namedProtectedAreaPictures[name], edges...)
 	}
 }
 

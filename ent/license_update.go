@@ -16,6 +16,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 )
 
 // LicenseUpdate is the builder for updating License entities.
@@ -185,6 +186,21 @@ func (lu *LicenseUpdate) AddBooks(b ...*Book) *LicenseUpdate {
 	return lu.AddBookIDs(ids...)
 }
 
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (lu *LicenseUpdate) AddProtectedAreaPictureIDs(ids ...int) *LicenseUpdate {
+	lu.mutation.AddProtectedAreaPictureIDs(ids...)
+	return lu
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (lu *LicenseUpdate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *LicenseUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return lu.AddProtectedAreaPictureIDs(ids...)
+}
+
 // Mutation returns the LicenseMutation object of the builder.
 func (lu *LicenseUpdate) Mutation() *LicenseMutation {
 	return lu.mutation
@@ -230,6 +246,27 @@ func (lu *LicenseUpdate) RemoveBooks(b ...*Book) *LicenseUpdate {
 		ids[i] = b[i].ID
 	}
 	return lu.RemoveBookIDs(ids...)
+}
+
+// ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (lu *LicenseUpdate) ClearProtectedAreaPictures() *LicenseUpdate {
+	lu.mutation.ClearProtectedAreaPictures()
+	return lu
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to ProtectedAreaPicture entities by IDs.
+func (lu *LicenseUpdate) RemoveProtectedAreaPictureIDs(ids ...int) *LicenseUpdate {
+	lu.mutation.RemoveProtectedAreaPictureIDs(ids...)
+	return lu
+}
+
+// RemoveProtectedAreaPictures removes "protected_area_pictures" edges to ProtectedAreaPicture entities.
+func (lu *LicenseUpdate) RemoveProtectedAreaPictures(p ...*ProtectedAreaPicture) *LicenseUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return lu.RemoveProtectedAreaPictureIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -417,6 +454,51 @@ func (lu *LicenseUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if lu.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   license.ProtectedAreaPicturesTable,
+			Columns: []string{license.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := lu.mutation.RemovedProtectedAreaPicturesIDs(); len(nodes) > 0 && !lu.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   license.ProtectedAreaPicturesTable,
+			Columns: []string{license.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := lu.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   license.ProtectedAreaPicturesTable,
+			Columns: []string{license.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, lu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{license.Label}
@@ -591,6 +673,21 @@ func (luo *LicenseUpdateOne) AddBooks(b ...*Book) *LicenseUpdateOne {
 	return luo.AddBookIDs(ids...)
 }
 
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (luo *LicenseUpdateOne) AddProtectedAreaPictureIDs(ids ...int) *LicenseUpdateOne {
+	luo.mutation.AddProtectedAreaPictureIDs(ids...)
+	return luo
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (luo *LicenseUpdateOne) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *LicenseUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return luo.AddProtectedAreaPictureIDs(ids...)
+}
+
 // Mutation returns the LicenseMutation object of the builder.
 func (luo *LicenseUpdateOne) Mutation() *LicenseMutation {
 	return luo.mutation
@@ -636,6 +733,27 @@ func (luo *LicenseUpdateOne) RemoveBooks(b ...*Book) *LicenseUpdateOne {
 		ids[i] = b[i].ID
 	}
 	return luo.RemoveBookIDs(ids...)
+}
+
+// ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (luo *LicenseUpdateOne) ClearProtectedAreaPictures() *LicenseUpdateOne {
+	luo.mutation.ClearProtectedAreaPictures()
+	return luo
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to ProtectedAreaPicture entities by IDs.
+func (luo *LicenseUpdateOne) RemoveProtectedAreaPictureIDs(ids ...int) *LicenseUpdateOne {
+	luo.mutation.RemoveProtectedAreaPictureIDs(ids...)
+	return luo
+}
+
+// RemoveProtectedAreaPictures removes "protected_area_pictures" edges to ProtectedAreaPicture entities.
+func (luo *LicenseUpdateOne) RemoveProtectedAreaPictures(p ...*ProtectedAreaPicture) *LicenseUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return luo.RemoveProtectedAreaPictureIDs(ids...)
 }
 
 // Where appends a list predicates to the LicenseUpdate builder.
@@ -846,6 +964,51 @@ func (luo *LicenseUpdateOne) sqlSave(ctx context.Context) (_node *License, err e
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if luo.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   license.ProtectedAreaPicturesTable,
+			Columns: []string{license.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := luo.mutation.RemovedProtectedAreaPicturesIDs(); len(nodes) > 0 && !luo.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   license.ProtectedAreaPicturesTable,
+			Columns: []string{license.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := luo.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   license.ProtectedAreaPicturesTable,
+			Columns: []string{license.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

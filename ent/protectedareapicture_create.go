@@ -10,6 +10,10 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/collection"
+	"github.com/dkrasnovdev/heritage-api/ent/license"
+	"github.com/dkrasnovdev/heritage-api/ent/location"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 )
 
@@ -122,6 +126,116 @@ func (papc *ProtectedAreaPictureCreate) SetNillableDescription(s *string) *Prote
 func (papc *ProtectedAreaPictureCreate) SetExternalLinks(s []string) *ProtectedAreaPictureCreate {
 	papc.mutation.SetExternalLinks(s)
 	return papc
+}
+
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (papc *ProtectedAreaPictureCreate) SetPrimaryImageURL(s string) *ProtectedAreaPictureCreate {
+	papc.mutation.SetPrimaryImageURL(s)
+	return papc
+}
+
+// SetNillablePrimaryImageURL sets the "primary_image_url" field if the given value is not nil.
+func (papc *ProtectedAreaPictureCreate) SetNillablePrimaryImageURL(s *string) *ProtectedAreaPictureCreate {
+	if s != nil {
+		papc.SetPrimaryImageURL(*s)
+	}
+	return papc
+}
+
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (papc *ProtectedAreaPictureCreate) SetAdditionalImagesUrls(s []string) *ProtectedAreaPictureCreate {
+	papc.mutation.SetAdditionalImagesUrls(s)
+	return papc
+}
+
+// SetShootingDate sets the "shooting_date" field.
+func (papc *ProtectedAreaPictureCreate) SetShootingDate(t time.Time) *ProtectedAreaPictureCreate {
+	papc.mutation.SetShootingDate(t)
+	return papc
+}
+
+// SetNillableShootingDate sets the "shooting_date" field if the given value is not nil.
+func (papc *ProtectedAreaPictureCreate) SetNillableShootingDate(t *time.Time) *ProtectedAreaPictureCreate {
+	if t != nil {
+		papc.SetShootingDate(*t)
+	}
+	return papc
+}
+
+// SetCollectionID sets the "collection" edge to the Collection entity by ID.
+func (papc *ProtectedAreaPictureCreate) SetCollectionID(id int) *ProtectedAreaPictureCreate {
+	papc.mutation.SetCollectionID(id)
+	return papc
+}
+
+// SetNillableCollectionID sets the "collection" edge to the Collection entity by ID if the given value is not nil.
+func (papc *ProtectedAreaPictureCreate) SetNillableCollectionID(id *int) *ProtectedAreaPictureCreate {
+	if id != nil {
+		papc = papc.SetCollectionID(*id)
+	}
+	return papc
+}
+
+// SetCollection sets the "collection" edge to the Collection entity.
+func (papc *ProtectedAreaPictureCreate) SetCollection(c *Collection) *ProtectedAreaPictureCreate {
+	return papc.SetCollectionID(c.ID)
+}
+
+// SetProtectedAreaID sets the "protected_area" edge to the ProtectedArea entity by ID.
+func (papc *ProtectedAreaPictureCreate) SetProtectedAreaID(id int) *ProtectedAreaPictureCreate {
+	papc.mutation.SetProtectedAreaID(id)
+	return papc
+}
+
+// SetNillableProtectedAreaID sets the "protected_area" edge to the ProtectedArea entity by ID if the given value is not nil.
+func (papc *ProtectedAreaPictureCreate) SetNillableProtectedAreaID(id *int) *ProtectedAreaPictureCreate {
+	if id != nil {
+		papc = papc.SetProtectedAreaID(*id)
+	}
+	return papc
+}
+
+// SetProtectedArea sets the "protected_area" edge to the ProtectedArea entity.
+func (papc *ProtectedAreaPictureCreate) SetProtectedArea(p *ProtectedArea) *ProtectedAreaPictureCreate {
+	return papc.SetProtectedAreaID(p.ID)
+}
+
+// SetLocationID sets the "location" edge to the Location entity by ID.
+func (papc *ProtectedAreaPictureCreate) SetLocationID(id int) *ProtectedAreaPictureCreate {
+	papc.mutation.SetLocationID(id)
+	return papc
+}
+
+// SetNillableLocationID sets the "location" edge to the Location entity by ID if the given value is not nil.
+func (papc *ProtectedAreaPictureCreate) SetNillableLocationID(id *int) *ProtectedAreaPictureCreate {
+	if id != nil {
+		papc = papc.SetLocationID(*id)
+	}
+	return papc
+}
+
+// SetLocation sets the "location" edge to the Location entity.
+func (papc *ProtectedAreaPictureCreate) SetLocation(l *Location) *ProtectedAreaPictureCreate {
+	return papc.SetLocationID(l.ID)
+}
+
+// SetLicenseID sets the "license" edge to the License entity by ID.
+func (papc *ProtectedAreaPictureCreate) SetLicenseID(id int) *ProtectedAreaPictureCreate {
+	papc.mutation.SetLicenseID(id)
+	return papc
+}
+
+// SetNillableLicenseID sets the "license" edge to the License entity by ID if the given value is not nil.
+func (papc *ProtectedAreaPictureCreate) SetNillableLicenseID(id *int) *ProtectedAreaPictureCreate {
+	if id != nil {
+		papc = papc.SetLicenseID(*id)
+	}
+	return papc
+}
+
+// SetLicense sets the "license" edge to the License entity.
+func (papc *ProtectedAreaPictureCreate) SetLicense(l *License) *ProtectedAreaPictureCreate {
+	return papc.SetLicenseID(l.ID)
 }
 
 // Mutation returns the ProtectedAreaPictureMutation object of the builder.
@@ -243,6 +357,86 @@ func (papc *ProtectedAreaPictureCreate) createSpec() (*ProtectedAreaPicture, *sq
 	if value, ok := papc.mutation.ExternalLinks(); ok {
 		_spec.SetField(protectedareapicture.FieldExternalLinks, field.TypeJSON, value)
 		_node.ExternalLinks = value
+	}
+	if value, ok := papc.mutation.PrimaryImageURL(); ok {
+		_spec.SetField(protectedareapicture.FieldPrimaryImageURL, field.TypeString, value)
+		_node.PrimaryImageURL = value
+	}
+	if value, ok := papc.mutation.AdditionalImagesUrls(); ok {
+		_spec.SetField(protectedareapicture.FieldAdditionalImagesUrls, field.TypeJSON, value)
+		_node.AdditionalImagesUrls = value
+	}
+	if value, ok := papc.mutation.ShootingDate(); ok {
+		_spec.SetField(protectedareapicture.FieldShootingDate, field.TypeTime, value)
+		_node.ShootingDate = value
+	}
+	if nodes := papc.mutation.CollectionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.CollectionTable,
+			Columns: []string{protectedareapicture.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.collection_protected_area_pictures = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := papc.mutation.ProtectedAreaIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.ProtectedAreaTable,
+			Columns: []string{protectedareapicture.ProtectedAreaColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedarea.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.protected_area_protected_area_pictures = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := papc.mutation.LocationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.LocationTable,
+			Columns: []string{protectedareapicture.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.location_protected_area_pictures = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := papc.mutation.LicenseIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.LicenseTable,
+			Columns: []string{protectedareapicture.LicenseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.license_protected_area_pictures = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

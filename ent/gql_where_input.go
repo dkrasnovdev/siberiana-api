@@ -4892,6 +4892,10 @@ type CollectionWhereInput struct {
 	HasPeople     *bool               `json:"hasPeople,omitempty"`
 	HasPeopleWith []*PersonWhereInput `json:"hasPeopleWith,omitempty"`
 
+	// "protected_area_pictures" edge predicates.
+	HasProtectedAreaPictures     *bool                             `json:"hasProtectedAreaPictures,omitempty"`
+	HasProtectedAreaPicturesWith []*ProtectedAreaPictureWhereInput `json:"hasProtectedAreaPicturesWith,omitempty"`
+
 	// "category" edge predicates.
 	HasCategory     *bool                 `json:"hasCategory,omitempty"`
 	HasCategoryWith []*CategoryWhereInput `json:"hasCategoryWith,omitempty"`
@@ -5319,6 +5323,24 @@ func (i *CollectionWhereInput) P() (predicate.Collection, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, collection.HasPeopleWith(with...))
+	}
+	if i.HasProtectedAreaPictures != nil {
+		p := collection.HasProtectedAreaPictures()
+		if !*i.HasProtectedAreaPictures {
+			p = collection.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProtectedAreaPicturesWith) > 0 {
+		with := make([]predicate.ProtectedAreaPicture, 0, len(i.HasProtectedAreaPicturesWith))
+		for _, w := range i.HasProtectedAreaPicturesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProtectedAreaPicturesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, collection.HasProtectedAreaPicturesWith(with...))
 	}
 	if i.HasCategory != nil {
 		p := collection.HasCategory()
@@ -8199,6 +8221,10 @@ type LicenseWhereInput struct {
 	// "books" edge predicates.
 	HasBooks     *bool             `json:"hasBooks,omitempty"`
 	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
+
+	// "protected_area_pictures" edge predicates.
+	HasProtectedAreaPictures     *bool                             `json:"hasProtectedAreaPictures,omitempty"`
+	HasProtectedAreaPicturesWith []*ProtectedAreaPictureWhereInput `json:"hasProtectedAreaPicturesWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -8606,6 +8632,24 @@ func (i *LicenseWhereInput) P() (predicate.License, error) {
 		}
 		predicates = append(predicates, license.HasBooksWith(with...))
 	}
+	if i.HasProtectedAreaPictures != nil {
+		p := license.HasProtectedAreaPictures()
+		if !*i.HasProtectedAreaPictures {
+			p = license.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProtectedAreaPicturesWith) > 0 {
+		with := make([]predicate.ProtectedAreaPicture, 0, len(i.HasProtectedAreaPicturesWith))
+		for _, w := range i.HasProtectedAreaPicturesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProtectedAreaPicturesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, license.HasProtectedAreaPicturesWith(with...))
+	}
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyLicenseWhereInput
@@ -8745,6 +8789,10 @@ type LocationWhereInput struct {
 	// "books" edge predicates.
 	HasBooks     *bool             `json:"hasBooks,omitempty"`
 	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
+
+	// "protected_area_pictures" edge predicates.
+	HasProtectedAreaPictures     *bool                             `json:"hasProtectedAreaPictures,omitempty"`
+	HasProtectedAreaPicturesWith []*ProtectedAreaPictureWhereInput `json:"hasProtectedAreaPicturesWith,omitempty"`
 
 	// "country" edge predicates.
 	HasCountry     *bool                `json:"hasCountry,omitempty"`
@@ -9167,6 +9215,24 @@ func (i *LocationWhereInput) P() (predicate.Location, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, location.HasBooksWith(with...))
+	}
+	if i.HasProtectedAreaPictures != nil {
+		p := location.HasProtectedAreaPictures()
+		if !*i.HasProtectedAreaPictures {
+			p = location.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProtectedAreaPicturesWith) > 0 {
+		with := make([]predicate.ProtectedAreaPicture, 0, len(i.HasProtectedAreaPicturesWith))
+		for _, w := range i.HasProtectedAreaPicturesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProtectedAreaPicturesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, location.HasProtectedAreaPicturesWith(with...))
 	}
 	if i.HasCountry != nil {
 		p := location.HasCountry()
@@ -15575,6 +15641,43 @@ type ProtectedAreaWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "area" field predicates.
+	Area             *string  `json:"area,omitempty"`
+	AreaNEQ          *string  `json:"areaNEQ,omitempty"`
+	AreaIn           []string `json:"areaIn,omitempty"`
+	AreaNotIn        []string `json:"areaNotIn,omitempty"`
+	AreaGT           *string  `json:"areaGT,omitempty"`
+	AreaGTE          *string  `json:"areaGTE,omitempty"`
+	AreaLT           *string  `json:"areaLT,omitempty"`
+	AreaLTE          *string  `json:"areaLTE,omitempty"`
+	AreaContains     *string  `json:"areaContains,omitempty"`
+	AreaHasPrefix    *string  `json:"areaHasPrefix,omitempty"`
+	AreaHasSuffix    *string  `json:"areaHasSuffix,omitempty"`
+	AreaIsNil        bool     `json:"areaIsNil,omitempty"`
+	AreaNotNil       bool     `json:"areaNotNil,omitempty"`
+	AreaEqualFold    *string  `json:"areaEqualFold,omitempty"`
+	AreaContainsFold *string  `json:"areaContainsFold,omitempty"`
+
+	// "establishment_date" field predicates.
+	EstablishmentDate       *time.Time  `json:"establishmentDate,omitempty"`
+	EstablishmentDateNEQ    *time.Time  `json:"establishmentDateNEQ,omitempty"`
+	EstablishmentDateIn     []time.Time `json:"establishmentDateIn,omitempty"`
+	EstablishmentDateNotIn  []time.Time `json:"establishmentDateNotIn,omitempty"`
+	EstablishmentDateGT     *time.Time  `json:"establishmentDateGT,omitempty"`
+	EstablishmentDateGTE    *time.Time  `json:"establishmentDateGTE,omitempty"`
+	EstablishmentDateLT     *time.Time  `json:"establishmentDateLT,omitempty"`
+	EstablishmentDateLTE    *time.Time  `json:"establishmentDateLTE,omitempty"`
+	EstablishmentDateIsNil  bool        `json:"establishmentDateIsNil,omitempty"`
+	EstablishmentDateNotNil bool        `json:"establishmentDateNotNil,omitempty"`
+
+	// "protected_area_pictures" edge predicates.
+	HasProtectedAreaPictures     *bool                             `json:"hasProtectedAreaPictures,omitempty"`
+	HasProtectedAreaPicturesWith []*ProtectedAreaPictureWhereInput `json:"hasProtectedAreaPicturesWith,omitempty"`
+
+	// "protected_area_category" edge predicates.
+	HasProtectedAreaCategory     *bool                              `json:"hasProtectedAreaCategory,omitempty"`
+	HasProtectedAreaCategoryWith []*ProtectedAreaCategoryWhereInput `json:"hasProtectedAreaCategoryWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -15945,7 +16048,118 @@ func (i *ProtectedAreaWhereInput) P() (predicate.ProtectedArea, error) {
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, protectedarea.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
+	if i.Area != nil {
+		predicates = append(predicates, protectedarea.AreaEQ(*i.Area))
+	}
+	if i.AreaNEQ != nil {
+		predicates = append(predicates, protectedarea.AreaNEQ(*i.AreaNEQ))
+	}
+	if len(i.AreaIn) > 0 {
+		predicates = append(predicates, protectedarea.AreaIn(i.AreaIn...))
+	}
+	if len(i.AreaNotIn) > 0 {
+		predicates = append(predicates, protectedarea.AreaNotIn(i.AreaNotIn...))
+	}
+	if i.AreaGT != nil {
+		predicates = append(predicates, protectedarea.AreaGT(*i.AreaGT))
+	}
+	if i.AreaGTE != nil {
+		predicates = append(predicates, protectedarea.AreaGTE(*i.AreaGTE))
+	}
+	if i.AreaLT != nil {
+		predicates = append(predicates, protectedarea.AreaLT(*i.AreaLT))
+	}
+	if i.AreaLTE != nil {
+		predicates = append(predicates, protectedarea.AreaLTE(*i.AreaLTE))
+	}
+	if i.AreaContains != nil {
+		predicates = append(predicates, protectedarea.AreaContains(*i.AreaContains))
+	}
+	if i.AreaHasPrefix != nil {
+		predicates = append(predicates, protectedarea.AreaHasPrefix(*i.AreaHasPrefix))
+	}
+	if i.AreaHasSuffix != nil {
+		predicates = append(predicates, protectedarea.AreaHasSuffix(*i.AreaHasSuffix))
+	}
+	if i.AreaIsNil {
+		predicates = append(predicates, protectedarea.AreaIsNil())
+	}
+	if i.AreaNotNil {
+		predicates = append(predicates, protectedarea.AreaNotNil())
+	}
+	if i.AreaEqualFold != nil {
+		predicates = append(predicates, protectedarea.AreaEqualFold(*i.AreaEqualFold))
+	}
+	if i.AreaContainsFold != nil {
+		predicates = append(predicates, protectedarea.AreaContainsFold(*i.AreaContainsFold))
+	}
+	if i.EstablishmentDate != nil {
+		predicates = append(predicates, protectedarea.EstablishmentDateEQ(*i.EstablishmentDate))
+	}
+	if i.EstablishmentDateNEQ != nil {
+		predicates = append(predicates, protectedarea.EstablishmentDateNEQ(*i.EstablishmentDateNEQ))
+	}
+	if len(i.EstablishmentDateIn) > 0 {
+		predicates = append(predicates, protectedarea.EstablishmentDateIn(i.EstablishmentDateIn...))
+	}
+	if len(i.EstablishmentDateNotIn) > 0 {
+		predicates = append(predicates, protectedarea.EstablishmentDateNotIn(i.EstablishmentDateNotIn...))
+	}
+	if i.EstablishmentDateGT != nil {
+		predicates = append(predicates, protectedarea.EstablishmentDateGT(*i.EstablishmentDateGT))
+	}
+	if i.EstablishmentDateGTE != nil {
+		predicates = append(predicates, protectedarea.EstablishmentDateGTE(*i.EstablishmentDateGTE))
+	}
+	if i.EstablishmentDateLT != nil {
+		predicates = append(predicates, protectedarea.EstablishmentDateLT(*i.EstablishmentDateLT))
+	}
+	if i.EstablishmentDateLTE != nil {
+		predicates = append(predicates, protectedarea.EstablishmentDateLTE(*i.EstablishmentDateLTE))
+	}
+	if i.EstablishmentDateIsNil {
+		predicates = append(predicates, protectedarea.EstablishmentDateIsNil())
+	}
+	if i.EstablishmentDateNotNil {
+		predicates = append(predicates, protectedarea.EstablishmentDateNotNil())
+	}
 
+	if i.HasProtectedAreaPictures != nil {
+		p := protectedarea.HasProtectedAreaPictures()
+		if !*i.HasProtectedAreaPictures {
+			p = protectedarea.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProtectedAreaPicturesWith) > 0 {
+		with := make([]predicate.ProtectedAreaPicture, 0, len(i.HasProtectedAreaPicturesWith))
+		for _, w := range i.HasProtectedAreaPicturesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProtectedAreaPicturesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, protectedarea.HasProtectedAreaPicturesWith(with...))
+	}
+	if i.HasProtectedAreaCategory != nil {
+		p := protectedarea.HasProtectedAreaCategory()
+		if !*i.HasProtectedAreaCategory {
+			p = protectedarea.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProtectedAreaCategoryWith) > 0 {
+		with := make([]predicate.ProtectedAreaCategory, 0, len(i.HasProtectedAreaCategoryWith))
+		for _, w := range i.HasProtectedAreaCategoryWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProtectedAreaCategoryWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, protectedarea.HasProtectedAreaCategoryWith(with...))
+	}
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyProtectedAreaWhereInput
@@ -16077,6 +16291,10 @@ type ProtectedAreaCategoryWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "protected_areas" edge predicates.
+	HasProtectedAreas     *bool                      `json:"hasProtectedAreas,omitempty"`
+	HasProtectedAreasWith []*ProtectedAreaWhereInput `json:"hasProtectedAreasWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -16448,6 +16666,24 @@ func (i *ProtectedAreaCategoryWhereInput) P() (predicate.ProtectedAreaCategory, 
 		predicates = append(predicates, protectedareacategory.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
 
+	if i.HasProtectedAreas != nil {
+		p := protectedareacategory.HasProtectedAreas()
+		if !*i.HasProtectedAreas {
+			p = protectedareacategory.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProtectedAreasWith) > 0 {
+		with := make([]predicate.ProtectedArea, 0, len(i.HasProtectedAreasWith))
+		for _, w := range i.HasProtectedAreasWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProtectedAreasWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, protectedareacategory.HasProtectedAreasWith(with...))
+	}
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyProtectedAreaCategoryWhereInput
@@ -16579,6 +16815,51 @@ type ProtectedAreaPictureWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "primary_image_url" field predicates.
+	PrimaryImageURL             *string  `json:"primaryImageURL,omitempty"`
+	PrimaryImageURLNEQ          *string  `json:"primaryImageURLNEQ,omitempty"`
+	PrimaryImageURLIn           []string `json:"primaryImageURLIn,omitempty"`
+	PrimaryImageURLNotIn        []string `json:"primaryImageURLNotIn,omitempty"`
+	PrimaryImageURLGT           *string  `json:"primaryImageURLGT,omitempty"`
+	PrimaryImageURLGTE          *string  `json:"primaryImageURLGTE,omitempty"`
+	PrimaryImageURLLT           *string  `json:"primaryImageURLLT,omitempty"`
+	PrimaryImageURLLTE          *string  `json:"primaryImageURLLTE,omitempty"`
+	PrimaryImageURLContains     *string  `json:"primaryImageURLContains,omitempty"`
+	PrimaryImageURLHasPrefix    *string  `json:"primaryImageURLHasPrefix,omitempty"`
+	PrimaryImageURLHasSuffix    *string  `json:"primaryImageURLHasSuffix,omitempty"`
+	PrimaryImageURLIsNil        bool     `json:"primaryImageURLIsNil,omitempty"`
+	PrimaryImageURLNotNil       bool     `json:"primaryImageURLNotNil,omitempty"`
+	PrimaryImageURLEqualFold    *string  `json:"primaryImageURLEqualFold,omitempty"`
+	PrimaryImageURLContainsFold *string  `json:"primaryImageURLContainsFold,omitempty"`
+
+	// "shooting_date" field predicates.
+	ShootingDate       *time.Time  `json:"shootingDate,omitempty"`
+	ShootingDateNEQ    *time.Time  `json:"shootingDateNEQ,omitempty"`
+	ShootingDateIn     []time.Time `json:"shootingDateIn,omitempty"`
+	ShootingDateNotIn  []time.Time `json:"shootingDateNotIn,omitempty"`
+	ShootingDateGT     *time.Time  `json:"shootingDateGT,omitempty"`
+	ShootingDateGTE    *time.Time  `json:"shootingDateGTE,omitempty"`
+	ShootingDateLT     *time.Time  `json:"shootingDateLT,omitempty"`
+	ShootingDateLTE    *time.Time  `json:"shootingDateLTE,omitempty"`
+	ShootingDateIsNil  bool        `json:"shootingDateIsNil,omitempty"`
+	ShootingDateNotNil bool        `json:"shootingDateNotNil,omitempty"`
+
+	// "collection" edge predicates.
+	HasCollection     *bool                   `json:"hasCollection,omitempty"`
+	HasCollectionWith []*CollectionWhereInput `json:"hasCollectionWith,omitempty"`
+
+	// "protected_area" edge predicates.
+	HasProtectedArea     *bool                      `json:"hasProtectedArea,omitempty"`
+	HasProtectedAreaWith []*ProtectedAreaWhereInput `json:"hasProtectedAreaWith,omitempty"`
+
+	// "location" edge predicates.
+	HasLocation     *bool                 `json:"hasLocation,omitempty"`
+	HasLocationWith []*LocationWhereInput `json:"hasLocationWith,omitempty"`
+
+	// "license" edge predicates.
+	HasLicense     *bool                `json:"hasLicense,omitempty"`
+	HasLicenseWith []*LicenseWhereInput `json:"hasLicenseWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -16949,7 +17230,154 @@ func (i *ProtectedAreaPictureWhereInput) P() (predicate.ProtectedAreaPicture, er
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, protectedareapicture.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
+	if i.PrimaryImageURL != nil {
+		predicates = append(predicates, protectedareapicture.PrimaryImageURLEQ(*i.PrimaryImageURL))
+	}
+	if i.PrimaryImageURLNEQ != nil {
+		predicates = append(predicates, protectedareapicture.PrimaryImageURLNEQ(*i.PrimaryImageURLNEQ))
+	}
+	if len(i.PrimaryImageURLIn) > 0 {
+		predicates = append(predicates, protectedareapicture.PrimaryImageURLIn(i.PrimaryImageURLIn...))
+	}
+	if len(i.PrimaryImageURLNotIn) > 0 {
+		predicates = append(predicates, protectedareapicture.PrimaryImageURLNotIn(i.PrimaryImageURLNotIn...))
+	}
+	if i.PrimaryImageURLGT != nil {
+		predicates = append(predicates, protectedareapicture.PrimaryImageURLGT(*i.PrimaryImageURLGT))
+	}
+	if i.PrimaryImageURLGTE != nil {
+		predicates = append(predicates, protectedareapicture.PrimaryImageURLGTE(*i.PrimaryImageURLGTE))
+	}
+	if i.PrimaryImageURLLT != nil {
+		predicates = append(predicates, protectedareapicture.PrimaryImageURLLT(*i.PrimaryImageURLLT))
+	}
+	if i.PrimaryImageURLLTE != nil {
+		predicates = append(predicates, protectedareapicture.PrimaryImageURLLTE(*i.PrimaryImageURLLTE))
+	}
+	if i.PrimaryImageURLContains != nil {
+		predicates = append(predicates, protectedareapicture.PrimaryImageURLContains(*i.PrimaryImageURLContains))
+	}
+	if i.PrimaryImageURLHasPrefix != nil {
+		predicates = append(predicates, protectedareapicture.PrimaryImageURLHasPrefix(*i.PrimaryImageURLHasPrefix))
+	}
+	if i.PrimaryImageURLHasSuffix != nil {
+		predicates = append(predicates, protectedareapicture.PrimaryImageURLHasSuffix(*i.PrimaryImageURLHasSuffix))
+	}
+	if i.PrimaryImageURLIsNil {
+		predicates = append(predicates, protectedareapicture.PrimaryImageURLIsNil())
+	}
+	if i.PrimaryImageURLNotNil {
+		predicates = append(predicates, protectedareapicture.PrimaryImageURLNotNil())
+	}
+	if i.PrimaryImageURLEqualFold != nil {
+		predicates = append(predicates, protectedareapicture.PrimaryImageURLEqualFold(*i.PrimaryImageURLEqualFold))
+	}
+	if i.PrimaryImageURLContainsFold != nil {
+		predicates = append(predicates, protectedareapicture.PrimaryImageURLContainsFold(*i.PrimaryImageURLContainsFold))
+	}
+	if i.ShootingDate != nil {
+		predicates = append(predicates, protectedareapicture.ShootingDateEQ(*i.ShootingDate))
+	}
+	if i.ShootingDateNEQ != nil {
+		predicates = append(predicates, protectedareapicture.ShootingDateNEQ(*i.ShootingDateNEQ))
+	}
+	if len(i.ShootingDateIn) > 0 {
+		predicates = append(predicates, protectedareapicture.ShootingDateIn(i.ShootingDateIn...))
+	}
+	if len(i.ShootingDateNotIn) > 0 {
+		predicates = append(predicates, protectedareapicture.ShootingDateNotIn(i.ShootingDateNotIn...))
+	}
+	if i.ShootingDateGT != nil {
+		predicates = append(predicates, protectedareapicture.ShootingDateGT(*i.ShootingDateGT))
+	}
+	if i.ShootingDateGTE != nil {
+		predicates = append(predicates, protectedareapicture.ShootingDateGTE(*i.ShootingDateGTE))
+	}
+	if i.ShootingDateLT != nil {
+		predicates = append(predicates, protectedareapicture.ShootingDateLT(*i.ShootingDateLT))
+	}
+	if i.ShootingDateLTE != nil {
+		predicates = append(predicates, protectedareapicture.ShootingDateLTE(*i.ShootingDateLTE))
+	}
+	if i.ShootingDateIsNil {
+		predicates = append(predicates, protectedareapicture.ShootingDateIsNil())
+	}
+	if i.ShootingDateNotNil {
+		predicates = append(predicates, protectedareapicture.ShootingDateNotNil())
+	}
 
+	if i.HasCollection != nil {
+		p := protectedareapicture.HasCollection()
+		if !*i.HasCollection {
+			p = protectedareapicture.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCollectionWith) > 0 {
+		with := make([]predicate.Collection, 0, len(i.HasCollectionWith))
+		for _, w := range i.HasCollectionWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCollectionWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, protectedareapicture.HasCollectionWith(with...))
+	}
+	if i.HasProtectedArea != nil {
+		p := protectedareapicture.HasProtectedArea()
+		if !*i.HasProtectedArea {
+			p = protectedareapicture.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProtectedAreaWith) > 0 {
+		with := make([]predicate.ProtectedArea, 0, len(i.HasProtectedAreaWith))
+		for _, w := range i.HasProtectedAreaWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProtectedAreaWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, protectedareapicture.HasProtectedAreaWith(with...))
+	}
+	if i.HasLocation != nil {
+		p := protectedareapicture.HasLocation()
+		if !*i.HasLocation {
+			p = protectedareapicture.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasLocationWith) > 0 {
+		with := make([]predicate.Location, 0, len(i.HasLocationWith))
+		for _, w := range i.HasLocationWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasLocationWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, protectedareapicture.HasLocationWith(with...))
+	}
+	if i.HasLicense != nil {
+		p := protectedareapicture.HasLicense()
+		if !*i.HasLicense {
+			p = protectedareapicture.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasLicenseWith) > 0 {
+		with := make([]predicate.License, 0, len(i.HasLicenseWith))
+		for _, w := range i.HasLicenseWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasLicenseWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, protectedareapicture.HasLicenseWith(with...))
+	}
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyProtectedAreaPictureWhereInput

@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
 )
 
 // ProtectedArea is the model entity for the ProtectedArea schema.
@@ -34,7 +35,52 @@ type ProtectedArea struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLinks holds the value of the "external_links" field.
 	ExternalLinks []string `json:"external_links,omitempty"`
-	selectValues  sql.SelectValues
+	// Area holds the value of the "area" field.
+	Area string `json:"area,omitempty"`
+	// EstablishmentDate holds the value of the "establishment_date" field.
+	EstablishmentDate time.Time `json:"establishment_date,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the ProtectedAreaQuery when eager-loading is set.
+	Edges                                   ProtectedAreaEdges `json:"edges"`
+	protected_area_category_protected_areas *int
+	selectValues                            sql.SelectValues
+}
+
+// ProtectedAreaEdges holds the relations/edges for other nodes in the graph.
+type ProtectedAreaEdges struct {
+	// ProtectedAreaPictures holds the value of the protected_area_pictures edge.
+	ProtectedAreaPictures []*ProtectedAreaPicture `json:"protected_area_pictures,omitempty"`
+	// ProtectedAreaCategory holds the value of the protected_area_category edge.
+	ProtectedAreaCategory *ProtectedAreaCategory `json:"protected_area_category,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [2]bool
+	// totalCount holds the count of the edges above.
+	totalCount [2]map[string]int
+
+	namedProtectedAreaPictures map[string][]*ProtectedAreaPicture
+}
+
+// ProtectedAreaPicturesOrErr returns the ProtectedAreaPictures value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProtectedAreaEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, error) {
+	if e.loadedTypes[0] {
+		return e.ProtectedAreaPictures, nil
+	}
+	return nil, &NotLoadedError{edge: "protected_area_pictures"}
+}
+
+// ProtectedAreaCategoryOrErr returns the ProtectedAreaCategory value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProtectedAreaEdges) ProtectedAreaCategoryOrErr() (*ProtectedAreaCategory, error) {
+	if e.loadedTypes[1] {
+		if e.ProtectedAreaCategory == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: protectedareacategory.Label}
+		}
+		return e.ProtectedAreaCategory, nil
+	}
+	return nil, &NotLoadedError{edge: "protected_area_category"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -46,10 +92,12 @@ func (*ProtectedArea) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case protectedarea.FieldID:
 			values[i] = new(sql.NullInt64)
-		case protectedarea.FieldCreatedBy, protectedarea.FieldUpdatedBy, protectedarea.FieldDisplayName, protectedarea.FieldAbbreviation, protectedarea.FieldDescription:
+		case protectedarea.FieldCreatedBy, protectedarea.FieldUpdatedBy, protectedarea.FieldDisplayName, protectedarea.FieldAbbreviation, protectedarea.FieldDescription, protectedarea.FieldArea:
 			values[i] = new(sql.NullString)
-		case protectedarea.FieldCreatedAt, protectedarea.FieldUpdatedAt:
+		case protectedarea.FieldCreatedAt, protectedarea.FieldUpdatedAt, protectedarea.FieldEstablishmentDate:
 			values[i] = new(sql.NullTime)
+		case protectedarea.ForeignKeys[0]: // protected_area_category_protected_areas
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -121,6 +169,25 @@ func (pa *ProtectedArea) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field external_links: %w", err)
 				}
 			}
+		case protectedarea.FieldArea:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field area", values[i])
+			} else if value.Valid {
+				pa.Area = value.String
+			}
+		case protectedarea.FieldEstablishmentDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field establishment_date", values[i])
+			} else if value.Valid {
+				pa.EstablishmentDate = value.Time
+			}
+		case protectedarea.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field protected_area_category_protected_areas", value)
+			} else if value.Valid {
+				pa.protected_area_category_protected_areas = new(int)
+				*pa.protected_area_category_protected_areas = int(value.Int64)
+			}
 		default:
 			pa.selectValues.Set(columns[i], values[i])
 		}
@@ -132,6 +199,16 @@ func (pa *ProtectedArea) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (pa *ProtectedArea) Value(name string) (ent.Value, error) {
 	return pa.selectValues.Get(name)
+}
+
+// QueryProtectedAreaPictures queries the "protected_area_pictures" edge of the ProtectedArea entity.
+func (pa *ProtectedArea) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery {
+	return NewProtectedAreaClient(pa.config).QueryProtectedAreaPictures(pa)
+}
+
+// QueryProtectedAreaCategory queries the "protected_area_category" edge of the ProtectedArea entity.
+func (pa *ProtectedArea) QueryProtectedAreaCategory() *ProtectedAreaCategoryQuery {
+	return NewProtectedAreaClient(pa.config).QueryProtectedAreaCategory(pa)
 }
 
 // Update returns a builder for updating this ProtectedArea.
@@ -180,8 +257,38 @@ func (pa *ProtectedArea) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_links=")
 	builder.WriteString(fmt.Sprintf("%v", pa.ExternalLinks))
+	builder.WriteString(", ")
+	builder.WriteString("area=")
+	builder.WriteString(pa.Area)
+	builder.WriteString(", ")
+	builder.WriteString("establishment_date=")
+	builder.WriteString(pa.EstablishmentDate.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedProtectedAreaPictures returns the ProtectedAreaPictures named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pa *ProtectedArea) NamedProtectedAreaPictures(name string) ([]*ProtectedAreaPicture, error) {
+	if pa.Edges.namedProtectedAreaPictures == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pa.Edges.namedProtectedAreaPictures[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pa *ProtectedArea) appendNamedProtectedAreaPictures(name string, edges ...*ProtectedAreaPicture) {
+	if pa.Edges.namedProtectedAreaPictures == nil {
+		pa.Edges.namedProtectedAreaPictures = make(map[string][]*ProtectedAreaPicture)
+	}
+	if len(edges) == 0 {
+		pa.Edges.namedProtectedAreaPictures[name] = []*ProtectedAreaPicture{}
+	} else {
+		pa.Edges.namedProtectedAreaPictures[name] = append(pa.Edges.namedProtectedAreaPictures[name], edges...)
+	}
 }
 
 // ProtectedAreas is a parsable slice of ProtectedArea.

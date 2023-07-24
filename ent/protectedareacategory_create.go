@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
 )
 
@@ -122,6 +123,21 @@ func (pacc *ProtectedAreaCategoryCreate) SetNillableDescription(s *string) *Prot
 func (pacc *ProtectedAreaCategoryCreate) SetExternalLinks(s []string) *ProtectedAreaCategoryCreate {
 	pacc.mutation.SetExternalLinks(s)
 	return pacc
+}
+
+// AddProtectedAreaIDs adds the "protected_areas" edge to the ProtectedArea entity by IDs.
+func (pacc *ProtectedAreaCategoryCreate) AddProtectedAreaIDs(ids ...int) *ProtectedAreaCategoryCreate {
+	pacc.mutation.AddProtectedAreaIDs(ids...)
+	return pacc
+}
+
+// AddProtectedAreas adds the "protected_areas" edges to the ProtectedArea entity.
+func (pacc *ProtectedAreaCategoryCreate) AddProtectedAreas(p ...*ProtectedArea) *ProtectedAreaCategoryCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pacc.AddProtectedAreaIDs(ids...)
 }
 
 // Mutation returns the ProtectedAreaCategoryMutation object of the builder.
@@ -243,6 +259,22 @@ func (pacc *ProtectedAreaCategoryCreate) createSpec() (*ProtectedAreaCategory, *
 	if value, ok := pacc.mutation.ExternalLinks(); ok {
 		_spec.SetField(protectedareacategory.FieldExternalLinks, field.TypeJSON, value)
 		_node.ExternalLinks = value
+	}
+	if nodes := pacc.mutation.ProtectedAreasIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   protectedareacategory.ProtectedAreasTable,
+			Columns: []string{protectedareacategory.ProtectedAreasColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedarea.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

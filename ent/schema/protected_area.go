@@ -3,7 +3,10 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/edge"
+	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/privacy"
 	"github.com/dkrasnovdev/heritage-api/internal/ent/mixin"
 	rule "github.com/dkrasnovdev/heritage-api/internal/ent/privacy"
@@ -49,10 +52,20 @@ func (ProtectedArea) Annotations() []schema.Annotation {
 
 // Fields of the ProtectedArea.
 func (ProtectedArea) Fields() []ent.Field {
-	return nil
+	return []ent.Field{
+		field.String("area").Optional(),
+		field.Time("establishment_date").
+			Optional().
+			SchemaType(map[string]string{
+				dialect.Postgres: "date",
+			}),
+	}
 }
 
 // Edges of the ProtectedArea.
 func (ProtectedArea) Edges() []ent.Edge {
-	return nil
+	return []ent.Edge{
+		edge.To("protected_area_pictures", ProtectedAreaPicture.Type),
+		edge.From("protected_area_category", ProtectedAreaCategory.Type).Ref("protected_areas").Unique(),
+	}
 }

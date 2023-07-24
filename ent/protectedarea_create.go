@@ -11,6 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 )
 
 // ProtectedAreaCreate is the builder for creating a ProtectedArea entity.
@@ -122,6 +124,68 @@ func (pac *ProtectedAreaCreate) SetNillableDescription(s *string) *ProtectedArea
 func (pac *ProtectedAreaCreate) SetExternalLinks(s []string) *ProtectedAreaCreate {
 	pac.mutation.SetExternalLinks(s)
 	return pac
+}
+
+// SetArea sets the "area" field.
+func (pac *ProtectedAreaCreate) SetArea(s string) *ProtectedAreaCreate {
+	pac.mutation.SetArea(s)
+	return pac
+}
+
+// SetNillableArea sets the "area" field if the given value is not nil.
+func (pac *ProtectedAreaCreate) SetNillableArea(s *string) *ProtectedAreaCreate {
+	if s != nil {
+		pac.SetArea(*s)
+	}
+	return pac
+}
+
+// SetEstablishmentDate sets the "establishment_date" field.
+func (pac *ProtectedAreaCreate) SetEstablishmentDate(t time.Time) *ProtectedAreaCreate {
+	pac.mutation.SetEstablishmentDate(t)
+	return pac
+}
+
+// SetNillableEstablishmentDate sets the "establishment_date" field if the given value is not nil.
+func (pac *ProtectedAreaCreate) SetNillableEstablishmentDate(t *time.Time) *ProtectedAreaCreate {
+	if t != nil {
+		pac.SetEstablishmentDate(*t)
+	}
+	return pac
+}
+
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (pac *ProtectedAreaCreate) AddProtectedAreaPictureIDs(ids ...int) *ProtectedAreaCreate {
+	pac.mutation.AddProtectedAreaPictureIDs(ids...)
+	return pac
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (pac *ProtectedAreaCreate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *ProtectedAreaCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pac.AddProtectedAreaPictureIDs(ids...)
+}
+
+// SetProtectedAreaCategoryID sets the "protected_area_category" edge to the ProtectedAreaCategory entity by ID.
+func (pac *ProtectedAreaCreate) SetProtectedAreaCategoryID(id int) *ProtectedAreaCreate {
+	pac.mutation.SetProtectedAreaCategoryID(id)
+	return pac
+}
+
+// SetNillableProtectedAreaCategoryID sets the "protected_area_category" edge to the ProtectedAreaCategory entity by ID if the given value is not nil.
+func (pac *ProtectedAreaCreate) SetNillableProtectedAreaCategoryID(id *int) *ProtectedAreaCreate {
+	if id != nil {
+		pac = pac.SetProtectedAreaCategoryID(*id)
+	}
+	return pac
+}
+
+// SetProtectedAreaCategory sets the "protected_area_category" edge to the ProtectedAreaCategory entity.
+func (pac *ProtectedAreaCreate) SetProtectedAreaCategory(p *ProtectedAreaCategory) *ProtectedAreaCreate {
+	return pac.SetProtectedAreaCategoryID(p.ID)
 }
 
 // Mutation returns the ProtectedAreaMutation object of the builder.
@@ -243,6 +307,47 @@ func (pac *ProtectedAreaCreate) createSpec() (*ProtectedArea, *sqlgraph.CreateSp
 	if value, ok := pac.mutation.ExternalLinks(); ok {
 		_spec.SetField(protectedarea.FieldExternalLinks, field.TypeJSON, value)
 		_node.ExternalLinks = value
+	}
+	if value, ok := pac.mutation.Area(); ok {
+		_spec.SetField(protectedarea.FieldArea, field.TypeString, value)
+		_node.Area = value
+	}
+	if value, ok := pac.mutation.EstablishmentDate(); ok {
+		_spec.SetField(protectedarea.FieldEstablishmentDate, field.TypeTime, value)
+		_node.EstablishmentDate = value
+	}
+	if nodes := pac.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   protectedarea.ProtectedAreaPicturesTable,
+			Columns: []string{protectedarea.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pac.mutation.ProtectedAreaCategoryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedarea.ProtectedAreaCategoryTable,
+			Columns: []string{protectedarea.ProtectedAreaCategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareacategory.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.protected_area_category_protected_areas = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

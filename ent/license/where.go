@@ -601,6 +601,29 @@ func HasBooksWith(preds ...predicate.Book) predicate.License {
 	})
 }
 
+// HasProtectedAreaPictures applies the HasEdge predicate on the "protected_area_pictures" edge.
+func HasProtectedAreaPictures() predicate.License {
+	return predicate.License(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ProtectedAreaPicturesTable, ProtectedAreaPicturesColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProtectedAreaPicturesWith applies the HasEdge predicate on the "protected_area_pictures" edge with a given conditions (other predicates).
+func HasProtectedAreaPicturesWith(preds ...predicate.ProtectedAreaPicture) predicate.License {
+	return predicate.License(func(s *sql.Selector) {
+		step := newProtectedAreaPicturesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.License) predicate.License {
 	return predicate.License(func(s *sql.Selector) {

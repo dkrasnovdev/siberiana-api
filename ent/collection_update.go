@@ -18,6 +18,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 )
 
 // CollectionUpdate is the builder for updating Collection entities.
@@ -202,6 +203,21 @@ func (cu *CollectionUpdate) AddPeople(p ...*Person) *CollectionUpdate {
 	return cu.AddPersonIDs(ids...)
 }
 
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (cu *CollectionUpdate) AddProtectedAreaPictureIDs(ids ...int) *CollectionUpdate {
+	cu.mutation.AddProtectedAreaPictureIDs(ids...)
+	return cu
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (cu *CollectionUpdate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *CollectionUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cu.AddProtectedAreaPictureIDs(ids...)
+}
+
 // SetCategoryID sets the "category" edge to the Category entity by ID.
 func (cu *CollectionUpdate) SetCategoryID(id int) *CollectionUpdate {
 	cu.mutation.SetCategoryID(id)
@@ -287,6 +303,27 @@ func (cu *CollectionUpdate) RemovePeople(p ...*Person) *CollectionUpdate {
 		ids[i] = p[i].ID
 	}
 	return cu.RemovePersonIDs(ids...)
+}
+
+// ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (cu *CollectionUpdate) ClearProtectedAreaPictures() *CollectionUpdate {
+	cu.mutation.ClearProtectedAreaPictures()
+	return cu
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to ProtectedAreaPicture entities by IDs.
+func (cu *CollectionUpdate) RemoveProtectedAreaPictureIDs(ids ...int) *CollectionUpdate {
+	cu.mutation.RemoveProtectedAreaPictureIDs(ids...)
+	return cu
+}
+
+// RemoveProtectedAreaPictures removes "protected_area_pictures" edges to ProtectedAreaPicture entities.
+func (cu *CollectionUpdate) RemoveProtectedAreaPictures(p ...*ProtectedAreaPicture) *CollectionUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cu.RemoveProtectedAreaPictureIDs(ids...)
 }
 
 // ClearCategory clears the "category" edge to the Category entity.
@@ -525,6 +562,51 @@ func (cu *CollectionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if cu.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.ProtectedAreaPicturesTable,
+			Columns: []string{collection.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.RemovedProtectedAreaPicturesIDs(); len(nodes) > 0 && !cu.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.ProtectedAreaPicturesTable,
+			Columns: []string{collection.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.ProtectedAreaPicturesTable,
+			Columns: []string{collection.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if cu.mutation.CategoryCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -743,6 +825,21 @@ func (cuo *CollectionUpdateOne) AddPeople(p ...*Person) *CollectionUpdateOne {
 	return cuo.AddPersonIDs(ids...)
 }
 
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (cuo *CollectionUpdateOne) AddProtectedAreaPictureIDs(ids ...int) *CollectionUpdateOne {
+	cuo.mutation.AddProtectedAreaPictureIDs(ids...)
+	return cuo
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (cuo *CollectionUpdateOne) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *CollectionUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cuo.AddProtectedAreaPictureIDs(ids...)
+}
+
 // SetCategoryID sets the "category" edge to the Category entity by ID.
 func (cuo *CollectionUpdateOne) SetCategoryID(id int) *CollectionUpdateOne {
 	cuo.mutation.SetCategoryID(id)
@@ -828,6 +925,27 @@ func (cuo *CollectionUpdateOne) RemovePeople(p ...*Person) *CollectionUpdateOne 
 		ids[i] = p[i].ID
 	}
 	return cuo.RemovePersonIDs(ids...)
+}
+
+// ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (cuo *CollectionUpdateOne) ClearProtectedAreaPictures() *CollectionUpdateOne {
+	cuo.mutation.ClearProtectedAreaPictures()
+	return cuo
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to ProtectedAreaPicture entities by IDs.
+func (cuo *CollectionUpdateOne) RemoveProtectedAreaPictureIDs(ids ...int) *CollectionUpdateOne {
+	cuo.mutation.RemoveProtectedAreaPictureIDs(ids...)
+	return cuo
+}
+
+// RemoveProtectedAreaPictures removes "protected_area_pictures" edges to ProtectedAreaPicture entities.
+func (cuo *CollectionUpdateOne) RemoveProtectedAreaPictures(p ...*ProtectedAreaPicture) *CollectionUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cuo.RemoveProtectedAreaPictureIDs(ids...)
 }
 
 // ClearCategory clears the "category" edge to the Category entity.
@@ -1089,6 +1207,51 @@ func (cuo *CollectionUpdateOne) sqlSave(ctx context.Context) (_node *Collection,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cuo.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.ProtectedAreaPicturesTable,
+			Columns: []string{collection.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.RemovedProtectedAreaPicturesIDs(); len(nodes) > 0 && !cuo.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.ProtectedAreaPicturesTable,
+			Columns: []string{collection.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.ProtectedAreaPicturesTable,
+			Columns: []string{collection.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

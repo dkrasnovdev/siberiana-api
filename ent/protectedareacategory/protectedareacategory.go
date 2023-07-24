@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -30,8 +31,17 @@ const (
 	FieldDescription = "description"
 	// FieldExternalLinks holds the string denoting the external_links field in the database.
 	FieldExternalLinks = "external_links"
+	// EdgeProtectedAreas holds the string denoting the protected_areas edge name in mutations.
+	EdgeProtectedAreas = "protected_areas"
 	// Table holds the table name of the protectedareacategory in the database.
 	Table = "protected_area_categories"
+	// ProtectedAreasTable is the table that holds the protected_areas relation/edge.
+	ProtectedAreasTable = "protected_areas"
+	// ProtectedAreasInverseTable is the table name for the ProtectedArea entity.
+	// It exists in this package in order to avoid circular dependency with the "protectedarea" package.
+	ProtectedAreasInverseTable = "protected_areas"
+	// ProtectedAreasColumn is the table column denoting the protected_areas relation/edge.
+	ProtectedAreasColumn = "protected_area_category_protected_areas"
 )
 
 // Columns holds all SQL columns for protectedareacategory fields.
@@ -114,4 +124,25 @@ func ByAbbreviation(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByProtectedAreasCount orders the results by protected_areas count.
+func ByProtectedAreasCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProtectedAreasStep(), opts...)
+	}
+}
+
+// ByProtectedAreas orders the results by protected_areas terms.
+func ByProtectedAreas(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProtectedAreasStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+func newProtectedAreasStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProtectedAreasInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ProtectedAreasTable, ProtectedAreasColumn),
+	)
 }

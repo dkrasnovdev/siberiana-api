@@ -13,6 +13,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 )
 
 // LicenseCreate is the builder for creating a License entity.
@@ -154,6 +155,21 @@ func (lc *LicenseCreate) AddBooks(b ...*Book) *LicenseCreate {
 		ids[i] = b[i].ID
 	}
 	return lc.AddBookIDs(ids...)
+}
+
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (lc *LicenseCreate) AddProtectedAreaPictureIDs(ids ...int) *LicenseCreate {
+	lc.mutation.AddProtectedAreaPictureIDs(ids...)
+	return lc
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (lc *LicenseCreate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *LicenseCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return lc.AddProtectedAreaPictureIDs(ids...)
 }
 
 // Mutation returns the LicenseMutation object of the builder.
@@ -301,6 +317,22 @@ func (lc *LicenseCreate) createSpec() (*License, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := lc.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   license.ProtectedAreaPicturesTable,
+			Columns: []string{license.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

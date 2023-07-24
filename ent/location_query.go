@@ -18,6 +18,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/heritage-api/ent/region"
 	"github.com/dkrasnovdev/heritage-api/ent/settlement"
 )
@@ -25,20 +26,22 @@ import (
 // LocationQuery is the builder for querying Location entities.
 type LocationQuery struct {
 	config
-	ctx                *QueryContext
-	order              []location.OrderOption
-	inters             []Interceptor
-	predicates         []predicate.Location
-	withArtifacts      *ArtifactQuery
-	withBooks          *BookQuery
-	withCountry        *CountryQuery
-	withDistrict       *DistrictQuery
-	withSettlement     *SettlementQuery
-	withRegion         *RegionQuery
-	modifiers          []func(*sql.Selector)
-	loadTotal          []func(context.Context, []*Location) error
-	withNamedArtifacts map[string]*ArtifactQuery
-	withNamedBooks     map[string]*BookQuery
+	ctx                            *QueryContext
+	order                          []location.OrderOption
+	inters                         []Interceptor
+	predicates                     []predicate.Location
+	withArtifacts                  *ArtifactQuery
+	withBooks                      *BookQuery
+	withProtectedAreaPictures      *ProtectedAreaPictureQuery
+	withCountry                    *CountryQuery
+	withDistrict                   *DistrictQuery
+	withSettlement                 *SettlementQuery
+	withRegion                     *RegionQuery
+	modifiers                      []func(*sql.Selector)
+	loadTotal                      []func(context.Context, []*Location) error
+	withNamedArtifacts             map[string]*ArtifactQuery
+	withNamedBooks                 map[string]*BookQuery
+	withNamedProtectedAreaPictures map[string]*ProtectedAreaPictureQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -112,6 +115,28 @@ func (lq *LocationQuery) QueryBooks() *BookQuery {
 			sqlgraph.From(location.Table, location.FieldID, selector),
 			sqlgraph.To(book.Table, book.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, location.BooksTable, location.BooksColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(lq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProtectedAreaPictures chains the current query on the "protected_area_pictures" edge.
+func (lq *LocationQuery) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery {
+	query := (&ProtectedAreaPictureClient{config: lq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := lq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := lq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(location.Table, location.FieldID, selector),
+			sqlgraph.To(protectedareapicture.Table, protectedareapicture.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, location.ProtectedAreaPicturesTable, location.ProtectedAreaPicturesColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(lq.driver.Dialect(), step)
 		return fromU, nil
@@ -394,17 +419,18 @@ func (lq *LocationQuery) Clone() *LocationQuery {
 		return nil
 	}
 	return &LocationQuery{
-		config:         lq.config,
-		ctx:            lq.ctx.Clone(),
-		order:          append([]location.OrderOption{}, lq.order...),
-		inters:         append([]Interceptor{}, lq.inters...),
-		predicates:     append([]predicate.Location{}, lq.predicates...),
-		withArtifacts:  lq.withArtifacts.Clone(),
-		withBooks:      lq.withBooks.Clone(),
-		withCountry:    lq.withCountry.Clone(),
-		withDistrict:   lq.withDistrict.Clone(),
-		withSettlement: lq.withSettlement.Clone(),
-		withRegion:     lq.withRegion.Clone(),
+		config:                    lq.config,
+		ctx:                       lq.ctx.Clone(),
+		order:                     append([]location.OrderOption{}, lq.order...),
+		inters:                    append([]Interceptor{}, lq.inters...),
+		predicates:                append([]predicate.Location{}, lq.predicates...),
+		withArtifacts:             lq.withArtifacts.Clone(),
+		withBooks:                 lq.withBooks.Clone(),
+		withProtectedAreaPictures: lq.withProtectedAreaPictures.Clone(),
+		withCountry:               lq.withCountry.Clone(),
+		withDistrict:              lq.withDistrict.Clone(),
+		withSettlement:            lq.withSettlement.Clone(),
+		withRegion:                lq.withRegion.Clone(),
 		// clone intermediate query.
 		sql:  lq.sql.Clone(),
 		path: lq.path,
@@ -430,6 +456,17 @@ func (lq *LocationQuery) WithBooks(opts ...func(*BookQuery)) *LocationQuery {
 		opt(query)
 	}
 	lq.withBooks = query
+	return lq
+}
+
+// WithProtectedAreaPictures tells the query-builder to eager-load the nodes that are connected to
+// the "protected_area_pictures" edge. The optional arguments are used to configure the query builder of the edge.
+func (lq *LocationQuery) WithProtectedAreaPictures(opts ...func(*ProtectedAreaPictureQuery)) *LocationQuery {
+	query := (&ProtectedAreaPictureClient{config: lq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	lq.withProtectedAreaPictures = query
 	return lq
 }
 
@@ -561,9 +598,10 @@ func (lq *LocationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Loc
 	var (
 		nodes       = []*Location{}
 		_spec       = lq.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [7]bool{
 			lq.withArtifacts != nil,
 			lq.withBooks != nil,
+			lq.withProtectedAreaPictures != nil,
 			lq.withCountry != nil,
 			lq.withDistrict != nil,
 			lq.withSettlement != nil,
@@ -605,6 +643,15 @@ func (lq *LocationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Loc
 			return nil, err
 		}
 	}
+	if query := lq.withProtectedAreaPictures; query != nil {
+		if err := lq.loadProtectedAreaPictures(ctx, query, nodes,
+			func(n *Location) { n.Edges.ProtectedAreaPictures = []*ProtectedAreaPicture{} },
+			func(n *Location, e *ProtectedAreaPicture) {
+				n.Edges.ProtectedAreaPictures = append(n.Edges.ProtectedAreaPictures, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := lq.withCountry; query != nil {
 		if err := lq.loadCountry(ctx, query, nodes, nil,
 			func(n *Location, e *Country) { n.Edges.Country = e }); err != nil {
@@ -640,6 +687,13 @@ func (lq *LocationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Loc
 		if err := lq.loadBooks(ctx, query, nodes,
 			func(n *Location) { n.appendNamedBooks(name) },
 			func(n *Location, e *Book) { n.appendNamedBooks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range lq.withNamedProtectedAreaPictures {
+		if err := lq.loadProtectedAreaPictures(ctx, query, nodes,
+			func(n *Location) { n.appendNamedProtectedAreaPictures(name) },
+			func(n *Location, e *ProtectedAreaPicture) { n.appendNamedProtectedAreaPictures(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -708,6 +762,37 @@ func (lq *LocationQuery) loadBooks(ctx context.Context, query *BookQuery, nodes 
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "location_books" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (lq *LocationQuery) loadProtectedAreaPictures(ctx context.Context, query *ProtectedAreaPictureQuery, nodes []*Location, init func(*Location), assign func(*Location, *ProtectedAreaPicture)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Location)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.ProtectedAreaPicture(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(location.ProtectedAreaPicturesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.location_protected_area_pictures
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "location_protected_area_pictures" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "location_protected_area_pictures" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -935,6 +1020,20 @@ func (lq *LocationQuery) WithNamedBooks(name string, opts ...func(*BookQuery)) *
 		lq.withNamedBooks = make(map[string]*BookQuery)
 	}
 	lq.withNamedBooks[name] = query
+	return lq
+}
+
+// WithNamedProtectedAreaPictures tells the query-builder to eager-load the nodes that are connected to the "protected_area_pictures"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (lq *LocationQuery) WithNamedProtectedAreaPictures(name string, opts ...func(*ProtectedAreaPictureQuery)) *LocationQuery {
+	query := (&ProtectedAreaPictureClient{config: lq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if lq.withNamedProtectedAreaPictures == nil {
+		lq.withNamedProtectedAreaPictures = make(map[string]*ProtectedAreaPictureQuery)
+	}
+	lq.withNamedProtectedAreaPictures[name] = query
 	return lq
 }
 

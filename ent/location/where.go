@@ -601,6 +601,29 @@ func HasBooksWith(preds ...predicate.Book) predicate.Location {
 	})
 }
 
+// HasProtectedAreaPictures applies the HasEdge predicate on the "protected_area_pictures" edge.
+func HasProtectedAreaPictures() predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ProtectedAreaPicturesTable, ProtectedAreaPicturesColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProtectedAreaPicturesWith applies the HasEdge predicate on the "protected_area_pictures" edge with a given conditions (other predicates).
+func HasProtectedAreaPicturesWith(preds ...predicate.ProtectedAreaPicture) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		step := newProtectedAreaPicturesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasCountry applies the HasEdge predicate on the "country" edge.
 func HasCountry() predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {

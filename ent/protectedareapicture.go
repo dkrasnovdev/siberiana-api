@@ -10,6 +10,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/dkrasnovdev/heritage-api/ent/collection"
+	"github.com/dkrasnovdev/heritage-api/ent/license"
+	"github.com/dkrasnovdev/heritage-api/ent/location"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 )
 
@@ -34,7 +38,89 @@ type ProtectedAreaPicture struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLinks holds the value of the "external_links" field.
 	ExternalLinks []string `json:"external_links,omitempty"`
-	selectValues  sql.SelectValues
+	// PrimaryImageURL holds the value of the "primary_image_url" field.
+	PrimaryImageURL string `json:"primary_image_url,omitempty"`
+	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
+	AdditionalImagesUrls []string `json:"additional_images_urls,omitempty"`
+	// ShootingDate holds the value of the "shooting_date" field.
+	ShootingDate time.Time `json:"shooting_date,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the ProtectedAreaPictureQuery when eager-loading is set.
+	Edges                                  ProtectedAreaPictureEdges `json:"edges"`
+	collection_protected_area_pictures     *int
+	license_protected_area_pictures        *int
+	location_protected_area_pictures       *int
+	protected_area_protected_area_pictures *int
+	selectValues                           sql.SelectValues
+}
+
+// ProtectedAreaPictureEdges holds the relations/edges for other nodes in the graph.
+type ProtectedAreaPictureEdges struct {
+	// Collection holds the value of the collection edge.
+	Collection *Collection `json:"collection,omitempty"`
+	// ProtectedArea holds the value of the protected_area edge.
+	ProtectedArea *ProtectedArea `json:"protected_area,omitempty"`
+	// Location holds the value of the location edge.
+	Location *Location `json:"location,omitempty"`
+	// License holds the value of the license edge.
+	License *License `json:"license,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [4]bool
+	// totalCount holds the count of the edges above.
+	totalCount [4]map[string]int
+}
+
+// CollectionOrErr returns the Collection value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProtectedAreaPictureEdges) CollectionOrErr() (*Collection, error) {
+	if e.loadedTypes[0] {
+		if e.Collection == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: collection.Label}
+		}
+		return e.Collection, nil
+	}
+	return nil, &NotLoadedError{edge: "collection"}
+}
+
+// ProtectedAreaOrErr returns the ProtectedArea value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProtectedAreaPictureEdges) ProtectedAreaOrErr() (*ProtectedArea, error) {
+	if e.loadedTypes[1] {
+		if e.ProtectedArea == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: protectedarea.Label}
+		}
+		return e.ProtectedArea, nil
+	}
+	return nil, &NotLoadedError{edge: "protected_area"}
+}
+
+// LocationOrErr returns the Location value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProtectedAreaPictureEdges) LocationOrErr() (*Location, error) {
+	if e.loadedTypes[2] {
+		if e.Location == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: location.Label}
+		}
+		return e.Location, nil
+	}
+	return nil, &NotLoadedError{edge: "location"}
+}
+
+// LicenseOrErr returns the License value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProtectedAreaPictureEdges) LicenseOrErr() (*License, error) {
+	if e.loadedTypes[3] {
+		if e.License == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: license.Label}
+		}
+		return e.License, nil
+	}
+	return nil, &NotLoadedError{edge: "license"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -42,14 +128,22 @@ func (*ProtectedAreaPicture) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case protectedareapicture.FieldExternalLinks:
+		case protectedareapicture.FieldExternalLinks, protectedareapicture.FieldAdditionalImagesUrls:
 			values[i] = new([]byte)
 		case protectedareapicture.FieldID:
 			values[i] = new(sql.NullInt64)
-		case protectedareapicture.FieldCreatedBy, protectedareapicture.FieldUpdatedBy, protectedareapicture.FieldDisplayName, protectedareapicture.FieldAbbreviation, protectedareapicture.FieldDescription:
+		case protectedareapicture.FieldCreatedBy, protectedareapicture.FieldUpdatedBy, protectedareapicture.FieldDisplayName, protectedareapicture.FieldAbbreviation, protectedareapicture.FieldDescription, protectedareapicture.FieldPrimaryImageURL:
 			values[i] = new(sql.NullString)
-		case protectedareapicture.FieldCreatedAt, protectedareapicture.FieldUpdatedAt:
+		case protectedareapicture.FieldCreatedAt, protectedareapicture.FieldUpdatedAt, protectedareapicture.FieldShootingDate:
 			values[i] = new(sql.NullTime)
+		case protectedareapicture.ForeignKeys[0]: // collection_protected_area_pictures
+			values[i] = new(sql.NullInt64)
+		case protectedareapicture.ForeignKeys[1]: // license_protected_area_pictures
+			values[i] = new(sql.NullInt64)
+		case protectedareapicture.ForeignKeys[2]: // location_protected_area_pictures
+			values[i] = new(sql.NullInt64)
+		case protectedareapicture.ForeignKeys[3]: // protected_area_protected_area_pictures
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -121,6 +215,54 @@ func (pap *ProtectedAreaPicture) assignValues(columns []string, values []any) er
 					return fmt.Errorf("unmarshal field external_links: %w", err)
 				}
 			}
+		case protectedareapicture.FieldPrimaryImageURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field primary_image_url", values[i])
+			} else if value.Valid {
+				pap.PrimaryImageURL = value.String
+			}
+		case protectedareapicture.FieldAdditionalImagesUrls:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field additional_images_urls", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &pap.AdditionalImagesUrls); err != nil {
+					return fmt.Errorf("unmarshal field additional_images_urls: %w", err)
+				}
+			}
+		case protectedareapicture.FieldShootingDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field shooting_date", values[i])
+			} else if value.Valid {
+				pap.ShootingDate = value.Time
+			}
+		case protectedareapicture.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field collection_protected_area_pictures", value)
+			} else if value.Valid {
+				pap.collection_protected_area_pictures = new(int)
+				*pap.collection_protected_area_pictures = int(value.Int64)
+			}
+		case protectedareapicture.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field license_protected_area_pictures", value)
+			} else if value.Valid {
+				pap.license_protected_area_pictures = new(int)
+				*pap.license_protected_area_pictures = int(value.Int64)
+			}
+		case protectedareapicture.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field location_protected_area_pictures", value)
+			} else if value.Valid {
+				pap.location_protected_area_pictures = new(int)
+				*pap.location_protected_area_pictures = int(value.Int64)
+			}
+		case protectedareapicture.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field protected_area_protected_area_pictures", value)
+			} else if value.Valid {
+				pap.protected_area_protected_area_pictures = new(int)
+				*pap.protected_area_protected_area_pictures = int(value.Int64)
+			}
 		default:
 			pap.selectValues.Set(columns[i], values[i])
 		}
@@ -132,6 +274,26 @@ func (pap *ProtectedAreaPicture) assignValues(columns []string, values []any) er
 // This includes values selected through modifiers, order, etc.
 func (pap *ProtectedAreaPicture) Value(name string) (ent.Value, error) {
 	return pap.selectValues.Get(name)
+}
+
+// QueryCollection queries the "collection" edge of the ProtectedAreaPicture entity.
+func (pap *ProtectedAreaPicture) QueryCollection() *CollectionQuery {
+	return NewProtectedAreaPictureClient(pap.config).QueryCollection(pap)
+}
+
+// QueryProtectedArea queries the "protected_area" edge of the ProtectedAreaPicture entity.
+func (pap *ProtectedAreaPicture) QueryProtectedArea() *ProtectedAreaQuery {
+	return NewProtectedAreaPictureClient(pap.config).QueryProtectedArea(pap)
+}
+
+// QueryLocation queries the "location" edge of the ProtectedAreaPicture entity.
+func (pap *ProtectedAreaPicture) QueryLocation() *LocationQuery {
+	return NewProtectedAreaPictureClient(pap.config).QueryLocation(pap)
+}
+
+// QueryLicense queries the "license" edge of the ProtectedAreaPicture entity.
+func (pap *ProtectedAreaPicture) QueryLicense() *LicenseQuery {
+	return NewProtectedAreaPictureClient(pap.config).QueryLicense(pap)
 }
 
 // Update returns a builder for updating this ProtectedAreaPicture.
@@ -180,6 +342,15 @@ func (pap *ProtectedAreaPicture) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_links=")
 	builder.WriteString(fmt.Sprintf("%v", pap.ExternalLinks))
+	builder.WriteString(", ")
+	builder.WriteString("primary_image_url=")
+	builder.WriteString(pap.PrimaryImageURL)
+	builder.WriteString(", ")
+	builder.WriteString("additional_images_urls=")
+	builder.WriteString(fmt.Sprintf("%v", pap.AdditionalImagesUrls))
+	builder.WriteString(", ")
+	builder.WriteString("shooting_date=")
+	builder.WriteString(pap.ShootingDate.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

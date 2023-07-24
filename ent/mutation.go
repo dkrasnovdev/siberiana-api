@@ -9252,33 +9252,36 @@ func (m *CategoryMutation) ResetEdge(name string) error {
 // CollectionMutation represents an operation that mutates the Collection nodes in the graph.
 type CollectionMutation struct {
 	config
-	op                   Op
-	typ                  string
-	id                   *int
-	created_at           *time.Time
-	created_by           *string
-	updated_at           *time.Time
-	updated_by           *string
-	display_name         *string
-	abbreviation         *string
-	description          *string
-	external_links       *[]string
-	appendexternal_links []string
-	clearedFields        map[string]struct{}
-	artifacts            map[int]struct{}
-	removedartifacts     map[int]struct{}
-	clearedartifacts     bool
-	books                map[int]struct{}
-	removedbooks         map[int]struct{}
-	clearedbooks         bool
-	people               map[int]struct{}
-	removedpeople        map[int]struct{}
-	clearedpeople        bool
-	category             *int
-	clearedcategory      bool
-	done                 bool
-	oldValue             func(context.Context) (*Collection, error)
-	predicates           []predicate.Collection
+	op                             Op
+	typ                            string
+	id                             *int
+	created_at                     *time.Time
+	created_by                     *string
+	updated_at                     *time.Time
+	updated_by                     *string
+	display_name                   *string
+	abbreviation                   *string
+	description                    *string
+	external_links                 *[]string
+	appendexternal_links           []string
+	clearedFields                  map[string]struct{}
+	artifacts                      map[int]struct{}
+	removedartifacts               map[int]struct{}
+	clearedartifacts               bool
+	books                          map[int]struct{}
+	removedbooks                   map[int]struct{}
+	clearedbooks                   bool
+	people                         map[int]struct{}
+	removedpeople                  map[int]struct{}
+	clearedpeople                  bool
+	protected_area_pictures        map[int]struct{}
+	removedprotected_area_pictures map[int]struct{}
+	clearedprotected_area_pictures bool
+	category                       *int
+	clearedcategory                bool
+	done                           bool
+	oldValue                       func(context.Context) (*Collection, error)
+	predicates                     []predicate.Collection
 }
 
 var _ ent.Mutation = (*CollectionMutation)(nil)
@@ -9923,6 +9926,60 @@ func (m *CollectionMutation) ResetPeople() {
 	m.removedpeople = nil
 }
 
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by ids.
+func (m *CollectionMutation) AddProtectedAreaPictureIDs(ids ...int) {
+	if m.protected_area_pictures == nil {
+		m.protected_area_pictures = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.protected_area_pictures[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProtectedAreaPictures clears the "protected_area_pictures" edge to the ProtectedAreaPicture entity.
+func (m *CollectionMutation) ClearProtectedAreaPictures() {
+	m.clearedprotected_area_pictures = true
+}
+
+// ProtectedAreaPicturesCleared reports if the "protected_area_pictures" edge to the ProtectedAreaPicture entity was cleared.
+func (m *CollectionMutation) ProtectedAreaPicturesCleared() bool {
+	return m.clearedprotected_area_pictures
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (m *CollectionMutation) RemoveProtectedAreaPictureIDs(ids ...int) {
+	if m.removedprotected_area_pictures == nil {
+		m.removedprotected_area_pictures = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.protected_area_pictures, ids[i])
+		m.removedprotected_area_pictures[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProtectedAreaPictures returns the removed IDs of the "protected_area_pictures" edge to the ProtectedAreaPicture entity.
+func (m *CollectionMutation) RemovedProtectedAreaPicturesIDs() (ids []int) {
+	for id := range m.removedprotected_area_pictures {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProtectedAreaPicturesIDs returns the "protected_area_pictures" edge IDs in the mutation.
+func (m *CollectionMutation) ProtectedAreaPicturesIDs() (ids []int) {
+	for id := range m.protected_area_pictures {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProtectedAreaPictures resets all changes to the "protected_area_pictures" edge.
+func (m *CollectionMutation) ResetProtectedAreaPictures() {
+	m.protected_area_pictures = nil
+	m.clearedprotected_area_pictures = false
+	m.removedprotected_area_pictures = nil
+}
+
 // SetCategoryID sets the "category" edge to the Category entity by id.
 func (m *CollectionMutation) SetCategoryID(id int) {
 	m.category = &id
@@ -10253,7 +10310,7 @@ func (m *CollectionMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *CollectionMutation) AddedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.artifacts != nil {
 		edges = append(edges, collection.EdgeArtifacts)
 	}
@@ -10262,6 +10319,9 @@ func (m *CollectionMutation) AddedEdges() []string {
 	}
 	if m.people != nil {
 		edges = append(edges, collection.EdgePeople)
+	}
+	if m.protected_area_pictures != nil {
+		edges = append(edges, collection.EdgeProtectedAreaPictures)
 	}
 	if m.category != nil {
 		edges = append(edges, collection.EdgeCategory)
@@ -10291,6 +10351,12 @@ func (m *CollectionMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case collection.EdgeProtectedAreaPictures:
+		ids := make([]ent.Value, 0, len(m.protected_area_pictures))
+		for id := range m.protected_area_pictures {
+			ids = append(ids, id)
+		}
+		return ids
 	case collection.EdgeCategory:
 		if id := m.category; id != nil {
 			return []ent.Value{*id}
@@ -10301,7 +10367,7 @@ func (m *CollectionMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *CollectionMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.removedartifacts != nil {
 		edges = append(edges, collection.EdgeArtifacts)
 	}
@@ -10310,6 +10376,9 @@ func (m *CollectionMutation) RemovedEdges() []string {
 	}
 	if m.removedpeople != nil {
 		edges = append(edges, collection.EdgePeople)
+	}
+	if m.removedprotected_area_pictures != nil {
+		edges = append(edges, collection.EdgeProtectedAreaPictures)
 	}
 	return edges
 }
@@ -10336,13 +10405,19 @@ func (m *CollectionMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case collection.EdgeProtectedAreaPictures:
+		ids := make([]ent.Value, 0, len(m.removedprotected_area_pictures))
+		for id := range m.removedprotected_area_pictures {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *CollectionMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.clearedartifacts {
 		edges = append(edges, collection.EdgeArtifacts)
 	}
@@ -10351,6 +10426,9 @@ func (m *CollectionMutation) ClearedEdges() []string {
 	}
 	if m.clearedpeople {
 		edges = append(edges, collection.EdgePeople)
+	}
+	if m.clearedprotected_area_pictures {
+		edges = append(edges, collection.EdgeProtectedAreaPictures)
 	}
 	if m.clearedcategory {
 		edges = append(edges, collection.EdgeCategory)
@@ -10368,6 +10446,8 @@ func (m *CollectionMutation) EdgeCleared(name string) bool {
 		return m.clearedbooks
 	case collection.EdgePeople:
 		return m.clearedpeople
+	case collection.EdgeProtectedAreaPictures:
+		return m.clearedprotected_area_pictures
 	case collection.EdgeCategory:
 		return m.clearedcategory
 	}
@@ -10397,6 +10477,9 @@ func (m *CollectionMutation) ResetEdge(name string) error {
 		return nil
 	case collection.EdgePeople:
 		m.ResetPeople()
+		return nil
+	case collection.EdgeProtectedAreaPictures:
+		m.ResetProtectedAreaPictures()
 		return nil
 	case collection.EdgeCategory:
 		m.ResetCategory()
@@ -15377,28 +15460,31 @@ func (m *KeywordMutation) ResetEdge(name string) error {
 // LicenseMutation represents an operation that mutates the License nodes in the graph.
 type LicenseMutation struct {
 	config
-	op                   Op
-	typ                  string
-	id                   *int
-	created_at           *time.Time
-	created_by           *string
-	updated_at           *time.Time
-	updated_by           *string
-	display_name         *string
-	abbreviation         *string
-	description          *string
-	external_links       *[]string
-	appendexternal_links []string
-	clearedFields        map[string]struct{}
-	artifacts            map[int]struct{}
-	removedartifacts     map[int]struct{}
-	clearedartifacts     bool
-	books                map[int]struct{}
-	removedbooks         map[int]struct{}
-	clearedbooks         bool
-	done                 bool
-	oldValue             func(context.Context) (*License, error)
-	predicates           []predicate.License
+	op                             Op
+	typ                            string
+	id                             *int
+	created_at                     *time.Time
+	created_by                     *string
+	updated_at                     *time.Time
+	updated_by                     *string
+	display_name                   *string
+	abbreviation                   *string
+	description                    *string
+	external_links                 *[]string
+	appendexternal_links           []string
+	clearedFields                  map[string]struct{}
+	artifacts                      map[int]struct{}
+	removedartifacts               map[int]struct{}
+	clearedartifacts               bool
+	books                          map[int]struct{}
+	removedbooks                   map[int]struct{}
+	clearedbooks                   bool
+	protected_area_pictures        map[int]struct{}
+	removedprotected_area_pictures map[int]struct{}
+	clearedprotected_area_pictures bool
+	done                           bool
+	oldValue                       func(context.Context) (*License, error)
+	predicates                     []predicate.License
 }
 
 var _ ent.Mutation = (*LicenseMutation)(nil)
@@ -15989,6 +16075,60 @@ func (m *LicenseMutation) ResetBooks() {
 	m.removedbooks = nil
 }
 
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by ids.
+func (m *LicenseMutation) AddProtectedAreaPictureIDs(ids ...int) {
+	if m.protected_area_pictures == nil {
+		m.protected_area_pictures = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.protected_area_pictures[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProtectedAreaPictures clears the "protected_area_pictures" edge to the ProtectedAreaPicture entity.
+func (m *LicenseMutation) ClearProtectedAreaPictures() {
+	m.clearedprotected_area_pictures = true
+}
+
+// ProtectedAreaPicturesCleared reports if the "protected_area_pictures" edge to the ProtectedAreaPicture entity was cleared.
+func (m *LicenseMutation) ProtectedAreaPicturesCleared() bool {
+	return m.clearedprotected_area_pictures
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (m *LicenseMutation) RemoveProtectedAreaPictureIDs(ids ...int) {
+	if m.removedprotected_area_pictures == nil {
+		m.removedprotected_area_pictures = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.protected_area_pictures, ids[i])
+		m.removedprotected_area_pictures[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProtectedAreaPictures returns the removed IDs of the "protected_area_pictures" edge to the ProtectedAreaPicture entity.
+func (m *LicenseMutation) RemovedProtectedAreaPicturesIDs() (ids []int) {
+	for id := range m.removedprotected_area_pictures {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProtectedAreaPicturesIDs returns the "protected_area_pictures" edge IDs in the mutation.
+func (m *LicenseMutation) ProtectedAreaPicturesIDs() (ids []int) {
+	for id := range m.protected_area_pictures {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProtectedAreaPictures resets all changes to the "protected_area_pictures" edge.
+func (m *LicenseMutation) ResetProtectedAreaPictures() {
+	m.protected_area_pictures = nil
+	m.clearedprotected_area_pictures = false
+	m.removedprotected_area_pictures = nil
+}
+
 // Where appends a list predicates to the LicenseMutation builder.
 func (m *LicenseMutation) Where(ps ...predicate.License) {
 	m.predicates = append(m.predicates, ps...)
@@ -16280,12 +16420,15 @@ func (m *LicenseMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *LicenseMutation) AddedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.artifacts != nil {
 		edges = append(edges, license.EdgeArtifacts)
 	}
 	if m.books != nil {
 		edges = append(edges, license.EdgeBooks)
+	}
+	if m.protected_area_pictures != nil {
+		edges = append(edges, license.EdgeProtectedAreaPictures)
 	}
 	return edges
 }
@@ -16306,18 +16449,27 @@ func (m *LicenseMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case license.EdgeProtectedAreaPictures:
+		ids := make([]ent.Value, 0, len(m.protected_area_pictures))
+		for id := range m.protected_area_pictures {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *LicenseMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.removedartifacts != nil {
 		edges = append(edges, license.EdgeArtifacts)
 	}
 	if m.removedbooks != nil {
 		edges = append(edges, license.EdgeBooks)
+	}
+	if m.removedprotected_area_pictures != nil {
+		edges = append(edges, license.EdgeProtectedAreaPictures)
 	}
 	return edges
 }
@@ -16338,18 +16490,27 @@ func (m *LicenseMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case license.EdgeProtectedAreaPictures:
+		ids := make([]ent.Value, 0, len(m.removedprotected_area_pictures))
+		for id := range m.removedprotected_area_pictures {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *LicenseMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.clearedartifacts {
 		edges = append(edges, license.EdgeArtifacts)
 	}
 	if m.clearedbooks {
 		edges = append(edges, license.EdgeBooks)
+	}
+	if m.clearedprotected_area_pictures {
+		edges = append(edges, license.EdgeProtectedAreaPictures)
 	}
 	return edges
 }
@@ -16362,6 +16523,8 @@ func (m *LicenseMutation) EdgeCleared(name string) bool {
 		return m.clearedartifacts
 	case license.EdgeBooks:
 		return m.clearedbooks
+	case license.EdgeProtectedAreaPictures:
+		return m.clearedprotected_area_pictures
 	}
 	return false
 }
@@ -16384,6 +16547,9 @@ func (m *LicenseMutation) ResetEdge(name string) error {
 	case license.EdgeBooks:
 		m.ResetBooks()
 		return nil
+	case license.EdgeProtectedAreaPictures:
+		m.ResetProtectedAreaPictures()
+		return nil
 	}
 	return fmt.Errorf("unknown License edge %s", name)
 }
@@ -16391,36 +16557,39 @@ func (m *LicenseMutation) ResetEdge(name string) error {
 // LocationMutation represents an operation that mutates the Location nodes in the graph.
 type LocationMutation struct {
 	config
-	op                   Op
-	typ                  string
-	id                   *int
-	created_at           *time.Time
-	created_by           *string
-	updated_at           *time.Time
-	updated_by           *string
-	display_name         *string
-	abbreviation         *string
-	description          *string
-	external_links       *[]string
-	appendexternal_links []string
-	clearedFields        map[string]struct{}
-	artifacts            map[int]struct{}
-	removedartifacts     map[int]struct{}
-	clearedartifacts     bool
-	books                map[int]struct{}
-	removedbooks         map[int]struct{}
-	clearedbooks         bool
-	country              *int
-	clearedcountry       bool
-	district             *int
-	cleareddistrict      bool
-	settlement           *int
-	clearedsettlement    bool
-	region               *int
-	clearedregion        bool
-	done                 bool
-	oldValue             func(context.Context) (*Location, error)
-	predicates           []predicate.Location
+	op                             Op
+	typ                            string
+	id                             *int
+	created_at                     *time.Time
+	created_by                     *string
+	updated_at                     *time.Time
+	updated_by                     *string
+	display_name                   *string
+	abbreviation                   *string
+	description                    *string
+	external_links                 *[]string
+	appendexternal_links           []string
+	clearedFields                  map[string]struct{}
+	artifacts                      map[int]struct{}
+	removedartifacts               map[int]struct{}
+	clearedartifacts               bool
+	books                          map[int]struct{}
+	removedbooks                   map[int]struct{}
+	clearedbooks                   bool
+	protected_area_pictures        map[int]struct{}
+	removedprotected_area_pictures map[int]struct{}
+	clearedprotected_area_pictures bool
+	country                        *int
+	clearedcountry                 bool
+	district                       *int
+	cleareddistrict                bool
+	settlement                     *int
+	clearedsettlement              bool
+	region                         *int
+	clearedregion                  bool
+	done                           bool
+	oldValue                       func(context.Context) (*Location, error)
+	predicates                     []predicate.Location
 }
 
 var _ ent.Mutation = (*LocationMutation)(nil)
@@ -17011,6 +17180,60 @@ func (m *LocationMutation) ResetBooks() {
 	m.removedbooks = nil
 }
 
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by ids.
+func (m *LocationMutation) AddProtectedAreaPictureIDs(ids ...int) {
+	if m.protected_area_pictures == nil {
+		m.protected_area_pictures = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.protected_area_pictures[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProtectedAreaPictures clears the "protected_area_pictures" edge to the ProtectedAreaPicture entity.
+func (m *LocationMutation) ClearProtectedAreaPictures() {
+	m.clearedprotected_area_pictures = true
+}
+
+// ProtectedAreaPicturesCleared reports if the "protected_area_pictures" edge to the ProtectedAreaPicture entity was cleared.
+func (m *LocationMutation) ProtectedAreaPicturesCleared() bool {
+	return m.clearedprotected_area_pictures
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (m *LocationMutation) RemoveProtectedAreaPictureIDs(ids ...int) {
+	if m.removedprotected_area_pictures == nil {
+		m.removedprotected_area_pictures = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.protected_area_pictures, ids[i])
+		m.removedprotected_area_pictures[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProtectedAreaPictures returns the removed IDs of the "protected_area_pictures" edge to the ProtectedAreaPicture entity.
+func (m *LocationMutation) RemovedProtectedAreaPicturesIDs() (ids []int) {
+	for id := range m.removedprotected_area_pictures {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProtectedAreaPicturesIDs returns the "protected_area_pictures" edge IDs in the mutation.
+func (m *LocationMutation) ProtectedAreaPicturesIDs() (ids []int) {
+	for id := range m.protected_area_pictures {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProtectedAreaPictures resets all changes to the "protected_area_pictures" edge.
+func (m *LocationMutation) ResetProtectedAreaPictures() {
+	m.protected_area_pictures = nil
+	m.clearedprotected_area_pictures = false
+	m.removedprotected_area_pictures = nil
+}
+
 // SetCountryID sets the "country" edge to the Country entity by id.
 func (m *LocationMutation) SetCountryID(id int) {
 	m.country = &id
@@ -17458,12 +17681,15 @@ func (m *LocationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *LocationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.artifacts != nil {
 		edges = append(edges, location.EdgeArtifacts)
 	}
 	if m.books != nil {
 		edges = append(edges, location.EdgeBooks)
+	}
+	if m.protected_area_pictures != nil {
+		edges = append(edges, location.EdgeProtectedAreaPictures)
 	}
 	if m.country != nil {
 		edges = append(edges, location.EdgeCountry)
@@ -17496,6 +17722,12 @@ func (m *LocationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case location.EdgeProtectedAreaPictures:
+		ids := make([]ent.Value, 0, len(m.protected_area_pictures))
+		for id := range m.protected_area_pictures {
+			ids = append(ids, id)
+		}
+		return ids
 	case location.EdgeCountry:
 		if id := m.country; id != nil {
 			return []ent.Value{*id}
@@ -17518,12 +17750,15 @@ func (m *LocationMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *LocationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.removedartifacts != nil {
 		edges = append(edges, location.EdgeArtifacts)
 	}
 	if m.removedbooks != nil {
 		edges = append(edges, location.EdgeBooks)
+	}
+	if m.removedprotected_area_pictures != nil {
+		edges = append(edges, location.EdgeProtectedAreaPictures)
 	}
 	return edges
 }
@@ -17544,18 +17779,27 @@ func (m *LocationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case location.EdgeProtectedAreaPictures:
+		ids := make([]ent.Value, 0, len(m.removedprotected_area_pictures))
+		for id := range m.removedprotected_area_pictures {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *LocationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.clearedartifacts {
 		edges = append(edges, location.EdgeArtifacts)
 	}
 	if m.clearedbooks {
 		edges = append(edges, location.EdgeBooks)
+	}
+	if m.clearedprotected_area_pictures {
+		edges = append(edges, location.EdgeProtectedAreaPictures)
 	}
 	if m.clearedcountry {
 		edges = append(edges, location.EdgeCountry)
@@ -17580,6 +17824,8 @@ func (m *LocationMutation) EdgeCleared(name string) bool {
 		return m.clearedartifacts
 	case location.EdgeBooks:
 		return m.clearedbooks
+	case location.EdgeProtectedAreaPictures:
+		return m.clearedprotected_area_pictures
 	case location.EdgeCountry:
 		return m.clearedcountry
 	case location.EdgeDistrict:
@@ -17621,6 +17867,9 @@ func (m *LocationMutation) ResetEdge(name string) error {
 		return nil
 	case location.EdgeBooks:
 		m.ResetBooks()
+		return nil
+	case location.EdgeProtectedAreaPictures:
+		m.ResetProtectedAreaPictures()
 		return nil
 	case location.EdgeCountry:
 		m.ResetCountry()
@@ -29436,22 +29685,29 @@ func (m *ProjectTypeMutation) ResetEdge(name string) error {
 // ProtectedAreaMutation represents an operation that mutates the ProtectedArea nodes in the graph.
 type ProtectedAreaMutation struct {
 	config
-	op                   Op
-	typ                  string
-	id                   *int
-	created_at           *time.Time
-	created_by           *string
-	updated_at           *time.Time
-	updated_by           *string
-	display_name         *string
-	abbreviation         *string
-	description          *string
-	external_links       *[]string
-	appendexternal_links []string
-	clearedFields        map[string]struct{}
-	done                 bool
-	oldValue             func(context.Context) (*ProtectedArea, error)
-	predicates           []predicate.ProtectedArea
+	op                             Op
+	typ                            string
+	id                             *int
+	created_at                     *time.Time
+	created_by                     *string
+	updated_at                     *time.Time
+	updated_by                     *string
+	display_name                   *string
+	abbreviation                   *string
+	description                    *string
+	external_links                 *[]string
+	appendexternal_links           []string
+	area                           *string
+	establishment_date             *time.Time
+	clearedFields                  map[string]struct{}
+	protected_area_pictures        map[int]struct{}
+	removedprotected_area_pictures map[int]struct{}
+	clearedprotected_area_pictures bool
+	protected_area_category        *int
+	clearedprotected_area_category bool
+	done                           bool
+	oldValue                       func(context.Context) (*ProtectedArea, error)
+	predicates                     []predicate.ProtectedArea
 }
 
 var _ ent.Mutation = (*ProtectedAreaMutation)(nil)
@@ -29934,6 +30190,197 @@ func (m *ProtectedAreaMutation) ResetExternalLinks() {
 	delete(m.clearedFields, protectedarea.FieldExternalLinks)
 }
 
+// SetArea sets the "area" field.
+func (m *ProtectedAreaMutation) SetArea(s string) {
+	m.area = &s
+}
+
+// Area returns the value of the "area" field in the mutation.
+func (m *ProtectedAreaMutation) Area() (r string, exists bool) {
+	v := m.area
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldArea returns the old "area" field's value of the ProtectedArea entity.
+// If the ProtectedArea object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaMutation) OldArea(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldArea is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldArea requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldArea: %w", err)
+	}
+	return oldValue.Area, nil
+}
+
+// ClearArea clears the value of the "area" field.
+func (m *ProtectedAreaMutation) ClearArea() {
+	m.area = nil
+	m.clearedFields[protectedarea.FieldArea] = struct{}{}
+}
+
+// AreaCleared returns if the "area" field was cleared in this mutation.
+func (m *ProtectedAreaMutation) AreaCleared() bool {
+	_, ok := m.clearedFields[protectedarea.FieldArea]
+	return ok
+}
+
+// ResetArea resets all changes to the "area" field.
+func (m *ProtectedAreaMutation) ResetArea() {
+	m.area = nil
+	delete(m.clearedFields, protectedarea.FieldArea)
+}
+
+// SetEstablishmentDate sets the "establishment_date" field.
+func (m *ProtectedAreaMutation) SetEstablishmentDate(t time.Time) {
+	m.establishment_date = &t
+}
+
+// EstablishmentDate returns the value of the "establishment_date" field in the mutation.
+func (m *ProtectedAreaMutation) EstablishmentDate() (r time.Time, exists bool) {
+	v := m.establishment_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEstablishmentDate returns the old "establishment_date" field's value of the ProtectedArea entity.
+// If the ProtectedArea object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaMutation) OldEstablishmentDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEstablishmentDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEstablishmentDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEstablishmentDate: %w", err)
+	}
+	return oldValue.EstablishmentDate, nil
+}
+
+// ClearEstablishmentDate clears the value of the "establishment_date" field.
+func (m *ProtectedAreaMutation) ClearEstablishmentDate() {
+	m.establishment_date = nil
+	m.clearedFields[protectedarea.FieldEstablishmentDate] = struct{}{}
+}
+
+// EstablishmentDateCleared returns if the "establishment_date" field was cleared in this mutation.
+func (m *ProtectedAreaMutation) EstablishmentDateCleared() bool {
+	_, ok := m.clearedFields[protectedarea.FieldEstablishmentDate]
+	return ok
+}
+
+// ResetEstablishmentDate resets all changes to the "establishment_date" field.
+func (m *ProtectedAreaMutation) ResetEstablishmentDate() {
+	m.establishment_date = nil
+	delete(m.clearedFields, protectedarea.FieldEstablishmentDate)
+}
+
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by ids.
+func (m *ProtectedAreaMutation) AddProtectedAreaPictureIDs(ids ...int) {
+	if m.protected_area_pictures == nil {
+		m.protected_area_pictures = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.protected_area_pictures[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProtectedAreaPictures clears the "protected_area_pictures" edge to the ProtectedAreaPicture entity.
+func (m *ProtectedAreaMutation) ClearProtectedAreaPictures() {
+	m.clearedprotected_area_pictures = true
+}
+
+// ProtectedAreaPicturesCleared reports if the "protected_area_pictures" edge to the ProtectedAreaPicture entity was cleared.
+func (m *ProtectedAreaMutation) ProtectedAreaPicturesCleared() bool {
+	return m.clearedprotected_area_pictures
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (m *ProtectedAreaMutation) RemoveProtectedAreaPictureIDs(ids ...int) {
+	if m.removedprotected_area_pictures == nil {
+		m.removedprotected_area_pictures = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.protected_area_pictures, ids[i])
+		m.removedprotected_area_pictures[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProtectedAreaPictures returns the removed IDs of the "protected_area_pictures" edge to the ProtectedAreaPicture entity.
+func (m *ProtectedAreaMutation) RemovedProtectedAreaPicturesIDs() (ids []int) {
+	for id := range m.removedprotected_area_pictures {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProtectedAreaPicturesIDs returns the "protected_area_pictures" edge IDs in the mutation.
+func (m *ProtectedAreaMutation) ProtectedAreaPicturesIDs() (ids []int) {
+	for id := range m.protected_area_pictures {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProtectedAreaPictures resets all changes to the "protected_area_pictures" edge.
+func (m *ProtectedAreaMutation) ResetProtectedAreaPictures() {
+	m.protected_area_pictures = nil
+	m.clearedprotected_area_pictures = false
+	m.removedprotected_area_pictures = nil
+}
+
+// SetProtectedAreaCategoryID sets the "protected_area_category" edge to the ProtectedAreaCategory entity by id.
+func (m *ProtectedAreaMutation) SetProtectedAreaCategoryID(id int) {
+	m.protected_area_category = &id
+}
+
+// ClearProtectedAreaCategory clears the "protected_area_category" edge to the ProtectedAreaCategory entity.
+func (m *ProtectedAreaMutation) ClearProtectedAreaCategory() {
+	m.clearedprotected_area_category = true
+}
+
+// ProtectedAreaCategoryCleared reports if the "protected_area_category" edge to the ProtectedAreaCategory entity was cleared.
+func (m *ProtectedAreaMutation) ProtectedAreaCategoryCleared() bool {
+	return m.clearedprotected_area_category
+}
+
+// ProtectedAreaCategoryID returns the "protected_area_category" edge ID in the mutation.
+func (m *ProtectedAreaMutation) ProtectedAreaCategoryID() (id int, exists bool) {
+	if m.protected_area_category != nil {
+		return *m.protected_area_category, true
+	}
+	return
+}
+
+// ProtectedAreaCategoryIDs returns the "protected_area_category" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ProtectedAreaCategoryID instead. It exists only for internal usage by the builders.
+func (m *ProtectedAreaMutation) ProtectedAreaCategoryIDs() (ids []int) {
+	if id := m.protected_area_category; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetProtectedAreaCategory resets all changes to the "protected_area_category" edge.
+func (m *ProtectedAreaMutation) ResetProtectedAreaCategory() {
+	m.protected_area_category = nil
+	m.clearedprotected_area_category = false
+}
+
 // Where appends a list predicates to the ProtectedAreaMutation builder.
 func (m *ProtectedAreaMutation) Where(ps ...predicate.ProtectedArea) {
 	m.predicates = append(m.predicates, ps...)
@@ -29968,7 +30415,7 @@ func (m *ProtectedAreaMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProtectedAreaMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 10)
 	if m.created_at != nil {
 		fields = append(fields, protectedarea.FieldCreatedAt)
 	}
@@ -29992,6 +30439,12 @@ func (m *ProtectedAreaMutation) Fields() []string {
 	}
 	if m.external_links != nil {
 		fields = append(fields, protectedarea.FieldExternalLinks)
+	}
+	if m.area != nil {
+		fields = append(fields, protectedarea.FieldArea)
+	}
+	if m.establishment_date != nil {
+		fields = append(fields, protectedarea.FieldEstablishmentDate)
 	}
 	return fields
 }
@@ -30017,6 +30470,10 @@ func (m *ProtectedAreaMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case protectedarea.FieldExternalLinks:
 		return m.ExternalLinks()
+	case protectedarea.FieldArea:
+		return m.Area()
+	case protectedarea.FieldEstablishmentDate:
+		return m.EstablishmentDate()
 	}
 	return nil, false
 }
@@ -30042,6 +30499,10 @@ func (m *ProtectedAreaMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldDescription(ctx)
 	case protectedarea.FieldExternalLinks:
 		return m.OldExternalLinks(ctx)
+	case protectedarea.FieldArea:
+		return m.OldArea(ctx)
+	case protectedarea.FieldEstablishmentDate:
+		return m.OldEstablishmentDate(ctx)
 	}
 	return nil, fmt.Errorf("unknown ProtectedArea field %s", name)
 }
@@ -30107,6 +30568,20 @@ func (m *ProtectedAreaMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLinks(v)
 		return nil
+	case protectedarea.FieldArea:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetArea(v)
+		return nil
+	case protectedarea.FieldEstablishmentDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEstablishmentDate(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ProtectedArea field %s", name)
 }
@@ -30155,6 +30630,12 @@ func (m *ProtectedAreaMutation) ClearedFields() []string {
 	if m.FieldCleared(protectedarea.FieldExternalLinks) {
 		fields = append(fields, protectedarea.FieldExternalLinks)
 	}
+	if m.FieldCleared(protectedarea.FieldArea) {
+		fields = append(fields, protectedarea.FieldArea)
+	}
+	if m.FieldCleared(protectedarea.FieldEstablishmentDate) {
+		fields = append(fields, protectedarea.FieldEstablishmentDate)
+	}
 	return fields
 }
 
@@ -30186,6 +30667,12 @@ func (m *ProtectedAreaMutation) ClearField(name string) error {
 		return nil
 	case protectedarea.FieldExternalLinks:
 		m.ClearExternalLinks()
+		return nil
+	case protectedarea.FieldArea:
+		m.ClearArea()
+		return nil
+	case protectedarea.FieldEstablishmentDate:
+		m.ClearEstablishmentDate()
 		return nil
 	}
 	return fmt.Errorf("unknown ProtectedArea nullable field %s", name)
@@ -30219,77 +30706,140 @@ func (m *ProtectedAreaMutation) ResetField(name string) error {
 	case protectedarea.FieldExternalLinks:
 		m.ResetExternalLinks()
 		return nil
+	case protectedarea.FieldArea:
+		m.ResetArea()
+		return nil
+	case protectedarea.FieldEstablishmentDate:
+		m.ResetEstablishmentDate()
+		return nil
 	}
 	return fmt.Errorf("unknown ProtectedArea field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ProtectedAreaMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 2)
+	if m.protected_area_pictures != nil {
+		edges = append(edges, protectedarea.EdgeProtectedAreaPictures)
+	}
+	if m.protected_area_category != nil {
+		edges = append(edges, protectedarea.EdgeProtectedAreaCategory)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *ProtectedAreaMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case protectedarea.EdgeProtectedAreaPictures:
+		ids := make([]ent.Value, 0, len(m.protected_area_pictures))
+		for id := range m.protected_area_pictures {
+			ids = append(ids, id)
+		}
+		return ids
+	case protectedarea.EdgeProtectedAreaCategory:
+		if id := m.protected_area_category; id != nil {
+			return []ent.Value{*id}
+		}
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ProtectedAreaMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 2)
+	if m.removedprotected_area_pictures != nil {
+		edges = append(edges, protectedarea.EdgeProtectedAreaPictures)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *ProtectedAreaMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case protectedarea.EdgeProtectedAreaPictures:
+		ids := make([]ent.Value, 0, len(m.removedprotected_area_pictures))
+		for id := range m.removedprotected_area_pictures {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ProtectedAreaMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 2)
+	if m.clearedprotected_area_pictures {
+		edges = append(edges, protectedarea.EdgeProtectedAreaPictures)
+	}
+	if m.clearedprotected_area_category {
+		edges = append(edges, protectedarea.EdgeProtectedAreaCategory)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *ProtectedAreaMutation) EdgeCleared(name string) bool {
+	switch name {
+	case protectedarea.EdgeProtectedAreaPictures:
+		return m.clearedprotected_area_pictures
+	case protectedarea.EdgeProtectedAreaCategory:
+		return m.clearedprotected_area_category
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *ProtectedAreaMutation) ClearEdge(name string) error {
+	switch name {
+	case protectedarea.EdgeProtectedAreaCategory:
+		m.ClearProtectedAreaCategory()
+		return nil
+	}
 	return fmt.Errorf("unknown ProtectedArea unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *ProtectedAreaMutation) ResetEdge(name string) error {
+	switch name {
+	case protectedarea.EdgeProtectedAreaPictures:
+		m.ResetProtectedAreaPictures()
+		return nil
+	case protectedarea.EdgeProtectedAreaCategory:
+		m.ResetProtectedAreaCategory()
+		return nil
+	}
 	return fmt.Errorf("unknown ProtectedArea edge %s", name)
 }
 
 // ProtectedAreaCategoryMutation represents an operation that mutates the ProtectedAreaCategory nodes in the graph.
 type ProtectedAreaCategoryMutation struct {
 	config
-	op                   Op
-	typ                  string
-	id                   *int
-	created_at           *time.Time
-	created_by           *string
-	updated_at           *time.Time
-	updated_by           *string
-	display_name         *string
-	abbreviation         *string
-	description          *string
-	external_links       *[]string
-	appendexternal_links []string
-	clearedFields        map[string]struct{}
-	done                 bool
-	oldValue             func(context.Context) (*ProtectedAreaCategory, error)
-	predicates           []predicate.ProtectedAreaCategory
+	op                     Op
+	typ                    string
+	id                     *int
+	created_at             *time.Time
+	created_by             *string
+	updated_at             *time.Time
+	updated_by             *string
+	display_name           *string
+	abbreviation           *string
+	description            *string
+	external_links         *[]string
+	appendexternal_links   []string
+	clearedFields          map[string]struct{}
+	protected_areas        map[int]struct{}
+	removedprotected_areas map[int]struct{}
+	clearedprotected_areas bool
+	done                   bool
+	oldValue               func(context.Context) (*ProtectedAreaCategory, error)
+	predicates             []predicate.ProtectedAreaCategory
 }
 
 var _ ent.Mutation = (*ProtectedAreaCategoryMutation)(nil)
@@ -30772,6 +31322,60 @@ func (m *ProtectedAreaCategoryMutation) ResetExternalLinks() {
 	delete(m.clearedFields, protectedareacategory.FieldExternalLinks)
 }
 
+// AddProtectedAreaIDs adds the "protected_areas" edge to the ProtectedArea entity by ids.
+func (m *ProtectedAreaCategoryMutation) AddProtectedAreaIDs(ids ...int) {
+	if m.protected_areas == nil {
+		m.protected_areas = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.protected_areas[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProtectedAreas clears the "protected_areas" edge to the ProtectedArea entity.
+func (m *ProtectedAreaCategoryMutation) ClearProtectedAreas() {
+	m.clearedprotected_areas = true
+}
+
+// ProtectedAreasCleared reports if the "protected_areas" edge to the ProtectedArea entity was cleared.
+func (m *ProtectedAreaCategoryMutation) ProtectedAreasCleared() bool {
+	return m.clearedprotected_areas
+}
+
+// RemoveProtectedAreaIDs removes the "protected_areas" edge to the ProtectedArea entity by IDs.
+func (m *ProtectedAreaCategoryMutation) RemoveProtectedAreaIDs(ids ...int) {
+	if m.removedprotected_areas == nil {
+		m.removedprotected_areas = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.protected_areas, ids[i])
+		m.removedprotected_areas[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProtectedAreas returns the removed IDs of the "protected_areas" edge to the ProtectedArea entity.
+func (m *ProtectedAreaCategoryMutation) RemovedProtectedAreasIDs() (ids []int) {
+	for id := range m.removedprotected_areas {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProtectedAreasIDs returns the "protected_areas" edge IDs in the mutation.
+func (m *ProtectedAreaCategoryMutation) ProtectedAreasIDs() (ids []int) {
+	for id := range m.protected_areas {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProtectedAreas resets all changes to the "protected_areas" edge.
+func (m *ProtectedAreaCategoryMutation) ResetProtectedAreas() {
+	m.protected_areas = nil
+	m.clearedprotected_areas = false
+	m.removedprotected_areas = nil
+}
+
 // Where appends a list predicates to the ProtectedAreaCategoryMutation builder.
 func (m *ProtectedAreaCategoryMutation) Where(ps ...predicate.ProtectedAreaCategory) {
 	m.predicates = append(m.predicates, ps...)
@@ -31063,71 +31667,119 @@ func (m *ProtectedAreaCategoryMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ProtectedAreaCategoryMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.protected_areas != nil {
+		edges = append(edges, protectedareacategory.EdgeProtectedAreas)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *ProtectedAreaCategoryMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case protectedareacategory.EdgeProtectedAreas:
+		ids := make([]ent.Value, 0, len(m.protected_areas))
+		for id := range m.protected_areas {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ProtectedAreaCategoryMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.removedprotected_areas != nil {
+		edges = append(edges, protectedareacategory.EdgeProtectedAreas)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *ProtectedAreaCategoryMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case protectedareacategory.EdgeProtectedAreas:
+		ids := make([]ent.Value, 0, len(m.removedprotected_areas))
+		for id := range m.removedprotected_areas {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ProtectedAreaCategoryMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.clearedprotected_areas {
+		edges = append(edges, protectedareacategory.EdgeProtectedAreas)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *ProtectedAreaCategoryMutation) EdgeCleared(name string) bool {
+	switch name {
+	case protectedareacategory.EdgeProtectedAreas:
+		return m.clearedprotected_areas
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *ProtectedAreaCategoryMutation) ClearEdge(name string) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown ProtectedAreaCategory unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *ProtectedAreaCategoryMutation) ResetEdge(name string) error {
+	switch name {
+	case protectedareacategory.EdgeProtectedAreas:
+		m.ResetProtectedAreas()
+		return nil
+	}
 	return fmt.Errorf("unknown ProtectedAreaCategory edge %s", name)
 }
 
 // ProtectedAreaPictureMutation represents an operation that mutates the ProtectedAreaPicture nodes in the graph.
 type ProtectedAreaPictureMutation struct {
 	config
-	op                   Op
-	typ                  string
-	id                   *int
-	created_at           *time.Time
-	created_by           *string
-	updated_at           *time.Time
-	updated_by           *string
-	display_name         *string
-	abbreviation         *string
-	description          *string
-	external_links       *[]string
-	appendexternal_links []string
-	clearedFields        map[string]struct{}
-	done                 bool
-	oldValue             func(context.Context) (*ProtectedAreaPicture, error)
-	predicates           []predicate.ProtectedAreaPicture
+	op                           Op
+	typ                          string
+	id                           *int
+	created_at                   *time.Time
+	created_by                   *string
+	updated_at                   *time.Time
+	updated_by                   *string
+	display_name                 *string
+	abbreviation                 *string
+	description                  *string
+	external_links               *[]string
+	appendexternal_links         []string
+	primary_image_url            *string
+	additional_images_urls       *[]string
+	appendadditional_images_urls []string
+	shooting_date                *time.Time
+	clearedFields                map[string]struct{}
+	collection                   *int
+	clearedcollection            bool
+	protected_area               *int
+	clearedprotected_area        bool
+	location                     *int
+	clearedlocation              bool
+	license                      *int
+	clearedlicense               bool
+	done                         bool
+	oldValue                     func(context.Context) (*ProtectedAreaPicture, error)
+	predicates                   []predicate.ProtectedAreaPicture
 }
 
 var _ ent.Mutation = (*ProtectedAreaPictureMutation)(nil)
@@ -31610,6 +32262,325 @@ func (m *ProtectedAreaPictureMutation) ResetExternalLinks() {
 	delete(m.clearedFields, protectedareapicture.FieldExternalLinks)
 }
 
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (m *ProtectedAreaPictureMutation) SetPrimaryImageURL(s string) {
+	m.primary_image_url = &s
+}
+
+// PrimaryImageURL returns the value of the "primary_image_url" field in the mutation.
+func (m *ProtectedAreaPictureMutation) PrimaryImageURL() (r string, exists bool) {
+	v := m.primary_image_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPrimaryImageURL returns the old "primary_image_url" field's value of the ProtectedAreaPicture entity.
+// If the ProtectedAreaPicture object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaPictureMutation) OldPrimaryImageURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPrimaryImageURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPrimaryImageURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPrimaryImageURL: %w", err)
+	}
+	return oldValue.PrimaryImageURL, nil
+}
+
+// ClearPrimaryImageURL clears the value of the "primary_image_url" field.
+func (m *ProtectedAreaPictureMutation) ClearPrimaryImageURL() {
+	m.primary_image_url = nil
+	m.clearedFields[protectedareapicture.FieldPrimaryImageURL] = struct{}{}
+}
+
+// PrimaryImageURLCleared returns if the "primary_image_url" field was cleared in this mutation.
+func (m *ProtectedAreaPictureMutation) PrimaryImageURLCleared() bool {
+	_, ok := m.clearedFields[protectedareapicture.FieldPrimaryImageURL]
+	return ok
+}
+
+// ResetPrimaryImageURL resets all changes to the "primary_image_url" field.
+func (m *ProtectedAreaPictureMutation) ResetPrimaryImageURL() {
+	m.primary_image_url = nil
+	delete(m.clearedFields, protectedareapicture.FieldPrimaryImageURL)
+}
+
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (m *ProtectedAreaPictureMutation) SetAdditionalImagesUrls(s []string) {
+	m.additional_images_urls = &s
+	m.appendadditional_images_urls = nil
+}
+
+// AdditionalImagesUrls returns the value of the "additional_images_urls" field in the mutation.
+func (m *ProtectedAreaPictureMutation) AdditionalImagesUrls() (r []string, exists bool) {
+	v := m.additional_images_urls
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAdditionalImagesUrls returns the old "additional_images_urls" field's value of the ProtectedAreaPicture entity.
+// If the ProtectedAreaPicture object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaPictureMutation) OldAdditionalImagesUrls(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAdditionalImagesUrls is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAdditionalImagesUrls requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAdditionalImagesUrls: %w", err)
+	}
+	return oldValue.AdditionalImagesUrls, nil
+}
+
+// AppendAdditionalImagesUrls adds s to the "additional_images_urls" field.
+func (m *ProtectedAreaPictureMutation) AppendAdditionalImagesUrls(s []string) {
+	m.appendadditional_images_urls = append(m.appendadditional_images_urls, s...)
+}
+
+// AppendedAdditionalImagesUrls returns the list of values that were appended to the "additional_images_urls" field in this mutation.
+func (m *ProtectedAreaPictureMutation) AppendedAdditionalImagesUrls() ([]string, bool) {
+	if len(m.appendadditional_images_urls) == 0 {
+		return nil, false
+	}
+	return m.appendadditional_images_urls, true
+}
+
+// ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
+func (m *ProtectedAreaPictureMutation) ClearAdditionalImagesUrls() {
+	m.additional_images_urls = nil
+	m.appendadditional_images_urls = nil
+	m.clearedFields[protectedareapicture.FieldAdditionalImagesUrls] = struct{}{}
+}
+
+// AdditionalImagesUrlsCleared returns if the "additional_images_urls" field was cleared in this mutation.
+func (m *ProtectedAreaPictureMutation) AdditionalImagesUrlsCleared() bool {
+	_, ok := m.clearedFields[protectedareapicture.FieldAdditionalImagesUrls]
+	return ok
+}
+
+// ResetAdditionalImagesUrls resets all changes to the "additional_images_urls" field.
+func (m *ProtectedAreaPictureMutation) ResetAdditionalImagesUrls() {
+	m.additional_images_urls = nil
+	m.appendadditional_images_urls = nil
+	delete(m.clearedFields, protectedareapicture.FieldAdditionalImagesUrls)
+}
+
+// SetShootingDate sets the "shooting_date" field.
+func (m *ProtectedAreaPictureMutation) SetShootingDate(t time.Time) {
+	m.shooting_date = &t
+}
+
+// ShootingDate returns the value of the "shooting_date" field in the mutation.
+func (m *ProtectedAreaPictureMutation) ShootingDate() (r time.Time, exists bool) {
+	v := m.shooting_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldShootingDate returns the old "shooting_date" field's value of the ProtectedAreaPicture entity.
+// If the ProtectedAreaPicture object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaPictureMutation) OldShootingDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldShootingDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldShootingDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldShootingDate: %w", err)
+	}
+	return oldValue.ShootingDate, nil
+}
+
+// ClearShootingDate clears the value of the "shooting_date" field.
+func (m *ProtectedAreaPictureMutation) ClearShootingDate() {
+	m.shooting_date = nil
+	m.clearedFields[protectedareapicture.FieldShootingDate] = struct{}{}
+}
+
+// ShootingDateCleared returns if the "shooting_date" field was cleared in this mutation.
+func (m *ProtectedAreaPictureMutation) ShootingDateCleared() bool {
+	_, ok := m.clearedFields[protectedareapicture.FieldShootingDate]
+	return ok
+}
+
+// ResetShootingDate resets all changes to the "shooting_date" field.
+func (m *ProtectedAreaPictureMutation) ResetShootingDate() {
+	m.shooting_date = nil
+	delete(m.clearedFields, protectedareapicture.FieldShootingDate)
+}
+
+// SetCollectionID sets the "collection" edge to the Collection entity by id.
+func (m *ProtectedAreaPictureMutation) SetCollectionID(id int) {
+	m.collection = &id
+}
+
+// ClearCollection clears the "collection" edge to the Collection entity.
+func (m *ProtectedAreaPictureMutation) ClearCollection() {
+	m.clearedcollection = true
+}
+
+// CollectionCleared reports if the "collection" edge to the Collection entity was cleared.
+func (m *ProtectedAreaPictureMutation) CollectionCleared() bool {
+	return m.clearedcollection
+}
+
+// CollectionID returns the "collection" edge ID in the mutation.
+func (m *ProtectedAreaPictureMutation) CollectionID() (id int, exists bool) {
+	if m.collection != nil {
+		return *m.collection, true
+	}
+	return
+}
+
+// CollectionIDs returns the "collection" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// CollectionID instead. It exists only for internal usage by the builders.
+func (m *ProtectedAreaPictureMutation) CollectionIDs() (ids []int) {
+	if id := m.collection; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetCollection resets all changes to the "collection" edge.
+func (m *ProtectedAreaPictureMutation) ResetCollection() {
+	m.collection = nil
+	m.clearedcollection = false
+}
+
+// SetProtectedAreaID sets the "protected_area" edge to the ProtectedArea entity by id.
+func (m *ProtectedAreaPictureMutation) SetProtectedAreaID(id int) {
+	m.protected_area = &id
+}
+
+// ClearProtectedArea clears the "protected_area" edge to the ProtectedArea entity.
+func (m *ProtectedAreaPictureMutation) ClearProtectedArea() {
+	m.clearedprotected_area = true
+}
+
+// ProtectedAreaCleared reports if the "protected_area" edge to the ProtectedArea entity was cleared.
+func (m *ProtectedAreaPictureMutation) ProtectedAreaCleared() bool {
+	return m.clearedprotected_area
+}
+
+// ProtectedAreaID returns the "protected_area" edge ID in the mutation.
+func (m *ProtectedAreaPictureMutation) ProtectedAreaID() (id int, exists bool) {
+	if m.protected_area != nil {
+		return *m.protected_area, true
+	}
+	return
+}
+
+// ProtectedAreaIDs returns the "protected_area" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ProtectedAreaID instead. It exists only for internal usage by the builders.
+func (m *ProtectedAreaPictureMutation) ProtectedAreaIDs() (ids []int) {
+	if id := m.protected_area; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetProtectedArea resets all changes to the "protected_area" edge.
+func (m *ProtectedAreaPictureMutation) ResetProtectedArea() {
+	m.protected_area = nil
+	m.clearedprotected_area = false
+}
+
+// SetLocationID sets the "location" edge to the Location entity by id.
+func (m *ProtectedAreaPictureMutation) SetLocationID(id int) {
+	m.location = &id
+}
+
+// ClearLocation clears the "location" edge to the Location entity.
+func (m *ProtectedAreaPictureMutation) ClearLocation() {
+	m.clearedlocation = true
+}
+
+// LocationCleared reports if the "location" edge to the Location entity was cleared.
+func (m *ProtectedAreaPictureMutation) LocationCleared() bool {
+	return m.clearedlocation
+}
+
+// LocationID returns the "location" edge ID in the mutation.
+func (m *ProtectedAreaPictureMutation) LocationID() (id int, exists bool) {
+	if m.location != nil {
+		return *m.location, true
+	}
+	return
+}
+
+// LocationIDs returns the "location" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// LocationID instead. It exists only for internal usage by the builders.
+func (m *ProtectedAreaPictureMutation) LocationIDs() (ids []int) {
+	if id := m.location; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetLocation resets all changes to the "location" edge.
+func (m *ProtectedAreaPictureMutation) ResetLocation() {
+	m.location = nil
+	m.clearedlocation = false
+}
+
+// SetLicenseID sets the "license" edge to the License entity by id.
+func (m *ProtectedAreaPictureMutation) SetLicenseID(id int) {
+	m.license = &id
+}
+
+// ClearLicense clears the "license" edge to the License entity.
+func (m *ProtectedAreaPictureMutation) ClearLicense() {
+	m.clearedlicense = true
+}
+
+// LicenseCleared reports if the "license" edge to the License entity was cleared.
+func (m *ProtectedAreaPictureMutation) LicenseCleared() bool {
+	return m.clearedlicense
+}
+
+// LicenseID returns the "license" edge ID in the mutation.
+func (m *ProtectedAreaPictureMutation) LicenseID() (id int, exists bool) {
+	if m.license != nil {
+		return *m.license, true
+	}
+	return
+}
+
+// LicenseIDs returns the "license" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// LicenseID instead. It exists only for internal usage by the builders.
+func (m *ProtectedAreaPictureMutation) LicenseIDs() (ids []int) {
+	if id := m.license; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetLicense resets all changes to the "license" edge.
+func (m *ProtectedAreaPictureMutation) ResetLicense() {
+	m.license = nil
+	m.clearedlicense = false
+}
+
 // Where appends a list predicates to the ProtectedAreaPictureMutation builder.
 func (m *ProtectedAreaPictureMutation) Where(ps ...predicate.ProtectedAreaPicture) {
 	m.predicates = append(m.predicates, ps...)
@@ -31644,7 +32615,7 @@ func (m *ProtectedAreaPictureMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProtectedAreaPictureMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 11)
 	if m.created_at != nil {
 		fields = append(fields, protectedareapicture.FieldCreatedAt)
 	}
@@ -31668,6 +32639,15 @@ func (m *ProtectedAreaPictureMutation) Fields() []string {
 	}
 	if m.external_links != nil {
 		fields = append(fields, protectedareapicture.FieldExternalLinks)
+	}
+	if m.primary_image_url != nil {
+		fields = append(fields, protectedareapicture.FieldPrimaryImageURL)
+	}
+	if m.additional_images_urls != nil {
+		fields = append(fields, protectedareapicture.FieldAdditionalImagesUrls)
+	}
+	if m.shooting_date != nil {
+		fields = append(fields, protectedareapicture.FieldShootingDate)
 	}
 	return fields
 }
@@ -31693,6 +32673,12 @@ func (m *ProtectedAreaPictureMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case protectedareapicture.FieldExternalLinks:
 		return m.ExternalLinks()
+	case protectedareapicture.FieldPrimaryImageURL:
+		return m.PrimaryImageURL()
+	case protectedareapicture.FieldAdditionalImagesUrls:
+		return m.AdditionalImagesUrls()
+	case protectedareapicture.FieldShootingDate:
+		return m.ShootingDate()
 	}
 	return nil, false
 }
@@ -31718,6 +32704,12 @@ func (m *ProtectedAreaPictureMutation) OldField(ctx context.Context, name string
 		return m.OldDescription(ctx)
 	case protectedareapicture.FieldExternalLinks:
 		return m.OldExternalLinks(ctx)
+	case protectedareapicture.FieldPrimaryImageURL:
+		return m.OldPrimaryImageURL(ctx)
+	case protectedareapicture.FieldAdditionalImagesUrls:
+		return m.OldAdditionalImagesUrls(ctx)
+	case protectedareapicture.FieldShootingDate:
+		return m.OldShootingDate(ctx)
 	}
 	return nil, fmt.Errorf("unknown ProtectedAreaPicture field %s", name)
 }
@@ -31783,6 +32775,27 @@ func (m *ProtectedAreaPictureMutation) SetField(name string, value ent.Value) er
 		}
 		m.SetExternalLinks(v)
 		return nil
+	case protectedareapicture.FieldPrimaryImageURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPrimaryImageURL(v)
+		return nil
+	case protectedareapicture.FieldAdditionalImagesUrls:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAdditionalImagesUrls(v)
+		return nil
+	case protectedareapicture.FieldShootingDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetShootingDate(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ProtectedAreaPicture field %s", name)
 }
@@ -31831,6 +32844,15 @@ func (m *ProtectedAreaPictureMutation) ClearedFields() []string {
 	if m.FieldCleared(protectedareapicture.FieldExternalLinks) {
 		fields = append(fields, protectedareapicture.FieldExternalLinks)
 	}
+	if m.FieldCleared(protectedareapicture.FieldPrimaryImageURL) {
+		fields = append(fields, protectedareapicture.FieldPrimaryImageURL)
+	}
+	if m.FieldCleared(protectedareapicture.FieldAdditionalImagesUrls) {
+		fields = append(fields, protectedareapicture.FieldAdditionalImagesUrls)
+	}
+	if m.FieldCleared(protectedareapicture.FieldShootingDate) {
+		fields = append(fields, protectedareapicture.FieldShootingDate)
+	}
 	return fields
 }
 
@@ -31862,6 +32884,15 @@ func (m *ProtectedAreaPictureMutation) ClearField(name string) error {
 		return nil
 	case protectedareapicture.FieldExternalLinks:
 		m.ClearExternalLinks()
+		return nil
+	case protectedareapicture.FieldPrimaryImageURL:
+		m.ClearPrimaryImageURL()
+		return nil
+	case protectedareapicture.FieldAdditionalImagesUrls:
+		m.ClearAdditionalImagesUrls()
+		return nil
+	case protectedareapicture.FieldShootingDate:
+		m.ClearShootingDate()
 		return nil
 	}
 	return fmt.Errorf("unknown ProtectedAreaPicture nullable field %s", name)
@@ -31895,25 +32926,64 @@ func (m *ProtectedAreaPictureMutation) ResetField(name string) error {
 	case protectedareapicture.FieldExternalLinks:
 		m.ResetExternalLinks()
 		return nil
+	case protectedareapicture.FieldPrimaryImageURL:
+		m.ResetPrimaryImageURL()
+		return nil
+	case protectedareapicture.FieldAdditionalImagesUrls:
+		m.ResetAdditionalImagesUrls()
+		return nil
+	case protectedareapicture.FieldShootingDate:
+		m.ResetShootingDate()
+		return nil
 	}
 	return fmt.Errorf("unknown ProtectedAreaPicture field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ProtectedAreaPictureMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 4)
+	if m.collection != nil {
+		edges = append(edges, protectedareapicture.EdgeCollection)
+	}
+	if m.protected_area != nil {
+		edges = append(edges, protectedareapicture.EdgeProtectedArea)
+	}
+	if m.location != nil {
+		edges = append(edges, protectedareapicture.EdgeLocation)
+	}
+	if m.license != nil {
+		edges = append(edges, protectedareapicture.EdgeLicense)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *ProtectedAreaPictureMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case protectedareapicture.EdgeCollection:
+		if id := m.collection; id != nil {
+			return []ent.Value{*id}
+		}
+	case protectedareapicture.EdgeProtectedArea:
+		if id := m.protected_area; id != nil {
+			return []ent.Value{*id}
+		}
+	case protectedareapicture.EdgeLocation:
+		if id := m.location; id != nil {
+			return []ent.Value{*id}
+		}
+	case protectedareapicture.EdgeLicense:
+		if id := m.license; id != nil {
+			return []ent.Value{*id}
+		}
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ProtectedAreaPictureMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 4)
 	return edges
 }
 
@@ -31925,25 +32995,75 @@ func (m *ProtectedAreaPictureMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ProtectedAreaPictureMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 4)
+	if m.clearedcollection {
+		edges = append(edges, protectedareapicture.EdgeCollection)
+	}
+	if m.clearedprotected_area {
+		edges = append(edges, protectedareapicture.EdgeProtectedArea)
+	}
+	if m.clearedlocation {
+		edges = append(edges, protectedareapicture.EdgeLocation)
+	}
+	if m.clearedlicense {
+		edges = append(edges, protectedareapicture.EdgeLicense)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *ProtectedAreaPictureMutation) EdgeCleared(name string) bool {
+	switch name {
+	case protectedareapicture.EdgeCollection:
+		return m.clearedcollection
+	case protectedareapicture.EdgeProtectedArea:
+		return m.clearedprotected_area
+	case protectedareapicture.EdgeLocation:
+		return m.clearedlocation
+	case protectedareapicture.EdgeLicense:
+		return m.clearedlicense
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *ProtectedAreaPictureMutation) ClearEdge(name string) error {
+	switch name {
+	case protectedareapicture.EdgeCollection:
+		m.ClearCollection()
+		return nil
+	case protectedareapicture.EdgeProtectedArea:
+		m.ClearProtectedArea()
+		return nil
+	case protectedareapicture.EdgeLocation:
+		m.ClearLocation()
+		return nil
+	case protectedareapicture.EdgeLicense:
+		m.ClearLicense()
+		return nil
+	}
 	return fmt.Errorf("unknown ProtectedAreaPicture unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *ProtectedAreaPictureMutation) ResetEdge(name string) error {
+	switch name {
+	case protectedareapicture.EdgeCollection:
+		m.ResetCollection()
+		return nil
+	case protectedareapicture.EdgeProtectedArea:
+		m.ResetProtectedArea()
+		return nil
+	case protectedareapicture.EdgeLocation:
+		m.ResetLocation()
+		return nil
+	case protectedareapicture.EdgeLicense:
+		m.ResetLicense()
+		return nil
+	}
 	return fmt.Errorf("unknown ProtectedAreaPicture edge %s", name)
 }
 

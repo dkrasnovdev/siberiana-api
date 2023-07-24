@@ -12,7 +12,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/heritage-api/ent/collection"
+	"github.com/dkrasnovdev/heritage-api/ent/license"
+	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
 )
 
@@ -153,9 +157,167 @@ func (papu *ProtectedAreaPictureUpdate) ClearExternalLinks() *ProtectedAreaPictu
 	return papu
 }
 
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (papu *ProtectedAreaPictureUpdate) SetPrimaryImageURL(s string) *ProtectedAreaPictureUpdate {
+	papu.mutation.SetPrimaryImageURL(s)
+	return papu
+}
+
+// SetNillablePrimaryImageURL sets the "primary_image_url" field if the given value is not nil.
+func (papu *ProtectedAreaPictureUpdate) SetNillablePrimaryImageURL(s *string) *ProtectedAreaPictureUpdate {
+	if s != nil {
+		papu.SetPrimaryImageURL(*s)
+	}
+	return papu
+}
+
+// ClearPrimaryImageURL clears the value of the "primary_image_url" field.
+func (papu *ProtectedAreaPictureUpdate) ClearPrimaryImageURL() *ProtectedAreaPictureUpdate {
+	papu.mutation.ClearPrimaryImageURL()
+	return papu
+}
+
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (papu *ProtectedAreaPictureUpdate) SetAdditionalImagesUrls(s []string) *ProtectedAreaPictureUpdate {
+	papu.mutation.SetAdditionalImagesUrls(s)
+	return papu
+}
+
+// AppendAdditionalImagesUrls appends s to the "additional_images_urls" field.
+func (papu *ProtectedAreaPictureUpdate) AppendAdditionalImagesUrls(s []string) *ProtectedAreaPictureUpdate {
+	papu.mutation.AppendAdditionalImagesUrls(s)
+	return papu
+}
+
+// ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
+func (papu *ProtectedAreaPictureUpdate) ClearAdditionalImagesUrls() *ProtectedAreaPictureUpdate {
+	papu.mutation.ClearAdditionalImagesUrls()
+	return papu
+}
+
+// SetShootingDate sets the "shooting_date" field.
+func (papu *ProtectedAreaPictureUpdate) SetShootingDate(t time.Time) *ProtectedAreaPictureUpdate {
+	papu.mutation.SetShootingDate(t)
+	return papu
+}
+
+// SetNillableShootingDate sets the "shooting_date" field if the given value is not nil.
+func (papu *ProtectedAreaPictureUpdate) SetNillableShootingDate(t *time.Time) *ProtectedAreaPictureUpdate {
+	if t != nil {
+		papu.SetShootingDate(*t)
+	}
+	return papu
+}
+
+// ClearShootingDate clears the value of the "shooting_date" field.
+func (papu *ProtectedAreaPictureUpdate) ClearShootingDate() *ProtectedAreaPictureUpdate {
+	papu.mutation.ClearShootingDate()
+	return papu
+}
+
+// SetCollectionID sets the "collection" edge to the Collection entity by ID.
+func (papu *ProtectedAreaPictureUpdate) SetCollectionID(id int) *ProtectedAreaPictureUpdate {
+	papu.mutation.SetCollectionID(id)
+	return papu
+}
+
+// SetNillableCollectionID sets the "collection" edge to the Collection entity by ID if the given value is not nil.
+func (papu *ProtectedAreaPictureUpdate) SetNillableCollectionID(id *int) *ProtectedAreaPictureUpdate {
+	if id != nil {
+		papu = papu.SetCollectionID(*id)
+	}
+	return papu
+}
+
+// SetCollection sets the "collection" edge to the Collection entity.
+func (papu *ProtectedAreaPictureUpdate) SetCollection(c *Collection) *ProtectedAreaPictureUpdate {
+	return papu.SetCollectionID(c.ID)
+}
+
+// SetProtectedAreaID sets the "protected_area" edge to the ProtectedArea entity by ID.
+func (papu *ProtectedAreaPictureUpdate) SetProtectedAreaID(id int) *ProtectedAreaPictureUpdate {
+	papu.mutation.SetProtectedAreaID(id)
+	return papu
+}
+
+// SetNillableProtectedAreaID sets the "protected_area" edge to the ProtectedArea entity by ID if the given value is not nil.
+func (papu *ProtectedAreaPictureUpdate) SetNillableProtectedAreaID(id *int) *ProtectedAreaPictureUpdate {
+	if id != nil {
+		papu = papu.SetProtectedAreaID(*id)
+	}
+	return papu
+}
+
+// SetProtectedArea sets the "protected_area" edge to the ProtectedArea entity.
+func (papu *ProtectedAreaPictureUpdate) SetProtectedArea(p *ProtectedArea) *ProtectedAreaPictureUpdate {
+	return papu.SetProtectedAreaID(p.ID)
+}
+
+// SetLocationID sets the "location" edge to the Location entity by ID.
+func (papu *ProtectedAreaPictureUpdate) SetLocationID(id int) *ProtectedAreaPictureUpdate {
+	papu.mutation.SetLocationID(id)
+	return papu
+}
+
+// SetNillableLocationID sets the "location" edge to the Location entity by ID if the given value is not nil.
+func (papu *ProtectedAreaPictureUpdate) SetNillableLocationID(id *int) *ProtectedAreaPictureUpdate {
+	if id != nil {
+		papu = papu.SetLocationID(*id)
+	}
+	return papu
+}
+
+// SetLocation sets the "location" edge to the Location entity.
+func (papu *ProtectedAreaPictureUpdate) SetLocation(l *Location) *ProtectedAreaPictureUpdate {
+	return papu.SetLocationID(l.ID)
+}
+
+// SetLicenseID sets the "license" edge to the License entity by ID.
+func (papu *ProtectedAreaPictureUpdate) SetLicenseID(id int) *ProtectedAreaPictureUpdate {
+	papu.mutation.SetLicenseID(id)
+	return papu
+}
+
+// SetNillableLicenseID sets the "license" edge to the License entity by ID if the given value is not nil.
+func (papu *ProtectedAreaPictureUpdate) SetNillableLicenseID(id *int) *ProtectedAreaPictureUpdate {
+	if id != nil {
+		papu = papu.SetLicenseID(*id)
+	}
+	return papu
+}
+
+// SetLicense sets the "license" edge to the License entity.
+func (papu *ProtectedAreaPictureUpdate) SetLicense(l *License) *ProtectedAreaPictureUpdate {
+	return papu.SetLicenseID(l.ID)
+}
+
 // Mutation returns the ProtectedAreaPictureMutation object of the builder.
 func (papu *ProtectedAreaPictureUpdate) Mutation() *ProtectedAreaPictureMutation {
 	return papu.mutation
+}
+
+// ClearCollection clears the "collection" edge to the Collection entity.
+func (papu *ProtectedAreaPictureUpdate) ClearCollection() *ProtectedAreaPictureUpdate {
+	papu.mutation.ClearCollection()
+	return papu
+}
+
+// ClearProtectedArea clears the "protected_area" edge to the ProtectedArea entity.
+func (papu *ProtectedAreaPictureUpdate) ClearProtectedArea() *ProtectedAreaPictureUpdate {
+	papu.mutation.ClearProtectedArea()
+	return papu
+}
+
+// ClearLocation clears the "location" edge to the Location entity.
+func (papu *ProtectedAreaPictureUpdate) ClearLocation() *ProtectedAreaPictureUpdate {
+	papu.mutation.ClearLocation()
+	return papu
+}
+
+// ClearLicense clears the "license" edge to the License entity.
+func (papu *ProtectedAreaPictureUpdate) ClearLicense() *ProtectedAreaPictureUpdate {
+	papu.mutation.ClearLicense()
+	return papu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -252,6 +414,145 @@ func (papu *ProtectedAreaPictureUpdate) sqlSave(ctx context.Context) (n int, err
 	}
 	if papu.mutation.ExternalLinksCleared() {
 		_spec.ClearField(protectedareapicture.FieldExternalLinks, field.TypeJSON)
+	}
+	if value, ok := papu.mutation.PrimaryImageURL(); ok {
+		_spec.SetField(protectedareapicture.FieldPrimaryImageURL, field.TypeString, value)
+	}
+	if papu.mutation.PrimaryImageURLCleared() {
+		_spec.ClearField(protectedareapicture.FieldPrimaryImageURL, field.TypeString)
+	}
+	if value, ok := papu.mutation.AdditionalImagesUrls(); ok {
+		_spec.SetField(protectedareapicture.FieldAdditionalImagesUrls, field.TypeJSON, value)
+	}
+	if value, ok := papu.mutation.AppendedAdditionalImagesUrls(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, protectedareapicture.FieldAdditionalImagesUrls, value)
+		})
+	}
+	if papu.mutation.AdditionalImagesUrlsCleared() {
+		_spec.ClearField(protectedareapicture.FieldAdditionalImagesUrls, field.TypeJSON)
+	}
+	if value, ok := papu.mutation.ShootingDate(); ok {
+		_spec.SetField(protectedareapicture.FieldShootingDate, field.TypeTime, value)
+	}
+	if papu.mutation.ShootingDateCleared() {
+		_spec.ClearField(protectedareapicture.FieldShootingDate, field.TypeTime)
+	}
+	if papu.mutation.CollectionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.CollectionTable,
+			Columns: []string{protectedareapicture.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := papu.mutation.CollectionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.CollectionTable,
+			Columns: []string{protectedareapicture.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if papu.mutation.ProtectedAreaCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.ProtectedAreaTable,
+			Columns: []string{protectedareapicture.ProtectedAreaColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedarea.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := papu.mutation.ProtectedAreaIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.ProtectedAreaTable,
+			Columns: []string{protectedareapicture.ProtectedAreaColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedarea.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if papu.mutation.LocationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.LocationTable,
+			Columns: []string{protectedareapicture.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := papu.mutation.LocationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.LocationTable,
+			Columns: []string{protectedareapicture.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if papu.mutation.LicenseCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.LicenseTable,
+			Columns: []string{protectedareapicture.LicenseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := papu.mutation.LicenseIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.LicenseTable,
+			Columns: []string{protectedareapicture.LicenseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, papu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -397,9 +698,167 @@ func (papuo *ProtectedAreaPictureUpdateOne) ClearExternalLinks() *ProtectedAreaP
 	return papuo
 }
 
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (papuo *ProtectedAreaPictureUpdateOne) SetPrimaryImageURL(s string) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.SetPrimaryImageURL(s)
+	return papuo
+}
+
+// SetNillablePrimaryImageURL sets the "primary_image_url" field if the given value is not nil.
+func (papuo *ProtectedAreaPictureUpdateOne) SetNillablePrimaryImageURL(s *string) *ProtectedAreaPictureUpdateOne {
+	if s != nil {
+		papuo.SetPrimaryImageURL(*s)
+	}
+	return papuo
+}
+
+// ClearPrimaryImageURL clears the value of the "primary_image_url" field.
+func (papuo *ProtectedAreaPictureUpdateOne) ClearPrimaryImageURL() *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.ClearPrimaryImageURL()
+	return papuo
+}
+
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (papuo *ProtectedAreaPictureUpdateOne) SetAdditionalImagesUrls(s []string) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.SetAdditionalImagesUrls(s)
+	return papuo
+}
+
+// AppendAdditionalImagesUrls appends s to the "additional_images_urls" field.
+func (papuo *ProtectedAreaPictureUpdateOne) AppendAdditionalImagesUrls(s []string) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.AppendAdditionalImagesUrls(s)
+	return papuo
+}
+
+// ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
+func (papuo *ProtectedAreaPictureUpdateOne) ClearAdditionalImagesUrls() *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.ClearAdditionalImagesUrls()
+	return papuo
+}
+
+// SetShootingDate sets the "shooting_date" field.
+func (papuo *ProtectedAreaPictureUpdateOne) SetShootingDate(t time.Time) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.SetShootingDate(t)
+	return papuo
+}
+
+// SetNillableShootingDate sets the "shooting_date" field if the given value is not nil.
+func (papuo *ProtectedAreaPictureUpdateOne) SetNillableShootingDate(t *time.Time) *ProtectedAreaPictureUpdateOne {
+	if t != nil {
+		papuo.SetShootingDate(*t)
+	}
+	return papuo
+}
+
+// ClearShootingDate clears the value of the "shooting_date" field.
+func (papuo *ProtectedAreaPictureUpdateOne) ClearShootingDate() *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.ClearShootingDate()
+	return papuo
+}
+
+// SetCollectionID sets the "collection" edge to the Collection entity by ID.
+func (papuo *ProtectedAreaPictureUpdateOne) SetCollectionID(id int) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.SetCollectionID(id)
+	return papuo
+}
+
+// SetNillableCollectionID sets the "collection" edge to the Collection entity by ID if the given value is not nil.
+func (papuo *ProtectedAreaPictureUpdateOne) SetNillableCollectionID(id *int) *ProtectedAreaPictureUpdateOne {
+	if id != nil {
+		papuo = papuo.SetCollectionID(*id)
+	}
+	return papuo
+}
+
+// SetCollection sets the "collection" edge to the Collection entity.
+func (papuo *ProtectedAreaPictureUpdateOne) SetCollection(c *Collection) *ProtectedAreaPictureUpdateOne {
+	return papuo.SetCollectionID(c.ID)
+}
+
+// SetProtectedAreaID sets the "protected_area" edge to the ProtectedArea entity by ID.
+func (papuo *ProtectedAreaPictureUpdateOne) SetProtectedAreaID(id int) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.SetProtectedAreaID(id)
+	return papuo
+}
+
+// SetNillableProtectedAreaID sets the "protected_area" edge to the ProtectedArea entity by ID if the given value is not nil.
+func (papuo *ProtectedAreaPictureUpdateOne) SetNillableProtectedAreaID(id *int) *ProtectedAreaPictureUpdateOne {
+	if id != nil {
+		papuo = papuo.SetProtectedAreaID(*id)
+	}
+	return papuo
+}
+
+// SetProtectedArea sets the "protected_area" edge to the ProtectedArea entity.
+func (papuo *ProtectedAreaPictureUpdateOne) SetProtectedArea(p *ProtectedArea) *ProtectedAreaPictureUpdateOne {
+	return papuo.SetProtectedAreaID(p.ID)
+}
+
+// SetLocationID sets the "location" edge to the Location entity by ID.
+func (papuo *ProtectedAreaPictureUpdateOne) SetLocationID(id int) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.SetLocationID(id)
+	return papuo
+}
+
+// SetNillableLocationID sets the "location" edge to the Location entity by ID if the given value is not nil.
+func (papuo *ProtectedAreaPictureUpdateOne) SetNillableLocationID(id *int) *ProtectedAreaPictureUpdateOne {
+	if id != nil {
+		papuo = papuo.SetLocationID(*id)
+	}
+	return papuo
+}
+
+// SetLocation sets the "location" edge to the Location entity.
+func (papuo *ProtectedAreaPictureUpdateOne) SetLocation(l *Location) *ProtectedAreaPictureUpdateOne {
+	return papuo.SetLocationID(l.ID)
+}
+
+// SetLicenseID sets the "license" edge to the License entity by ID.
+func (papuo *ProtectedAreaPictureUpdateOne) SetLicenseID(id int) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.SetLicenseID(id)
+	return papuo
+}
+
+// SetNillableLicenseID sets the "license" edge to the License entity by ID if the given value is not nil.
+func (papuo *ProtectedAreaPictureUpdateOne) SetNillableLicenseID(id *int) *ProtectedAreaPictureUpdateOne {
+	if id != nil {
+		papuo = papuo.SetLicenseID(*id)
+	}
+	return papuo
+}
+
+// SetLicense sets the "license" edge to the License entity.
+func (papuo *ProtectedAreaPictureUpdateOne) SetLicense(l *License) *ProtectedAreaPictureUpdateOne {
+	return papuo.SetLicenseID(l.ID)
+}
+
 // Mutation returns the ProtectedAreaPictureMutation object of the builder.
 func (papuo *ProtectedAreaPictureUpdateOne) Mutation() *ProtectedAreaPictureMutation {
 	return papuo.mutation
+}
+
+// ClearCollection clears the "collection" edge to the Collection entity.
+func (papuo *ProtectedAreaPictureUpdateOne) ClearCollection() *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.ClearCollection()
+	return papuo
+}
+
+// ClearProtectedArea clears the "protected_area" edge to the ProtectedArea entity.
+func (papuo *ProtectedAreaPictureUpdateOne) ClearProtectedArea() *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.ClearProtectedArea()
+	return papuo
+}
+
+// ClearLocation clears the "location" edge to the Location entity.
+func (papuo *ProtectedAreaPictureUpdateOne) ClearLocation() *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.ClearLocation()
+	return papuo
+}
+
+// ClearLicense clears the "license" edge to the License entity.
+func (papuo *ProtectedAreaPictureUpdateOne) ClearLicense() *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.ClearLicense()
+	return papuo
 }
 
 // Where appends a list predicates to the ProtectedAreaPictureUpdate builder.
@@ -526,6 +985,145 @@ func (papuo *ProtectedAreaPictureUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if papuo.mutation.ExternalLinksCleared() {
 		_spec.ClearField(protectedareapicture.FieldExternalLinks, field.TypeJSON)
+	}
+	if value, ok := papuo.mutation.PrimaryImageURL(); ok {
+		_spec.SetField(protectedareapicture.FieldPrimaryImageURL, field.TypeString, value)
+	}
+	if papuo.mutation.PrimaryImageURLCleared() {
+		_spec.ClearField(protectedareapicture.FieldPrimaryImageURL, field.TypeString)
+	}
+	if value, ok := papuo.mutation.AdditionalImagesUrls(); ok {
+		_spec.SetField(protectedareapicture.FieldAdditionalImagesUrls, field.TypeJSON, value)
+	}
+	if value, ok := papuo.mutation.AppendedAdditionalImagesUrls(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, protectedareapicture.FieldAdditionalImagesUrls, value)
+		})
+	}
+	if papuo.mutation.AdditionalImagesUrlsCleared() {
+		_spec.ClearField(protectedareapicture.FieldAdditionalImagesUrls, field.TypeJSON)
+	}
+	if value, ok := papuo.mutation.ShootingDate(); ok {
+		_spec.SetField(protectedareapicture.FieldShootingDate, field.TypeTime, value)
+	}
+	if papuo.mutation.ShootingDateCleared() {
+		_spec.ClearField(protectedareapicture.FieldShootingDate, field.TypeTime)
+	}
+	if papuo.mutation.CollectionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.CollectionTable,
+			Columns: []string{protectedareapicture.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := papuo.mutation.CollectionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.CollectionTable,
+			Columns: []string{protectedareapicture.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if papuo.mutation.ProtectedAreaCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.ProtectedAreaTable,
+			Columns: []string{protectedareapicture.ProtectedAreaColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedarea.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := papuo.mutation.ProtectedAreaIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.ProtectedAreaTable,
+			Columns: []string{protectedareapicture.ProtectedAreaColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedarea.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if papuo.mutation.LocationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.LocationTable,
+			Columns: []string{protectedareapicture.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := papuo.mutation.LocationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.LocationTable,
+			Columns: []string{protectedareapicture.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if papuo.mutation.LicenseCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.LicenseTable,
+			Columns: []string{protectedareapicture.LicenseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := papuo.mutation.LicenseIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.LicenseTable,
+			Columns: []string{protectedareapicture.LicenseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &ProtectedAreaPicture{config: papuo.config}
 	_spec.Assign = _node.assignValues

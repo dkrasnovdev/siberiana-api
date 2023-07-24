@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -30,8 +31,30 @@ const (
 	FieldDescription = "description"
 	// FieldExternalLinks holds the string denoting the external_links field in the database.
 	FieldExternalLinks = "external_links"
+	// FieldArea holds the string denoting the area field in the database.
+	FieldArea = "area"
+	// FieldEstablishmentDate holds the string denoting the establishment_date field in the database.
+	FieldEstablishmentDate = "establishment_date"
+	// EdgeProtectedAreaPictures holds the string denoting the protected_area_pictures edge name in mutations.
+	EdgeProtectedAreaPictures = "protected_area_pictures"
+	// EdgeProtectedAreaCategory holds the string denoting the protected_area_category edge name in mutations.
+	EdgeProtectedAreaCategory = "protected_area_category"
 	// Table holds the table name of the protectedarea in the database.
 	Table = "protected_areas"
+	// ProtectedAreaPicturesTable is the table that holds the protected_area_pictures relation/edge.
+	ProtectedAreaPicturesTable = "protected_area_pictures"
+	// ProtectedAreaPicturesInverseTable is the table name for the ProtectedAreaPicture entity.
+	// It exists in this package in order to avoid circular dependency with the "protectedareapicture" package.
+	ProtectedAreaPicturesInverseTable = "protected_area_pictures"
+	// ProtectedAreaPicturesColumn is the table column denoting the protected_area_pictures relation/edge.
+	ProtectedAreaPicturesColumn = "protected_area_protected_area_pictures"
+	// ProtectedAreaCategoryTable is the table that holds the protected_area_category relation/edge.
+	ProtectedAreaCategoryTable = "protected_areas"
+	// ProtectedAreaCategoryInverseTable is the table name for the ProtectedAreaCategory entity.
+	// It exists in this package in order to avoid circular dependency with the "protectedareacategory" package.
+	ProtectedAreaCategoryInverseTable = "protected_area_categories"
+	// ProtectedAreaCategoryColumn is the table column denoting the protected_area_category relation/edge.
+	ProtectedAreaCategoryColumn = "protected_area_category_protected_areas"
 )
 
 // Columns holds all SQL columns for protectedarea fields.
@@ -45,12 +68,25 @@ var Columns = []string{
 	FieldAbbreviation,
 	FieldDescription,
 	FieldExternalLinks,
+	FieldArea,
+	FieldEstablishmentDate,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "protected_areas"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"protected_area_category_protected_areas",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -114,4 +150,49 @@ func ByAbbreviation(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByArea orders the results by the area field.
+func ByArea(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldArea, opts...).ToFunc()
+}
+
+// ByEstablishmentDate orders the results by the establishment_date field.
+func ByEstablishmentDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEstablishmentDate, opts...).ToFunc()
+}
+
+// ByProtectedAreaPicturesCount orders the results by protected_area_pictures count.
+func ByProtectedAreaPicturesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProtectedAreaPicturesStep(), opts...)
+	}
+}
+
+// ByProtectedAreaPictures orders the results by protected_area_pictures terms.
+func ByProtectedAreaPictures(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProtectedAreaPicturesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByProtectedAreaCategoryField orders the results by protected_area_category field.
+func ByProtectedAreaCategoryField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProtectedAreaCategoryStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newProtectedAreaPicturesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProtectedAreaPicturesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ProtectedAreaPicturesTable, ProtectedAreaPicturesColumn),
+	)
+}
+func newProtectedAreaCategoryStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProtectedAreaCategoryInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, ProtectedAreaCategoryTable, ProtectedAreaCategoryColumn),
+	)
 }

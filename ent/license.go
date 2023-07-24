@@ -46,14 +46,17 @@ type LicenseEdges struct {
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
 	// Books holds the value of the books edge.
 	Books []*Book `json:"books,omitempty"`
+	// ProtectedAreaPictures holds the value of the protected_area_pictures edge.
+	ProtectedAreaPictures []*ProtectedAreaPicture `json:"protected_area_pictures,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [3]map[string]int
 
-	namedArtifacts map[string][]*Artifact
-	namedBooks     map[string][]*Book
+	namedArtifacts             map[string][]*Artifact
+	namedBooks                 map[string][]*Book
+	namedProtectedAreaPictures map[string][]*ProtectedAreaPicture
 }
 
 // ArtifactsOrErr returns the Artifacts value or an error if the edge
@@ -72,6 +75,15 @@ func (e LicenseEdges) BooksOrErr() ([]*Book, error) {
 		return e.Books, nil
 	}
 	return nil, &NotLoadedError{edge: "books"}
+}
+
+// ProtectedAreaPicturesOrErr returns the ProtectedAreaPictures value or an error if the edge
+// was not loaded in eager-loading.
+func (e LicenseEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, error) {
+	if e.loadedTypes[2] {
+		return e.ProtectedAreaPictures, nil
+	}
+	return nil, &NotLoadedError{edge: "protected_area_pictures"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -181,6 +193,11 @@ func (l *License) QueryBooks() *BookQuery {
 	return NewLicenseClient(l.config).QueryBooks(l)
 }
 
+// QueryProtectedAreaPictures queries the "protected_area_pictures" edge of the License entity.
+func (l *License) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery {
+	return NewLicenseClient(l.config).QueryProtectedAreaPictures(l)
+}
+
 // Update returns a builder for updating this License.
 // Note that you need to call License.Unwrap() before calling this method if this License
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -276,6 +293,30 @@ func (l *License) appendNamedBooks(name string, edges ...*Book) {
 		l.Edges.namedBooks[name] = []*Book{}
 	} else {
 		l.Edges.namedBooks[name] = append(l.Edges.namedBooks[name], edges...)
+	}
+}
+
+// NamedProtectedAreaPictures returns the ProtectedAreaPictures named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (l *License) NamedProtectedAreaPictures(name string) ([]*ProtectedAreaPicture, error) {
+	if l.Edges.namedProtectedAreaPictures == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := l.Edges.namedProtectedAreaPictures[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (l *License) appendNamedProtectedAreaPictures(name string, edges ...*ProtectedAreaPicture) {
+	if l.Edges.namedProtectedAreaPictures == nil {
+		l.Edges.namedProtectedAreaPictures = make(map[string][]*ProtectedAreaPicture)
+	}
+	if len(edges) == 0 {
+		l.Edges.namedProtectedAreaPictures[name] = []*ProtectedAreaPicture{}
+	} else {
+		l.Edges.namedProtectedAreaPictures[name] = append(l.Edges.namedProtectedAreaPictures[name], edges...)
 	}
 }
 

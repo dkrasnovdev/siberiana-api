@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
 )
 
@@ -153,9 +154,45 @@ func (pacu *ProtectedAreaCategoryUpdate) ClearExternalLinks() *ProtectedAreaCate
 	return pacu
 }
 
+// AddProtectedAreaIDs adds the "protected_areas" edge to the ProtectedArea entity by IDs.
+func (pacu *ProtectedAreaCategoryUpdate) AddProtectedAreaIDs(ids ...int) *ProtectedAreaCategoryUpdate {
+	pacu.mutation.AddProtectedAreaIDs(ids...)
+	return pacu
+}
+
+// AddProtectedAreas adds the "protected_areas" edges to the ProtectedArea entity.
+func (pacu *ProtectedAreaCategoryUpdate) AddProtectedAreas(p ...*ProtectedArea) *ProtectedAreaCategoryUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pacu.AddProtectedAreaIDs(ids...)
+}
+
 // Mutation returns the ProtectedAreaCategoryMutation object of the builder.
 func (pacu *ProtectedAreaCategoryUpdate) Mutation() *ProtectedAreaCategoryMutation {
 	return pacu.mutation
+}
+
+// ClearProtectedAreas clears all "protected_areas" edges to the ProtectedArea entity.
+func (pacu *ProtectedAreaCategoryUpdate) ClearProtectedAreas() *ProtectedAreaCategoryUpdate {
+	pacu.mutation.ClearProtectedAreas()
+	return pacu
+}
+
+// RemoveProtectedAreaIDs removes the "protected_areas" edge to ProtectedArea entities by IDs.
+func (pacu *ProtectedAreaCategoryUpdate) RemoveProtectedAreaIDs(ids ...int) *ProtectedAreaCategoryUpdate {
+	pacu.mutation.RemoveProtectedAreaIDs(ids...)
+	return pacu
+}
+
+// RemoveProtectedAreas removes "protected_areas" edges to ProtectedArea entities.
+func (pacu *ProtectedAreaCategoryUpdate) RemoveProtectedAreas(p ...*ProtectedArea) *ProtectedAreaCategoryUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pacu.RemoveProtectedAreaIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -252,6 +289,51 @@ func (pacu *ProtectedAreaCategoryUpdate) sqlSave(ctx context.Context) (n int, er
 	}
 	if pacu.mutation.ExternalLinksCleared() {
 		_spec.ClearField(protectedareacategory.FieldExternalLinks, field.TypeJSON)
+	}
+	if pacu.mutation.ProtectedAreasCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   protectedareacategory.ProtectedAreasTable,
+			Columns: []string{protectedareacategory.ProtectedAreasColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedarea.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pacu.mutation.RemovedProtectedAreasIDs(); len(nodes) > 0 && !pacu.mutation.ProtectedAreasCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   protectedareacategory.ProtectedAreasTable,
+			Columns: []string{protectedareacategory.ProtectedAreasColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedarea.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pacu.mutation.ProtectedAreasIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   protectedareacategory.ProtectedAreasTable,
+			Columns: []string{protectedareacategory.ProtectedAreasColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedarea.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, pacu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -397,9 +479,45 @@ func (pacuo *ProtectedAreaCategoryUpdateOne) ClearExternalLinks() *ProtectedArea
 	return pacuo
 }
 
+// AddProtectedAreaIDs adds the "protected_areas" edge to the ProtectedArea entity by IDs.
+func (pacuo *ProtectedAreaCategoryUpdateOne) AddProtectedAreaIDs(ids ...int) *ProtectedAreaCategoryUpdateOne {
+	pacuo.mutation.AddProtectedAreaIDs(ids...)
+	return pacuo
+}
+
+// AddProtectedAreas adds the "protected_areas" edges to the ProtectedArea entity.
+func (pacuo *ProtectedAreaCategoryUpdateOne) AddProtectedAreas(p ...*ProtectedArea) *ProtectedAreaCategoryUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pacuo.AddProtectedAreaIDs(ids...)
+}
+
 // Mutation returns the ProtectedAreaCategoryMutation object of the builder.
 func (pacuo *ProtectedAreaCategoryUpdateOne) Mutation() *ProtectedAreaCategoryMutation {
 	return pacuo.mutation
+}
+
+// ClearProtectedAreas clears all "protected_areas" edges to the ProtectedArea entity.
+func (pacuo *ProtectedAreaCategoryUpdateOne) ClearProtectedAreas() *ProtectedAreaCategoryUpdateOne {
+	pacuo.mutation.ClearProtectedAreas()
+	return pacuo
+}
+
+// RemoveProtectedAreaIDs removes the "protected_areas" edge to ProtectedArea entities by IDs.
+func (pacuo *ProtectedAreaCategoryUpdateOne) RemoveProtectedAreaIDs(ids ...int) *ProtectedAreaCategoryUpdateOne {
+	pacuo.mutation.RemoveProtectedAreaIDs(ids...)
+	return pacuo
+}
+
+// RemoveProtectedAreas removes "protected_areas" edges to ProtectedArea entities.
+func (pacuo *ProtectedAreaCategoryUpdateOne) RemoveProtectedAreas(p ...*ProtectedArea) *ProtectedAreaCategoryUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pacuo.RemoveProtectedAreaIDs(ids...)
 }
 
 // Where appends a list predicates to the ProtectedAreaCategoryUpdate builder.
@@ -526,6 +644,51 @@ func (pacuo *ProtectedAreaCategoryUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if pacuo.mutation.ExternalLinksCleared() {
 		_spec.ClearField(protectedareacategory.FieldExternalLinks, field.TypeJSON)
+	}
+	if pacuo.mutation.ProtectedAreasCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   protectedareacategory.ProtectedAreasTable,
+			Columns: []string{protectedareacategory.ProtectedAreasColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedarea.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pacuo.mutation.RemovedProtectedAreasIDs(); len(nodes) > 0 && !pacuo.mutation.ProtectedAreasCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   protectedareacategory.ProtectedAreasTable,
+			Columns: []string{protectedareacategory.ProtectedAreasColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedarea.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pacuo.mutation.ProtectedAreasIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   protectedareacategory.ProtectedAreasTable,
+			Columns: []string{protectedareacategory.ProtectedAreasColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedarea.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &ProtectedAreaCategory{config: pacuo.config}
 	_spec.Assign = _node.assignValues
