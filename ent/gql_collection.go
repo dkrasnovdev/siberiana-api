@@ -909,6 +909,16 @@ func (b *BookQuery) collectField(ctx context.Context, opCtx *graphql.OperationCo
 				return err
 			}
 			b.withLicense = query
+		case "location":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&LocationClient{config: b.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, locationImplementors)...); err != nil {
+				return err
+			}
+			b.withLocation = query
 		case "createdAt":
 			if _, ok := fieldSeen[book.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, book.FieldCreatedAt)
@@ -2469,6 +2479,18 @@ func (l *LocationQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				return err
 			}
 			l.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
+		case "books":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&BookClient{config: l.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, bookImplementors)...); err != nil {
+				return err
+			}
+			l.WithNamedBooks(alias, func(wq *BookQuery) {
 				*wq = *query
 			})
 		case "country":

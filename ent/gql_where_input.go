@@ -3124,6 +3124,10 @@ type BookWhereInput struct {
 	// "license" edge predicates.
 	HasLicense     *bool                `json:"hasLicense,omitempty"`
 	HasLicenseWith []*LicenseWhereInput `json:"hasLicenseWith,omitempty"`
+
+	// "location" edge predicates.
+	HasLocation     *bool                 `json:"hasLocation,omitempty"`
+	HasLocationWith []*LocationWhereInput `json:"hasLocationWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -3677,6 +3681,24 @@ func (i *BookWhereInput) P() (predicate.Book, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, book.HasLicenseWith(with...))
+	}
+	if i.HasLocation != nil {
+		p := book.HasLocation()
+		if !*i.HasLocation {
+			p = book.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasLocationWith) > 0 {
+		with := make([]predicate.Location, 0, len(i.HasLocationWith))
+		for _, w := range i.HasLocationWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasLocationWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, book.HasLocationWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -8720,6 +8742,10 @@ type LocationWhereInput struct {
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
 
+	// "books" edge predicates.
+	HasBooks     *bool             `json:"hasBooks,omitempty"`
+	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
+
 	// "country" edge predicates.
 	HasCountry     *bool                `json:"hasCountry,omitempty"`
 	HasCountryWith []*CountryWhereInput `json:"hasCountryWith,omitempty"`
@@ -9123,6 +9149,24 @@ func (i *LocationWhereInput) P() (predicate.Location, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, location.HasArtifactsWith(with...))
+	}
+	if i.HasBooks != nil {
+		p := location.HasBooks()
+		if !*i.HasBooks {
+			p = location.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBooksWith) > 0 {
+		with := make([]predicate.Book, 0, len(i.HasBooksWith))
+		for _, w := range i.HasBooksWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBooksWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, location.HasBooksWith(with...))
 	}
 	if i.HasCountry != nil {
 		p := location.HasCountry()

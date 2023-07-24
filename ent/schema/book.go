@@ -68,5 +68,6 @@ func (Book) Edges() []ent.Edge {
 		edge.From("holders", Holder.Type).Ref("books"),
 		edge.From("publisher", Publisher.Type).Ref("books").Unique(),
 		edge.From("license", License.Type).Ref("books").Unique(),
+		edge.From("location", Location.Type).Ref("books").Unique(),
 	}
 }

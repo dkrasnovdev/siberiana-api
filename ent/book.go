@@ -13,6 +13,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
+	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/publisher"
 )
 
@@ -50,6 +51,7 @@ type Book struct {
 	Edges            BookEdges `json:"edges"`
 	collection_books *int
 	license_books    *int
+	location_books   *int
 	publisher_books  *int
 	selectValues     sql.SelectValues
 }
@@ -68,11 +70,13 @@ type BookEdges struct {
 	Publisher *Publisher `json:"publisher,omitempty"`
 	// License holds the value of the license edge.
 	License *License `json:"license,omitempty"`
+	// Location holds the value of the location edge.
+	Location *Location `json:"location,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [7]map[string]int
 
 	namedAuthors    map[string][]*Person
 	namedBookGenres map[string][]*BookGenre
@@ -145,6 +149,19 @@ func (e BookEdges) LicenseOrErr() (*License, error) {
 	return nil, &NotLoadedError{edge: "license"}
 }
 
+// LocationOrErr returns the Location value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e BookEdges) LocationOrErr() (*Location, error) {
+	if e.loadedTypes[6] {
+		if e.Location == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: location.Label}
+		}
+		return e.Location, nil
+	}
+	return nil, &NotLoadedError{edge: "location"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Book) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -162,7 +179,9 @@ func (*Book) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case book.ForeignKeys[1]: // license_books
 			values[i] = new(sql.NullInt64)
-		case book.ForeignKeys[2]: // publisher_books
+		case book.ForeignKeys[2]: // location_books
+			values[i] = new(sql.NullInt64)
+		case book.ForeignKeys[3]: // publisher_books
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -279,6 +298,13 @@ func (b *Book) assignValues(columns []string, values []any) error {
 			}
 		case book.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field location_books", value)
+			} else if value.Valid {
+				b.location_books = new(int)
+				*b.location_books = int(value.Int64)
+			}
+		case book.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field publisher_books", value)
 			} else if value.Valid {
 				b.publisher_books = new(int)
@@ -325,6 +351,11 @@ func (b *Book) QueryPublisher() *PublisherQuery {
 // QueryLicense queries the "license" edge of the Book entity.
 func (b *Book) QueryLicense() *LicenseQuery {
 	return NewBookClient(b.config).QueryLicense(b)
+}
+
+// QueryLocation queries the "location" edge of the Book entity.
+func (b *Book) QueryLocation() *LocationQuery {
+	return NewBookClient(b.config).QueryLocation(b)
 }
 
 // Update returns a builder for updating this Book.

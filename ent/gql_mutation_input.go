@@ -722,6 +722,7 @@ type CreateBookInput struct {
 	HolderIDs            []int
 	PublisherID          *int
 	LicenseID            *int
+	LocationID           *int
 }
 
 // Mutate applies the CreateBookInput on the BookMutation builder.
@@ -780,6 +781,9 @@ func (i *CreateBookInput) Mutate(m *BookMutation) {
 	if v := i.LicenseID; v != nil {
 		m.SetLicenseID(*v)
 	}
+	if v := i.LocationID; v != nil {
+		m.SetLocationID(*v)
+	}
 }
 
 // SetInput applies the change-set in the CreateBookInput on the BookCreate builder.
@@ -829,6 +833,8 @@ type UpdateBookInput struct {
 	PublisherID                *int
 	ClearLicense               bool
 	LicenseID                  *int
+	ClearLocation              bool
+	LocationID                 *int
 }
 
 // Mutate applies the UpdateBookInput on the BookMutation builder.
@@ -949,6 +955,12 @@ func (i *UpdateBookInput) Mutate(m *BookMutation) {
 	}
 	if v := i.LicenseID; v != nil {
 		m.SetLicenseID(*v)
+	}
+	if i.ClearLocation {
+		m.ClearLocation()
+	}
+	if v := i.LocationID; v != nil {
+		m.SetLocationID(*v)
 	}
 }
 
@@ -2291,6 +2303,7 @@ type CreateLocationInput struct {
 	Description   *string
 	ExternalLinks []string
 	ArtifactIDs   []int
+	BookIDs       []int
 	CountryID     *int
 	DistrictID    *int
 	SettlementID  *int
@@ -2325,6 +2338,9 @@ func (i *CreateLocationInput) Mutate(m *LocationMutation) {
 	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
+	}
+	if v := i.BookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
 	}
 	if v := i.CountryID; v != nil {
 		m.SetCountryID(*v)
@@ -2365,6 +2381,9 @@ type UpdateLocationInput struct {
 	ClearArtifacts      bool
 	AddArtifactIDs      []int
 	RemoveArtifactIDs   []int
+	ClearBooks          bool
+	AddBookIDs          []int
+	RemoveBookIDs       []int
 	ClearCountry        bool
 	CountryID           *int
 	ClearDistrict       bool
@@ -2427,6 +2446,15 @@ func (i *UpdateLocationInput) Mutate(m *LocationMutation) {
 	}
 	if v := i.RemoveArtifactIDs; len(v) > 0 {
 		m.RemoveArtifactIDs(v...)
+	}
+	if i.ClearBooks {
+		m.ClearBooks()
+	}
+	if v := i.AddBookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
+	if v := i.RemoveBookIDs; len(v) > 0 {
+		m.RemoveBookIDs(v...)
 	}
 	if i.ClearCountry {
 		m.ClearCountry()

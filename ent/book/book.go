@@ -51,6 +51,8 @@ const (
 	EdgePublisher = "publisher"
 	// EdgeLicense holds the string denoting the license edge name in mutations.
 	EdgeLicense = "license"
+	// EdgeLocation holds the string denoting the location edge name in mutations.
+	EdgeLocation = "location"
 	// Table holds the table name of the book in the database.
 	Table = "books"
 	// AuthorsTable is the table that holds the authors relation/edge. The primary key declared below.
@@ -89,6 +91,13 @@ const (
 	LicenseInverseTable = "licenses"
 	// LicenseColumn is the table column denoting the license relation/edge.
 	LicenseColumn = "license_books"
+	// LocationTable is the table that holds the location relation/edge.
+	LocationTable = "books"
+	// LocationInverseTable is the table name for the Location entity.
+	// It exists in this package in order to avoid circular dependency with the "location" package.
+	LocationInverseTable = "locations"
+	// LocationColumn is the table column denoting the location relation/edge.
+	LocationColumn = "location_books"
 )
 
 // Columns holds all SQL columns for book fields.
@@ -113,6 +122,7 @@ var Columns = []string{
 var ForeignKeys = []string{
 	"collection_books",
 	"license_books",
+	"location_books",
 	"publisher_books",
 }
 
@@ -276,6 +286,13 @@ func ByLicenseField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newLicenseStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByLocationField orders the results by location field.
+func ByLocationField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newLocationStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newAuthorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -316,5 +333,12 @@ func newLicenseStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(LicenseInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, LicenseTable, LicenseColumn),
+	)
+}
+func newLocationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(LocationInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, LocationTable, LocationColumn),
 	)
 }

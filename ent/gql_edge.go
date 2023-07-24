@@ -204,6 +204,14 @@ func (b *Book) License(ctx context.Context) (*License, error) {
 	return result, MaskNotFound(err)
 }
 
+func (b *Book) Location(ctx context.Context) (*Location, error) {
+	result, err := b.Edges.LocationOrErr()
+	if IsNotLoaded(err) {
+		result, err = b.QueryLocation().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (bg *BookGenre) Books(ctx context.Context) (result []*Book, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = bg.NamedBooks(graphql.GetFieldContext(ctx).Field.Alias)
@@ -396,6 +404,18 @@ func (l *Location) Artifacts(ctx context.Context) (result []*Artifact, err error
 	}
 	if IsNotLoaded(err) {
 		result, err = l.QueryArtifacts().All(ctx)
+	}
+	return result, err
+}
+
+func (l *Location) Books(ctx context.Context) (result []*Book, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = l.NamedBooks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = l.Edges.BooksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = l.QueryBooks().All(ctx)
 	}
 	return result, err
 }

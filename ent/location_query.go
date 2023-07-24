@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/country"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
@@ -29,6 +30,7 @@ type LocationQuery struct {
 	inters             []Interceptor
 	predicates         []predicate.Location
 	withArtifacts      *ArtifactQuery
+	withBooks          *BookQuery
 	withCountry        *CountryQuery
 	withDistrict       *DistrictQuery
 	withSettlement     *SettlementQuery
@@ -36,6 +38,7 @@ type LocationQuery struct {
 	modifiers          []func(*sql.Selector)
 	loadTotal          []func(context.Context, []*Location) error
 	withNamedArtifacts map[string]*ArtifactQuery
+	withNamedBooks     map[string]*BookQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -87,6 +90,28 @@ func (lq *LocationQuery) QueryArtifacts() *ArtifactQuery {
 			sqlgraph.From(location.Table, location.FieldID, selector),
 			sqlgraph.To(artifact.Table, artifact.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, location.ArtifactsTable, location.ArtifactsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(lq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryBooks chains the current query on the "books" edge.
+func (lq *LocationQuery) QueryBooks() *BookQuery {
+	query := (&BookClient{config: lq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := lq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := lq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(location.Table, location.FieldID, selector),
+			sqlgraph.To(book.Table, book.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, location.BooksTable, location.BooksColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(lq.driver.Dialect(), step)
 		return fromU, nil
@@ -375,6 +400,7 @@ func (lq *LocationQuery) Clone() *LocationQuery {
 		inters:         append([]Interceptor{}, lq.inters...),
 		predicates:     append([]predicate.Location{}, lq.predicates...),
 		withArtifacts:  lq.withArtifacts.Clone(),
+		withBooks:      lq.withBooks.Clone(),
 		withCountry:    lq.withCountry.Clone(),
 		withDistrict:   lq.withDistrict.Clone(),
 		withSettlement: lq.withSettlement.Clone(),
@@ -393,6 +419,17 @@ func (lq *LocationQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *LocationQu
 		opt(query)
 	}
 	lq.withArtifacts = query
+	return lq
+}
+
+// WithBooks tells the query-builder to eager-load the nodes that are connected to
+// the "books" edge. The optional arguments are used to configure the query builder of the edge.
+func (lq *LocationQuery) WithBooks(opts ...func(*BookQuery)) *LocationQuery {
+	query := (&BookClient{config: lq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	lq.withBooks = query
 	return lq
 }
 
@@ -524,8 +561,9 @@ func (lq *LocationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Loc
 	var (
 		nodes       = []*Location{}
 		_spec       = lq.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [6]bool{
 			lq.withArtifacts != nil,
+			lq.withBooks != nil,
 			lq.withCountry != nil,
 			lq.withDistrict != nil,
 			lq.withSettlement != nil,
@@ -560,6 +598,13 @@ func (lq *LocationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Loc
 			return nil, err
 		}
 	}
+	if query := lq.withBooks; query != nil {
+		if err := lq.loadBooks(ctx, query, nodes,
+			func(n *Location) { n.Edges.Books = []*Book{} },
+			func(n *Location, e *Book) { n.Edges.Books = append(n.Edges.Books, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := lq.withCountry; query != nil {
 		if err := lq.loadCountry(ctx, query, nodes, nil,
 			func(n *Location, e *Country) { n.Edges.Country = e }); err != nil {
@@ -588,6 +633,13 @@ func (lq *LocationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Loc
 		if err := lq.loadArtifacts(ctx, query, nodes,
 			func(n *Location) { n.appendNamedArtifacts(name) },
 			func(n *Location, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range lq.withNamedBooks {
+		if err := lq.loadBooks(ctx, query, nodes,
+			func(n *Location) { n.appendNamedBooks(name) },
+			func(n *Location, e *Book) { n.appendNamedBooks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -625,6 +677,37 @@ func (lq *LocationQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "location_artifacts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (lq *LocationQuery) loadBooks(ctx context.Context, query *BookQuery, nodes []*Location, init func(*Location), assign func(*Location, *Book)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Location)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(location.BooksColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.location_books
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "location_books" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "location_books" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -838,6 +921,20 @@ func (lq *LocationQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQ
 		lq.withNamedArtifacts = make(map[string]*ArtifactQuery)
 	}
 	lq.withNamedArtifacts[name] = query
+	return lq
+}
+
+// WithNamedBooks tells the query-builder to eager-load the nodes that are connected to the "books"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (lq *LocationQuery) WithNamedBooks(name string, opts ...func(*BookQuery)) *LocationQuery {
+	query := (&BookClient{config: lq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if lq.withNamedBooks == nil {
+		lq.withNamedBooks = make(map[string]*BookQuery)
+	}
+	lq.withNamedBooks[name] = query
 	return lq
 }
 

@@ -5729,6 +5729,8 @@ type BookMutation struct {
 	clearedpublisher             bool
 	license                      *int
 	clearedlicense               bool
+	location                     *int
+	clearedlocation              bool
 	done                         bool
 	oldValue                     func(context.Context) (*Book, error)
 	predicates                   []predicate.Book
@@ -6742,6 +6744,45 @@ func (m *BookMutation) ResetLicense() {
 	m.clearedlicense = false
 }
 
+// SetLocationID sets the "location" edge to the Location entity by id.
+func (m *BookMutation) SetLocationID(id int) {
+	m.location = &id
+}
+
+// ClearLocation clears the "location" edge to the Location entity.
+func (m *BookMutation) ClearLocation() {
+	m.clearedlocation = true
+}
+
+// LocationCleared reports if the "location" edge to the Location entity was cleared.
+func (m *BookMutation) LocationCleared() bool {
+	return m.clearedlocation
+}
+
+// LocationID returns the "location" edge ID in the mutation.
+func (m *BookMutation) LocationID() (id int, exists bool) {
+	if m.location != nil {
+		return *m.location, true
+	}
+	return
+}
+
+// LocationIDs returns the "location" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// LocationID instead. It exists only for internal usage by the builders.
+func (m *BookMutation) LocationIDs() (ids []int) {
+	if id := m.location; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetLocation resets all changes to the "location" edge.
+func (m *BookMutation) ResetLocation() {
+	m.location = nil
+	m.clearedlocation = false
+}
+
 // Where appends a list predicates to the BookMutation builder.
 func (m *BookMutation) Where(ps ...predicate.Book) {
 	m.predicates = append(m.predicates, ps...)
@@ -7140,7 +7181,7 @@ func (m *BookMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *BookMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.authors != nil {
 		edges = append(edges, book.EdgeAuthors)
 	}
@@ -7158,6 +7199,9 @@ func (m *BookMutation) AddedEdges() []string {
 	}
 	if m.license != nil {
 		edges = append(edges, book.EdgeLicense)
+	}
+	if m.location != nil {
+		edges = append(edges, book.EdgeLocation)
 	}
 	return edges
 }
@@ -7196,13 +7240,17 @@ func (m *BookMutation) AddedIDs(name string) []ent.Value {
 		if id := m.license; id != nil {
 			return []ent.Value{*id}
 		}
+	case book.EdgeLocation:
+		if id := m.location; id != nil {
+			return []ent.Value{*id}
+		}
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *BookMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.removedauthors != nil {
 		edges = append(edges, book.EdgeAuthors)
 	}
@@ -7243,7 +7291,7 @@ func (m *BookMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *BookMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.clearedauthors {
 		edges = append(edges, book.EdgeAuthors)
 	}
@@ -7261,6 +7309,9 @@ func (m *BookMutation) ClearedEdges() []string {
 	}
 	if m.clearedlicense {
 		edges = append(edges, book.EdgeLicense)
+	}
+	if m.clearedlocation {
+		edges = append(edges, book.EdgeLocation)
 	}
 	return edges
 }
@@ -7281,6 +7332,8 @@ func (m *BookMutation) EdgeCleared(name string) bool {
 		return m.clearedpublisher
 	case book.EdgeLicense:
 		return m.clearedlicense
+	case book.EdgeLocation:
+		return m.clearedlocation
 	}
 	return false
 }
@@ -7297,6 +7350,9 @@ func (m *BookMutation) ClearEdge(name string) error {
 		return nil
 	case book.EdgeLicense:
 		m.ClearLicense()
+		return nil
+	case book.EdgeLocation:
+		m.ClearLocation()
 		return nil
 	}
 	return fmt.Errorf("unknown Book unique edge %s", name)
@@ -7323,6 +7379,9 @@ func (m *BookMutation) ResetEdge(name string) error {
 		return nil
 	case book.EdgeLicense:
 		m.ResetLicense()
+		return nil
+	case book.EdgeLocation:
+		m.ResetLocation()
 		return nil
 	}
 	return fmt.Errorf("unknown Book edge %s", name)
@@ -16348,6 +16407,9 @@ type LocationMutation struct {
 	artifacts            map[int]struct{}
 	removedartifacts     map[int]struct{}
 	clearedartifacts     bool
+	books                map[int]struct{}
+	removedbooks         map[int]struct{}
+	clearedbooks         bool
 	country              *int
 	clearedcountry       bool
 	district             *int
@@ -16895,6 +16957,60 @@ func (m *LocationMutation) ResetArtifacts() {
 	m.removedartifacts = nil
 }
 
+// AddBookIDs adds the "books" edge to the Book entity by ids.
+func (m *LocationMutation) AddBookIDs(ids ...int) {
+	if m.books == nil {
+		m.books = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.books[ids[i]] = struct{}{}
+	}
+}
+
+// ClearBooks clears the "books" edge to the Book entity.
+func (m *LocationMutation) ClearBooks() {
+	m.clearedbooks = true
+}
+
+// BooksCleared reports if the "books" edge to the Book entity was cleared.
+func (m *LocationMutation) BooksCleared() bool {
+	return m.clearedbooks
+}
+
+// RemoveBookIDs removes the "books" edge to the Book entity by IDs.
+func (m *LocationMutation) RemoveBookIDs(ids ...int) {
+	if m.removedbooks == nil {
+		m.removedbooks = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.books, ids[i])
+		m.removedbooks[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedBooks returns the removed IDs of the "books" edge to the Book entity.
+func (m *LocationMutation) RemovedBooksIDs() (ids []int) {
+	for id := range m.removedbooks {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// BooksIDs returns the "books" edge IDs in the mutation.
+func (m *LocationMutation) BooksIDs() (ids []int) {
+	for id := range m.books {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetBooks resets all changes to the "books" edge.
+func (m *LocationMutation) ResetBooks() {
+	m.books = nil
+	m.clearedbooks = false
+	m.removedbooks = nil
+}
+
 // SetCountryID sets the "country" edge to the Country entity by id.
 func (m *LocationMutation) SetCountryID(id int) {
 	m.country = &id
@@ -17342,9 +17458,12 @@ func (m *LocationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *LocationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.artifacts != nil {
 		edges = append(edges, location.EdgeArtifacts)
+	}
+	if m.books != nil {
+		edges = append(edges, location.EdgeBooks)
 	}
 	if m.country != nil {
 		edges = append(edges, location.EdgeCountry)
@@ -17371,6 +17490,12 @@ func (m *LocationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case location.EdgeBooks:
+		ids := make([]ent.Value, 0, len(m.books))
+		for id := range m.books {
+			ids = append(ids, id)
+		}
+		return ids
 	case location.EdgeCountry:
 		if id := m.country; id != nil {
 			return []ent.Value{*id}
@@ -17393,9 +17518,12 @@ func (m *LocationMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *LocationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.removedartifacts != nil {
 		edges = append(edges, location.EdgeArtifacts)
+	}
+	if m.removedbooks != nil {
+		edges = append(edges, location.EdgeBooks)
 	}
 	return edges
 }
@@ -17410,15 +17538,24 @@ func (m *LocationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case location.EdgeBooks:
+		ids := make([]ent.Value, 0, len(m.removedbooks))
+		for id := range m.removedbooks {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *LocationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.clearedartifacts {
 		edges = append(edges, location.EdgeArtifacts)
+	}
+	if m.clearedbooks {
+		edges = append(edges, location.EdgeBooks)
 	}
 	if m.clearedcountry {
 		edges = append(edges, location.EdgeCountry)
@@ -17441,6 +17578,8 @@ func (m *LocationMutation) EdgeCleared(name string) bool {
 	switch name {
 	case location.EdgeArtifacts:
 		return m.clearedartifacts
+	case location.EdgeBooks:
+		return m.clearedbooks
 	case location.EdgeCountry:
 		return m.clearedcountry
 	case location.EdgeDistrict:
@@ -17479,6 +17618,9 @@ func (m *LocationMutation) ResetEdge(name string) error {
 	switch name {
 	case location.EdgeArtifacts:
 		m.ResetArtifacts()
+		return nil
+	case location.EdgeBooks:
+		m.ResetBooks()
 		return nil
 	case location.EdgeCountry:
 		m.ResetCountry()

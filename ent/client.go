@@ -1498,6 +1498,22 @@ func (c *BookClient) QueryLicense(b *Book) *LicenseQuery {
 	return query
 }
 
+// QueryLocation queries the location edge of a Book.
+func (c *BookClient) QueryLocation(b *Book) *LocationQuery {
+	query := (&LocationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := b.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(book.Table, book.FieldID, id),
+			sqlgraph.To(location.Table, location.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, book.LocationTable, book.LocationColumn),
+		)
+		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *BookClient) Hooks() []Hook {
 	hooks := c.hooks.Book
@@ -3087,6 +3103,22 @@ func (c *LocationClient) QueryArtifacts(l *Location) *ArtifactQuery {
 			sqlgraph.From(location.Table, location.FieldID, id),
 			sqlgraph.To(artifact.Table, artifact.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, location.ArtifactsTable, location.ArtifactsColumn),
+		)
+		fromV = sqlgraph.Neighbors(l.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryBooks queries the books edge of a Location.
+func (c *LocationClient) QueryBooks(l *Location) *BookQuery {
+	query := (&BookClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := l.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(location.Table, location.FieldID, id),
+			sqlgraph.To(book.Table, book.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, location.BooksTable, location.BooksColumn),
 		)
 		fromV = sqlgraph.Neighbors(l.driver.Dialect(), step)
 		return fromV, nil

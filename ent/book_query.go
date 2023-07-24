@@ -17,6 +17,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
+	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/publisher"
@@ -35,6 +36,7 @@ type BookQuery struct {
 	withHolders         *HolderQuery
 	withPublisher       *PublisherQuery
 	withLicense         *LicenseQuery
+	withLocation        *LocationQuery
 	withFKs             bool
 	modifiers           []func(*sql.Selector)
 	loadTotal           []func(context.Context, []*Book) error
@@ -202,6 +204,28 @@ func (bq *BookQuery) QueryLicense() *LicenseQuery {
 			sqlgraph.From(book.Table, book.FieldID, selector),
 			sqlgraph.To(license.Table, license.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, book.LicenseTable, book.LicenseColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryLocation chains the current query on the "location" edge.
+func (bq *BookQuery) QueryLocation() *LocationQuery {
+	query := (&LocationClient{config: bq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := bq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := bq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(book.Table, book.FieldID, selector),
+			sqlgraph.To(location.Table, location.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, book.LocationTable, book.LocationColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
 		return fromU, nil
@@ -407,6 +431,7 @@ func (bq *BookQuery) Clone() *BookQuery {
 		withHolders:    bq.withHolders.Clone(),
 		withPublisher:  bq.withPublisher.Clone(),
 		withLicense:    bq.withLicense.Clone(),
+		withLocation:   bq.withLocation.Clone(),
 		// clone intermediate query.
 		sql:  bq.sql.Clone(),
 		path: bq.path,
@@ -476,6 +501,17 @@ func (bq *BookQuery) WithLicense(opts ...func(*LicenseQuery)) *BookQuery {
 		opt(query)
 	}
 	bq.withLicense = query
+	return bq
+}
+
+// WithLocation tells the query-builder to eager-load the nodes that are connected to
+// the "location" edge. The optional arguments are used to configure the query builder of the edge.
+func (bq *BookQuery) WithLocation(opts ...func(*LocationQuery)) *BookQuery {
+	query := (&LocationClient{config: bq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	bq.withLocation = query
 	return bq
 }
 
@@ -564,16 +600,17 @@ func (bq *BookQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Book, e
 		nodes       = []*Book{}
 		withFKs     = bq.withFKs
 		_spec       = bq.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [7]bool{
 			bq.withAuthors != nil,
 			bq.withBookGenres != nil,
 			bq.withCollection != nil,
 			bq.withHolders != nil,
 			bq.withPublisher != nil,
 			bq.withLicense != nil,
+			bq.withLocation != nil,
 		}
 	)
-	if bq.withCollection != nil || bq.withPublisher != nil || bq.withLicense != nil {
+	if bq.withCollection != nil || bq.withPublisher != nil || bq.withLicense != nil || bq.withLocation != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -636,6 +673,12 @@ func (bq *BookQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Book, e
 	if query := bq.withLicense; query != nil {
 		if err := bq.loadLicense(ctx, query, nodes, nil,
 			func(n *Book, e *License) { n.Edges.License = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := bq.withLocation; query != nil {
+		if err := bq.loadLocation(ctx, query, nodes, nil,
+			func(n *Book, e *Location) { n.Edges.Location = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -940,6 +983,38 @@ func (bq *BookQuery) loadLicense(ctx context.Context, query *LicenseQuery, nodes
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "license_books" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (bq *BookQuery) loadLocation(ctx context.Context, query *LocationQuery, nodes []*Book, init func(*Book), assign func(*Book, *Location)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Book)
+	for i := range nodes {
+		if nodes[i].location_books == nil {
+			continue
+		}
+		fk := *nodes[i].location_books
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(location.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "location_books" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

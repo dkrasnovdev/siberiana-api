@@ -17,6 +17,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
+	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/publisher"
@@ -344,6 +345,25 @@ func (bu *BookUpdate) SetLicense(l *License) *BookUpdate {
 	return bu.SetLicenseID(l.ID)
 }
 
+// SetLocationID sets the "location" edge to the Location entity by ID.
+func (bu *BookUpdate) SetLocationID(id int) *BookUpdate {
+	bu.mutation.SetLocationID(id)
+	return bu
+}
+
+// SetNillableLocationID sets the "location" edge to the Location entity by ID if the given value is not nil.
+func (bu *BookUpdate) SetNillableLocationID(id *int) *BookUpdate {
+	if id != nil {
+		bu = bu.SetLocationID(*id)
+	}
+	return bu
+}
+
+// SetLocation sets the "location" edge to the Location entity.
+func (bu *BookUpdate) SetLocation(l *Location) *BookUpdate {
+	return bu.SetLocationID(l.ID)
+}
+
 // Mutation returns the BookMutation object of the builder.
 func (bu *BookUpdate) Mutation() *BookMutation {
 	return bu.mutation
@@ -427,6 +447,12 @@ func (bu *BookUpdate) ClearPublisher() *BookUpdate {
 // ClearLicense clears the "license" edge to the License entity.
 func (bu *BookUpdate) ClearLicense() *BookUpdate {
 	bu.mutation.ClearLicense()
+	return bu
+}
+
+// ClearLocation clears the "location" edge to the Location entity.
+func (bu *BookUpdate) ClearLocation() *BookUpdate {
+	bu.mutation.ClearLocation()
 	return bu
 }
 
@@ -797,6 +823,35 @@ func (bu *BookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if bu.mutation.LocationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.LocationTable,
+			Columns: []string{book.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.LocationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.LocationTable,
+			Columns: []string{book.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, bu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{book.Label}
@@ -1126,6 +1181,25 @@ func (buo *BookUpdateOne) SetLicense(l *License) *BookUpdateOne {
 	return buo.SetLicenseID(l.ID)
 }
 
+// SetLocationID sets the "location" edge to the Location entity by ID.
+func (buo *BookUpdateOne) SetLocationID(id int) *BookUpdateOne {
+	buo.mutation.SetLocationID(id)
+	return buo
+}
+
+// SetNillableLocationID sets the "location" edge to the Location entity by ID if the given value is not nil.
+func (buo *BookUpdateOne) SetNillableLocationID(id *int) *BookUpdateOne {
+	if id != nil {
+		buo = buo.SetLocationID(*id)
+	}
+	return buo
+}
+
+// SetLocation sets the "location" edge to the Location entity.
+func (buo *BookUpdateOne) SetLocation(l *Location) *BookUpdateOne {
+	return buo.SetLocationID(l.ID)
+}
+
 // Mutation returns the BookMutation object of the builder.
 func (buo *BookUpdateOne) Mutation() *BookMutation {
 	return buo.mutation
@@ -1209,6 +1283,12 @@ func (buo *BookUpdateOne) ClearPublisher() *BookUpdateOne {
 // ClearLicense clears the "license" edge to the License entity.
 func (buo *BookUpdateOne) ClearLicense() *BookUpdateOne {
 	buo.mutation.ClearLicense()
+	return buo
+}
+
+// ClearLocation clears the "location" edge to the Location entity.
+func (buo *BookUpdateOne) ClearLocation() *BookUpdateOne {
+	buo.mutation.ClearLocation()
 	return buo
 }
 
@@ -1602,6 +1682,35 @@ func (buo *BookUpdateOne) sqlSave(ctx context.Context) (_node *Book, err error) 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if buo.mutation.LocationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.LocationTable,
+			Columns: []string{book.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.LocationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.LocationTable,
+			Columns: []string{book.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

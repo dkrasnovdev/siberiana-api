@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
+	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/country"
 	"github.com/dkrasnovdev/heritage-api/ent/district"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
@@ -142,6 +143,21 @@ func (lc *LocationCreate) AddArtifacts(a ...*Artifact) *LocationCreate {
 		ids[i] = a[i].ID
 	}
 	return lc.AddArtifactIDs(ids...)
+}
+
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (lc *LocationCreate) AddBookIDs(ids ...int) *LocationCreate {
+	lc.mutation.AddBookIDs(ids...)
+	return lc
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (lc *LocationCreate) AddBooks(b ...*Book) *LocationCreate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return lc.AddBookIDs(ids...)
 }
 
 // SetCountryID sets the "country" edge to the Country entity by ID.
@@ -349,6 +365,22 @@ func (lc *LocationCreate) createSpec() (*Location, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := lc.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   location.BooksTable,
+			Columns: []string{location.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

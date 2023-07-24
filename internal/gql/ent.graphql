@@ -848,6 +848,7 @@ type Book implements Node {
   holders: [Holder!]
   publisher: Publisher
   license: License
+  location: Location
 }
 """A connection to a list of items."""
 type BookConnection {
@@ -1196,6 +1197,9 @@ input BookWhereInput {
   """license edge predicates"""
   hasLicense: Boolean
   hasLicenseWith: [LicenseWhereInput!]
+  """location edge predicates"""
+  hasLocation: Boolean
+  hasLocationWith: [LocationWhereInput!]
 }
 type Category implements Node {
   id: ID!
@@ -1791,6 +1795,7 @@ input CreateBookInput {
   holderIDs: [ID!]
   publisherID: ID
   licenseID: ID
+  locationID: ID
 }
 """
 CreateCategoryInput is used for create Category object.
@@ -1932,6 +1937,7 @@ input CreateLocationInput {
   description: String
   externalLinks: [String!]
   artifactIDs: [ID!]
+  bookIDs: [ID!]
   countryID: ID
   districtID: ID
   settlementID: ID
@@ -3076,6 +3082,7 @@ type Location implements Node {
   description: String
   externalLinks: [String!]
   artifacts: [Artifact!]
+  books: [Book!]
   country: Country
   district: District
   settlement: Settlement
@@ -3227,6 +3234,9 @@ input LocationWhereInput {
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
+  """books edge predicates"""
+  hasBooks: Boolean
+  hasBooksWith: [BookWhereInput!]
   """country edge predicates"""
   hasCountry: Boolean
   hasCountryWith: [CountryWhereInput!]
@@ -7386,6 +7396,8 @@ input UpdateBookInput {
   clearPublisher: Boolean
   licenseID: ID
   clearLicense: Boolean
+  locationID: ID
+  clearLocation: Boolean
 }
 """
 UpdateCategoryInput is used for update Category object.
@@ -7606,6 +7618,9 @@ input UpdateLocationInput {
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
+  addBookIDs: [ID!]
+  removeBookIDs: [ID!]
+  clearBooks: Boolean
   countryID: ID
   clearCountry: Boolean
   districtID: ID

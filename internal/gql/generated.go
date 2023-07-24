@@ -185,6 +185,7 @@ type ComplexityRoot struct {
 		Holders              func(childComplexity int) int
 		ID                   func(childComplexity int) int
 		License              func(childComplexity int) int
+		Location             func(childComplexity int) int
 		PrimaryImageURL      func(childComplexity int) int
 		Publisher            func(childComplexity int) int
 		UpdatedAt            func(childComplexity int) int
@@ -432,6 +433,7 @@ type ComplexityRoot struct {
 	Location struct {
 		Abbreviation  func(childComplexity int) int
 		Artifacts     func(childComplexity int) int
+		Books         func(childComplexity int) int
 		Country       func(childComplexity int) int
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
@@ -1806,6 +1808,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Book.License(childComplexity), true
 
+	case "Book.location":
+		if e.complexity.Book.Location == nil {
+			break
+		}
+
+		return e.complexity.Book.Location(childComplexity), true
+
 	case "Book.primaryImageURL":
 		if e.complexity.Book.PrimaryImageURL == nil {
 			break
@@ -2883,6 +2892,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Location.Artifacts(childComplexity), true
+
+	case "Location.books":
+		if e.complexity.Location.Books == nil {
+			break
+		}
+
+		return e.complexity.Location.Books(childComplexity), true
 
 	case "Location.country":
 		if e.complexity.Location.Country == nil {
@@ -12195,6 +12211,8 @@ func (ec *executionContext) fieldContext_Artifact_location(ctx context.Context, 
 				return ec.fieldContext_Location_externalLinks(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Location_artifacts(ctx, field)
+			case "books":
+				return ec.fieldContext_Location_books(ctx, field)
 			case "country":
 				return ec.fieldContext_Location_country(ctx, field)
 			case "district":
@@ -14280,6 +14298,79 @@ func (ec *executionContext) fieldContext_Book_license(ctx context.Context, field
 	return fc, nil
 }
 
+func (ec *executionContext) _Book_location(ctx context.Context, field graphql.CollectedField, obj *ent.Book) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Book_location(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Location(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Location)
+	fc.Result = res
+	return ec.marshalOLocation2ᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLocation(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Book_location(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Book",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Location_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Location_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Location_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Location_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Location_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Location_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Location_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Location_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_Location_externalLinks(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Location_artifacts(ctx, field)
+			case "books":
+				return ec.fieldContext_Location_books(ctx, field)
+			case "country":
+				return ec.fieldContext_Location_country(ctx, field)
+			case "district":
+				return ec.fieldContext_Location_district(ctx, field)
+			case "settlement":
+				return ec.fieldContext_Location_settlement(ctx, field)
+			case "region":
+				return ec.fieldContext_Location_region(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Location", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _BookConnection_edges(ctx context.Context, field graphql.CollectedField, obj *ent.BookConnection) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_BookConnection_edges(ctx, field)
 	if err != nil {
@@ -14499,6 +14590,8 @@ func (ec *executionContext) fieldContext_BookEdge_node(ctx context.Context, fiel
 				return ec.fieldContext_Book_publisher(ctx, field)
 			case "license":
 				return ec.fieldContext_Book_license(ctx, field)
+			case "location":
+				return ec.fieldContext_Book_location(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Book", field.Name)
 		},
@@ -15002,6 +15095,8 @@ func (ec *executionContext) fieldContext_BookGenre_books(ctx context.Context, fi
 				return ec.fieldContext_Book_publisher(ctx, field)
 			case "license":
 				return ec.fieldContext_Book_license(ctx, field)
+			case "location":
+				return ec.fieldContext_Book_location(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Book", field.Name)
 		},
@@ -16523,6 +16618,8 @@ func (ec *executionContext) fieldContext_Collection_books(ctx context.Context, f
 				return ec.fieldContext_Book_publisher(ctx, field)
 			case "license":
 				return ec.fieldContext_Book_license(ctx, field)
+			case "location":
+				return ec.fieldContext_Book_location(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Book", field.Name)
 		},
@@ -17384,6 +17481,8 @@ func (ec *executionContext) fieldContext_Country_location(ctx context.Context, f
 				return ec.fieldContext_Location_externalLinks(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Location_artifacts(ctx, field)
+			case "books":
+				return ec.fieldContext_Location_books(ctx, field)
 			case "country":
 				return ec.fieldContext_Location_country(ctx, field)
 			case "district":
@@ -18826,6 +18925,8 @@ func (ec *executionContext) fieldContext_District_location(ctx context.Context, 
 				return ec.fieldContext_Location_externalLinks(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Location_artifacts(ctx, field)
+			case "books":
+				return ec.fieldContext_Location_books(ctx, field)
 			case "country":
 				return ec.fieldContext_Location_country(ctx, field)
 			case "district":
@@ -19577,6 +19678,8 @@ func (ec *executionContext) fieldContext_Holder_books(ctx context.Context, field
 				return ec.fieldContext_Book_publisher(ctx, field)
 			case "license":
 				return ec.fieldContext_Book_license(ctx, field)
+			case "location":
+				return ec.fieldContext_Book_location(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Book", field.Name)
 		},
@@ -21389,6 +21492,8 @@ func (ec *executionContext) fieldContext_License_books(ctx context.Context, fiel
 				return ec.fieldContext_Book_publisher(ctx, field)
 			case "license":
 				return ec.fieldContext_Book_license(ctx, field)
+			case "location":
+				return ec.fieldContext_Book_location(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Book", field.Name)
 		},
@@ -22139,6 +22244,89 @@ func (ec *executionContext) fieldContext_Location_artifacts(ctx context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _Location_books(ctx context.Context, field graphql.CollectedField, obj *ent.Location) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Location_books(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Books(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Book)
+	fc.Result = res
+	return ec.marshalOBook2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐBookᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Location_books(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Location",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Book_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Book_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Book_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Book_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Book_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Book_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Book_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Book_description(ctx, field)
+			case "externalLinks":
+				return ec.fieldContext_Book_externalLinks(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_Book_primaryImageURL(ctx, field)
+			case "additionalImagesUrls":
+				return ec.fieldContext_Book_additionalImagesUrls(ctx, field)
+			case "files":
+				return ec.fieldContext_Book_files(ctx, field)
+			case "year":
+				return ec.fieldContext_Book_year(ctx, field)
+			case "authors":
+				return ec.fieldContext_Book_authors(ctx, field)
+			case "bookGenres":
+				return ec.fieldContext_Book_bookGenres(ctx, field)
+			case "collection":
+				return ec.fieldContext_Book_collection(ctx, field)
+			case "holders":
+				return ec.fieldContext_Book_holders(ctx, field)
+			case "publisher":
+				return ec.fieldContext_Book_publisher(ctx, field)
+			case "license":
+				return ec.fieldContext_Book_license(ctx, field)
+			case "location":
+				return ec.fieldContext_Book_location(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Book", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Location_country(ctx context.Context, field graphql.CollectedField, obj *ent.Location) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Location_country(ctx, field)
 	if err != nil {
@@ -22592,6 +22780,8 @@ func (ec *executionContext) fieldContext_LocationEdge_node(ctx context.Context, 
 				return ec.fieldContext_Location_externalLinks(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Location_artifacts(ctx, field)
+			case "books":
+				return ec.fieldContext_Location_books(ctx, field)
 			case "country":
 				return ec.fieldContext_Location_country(ctx, field)
 			case "district":
@@ -26198,6 +26388,8 @@ func (ec *executionContext) fieldContext_Mutation_createLocation(ctx context.Con
 				return ec.fieldContext_Location_externalLinks(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Location_artifacts(ctx, field)
+			case "books":
+				return ec.fieldContext_Location_books(ctx, field)
 			case "country":
 				return ec.fieldContext_Location_country(ctx, field)
 			case "district":
@@ -26283,6 +26475,8 @@ func (ec *executionContext) fieldContext_Mutation_updateLocation(ctx context.Con
 				return ec.fieldContext_Location_externalLinks(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Location_artifacts(ctx, field)
+			case "books":
+				return ec.fieldContext_Location_books(ctx, field)
 			case "country":
 				return ec.fieldContext_Location_country(ctx, field)
 			case "district":
@@ -31991,6 +32185,8 @@ func (ec *executionContext) fieldContext_Person_books(ctx context.Context, field
 				return ec.fieldContext_Book_publisher(ctx, field)
 			case "license":
 				return ec.fieldContext_Book_license(ctx, field)
+			case "location":
+				return ec.fieldContext_Book_location(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Book", field.Name)
 		},
@@ -38305,6 +38501,8 @@ func (ec *executionContext) fieldContext_Publisher_books(ctx context.Context, fi
 				return ec.fieldContext_Book_publisher(ctx, field)
 			case "license":
 				return ec.fieldContext_Book_license(ctx, field)
+			case "location":
+				return ec.fieldContext_Book_location(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Book", field.Name)
 		},
@@ -41376,6 +41574,8 @@ func (ec *executionContext) fieldContext_Region_location(ctx context.Context, fi
 				return ec.fieldContext_Location_externalLinks(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Location_artifacts(ctx, field)
+			case "books":
+				return ec.fieldContext_Location_books(ctx, field)
 			case "country":
 				return ec.fieldContext_Location_country(ctx, field)
 			case "district":
@@ -42885,6 +43085,8 @@ func (ec *executionContext) fieldContext_Settlement_location(ctx context.Context
 				return ec.fieldContext_Location_externalLinks(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Location_artifacts(ctx, field)
+			case "books":
+				return ec.fieldContext_Location_books(ctx, field)
 			case "country":
 				return ec.fieldContext_Location_country(ctx, field)
 			case "district":
@@ -52012,7 +52214,7 @@ func (ec *executionContext) unmarshalInputBookWhereInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "year", "yearNEQ", "yearIn", "yearNotIn", "yearGT", "yearGTE", "yearLT", "yearLTE", "yearIsNil", "yearNotNil", "hasAuthors", "hasAuthorsWith", "hasBookGenres", "hasBookGenresWith", "hasCollection", "hasCollectionWith", "hasHolders", "hasHoldersWith", "hasPublisher", "hasPublisherWith", "hasLicense", "hasLicenseWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "year", "yearNEQ", "yearIn", "yearNotIn", "yearGT", "yearGTE", "yearLT", "yearLTE", "yearIsNil", "yearNotNil", "hasAuthors", "hasAuthorsWith", "hasBookGenres", "hasBookGenresWith", "hasCollection", "hasCollectionWith", "hasHolders", "hasHoldersWith", "hasPublisher", "hasPublisherWith", "hasLicense", "hasLicenseWith", "hasLocation", "hasLocationWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -53270,6 +53472,24 @@ func (ec *executionContext) unmarshalInputBookWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.HasLicenseWith = data
+		case "hasLocation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLocation"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasLocation = data
+		case "hasLocationWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLocationWith"))
+			data, err := ec.unmarshalOLocationWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐLocationWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasLocationWith = data
 		}
 	}
 
@@ -56933,7 +57153,7 @@ func (ec *executionContext) unmarshalInputCreateBookInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "files", "year", "authorIDs", "bookGenreIDs", "collectionID", "holderIDs", "publisherID", "licenseID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "files", "year", "authorIDs", "bookGenreIDs", "collectionID", "holderIDs", "publisherID", "licenseID", "locationID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -57102,6 +57322,15 @@ func (ec *executionContext) unmarshalInputCreateBookInput(ctx context.Context, o
 				return it, err
 			}
 			it.LicenseID = data
+		case "locationID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("locationID"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LocationID = data
 		}
 	}
 
@@ -57977,7 +58206,7 @@ func (ec *executionContext) unmarshalInputCreateLocationInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs", "countryID", "districtID", "settlementID", "regionID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs", "bookIDs", "countryID", "districtID", "settlementID", "regionID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -58065,6 +58294,15 @@ func (ec *executionContext) unmarshalInputCreateLocationInput(ctx context.Contex
 				return it, err
 			}
 			it.ArtifactIDs = data
+		case "bookIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("bookIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BookIDs = data
 		case "countryID":
 			var err error
 
@@ -65319,7 +65557,7 @@ func (ec *executionContext) unmarshalInputLocationWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasCountry", "hasCountryWith", "hasDistrict", "hasDistrictWith", "hasSettlement", "hasSettlementWith", "hasRegion", "hasRegionWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasCountry", "hasCountryWith", "hasDistrict", "hasDistrictWith", "hasSettlement", "hasSettlementWith", "hasRegion", "hasRegionWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -66262,6 +66500,24 @@ func (ec *executionContext) unmarshalInputLocationWhereInput(ctx context.Context
 				return it, err
 			}
 			it.HasArtifactsWith = data
+		case "hasBooks":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBooks"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasBooks = data
+		case "hasBooksWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBooksWith"))
+			data, err := ec.unmarshalOBookWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋheritageᚑapiᚋentᚐBookWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasBooksWith = data
 		case "hasCountry":
 			var err error
 
@@ -88143,7 +88399,7 @@ func (ec *executionContext) unmarshalInputUpdateBookInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "files", "appendFiles", "clearFiles", "year", "clearYear", "addAuthorIDs", "removeAuthorIDs", "clearAuthors", "addBookGenreIDs", "removeBookGenreIDs", "clearBookGenres", "collectionID", "clearCollection", "addHolderIDs", "removeHolderIDs", "clearHolders", "publisherID", "clearPublisher", "licenseID", "clearLicense"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "files", "appendFiles", "clearFiles", "year", "clearYear", "addAuthorIDs", "removeAuthorIDs", "clearAuthors", "addBookGenreIDs", "removeBookGenreIDs", "clearBookGenres", "collectionID", "clearCollection", "addHolderIDs", "removeHolderIDs", "clearHolders", "publisherID", "clearPublisher", "licenseID", "clearLicense", "locationID", "clearLocation"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -88501,6 +88757,24 @@ func (ec *executionContext) unmarshalInputUpdateBookInput(ctx context.Context, o
 				return it, err
 			}
 			it.ClearLicense = data
+		case "locationID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("locationID"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LocationID = data
+		case "clearLocation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearLocation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearLocation = data
 		}
 	}
 
@@ -90015,7 +90289,7 @@ func (ec *executionContext) unmarshalInputUpdateLocationInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "countryID", "clearCountry", "districtID", "clearDistrict", "settlementID", "clearSettlement", "regionID", "clearRegion"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "countryID", "clearCountry", "districtID", "clearDistrict", "settlementID", "clearSettlement", "regionID", "clearRegion"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -90175,6 +90449,33 @@ func (ec *executionContext) unmarshalInputUpdateLocationInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearArtifacts = data
+		case "addBookIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addBookIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddBookIDs = data
+		case "removeBookIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeBookIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveBookIDs = data
+		case "clearBooks":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearBooks"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearBooks = data
 		case "countryID":
 			var err error
 
@@ -95752,6 +96053,39 @@ func (ec *executionContext) _Book(ctx context.Context, sel ast.SelectionSet, obj
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "location":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Book_location(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -97841,6 +98175,39 @@ func (ec *executionContext) _Location(ctx context.Context, sel ast.SelectionSet,
 					}
 				}()
 				res = ec._Location_artifacts(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "books":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Location_books(ctx, field, obj)
 				return res
 			}
 

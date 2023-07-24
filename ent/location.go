@@ -48,6 +48,8 @@ type Location struct {
 type LocationEdges struct {
 	// Artifacts holds the value of the artifacts edge.
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
+	// Books holds the value of the books edge.
+	Books []*Book `json:"books,omitempty"`
 	// Country holds the value of the country edge.
 	Country *Country `json:"country,omitempty"`
 	// District holds the value of the district edge.
@@ -58,11 +60,12 @@ type LocationEdges struct {
 	Region *Region `json:"region,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [6]map[string]int
 
 	namedArtifacts map[string][]*Artifact
+	namedBooks     map[string][]*Book
 }
 
 // ArtifactsOrErr returns the Artifacts value or an error if the edge
@@ -74,10 +77,19 @@ func (e LocationEdges) ArtifactsOrErr() ([]*Artifact, error) {
 	return nil, &NotLoadedError{edge: "artifacts"}
 }
 
+// BooksOrErr returns the Books value or an error if the edge
+// was not loaded in eager-loading.
+func (e LocationEdges) BooksOrErr() ([]*Book, error) {
+	if e.loadedTypes[1] {
+		return e.Books, nil
+	}
+	return nil, &NotLoadedError{edge: "books"}
+}
+
 // CountryOrErr returns the Country value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e LocationEdges) CountryOrErr() (*Country, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		if e.Country == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: country.Label}
@@ -90,7 +102,7 @@ func (e LocationEdges) CountryOrErr() (*Country, error) {
 // DistrictOrErr returns the District value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e LocationEdges) DistrictOrErr() (*District, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		if e.District == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: district.Label}
@@ -103,7 +115,7 @@ func (e LocationEdges) DistrictOrErr() (*District, error) {
 // SettlementOrErr returns the Settlement value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e LocationEdges) SettlementOrErr() (*Settlement, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		if e.Settlement == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: settlement.Label}
@@ -116,7 +128,7 @@ func (e LocationEdges) SettlementOrErr() (*Settlement, error) {
 // RegionOrErr returns the Region value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e LocationEdges) RegionOrErr() (*Region, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		if e.Region == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: region.Label}
@@ -228,6 +240,11 @@ func (l *Location) QueryArtifacts() *ArtifactQuery {
 	return NewLocationClient(l.config).QueryArtifacts(l)
 }
 
+// QueryBooks queries the "books" edge of the Location entity.
+func (l *Location) QueryBooks() *BookQuery {
+	return NewLocationClient(l.config).QueryBooks(l)
+}
+
 // QueryCountry queries the "country" edge of the Location entity.
 func (l *Location) QueryCountry() *CountryQuery {
 	return NewLocationClient(l.config).QueryCountry(l)
@@ -319,6 +336,30 @@ func (l *Location) appendNamedArtifacts(name string, edges ...*Artifact) {
 		l.Edges.namedArtifacts[name] = []*Artifact{}
 	} else {
 		l.Edges.namedArtifacts[name] = append(l.Edges.namedArtifacts[name], edges...)
+	}
+}
+
+// NamedBooks returns the Books named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (l *Location) NamedBooks(name string) ([]*Book, error) {
+	if l.Edges.namedBooks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := l.Edges.namedBooks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (l *Location) appendNamedBooks(name string, edges ...*Book) {
+	if l.Edges.namedBooks == nil {
+		l.Edges.namedBooks = make(map[string][]*Book)
+	}
+	if len(edges) == 0 {
+		l.Edges.namedBooks[name] = []*Book{}
+	} else {
+		l.Edges.namedBooks[name] = append(l.Edges.namedBooks[name], edges...)
 	}
 }
 

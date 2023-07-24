@@ -177,6 +177,7 @@ var (
 		{Name: "year", Type: field.TypeInt, Nullable: true},
 		{Name: "collection_books", Type: field.TypeInt, Nullable: true},
 		{Name: "license_books", Type: field.TypeInt, Nullable: true},
+		{Name: "location_books", Type: field.TypeInt, Nullable: true},
 		{Name: "publisher_books", Type: field.TypeInt, Nullable: true},
 	}
 	// BooksTable holds the schema information for the "books" table.
@@ -198,8 +199,14 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "books_publishers_books",
+				Symbol:     "books_locations_books",
 				Columns:    []*schema.Column{BooksColumns[15]},
+				RefColumns: []*schema.Column{LocationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "books_publishers_books",
+				Columns:    []*schema.Column{BooksColumns[16]},
 				RefColumns: []*schema.Column{PublishersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1265,7 +1272,8 @@ func init() {
 	ArtifactsTable.ForeignKeys[7].RefTable = SetsTable
 	BooksTable.ForeignKeys[0].RefTable = CollectionsTable
 	BooksTable.ForeignKeys[1].RefTable = LicensesTable
-	BooksTable.ForeignKeys[2].RefTable = PublishersTable
+	BooksTable.ForeignKeys[2].RefTable = LocationsTable
+	BooksTable.ForeignKeys[3].RefTable = PublishersTable
 	CollectionsTable.ForeignKeys[0].RefTable = CategoriesTable
 	CountriesTable.ForeignKeys[0].RefTable = LocationsTable
 	DistrictsTable.ForeignKeys[0].RefTable = LocationsTable

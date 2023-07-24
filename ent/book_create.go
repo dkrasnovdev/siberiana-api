@@ -15,6 +15,7 @@ import (
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/license"
+	"github.com/dkrasnovdev/heritage-api/ent/location"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/publisher"
 )
@@ -272,6 +273,25 @@ func (bc *BookCreate) SetLicense(l *License) *BookCreate {
 	return bc.SetLicenseID(l.ID)
 }
 
+// SetLocationID sets the "location" edge to the Location entity by ID.
+func (bc *BookCreate) SetLocationID(id int) *BookCreate {
+	bc.mutation.SetLocationID(id)
+	return bc
+}
+
+// SetNillableLocationID sets the "location" edge to the Location entity by ID if the given value is not nil.
+func (bc *BookCreate) SetNillableLocationID(id *int) *BookCreate {
+	if id != nil {
+		bc = bc.SetLocationID(*id)
+	}
+	return bc
+}
+
+// SetLocation sets the "location" edge to the Location entity.
+func (bc *BookCreate) SetLocation(l *Location) *BookCreate {
+	return bc.SetLocationID(l.ID)
+}
+
 // Mutation returns the BookMutation object of the builder.
 func (bc *BookCreate) Mutation() *BookMutation {
 	return bc.mutation
@@ -510,6 +530,23 @@ func (bc *BookCreate) createSpec() (*Book, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.license_books = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := bc.mutation.LocationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.LocationTable,
+			Columns: []string{book.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.location_books = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
