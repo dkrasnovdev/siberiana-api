@@ -9,6 +9,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/dkrasnovdev/heritage-api/internal/ent/privacy"
 	"github.com/minio/minio-go/v7"
 )
 
@@ -23,6 +24,22 @@ type UploadResponse struct {
 // NewServer creates a new HTTP handler for handling file uploads using MinIO client.
 func NewServer(client *minio.Client, baseURL, defaultBucket string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+
+		// Check if the viewer is available in the request context.
+		view := privacy.FromContext(r.Context())
+		if view == nil {
+			// Return a forbidden error if the viewer is missing.
+			http.Error(w, "Viewer not found in the context or user not authenticated", http.StatusForbidden)
+			return
+		}
+
+		// Check if the viewer is a moderator.
+		if !view.IsModerator() && !view.IsAdministrator() {
+			// Return a forbidden error if the viewer is not a moderator or an administrator.
+			http.Error(w, "Forbidden", http.StatusForbidden)
+			return
+		}
+
 		switch r.Method {
 		case http.MethodGet:
 			// Display a message when a GET request is made to the server.
@@ -138,3 +155,4 @@ func sendJSONResponse(w http.ResponseWriter, statusCode int, payload interface{}
 		fmt.Fprint(w, "Failed to encode JSON response")
 	}
 }
+
