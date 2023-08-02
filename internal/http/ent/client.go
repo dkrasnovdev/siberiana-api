@@ -1,5 +1,4 @@
 // Package ent provides functions to create a new ent client and apply schema migrations to the database.
-
 package ent
 
 import (
@@ -7,11 +6,14 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"time"
 
+	"ariga.io/entcache"
 	"github.com/dkrasnovdev/heritage-api/config"
 	"github.com/dkrasnovdev/heritage-api/ent"
 	"github.com/dkrasnovdev/heritage-api/ent/migrate"
 	mig "github.com/dkrasnovdev/heritage-api/internal/ent/migrate"
+	"github.com/go-redis/redis/v8"
 
 	"entgo.io/ent/dialect"
 	entsql "entgo.io/ent/dialect/sql"
@@ -32,18 +34,44 @@ func NewClient(env config.Config) *ent.Client {
 		log.Fatalf("failed opening connection to postgres: %v", err)
 	}
 
+	// Create a context for the database operations.
+	ctx := context.Background()
+
 	// Create an ent driver using the SQL database connection.
 	driver := entsql.OpenDB(dialect.Postgres, db)
-	client := ent.NewClient(ent.Driver(driver))
 
 	// Apply schema migrations to the database.
-	if err := client.Schema.Create(
-		context.Background(),
+	if err := ent.NewClient(ent.Driver(driver)).Schema.Create(
+		ctx,
 		mig.EnablePostgisOption(db),
 		migrate.WithGlobalUniqueID(true),
 	); err != nil {
 		log.Fatal("failed to apply schema migrations", err)
 	}
 
-	return client
+	// Create a debug driver to log database operations.
+	drv := dialect.Debug(driver)
+
+	// Create a Redis client to be used for caching.
+	rdb := redis.NewClient(&redis.Options{
+		Addr: "localhost:6379",
+	})
+
+	// Ping the Redis server to check the connection.
+	if err := rdb.Ping(ctx).Err(); err != nil {
+		log.Fatal("failed pinging the redis derver", err)
+	}
+
+	// Create a caching driver for ent using Redis and LRU cache.
+	drv = entcache.NewDriver(
+		drv,
+		entcache.TTL(time.Second*5),
+		entcache.Levels(
+			entcache.NewLRU(256),
+			entcache.NewRedis(rdb),
+		),
+	)
+
+	// Create and return the ent client using the caching driver.
+	return ent.NewClient(ent.Driver(drv))
 }

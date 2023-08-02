@@ -24,7 +24,6 @@ services:
     build:
       context: .
       dockerfile: ./docker/Dockerfile.postgres
-    image: postgres:latest
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -38,6 +37,15 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  redis:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.redis
+    ports:
+      - 6379:6379
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
 
 volumes:
   pg_data:
