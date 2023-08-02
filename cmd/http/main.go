@@ -47,10 +47,10 @@ func main() {
 	minioClient := minio.NewClient(config)
 
 	// Create a new MinIO server using the MinIO client.
-	minioServer := httpMinio.NewServer(minioClient)
+	minioServer := httpMinio.NewServer(minioClient, "http://localhost:9000", "artifacts")
 
-	// Mount the MinIO server on the "/storage" route of the chi router.
-	r.Mount("/storage", minioServer)
+	// Mount the MinIO server on the "/upload" route of the chi router.
+	r.Mount("/upload", minioServer)
 
 	// Mount the Apollo Sandbox on the "/" route of the chi router.
 	r.Mount("/", playground.ApolloSandboxHandler("Heritage GraphQL API", "/graphql"))
