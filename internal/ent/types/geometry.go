@@ -104,7 +104,7 @@ func (g *Geometry) UnmarshalGQL(v interface{}) error {
 	}
 
 	// Unmarshal the GraphQL string value into the Geometry's WKT.
-	return json.Unmarshal([]byte(value), g)
+	return json.Unmarshal([]byte(`"`+value+`"`), g)
 }
 
 // MarshalGQL implements the interface graphql.Marshaler.
