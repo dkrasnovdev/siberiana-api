@@ -9,12 +9,15 @@ import (
 
 // Config represents the application configuration.
 type Config struct {
-	HOST                   string `mapstructure:"HOST"`
-	PORT                   string `mapstructure:"PORT"`
+	POSTGRES_HOST          string `mapstructure:"POSTGRES_HOST"`
+	POSTGRES_PORT          string `mapstructure:"POSTGRES_PORT"`
 	POSTGRES_DB            string `mapstructure:"POSTGRES_DB"`
 	POSTGRES_USER          string `mapstructure:"POSTGRES_USER"`
 	POSTGRES_PASSWORD      string `mapstructure:"POSTGRES_PASSWORD"`
-	SSL_MODE               string `mapstructure:"SSL_MODE"`
+	POSTGRES_SSL_MODE      string `mapstructure:"POSTGRES_SSL_MODE"`
+	REDIS_HOST             string `mapstructure:"REDIS_HOST"`
+	REDIS_PORT             string `mapstructure:"REDIS_PORT"`
+	REDIS_PASSWORD         string `mapstructure:"REDIS_PASSWORD"`
 	OIDC_USERINFO_ENDPOINT string `mapstructure:"OIDC_USERINFO_ENDPOINT"`
 }
 
@@ -25,12 +28,15 @@ func LoadConfig() (config Config, err error) {
 	if env == "production" {
 		// Load configuration from environment variables in production environment.
 		return Config{
-			HOST:                   os.Getenv("HOST"),
-			PORT:                   os.Getenv("PORT"),
+			POSTGRES_HOST:          os.Getenv("POSTGRES_HOST"),
+			POSTGRES_PORT:          os.Getenv("POSTGRES_PORT"),
 			POSTGRES_DB:            os.Getenv("POSTGRES_DB"),
 			POSTGRES_USER:          os.Getenv("POSTGRES_USER"),
 			POSTGRES_PASSWORD:      os.Getenv("POSTGRES_PASSWORD"),
-			SSL_MODE:               os.Getenv("SSL_MODE"),
+			POSTGRES_SSL_MODE:      os.Getenv("POSTGRES_SSL_MODE"),
+			REDIS_HOST:             os.Getenv("REDIS_HOST"),
+			REDIS_PORT:             os.Getenv("REDIS_PORT"),
+			REDIS_PASSWORD:         os.Getenv("REDIS_PASSWORD"),
 			OIDC_USERINFO_ENDPOINT: os.Getenv("OIDC_USERINFO_ENDPOINT"),
 		}, nil
 	}
@@ -49,12 +55,12 @@ func LoadConfig() (config Config, err error) {
 	err = viper.Unmarshal(&config)
 
 	// Check if required configuration values are missing.
-	if config.HOST == "" {
-		err = errors.New("HOST is required")
+	if config.POSTGRES_HOST == "" {
+		err = errors.New("POSTGRES_HOST is required")
 	}
 
-	if config.PORT == "" {
-		err = errors.New("PORT is required")
+	if config.POSTGRES_PORT == "" {
+		err = errors.New("POSTGRES_PORT is required")
 	}
 
 	if config.POSTGRES_DB == "" {
@@ -69,8 +75,20 @@ func LoadConfig() (config Config, err error) {
 		err = errors.New("POSTGRES_PASSWORD is required")
 	}
 
-	if config.SSL_MODE == "" {
-		err = errors.New("SSL_MODE is required")
+	if config.POSTGRES_SSL_MODE == "" {
+		err = errors.New("POSTGRES_SSL_MODE is required")
+	}
+
+	if config.REDIS_HOST == "" {
+		err = errors.New("REDIS_HOST is required")
+	}
+
+	if config.REDIS_PORT == "" {
+		err = errors.New("REDIS_PORT is required")
+	}
+
+	if config.REDIS_PASSWORD == "" {
+		err = errors.New("REDIS_PASSWORD is required")
 	}
 
 	if config.OIDC_USERINFO_ENDPOINT == "" {

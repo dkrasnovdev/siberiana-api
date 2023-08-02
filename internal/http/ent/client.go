@@ -26,7 +26,7 @@ import (
 func NewClient(env config.Config) *ent.Client {
 	// Create the PostgreSQL connection string.
 	psql := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
-		env.HOST, env.PORT, env.POSTGRES_USER, env.POSTGRES_PASSWORD, env.POSTGRES_DB, env.SSL_MODE)
+		env.POSTGRES_HOST, env.POSTGRES_PORT, env.POSTGRES_USER, env.POSTGRES_PASSWORD, env.POSTGRES_DB, env.POSTGRES_SSL_MODE)
 
 	// Open a connection to the PostgreSQL database.
 	db, err := sql.Open("pgx", psql)
@@ -54,7 +54,8 @@ func NewClient(env config.Config) *ent.Client {
 
 	// Create a Redis client to be used for caching.
 	rdb := redis.NewClient(&redis.Options{
-		Addr: "localhost:6379",
+		Addr:     fmt.Sprintf("%v:%v", env.REDIS_HOST, env.REDIS_PORT),
+		Password: env.REDIS_PASSWORD,
 	})
 
 	// Ping the Redis server to check the connection.
