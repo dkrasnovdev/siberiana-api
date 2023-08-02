@@ -11,6 +11,8 @@ import (
 	"github.com/dkrasnovdev/heritage-api/config"
 	"github.com/dkrasnovdev/heritage-api/internal/http/chi"
 	"github.com/dkrasnovdev/heritage-api/internal/http/ent"
+	httpMinio "github.com/dkrasnovdev/heritage-api/internal/http/minio"
+	"github.com/dkrasnovdev/heritage-api/internal/minio"
 	"github.com/dkrasnovdev/heritage-api/pkg/shutdown"
 )
 
@@ -40,6 +42,15 @@ func main() {
 
 	// Mount the GraphQL server on the "/graphql" route of the chi router.
 	r.Mount("/graphql", gql)
+
+	// Create a new MinIO client using the loaded configuration.
+	minioClient := minio.NewClient(config)
+
+	// Create a new MinIO server using the MinIO client.
+	minioServer := httpMinio.NewServer(minioClient)
+
+	// Mount the MinIO server on the "/storage" route of the chi router.
+	r.Mount("/storage", minioServer)
 
 	// Mount the Apollo Sandbox on the "/" route of the chi router.
 	r.Mount("/", playground.ApolloSandboxHandler("Heritage GraphQL API", "/graphql"))
