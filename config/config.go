@@ -9,16 +9,21 @@ import (
 
 // Config represents the application configuration.
 type Config struct {
-	POSTGRES_HOST          string `mapstructure:"POSTGRES_HOST"`
-	POSTGRES_PORT          string `mapstructure:"POSTGRES_PORT"`
-	POSTGRES_DB            string `mapstructure:"POSTGRES_DB"`
-	POSTGRES_USER          string `mapstructure:"POSTGRES_USER"`
-	POSTGRES_PASSWORD      string `mapstructure:"POSTGRES_PASSWORD"`
-	POSTGRES_SSL_MODE      string `mapstructure:"POSTGRES_SSL_MODE"`
-	REDIS_HOST             string `mapstructure:"REDIS_HOST"`
-	REDIS_PORT             string `mapstructure:"REDIS_PORT"`
-	REDIS_PASSWORD         string `mapstructure:"REDIS_PASSWORD"`
-	OIDC_USERINFO_ENDPOINT string `mapstructure:"OIDC_USERINFO_ENDPOINT"`
+	POSTGRES_HOST           string `mapstructure:"POSTGRES_HOST"`
+	POSTGRES_PORT           string `mapstructure:"POSTGRES_PORT"`
+	POSTGRES_DB             string `mapstructure:"POSTGRES_DB"`
+	POSTGRES_USER           string `mapstructure:"POSTGRES_USER"`
+	POSTGRES_PASSWORD       string `mapstructure:"POSTGRES_PASSWORD"`
+	POSTGRES_SSL_MODE       string `mapstructure:"POSTGRES_SSL_MODE"`
+	REDIS_HOST              string `mapstructure:"REDIS_HOST"`
+	REDIS_PORT              string `mapstructure:"REDIS_PORT"`
+	REDIS_PASSWORD          string `mapstructure:"REDIS_PASSWORD"`
+	MINIO_ENDPOINT          string `mapstructure:"MINIO_ENDPOINT"`
+	MINIO_PORT              string `mapstructure:"MINIO_PORT"`
+	MINIO_ACCESS_KEY_ID     string `mapstructure:"MINIO_ACCESS_KEY_ID"`
+	MINIO_SECRET_ACCESS_KEY string `mapstructure:"MINIO_SECRET_ACCESS_KEY"`
+	MINIO_USE_SSL           string `mapstructure:"MINIO_USE_SSL"`
+	OIDC_USERINFO_ENDPOINT  string `mapstructure:"OIDC_USERINFO_ENDPOINT"`
 }
 
 // LoadConfig loads the application configuration from environment variables or a configuration file.
@@ -28,16 +33,21 @@ func LoadConfig() (config Config, err error) {
 	if env == "production" {
 		// Load configuration from environment variables in production environment.
 		return Config{
-			POSTGRES_HOST:          os.Getenv("POSTGRES_HOST"),
-			POSTGRES_PORT:          os.Getenv("POSTGRES_PORT"),
-			POSTGRES_DB:            os.Getenv("POSTGRES_DB"),
-			POSTGRES_USER:          os.Getenv("POSTGRES_USER"),
-			POSTGRES_PASSWORD:      os.Getenv("POSTGRES_PASSWORD"),
-			POSTGRES_SSL_MODE:      os.Getenv("POSTGRES_SSL_MODE"),
-			REDIS_HOST:             os.Getenv("REDIS_HOST"),
-			REDIS_PORT:             os.Getenv("REDIS_PORT"),
-			REDIS_PASSWORD:         os.Getenv("REDIS_PASSWORD"),
-			OIDC_USERINFO_ENDPOINT: os.Getenv("OIDC_USERINFO_ENDPOINT"),
+			POSTGRES_HOST:           os.Getenv("POSTGRES_HOST"),
+			POSTGRES_PORT:           os.Getenv("POSTGRES_PORT"),
+			POSTGRES_DB:             os.Getenv("POSTGRES_DB"),
+			POSTGRES_USER:           os.Getenv("POSTGRES_USER"),
+			POSTGRES_PASSWORD:       os.Getenv("POSTGRES_PASSWORD"),
+			POSTGRES_SSL_MODE:       os.Getenv("POSTGRES_SSL_MODE"),
+			REDIS_HOST:              os.Getenv("REDIS_HOST"),
+			REDIS_PORT:              os.Getenv("REDIS_PORT"),
+			REDIS_PASSWORD:          os.Getenv("REDIS_PASSWORD"),
+			MINIO_ENDPOINT:          os.Getenv("MINIO_ENDPOINT"),
+			MINIO_PORT:              os.Getenv("MINIO_PORT"),
+			MINIO_ACCESS_KEY_ID:     os.Getenv("MINIO_ACCESS_KEY_ID"),
+			MINIO_SECRET_ACCESS_KEY: os.Getenv("MINIO_SECRET_ACCESS_KEY"),
+			MINIO_USE_SSL:           os.Getenv("MINIO_USE_SSL"),
+			OIDC_USERINFO_ENDPOINT:  os.Getenv("OIDC_USERINFO_ENDPOINT"),
 		}, nil
 	}
 
@@ -89,6 +99,24 @@ func LoadConfig() (config Config, err error) {
 
 	if config.REDIS_PASSWORD == "" {
 		err = errors.New("REDIS_PASSWORD is required")
+	}
+
+	if config.MINIO_ENDPOINT == "" {
+		err = errors.New("MINIO_ENDPOINT is required")
+	}
+
+	if config.MINIO_PORT == "" {
+		err = errors.New("MINIO_PORT is required")
+	}
+
+	if config.MINIO_ACCESS_KEY_ID == "" {
+		err = errors.New("MINIO_ACCESS_KEY_ID is required")
+	}
+	if config.MINIO_SECRET_ACCESS_KEY == "" {
+		err = errors.New("MINIO_SECRET_ACCESS_KEY is required")
+	}
+	if config.MINIO_USE_SSL == "" {
+		err = errors.New("MINIO_USE_SSL is required")
 	}
 
 	if config.OIDC_USERINFO_ENDPOINT == "" {
