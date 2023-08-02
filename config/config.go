@@ -24,6 +24,7 @@ type Config struct {
 	MINIO_SECRET_ACCESS_KEY string `mapstructure:"MINIO_SECRET_ACCESS_KEY"`
 	MINIO_USE_SSL           string `mapstructure:"MINIO_USE_SSL"`
 	OIDC_USERINFO_ENDPOINT  string `mapstructure:"OIDC_USERINFO_ENDPOINT"`
+	STORAGE_BASE_URL        string `mapstructure:"STORAGE_BASE_URL"`
 }
 
 // LoadConfig loads the application configuration from environment variables or a configuration file.
@@ -48,6 +49,7 @@ func LoadConfig() (config Config, err error) {
 			MINIO_SECRET_ACCESS_KEY: os.Getenv("MINIO_SECRET_ACCESS_KEY"),
 			MINIO_USE_SSL:           os.Getenv("MINIO_USE_SSL"),
 			OIDC_USERINFO_ENDPOINT:  os.Getenv("OIDC_USERINFO_ENDPOINT"),
+			STORAGE_BASE_URL:        os.Getenv("STORAGE_BASE_URL"),
 		}, nil
 	}
 
@@ -121,6 +123,10 @@ func LoadConfig() (config Config, err error) {
 
 	if config.OIDC_USERINFO_ENDPOINT == "" {
 		err = errors.New("OIDC_USERINFO_ENDPOINT is required")
+	}
+
+	if config.STORAGE_BASE_URL == "" {
+		err = errors.New("STORAGE_BASE_URL is required")
 	}
 
 	return

@@ -47,7 +47,7 @@ func main() {
 	minioClient := minio.NewClient(config)
 
 	// Create a new MinIO server using the MinIO client.
-	minioServer := httpMinio.NewServer(minioClient, "http://localhost:9000", "artifacts")
+	minioServer := httpMinio.NewServer(minioClient, config.STORAGE_BASE_URL, "artifacts")
 
 	// Mount the MinIO server on the "/upload" route of the chi router.
 	r.Mount("/upload", minioServer)
