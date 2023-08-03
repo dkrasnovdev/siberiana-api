@@ -30,7 +30,7 @@ FROM scratch
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
 # Copy the compiled binary from the builder stage to the root directory of the scratch image
-COPY --from=builder ["/build/bin/http", "/http"]
+COPY --from=builder ["/bin/http", "/http"]
 
 # Set an environment variable to indicate the production environment
 ENV GO_ENV=production
