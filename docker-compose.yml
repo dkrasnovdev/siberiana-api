@@ -20,6 +20,8 @@ services:
       - postgres
       - redis
       - minio
+    networks:
+      - siberiana-network
 
   postgres:
     container_name: heritage_postgres_db
@@ -39,6 +41,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - siberiana-network
 
   redis:
     container_name: heritage_redis_db
@@ -56,6 +60,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - siberiana-network
 
   minio:
     container_name: heritage_minio
@@ -71,8 +77,14 @@ services:
     volumes:
       - ./minio:/data
     command: server --console-address :9001 /data
+    networks:
+      - siberiana-network
 
 volumes:
   cache:
   pg_data:
   minio:
+
+networks:
+  siberiana-network:
+    external: true
