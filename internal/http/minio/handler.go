@@ -21,8 +21,8 @@ type UploadResponse struct {
 	URLs []string `json:"urls"`
 }
 
-// NewServer creates a new HTTP handler for handling file uploads using MinIO client.
-func NewServer(client *minio.Client, baseURL, defaultBucket string) http.HandlerFunc {
+// Handler creates a new HTTP handler for handling file uploads using MinIO client.
+func Handler(client *minio.Client, baseURL, defaultBucket string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		// Check if the viewer is available in the request context.
@@ -155,4 +155,3 @@ func sendJSONResponse(w http.ResponseWriter, statusCode int, payload interface{}
 		fmt.Fprint(w, "Failed to encode JSON response")
 	}
 }
-
