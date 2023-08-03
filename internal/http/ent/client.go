@@ -50,7 +50,7 @@ func NewClient(env config.Config) *ent.Client {
 	}
 
 	// Create a debug driver to log database operations.
-	drv := dialect.Debug(driver)
+	drv := dialect.Driver(driver)
 
 	// Create a Redis client to be used for caching.
 	rdb := redis.NewClient(&redis.Options{
