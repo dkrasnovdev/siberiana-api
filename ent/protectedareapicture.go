@@ -37,8 +37,8 @@ type ProtectedAreaPicture struct {
 	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
-	// ExternalLinks holds the value of the "external_links" field.
-	ExternalLinks []string `json:"external_links,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// PrimaryImageURL holds the value of the "primary_image_url" field.
 	PrimaryImageURL string `json:"primary_image_url,omitempty"`
 	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
@@ -133,11 +133,11 @@ func (*ProtectedAreaPicture) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case protectedareapicture.FieldGeometry:
 			values[i] = &sql.NullScanner{S: new(types.Geometry)}
-		case protectedareapicture.FieldExternalLinks, protectedareapicture.FieldAdditionalImagesUrls:
+		case protectedareapicture.FieldAdditionalImagesUrls:
 			values[i] = new([]byte)
 		case protectedareapicture.FieldID:
 			values[i] = new(sql.NullInt64)
-		case protectedareapicture.FieldCreatedBy, protectedareapicture.FieldUpdatedBy, protectedareapicture.FieldDisplayName, protectedareapicture.FieldAbbreviation, protectedareapicture.FieldDescription, protectedareapicture.FieldPrimaryImageURL:
+		case protectedareapicture.FieldCreatedBy, protectedareapicture.FieldUpdatedBy, protectedareapicture.FieldDisplayName, protectedareapicture.FieldAbbreviation, protectedareapicture.FieldDescription, protectedareapicture.FieldExternalLink, protectedareapicture.FieldPrimaryImageURL:
 			values[i] = new(sql.NullString)
 		case protectedareapicture.FieldCreatedAt, protectedareapicture.FieldUpdatedAt, protectedareapicture.FieldShootingDate:
 			values[i] = new(sql.NullTime)
@@ -212,13 +212,11 @@ func (pap *ProtectedAreaPicture) assignValues(columns []string, values []any) er
 			} else if value.Valid {
 				pap.Description = value.String
 			}
-		case protectedareapicture.FieldExternalLinks:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field external_links", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &pap.ExternalLinks); err != nil {
-					return fmt.Errorf("unmarshal field external_links: %w", err)
-				}
+		case protectedareapicture.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				pap.ExternalLink = value.String
 			}
 		case protectedareapicture.FieldPrimaryImageURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -352,8 +350,8 @@ func (pap *ProtectedAreaPicture) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(pap.Description)
 	builder.WriteString(", ")
-	builder.WriteString("external_links=")
-	builder.WriteString(fmt.Sprintf("%v", pap.ExternalLinks))
+	builder.WriteString("external_link=")
+	builder.WriteString(pap.ExternalLink)
 	builder.WriteString(", ")
 	builder.WriteString("primary_image_url=")
 	builder.WriteString(pap.PrimaryImageURL)

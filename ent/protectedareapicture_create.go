@@ -123,9 +123,17 @@ func (papc *ProtectedAreaPictureCreate) SetNillableDescription(s *string) *Prote
 	return papc
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (papc *ProtectedAreaPictureCreate) SetExternalLinks(s []string) *ProtectedAreaPictureCreate {
-	papc.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (papc *ProtectedAreaPictureCreate) SetExternalLink(s string) *ProtectedAreaPictureCreate {
+	papc.mutation.SetExternalLink(s)
+	return papc
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (papc *ProtectedAreaPictureCreate) SetNillableExternalLink(s *string) *ProtectedAreaPictureCreate {
+	if s != nil {
+		papc.SetExternalLink(*s)
+	}
 	return papc
 }
 
@@ -369,9 +377,9 @@ func (papc *ProtectedAreaPictureCreate) createSpec() (*ProtectedAreaPicture, *sq
 		_spec.SetField(protectedareapicture.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := papc.mutation.ExternalLinks(); ok {
-		_spec.SetField(protectedareapicture.FieldExternalLinks, field.TypeJSON, value)
-		_node.ExternalLinks = value
+	if value, ok := papc.mutation.ExternalLink(); ok {
+		_spec.SetField(protectedareapicture.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
 	}
 	if value, ok := papc.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(protectedareapicture.FieldPrimaryImageURL, field.TypeString, value)

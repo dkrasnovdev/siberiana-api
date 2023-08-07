@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/model"
@@ -136,21 +135,23 @@ func (mu *ModelUpdate) ClearDescription() *ModelUpdate {
 	return mu
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (mu *ModelUpdate) SetExternalLinks(s []string) *ModelUpdate {
-	mu.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (mu *ModelUpdate) SetExternalLink(s string) *ModelUpdate {
+	mu.mutation.SetExternalLink(s)
 	return mu
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (mu *ModelUpdate) AppendExternalLinks(s []string) *ModelUpdate {
-	mu.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (mu *ModelUpdate) SetNillableExternalLink(s *string) *ModelUpdate {
+	if s != nil {
+		mu.SetExternalLink(*s)
+	}
 	return mu
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (mu *ModelUpdate) ClearExternalLinks() *ModelUpdate {
-	mu.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (mu *ModelUpdate) ClearExternalLink() *ModelUpdate {
+	mu.mutation.ClearExternalLink()
 	return mu
 }
 
@@ -279,16 +280,11 @@ func (mu *ModelUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if mu.mutation.DescriptionCleared() {
 		_spec.ClearField(model.FieldDescription, field.TypeString)
 	}
-	if value, ok := mu.mutation.ExternalLinks(); ok {
-		_spec.SetField(model.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := mu.mutation.ExternalLink(); ok {
+		_spec.SetField(model.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := mu.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, model.FieldExternalLinks, value)
-		})
-	}
-	if mu.mutation.ExternalLinksCleared() {
-		_spec.ClearField(model.FieldExternalLinks, field.TypeJSON)
+	if mu.mutation.ExternalLinkCleared() {
+		_spec.ClearField(model.FieldExternalLink, field.TypeString)
 	}
 	if mu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -461,21 +457,23 @@ func (muo *ModelUpdateOne) ClearDescription() *ModelUpdateOne {
 	return muo
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (muo *ModelUpdateOne) SetExternalLinks(s []string) *ModelUpdateOne {
-	muo.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (muo *ModelUpdateOne) SetExternalLink(s string) *ModelUpdateOne {
+	muo.mutation.SetExternalLink(s)
 	return muo
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (muo *ModelUpdateOne) AppendExternalLinks(s []string) *ModelUpdateOne {
-	muo.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (muo *ModelUpdateOne) SetNillableExternalLink(s *string) *ModelUpdateOne {
+	if s != nil {
+		muo.SetExternalLink(*s)
+	}
 	return muo
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (muo *ModelUpdateOne) ClearExternalLinks() *ModelUpdateOne {
-	muo.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (muo *ModelUpdateOne) ClearExternalLink() *ModelUpdateOne {
+	muo.mutation.ClearExternalLink()
 	return muo
 }
 
@@ -634,16 +632,11 @@ func (muo *ModelUpdateOne) sqlSave(ctx context.Context) (_node *Model, err error
 	if muo.mutation.DescriptionCleared() {
 		_spec.ClearField(model.FieldDescription, field.TypeString)
 	}
-	if value, ok := muo.mutation.ExternalLinks(); ok {
-		_spec.SetField(model.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := muo.mutation.ExternalLink(); ok {
+		_spec.SetField(model.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := muo.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, model.FieldExternalLinks, value)
-		})
-	}
-	if muo.mutation.ExternalLinksCleared() {
-		_spec.ClearField(model.FieldExternalLinks, field.TypeJSON)
+	if muo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(model.FieldExternalLink, field.TypeString)
 	}
 	if muo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

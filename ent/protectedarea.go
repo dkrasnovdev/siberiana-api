@@ -3,7 +3,6 @@
 package ent
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -33,8 +32,8 @@ type ProtectedArea struct {
 	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
-	// ExternalLinks holds the value of the "external_links" field.
-	ExternalLinks []string `json:"external_links,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// Area holds the value of the "area" field.
 	Area string `json:"area,omitempty"`
 	// EstablishmentDate holds the value of the "establishment_date" field.
@@ -88,11 +87,9 @@ func (*ProtectedArea) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case protectedarea.FieldExternalLinks:
-			values[i] = new([]byte)
 		case protectedarea.FieldID:
 			values[i] = new(sql.NullInt64)
-		case protectedarea.FieldCreatedBy, protectedarea.FieldUpdatedBy, protectedarea.FieldDisplayName, protectedarea.FieldAbbreviation, protectedarea.FieldDescription, protectedarea.FieldArea:
+		case protectedarea.FieldCreatedBy, protectedarea.FieldUpdatedBy, protectedarea.FieldDisplayName, protectedarea.FieldAbbreviation, protectedarea.FieldDescription, protectedarea.FieldExternalLink, protectedarea.FieldArea:
 			values[i] = new(sql.NullString)
 		case protectedarea.FieldCreatedAt, protectedarea.FieldUpdatedAt, protectedarea.FieldEstablishmentDate:
 			values[i] = new(sql.NullTime)
@@ -161,13 +158,11 @@ func (pa *ProtectedArea) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pa.Description = value.String
 			}
-		case protectedarea.FieldExternalLinks:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field external_links", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &pa.ExternalLinks); err != nil {
-					return fmt.Errorf("unmarshal field external_links: %w", err)
-				}
+		case protectedarea.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				pa.ExternalLink = value.String
 			}
 		case protectedarea.FieldArea:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -255,8 +250,8 @@ func (pa *ProtectedArea) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(pa.Description)
 	builder.WriteString(", ")
-	builder.WriteString("external_links=")
-	builder.WriteString(fmt.Sprintf("%v", pa.ExternalLinks))
+	builder.WriteString("external_link=")
+	builder.WriteString(pa.ExternalLink)
 	builder.WriteString(", ")
 	builder.WriteString("area=")
 	builder.WriteString(pa.Area)

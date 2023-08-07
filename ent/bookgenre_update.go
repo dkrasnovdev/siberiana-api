@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/book"
 	"github.com/dkrasnovdev/heritage-api/ent/bookgenre"
@@ -136,21 +135,23 @@ func (bgu *BookGenreUpdate) ClearDescription() *BookGenreUpdate {
 	return bgu
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (bgu *BookGenreUpdate) SetExternalLinks(s []string) *BookGenreUpdate {
-	bgu.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (bgu *BookGenreUpdate) SetExternalLink(s string) *BookGenreUpdate {
+	bgu.mutation.SetExternalLink(s)
 	return bgu
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (bgu *BookGenreUpdate) AppendExternalLinks(s []string) *BookGenreUpdate {
-	bgu.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (bgu *BookGenreUpdate) SetNillableExternalLink(s *string) *BookGenreUpdate {
+	if s != nil {
+		bgu.SetExternalLink(*s)
+	}
 	return bgu
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (bgu *BookGenreUpdate) ClearExternalLinks() *BookGenreUpdate {
-	bgu.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (bgu *BookGenreUpdate) ClearExternalLink() *BookGenreUpdate {
+	bgu.mutation.ClearExternalLink()
 	return bgu
 }
 
@@ -279,16 +280,11 @@ func (bgu *BookGenreUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if bgu.mutation.DescriptionCleared() {
 		_spec.ClearField(bookgenre.FieldDescription, field.TypeString)
 	}
-	if value, ok := bgu.mutation.ExternalLinks(); ok {
-		_spec.SetField(bookgenre.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := bgu.mutation.ExternalLink(); ok {
+		_spec.SetField(bookgenre.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := bgu.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, bookgenre.FieldExternalLinks, value)
-		})
-	}
-	if bgu.mutation.ExternalLinksCleared() {
-		_spec.ClearField(bookgenre.FieldExternalLinks, field.TypeJSON)
+	if bgu.mutation.ExternalLinkCleared() {
+		_spec.ClearField(bookgenre.FieldExternalLink, field.TypeString)
 	}
 	if bgu.mutation.BooksCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -461,21 +457,23 @@ func (bguo *BookGenreUpdateOne) ClearDescription() *BookGenreUpdateOne {
 	return bguo
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (bguo *BookGenreUpdateOne) SetExternalLinks(s []string) *BookGenreUpdateOne {
-	bguo.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (bguo *BookGenreUpdateOne) SetExternalLink(s string) *BookGenreUpdateOne {
+	bguo.mutation.SetExternalLink(s)
 	return bguo
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (bguo *BookGenreUpdateOne) AppendExternalLinks(s []string) *BookGenreUpdateOne {
-	bguo.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (bguo *BookGenreUpdateOne) SetNillableExternalLink(s *string) *BookGenreUpdateOne {
+	if s != nil {
+		bguo.SetExternalLink(*s)
+	}
 	return bguo
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (bguo *BookGenreUpdateOne) ClearExternalLinks() *BookGenreUpdateOne {
-	bguo.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (bguo *BookGenreUpdateOne) ClearExternalLink() *BookGenreUpdateOne {
+	bguo.mutation.ClearExternalLink()
 	return bguo
 }
 
@@ -634,16 +632,11 @@ func (bguo *BookGenreUpdateOne) sqlSave(ctx context.Context) (_node *BookGenre, 
 	if bguo.mutation.DescriptionCleared() {
 		_spec.ClearField(bookgenre.FieldDescription, field.TypeString)
 	}
-	if value, ok := bguo.mutation.ExternalLinks(); ok {
-		_spec.SetField(bookgenre.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := bguo.mutation.ExternalLink(); ok {
+		_spec.SetField(bookgenre.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := bguo.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, bookgenre.FieldExternalLinks, value)
-		})
-	}
-	if bguo.mutation.ExternalLinksCleared() {
-		_spec.ClearField(bookgenre.FieldExternalLinks, field.TypeJSON)
+	if bguo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(bookgenre.FieldExternalLink, field.TypeString)
 	}
 	if bguo.mutation.BooksCleared() {
 		edge := &sqlgraph.EdgeSpec{

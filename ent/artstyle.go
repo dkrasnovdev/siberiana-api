@@ -3,7 +3,6 @@
 package ent
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -32,8 +31,8 @@ type ArtStyle struct {
 	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
-	// ExternalLinks holds the value of the "external_links" field.
-	ExternalLinks []string `json:"external_links,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ArtStyleQuery when eager-loading is set.
 	Edges        ArtStyleEdges `json:"edges"`
@@ -67,11 +66,9 @@ func (*ArtStyle) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case artstyle.FieldExternalLinks:
-			values[i] = new([]byte)
 		case artstyle.FieldID:
 			values[i] = new(sql.NullInt64)
-		case artstyle.FieldCreatedBy, artstyle.FieldUpdatedBy, artstyle.FieldDisplayName, artstyle.FieldAbbreviation, artstyle.FieldDescription:
+		case artstyle.FieldCreatedBy, artstyle.FieldUpdatedBy, artstyle.FieldDisplayName, artstyle.FieldAbbreviation, artstyle.FieldDescription, artstyle.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case artstyle.FieldCreatedAt, artstyle.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -138,13 +135,11 @@ func (as *ArtStyle) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				as.Description = value.String
 			}
-		case artstyle.FieldExternalLinks:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field external_links", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &as.ExternalLinks); err != nil {
-					return fmt.Errorf("unmarshal field external_links: %w", err)
-				}
+		case artstyle.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				as.ExternalLink = value.String
 			}
 		default:
 			as.selectValues.Set(columns[i], values[i])
@@ -208,8 +203,8 @@ func (as *ArtStyle) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(as.Description)
 	builder.WriteString(", ")
-	builder.WriteString("external_links=")
-	builder.WriteString(fmt.Sprintf("%v", as.ExternalLinks))
+	builder.WriteString("external_link=")
+	builder.WriteString(as.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
 }

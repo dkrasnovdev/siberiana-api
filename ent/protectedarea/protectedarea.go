@@ -29,8 +29,8 @@ const (
 	FieldAbbreviation = "abbreviation"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
-	// FieldExternalLinks holds the string denoting the external_links field in the database.
-	FieldExternalLinks = "external_links"
+	// FieldExternalLink holds the string denoting the external_link field in the database.
+	FieldExternalLink = "external_link"
 	// FieldArea holds the string denoting the area field in the database.
 	FieldArea = "area"
 	// FieldEstablishmentDate holds the string denoting the establishment_date field in the database.
@@ -67,7 +67,7 @@ var Columns = []string{
 	FieldDisplayName,
 	FieldAbbreviation,
 	FieldDescription,
-	FieldExternalLinks,
+	FieldExternalLink,
 	FieldArea,
 	FieldEstablishmentDate,
 }
@@ -150,6 +150,11 @@ func ByAbbreviation(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByExternalLink orders the results by the external_link field.
+func ByExternalLink(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalLink, opts...).ToFunc()
 }
 
 // ByArea orders the results by the area field.

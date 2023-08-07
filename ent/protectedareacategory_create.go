@@ -119,9 +119,17 @@ func (pacc *ProtectedAreaCategoryCreate) SetNillableDescription(s *string) *Prot
 	return pacc
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (pacc *ProtectedAreaCategoryCreate) SetExternalLinks(s []string) *ProtectedAreaCategoryCreate {
-	pacc.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (pacc *ProtectedAreaCategoryCreate) SetExternalLink(s string) *ProtectedAreaCategoryCreate {
+	pacc.mutation.SetExternalLink(s)
+	return pacc
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (pacc *ProtectedAreaCategoryCreate) SetNillableExternalLink(s *string) *ProtectedAreaCategoryCreate {
+	if s != nil {
+		pacc.SetExternalLink(*s)
+	}
 	return pacc
 }
 
@@ -256,9 +264,9 @@ func (pacc *ProtectedAreaCategoryCreate) createSpec() (*ProtectedAreaCategory, *
 		_spec.SetField(protectedareacategory.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := pacc.mutation.ExternalLinks(); ok {
-		_spec.SetField(protectedareacategory.FieldExternalLinks, field.TypeJSON, value)
-		_node.ExternalLinks = value
+	if value, ok := pacc.mutation.ExternalLink(); ok {
+		_spec.SetField(protectedareacategory.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
 	}
 	if nodes := pacc.mutation.ProtectedAreasIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

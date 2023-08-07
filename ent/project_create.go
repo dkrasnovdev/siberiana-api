@@ -121,9 +121,17 @@ func (pc *ProjectCreate) SetNillableDescription(s *string) *ProjectCreate {
 	return pc
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (pc *ProjectCreate) SetExternalLinks(s []string) *ProjectCreate {
-	pc.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (pc *ProjectCreate) SetExternalLink(s string) *ProjectCreate {
+	pc.mutation.SetExternalLink(s)
+	return pc
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableExternalLink(s *string) *ProjectCreate {
+	if s != nil {
+		pc.SetExternalLink(*s)
+	}
 	return pc
 }
 
@@ -320,9 +328,9 @@ func (pc *ProjectCreate) createSpec() (*Project, *sqlgraph.CreateSpec) {
 		_spec.SetField(project.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := pc.mutation.ExternalLinks(); ok {
-		_spec.SetField(project.FieldExternalLinks, field.TypeJSON, value)
-		_node.ExternalLinks = value
+	if value, ok := pc.mutation.ExternalLink(); ok {
+		_spec.SetField(project.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
 	}
 	if value, ok := pc.mutation.BeginData(); ok {
 		_spec.SetField(project.FieldBeginData, field.TypeTime, value)

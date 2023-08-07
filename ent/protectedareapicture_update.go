@@ -140,21 +140,23 @@ func (papu *ProtectedAreaPictureUpdate) ClearDescription() *ProtectedAreaPicture
 	return papu
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (papu *ProtectedAreaPictureUpdate) SetExternalLinks(s []string) *ProtectedAreaPictureUpdate {
-	papu.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (papu *ProtectedAreaPictureUpdate) SetExternalLink(s string) *ProtectedAreaPictureUpdate {
+	papu.mutation.SetExternalLink(s)
 	return papu
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (papu *ProtectedAreaPictureUpdate) AppendExternalLinks(s []string) *ProtectedAreaPictureUpdate {
-	papu.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (papu *ProtectedAreaPictureUpdate) SetNillableExternalLink(s *string) *ProtectedAreaPictureUpdate {
+	if s != nil {
+		papu.SetExternalLink(*s)
+	}
 	return papu
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (papu *ProtectedAreaPictureUpdate) ClearExternalLinks() *ProtectedAreaPictureUpdate {
-	papu.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (papu *ProtectedAreaPictureUpdate) ClearExternalLink() *ProtectedAreaPictureUpdate {
+	papu.mutation.ClearExternalLink()
 	return papu
 }
 
@@ -425,16 +427,11 @@ func (papu *ProtectedAreaPictureUpdate) sqlSave(ctx context.Context) (n int, err
 	if papu.mutation.DescriptionCleared() {
 		_spec.ClearField(protectedareapicture.FieldDescription, field.TypeString)
 	}
-	if value, ok := papu.mutation.ExternalLinks(); ok {
-		_spec.SetField(protectedareapicture.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := papu.mutation.ExternalLink(); ok {
+		_spec.SetField(protectedareapicture.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := papu.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, protectedareapicture.FieldExternalLinks, value)
-		})
-	}
-	if papu.mutation.ExternalLinksCleared() {
-		_spec.ClearField(protectedareapicture.FieldExternalLinks, field.TypeJSON)
+	if papu.mutation.ExternalLinkCleared() {
+		_spec.ClearField(protectedareapicture.FieldExternalLink, field.TypeString)
 	}
 	if value, ok := papu.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(protectedareapicture.FieldPrimaryImageURL, field.TypeString, value)
@@ -707,21 +704,23 @@ func (papuo *ProtectedAreaPictureUpdateOne) ClearDescription() *ProtectedAreaPic
 	return papuo
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (papuo *ProtectedAreaPictureUpdateOne) SetExternalLinks(s []string) *ProtectedAreaPictureUpdateOne {
-	papuo.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (papuo *ProtectedAreaPictureUpdateOne) SetExternalLink(s string) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.SetExternalLink(s)
 	return papuo
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (papuo *ProtectedAreaPictureUpdateOne) AppendExternalLinks(s []string) *ProtectedAreaPictureUpdateOne {
-	papuo.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (papuo *ProtectedAreaPictureUpdateOne) SetNillableExternalLink(s *string) *ProtectedAreaPictureUpdateOne {
+	if s != nil {
+		papuo.SetExternalLink(*s)
+	}
 	return papuo
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (papuo *ProtectedAreaPictureUpdateOne) ClearExternalLinks() *ProtectedAreaPictureUpdateOne {
-	papuo.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (papuo *ProtectedAreaPictureUpdateOne) ClearExternalLink() *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.ClearExternalLink()
 	return papuo
 }
 
@@ -1022,16 +1021,11 @@ func (papuo *ProtectedAreaPictureUpdateOne) sqlSave(ctx context.Context) (_node 
 	if papuo.mutation.DescriptionCleared() {
 		_spec.ClearField(protectedareapicture.FieldDescription, field.TypeString)
 	}
-	if value, ok := papuo.mutation.ExternalLinks(); ok {
-		_spec.SetField(protectedareapicture.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := papuo.mutation.ExternalLink(); ok {
+		_spec.SetField(protectedareapicture.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := papuo.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, protectedareapicture.FieldExternalLinks, value)
-		})
-	}
-	if papuo.mutation.ExternalLinksCleared() {
-		_spec.ClearField(protectedareapicture.FieldExternalLinks, field.TypeJSON)
+	if papuo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(protectedareapicture.FieldExternalLink, field.TypeString)
 	}
 	if value, ok := papuo.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(protectedareapicture.FieldPrimaryImageURL, field.TypeString, value)

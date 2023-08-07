@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/artifact"
 	"github.com/dkrasnovdev/heritage-api/ent/period"
@@ -136,21 +135,23 @@ func (pu *PeriodUpdate) ClearDescription() *PeriodUpdate {
 	return pu
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (pu *PeriodUpdate) SetExternalLinks(s []string) *PeriodUpdate {
-	pu.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (pu *PeriodUpdate) SetExternalLink(s string) *PeriodUpdate {
+	pu.mutation.SetExternalLink(s)
 	return pu
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (pu *PeriodUpdate) AppendExternalLinks(s []string) *PeriodUpdate {
-	pu.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (pu *PeriodUpdate) SetNillableExternalLink(s *string) *PeriodUpdate {
+	if s != nil {
+		pu.SetExternalLink(*s)
+	}
 	return pu
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (pu *PeriodUpdate) ClearExternalLinks() *PeriodUpdate {
-	pu.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (pu *PeriodUpdate) ClearExternalLink() *PeriodUpdate {
+	pu.mutation.ClearExternalLink()
 	return pu
 }
 
@@ -279,16 +280,11 @@ func (pu *PeriodUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.DescriptionCleared() {
 		_spec.ClearField(period.FieldDescription, field.TypeString)
 	}
-	if value, ok := pu.mutation.ExternalLinks(); ok {
-		_spec.SetField(period.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := pu.mutation.ExternalLink(); ok {
+		_spec.SetField(period.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := pu.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, period.FieldExternalLinks, value)
-		})
-	}
-	if pu.mutation.ExternalLinksCleared() {
-		_spec.ClearField(period.FieldExternalLinks, field.TypeJSON)
+	if pu.mutation.ExternalLinkCleared() {
+		_spec.ClearField(period.FieldExternalLink, field.TypeString)
 	}
 	if pu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -461,21 +457,23 @@ func (puo *PeriodUpdateOne) ClearDescription() *PeriodUpdateOne {
 	return puo
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (puo *PeriodUpdateOne) SetExternalLinks(s []string) *PeriodUpdateOne {
-	puo.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (puo *PeriodUpdateOne) SetExternalLink(s string) *PeriodUpdateOne {
+	puo.mutation.SetExternalLink(s)
 	return puo
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (puo *PeriodUpdateOne) AppendExternalLinks(s []string) *PeriodUpdateOne {
-	puo.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (puo *PeriodUpdateOne) SetNillableExternalLink(s *string) *PeriodUpdateOne {
+	if s != nil {
+		puo.SetExternalLink(*s)
+	}
 	return puo
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (puo *PeriodUpdateOne) ClearExternalLinks() *PeriodUpdateOne {
-	puo.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (puo *PeriodUpdateOne) ClearExternalLink() *PeriodUpdateOne {
+	puo.mutation.ClearExternalLink()
 	return puo
 }
 
@@ -634,16 +632,11 @@ func (puo *PeriodUpdateOne) sqlSave(ctx context.Context) (_node *Period, err err
 	if puo.mutation.DescriptionCleared() {
 		_spec.ClearField(period.FieldDescription, field.TypeString)
 	}
-	if value, ok := puo.mutation.ExternalLinks(); ok {
-		_spec.SetField(period.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := puo.mutation.ExternalLink(); ok {
+		_spec.SetField(period.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := puo.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, period.FieldExternalLinks, value)
-		})
-	}
-	if puo.mutation.ExternalLinksCleared() {
-		_spec.ClearField(period.FieldExternalLinks, field.TypeJSON)
+	if puo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(period.FieldExternalLink, field.TypeString)
 	}
 	if puo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

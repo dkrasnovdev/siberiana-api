@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/person"
 	"github.com/dkrasnovdev/heritage-api/ent/personrole"
@@ -136,21 +135,23 @@ func (pru *PersonRoleUpdate) ClearDescription() *PersonRoleUpdate {
 	return pru
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (pru *PersonRoleUpdate) SetExternalLinks(s []string) *PersonRoleUpdate {
-	pru.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (pru *PersonRoleUpdate) SetExternalLink(s string) *PersonRoleUpdate {
+	pru.mutation.SetExternalLink(s)
 	return pru
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (pru *PersonRoleUpdate) AppendExternalLinks(s []string) *PersonRoleUpdate {
-	pru.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (pru *PersonRoleUpdate) SetNillableExternalLink(s *string) *PersonRoleUpdate {
+	if s != nil {
+		pru.SetExternalLink(*s)
+	}
 	return pru
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (pru *PersonRoleUpdate) ClearExternalLinks() *PersonRoleUpdate {
-	pru.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (pru *PersonRoleUpdate) ClearExternalLink() *PersonRoleUpdate {
+	pru.mutation.ClearExternalLink()
 	return pru
 }
 
@@ -279,16 +280,11 @@ func (pru *PersonRoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pru.mutation.DescriptionCleared() {
 		_spec.ClearField(personrole.FieldDescription, field.TypeString)
 	}
-	if value, ok := pru.mutation.ExternalLinks(); ok {
-		_spec.SetField(personrole.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := pru.mutation.ExternalLink(); ok {
+		_spec.SetField(personrole.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := pru.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, personrole.FieldExternalLinks, value)
-		})
-	}
-	if pru.mutation.ExternalLinksCleared() {
-		_spec.ClearField(personrole.FieldExternalLinks, field.TypeJSON)
+	if pru.mutation.ExternalLinkCleared() {
+		_spec.ClearField(personrole.FieldExternalLink, field.TypeString)
 	}
 	if pru.mutation.PersonCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -461,21 +457,23 @@ func (pruo *PersonRoleUpdateOne) ClearDescription() *PersonRoleUpdateOne {
 	return pruo
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (pruo *PersonRoleUpdateOne) SetExternalLinks(s []string) *PersonRoleUpdateOne {
-	pruo.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (pruo *PersonRoleUpdateOne) SetExternalLink(s string) *PersonRoleUpdateOne {
+	pruo.mutation.SetExternalLink(s)
 	return pruo
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (pruo *PersonRoleUpdateOne) AppendExternalLinks(s []string) *PersonRoleUpdateOne {
-	pruo.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (pruo *PersonRoleUpdateOne) SetNillableExternalLink(s *string) *PersonRoleUpdateOne {
+	if s != nil {
+		pruo.SetExternalLink(*s)
+	}
 	return pruo
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (pruo *PersonRoleUpdateOne) ClearExternalLinks() *PersonRoleUpdateOne {
-	pruo.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (pruo *PersonRoleUpdateOne) ClearExternalLink() *PersonRoleUpdateOne {
+	pruo.mutation.ClearExternalLink()
 	return pruo
 }
 
@@ -634,16 +632,11 @@ func (pruo *PersonRoleUpdateOne) sqlSave(ctx context.Context) (_node *PersonRole
 	if pruo.mutation.DescriptionCleared() {
 		_spec.ClearField(personrole.FieldDescription, field.TypeString)
 	}
-	if value, ok := pruo.mutation.ExternalLinks(); ok {
-		_spec.SetField(personrole.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := pruo.mutation.ExternalLink(); ok {
+		_spec.SetField(personrole.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := pruo.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, personrole.FieldExternalLinks, value)
-		})
-	}
-	if pruo.mutation.ExternalLinksCleared() {
-		_spec.ClearField(personrole.FieldExternalLinks, field.TypeJSON)
+	if pruo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(personrole.FieldExternalLink, field.TypeString)
 	}
 	if pruo.mutation.PersonCleared() {
 		edge := &sqlgraph.EdgeSpec{

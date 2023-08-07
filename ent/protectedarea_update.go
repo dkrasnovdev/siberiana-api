@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
@@ -137,21 +136,23 @@ func (pau *ProtectedAreaUpdate) ClearDescription() *ProtectedAreaUpdate {
 	return pau
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (pau *ProtectedAreaUpdate) SetExternalLinks(s []string) *ProtectedAreaUpdate {
-	pau.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (pau *ProtectedAreaUpdate) SetExternalLink(s string) *ProtectedAreaUpdate {
+	pau.mutation.SetExternalLink(s)
 	return pau
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (pau *ProtectedAreaUpdate) AppendExternalLinks(s []string) *ProtectedAreaUpdate {
-	pau.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (pau *ProtectedAreaUpdate) SetNillableExternalLink(s *string) *ProtectedAreaUpdate {
+	if s != nil {
+		pau.SetExternalLink(*s)
+	}
 	return pau
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (pau *ProtectedAreaUpdate) ClearExternalLinks() *ProtectedAreaUpdate {
-	pau.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (pau *ProtectedAreaUpdate) ClearExternalLink() *ProtectedAreaUpdate {
+	pau.mutation.ClearExternalLink()
 	return pau
 }
 
@@ -345,16 +346,11 @@ func (pau *ProtectedAreaUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if pau.mutation.DescriptionCleared() {
 		_spec.ClearField(protectedarea.FieldDescription, field.TypeString)
 	}
-	if value, ok := pau.mutation.ExternalLinks(); ok {
-		_spec.SetField(protectedarea.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := pau.mutation.ExternalLink(); ok {
+		_spec.SetField(protectedarea.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := pau.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, protectedarea.FieldExternalLinks, value)
-		})
-	}
-	if pau.mutation.ExternalLinksCleared() {
-		_spec.ClearField(protectedarea.FieldExternalLinks, field.TypeJSON)
+	if pau.mutation.ExternalLinkCleared() {
+		_spec.ClearField(protectedarea.FieldExternalLink, field.TypeString)
 	}
 	if value, ok := pau.mutation.Area(); ok {
 		_spec.SetField(protectedarea.FieldArea, field.TypeString, value)
@@ -568,21 +564,23 @@ func (pauo *ProtectedAreaUpdateOne) ClearDescription() *ProtectedAreaUpdateOne {
 	return pauo
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (pauo *ProtectedAreaUpdateOne) SetExternalLinks(s []string) *ProtectedAreaUpdateOne {
-	pauo.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (pauo *ProtectedAreaUpdateOne) SetExternalLink(s string) *ProtectedAreaUpdateOne {
+	pauo.mutation.SetExternalLink(s)
 	return pauo
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (pauo *ProtectedAreaUpdateOne) AppendExternalLinks(s []string) *ProtectedAreaUpdateOne {
-	pauo.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (pauo *ProtectedAreaUpdateOne) SetNillableExternalLink(s *string) *ProtectedAreaUpdateOne {
+	if s != nil {
+		pauo.SetExternalLink(*s)
+	}
 	return pauo
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (pauo *ProtectedAreaUpdateOne) ClearExternalLinks() *ProtectedAreaUpdateOne {
-	pauo.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (pauo *ProtectedAreaUpdateOne) ClearExternalLink() *ProtectedAreaUpdateOne {
+	pauo.mutation.ClearExternalLink()
 	return pauo
 }
 
@@ -806,16 +804,11 @@ func (pauo *ProtectedAreaUpdateOne) sqlSave(ctx context.Context) (_node *Protect
 	if pauo.mutation.DescriptionCleared() {
 		_spec.ClearField(protectedarea.FieldDescription, field.TypeString)
 	}
-	if value, ok := pauo.mutation.ExternalLinks(); ok {
-		_spec.SetField(protectedarea.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := pauo.mutation.ExternalLink(); ok {
+		_spec.SetField(protectedarea.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := pauo.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, protectedarea.FieldExternalLinks, value)
-		})
-	}
-	if pauo.mutation.ExternalLinksCleared() {
-		_spec.ClearField(protectedarea.FieldExternalLinks, field.TypeJSON)
+	if pauo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(protectedarea.FieldExternalLink, field.TypeString)
 	}
 	if value, ok := pauo.mutation.Area(); ok {
 		_spec.SetField(protectedarea.FieldArea, field.TypeString, value)

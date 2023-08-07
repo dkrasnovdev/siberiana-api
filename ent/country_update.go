@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/country"
 	"github.com/dkrasnovdev/heritage-api/ent/location"
@@ -136,21 +135,23 @@ func (cu *CountryUpdate) ClearDescription() *CountryUpdate {
 	return cu
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (cu *CountryUpdate) SetExternalLinks(s []string) *CountryUpdate {
-	cu.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (cu *CountryUpdate) SetExternalLink(s string) *CountryUpdate {
+	cu.mutation.SetExternalLink(s)
 	return cu
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (cu *CountryUpdate) AppendExternalLinks(s []string) *CountryUpdate {
-	cu.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (cu *CountryUpdate) SetNillableExternalLink(s *string) *CountryUpdate {
+	if s != nil {
+		cu.SetExternalLink(*s)
+	}
 	return cu
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (cu *CountryUpdate) ClearExternalLinks() *CountryUpdate {
-	cu.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (cu *CountryUpdate) ClearExternalLink() *CountryUpdate {
+	cu.mutation.ClearExternalLink()
 	return cu
 }
 
@@ -268,16 +269,11 @@ func (cu *CountryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.DescriptionCleared() {
 		_spec.ClearField(country.FieldDescription, field.TypeString)
 	}
-	if value, ok := cu.mutation.ExternalLinks(); ok {
-		_spec.SetField(country.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := cu.mutation.ExternalLink(); ok {
+		_spec.SetField(country.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := cu.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, country.FieldExternalLinks, value)
-		})
-	}
-	if cu.mutation.ExternalLinksCleared() {
-		_spec.ClearField(country.FieldExternalLinks, field.TypeJSON)
+	if cu.mutation.ExternalLinkCleared() {
+		_spec.ClearField(country.FieldExternalLink, field.TypeString)
 	}
 	if cu.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -434,21 +430,23 @@ func (cuo *CountryUpdateOne) ClearDescription() *CountryUpdateOne {
 	return cuo
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (cuo *CountryUpdateOne) SetExternalLinks(s []string) *CountryUpdateOne {
-	cuo.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (cuo *CountryUpdateOne) SetExternalLink(s string) *CountryUpdateOne {
+	cuo.mutation.SetExternalLink(s)
 	return cuo
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (cuo *CountryUpdateOne) AppendExternalLinks(s []string) *CountryUpdateOne {
-	cuo.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (cuo *CountryUpdateOne) SetNillableExternalLink(s *string) *CountryUpdateOne {
+	if s != nil {
+		cuo.SetExternalLink(*s)
+	}
 	return cuo
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (cuo *CountryUpdateOne) ClearExternalLinks() *CountryUpdateOne {
-	cuo.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (cuo *CountryUpdateOne) ClearExternalLink() *CountryUpdateOne {
+	cuo.mutation.ClearExternalLink()
 	return cuo
 }
 
@@ -596,16 +594,11 @@ func (cuo *CountryUpdateOne) sqlSave(ctx context.Context) (_node *Country, err e
 	if cuo.mutation.DescriptionCleared() {
 		_spec.ClearField(country.FieldDescription, field.TypeString)
 	}
-	if value, ok := cuo.mutation.ExternalLinks(); ok {
-		_spec.SetField(country.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := cuo.mutation.ExternalLink(); ok {
+		_spec.SetField(country.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := cuo.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, country.FieldExternalLinks, value)
-		})
-	}
-	if cuo.mutation.ExternalLinksCleared() {
-		_spec.ClearField(country.FieldExternalLinks, field.TypeJSON)
+	if cuo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(country.FieldExternalLink, field.TypeString)
 	}
 	if cuo.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/category"
 	"github.com/dkrasnovdev/heritage-api/ent/collection"
@@ -136,21 +135,23 @@ func (cu *CategoryUpdate) ClearDescription() *CategoryUpdate {
 	return cu
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (cu *CategoryUpdate) SetExternalLinks(s []string) *CategoryUpdate {
-	cu.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (cu *CategoryUpdate) SetExternalLink(s string) *CategoryUpdate {
+	cu.mutation.SetExternalLink(s)
 	return cu
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (cu *CategoryUpdate) AppendExternalLinks(s []string) *CategoryUpdate {
-	cu.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (cu *CategoryUpdate) SetNillableExternalLink(s *string) *CategoryUpdate {
+	if s != nil {
+		cu.SetExternalLink(*s)
+	}
 	return cu
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (cu *CategoryUpdate) ClearExternalLinks() *CategoryUpdate {
-	cu.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (cu *CategoryUpdate) ClearExternalLink() *CategoryUpdate {
+	cu.mutation.ClearExternalLink()
 	return cu
 }
 
@@ -279,16 +280,11 @@ func (cu *CategoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.DescriptionCleared() {
 		_spec.ClearField(category.FieldDescription, field.TypeString)
 	}
-	if value, ok := cu.mutation.ExternalLinks(); ok {
-		_spec.SetField(category.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := cu.mutation.ExternalLink(); ok {
+		_spec.SetField(category.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := cu.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, category.FieldExternalLinks, value)
-		})
-	}
-	if cu.mutation.ExternalLinksCleared() {
-		_spec.ClearField(category.FieldExternalLinks, field.TypeJSON)
+	if cu.mutation.ExternalLinkCleared() {
+		_spec.ClearField(category.FieldExternalLink, field.TypeString)
 	}
 	if cu.mutation.CollectionsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -461,21 +457,23 @@ func (cuo *CategoryUpdateOne) ClearDescription() *CategoryUpdateOne {
 	return cuo
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (cuo *CategoryUpdateOne) SetExternalLinks(s []string) *CategoryUpdateOne {
-	cuo.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (cuo *CategoryUpdateOne) SetExternalLink(s string) *CategoryUpdateOne {
+	cuo.mutation.SetExternalLink(s)
 	return cuo
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (cuo *CategoryUpdateOne) AppendExternalLinks(s []string) *CategoryUpdateOne {
-	cuo.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (cuo *CategoryUpdateOne) SetNillableExternalLink(s *string) *CategoryUpdateOne {
+	if s != nil {
+		cuo.SetExternalLink(*s)
+	}
 	return cuo
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (cuo *CategoryUpdateOne) ClearExternalLinks() *CategoryUpdateOne {
-	cuo.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (cuo *CategoryUpdateOne) ClearExternalLink() *CategoryUpdateOne {
+	cuo.mutation.ClearExternalLink()
 	return cuo
 }
 
@@ -634,16 +632,11 @@ func (cuo *CategoryUpdateOne) sqlSave(ctx context.Context) (_node *Category, err
 	if cuo.mutation.DescriptionCleared() {
 		_spec.ClearField(category.FieldDescription, field.TypeString)
 	}
-	if value, ok := cuo.mutation.ExternalLinks(); ok {
-		_spec.SetField(category.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := cuo.mutation.ExternalLink(); ok {
+		_spec.SetField(category.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := cuo.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, category.FieldExternalLinks, value)
-		})
-	}
-	if cuo.mutation.ExternalLinksCleared() {
-		_spec.ClearField(category.FieldExternalLinks, field.TypeJSON)
+	if cuo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(category.FieldExternalLink, field.TypeString)
 	}
 	if cuo.mutation.CollectionsCleared() {
 		edge := &sqlgraph.EdgeSpec{

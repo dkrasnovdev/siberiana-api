@@ -3,7 +3,6 @@
 package ent
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -32,8 +31,8 @@ type Period struct {
 	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
-	// ExternalLinks holds the value of the "external_links" field.
-	ExternalLinks []string `json:"external_links,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PeriodQuery when eager-loading is set.
 	Edges        PeriodEdges `json:"edges"`
@@ -67,11 +66,9 @@ func (*Period) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case period.FieldExternalLinks:
-			values[i] = new([]byte)
 		case period.FieldID:
 			values[i] = new(sql.NullInt64)
-		case period.FieldCreatedBy, period.FieldUpdatedBy, period.FieldDisplayName, period.FieldAbbreviation, period.FieldDescription:
+		case period.FieldCreatedBy, period.FieldUpdatedBy, period.FieldDisplayName, period.FieldAbbreviation, period.FieldDescription, period.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case period.FieldCreatedAt, period.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -138,13 +135,11 @@ func (pe *Period) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pe.Description = value.String
 			}
-		case period.FieldExternalLinks:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field external_links", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &pe.ExternalLinks); err != nil {
-					return fmt.Errorf("unmarshal field external_links: %w", err)
-				}
+		case period.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				pe.ExternalLink = value.String
 			}
 		default:
 			pe.selectValues.Set(columns[i], values[i])
@@ -208,8 +203,8 @@ func (pe *Period) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(pe.Description)
 	builder.WriteString(", ")
-	builder.WriteString("external_links=")
-	builder.WriteString(fmt.Sprintf("%v", pe.ExternalLinks))
+	builder.WriteString("external_link=")
+	builder.WriteString(pe.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
 }

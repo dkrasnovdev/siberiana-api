@@ -90,6 +90,11 @@ func Description(v string) predicate.ArtGenre {
 	return predicate.ArtGenre(sql.FieldEQ(FieldDescription, v))
 }
 
+// ExternalLink applies equality check predicate on the "external_link" field. It's identical to ExternalLinkEQ.
+func ExternalLink(v string) predicate.ArtGenre {
+	return predicate.ArtGenre(sql.FieldEQ(FieldExternalLink, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.ArtGenre {
 	return predicate.ArtGenre(sql.FieldEQ(FieldCreatedAt, v))
@@ -545,14 +550,79 @@ func DescriptionContainsFold(v string) predicate.ArtGenre {
 	return predicate.ArtGenre(sql.FieldContainsFold(FieldDescription, v))
 }
 
-// ExternalLinksIsNil applies the IsNil predicate on the "external_links" field.
-func ExternalLinksIsNil() predicate.ArtGenre {
-	return predicate.ArtGenre(sql.FieldIsNull(FieldExternalLinks))
+// ExternalLinkEQ applies the EQ predicate on the "external_link" field.
+func ExternalLinkEQ(v string) predicate.ArtGenre {
+	return predicate.ArtGenre(sql.FieldEQ(FieldExternalLink, v))
 }
 
-// ExternalLinksNotNil applies the NotNil predicate on the "external_links" field.
-func ExternalLinksNotNil() predicate.ArtGenre {
-	return predicate.ArtGenre(sql.FieldNotNull(FieldExternalLinks))
+// ExternalLinkNEQ applies the NEQ predicate on the "external_link" field.
+func ExternalLinkNEQ(v string) predicate.ArtGenre {
+	return predicate.ArtGenre(sql.FieldNEQ(FieldExternalLink, v))
+}
+
+// ExternalLinkIn applies the In predicate on the "external_link" field.
+func ExternalLinkIn(vs ...string) predicate.ArtGenre {
+	return predicate.ArtGenre(sql.FieldIn(FieldExternalLink, vs...))
+}
+
+// ExternalLinkNotIn applies the NotIn predicate on the "external_link" field.
+func ExternalLinkNotIn(vs ...string) predicate.ArtGenre {
+	return predicate.ArtGenre(sql.FieldNotIn(FieldExternalLink, vs...))
+}
+
+// ExternalLinkGT applies the GT predicate on the "external_link" field.
+func ExternalLinkGT(v string) predicate.ArtGenre {
+	return predicate.ArtGenre(sql.FieldGT(FieldExternalLink, v))
+}
+
+// ExternalLinkGTE applies the GTE predicate on the "external_link" field.
+func ExternalLinkGTE(v string) predicate.ArtGenre {
+	return predicate.ArtGenre(sql.FieldGTE(FieldExternalLink, v))
+}
+
+// ExternalLinkLT applies the LT predicate on the "external_link" field.
+func ExternalLinkLT(v string) predicate.ArtGenre {
+	return predicate.ArtGenre(sql.FieldLT(FieldExternalLink, v))
+}
+
+// ExternalLinkLTE applies the LTE predicate on the "external_link" field.
+func ExternalLinkLTE(v string) predicate.ArtGenre {
+	return predicate.ArtGenre(sql.FieldLTE(FieldExternalLink, v))
+}
+
+// ExternalLinkContains applies the Contains predicate on the "external_link" field.
+func ExternalLinkContains(v string) predicate.ArtGenre {
+	return predicate.ArtGenre(sql.FieldContains(FieldExternalLink, v))
+}
+
+// ExternalLinkHasPrefix applies the HasPrefix predicate on the "external_link" field.
+func ExternalLinkHasPrefix(v string) predicate.ArtGenre {
+	return predicate.ArtGenre(sql.FieldHasPrefix(FieldExternalLink, v))
+}
+
+// ExternalLinkHasSuffix applies the HasSuffix predicate on the "external_link" field.
+func ExternalLinkHasSuffix(v string) predicate.ArtGenre {
+	return predicate.ArtGenre(sql.FieldHasSuffix(FieldExternalLink, v))
+}
+
+// ExternalLinkIsNil applies the IsNil predicate on the "external_link" field.
+func ExternalLinkIsNil() predicate.ArtGenre {
+	return predicate.ArtGenre(sql.FieldIsNull(FieldExternalLink))
+}
+
+// ExternalLinkNotNil applies the NotNil predicate on the "external_link" field.
+func ExternalLinkNotNil() predicate.ArtGenre {
+	return predicate.ArtGenre(sql.FieldNotNull(FieldExternalLink))
+}
+
+// ExternalLinkEqualFold applies the EqualFold predicate on the "external_link" field.
+func ExternalLinkEqualFold(v string) predicate.ArtGenre {
+	return predicate.ArtGenre(sql.FieldEqualFold(FieldExternalLink, v))
+}
+
+// ExternalLinkContainsFold applies the ContainsFold predicate on the "external_link" field.
+func ExternalLinkContainsFold(v string) predicate.ArtGenre {
+	return predicate.ArtGenre(sql.FieldContainsFold(FieldExternalLink, v))
 }
 
 // HasArt applies the HasEdge predicate on the "art" edge.

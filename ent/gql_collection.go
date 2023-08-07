@@ -125,10 +125,10 @@ func (a *ArtQuery) collectField(ctx context.Context, opCtx *graphql.OperationCon
 				selectedFields = append(selectedFields, art.FieldDescription)
 				fieldSeen[art.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[art.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, art.FieldExternalLinks)
-				fieldSeen[art.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[art.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, art.FieldExternalLink)
+				fieldSeen[art.FieldExternalLink] = struct{}{}
 			}
 		case "primaryImageURL":
 			if _, ok := fieldSeen[art.FieldPrimaryImageURL]; !ok {
@@ -277,10 +277,10 @@ func (ag *ArtGenreQuery) collectField(ctx context.Context, opCtx *graphql.Operat
 				selectedFields = append(selectedFields, artgenre.FieldDescription)
 				fieldSeen[artgenre.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[artgenre.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, artgenre.FieldExternalLinks)
-				fieldSeen[artgenre.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[artgenre.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, artgenre.FieldExternalLink)
+				fieldSeen[artgenre.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -419,10 +419,10 @@ func (as *ArtStyleQuery) collectField(ctx context.Context, opCtx *graphql.Operat
 				selectedFields = append(selectedFields, artstyle.FieldDescription)
 				fieldSeen[artstyle.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[artstyle.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, artstyle.FieldExternalLinks)
-				fieldSeen[artstyle.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[artstyle.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, artstyle.FieldExternalLink)
+				fieldSeen[artstyle.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -701,10 +701,10 @@ func (a *ArtifactQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				selectedFields = append(selectedFields, artifact.FieldDescription)
 				fieldSeen[artifact.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[artifact.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, artifact.FieldExternalLinks)
-				fieldSeen[artifact.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[artifact.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldExternalLink)
+				fieldSeen[artifact.FieldExternalLink] = struct{}{}
 			}
 		case "primaryImageURL":
 			if _, ok := fieldSeen[artifact.FieldPrimaryImageURL]; !ok {
@@ -1097,10 +1097,10 @@ func (b *BookQuery) collectField(ctx context.Context, opCtx *graphql.OperationCo
 				selectedFields = append(selectedFields, book.FieldDescription)
 				fieldSeen[book.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[book.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, book.FieldExternalLinks)
-				fieldSeen[book.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[book.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, book.FieldExternalLink)
+				fieldSeen[book.FieldExternalLink] = struct{}{}
 			}
 		case "primaryImageURL":
 			if _, ok := fieldSeen[book.FieldPrimaryImageURL]; !ok {
@@ -1259,10 +1259,10 @@ func (bg *BookGenreQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 				selectedFields = append(selectedFields, bookgenre.FieldDescription)
 				fieldSeen[bookgenre.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[bookgenre.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, bookgenre.FieldExternalLinks)
-				fieldSeen[bookgenre.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[bookgenre.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, bookgenre.FieldExternalLink)
+				fieldSeen[bookgenre.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -1401,10 +1401,10 @@ func (c *CategoryQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				selectedFields = append(selectedFields, category.FieldDescription)
 				fieldSeen[category.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[category.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, category.FieldExternalLinks)
-				fieldSeen[category.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[category.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, category.FieldExternalLink)
+				fieldSeen[category.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -1589,10 +1589,10 @@ func (c *CollectionQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 				selectedFields = append(selectedFields, collection.FieldDescription)
 				fieldSeen[collection.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[collection.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, collection.FieldExternalLinks)
-				fieldSeen[collection.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[collection.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, collection.FieldExternalLink)
+				fieldSeen[collection.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -1729,10 +1729,10 @@ func (c *CountryQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 				selectedFields = append(selectedFields, country.FieldDescription)
 				fieldSeen[country.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[country.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, country.FieldExternalLinks)
-				fieldSeen[country.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[country.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, country.FieldExternalLink)
+				fieldSeen[country.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -1871,10 +1871,10 @@ func (c *CultureQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 				selectedFields = append(selectedFields, culture.FieldDescription)
 				fieldSeen[culture.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[culture.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, culture.FieldExternalLinks)
-				fieldSeen[culture.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[culture.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, culture.FieldExternalLink)
+				fieldSeen[culture.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -2011,10 +2011,10 @@ func (d *DistrictQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				selectedFields = append(selectedFields, district.FieldDescription)
 				fieldSeen[district.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[district.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, district.FieldExternalLinks)
-				fieldSeen[district.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[district.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, district.FieldExternalLink)
+				fieldSeen[district.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -2329,10 +2329,10 @@ func (hr *HolderResponsibilityQuery) collectField(ctx context.Context, opCtx *gr
 				selectedFields = append(selectedFields, holderresponsibility.FieldDescription)
 				fieldSeen[holderresponsibility.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[holderresponsibility.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, holderresponsibility.FieldExternalLinks)
-				fieldSeen[holderresponsibility.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[holderresponsibility.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, holderresponsibility.FieldExternalLink)
+				fieldSeen[holderresponsibility.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -2541,10 +2541,10 @@ func (l *LicenseQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 				selectedFields = append(selectedFields, license.FieldDescription)
 				fieldSeen[license.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[license.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, license.FieldExternalLinks)
-				fieldSeen[license.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[license.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, license.FieldExternalLink)
+				fieldSeen[license.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -2747,10 +2747,10 @@ func (l *LocationQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				selectedFields = append(selectedFields, location.FieldDescription)
 				fieldSeen[location.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[location.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, location.FieldExternalLinks)
-				fieldSeen[location.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[location.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, location.FieldExternalLink)
+				fieldSeen[location.FieldExternalLink] = struct{}{}
 			}
 		case "geometry":
 			if _, ok := fieldSeen[location.FieldGeometry]; !ok {
@@ -2894,10 +2894,10 @@ func (m *MediumQuery) collectField(ctx context.Context, opCtx *graphql.Operation
 				selectedFields = append(selectedFields, medium.FieldDescription)
 				fieldSeen[medium.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[medium.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, medium.FieldExternalLinks)
-				fieldSeen[medium.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[medium.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, medium.FieldExternalLink)
+				fieldSeen[medium.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -3036,10 +3036,10 @@ func (m *ModelQuery) collectField(ctx context.Context, opCtx *graphql.OperationC
 				selectedFields = append(selectedFields, model.FieldDescription)
 				fieldSeen[model.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[model.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, model.FieldExternalLinks)
-				fieldSeen[model.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[model.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, model.FieldExternalLink)
+				fieldSeen[model.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -3190,10 +3190,10 @@ func (m *MonumentQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				selectedFields = append(selectedFields, monument.FieldDescription)
 				fieldSeen[monument.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[monument.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, monument.FieldExternalLinks)
-				fieldSeen[monument.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[monument.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, monument.FieldExternalLink)
+				fieldSeen[monument.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -3367,10 +3367,10 @@ func (o *OrganizationQuery) collectField(ctx context.Context, opCtx *graphql.Ope
 				selectedFields = append(selectedFields, organization.FieldDescription)
 				fieldSeen[organization.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[organization.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, organization.FieldExternalLinks)
-				fieldSeen[organization.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[organization.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, organization.FieldExternalLink)
+				fieldSeen[organization.FieldExternalLink] = struct{}{}
 			}
 		case "primaryImageURL":
 			if _, ok := fieldSeen[organization.FieldPrimaryImageURL]; !ok {
@@ -3528,10 +3528,10 @@ func (ot *OrganizationTypeQuery) collectField(ctx context.Context, opCtx *graphq
 				selectedFields = append(selectedFields, organizationtype.FieldDescription)
 				fieldSeen[organizationtype.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[organizationtype.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, organizationtype.FieldExternalLinks)
-				fieldSeen[organizationtype.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[organizationtype.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, organizationtype.FieldExternalLink)
+				fieldSeen[organizationtype.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -3670,10 +3670,10 @@ func (pe *PeriodQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 				selectedFields = append(selectedFields, period.FieldDescription)
 				fieldSeen[period.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[period.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, period.FieldExternalLinks)
-				fieldSeen[period.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[period.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, period.FieldExternalLink)
+				fieldSeen[period.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -3905,10 +3905,10 @@ func (pe *PersonQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 				selectedFields = append(selectedFields, person.FieldDescription)
 				fieldSeen[person.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[person.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, person.FieldExternalLinks)
-				fieldSeen[person.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[person.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, person.FieldExternalLink)
+				fieldSeen[person.FieldExternalLink] = struct{}{}
 			}
 		case "primaryImageURL":
 			if _, ok := fieldSeen[person.FieldPrimaryImageURL]; !ok {
@@ -4087,10 +4087,10 @@ func (pr *PersonRoleQuery) collectField(ctx context.Context, opCtx *graphql.Oper
 				selectedFields = append(selectedFields, personrole.FieldDescription)
 				fieldSeen[personrole.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[personrole.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, personrole.FieldExternalLinks)
-				fieldSeen[personrole.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[personrole.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, personrole.FieldExternalLink)
+				fieldSeen[personrole.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -4251,10 +4251,10 @@ func (pr *ProjectQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				selectedFields = append(selectedFields, project.FieldDescription)
 				fieldSeen[project.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[project.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, project.FieldExternalLinks)
-				fieldSeen[project.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[project.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, project.FieldExternalLink)
+				fieldSeen[project.FieldExternalLink] = struct{}{}
 			}
 		case "beginData":
 			if _, ok := fieldSeen[project.FieldBeginData]; !ok {
@@ -4403,10 +4403,10 @@ func (pt *ProjectTypeQuery) collectField(ctx context.Context, opCtx *graphql.Ope
 				selectedFields = append(selectedFields, projecttype.FieldDescription)
 				fieldSeen[projecttype.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[projecttype.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, projecttype.FieldExternalLinks)
-				fieldSeen[projecttype.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[projecttype.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, projecttype.FieldExternalLink)
+				fieldSeen[projecttype.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -4555,10 +4555,10 @@ func (pa *ProtectedAreaQuery) collectField(ctx context.Context, opCtx *graphql.O
 				selectedFields = append(selectedFields, protectedarea.FieldDescription)
 				fieldSeen[protectedarea.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[protectedarea.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, protectedarea.FieldExternalLinks)
-				fieldSeen[protectedarea.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[protectedarea.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, protectedarea.FieldExternalLink)
+				fieldSeen[protectedarea.FieldExternalLink] = struct{}{}
 			}
 		case "area":
 			if _, ok := fieldSeen[protectedarea.FieldArea]; !ok {
@@ -4707,10 +4707,10 @@ func (pac *ProtectedAreaCategoryQuery) collectField(ctx context.Context, opCtx *
 				selectedFields = append(selectedFields, protectedareacategory.FieldDescription)
 				fieldSeen[protectedareacategory.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[protectedareacategory.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, protectedareacategory.FieldExternalLinks)
-				fieldSeen[protectedareacategory.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[protectedareacategory.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, protectedareacategory.FieldExternalLink)
+				fieldSeen[protectedareacategory.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -4877,10 +4877,10 @@ func (pap *ProtectedAreaPictureQuery) collectField(ctx context.Context, opCtx *g
 				selectedFields = append(selectedFields, protectedareapicture.FieldDescription)
 				fieldSeen[protectedareapicture.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[protectedareapicture.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, protectedareapicture.FieldExternalLinks)
-				fieldSeen[protectedareapicture.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[protectedareapicture.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, protectedareapicture.FieldExternalLink)
+				fieldSeen[protectedareapicture.FieldExternalLink] = struct{}{}
 			}
 		case "primaryImageURL":
 			if _, ok := fieldSeen[protectedareapicture.FieldPrimaryImageURL]; !ok {
@@ -5051,10 +5051,10 @@ func (pu *PublicationQuery) collectField(ctx context.Context, opCtx *graphql.Ope
 				selectedFields = append(selectedFields, publication.FieldDescription)
 				fieldSeen[publication.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[publication.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, publication.FieldExternalLinks)
-				fieldSeen[publication.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[publication.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, publication.FieldExternalLink)
+				fieldSeen[publication.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -5193,10 +5193,10 @@ func (pu *PublisherQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 				selectedFields = append(selectedFields, publisher.FieldDescription)
 				fieldSeen[publisher.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[publisher.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, publisher.FieldExternalLinks)
-				fieldSeen[publisher.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[publisher.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, publisher.FieldExternalLink)
+				fieldSeen[publisher.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -5333,10 +5333,10 @@ func (r *RegionQuery) collectField(ctx context.Context, opCtx *graphql.Operation
 				selectedFields = append(selectedFields, region.FieldDescription)
 				fieldSeen[region.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[region.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, region.FieldExternalLinks)
-				fieldSeen[region.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[region.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, region.FieldExternalLink)
+				fieldSeen[region.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -5487,10 +5487,10 @@ func (s *SetQuery) collectField(ctx context.Context, opCtx *graphql.OperationCon
 				selectedFields = append(selectedFields, set.FieldDescription)
 				fieldSeen[set.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[set.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, set.FieldExternalLinks)
-				fieldSeen[set.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[set.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, set.FieldExternalLink)
+				fieldSeen[set.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -5627,10 +5627,10 @@ func (s *SettlementQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 				selectedFields = append(selectedFields, settlement.FieldDescription)
 				fieldSeen[settlement.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[settlement.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, settlement.FieldExternalLinks)
-				fieldSeen[settlement.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[settlement.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, settlement.FieldExternalLink)
+				fieldSeen[settlement.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -5769,10 +5769,10 @@ func (t *TechniqueQuery) collectField(ctx context.Context, opCtx *graphql.Operat
 				selectedFields = append(selectedFields, technique.FieldDescription)
 				fieldSeen[technique.FieldDescription] = struct{}{}
 			}
-		case "externalLinks":
-			if _, ok := fieldSeen[technique.FieldExternalLinks]; !ok {
-				selectedFields = append(selectedFields, technique.FieldExternalLinks)
-				fieldSeen[technique.FieldExternalLinks] = struct{}{}
+		case "externalLink":
+			if _, ok := fieldSeen[technique.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, technique.FieldExternalLink)
+				fieldSeen[technique.FieldExternalLink] = struct{}{}
 			}
 		case "id":
 		case "__typename":

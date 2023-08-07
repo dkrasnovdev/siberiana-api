@@ -125,9 +125,17 @@ func (bc *BookCreate) SetNillableDescription(s *string) *BookCreate {
 	return bc
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (bc *BookCreate) SetExternalLinks(s []string) *BookCreate {
-	bc.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (bc *BookCreate) SetExternalLink(s string) *BookCreate {
+	bc.mutation.SetExternalLink(s)
+	return bc
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (bc *BookCreate) SetNillableExternalLink(s *string) *BookCreate {
+	if s != nil {
+		bc.SetExternalLink(*s)
+	}
 	return bc
 }
 
@@ -413,9 +421,9 @@ func (bc *BookCreate) createSpec() (*Book, *sqlgraph.CreateSpec) {
 		_spec.SetField(book.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := bc.mutation.ExternalLinks(); ok {
-		_spec.SetField(book.FieldExternalLinks, field.TypeJSON, value)
-		_node.ExternalLinks = value
+	if value, ok := bc.mutation.ExternalLink(); ok {
+		_spec.SetField(book.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
 	}
 	if value, ok := bc.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(book.FieldPrimaryImageURL, field.TypeString, value)

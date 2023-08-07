@@ -3,7 +3,6 @@
 package ent
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -32,8 +31,8 @@ type OrganizationType struct {
 	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
-	// ExternalLinks holds the value of the "external_links" field.
-	ExternalLinks []string `json:"external_links,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrganizationTypeQuery when eager-loading is set.
 	Edges        OrganizationTypeEdges `json:"edges"`
@@ -67,11 +66,9 @@ func (*OrganizationType) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case organizationtype.FieldExternalLinks:
-			values[i] = new([]byte)
 		case organizationtype.FieldID:
 			values[i] = new(sql.NullInt64)
-		case organizationtype.FieldCreatedBy, organizationtype.FieldUpdatedBy, organizationtype.FieldDisplayName, organizationtype.FieldAbbreviation, organizationtype.FieldDescription:
+		case organizationtype.FieldCreatedBy, organizationtype.FieldUpdatedBy, organizationtype.FieldDisplayName, organizationtype.FieldAbbreviation, organizationtype.FieldDescription, organizationtype.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case organizationtype.FieldCreatedAt, organizationtype.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -138,13 +135,11 @@ func (ot *OrganizationType) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ot.Description = value.String
 			}
-		case organizationtype.FieldExternalLinks:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field external_links", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ot.ExternalLinks); err != nil {
-					return fmt.Errorf("unmarshal field external_links: %w", err)
-				}
+		case organizationtype.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				ot.ExternalLink = value.String
 			}
 		default:
 			ot.selectValues.Set(columns[i], values[i])
@@ -208,8 +203,8 @@ func (ot *OrganizationType) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(ot.Description)
 	builder.WriteString(", ")
-	builder.WriteString("external_links=")
-	builder.WriteString(fmt.Sprintf("%v", ot.ExternalLinks))
+	builder.WriteString("external_link=")
+	builder.WriteString(ot.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
 }

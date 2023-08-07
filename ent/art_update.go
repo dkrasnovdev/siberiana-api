@@ -137,21 +137,23 @@ func (au *ArtUpdate) ClearDescription() *ArtUpdate {
 	return au
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (au *ArtUpdate) SetExternalLinks(s []string) *ArtUpdate {
-	au.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (au *ArtUpdate) SetExternalLink(s string) *ArtUpdate {
+	au.mutation.SetExternalLink(s)
 	return au
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (au *ArtUpdate) AppendExternalLinks(s []string) *ArtUpdate {
-	au.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (au *ArtUpdate) SetNillableExternalLink(s *string) *ArtUpdate {
+	if s != nil {
+		au.SetExternalLink(*s)
+	}
 	return au
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (au *ArtUpdate) ClearExternalLinks() *ArtUpdate {
-	au.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (au *ArtUpdate) ClearExternalLink() *ArtUpdate {
+	au.mutation.ClearExternalLink()
 	return au
 }
 
@@ -354,16 +356,11 @@ func (au *ArtUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if au.mutation.DescriptionCleared() {
 		_spec.ClearField(art.FieldDescription, field.TypeString)
 	}
-	if value, ok := au.mutation.ExternalLinks(); ok {
-		_spec.SetField(art.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := au.mutation.ExternalLink(); ok {
+		_spec.SetField(art.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := au.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, art.FieldExternalLinks, value)
-		})
-	}
-	if au.mutation.ExternalLinksCleared() {
-		_spec.ClearField(art.FieldExternalLinks, field.TypeJSON)
+	if au.mutation.ExternalLinkCleared() {
+		_spec.ClearField(art.FieldExternalLink, field.TypeString)
 	}
 	if value, ok := au.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(art.FieldPrimaryImageURL, field.TypeString, value)
@@ -598,21 +595,23 @@ func (auo *ArtUpdateOne) ClearDescription() *ArtUpdateOne {
 	return auo
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (auo *ArtUpdateOne) SetExternalLinks(s []string) *ArtUpdateOne {
-	auo.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (auo *ArtUpdateOne) SetExternalLink(s string) *ArtUpdateOne {
+	auo.mutation.SetExternalLink(s)
 	return auo
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (auo *ArtUpdateOne) AppendExternalLinks(s []string) *ArtUpdateOne {
-	auo.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (auo *ArtUpdateOne) SetNillableExternalLink(s *string) *ArtUpdateOne {
+	if s != nil {
+		auo.SetExternalLink(*s)
+	}
 	return auo
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (auo *ArtUpdateOne) ClearExternalLinks() *ArtUpdateOne {
-	auo.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (auo *ArtUpdateOne) ClearExternalLink() *ArtUpdateOne {
+	auo.mutation.ClearExternalLink()
 	return auo
 }
 
@@ -845,16 +844,11 @@ func (auo *ArtUpdateOne) sqlSave(ctx context.Context) (_node *Art, err error) {
 	if auo.mutation.DescriptionCleared() {
 		_spec.ClearField(art.FieldDescription, field.TypeString)
 	}
-	if value, ok := auo.mutation.ExternalLinks(); ok {
-		_spec.SetField(art.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := auo.mutation.ExternalLink(); ok {
+		_spec.SetField(art.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := auo.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, art.FieldExternalLinks, value)
-		})
-	}
-	if auo.mutation.ExternalLinksCleared() {
-		_spec.ClearField(art.FieldExternalLinks, field.TypeJSON)
+	if auo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(art.FieldExternalLink, field.TypeString)
 	}
 	if value, ok := auo.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(art.FieldPrimaryImageURL, field.TypeString, value)

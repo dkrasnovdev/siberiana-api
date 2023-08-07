@@ -18,7 +18,7 @@ type CreateArtInput struct {
 	DisplayName          *string
 	Abbreviation         *string
 	Description          *string
-	ExternalLinks        []string
+	ExternalLink         *string
 	PrimaryImageURL      *string
 	AdditionalImagesUrls []string
 	ArtGenreIDs          []int
@@ -48,8 +48,8 @@ func (i *CreateArtInput) Mutate(m *ArtMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.PrimaryImageURL; v != nil {
 		m.SetPrimaryImageURL(*v)
@@ -84,9 +84,8 @@ type UpdateArtInput struct {
 	Abbreviation               *string
 	ClearDescription           bool
 	Description                *string
-	ClearExternalLinks         bool
-	ExternalLinks              []string
-	AppendExternalLinks        []string
+	ClearExternalLink          bool
+	ExternalLink               *string
 	ClearPrimaryImageURL       bool
 	PrimaryImageURL            *string
 	ClearAdditionalImagesUrls  bool
@@ -135,14 +134,11 @@ func (i *UpdateArtInput) Mutate(m *ArtMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearPrimaryImageURL {
 		m.ClearPrimaryImageURL()
@@ -193,15 +189,15 @@ func (c *ArtUpdateOne) SetInput(i UpdateArtInput) *ArtUpdateOne {
 
 // CreateArtGenreInput represents a mutation input for creating artgenres.
 type CreateArtGenreInput struct {
-	CreatedAt     *time.Time
-	CreatedBy     *string
-	UpdatedAt     *time.Time
-	UpdatedBy     *string
-	DisplayName   *string
-	Abbreviation  *string
-	Description   *string
-	ExternalLinks []string
-	ArtIDs        []int
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
+	DisplayName  *string
+	Abbreviation *string
+	Description  *string
+	ExternalLink *string
+	ArtIDs       []int
 }
 
 // Mutate applies the CreateArtGenreInput on the ArtGenreMutation builder.
@@ -227,8 +223,8 @@ func (i *CreateArtGenreInput) Mutate(m *ArtGenreMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.ArtIDs; len(v) > 0 {
 		m.AddArtIDs(v...)
@@ -243,23 +239,22 @@ func (c *ArtGenreCreate) SetInput(i CreateArtGenreInput) *ArtGenreCreate {
 
 // UpdateArtGenreInput represents a mutation input for updating artgenres.
 type UpdateArtGenreInput struct {
-	ClearCreatedBy      bool
-	CreatedBy           *string
-	UpdatedAt           *time.Time
-	ClearUpdatedBy      bool
-	UpdatedBy           *string
-	ClearDisplayName    bool
-	DisplayName         *string
-	ClearAbbreviation   bool
-	Abbreviation        *string
-	ClearDescription    bool
-	Description         *string
-	ClearExternalLinks  bool
-	ExternalLinks       []string
-	AppendExternalLinks []string
-	ClearArt            bool
-	AddArtIDs           []int
-	RemoveArtIDs        []int
+	ClearCreatedBy    bool
+	CreatedBy         *string
+	UpdatedAt         *time.Time
+	ClearUpdatedBy    bool
+	UpdatedBy         *string
+	ClearDisplayName  bool
+	DisplayName       *string
+	ClearAbbreviation bool
+	Abbreviation      *string
+	ClearDescription  bool
+	Description       *string
+	ClearExternalLink bool
+	ExternalLink      *string
+	ClearArt          bool
+	AddArtIDs         []int
+	RemoveArtIDs      []int
 }
 
 // Mutate applies the UpdateArtGenreInput on the ArtGenreMutation builder.
@@ -297,14 +292,11 @@ func (i *UpdateArtGenreInput) Mutate(m *ArtGenreMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearArt {
 		m.ClearArt()
@@ -331,15 +323,15 @@ func (c *ArtGenreUpdateOne) SetInput(i UpdateArtGenreInput) *ArtGenreUpdateOne {
 
 // CreateArtStyleInput represents a mutation input for creating artstyles.
 type CreateArtStyleInput struct {
-	CreatedAt     *time.Time
-	CreatedBy     *string
-	UpdatedAt     *time.Time
-	UpdatedBy     *string
-	DisplayName   *string
-	Abbreviation  *string
-	Description   *string
-	ExternalLinks []string
-	ArtIDs        []int
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
+	DisplayName  *string
+	Abbreviation *string
+	Description  *string
+	ExternalLink *string
+	ArtIDs       []int
 }
 
 // Mutate applies the CreateArtStyleInput on the ArtStyleMutation builder.
@@ -365,8 +357,8 @@ func (i *CreateArtStyleInput) Mutate(m *ArtStyleMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.ArtIDs; len(v) > 0 {
 		m.AddArtIDs(v...)
@@ -381,23 +373,22 @@ func (c *ArtStyleCreate) SetInput(i CreateArtStyleInput) *ArtStyleCreate {
 
 // UpdateArtStyleInput represents a mutation input for updating artstyles.
 type UpdateArtStyleInput struct {
-	ClearCreatedBy      bool
-	CreatedBy           *string
-	UpdatedAt           *time.Time
-	ClearUpdatedBy      bool
-	UpdatedBy           *string
-	ClearDisplayName    bool
-	DisplayName         *string
-	ClearAbbreviation   bool
-	Abbreviation        *string
-	ClearDescription    bool
-	Description         *string
-	ClearExternalLinks  bool
-	ExternalLinks       []string
-	AppendExternalLinks []string
-	ClearArt            bool
-	AddArtIDs           []int
-	RemoveArtIDs        []int
+	ClearCreatedBy    bool
+	CreatedBy         *string
+	UpdatedAt         *time.Time
+	ClearUpdatedBy    bool
+	UpdatedBy         *string
+	ClearDisplayName  bool
+	DisplayName       *string
+	ClearAbbreviation bool
+	Abbreviation      *string
+	ClearDescription  bool
+	Description       *string
+	ClearExternalLink bool
+	ExternalLink      *string
+	ClearArt          bool
+	AddArtIDs         []int
+	RemoveArtIDs      []int
 }
 
 // Mutate applies the UpdateArtStyleInput on the ArtStyleMutation builder.
@@ -435,14 +426,11 @@ func (i *UpdateArtStyleInput) Mutate(m *ArtStyleMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearArt {
 		m.ClearArt()
@@ -476,7 +464,7 @@ type CreateArtifactInput struct {
 	DisplayName           *string
 	Abbreviation          *string
 	Description           *string
-	ExternalLinks         []string
+	ExternalLink          *string
 	PrimaryImageURL       *string
 	AdditionalImagesUrls  []string
 	DeletedAt             *time.Time
@@ -527,8 +515,8 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.PrimaryImageURL; v != nil {
 		m.SetPrimaryImageURL(*v)
@@ -626,9 +614,8 @@ type UpdateArtifactInput struct {
 	Abbreviation               *string
 	ClearDescription           bool
 	Description                *string
-	ClearExternalLinks         bool
-	ExternalLinks              []string
-	AppendExternalLinks        []string
+	ClearExternalLink          bool
+	ExternalLink               *string
 	ClearPrimaryImageURL       bool
 	PrimaryImageURL            *string
 	ClearAdditionalImagesUrls  bool
@@ -723,14 +710,11 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearPrimaryImageURL {
 		m.ClearPrimaryImageURL()
@@ -926,7 +910,7 @@ type CreateBookInput struct {
 	DisplayName          *string
 	Abbreviation         *string
 	Description          *string
-	ExternalLinks        []string
+	ExternalLink         *string
 	PrimaryImageURL      *string
 	AdditionalImagesUrls []string
 	Files                []string
@@ -963,8 +947,8 @@ func (i *CreateBookInput) Mutate(m *BookMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.PrimaryImageURL; v != nil {
 		m.SetPrimaryImageURL(*v)
@@ -1020,9 +1004,8 @@ type UpdateBookInput struct {
 	Abbreviation               *string
 	ClearDescription           bool
 	Description                *string
-	ClearExternalLinks         bool
-	ExternalLinks              []string
-	AppendExternalLinks        []string
+	ClearExternalLink          bool
+	ExternalLink               *string
 	ClearPrimaryImageURL       bool
 	PrimaryImageURL            *string
 	ClearAdditionalImagesUrls  bool
@@ -1087,14 +1070,11 @@ func (i *UpdateBookInput) Mutate(m *BookMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearPrimaryImageURL {
 		m.ClearPrimaryImageURL()
@@ -1193,15 +1173,15 @@ func (c *BookUpdateOne) SetInput(i UpdateBookInput) *BookUpdateOne {
 
 // CreateBookGenreInput represents a mutation input for creating bookgenres.
 type CreateBookGenreInput struct {
-	CreatedAt     *time.Time
-	CreatedBy     *string
-	UpdatedAt     *time.Time
-	UpdatedBy     *string
-	DisplayName   *string
-	Abbreviation  *string
-	Description   *string
-	ExternalLinks []string
-	BookIDs       []int
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
+	DisplayName  *string
+	Abbreviation *string
+	Description  *string
+	ExternalLink *string
+	BookIDs      []int
 }
 
 // Mutate applies the CreateBookGenreInput on the BookGenreMutation builder.
@@ -1227,8 +1207,8 @@ func (i *CreateBookGenreInput) Mutate(m *BookGenreMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.BookIDs; len(v) > 0 {
 		m.AddBookIDs(v...)
@@ -1243,23 +1223,22 @@ func (c *BookGenreCreate) SetInput(i CreateBookGenreInput) *BookGenreCreate {
 
 // UpdateBookGenreInput represents a mutation input for updating bookgenres.
 type UpdateBookGenreInput struct {
-	ClearCreatedBy      bool
-	CreatedBy           *string
-	UpdatedAt           *time.Time
-	ClearUpdatedBy      bool
-	UpdatedBy           *string
-	ClearDisplayName    bool
-	DisplayName         *string
-	ClearAbbreviation   bool
-	Abbreviation        *string
-	ClearDescription    bool
-	Description         *string
-	ClearExternalLinks  bool
-	ExternalLinks       []string
-	AppendExternalLinks []string
-	ClearBooks          bool
-	AddBookIDs          []int
-	RemoveBookIDs       []int
+	ClearCreatedBy    bool
+	CreatedBy         *string
+	UpdatedAt         *time.Time
+	ClearUpdatedBy    bool
+	UpdatedBy         *string
+	ClearDisplayName  bool
+	DisplayName       *string
+	ClearAbbreviation bool
+	Abbreviation      *string
+	ClearDescription  bool
+	Description       *string
+	ClearExternalLink bool
+	ExternalLink      *string
+	ClearBooks        bool
+	AddBookIDs        []int
+	RemoveBookIDs     []int
 }
 
 // Mutate applies the UpdateBookGenreInput on the BookGenreMutation builder.
@@ -1297,14 +1276,11 @@ func (i *UpdateBookGenreInput) Mutate(m *BookGenreMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearBooks {
 		m.ClearBooks()
@@ -1338,7 +1314,7 @@ type CreateCategoryInput struct {
 	DisplayName   *string
 	Abbreviation  *string
 	Description   *string
-	ExternalLinks []string
+	ExternalLink  *string
 	CollectionIDs []int
 }
 
@@ -1365,8 +1341,8 @@ func (i *CreateCategoryInput) Mutate(m *CategoryMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.CollectionIDs; len(v) > 0 {
 		m.AddCollectionIDs(v...)
@@ -1392,9 +1368,8 @@ type UpdateCategoryInput struct {
 	Abbreviation        *string
 	ClearDescription    bool
 	Description         *string
-	ClearExternalLinks  bool
-	ExternalLinks       []string
-	AppendExternalLinks []string
+	ClearExternalLink   bool
+	ExternalLink        *string
 	ClearCollections    bool
 	AddCollectionIDs    []int
 	RemoveCollectionIDs []int
@@ -1435,14 +1410,11 @@ func (i *UpdateCategoryInput) Mutate(m *CategoryMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearCollections {
 		m.ClearCollections()
@@ -1476,7 +1448,7 @@ type CreateCollectionInput struct {
 	DisplayName             *string
 	Abbreviation            *string
 	Description             *string
-	ExternalLinks           []string
+	ExternalLink            *string
 	ArtifactIDs             []int
 	BookIDs                 []int
 	PersonIDs               []int
@@ -1507,8 +1479,8 @@ func (i *CreateCollectionInput) Mutate(m *CollectionMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
@@ -1546,9 +1518,8 @@ type UpdateCollectionInput struct {
 	Abbreviation                  *string
 	ClearDescription              bool
 	Description                   *string
-	ClearExternalLinks            bool
-	ExternalLinks                 []string
-	AppendExternalLinks           []string
+	ClearExternalLink             bool
+	ExternalLink                  *string
 	ClearArtifacts                bool
 	AddArtifactIDs                []int
 	RemoveArtifactIDs             []int
@@ -1600,14 +1571,11 @@ func (i *UpdateCollectionInput) Mutate(m *CollectionMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
@@ -1667,15 +1635,15 @@ func (c *CollectionUpdateOne) SetInput(i UpdateCollectionInput) *CollectionUpdat
 
 // CreateCountryInput represents a mutation input for creating countries.
 type CreateCountryInput struct {
-	CreatedAt     *time.Time
-	CreatedBy     *string
-	UpdatedAt     *time.Time
-	UpdatedBy     *string
-	DisplayName   *string
-	Abbreviation  *string
-	Description   *string
-	ExternalLinks []string
-	LocationID    *int
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
+	DisplayName  *string
+	Abbreviation *string
+	Description  *string
+	ExternalLink *string
+	LocationID   *int
 }
 
 // Mutate applies the CreateCountryInput on the CountryMutation builder.
@@ -1701,8 +1669,8 @@ func (i *CreateCountryInput) Mutate(m *CountryMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.LocationID; v != nil {
 		m.SetLocationID(*v)
@@ -1717,22 +1685,21 @@ func (c *CountryCreate) SetInput(i CreateCountryInput) *CountryCreate {
 
 // UpdateCountryInput represents a mutation input for updating countries.
 type UpdateCountryInput struct {
-	ClearCreatedBy      bool
-	CreatedBy           *string
-	UpdatedAt           *time.Time
-	ClearUpdatedBy      bool
-	UpdatedBy           *string
-	ClearDisplayName    bool
-	DisplayName         *string
-	ClearAbbreviation   bool
-	Abbreviation        *string
-	ClearDescription    bool
-	Description         *string
-	ClearExternalLinks  bool
-	ExternalLinks       []string
-	AppendExternalLinks []string
-	ClearLocation       bool
-	LocationID          *int
+	ClearCreatedBy    bool
+	CreatedBy         *string
+	UpdatedAt         *time.Time
+	ClearUpdatedBy    bool
+	UpdatedBy         *string
+	ClearDisplayName  bool
+	DisplayName       *string
+	ClearAbbreviation bool
+	Abbreviation      *string
+	ClearDescription  bool
+	Description       *string
+	ClearExternalLink bool
+	ExternalLink      *string
+	ClearLocation     bool
+	LocationID        *int
 }
 
 // Mutate applies the UpdateCountryInput on the CountryMutation builder.
@@ -1770,14 +1737,11 @@ func (i *UpdateCountryInput) Mutate(m *CountryMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearLocation {
 		m.ClearLocation()
@@ -1801,15 +1765,15 @@ func (c *CountryUpdateOne) SetInput(i UpdateCountryInput) *CountryUpdateOne {
 
 // CreateCultureInput represents a mutation input for creating cultures.
 type CreateCultureInput struct {
-	CreatedAt     *time.Time
-	CreatedBy     *string
-	UpdatedAt     *time.Time
-	UpdatedBy     *string
-	DisplayName   *string
-	Abbreviation  *string
-	Description   *string
-	ExternalLinks []string
-	ArtifactIDs   []int
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
+	DisplayName  *string
+	Abbreviation *string
+	Description  *string
+	ExternalLink *string
+	ArtifactIDs  []int
 }
 
 // Mutate applies the CreateCultureInput on the CultureMutation builder.
@@ -1835,8 +1799,8 @@ func (i *CreateCultureInput) Mutate(m *CultureMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
@@ -1851,23 +1815,22 @@ func (c *CultureCreate) SetInput(i CreateCultureInput) *CultureCreate {
 
 // UpdateCultureInput represents a mutation input for updating cultures.
 type UpdateCultureInput struct {
-	ClearCreatedBy      bool
-	CreatedBy           *string
-	UpdatedAt           *time.Time
-	ClearUpdatedBy      bool
-	UpdatedBy           *string
-	ClearDisplayName    bool
-	DisplayName         *string
-	ClearAbbreviation   bool
-	Abbreviation        *string
-	ClearDescription    bool
-	Description         *string
-	ClearExternalLinks  bool
-	ExternalLinks       []string
-	AppendExternalLinks []string
-	ClearArtifacts      bool
-	AddArtifactIDs      []int
-	RemoveArtifactIDs   []int
+	ClearCreatedBy    bool
+	CreatedBy         *string
+	UpdatedAt         *time.Time
+	ClearUpdatedBy    bool
+	UpdatedBy         *string
+	ClearDisplayName  bool
+	DisplayName       *string
+	ClearAbbreviation bool
+	Abbreviation      *string
+	ClearDescription  bool
+	Description       *string
+	ClearExternalLink bool
+	ExternalLink      *string
+	ClearArtifacts    bool
+	AddArtifactIDs    []int
+	RemoveArtifactIDs []int
 }
 
 // Mutate applies the UpdateCultureInput on the CultureMutation builder.
@@ -1905,14 +1868,11 @@ func (i *UpdateCultureInput) Mutate(m *CultureMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
@@ -1939,15 +1899,15 @@ func (c *CultureUpdateOne) SetInput(i UpdateCultureInput) *CultureUpdateOne {
 
 // CreateDistrictInput represents a mutation input for creating districts.
 type CreateDistrictInput struct {
-	CreatedAt     *time.Time
-	CreatedBy     *string
-	UpdatedAt     *time.Time
-	UpdatedBy     *string
-	DisplayName   *string
-	Abbreviation  *string
-	Description   *string
-	ExternalLinks []string
-	LocationID    *int
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
+	DisplayName  *string
+	Abbreviation *string
+	Description  *string
+	ExternalLink *string
+	LocationID   *int
 }
 
 // Mutate applies the CreateDistrictInput on the DistrictMutation builder.
@@ -1973,8 +1933,8 @@ func (i *CreateDistrictInput) Mutate(m *DistrictMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.LocationID; v != nil {
 		m.SetLocationID(*v)
@@ -1989,22 +1949,21 @@ func (c *DistrictCreate) SetInput(i CreateDistrictInput) *DistrictCreate {
 
 // UpdateDistrictInput represents a mutation input for updating districts.
 type UpdateDistrictInput struct {
-	ClearCreatedBy      bool
-	CreatedBy           *string
-	UpdatedAt           *time.Time
-	ClearUpdatedBy      bool
-	UpdatedBy           *string
-	ClearDisplayName    bool
-	DisplayName         *string
-	ClearAbbreviation   bool
-	Abbreviation        *string
-	ClearDescription    bool
-	Description         *string
-	ClearExternalLinks  bool
-	ExternalLinks       []string
-	AppendExternalLinks []string
-	ClearLocation       bool
-	LocationID          *int
+	ClearCreatedBy    bool
+	CreatedBy         *string
+	UpdatedAt         *time.Time
+	ClearUpdatedBy    bool
+	UpdatedBy         *string
+	ClearDisplayName  bool
+	DisplayName       *string
+	ClearAbbreviation bool
+	Abbreviation      *string
+	ClearDescription  bool
+	Description       *string
+	ClearExternalLink bool
+	ExternalLink      *string
+	ClearLocation     bool
+	LocationID        *int
 }
 
 // Mutate applies the UpdateDistrictInput on the DistrictMutation builder.
@@ -2042,14 +2001,11 @@ func (i *UpdateDistrictInput) Mutate(m *DistrictMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearLocation {
 		m.ClearLocation()
@@ -2233,15 +2189,15 @@ func (c *HolderUpdateOne) SetInput(i UpdateHolderInput) *HolderUpdateOne {
 
 // CreateHolderResponsibilityInput represents a mutation input for creating holderresponsibilities.
 type CreateHolderResponsibilityInput struct {
-	CreatedAt     *time.Time
-	CreatedBy     *string
-	UpdatedAt     *time.Time
-	UpdatedBy     *string
-	DisplayName   *string
-	Abbreviation  *string
-	Description   *string
-	ExternalLinks []string
-	HolderIDs     []int
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
+	DisplayName  *string
+	Abbreviation *string
+	Description  *string
+	ExternalLink *string
+	HolderIDs    []int
 }
 
 // Mutate applies the CreateHolderResponsibilityInput on the HolderResponsibilityMutation builder.
@@ -2267,8 +2223,8 @@ func (i *CreateHolderResponsibilityInput) Mutate(m *HolderResponsibilityMutation
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.HolderIDs; len(v) > 0 {
 		m.AddHolderIDs(v...)
@@ -2283,23 +2239,22 @@ func (c *HolderResponsibilityCreate) SetInput(i CreateHolderResponsibilityInput)
 
 // UpdateHolderResponsibilityInput represents a mutation input for updating holderresponsibilities.
 type UpdateHolderResponsibilityInput struct {
-	ClearCreatedBy      bool
-	CreatedBy           *string
-	UpdatedAt           *time.Time
-	ClearUpdatedBy      bool
-	UpdatedBy           *string
-	ClearDisplayName    bool
-	DisplayName         *string
-	ClearAbbreviation   bool
-	Abbreviation        *string
-	ClearDescription    bool
-	Description         *string
-	ClearExternalLinks  bool
-	ExternalLinks       []string
-	AppendExternalLinks []string
-	ClearHolder         bool
-	AddHolderIDs        []int
-	RemoveHolderIDs     []int
+	ClearCreatedBy    bool
+	CreatedBy         *string
+	UpdatedAt         *time.Time
+	ClearUpdatedBy    bool
+	UpdatedBy         *string
+	ClearDisplayName  bool
+	DisplayName       *string
+	ClearAbbreviation bool
+	Abbreviation      *string
+	ClearDescription  bool
+	Description       *string
+	ClearExternalLink bool
+	ExternalLink      *string
+	ClearHolder       bool
+	AddHolderIDs      []int
+	RemoveHolderIDs   []int
 }
 
 // Mutate applies the UpdateHolderResponsibilityInput on the HolderResponsibilityMutation builder.
@@ -2337,14 +2292,11 @@ func (i *UpdateHolderResponsibilityInput) Mutate(m *HolderResponsibilityMutation
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearHolder {
 		m.ClearHolder()
@@ -2378,7 +2330,7 @@ type CreateLicenseInput struct {
 	DisplayName             *string
 	Abbreviation            *string
 	Description             *string
-	ExternalLinks           []string
+	ExternalLink            *string
 	ArtifactIDs             []int
 	BookIDs                 []int
 	ProtectedAreaPictureIDs []int
@@ -2407,8 +2359,8 @@ func (i *CreateLicenseInput) Mutate(m *LicenseMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
@@ -2440,9 +2392,8 @@ type UpdateLicenseInput struct {
 	Abbreviation                  *string
 	ClearDescription              bool
 	Description                   *string
-	ClearExternalLinks            bool
-	ExternalLinks                 []string
-	AppendExternalLinks           []string
+	ClearExternalLink             bool
+	ExternalLink                  *string
 	ClearArtifacts                bool
 	AddArtifactIDs                []int
 	RemoveArtifactIDs             []int
@@ -2489,14 +2440,11 @@ func (i *UpdateLicenseInput) Mutate(m *LicenseMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
@@ -2548,7 +2496,7 @@ type CreateLocationInput struct {
 	DisplayName             *string
 	Abbreviation            *string
 	Description             *string
-	ExternalLinks           []string
+	ExternalLink            *string
 	Geometry                *types.Geometry
 	ArtifactIDs             []int
 	BookIDs                 []int
@@ -2582,8 +2530,8 @@ func (i *CreateLocationInput) Mutate(m *LocationMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.Geometry; v != nil {
 		m.SetGeometry(*v)
@@ -2630,9 +2578,8 @@ type UpdateLocationInput struct {
 	Abbreviation                  *string
 	ClearDescription              bool
 	Description                   *string
-	ClearExternalLinks            bool
-	ExternalLinks                 []string
-	AppendExternalLinks           []string
+	ClearExternalLink             bool
+	ExternalLink                  *string
 	ClearGeometry                 bool
 	Geometry                      *types.Geometry
 	ClearArtifacts                bool
@@ -2689,14 +2636,11 @@ func (i *UpdateLocationInput) Mutate(m *LocationMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearGeometry {
 		m.ClearGeometry()
@@ -2771,15 +2715,15 @@ func (c *LocationUpdateOne) SetInput(i UpdateLocationInput) *LocationUpdateOne {
 
 // CreateMediumInput represents a mutation input for creating media.
 type CreateMediumInput struct {
-	CreatedAt     *time.Time
-	CreatedBy     *string
-	UpdatedAt     *time.Time
-	UpdatedBy     *string
-	DisplayName   *string
-	Abbreviation  *string
-	Description   *string
-	ExternalLinks []string
-	ArtifactIDs   []int
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
+	DisplayName  *string
+	Abbreviation *string
+	Description  *string
+	ExternalLink *string
+	ArtifactIDs  []int
 }
 
 // Mutate applies the CreateMediumInput on the MediumMutation builder.
@@ -2805,8 +2749,8 @@ func (i *CreateMediumInput) Mutate(m *MediumMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
@@ -2821,23 +2765,22 @@ func (c *MediumCreate) SetInput(i CreateMediumInput) *MediumCreate {
 
 // UpdateMediumInput represents a mutation input for updating media.
 type UpdateMediumInput struct {
-	ClearCreatedBy      bool
-	CreatedBy           *string
-	UpdatedAt           *time.Time
-	ClearUpdatedBy      bool
-	UpdatedBy           *string
-	ClearDisplayName    bool
-	DisplayName         *string
-	ClearAbbreviation   bool
-	Abbreviation        *string
-	ClearDescription    bool
-	Description         *string
-	ClearExternalLinks  bool
-	ExternalLinks       []string
-	AppendExternalLinks []string
-	ClearArtifacts      bool
-	AddArtifactIDs      []int
-	RemoveArtifactIDs   []int
+	ClearCreatedBy    bool
+	CreatedBy         *string
+	UpdatedAt         *time.Time
+	ClearUpdatedBy    bool
+	UpdatedBy         *string
+	ClearDisplayName  bool
+	DisplayName       *string
+	ClearAbbreviation bool
+	Abbreviation      *string
+	ClearDescription  bool
+	Description       *string
+	ClearExternalLink bool
+	ExternalLink      *string
+	ClearArtifacts    bool
+	AddArtifactIDs    []int
+	RemoveArtifactIDs []int
 }
 
 // Mutate applies the UpdateMediumInput on the MediumMutation builder.
@@ -2875,14 +2818,11 @@ func (i *UpdateMediumInput) Mutate(m *MediumMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
@@ -2909,15 +2849,15 @@ func (c *MediumUpdateOne) SetInput(i UpdateMediumInput) *MediumUpdateOne {
 
 // CreateModelInput represents a mutation input for creating models.
 type CreateModelInput struct {
-	CreatedAt     *time.Time
-	CreatedBy     *string
-	UpdatedAt     *time.Time
-	UpdatedBy     *string
-	DisplayName   *string
-	Abbreviation  *string
-	Description   *string
-	ExternalLinks []string
-	ArtifactIDs   []int
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
+	DisplayName  *string
+	Abbreviation *string
+	Description  *string
+	ExternalLink *string
+	ArtifactIDs  []int
 }
 
 // Mutate applies the CreateModelInput on the ModelMutation builder.
@@ -2943,8 +2883,8 @@ func (i *CreateModelInput) Mutate(m *ModelMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
@@ -2959,23 +2899,22 @@ func (c *ModelCreate) SetInput(i CreateModelInput) *ModelCreate {
 
 // UpdateModelInput represents a mutation input for updating models.
 type UpdateModelInput struct {
-	ClearCreatedBy      bool
-	CreatedBy           *string
-	UpdatedAt           *time.Time
-	ClearUpdatedBy      bool
-	UpdatedBy           *string
-	ClearDisplayName    bool
-	DisplayName         *string
-	ClearAbbreviation   bool
-	Abbreviation        *string
-	ClearDescription    bool
-	Description         *string
-	ClearExternalLinks  bool
-	ExternalLinks       []string
-	AppendExternalLinks []string
-	ClearArtifacts      bool
-	AddArtifactIDs      []int
-	RemoveArtifactIDs   []int
+	ClearCreatedBy    bool
+	CreatedBy         *string
+	UpdatedAt         *time.Time
+	ClearUpdatedBy    bool
+	UpdatedBy         *string
+	ClearDisplayName  bool
+	DisplayName       *string
+	ClearAbbreviation bool
+	Abbreviation      *string
+	ClearDescription  bool
+	Description       *string
+	ClearExternalLink bool
+	ExternalLink      *string
+	ClearArtifacts    bool
+	AddArtifactIDs    []int
+	RemoveArtifactIDs []int
 }
 
 // Mutate applies the UpdateModelInput on the ModelMutation builder.
@@ -3013,14 +2952,11 @@ func (i *UpdateModelInput) Mutate(m *ModelMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
@@ -3047,16 +2983,16 @@ func (c *ModelUpdateOne) SetInput(i UpdateModelInput) *ModelUpdateOne {
 
 // CreateMonumentInput represents a mutation input for creating monuments.
 type CreateMonumentInput struct {
-	CreatedAt     *time.Time
-	CreatedBy     *string
-	UpdatedAt     *time.Time
-	UpdatedBy     *string
-	DisplayName   *string
-	Abbreviation  *string
-	Description   *string
-	ExternalLinks []string
-	ArtifactIDs   []int
-	SetIDs        []int
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
+	DisplayName  *string
+	Abbreviation *string
+	Description  *string
+	ExternalLink *string
+	ArtifactIDs  []int
+	SetIDs       []int
 }
 
 // Mutate applies the CreateMonumentInput on the MonumentMutation builder.
@@ -3082,8 +3018,8 @@ func (i *CreateMonumentInput) Mutate(m *MonumentMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
@@ -3101,26 +3037,25 @@ func (c *MonumentCreate) SetInput(i CreateMonumentInput) *MonumentCreate {
 
 // UpdateMonumentInput represents a mutation input for updating monuments.
 type UpdateMonumentInput struct {
-	ClearCreatedBy      bool
-	CreatedBy           *string
-	UpdatedAt           *time.Time
-	ClearUpdatedBy      bool
-	UpdatedBy           *string
-	ClearDisplayName    bool
-	DisplayName         *string
-	ClearAbbreviation   bool
-	Abbreviation        *string
-	ClearDescription    bool
-	Description         *string
-	ClearExternalLinks  bool
-	ExternalLinks       []string
-	AppendExternalLinks []string
-	ClearArtifacts      bool
-	AddArtifactIDs      []int
-	RemoveArtifactIDs   []int
-	ClearSets           bool
-	AddSetIDs           []int
-	RemoveSetIDs        []int
+	ClearCreatedBy    bool
+	CreatedBy         *string
+	UpdatedAt         *time.Time
+	ClearUpdatedBy    bool
+	UpdatedBy         *string
+	ClearDisplayName  bool
+	DisplayName       *string
+	ClearAbbreviation bool
+	Abbreviation      *string
+	ClearDescription  bool
+	Description       *string
+	ClearExternalLink bool
+	ExternalLink      *string
+	ClearArtifacts    bool
+	AddArtifactIDs    []int
+	RemoveArtifactIDs []int
+	ClearSets         bool
+	AddSetIDs         []int
+	RemoveSetIDs      []int
 }
 
 // Mutate applies the UpdateMonumentInput on the MonumentMutation builder.
@@ -3158,14 +3093,11 @@ func (i *UpdateMonumentInput) Mutate(m *MonumentMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
@@ -3211,7 +3143,7 @@ type CreateOrganizationInput struct {
 	DisplayName           *string
 	Abbreviation          *string
 	Description           *string
-	ExternalLinks         []string
+	ExternalLink          *string
 	PrimaryImageURL       *string
 	AdditionalImagesUrls  []string
 	PreviousNames         []string
@@ -3254,8 +3186,8 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.PrimaryImageURL; v != nil {
 		m.SetPrimaryImageURL(*v)
@@ -3310,9 +3242,8 @@ type UpdateOrganizationInput struct {
 	Abbreviation               *string
 	ClearDescription           bool
 	Description                *string
-	ClearExternalLinks         bool
-	ExternalLinks              []string
-	AppendExternalLinks        []string
+	ClearExternalLink          bool
+	ExternalLink               *string
 	ClearPrimaryImageURL       bool
 	PrimaryImageURL            *string
 	ClearAdditionalImagesUrls  bool
@@ -3393,14 +3324,11 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearPrimaryImageURL {
 		m.ClearPrimaryImageURL()
@@ -3482,7 +3410,7 @@ type CreateOrganizationTypeInput struct {
 	DisplayName     *string
 	Abbreviation    *string
 	Description     *string
-	ExternalLinks   []string
+	ExternalLink    *string
 	OrganizationIDs []int
 }
 
@@ -3509,8 +3437,8 @@ func (i *CreateOrganizationTypeInput) Mutate(m *OrganizationTypeMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.OrganizationIDs; len(v) > 0 {
 		m.AddOrganizationIDs(v...)
@@ -3536,9 +3464,8 @@ type UpdateOrganizationTypeInput struct {
 	Abbreviation          *string
 	ClearDescription      bool
 	Description           *string
-	ClearExternalLinks    bool
-	ExternalLinks         []string
-	AppendExternalLinks   []string
+	ClearExternalLink     bool
+	ExternalLink          *string
 	ClearOrganizations    bool
 	AddOrganizationIDs    []int
 	RemoveOrganizationIDs []int
@@ -3579,14 +3506,11 @@ func (i *UpdateOrganizationTypeInput) Mutate(m *OrganizationTypeMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearOrganizations {
 		m.ClearOrganizations()
@@ -3613,15 +3537,15 @@ func (c *OrganizationTypeUpdateOne) SetInput(i UpdateOrganizationTypeInput) *Org
 
 // CreatePeriodInput represents a mutation input for creating periods.
 type CreatePeriodInput struct {
-	CreatedAt     *time.Time
-	CreatedBy     *string
-	UpdatedAt     *time.Time
-	UpdatedBy     *string
-	DisplayName   *string
-	Abbreviation  *string
-	Description   *string
-	ExternalLinks []string
-	ArtifactIDs   []int
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
+	DisplayName  *string
+	Abbreviation *string
+	Description  *string
+	ExternalLink *string
+	ArtifactIDs  []int
 }
 
 // Mutate applies the CreatePeriodInput on the PeriodMutation builder.
@@ -3647,8 +3571,8 @@ func (i *CreatePeriodInput) Mutate(m *PeriodMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
@@ -3663,23 +3587,22 @@ func (c *PeriodCreate) SetInput(i CreatePeriodInput) *PeriodCreate {
 
 // UpdatePeriodInput represents a mutation input for updating periods.
 type UpdatePeriodInput struct {
-	ClearCreatedBy      bool
-	CreatedBy           *string
-	UpdatedAt           *time.Time
-	ClearUpdatedBy      bool
-	UpdatedBy           *string
-	ClearDisplayName    bool
-	DisplayName         *string
-	ClearAbbreviation   bool
-	Abbreviation        *string
-	ClearDescription    bool
-	Description         *string
-	ClearExternalLinks  bool
-	ExternalLinks       []string
-	AppendExternalLinks []string
-	ClearArtifacts      bool
-	AddArtifactIDs      []int
-	RemoveArtifactIDs   []int
+	ClearCreatedBy    bool
+	CreatedBy         *string
+	UpdatedAt         *time.Time
+	ClearUpdatedBy    bool
+	UpdatedBy         *string
+	ClearDisplayName  bool
+	DisplayName       *string
+	ClearAbbreviation bool
+	Abbreviation      *string
+	ClearDescription  bool
+	Description       *string
+	ClearExternalLink bool
+	ExternalLink      *string
+	ClearArtifacts    bool
+	AddArtifactIDs    []int
+	RemoveArtifactIDs []int
 }
 
 // Mutate applies the UpdatePeriodInput on the PeriodMutation builder.
@@ -3717,14 +3640,11 @@ func (i *UpdatePeriodInput) Mutate(m *PeriodMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
@@ -3761,7 +3681,7 @@ type CreatePersonInput struct {
 	DisplayName          *string
 	Abbreviation         *string
 	Description          *string
-	ExternalLinks        []string
+	ExternalLink         *string
 	PrimaryImageURL      *string
 	AdditionalImagesUrls []string
 	GivenName            *string
@@ -3812,8 +3732,8 @@ func (i *CreatePersonInput) Mutate(m *PersonMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.PrimaryImageURL; v != nil {
 		m.SetPrimaryImageURL(*v)
@@ -3890,9 +3810,8 @@ type UpdatePersonInput struct {
 	Abbreviation               *string
 	ClearDescription           bool
 	Description                *string
-	ClearExternalLinks         bool
-	ExternalLinks              []string
-	AppendExternalLinks        []string
+	ClearExternalLink          bool
+	ExternalLink               *string
 	ClearPrimaryImageURL       bool
 	PrimaryImageURL            *string
 	ClearAdditionalImagesUrls  bool
@@ -3991,14 +3910,11 @@ func (i *UpdatePersonInput) Mutate(m *PersonMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearPrimaryImageURL {
 		m.ClearPrimaryImageURL()
@@ -4127,15 +4043,15 @@ func (c *PersonUpdateOne) SetInput(i UpdatePersonInput) *PersonUpdateOne {
 
 // CreatePersonRoleInput represents a mutation input for creating personroles.
 type CreatePersonRoleInput struct {
-	CreatedAt     *time.Time
-	CreatedBy     *string
-	UpdatedAt     *time.Time
-	UpdatedBy     *string
-	DisplayName   *string
-	Abbreviation  *string
-	Description   *string
-	ExternalLinks []string
-	PersonIDs     []int
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
+	DisplayName  *string
+	Abbreviation *string
+	Description  *string
+	ExternalLink *string
+	PersonIDs    []int
 }
 
 // Mutate applies the CreatePersonRoleInput on the PersonRoleMutation builder.
@@ -4161,8 +4077,8 @@ func (i *CreatePersonRoleInput) Mutate(m *PersonRoleMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.PersonIDs; len(v) > 0 {
 		m.AddPersonIDs(v...)
@@ -4177,23 +4093,22 @@ func (c *PersonRoleCreate) SetInput(i CreatePersonRoleInput) *PersonRoleCreate {
 
 // UpdatePersonRoleInput represents a mutation input for updating personroles.
 type UpdatePersonRoleInput struct {
-	ClearCreatedBy      bool
-	CreatedBy           *string
-	UpdatedAt           *time.Time
-	ClearUpdatedBy      bool
-	UpdatedBy           *string
-	ClearDisplayName    bool
-	DisplayName         *string
-	ClearAbbreviation   bool
-	Abbreviation        *string
-	ClearDescription    bool
-	Description         *string
-	ClearExternalLinks  bool
-	ExternalLinks       []string
-	AppendExternalLinks []string
-	ClearPerson         bool
-	AddPersonIDs        []int
-	RemovePersonIDs     []int
+	ClearCreatedBy    bool
+	CreatedBy         *string
+	UpdatedAt         *time.Time
+	ClearUpdatedBy    bool
+	UpdatedBy         *string
+	ClearDisplayName  bool
+	DisplayName       *string
+	ClearAbbreviation bool
+	Abbreviation      *string
+	ClearDescription  bool
+	Description       *string
+	ClearExternalLink bool
+	ExternalLink      *string
+	ClearPerson       bool
+	AddPersonIDs      []int
+	RemovePersonIDs   []int
 }
 
 // Mutate applies the UpdatePersonRoleInput on the PersonRoleMutation builder.
@@ -4231,14 +4146,11 @@ func (i *UpdatePersonRoleInput) Mutate(m *PersonRoleMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearPerson {
 		m.ClearPerson()
@@ -4272,7 +4184,7 @@ type CreateProjectInput struct {
 	DisplayName   *string
 	Abbreviation  *string
 	Description   *string
-	ExternalLinks []string
+	ExternalLink  *string
 	BeginData     *time.Time
 	EndDate       *time.Time
 	ArtifactIDs   []int
@@ -4303,8 +4215,8 @@ func (i *CreateProjectInput) Mutate(m *ProjectMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.BeginData; v != nil {
 		m.SetBeginData(*v)
@@ -4331,32 +4243,31 @@ func (c *ProjectCreate) SetInput(i CreateProjectInput) *ProjectCreate {
 
 // UpdateProjectInput represents a mutation input for updating projects.
 type UpdateProjectInput struct {
-	ClearCreatedBy      bool
-	CreatedBy           *string
-	UpdatedAt           *time.Time
-	ClearUpdatedBy      bool
-	UpdatedBy           *string
-	ClearDisplayName    bool
-	DisplayName         *string
-	ClearAbbreviation   bool
-	Abbreviation        *string
-	ClearDescription    bool
-	Description         *string
-	ClearExternalLinks  bool
-	ExternalLinks       []string
-	AppendExternalLinks []string
-	ClearBeginData      bool
-	BeginData           *time.Time
-	ClearEndDate        bool
-	EndDate             *time.Time
-	ClearArtifacts      bool
-	AddArtifactIDs      []int
-	RemoveArtifactIDs   []int
-	ClearTeam           bool
-	AddTeamIDs          []int
-	RemoveTeamIDs       []int
-	ClearProjectType    bool
-	ProjectTypeID       *int
+	ClearCreatedBy    bool
+	CreatedBy         *string
+	UpdatedAt         *time.Time
+	ClearUpdatedBy    bool
+	UpdatedBy         *string
+	ClearDisplayName  bool
+	DisplayName       *string
+	ClearAbbreviation bool
+	Abbreviation      *string
+	ClearDescription  bool
+	Description       *string
+	ClearExternalLink bool
+	ExternalLink      *string
+	ClearBeginData    bool
+	BeginData         *time.Time
+	ClearEndDate      bool
+	EndDate           *time.Time
+	ClearArtifacts    bool
+	AddArtifactIDs    []int
+	RemoveArtifactIDs []int
+	ClearTeam         bool
+	AddTeamIDs        []int
+	RemoveTeamIDs     []int
+	ClearProjectType  bool
+	ProjectTypeID     *int
 }
 
 // Mutate applies the UpdateProjectInput on the ProjectMutation builder.
@@ -4394,14 +4305,11 @@ func (i *UpdateProjectInput) Mutate(m *ProjectMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearBeginData {
 		m.ClearBeginData()
@@ -4455,15 +4363,15 @@ func (c *ProjectUpdateOne) SetInput(i UpdateProjectInput) *ProjectUpdateOne {
 
 // CreateProjectTypeInput represents a mutation input for creating projecttypes.
 type CreateProjectTypeInput struct {
-	CreatedAt     *time.Time
-	CreatedBy     *string
-	UpdatedAt     *time.Time
-	UpdatedBy     *string
-	DisplayName   *string
-	Abbreviation  *string
-	Description   *string
-	ExternalLinks []string
-	ProjectIDs    []int
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
+	DisplayName  *string
+	Abbreviation *string
+	Description  *string
+	ExternalLink *string
+	ProjectIDs   []int
 }
 
 // Mutate applies the CreateProjectTypeInput on the ProjectTypeMutation builder.
@@ -4489,8 +4397,8 @@ func (i *CreateProjectTypeInput) Mutate(m *ProjectTypeMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.ProjectIDs; len(v) > 0 {
 		m.AddProjectIDs(v...)
@@ -4505,23 +4413,22 @@ func (c *ProjectTypeCreate) SetInput(i CreateProjectTypeInput) *ProjectTypeCreat
 
 // UpdateProjectTypeInput represents a mutation input for updating projecttypes.
 type UpdateProjectTypeInput struct {
-	ClearCreatedBy      bool
-	CreatedBy           *string
-	UpdatedAt           *time.Time
-	ClearUpdatedBy      bool
-	UpdatedBy           *string
-	ClearDisplayName    bool
-	DisplayName         *string
-	ClearAbbreviation   bool
-	Abbreviation        *string
-	ClearDescription    bool
-	Description         *string
-	ClearExternalLinks  bool
-	ExternalLinks       []string
-	AppendExternalLinks []string
-	ClearProjects       bool
-	AddProjectIDs       []int
-	RemoveProjectIDs    []int
+	ClearCreatedBy    bool
+	CreatedBy         *string
+	UpdatedAt         *time.Time
+	ClearUpdatedBy    bool
+	UpdatedBy         *string
+	ClearDisplayName  bool
+	DisplayName       *string
+	ClearAbbreviation bool
+	Abbreviation      *string
+	ClearDescription  bool
+	Description       *string
+	ClearExternalLink bool
+	ExternalLink      *string
+	ClearProjects     bool
+	AddProjectIDs     []int
+	RemoveProjectIDs  []int
 }
 
 // Mutate applies the UpdateProjectTypeInput on the ProjectTypeMutation builder.
@@ -4559,14 +4466,11 @@ func (i *UpdateProjectTypeInput) Mutate(m *ProjectTypeMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearProjects {
 		m.ClearProjects()
@@ -4600,7 +4504,7 @@ type CreateProtectedAreaInput struct {
 	DisplayName             *string
 	Abbreviation            *string
 	Description             *string
-	ExternalLinks           []string
+	ExternalLink            *string
 	Area                    *string
 	EstablishmentDate       *time.Time
 	ProtectedAreaPictureIDs []int
@@ -4630,8 +4534,8 @@ func (i *CreateProtectedAreaInput) Mutate(m *ProtectedAreaMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.Area; v != nil {
 		m.SetArea(*v)
@@ -4666,9 +4570,8 @@ type UpdateProtectedAreaInput struct {
 	Abbreviation                  *string
 	ClearDescription              bool
 	Description                   *string
-	ClearExternalLinks            bool
-	ExternalLinks                 []string
-	AppendExternalLinks           []string
+	ClearExternalLink             bool
+	ExternalLink                  *string
 	ClearArea                     bool
 	Area                          *string
 	ClearEstablishmentDate        bool
@@ -4715,14 +4618,11 @@ func (i *UpdateProtectedAreaInput) Mutate(m *ProtectedAreaMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearArea {
 		m.ClearArea()
@@ -4774,7 +4674,7 @@ type CreateProtectedAreaCategoryInput struct {
 	DisplayName      *string
 	Abbreviation     *string
 	Description      *string
-	ExternalLinks    []string
+	ExternalLink     *string
 	ProtectedAreaIDs []int
 }
 
@@ -4801,8 +4701,8 @@ func (i *CreateProtectedAreaCategoryInput) Mutate(m *ProtectedAreaCategoryMutati
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.ProtectedAreaIDs; len(v) > 0 {
 		m.AddProtectedAreaIDs(v...)
@@ -4828,9 +4728,8 @@ type UpdateProtectedAreaCategoryInput struct {
 	Abbreviation           *string
 	ClearDescription       bool
 	Description            *string
-	ClearExternalLinks     bool
-	ExternalLinks          []string
-	AppendExternalLinks    []string
+	ClearExternalLink      bool
+	ExternalLink           *string
 	ClearProtectedAreas    bool
 	AddProtectedAreaIDs    []int
 	RemoveProtectedAreaIDs []int
@@ -4871,14 +4770,11 @@ func (i *UpdateProtectedAreaCategoryInput) Mutate(m *ProtectedAreaCategoryMutati
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearProtectedAreas {
 		m.ClearProtectedAreas()
@@ -4912,7 +4808,7 @@ type CreateProtectedAreaPictureInput struct {
 	DisplayName          *string
 	Abbreviation         *string
 	Description          *string
-	ExternalLinks        []string
+	ExternalLink         *string
 	PrimaryImageURL      *string
 	AdditionalImagesUrls []string
 	ShootingDate         *time.Time
@@ -4946,8 +4842,8 @@ func (i *CreateProtectedAreaPictureInput) Mutate(m *ProtectedAreaPictureMutation
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.PrimaryImageURL; v != nil {
 		m.SetPrimaryImageURL(*v)
@@ -4994,9 +4890,8 @@ type UpdateProtectedAreaPictureInput struct {
 	Abbreviation               *string
 	ClearDescription           bool
 	Description                *string
-	ClearExternalLinks         bool
-	ExternalLinks              []string
-	AppendExternalLinks        []string
+	ClearExternalLink          bool
+	ExternalLink               *string
 	ClearPrimaryImageURL       bool
 	PrimaryImageURL            *string
 	ClearAdditionalImagesUrls  bool
@@ -5051,14 +4946,11 @@ func (i *UpdateProtectedAreaPictureInput) Mutate(m *ProtectedAreaPictureMutation
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearPrimaryImageURL {
 		m.ClearPrimaryImageURL()
@@ -5127,16 +5019,16 @@ func (c *ProtectedAreaPictureUpdateOne) SetInput(i UpdateProtectedAreaPictureInp
 
 // CreatePublicationInput represents a mutation input for creating publications.
 type CreatePublicationInput struct {
-	CreatedAt     *time.Time
-	CreatedBy     *string
-	UpdatedAt     *time.Time
-	UpdatedBy     *string
-	DisplayName   *string
-	Abbreviation  *string
-	Description   *string
-	ExternalLinks []string
-	ArtifactIDs   []int
-	AuthorIDs     []int
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
+	DisplayName  *string
+	Abbreviation *string
+	Description  *string
+	ExternalLink *string
+	ArtifactIDs  []int
+	AuthorIDs    []int
 }
 
 // Mutate applies the CreatePublicationInput on the PublicationMutation builder.
@@ -5162,8 +5054,8 @@ func (i *CreatePublicationInput) Mutate(m *PublicationMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
@@ -5181,26 +5073,25 @@ func (c *PublicationCreate) SetInput(i CreatePublicationInput) *PublicationCreat
 
 // UpdatePublicationInput represents a mutation input for updating publications.
 type UpdatePublicationInput struct {
-	ClearCreatedBy      bool
-	CreatedBy           *string
-	UpdatedAt           *time.Time
-	ClearUpdatedBy      bool
-	UpdatedBy           *string
-	ClearDisplayName    bool
-	DisplayName         *string
-	ClearAbbreviation   bool
-	Abbreviation        *string
-	ClearDescription    bool
-	Description         *string
-	ClearExternalLinks  bool
-	ExternalLinks       []string
-	AppendExternalLinks []string
-	ClearArtifacts      bool
-	AddArtifactIDs      []int
-	RemoveArtifactIDs   []int
-	ClearAuthors        bool
-	AddAuthorIDs        []int
-	RemoveAuthorIDs     []int
+	ClearCreatedBy    bool
+	CreatedBy         *string
+	UpdatedAt         *time.Time
+	ClearUpdatedBy    bool
+	UpdatedBy         *string
+	ClearDisplayName  bool
+	DisplayName       *string
+	ClearAbbreviation bool
+	Abbreviation      *string
+	ClearDescription  bool
+	Description       *string
+	ClearExternalLink bool
+	ExternalLink      *string
+	ClearArtifacts    bool
+	AddArtifactIDs    []int
+	RemoveArtifactIDs []int
+	ClearAuthors      bool
+	AddAuthorIDs      []int
+	RemoveAuthorIDs   []int
 }
 
 // Mutate applies the UpdatePublicationInput on the PublicationMutation builder.
@@ -5238,14 +5129,11 @@ func (i *UpdatePublicationInput) Mutate(m *PublicationMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
@@ -5281,15 +5169,15 @@ func (c *PublicationUpdateOne) SetInput(i UpdatePublicationInput) *PublicationUp
 
 // CreatePublisherInput represents a mutation input for creating publishers.
 type CreatePublisherInput struct {
-	CreatedAt     *time.Time
-	CreatedBy     *string
-	UpdatedAt     *time.Time
-	UpdatedBy     *string
-	DisplayName   *string
-	Abbreviation  *string
-	Description   *string
-	ExternalLinks []string
-	BookIDs       []int
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
+	DisplayName  *string
+	Abbreviation *string
+	Description  *string
+	ExternalLink *string
+	BookIDs      []int
 }
 
 // Mutate applies the CreatePublisherInput on the PublisherMutation builder.
@@ -5315,8 +5203,8 @@ func (i *CreatePublisherInput) Mutate(m *PublisherMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.BookIDs; len(v) > 0 {
 		m.AddBookIDs(v...)
@@ -5331,23 +5219,22 @@ func (c *PublisherCreate) SetInput(i CreatePublisherInput) *PublisherCreate {
 
 // UpdatePublisherInput represents a mutation input for updating publishers.
 type UpdatePublisherInput struct {
-	ClearCreatedBy      bool
-	CreatedBy           *string
-	UpdatedAt           *time.Time
-	ClearUpdatedBy      bool
-	UpdatedBy           *string
-	ClearDisplayName    bool
-	DisplayName         *string
-	ClearAbbreviation   bool
-	Abbreviation        *string
-	ClearDescription    bool
-	Description         *string
-	ClearExternalLinks  bool
-	ExternalLinks       []string
-	AppendExternalLinks []string
-	ClearBooks          bool
-	AddBookIDs          []int
-	RemoveBookIDs       []int
+	ClearCreatedBy    bool
+	CreatedBy         *string
+	UpdatedAt         *time.Time
+	ClearUpdatedBy    bool
+	UpdatedBy         *string
+	ClearDisplayName  bool
+	DisplayName       *string
+	ClearAbbreviation bool
+	Abbreviation      *string
+	ClearDescription  bool
+	Description       *string
+	ClearExternalLink bool
+	ExternalLink      *string
+	ClearBooks        bool
+	AddBookIDs        []int
+	RemoveBookIDs     []int
 }
 
 // Mutate applies the UpdatePublisherInput on the PublisherMutation builder.
@@ -5385,14 +5272,11 @@ func (i *UpdatePublisherInput) Mutate(m *PublisherMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearBooks {
 		m.ClearBooks()
@@ -5419,15 +5303,15 @@ func (c *PublisherUpdateOne) SetInput(i UpdatePublisherInput) *PublisherUpdateOn
 
 // CreateRegionInput represents a mutation input for creating regions.
 type CreateRegionInput struct {
-	CreatedAt     *time.Time
-	CreatedBy     *string
-	UpdatedAt     *time.Time
-	UpdatedBy     *string
-	DisplayName   *string
-	Abbreviation  *string
-	Description   *string
-	ExternalLinks []string
-	LocationID    *int
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
+	DisplayName  *string
+	Abbreviation *string
+	Description  *string
+	ExternalLink *string
+	LocationID   *int
 }
 
 // Mutate applies the CreateRegionInput on the RegionMutation builder.
@@ -5453,8 +5337,8 @@ func (i *CreateRegionInput) Mutate(m *RegionMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.LocationID; v != nil {
 		m.SetLocationID(*v)
@@ -5469,22 +5353,21 @@ func (c *RegionCreate) SetInput(i CreateRegionInput) *RegionCreate {
 
 // UpdateRegionInput represents a mutation input for updating regions.
 type UpdateRegionInput struct {
-	ClearCreatedBy      bool
-	CreatedBy           *string
-	UpdatedAt           *time.Time
-	ClearUpdatedBy      bool
-	UpdatedBy           *string
-	ClearDisplayName    bool
-	DisplayName         *string
-	ClearAbbreviation   bool
-	Abbreviation        *string
-	ClearDescription    bool
-	Description         *string
-	ClearExternalLinks  bool
-	ExternalLinks       []string
-	AppendExternalLinks []string
-	ClearLocation       bool
-	LocationID          *int
+	ClearCreatedBy    bool
+	CreatedBy         *string
+	UpdatedAt         *time.Time
+	ClearUpdatedBy    bool
+	UpdatedBy         *string
+	ClearDisplayName  bool
+	DisplayName       *string
+	ClearAbbreviation bool
+	Abbreviation      *string
+	ClearDescription  bool
+	Description       *string
+	ClearExternalLink bool
+	ExternalLink      *string
+	ClearLocation     bool
+	LocationID        *int
 }
 
 // Mutate applies the UpdateRegionInput on the RegionMutation builder.
@@ -5522,14 +5405,11 @@ func (i *UpdateRegionInput) Mutate(m *RegionMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearLocation {
 		m.ClearLocation()
@@ -5553,16 +5433,16 @@ func (c *RegionUpdateOne) SetInput(i UpdateRegionInput) *RegionUpdateOne {
 
 // CreateSetInput represents a mutation input for creating sets.
 type CreateSetInput struct {
-	CreatedAt     *time.Time
-	CreatedBy     *string
-	UpdatedAt     *time.Time
-	UpdatedBy     *string
-	DisplayName   *string
-	Abbreviation  *string
-	Description   *string
-	ExternalLinks []string
-	ArtifactIDs   []int
-	MonumentIDs   []int
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
+	DisplayName  *string
+	Abbreviation *string
+	Description  *string
+	ExternalLink *string
+	ArtifactIDs  []int
+	MonumentIDs  []int
 }
 
 // Mutate applies the CreateSetInput on the SetMutation builder.
@@ -5588,8 +5468,8 @@ func (i *CreateSetInput) Mutate(m *SetMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
@@ -5607,26 +5487,25 @@ func (c *SetCreate) SetInput(i CreateSetInput) *SetCreate {
 
 // UpdateSetInput represents a mutation input for updating sets.
 type UpdateSetInput struct {
-	ClearCreatedBy      bool
-	CreatedBy           *string
-	UpdatedAt           *time.Time
-	ClearUpdatedBy      bool
-	UpdatedBy           *string
-	ClearDisplayName    bool
-	DisplayName         *string
-	ClearAbbreviation   bool
-	Abbreviation        *string
-	ClearDescription    bool
-	Description         *string
-	ClearExternalLinks  bool
-	ExternalLinks       []string
-	AppendExternalLinks []string
-	ClearArtifacts      bool
-	AddArtifactIDs      []int
-	RemoveArtifactIDs   []int
-	ClearMonuments      bool
-	AddMonumentIDs      []int
-	RemoveMonumentIDs   []int
+	ClearCreatedBy    bool
+	CreatedBy         *string
+	UpdatedAt         *time.Time
+	ClearUpdatedBy    bool
+	UpdatedBy         *string
+	ClearDisplayName  bool
+	DisplayName       *string
+	ClearAbbreviation bool
+	Abbreviation      *string
+	ClearDescription  bool
+	Description       *string
+	ClearExternalLink bool
+	ExternalLink      *string
+	ClearArtifacts    bool
+	AddArtifactIDs    []int
+	RemoveArtifactIDs []int
+	ClearMonuments    bool
+	AddMonumentIDs    []int
+	RemoveMonumentIDs []int
 }
 
 // Mutate applies the UpdateSetInput on the SetMutation builder.
@@ -5664,14 +5543,11 @@ func (i *UpdateSetInput) Mutate(m *SetMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
@@ -5707,15 +5583,15 @@ func (c *SetUpdateOne) SetInput(i UpdateSetInput) *SetUpdateOne {
 
 // CreateSettlementInput represents a mutation input for creating settlements.
 type CreateSettlementInput struct {
-	CreatedAt     *time.Time
-	CreatedBy     *string
-	UpdatedAt     *time.Time
-	UpdatedBy     *string
-	DisplayName   *string
-	Abbreviation  *string
-	Description   *string
-	ExternalLinks []string
-	LocationID    *int
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
+	DisplayName  *string
+	Abbreviation *string
+	Description  *string
+	ExternalLink *string
+	LocationID   *int
 }
 
 // Mutate applies the CreateSettlementInput on the SettlementMutation builder.
@@ -5741,8 +5617,8 @@ func (i *CreateSettlementInput) Mutate(m *SettlementMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.LocationID; v != nil {
 		m.SetLocationID(*v)
@@ -5757,22 +5633,21 @@ func (c *SettlementCreate) SetInput(i CreateSettlementInput) *SettlementCreate {
 
 // UpdateSettlementInput represents a mutation input for updating settlements.
 type UpdateSettlementInput struct {
-	ClearCreatedBy      bool
-	CreatedBy           *string
-	UpdatedAt           *time.Time
-	ClearUpdatedBy      bool
-	UpdatedBy           *string
-	ClearDisplayName    bool
-	DisplayName         *string
-	ClearAbbreviation   bool
-	Abbreviation        *string
-	ClearDescription    bool
-	Description         *string
-	ClearExternalLinks  bool
-	ExternalLinks       []string
-	AppendExternalLinks []string
-	ClearLocation       bool
-	LocationID          *int
+	ClearCreatedBy    bool
+	CreatedBy         *string
+	UpdatedAt         *time.Time
+	ClearUpdatedBy    bool
+	UpdatedBy         *string
+	ClearDisplayName  bool
+	DisplayName       *string
+	ClearAbbreviation bool
+	Abbreviation      *string
+	ClearDescription  bool
+	Description       *string
+	ClearExternalLink bool
+	ExternalLink      *string
+	ClearLocation     bool
+	LocationID        *int
 }
 
 // Mutate applies the UpdateSettlementInput on the SettlementMutation builder.
@@ -5810,14 +5685,11 @@ func (i *UpdateSettlementInput) Mutate(m *SettlementMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearLocation {
 		m.ClearLocation()
@@ -5841,15 +5713,15 @@ func (c *SettlementUpdateOne) SetInput(i UpdateSettlementInput) *SettlementUpdat
 
 // CreateTechniqueInput represents a mutation input for creating techniques.
 type CreateTechniqueInput struct {
-	CreatedAt     *time.Time
-	CreatedBy     *string
-	UpdatedAt     *time.Time
-	UpdatedBy     *string
-	DisplayName   *string
-	Abbreviation  *string
-	Description   *string
-	ExternalLinks []string
-	ArtifactIDs   []int
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
+	DisplayName  *string
+	Abbreviation *string
+	Description  *string
+	ExternalLink *string
+	ArtifactIDs  []int
 }
 
 // Mutate applies the CreateTechniqueInput on the TechniqueMutation builder.
@@ -5875,8 +5747,8 @@ func (i *CreateTechniqueInput) Mutate(m *TechniqueMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
@@ -5891,23 +5763,22 @@ func (c *TechniqueCreate) SetInput(i CreateTechniqueInput) *TechniqueCreate {
 
 // UpdateTechniqueInput represents a mutation input for updating techniques.
 type UpdateTechniqueInput struct {
-	ClearCreatedBy      bool
-	CreatedBy           *string
-	UpdatedAt           *time.Time
-	ClearUpdatedBy      bool
-	UpdatedBy           *string
-	ClearDisplayName    bool
-	DisplayName         *string
-	ClearAbbreviation   bool
-	Abbreviation        *string
-	ClearDescription    bool
-	Description         *string
-	ClearExternalLinks  bool
-	ExternalLinks       []string
-	AppendExternalLinks []string
-	ClearArtifacts      bool
-	AddArtifactIDs      []int
-	RemoveArtifactIDs   []int
+	ClearCreatedBy    bool
+	CreatedBy         *string
+	UpdatedAt         *time.Time
+	ClearUpdatedBy    bool
+	UpdatedBy         *string
+	ClearDisplayName  bool
+	DisplayName       *string
+	ClearAbbreviation bool
+	Abbreviation      *string
+	ClearDescription  bool
+	Description       *string
+	ClearExternalLink bool
+	ExternalLink      *string
+	ClearArtifacts    bool
+	AddArtifactIDs    []int
+	RemoveArtifactIDs []int
 }
 
 // Mutate applies the UpdateTechniqueInput on the TechniqueMutation builder.
@@ -5945,14 +5816,11 @@ func (i *UpdateTechniqueInput) Mutate(m *TechniqueMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearExternalLinks {
-		m.ClearExternalLinks()
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
 	}
-	if v := i.ExternalLinks; v != nil {
-		m.SetExternalLinks(v)
-	}
-	if i.AppendExternalLinks != nil {
-		m.AppendExternalLinks(i.ExternalLinks)
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()

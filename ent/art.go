@@ -32,8 +32,8 @@ type Art struct {
 	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
-	// ExternalLinks holds the value of the "external_links" field.
-	ExternalLinks []string `json:"external_links,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// PrimaryImageURL holds the value of the "primary_image_url" field.
 	PrimaryImageURL string `json:"primary_image_url,omitempty"`
 	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
@@ -83,11 +83,11 @@ func (*Art) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case art.FieldExternalLinks, art.FieldAdditionalImagesUrls:
+		case art.FieldAdditionalImagesUrls:
 			values[i] = new([]byte)
 		case art.FieldID:
 			values[i] = new(sql.NullInt64)
-		case art.FieldCreatedBy, art.FieldUpdatedBy, art.FieldDisplayName, art.FieldAbbreviation, art.FieldDescription, art.FieldPrimaryImageURL:
+		case art.FieldCreatedBy, art.FieldUpdatedBy, art.FieldDisplayName, art.FieldAbbreviation, art.FieldDescription, art.FieldExternalLink, art.FieldPrimaryImageURL:
 			values[i] = new(sql.NullString)
 		case art.FieldCreatedAt, art.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -154,13 +154,11 @@ func (a *Art) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				a.Description = value.String
 			}
-		case art.FieldExternalLinks:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field external_links", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &a.ExternalLinks); err != nil {
-					return fmt.Errorf("unmarshal field external_links: %w", err)
-				}
+		case art.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				a.ExternalLink = value.String
 			}
 		case art.FieldPrimaryImageURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -243,8 +241,8 @@ func (a *Art) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(a.Description)
 	builder.WriteString(", ")
-	builder.WriteString("external_links=")
-	builder.WriteString(fmt.Sprintf("%v", a.ExternalLinks))
+	builder.WriteString("external_link=")
+	builder.WriteString(a.ExternalLink)
 	builder.WriteString(", ")
 	builder.WriteString("primary_image_url=")
 	builder.WriteString(a.PrimaryImageURL)

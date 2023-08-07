@@ -119,9 +119,17 @@ func (bgc *BookGenreCreate) SetNillableDescription(s *string) *BookGenreCreate {
 	return bgc
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (bgc *BookGenreCreate) SetExternalLinks(s []string) *BookGenreCreate {
-	bgc.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (bgc *BookGenreCreate) SetExternalLink(s string) *BookGenreCreate {
+	bgc.mutation.SetExternalLink(s)
+	return bgc
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (bgc *BookGenreCreate) SetNillableExternalLink(s *string) *BookGenreCreate {
+	if s != nil {
+		bgc.SetExternalLink(*s)
+	}
 	return bgc
 }
 
@@ -256,9 +264,9 @@ func (bgc *BookGenreCreate) createSpec() (*BookGenre, *sqlgraph.CreateSpec) {
 		_spec.SetField(bookgenre.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := bgc.mutation.ExternalLinks(); ok {
-		_spec.SetField(bookgenre.FieldExternalLinks, field.TypeJSON, value)
-		_node.ExternalLinks = value
+	if value, ok := bgc.mutation.ExternalLink(); ok {
+		_spec.SetField(bookgenre.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
 	}
 	if nodes := bgc.mutation.BooksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

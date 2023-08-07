@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/predicate"
 	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
@@ -136,21 +135,23 @@ func (pacu *ProtectedAreaCategoryUpdate) ClearDescription() *ProtectedAreaCatego
 	return pacu
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (pacu *ProtectedAreaCategoryUpdate) SetExternalLinks(s []string) *ProtectedAreaCategoryUpdate {
-	pacu.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (pacu *ProtectedAreaCategoryUpdate) SetExternalLink(s string) *ProtectedAreaCategoryUpdate {
+	pacu.mutation.SetExternalLink(s)
 	return pacu
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (pacu *ProtectedAreaCategoryUpdate) AppendExternalLinks(s []string) *ProtectedAreaCategoryUpdate {
-	pacu.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (pacu *ProtectedAreaCategoryUpdate) SetNillableExternalLink(s *string) *ProtectedAreaCategoryUpdate {
+	if s != nil {
+		pacu.SetExternalLink(*s)
+	}
 	return pacu
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (pacu *ProtectedAreaCategoryUpdate) ClearExternalLinks() *ProtectedAreaCategoryUpdate {
-	pacu.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (pacu *ProtectedAreaCategoryUpdate) ClearExternalLink() *ProtectedAreaCategoryUpdate {
+	pacu.mutation.ClearExternalLink()
 	return pacu
 }
 
@@ -279,16 +280,11 @@ func (pacu *ProtectedAreaCategoryUpdate) sqlSave(ctx context.Context) (n int, er
 	if pacu.mutation.DescriptionCleared() {
 		_spec.ClearField(protectedareacategory.FieldDescription, field.TypeString)
 	}
-	if value, ok := pacu.mutation.ExternalLinks(); ok {
-		_spec.SetField(protectedareacategory.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := pacu.mutation.ExternalLink(); ok {
+		_spec.SetField(protectedareacategory.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := pacu.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, protectedareacategory.FieldExternalLinks, value)
-		})
-	}
-	if pacu.mutation.ExternalLinksCleared() {
-		_spec.ClearField(protectedareacategory.FieldExternalLinks, field.TypeJSON)
+	if pacu.mutation.ExternalLinkCleared() {
+		_spec.ClearField(protectedareacategory.FieldExternalLink, field.TypeString)
 	}
 	if pacu.mutation.ProtectedAreasCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -461,21 +457,23 @@ func (pacuo *ProtectedAreaCategoryUpdateOne) ClearDescription() *ProtectedAreaCa
 	return pacuo
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (pacuo *ProtectedAreaCategoryUpdateOne) SetExternalLinks(s []string) *ProtectedAreaCategoryUpdateOne {
-	pacuo.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (pacuo *ProtectedAreaCategoryUpdateOne) SetExternalLink(s string) *ProtectedAreaCategoryUpdateOne {
+	pacuo.mutation.SetExternalLink(s)
 	return pacuo
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (pacuo *ProtectedAreaCategoryUpdateOne) AppendExternalLinks(s []string) *ProtectedAreaCategoryUpdateOne {
-	pacuo.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (pacuo *ProtectedAreaCategoryUpdateOne) SetNillableExternalLink(s *string) *ProtectedAreaCategoryUpdateOne {
+	if s != nil {
+		pacuo.SetExternalLink(*s)
+	}
 	return pacuo
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (pacuo *ProtectedAreaCategoryUpdateOne) ClearExternalLinks() *ProtectedAreaCategoryUpdateOne {
-	pacuo.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (pacuo *ProtectedAreaCategoryUpdateOne) ClearExternalLink() *ProtectedAreaCategoryUpdateOne {
+	pacuo.mutation.ClearExternalLink()
 	return pacuo
 }
 
@@ -634,16 +632,11 @@ func (pacuo *ProtectedAreaCategoryUpdateOne) sqlSave(ctx context.Context) (_node
 	if pacuo.mutation.DescriptionCleared() {
 		_spec.ClearField(protectedareacategory.FieldDescription, field.TypeString)
 	}
-	if value, ok := pacuo.mutation.ExternalLinks(); ok {
-		_spec.SetField(protectedareacategory.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := pacuo.mutation.ExternalLink(); ok {
+		_spec.SetField(protectedareacategory.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := pacuo.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, protectedareacategory.FieldExternalLinks, value)
-		})
-	}
-	if pacuo.mutation.ExternalLinksCleared() {
-		_spec.ClearField(protectedareacategory.FieldExternalLinks, field.TypeJSON)
+	if pacuo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(protectedareacategory.FieldExternalLink, field.TypeString)
 	}
 	if pacuo.mutation.ProtectedAreasCleared() {
 		edge := &sqlgraph.EdgeSpec{

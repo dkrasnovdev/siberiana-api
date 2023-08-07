@@ -119,9 +119,17 @@ func (pc *PublisherCreate) SetNillableDescription(s *string) *PublisherCreate {
 	return pc
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (pc *PublisherCreate) SetExternalLinks(s []string) *PublisherCreate {
-	pc.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (pc *PublisherCreate) SetExternalLink(s string) *PublisherCreate {
+	pc.mutation.SetExternalLink(s)
+	return pc
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (pc *PublisherCreate) SetNillableExternalLink(s *string) *PublisherCreate {
+	if s != nil {
+		pc.SetExternalLink(*s)
+	}
 	return pc
 }
 
@@ -256,9 +264,9 @@ func (pc *PublisherCreate) createSpec() (*Publisher, *sqlgraph.CreateSpec) {
 		_spec.SetField(publisher.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := pc.mutation.ExternalLinks(); ok {
-		_spec.SetField(publisher.FieldExternalLinks, field.TypeJSON, value)
-		_node.ExternalLinks = value
+	if value, ok := pc.mutation.ExternalLink(); ok {
+		_spec.SetField(publisher.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
 	}
 	if nodes := pc.mutation.BooksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

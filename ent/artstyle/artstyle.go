@@ -29,8 +29,8 @@ const (
 	FieldAbbreviation = "abbreviation"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
-	// FieldExternalLinks holds the string denoting the external_links field in the database.
-	FieldExternalLinks = "external_links"
+	// FieldExternalLink holds the string denoting the external_link field in the database.
+	FieldExternalLink = "external_link"
 	// EdgeArt holds the string denoting the art edge name in mutations.
 	EdgeArt = "art"
 	// Table holds the table name of the artstyle in the database.
@@ -52,7 +52,7 @@ var Columns = []string{
 	FieldDisplayName,
 	FieldAbbreviation,
 	FieldDescription,
-	FieldExternalLinks,
+	FieldExternalLink,
 }
 
 var (
@@ -128,6 +128,11 @@ func ByAbbreviation(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByExternalLink orders the results by the external_link field.
+func ByExternalLink(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalLink, opts...).ToFunc()
 }
 
 // ByArtCount orders the results by art count.

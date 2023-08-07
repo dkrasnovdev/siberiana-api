@@ -119,9 +119,17 @@ func (prc *PersonRoleCreate) SetNillableDescription(s *string) *PersonRoleCreate
 	return prc
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (prc *PersonRoleCreate) SetExternalLinks(s []string) *PersonRoleCreate {
-	prc.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (prc *PersonRoleCreate) SetExternalLink(s string) *PersonRoleCreate {
+	prc.mutation.SetExternalLink(s)
+	return prc
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (prc *PersonRoleCreate) SetNillableExternalLink(s *string) *PersonRoleCreate {
+	if s != nil {
+		prc.SetExternalLink(*s)
+	}
 	return prc
 }
 
@@ -256,9 +264,9 @@ func (prc *PersonRoleCreate) createSpec() (*PersonRole, *sqlgraph.CreateSpec) {
 		_spec.SetField(personrole.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := prc.mutation.ExternalLinks(); ok {
-		_spec.SetField(personrole.FieldExternalLinks, field.TypeJSON, value)
-		_node.ExternalLinks = value
+	if value, ok := prc.mutation.ExternalLink(); ok {
+		_spec.SetField(personrole.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
 	}
 	if nodes := prc.mutation.PersonIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

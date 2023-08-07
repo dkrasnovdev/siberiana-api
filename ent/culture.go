@@ -3,7 +3,6 @@
 package ent
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -32,8 +31,8 @@ type Culture struct {
 	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
-	// ExternalLinks holds the value of the "external_links" field.
-	ExternalLinks []string `json:"external_links,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CultureQuery when eager-loading is set.
 	Edges        CultureEdges `json:"edges"`
@@ -67,11 +66,9 @@ func (*Culture) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case culture.FieldExternalLinks:
-			values[i] = new([]byte)
 		case culture.FieldID:
 			values[i] = new(sql.NullInt64)
-		case culture.FieldCreatedBy, culture.FieldUpdatedBy, culture.FieldDisplayName, culture.FieldAbbreviation, culture.FieldDescription:
+		case culture.FieldCreatedBy, culture.FieldUpdatedBy, culture.FieldDisplayName, culture.FieldAbbreviation, culture.FieldDescription, culture.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case culture.FieldCreatedAt, culture.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -138,13 +135,11 @@ func (c *Culture) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.Description = value.String
 			}
-		case culture.FieldExternalLinks:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field external_links", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &c.ExternalLinks); err != nil {
-					return fmt.Errorf("unmarshal field external_links: %w", err)
-				}
+		case culture.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				c.ExternalLink = value.String
 			}
 		default:
 			c.selectValues.Set(columns[i], values[i])
@@ -208,8 +203,8 @@ func (c *Culture) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(c.Description)
 	builder.WriteString(", ")
-	builder.WriteString("external_links=")
-	builder.WriteString(fmt.Sprintf("%v", c.ExternalLinks))
+	builder.WriteString("external_link=")
+	builder.WriteString(c.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
 }

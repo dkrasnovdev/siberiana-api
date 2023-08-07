@@ -119,9 +119,17 @@ func (tc *TechniqueCreate) SetNillableDescription(s *string) *TechniqueCreate {
 	return tc
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (tc *TechniqueCreate) SetExternalLinks(s []string) *TechniqueCreate {
-	tc.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (tc *TechniqueCreate) SetExternalLink(s string) *TechniqueCreate {
+	tc.mutation.SetExternalLink(s)
+	return tc
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (tc *TechniqueCreate) SetNillableExternalLink(s *string) *TechniqueCreate {
+	if s != nil {
+		tc.SetExternalLink(*s)
+	}
 	return tc
 }
 
@@ -256,9 +264,9 @@ func (tc *TechniqueCreate) createSpec() (*Technique, *sqlgraph.CreateSpec) {
 		_spec.SetField(technique.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := tc.mutation.ExternalLinks(); ok {
-		_spec.SetField(technique.FieldExternalLinks, field.TypeJSON, value)
-		_node.ExternalLinks = value
+	if value, ok := tc.mutation.ExternalLink(); ok {
+		_spec.SetField(technique.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
 	}
 	if nodes := tc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

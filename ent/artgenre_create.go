@@ -119,9 +119,17 @@ func (agc *ArtGenreCreate) SetNillableDescription(s *string) *ArtGenreCreate {
 	return agc
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (agc *ArtGenreCreate) SetExternalLinks(s []string) *ArtGenreCreate {
-	agc.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (agc *ArtGenreCreate) SetExternalLink(s string) *ArtGenreCreate {
+	agc.mutation.SetExternalLink(s)
+	return agc
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (agc *ArtGenreCreate) SetNillableExternalLink(s *string) *ArtGenreCreate {
+	if s != nil {
+		agc.SetExternalLink(*s)
+	}
 	return agc
 }
 
@@ -256,9 +264,9 @@ func (agc *ArtGenreCreate) createSpec() (*ArtGenre, *sqlgraph.CreateSpec) {
 		_spec.SetField(artgenre.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := agc.mutation.ExternalLinks(); ok {
-		_spec.SetField(artgenre.FieldExternalLinks, field.TypeJSON, value)
-		_node.ExternalLinks = value
+	if value, ok := agc.mutation.ExternalLink(); ok {
+		_spec.SetField(artgenre.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
 	}
 	if nodes := agc.mutation.ArtIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

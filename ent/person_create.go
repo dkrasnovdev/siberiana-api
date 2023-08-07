@@ -152,9 +152,17 @@ func (pc *PersonCreate) SetNillableDescription(s *string) *PersonCreate {
 	return pc
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (pc *PersonCreate) SetExternalLinks(s []string) *PersonCreate {
-	pc.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (pc *PersonCreate) SetExternalLink(s string) *PersonCreate {
+	pc.mutation.SetExternalLink(s)
+	return pc
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (pc *PersonCreate) SetNillableExternalLink(s *string) *PersonCreate {
+	if s != nil {
+		pc.SetExternalLink(*s)
+	}
 	return pc
 }
 
@@ -522,9 +530,9 @@ func (pc *PersonCreate) createSpec() (*Person, *sqlgraph.CreateSpec) {
 		_spec.SetField(person.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := pc.mutation.ExternalLinks(); ok {
-		_spec.SetField(person.FieldExternalLinks, field.TypeJSON, value)
-		_node.ExternalLinks = value
+	if value, ok := pc.mutation.ExternalLink(); ok {
+		_spec.SetField(person.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
 	}
 	if value, ok := pc.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(person.FieldPrimaryImageURL, field.TypeString, value)

@@ -119,9 +119,17 @@ func (asc *ArtStyleCreate) SetNillableDescription(s *string) *ArtStyleCreate {
 	return asc
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (asc *ArtStyleCreate) SetExternalLinks(s []string) *ArtStyleCreate {
-	asc.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (asc *ArtStyleCreate) SetExternalLink(s string) *ArtStyleCreate {
+	asc.mutation.SetExternalLink(s)
+	return asc
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (asc *ArtStyleCreate) SetNillableExternalLink(s *string) *ArtStyleCreate {
+	if s != nil {
+		asc.SetExternalLink(*s)
+	}
 	return asc
 }
 
@@ -256,9 +264,9 @@ func (asc *ArtStyleCreate) createSpec() (*ArtStyle, *sqlgraph.CreateSpec) {
 		_spec.SetField(artstyle.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := asc.mutation.ExternalLinks(); ok {
-		_spec.SetField(artstyle.FieldExternalLinks, field.TypeJSON, value)
-		_node.ExternalLinks = value
+	if value, ok := asc.mutation.ExternalLink(); ok {
+		_spec.SetField(artstyle.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
 	}
 	if nodes := asc.mutation.ArtIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

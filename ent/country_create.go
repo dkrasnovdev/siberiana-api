@@ -119,9 +119,17 @@ func (cc *CountryCreate) SetNillableDescription(s *string) *CountryCreate {
 	return cc
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (cc *CountryCreate) SetExternalLinks(s []string) *CountryCreate {
-	cc.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (cc *CountryCreate) SetExternalLink(s string) *CountryCreate {
+	cc.mutation.SetExternalLink(s)
+	return cc
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (cc *CountryCreate) SetNillableExternalLink(s *string) *CountryCreate {
+	if s != nil {
+		cc.SetExternalLink(*s)
+	}
 	return cc
 }
 
@@ -260,9 +268,9 @@ func (cc *CountryCreate) createSpec() (*Country, *sqlgraph.CreateSpec) {
 		_spec.SetField(country.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := cc.mutation.ExternalLinks(); ok {
-		_spec.SetField(country.FieldExternalLinks, field.TypeJSON, value)
-		_node.ExternalLinks = value
+	if value, ok := cc.mutation.ExternalLink(); ok {
+		_spec.SetField(country.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
 	}
 	if nodes := cc.mutation.LocationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

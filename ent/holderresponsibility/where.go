@@ -90,6 +90,11 @@ func Description(v string) predicate.HolderResponsibility {
 	return predicate.HolderResponsibility(sql.FieldEQ(FieldDescription, v))
 }
 
+// ExternalLink applies equality check predicate on the "external_link" field. It's identical to ExternalLinkEQ.
+func ExternalLink(v string) predicate.HolderResponsibility {
+	return predicate.HolderResponsibility(sql.FieldEQ(FieldExternalLink, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.HolderResponsibility {
 	return predicate.HolderResponsibility(sql.FieldEQ(FieldCreatedAt, v))
@@ -545,14 +550,79 @@ func DescriptionContainsFold(v string) predicate.HolderResponsibility {
 	return predicate.HolderResponsibility(sql.FieldContainsFold(FieldDescription, v))
 }
 
-// ExternalLinksIsNil applies the IsNil predicate on the "external_links" field.
-func ExternalLinksIsNil() predicate.HolderResponsibility {
-	return predicate.HolderResponsibility(sql.FieldIsNull(FieldExternalLinks))
+// ExternalLinkEQ applies the EQ predicate on the "external_link" field.
+func ExternalLinkEQ(v string) predicate.HolderResponsibility {
+	return predicate.HolderResponsibility(sql.FieldEQ(FieldExternalLink, v))
 }
 
-// ExternalLinksNotNil applies the NotNil predicate on the "external_links" field.
-func ExternalLinksNotNil() predicate.HolderResponsibility {
-	return predicate.HolderResponsibility(sql.FieldNotNull(FieldExternalLinks))
+// ExternalLinkNEQ applies the NEQ predicate on the "external_link" field.
+func ExternalLinkNEQ(v string) predicate.HolderResponsibility {
+	return predicate.HolderResponsibility(sql.FieldNEQ(FieldExternalLink, v))
+}
+
+// ExternalLinkIn applies the In predicate on the "external_link" field.
+func ExternalLinkIn(vs ...string) predicate.HolderResponsibility {
+	return predicate.HolderResponsibility(sql.FieldIn(FieldExternalLink, vs...))
+}
+
+// ExternalLinkNotIn applies the NotIn predicate on the "external_link" field.
+func ExternalLinkNotIn(vs ...string) predicate.HolderResponsibility {
+	return predicate.HolderResponsibility(sql.FieldNotIn(FieldExternalLink, vs...))
+}
+
+// ExternalLinkGT applies the GT predicate on the "external_link" field.
+func ExternalLinkGT(v string) predicate.HolderResponsibility {
+	return predicate.HolderResponsibility(sql.FieldGT(FieldExternalLink, v))
+}
+
+// ExternalLinkGTE applies the GTE predicate on the "external_link" field.
+func ExternalLinkGTE(v string) predicate.HolderResponsibility {
+	return predicate.HolderResponsibility(sql.FieldGTE(FieldExternalLink, v))
+}
+
+// ExternalLinkLT applies the LT predicate on the "external_link" field.
+func ExternalLinkLT(v string) predicate.HolderResponsibility {
+	return predicate.HolderResponsibility(sql.FieldLT(FieldExternalLink, v))
+}
+
+// ExternalLinkLTE applies the LTE predicate on the "external_link" field.
+func ExternalLinkLTE(v string) predicate.HolderResponsibility {
+	return predicate.HolderResponsibility(sql.FieldLTE(FieldExternalLink, v))
+}
+
+// ExternalLinkContains applies the Contains predicate on the "external_link" field.
+func ExternalLinkContains(v string) predicate.HolderResponsibility {
+	return predicate.HolderResponsibility(sql.FieldContains(FieldExternalLink, v))
+}
+
+// ExternalLinkHasPrefix applies the HasPrefix predicate on the "external_link" field.
+func ExternalLinkHasPrefix(v string) predicate.HolderResponsibility {
+	return predicate.HolderResponsibility(sql.FieldHasPrefix(FieldExternalLink, v))
+}
+
+// ExternalLinkHasSuffix applies the HasSuffix predicate on the "external_link" field.
+func ExternalLinkHasSuffix(v string) predicate.HolderResponsibility {
+	return predicate.HolderResponsibility(sql.FieldHasSuffix(FieldExternalLink, v))
+}
+
+// ExternalLinkIsNil applies the IsNil predicate on the "external_link" field.
+func ExternalLinkIsNil() predicate.HolderResponsibility {
+	return predicate.HolderResponsibility(sql.FieldIsNull(FieldExternalLink))
+}
+
+// ExternalLinkNotNil applies the NotNil predicate on the "external_link" field.
+func ExternalLinkNotNil() predicate.HolderResponsibility {
+	return predicate.HolderResponsibility(sql.FieldNotNull(FieldExternalLink))
+}
+
+// ExternalLinkEqualFold applies the EqualFold predicate on the "external_link" field.
+func ExternalLinkEqualFold(v string) predicate.HolderResponsibility {
+	return predicate.HolderResponsibility(sql.FieldEqualFold(FieldExternalLink, v))
+}
+
+// ExternalLinkContainsFold applies the ContainsFold predicate on the "external_link" field.
+func ExternalLinkContainsFold(v string) predicate.HolderResponsibility {
+	return predicate.HolderResponsibility(sql.FieldContainsFold(FieldExternalLink, v))
 }
 
 // HasHolder applies the HasEdge predicate on the "holder" edge.

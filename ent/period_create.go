@@ -119,9 +119,17 @@ func (pc *PeriodCreate) SetNillableDescription(s *string) *PeriodCreate {
 	return pc
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (pc *PeriodCreate) SetExternalLinks(s []string) *PeriodCreate {
-	pc.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (pc *PeriodCreate) SetExternalLink(s string) *PeriodCreate {
+	pc.mutation.SetExternalLink(s)
+	return pc
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (pc *PeriodCreate) SetNillableExternalLink(s *string) *PeriodCreate {
+	if s != nil {
+		pc.SetExternalLink(*s)
+	}
 	return pc
 }
 
@@ -256,9 +264,9 @@ func (pc *PeriodCreate) createSpec() (*Period, *sqlgraph.CreateSpec) {
 		_spec.SetField(period.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := pc.mutation.ExternalLinks(); ok {
-		_spec.SetField(period.FieldExternalLinks, field.TypeJSON, value)
-		_node.ExternalLinks = value
+	if value, ok := pc.mutation.ExternalLink(); ok {
+		_spec.SetField(period.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
 	}
 	if nodes := pc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

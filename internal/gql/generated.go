@@ -58,7 +58,7 @@ type ComplexityRoot struct {
 		CreatedBy            func(childComplexity int) int
 		Description          func(childComplexity int) int
 		DisplayName          func(childComplexity int) int
-		ExternalLinks        func(childComplexity int) int
+		ExternalLink         func(childComplexity int) int
 		ID                   func(childComplexity int) int
 		PrimaryImageURL      func(childComplexity int) int
 		UpdatedAt            func(childComplexity int) int
@@ -77,16 +77,16 @@ type ComplexityRoot struct {
 	}
 
 	ArtGenre struct {
-		Abbreviation  func(childComplexity int) int
-		Art           func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation func(childComplexity int) int
+		Art          func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		Description  func(childComplexity int) int
+		DisplayName  func(childComplexity int) int
+		ExternalLink func(childComplexity int) int
+		ID           func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
 	}
 
 	ArtGenreConnection struct {
@@ -101,16 +101,16 @@ type ComplexityRoot struct {
 	}
 
 	ArtStyle struct {
-		Abbreviation  func(childComplexity int) int
-		Art           func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation func(childComplexity int) int
+		Art          func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		Description  func(childComplexity int) int
+		DisplayName  func(childComplexity int) int
+		ExternalLink func(childComplexity int) int
+		ID           func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
 	}
 
 	ArtStyleConnection struct {
@@ -140,7 +140,7 @@ type ComplexityRoot struct {
 		Description          func(childComplexity int) int
 		Dimensions           func(childComplexity int) int
 		DisplayName          func(childComplexity int) int
-		ExternalLinks        func(childComplexity int) int
+		ExternalLink         func(childComplexity int) int
 		Holders              func(childComplexity int) int
 		ID                   func(childComplexity int) int
 		License              func(childComplexity int) int
@@ -206,7 +206,7 @@ type ComplexityRoot struct {
 		CreatedBy            func(childComplexity int) int
 		Description          func(childComplexity int) int
 		DisplayName          func(childComplexity int) int
-		ExternalLinks        func(childComplexity int) int
+		ExternalLink         func(childComplexity int) int
 		Files                func(childComplexity int) int
 		Holders              func(childComplexity int) int
 		ID                   func(childComplexity int) int
@@ -231,16 +231,16 @@ type ComplexityRoot struct {
 	}
 
 	BookGenre struct {
-		Abbreviation  func(childComplexity int) int
-		Books         func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation func(childComplexity int) int
+		Books        func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		Description  func(childComplexity int) int
+		DisplayName  func(childComplexity int) int
+		ExternalLink func(childComplexity int) int
+		ID           func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
 	}
 
 	BookGenreConnection struct {
@@ -255,16 +255,16 @@ type ComplexityRoot struct {
 	}
 
 	Category struct {
-		Abbreviation  func(childComplexity int) int
-		Collections   func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation func(childComplexity int) int
+		Collections  func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		Description  func(childComplexity int) int
+		DisplayName  func(childComplexity int) int
+		ExternalLink func(childComplexity int) int
+		ID           func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
 	}
 
 	CategoryConnection struct {
@@ -287,7 +287,7 @@ type ComplexityRoot struct {
 		CreatedBy             func(childComplexity int) int
 		Description           func(childComplexity int) int
 		DisplayName           func(childComplexity int) int
-		ExternalLinks         func(childComplexity int) int
+		ExternalLink          func(childComplexity int) int
 		ID                    func(childComplexity int) int
 		People                func(childComplexity int) int
 		ProtectedAreaPictures func(childComplexity int) int
@@ -307,16 +307,16 @@ type ComplexityRoot struct {
 	}
 
 	Country struct {
-		Abbreviation  func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Location      func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		Description  func(childComplexity int) int
+		DisplayName  func(childComplexity int) int
+		ExternalLink func(childComplexity int) int
+		ID           func(childComplexity int) int
+		Location     func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
 	}
 
 	CountryConnection struct {
@@ -331,16 +331,16 @@ type ComplexityRoot struct {
 	}
 
 	Culture struct {
-		Abbreviation  func(childComplexity int) int
-		Artifacts     func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation func(childComplexity int) int
+		Artifacts    func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		Description  func(childComplexity int) int
+		DisplayName  func(childComplexity int) int
+		ExternalLink func(childComplexity int) int
+		ID           func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
 	}
 
 	CultureConnection struct {
@@ -355,16 +355,16 @@ type ComplexityRoot struct {
 	}
 
 	District struct {
-		Abbreviation  func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Location      func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		Description  func(childComplexity int) int
+		DisplayName  func(childComplexity int) int
+		ExternalLink func(childComplexity int) int
+		ID           func(childComplexity int) int
+		Location     func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
 	}
 
 	DistrictConnection struct {
@@ -405,16 +405,16 @@ type ComplexityRoot struct {
 	}
 
 	HolderResponsibility struct {
-		Abbreviation  func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		Holder        func(childComplexity int) int
-		ID            func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		Description  func(childComplexity int) int
+		DisplayName  func(childComplexity int) int
+		ExternalLink func(childComplexity int) int
+		Holder       func(childComplexity int) int
+		ID           func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
 	}
 
 	HolderResponsibilityConnection struct {
@@ -440,7 +440,7 @@ type ComplexityRoot struct {
 		CreatedBy             func(childComplexity int) int
 		Description           func(childComplexity int) int
 		DisplayName           func(childComplexity int) int
-		ExternalLinks         func(childComplexity int) int
+		ExternalLink          func(childComplexity int) int
 		ID                    func(childComplexity int) int
 		ProtectedAreaPictures func(childComplexity int) int
 		UpdatedAt             func(childComplexity int) int
@@ -468,7 +468,7 @@ type ComplexityRoot struct {
 		Description           func(childComplexity int) int
 		DisplayName           func(childComplexity int) int
 		District              func(childComplexity int) int
-		ExternalLinks         func(childComplexity int) int
+		ExternalLink          func(childComplexity int) int
 		Geometry              func(childComplexity int) int
 		ID                    func(childComplexity int) int
 		ProtectedAreaPictures func(childComplexity int) int
@@ -490,16 +490,16 @@ type ComplexityRoot struct {
 	}
 
 	Medium struct {
-		Abbreviation  func(childComplexity int) int
-		Artifacts     func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation func(childComplexity int) int
+		Artifacts    func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		Description  func(childComplexity int) int
+		DisplayName  func(childComplexity int) int
+		ExternalLink func(childComplexity int) int
+		ID           func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
 	}
 
 	MediumConnection struct {
@@ -514,16 +514,16 @@ type ComplexityRoot struct {
 	}
 
 	Model struct {
-		Abbreviation  func(childComplexity int) int
-		Artifacts     func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation func(childComplexity int) int
+		Artifacts    func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		Description  func(childComplexity int) int
+		DisplayName  func(childComplexity int) int
+		ExternalLink func(childComplexity int) int
+		ID           func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
 	}
 
 	ModelConnection struct {
@@ -538,17 +538,17 @@ type ComplexityRoot struct {
 	}
 
 	Monument struct {
-		Abbreviation  func(childComplexity int) int
-		Artifacts     func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Sets          func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation func(childComplexity int) int
+		Artifacts    func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		Description  func(childComplexity int) int
+		DisplayName  func(childComplexity int) int
+		ExternalLink func(childComplexity int) int
+		ID           func(childComplexity int) int
+		Sets         func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
 	}
 
 	MonumentConnection struct {
@@ -643,7 +643,7 @@ type ComplexityRoot struct {
 		Description           func(childComplexity int) int
 		DisplayName           func(childComplexity int) int
 		Emails                func(childComplexity int) int
-		ExternalLinks         func(childComplexity int) int
+		ExternalLink          func(childComplexity int) int
 		Holder                func(childComplexity int) int
 		ID                    func(childComplexity int) int
 		IsInAConsortium       func(childComplexity int) int
@@ -673,7 +673,7 @@ type ComplexityRoot struct {
 		CreatedBy     func(childComplexity int) int
 		Description   func(childComplexity int) int
 		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
+		ExternalLink  func(childComplexity int) int
 		ID            func(childComplexity int) int
 		Organizations func(childComplexity int) int
 		UpdatedAt     func(childComplexity int) int
@@ -699,16 +699,16 @@ type ComplexityRoot struct {
 	}
 
 	Period struct {
-		Abbreviation  func(childComplexity int) int
-		Artifacts     func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation func(childComplexity int) int
+		Artifacts    func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		Description  func(childComplexity int) int
+		DisplayName  func(childComplexity int) int
+		ExternalLink func(childComplexity int) int
+		ID           func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
 	}
 
 	PeriodConnection struct {
@@ -737,7 +737,7 @@ type ComplexityRoot struct {
 		DisplayName          func(childComplexity int) int
 		Emails               func(childComplexity int) int
 		EndDate              func(childComplexity int) int
-		ExternalLinks        func(childComplexity int) int
+		ExternalLink         func(childComplexity int) int
 		FamilyName           func(childComplexity int) int
 		Gender               func(childComplexity int) int
 		GivenName            func(childComplexity int) int
@@ -765,16 +765,16 @@ type ComplexityRoot struct {
 	}
 
 	PersonRole struct {
-		Abbreviation  func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Person        func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		Description  func(childComplexity int) int
+		DisplayName  func(childComplexity int) int
+		ExternalLink func(childComplexity int) int
+		ID           func(childComplexity int) int
+		Person       func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
 	}
 
 	PersonRoleConnection struct {
@@ -789,20 +789,20 @@ type ComplexityRoot struct {
 	}
 
 	Project struct {
-		Abbreviation  func(childComplexity int) int
-		Artifacts     func(childComplexity int) int
-		BeginData     func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		EndDate       func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		ProjectType   func(childComplexity int) int
-		Team          func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation func(childComplexity int) int
+		Artifacts    func(childComplexity int) int
+		BeginData    func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		Description  func(childComplexity int) int
+		DisplayName  func(childComplexity int) int
+		EndDate      func(childComplexity int) int
+		ExternalLink func(childComplexity int) int
+		ID           func(childComplexity int) int
+		ProjectType  func(childComplexity int) int
+		Team         func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
 	}
 
 	ProjectConnection struct {
@@ -817,16 +817,16 @@ type ComplexityRoot struct {
 	}
 
 	ProjectType struct {
-		Abbreviation  func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Projects      func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		Description  func(childComplexity int) int
+		DisplayName  func(childComplexity int) int
+		ExternalLink func(childComplexity int) int
+		ID           func(childComplexity int) int
+		Projects     func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
 	}
 
 	ProjectTypeConnection struct {
@@ -848,7 +848,7 @@ type ComplexityRoot struct {
 		Description           func(childComplexity int) int
 		DisplayName           func(childComplexity int) int
 		EstablishmentDate     func(childComplexity int) int
-		ExternalLinks         func(childComplexity int) int
+		ExternalLink          func(childComplexity int) int
 		ID                    func(childComplexity int) int
 		ProtectedAreaCategory func(childComplexity int) int
 		ProtectedAreaPictures func(childComplexity int) int
@@ -862,7 +862,7 @@ type ComplexityRoot struct {
 		CreatedBy      func(childComplexity int) int
 		Description    func(childComplexity int) int
 		DisplayName    func(childComplexity int) int
-		ExternalLinks  func(childComplexity int) int
+		ExternalLink   func(childComplexity int) int
 		ID             func(childComplexity int) int
 		ProtectedAreas func(childComplexity int) int
 		UpdatedAt      func(childComplexity int) int
@@ -899,7 +899,7 @@ type ComplexityRoot struct {
 		CreatedBy            func(childComplexity int) int
 		Description          func(childComplexity int) int
 		DisplayName          func(childComplexity int) int
-		ExternalLinks        func(childComplexity int) int
+		ExternalLink         func(childComplexity int) int
 		Geometry             func(childComplexity int) int
 		ID                   func(childComplexity int) int
 		License              func(childComplexity int) int
@@ -923,17 +923,17 @@ type ComplexityRoot struct {
 	}
 
 	Publication struct {
-		Abbreviation  func(childComplexity int) int
-		Artifacts     func(childComplexity int) int
-		Authors       func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation func(childComplexity int) int
+		Artifacts    func(childComplexity int) int
+		Authors      func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		Description  func(childComplexity int) int
+		DisplayName  func(childComplexity int) int
+		ExternalLink func(childComplexity int) int
+		ID           func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
 	}
 
 	PublicationConnection struct {
@@ -948,16 +948,16 @@ type ComplexityRoot struct {
 	}
 
 	Publisher struct {
-		Abbreviation  func(childComplexity int) int
-		Books         func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation func(childComplexity int) int
+		Books        func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		Description  func(childComplexity int) int
+		DisplayName  func(childComplexity int) int
+		ExternalLink func(childComplexity int) int
+		ID           func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
 	}
 
 	PublisherConnection struct {
@@ -1012,16 +1012,16 @@ type ComplexityRoot struct {
 	}
 
 	Region struct {
-		Abbreviation  func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Location      func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		Description  func(childComplexity int) int
+		DisplayName  func(childComplexity int) int
+		ExternalLink func(childComplexity int) int
+		ID           func(childComplexity int) int
+		Location     func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
 	}
 
 	RegionConnection struct {
@@ -1036,17 +1036,17 @@ type ComplexityRoot struct {
 	}
 
 	Set struct {
-		Abbreviation  func(childComplexity int) int
-		Artifacts     func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Monuments     func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation func(childComplexity int) int
+		Artifacts    func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		Description  func(childComplexity int) int
+		DisplayName  func(childComplexity int) int
+		ExternalLink func(childComplexity int) int
+		ID           func(childComplexity int) int
+		Monuments    func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
 	}
 
 	SetConnection struct {
@@ -1061,16 +1061,16 @@ type ComplexityRoot struct {
 	}
 
 	Settlement struct {
-		Abbreviation  func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Location      func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		Description  func(childComplexity int) int
+		DisplayName  func(childComplexity int) int
+		ExternalLink func(childComplexity int) int
+		ID           func(childComplexity int) int
+		Location     func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
 	}
 
 	SettlementConnection struct {
@@ -1085,16 +1085,16 @@ type ComplexityRoot struct {
 	}
 
 	Technique struct {
-		Abbreviation  func(childComplexity int) int
-		Artifacts     func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		ExternalLinks func(childComplexity int) int
-		ID            func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Abbreviation func(childComplexity int) int
+		Artifacts    func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		Description  func(childComplexity int) int
+		DisplayName  func(childComplexity int) int
+		ExternalLink func(childComplexity int) int
+		ID           func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
 	}
 
 	TechniqueConnection struct {
@@ -1290,12 +1290,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Art.DisplayName(childComplexity), true
 
-	case "Art.externalLinks":
-		if e.complexity.Art.ExternalLinks == nil {
+	case "Art.externalLink":
+		if e.complexity.Art.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.Art.ExternalLinks(childComplexity), true
+		return e.complexity.Art.ExternalLink(childComplexity), true
 
 	case "Art.id":
 		if e.complexity.Art.ID == nil {
@@ -1402,12 +1402,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ArtGenre.DisplayName(childComplexity), true
 
-	case "ArtGenre.externalLinks":
-		if e.complexity.ArtGenre.ExternalLinks == nil {
+	case "ArtGenre.externalLink":
+		if e.complexity.ArtGenre.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.ArtGenre.ExternalLinks(childComplexity), true
+		return e.complexity.ArtGenre.ExternalLink(childComplexity), true
 
 	case "ArtGenre.id":
 		if e.complexity.ArtGenre.ID == nil {
@@ -1507,12 +1507,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ArtStyle.DisplayName(childComplexity), true
 
-	case "ArtStyle.externalLinks":
-		if e.complexity.ArtStyle.ExternalLinks == nil {
+	case "ArtStyle.externalLink":
+		if e.complexity.ArtStyle.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.ArtStyle.ExternalLinks(childComplexity), true
+		return e.complexity.ArtStyle.ExternalLink(childComplexity), true
 
 	case "ArtStyle.id":
 		if e.complexity.ArtStyle.ID == nil {
@@ -1675,12 +1675,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Artifact.DisplayName(childComplexity), true
 
-	case "Artifact.externalLinks":
-		if e.complexity.Artifact.ExternalLinks == nil {
+	case "Artifact.externalLink":
+		if e.complexity.Artifact.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.Artifact.ExternalLinks(childComplexity), true
+		return e.complexity.Artifact.ExternalLink(childComplexity), true
 
 	case "Artifact.holders":
 		if e.complexity.Artifact.Holders == nil {
@@ -2011,12 +2011,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Book.DisplayName(childComplexity), true
 
-	case "Book.externalLinks":
-		if e.complexity.Book.ExternalLinks == nil {
+	case "Book.externalLink":
+		if e.complexity.Book.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.Book.ExternalLinks(childComplexity), true
+		return e.complexity.Book.ExternalLink(childComplexity), true
 
 	case "Book.files":
 		if e.complexity.Book.Files == nil {
@@ -2165,12 +2165,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.BookGenre.DisplayName(childComplexity), true
 
-	case "BookGenre.externalLinks":
-		if e.complexity.BookGenre.ExternalLinks == nil {
+	case "BookGenre.externalLink":
+		if e.complexity.BookGenre.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.BookGenre.ExternalLinks(childComplexity), true
+		return e.complexity.BookGenre.ExternalLink(childComplexity), true
 
 	case "BookGenre.id":
 		if e.complexity.BookGenre.ID == nil {
@@ -2270,12 +2270,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Category.DisplayName(childComplexity), true
 
-	case "Category.externalLinks":
-		if e.complexity.Category.ExternalLinks == nil {
+	case "Category.externalLink":
+		if e.complexity.Category.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.Category.ExternalLinks(childComplexity), true
+		return e.complexity.Category.ExternalLink(childComplexity), true
 
 	case "Category.id":
 		if e.complexity.Category.ID == nil {
@@ -2389,12 +2389,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Collection.DisplayName(childComplexity), true
 
-	case "Collection.externalLinks":
-		if e.complexity.Collection.ExternalLinks == nil {
+	case "Collection.externalLink":
+		if e.complexity.Collection.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.Collection.ExternalLinks(childComplexity), true
+		return e.complexity.Collection.ExternalLink(childComplexity), true
 
 	case "Collection.id":
 		if e.complexity.Collection.ID == nil {
@@ -2501,12 +2501,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Country.DisplayName(childComplexity), true
 
-	case "Country.externalLinks":
-		if e.complexity.Country.ExternalLinks == nil {
+	case "Country.externalLink":
+		if e.complexity.Country.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.Country.ExternalLinks(childComplexity), true
+		return e.complexity.Country.ExternalLink(childComplexity), true
 
 	case "Country.id":
 		if e.complexity.Country.ID == nil {
@@ -2613,12 +2613,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Culture.DisplayName(childComplexity), true
 
-	case "Culture.externalLinks":
-		if e.complexity.Culture.ExternalLinks == nil {
+	case "Culture.externalLink":
+		if e.complexity.Culture.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.Culture.ExternalLinks(childComplexity), true
+		return e.complexity.Culture.ExternalLink(childComplexity), true
 
 	case "Culture.id":
 		if e.complexity.Culture.ID == nil {
@@ -2711,12 +2711,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.District.DisplayName(childComplexity), true
 
-	case "District.externalLinks":
-		if e.complexity.District.ExternalLinks == nil {
+	case "District.externalLink":
+		if e.complexity.District.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.District.ExternalLinks(childComplexity), true
+		return e.complexity.District.ExternalLink(childComplexity), true
 
 	case "District.id":
 		if e.complexity.District.ID == nil {
@@ -2935,12 +2935,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.HolderResponsibility.DisplayName(childComplexity), true
 
-	case "HolderResponsibility.externalLinks":
-		if e.complexity.HolderResponsibility.ExternalLinks == nil {
+	case "HolderResponsibility.externalLink":
+		if e.complexity.HolderResponsibility.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.HolderResponsibility.ExternalLinks(childComplexity), true
+		return e.complexity.HolderResponsibility.ExternalLink(childComplexity), true
 
 	case "HolderResponsibility.holder":
 		if e.complexity.HolderResponsibility.Holder == nil {
@@ -3061,12 +3061,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.License.DisplayName(childComplexity), true
 
-	case "License.externalLinks":
-		if e.complexity.License.ExternalLinks == nil {
+	case "License.externalLink":
+		if e.complexity.License.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.License.ExternalLinks(childComplexity), true
+		return e.complexity.License.ExternalLink(childComplexity), true
 
 	case "License.id":
 		if e.complexity.License.ID == nil {
@@ -3194,12 +3194,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Location.District(childComplexity), true
 
-	case "Location.externalLinks":
-		if e.complexity.Location.ExternalLinks == nil {
+	case "Location.externalLink":
+		if e.complexity.Location.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.Location.ExternalLinks(childComplexity), true
+		return e.complexity.Location.ExternalLink(childComplexity), true
 
 	case "Location.geometry":
 		if e.complexity.Location.Geometry == nil {
@@ -3327,12 +3327,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Medium.DisplayName(childComplexity), true
 
-	case "Medium.externalLinks":
-		if e.complexity.Medium.ExternalLinks == nil {
+	case "Medium.externalLink":
+		if e.complexity.Medium.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.Medium.ExternalLinks(childComplexity), true
+		return e.complexity.Medium.ExternalLink(childComplexity), true
 
 	case "Medium.id":
 		if e.complexity.Medium.ID == nil {
@@ -3432,12 +3432,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Model.DisplayName(childComplexity), true
 
-	case "Model.externalLinks":
-		if e.complexity.Model.ExternalLinks == nil {
+	case "Model.externalLink":
+		if e.complexity.Model.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.Model.ExternalLinks(childComplexity), true
+		return e.complexity.Model.ExternalLink(childComplexity), true
 
 	case "Model.id":
 		if e.complexity.Model.ID == nil {
@@ -3537,12 +3537,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Monument.DisplayName(childComplexity), true
 
-	case "Monument.externalLinks":
-		if e.complexity.Monument.ExternalLinks == nil {
+	case "Monument.externalLink":
+		if e.complexity.Monument.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.Monument.ExternalLinks(childComplexity), true
+		return e.complexity.Monument.ExternalLink(childComplexity), true
 
 	case "Monument.id":
 		if e.complexity.Monument.ID == nil {
@@ -4486,12 +4486,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Organization.Emails(childComplexity), true
 
-	case "Organization.externalLinks":
-		if e.complexity.Organization.ExternalLinks == nil {
+	case "Organization.externalLink":
+		if e.complexity.Organization.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.Organization.ExternalLinks(childComplexity), true
+		return e.complexity.Organization.ExternalLink(childComplexity), true
 
 	case "Organization.holder":
 		if e.complexity.Organization.Holder == nil {
@@ -4633,12 +4633,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrganizationType.DisplayName(childComplexity), true
 
-	case "OrganizationType.externalLinks":
-		if e.complexity.OrganizationType.ExternalLinks == nil {
+	case "OrganizationType.externalLink":
+		if e.complexity.OrganizationType.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.OrganizationType.ExternalLinks(childComplexity), true
+		return e.complexity.OrganizationType.ExternalLink(childComplexity), true
 
 	case "OrganizationType.id":
 		if e.complexity.OrganizationType.ID == nil {
@@ -4773,12 +4773,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Period.DisplayName(childComplexity), true
 
-	case "Period.externalLinks":
-		if e.complexity.Period.ExternalLinks == nil {
+	case "Period.externalLink":
+		if e.complexity.Period.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.Period.ExternalLinks(childComplexity), true
+		return e.complexity.Period.ExternalLink(childComplexity), true
 
 	case "Period.id":
 		if e.complexity.Period.ID == nil {
@@ -4934,12 +4934,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Person.EndDate(childComplexity), true
 
-	case "Person.externalLinks":
-		if e.complexity.Person.ExternalLinks == nil {
+	case "Person.externalLink":
+		if e.complexity.Person.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.Person.ExternalLinks(childComplexity), true
+		return e.complexity.Person.ExternalLink(childComplexity), true
 
 	case "Person.familyName":
 		if e.complexity.Person.FamilyName == nil {
@@ -5102,12 +5102,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.PersonRole.DisplayName(childComplexity), true
 
-	case "PersonRole.externalLinks":
-		if e.complexity.PersonRole.ExternalLinks == nil {
+	case "PersonRole.externalLink":
+		if e.complexity.PersonRole.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.PersonRole.ExternalLinks(childComplexity), true
+		return e.complexity.PersonRole.ExternalLink(childComplexity), true
 
 	case "PersonRole.id":
 		if e.complexity.PersonRole.ID == nil {
@@ -5228,12 +5228,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Project.EndDate(childComplexity), true
 
-	case "Project.externalLinks":
-		if e.complexity.Project.ExternalLinks == nil {
+	case "Project.externalLink":
+		if e.complexity.Project.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.Project.ExternalLinks(childComplexity), true
+		return e.complexity.Project.ExternalLink(childComplexity), true
 
 	case "Project.id":
 		if e.complexity.Project.ID == nil {
@@ -5340,12 +5340,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ProjectType.DisplayName(childComplexity), true
 
-	case "ProjectType.externalLinks":
-		if e.complexity.ProjectType.ExternalLinks == nil {
+	case "ProjectType.externalLink":
+		if e.complexity.ProjectType.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.ProjectType.ExternalLinks(childComplexity), true
+		return e.complexity.ProjectType.ExternalLink(childComplexity), true
 
 	case "ProjectType.id":
 		if e.complexity.ProjectType.ID == nil {
@@ -5459,12 +5459,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ProtectedArea.EstablishmentDate(childComplexity), true
 
-	case "ProtectedArea.externalLinks":
-		if e.complexity.ProtectedArea.ExternalLinks == nil {
+	case "ProtectedArea.externalLink":
+		if e.complexity.ProtectedArea.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.ProtectedArea.ExternalLinks(childComplexity), true
+		return e.complexity.ProtectedArea.ExternalLink(childComplexity), true
 
 	case "ProtectedArea.id":
 		if e.complexity.ProtectedArea.ID == nil {
@@ -5536,12 +5536,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ProtectedAreaCategory.DisplayName(childComplexity), true
 
-	case "ProtectedAreaCategory.externalLinks":
-		if e.complexity.ProtectedAreaCategory.ExternalLinks == nil {
+	case "ProtectedAreaCategory.externalLink":
+		if e.complexity.ProtectedAreaCategory.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.ProtectedAreaCategory.ExternalLinks(childComplexity), true
+		return e.complexity.ProtectedAreaCategory.ExternalLink(childComplexity), true
 
 	case "ProtectedAreaCategory.id":
 		if e.complexity.ProtectedAreaCategory.ID == nil {
@@ -5690,12 +5690,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ProtectedAreaPicture.DisplayName(childComplexity), true
 
-	case "ProtectedAreaPicture.externalLinks":
-		if e.complexity.ProtectedAreaPicture.ExternalLinks == nil {
+	case "ProtectedAreaPicture.externalLink":
+		if e.complexity.ProtectedAreaPicture.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.ProtectedAreaPicture.ExternalLinks(childComplexity), true
+		return e.complexity.ProtectedAreaPicture.ExternalLink(childComplexity), true
 
 	case "ProtectedAreaPicture.geometry":
 		if e.complexity.ProtectedAreaPicture.Geometry == nil {
@@ -5844,12 +5844,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Publication.DisplayName(childComplexity), true
 
-	case "Publication.externalLinks":
-		if e.complexity.Publication.ExternalLinks == nil {
+	case "Publication.externalLink":
+		if e.complexity.Publication.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.Publication.ExternalLinks(childComplexity), true
+		return e.complexity.Publication.ExternalLink(childComplexity), true
 
 	case "Publication.id":
 		if e.complexity.Publication.ID == nil {
@@ -5949,12 +5949,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Publisher.DisplayName(childComplexity), true
 
-	case "Publisher.externalLinks":
-		if e.complexity.Publisher.ExternalLinks == nil {
+	case "Publisher.externalLink":
+		if e.complexity.Publisher.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.Publisher.ExternalLinks(childComplexity), true
+		return e.complexity.Publisher.ExternalLink(childComplexity), true
 
 	case "Publisher.id":
 		if e.complexity.Publisher.ID == nil {
@@ -6491,12 +6491,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Region.DisplayName(childComplexity), true
 
-	case "Region.externalLinks":
-		if e.complexity.Region.ExternalLinks == nil {
+	case "Region.externalLink":
+		if e.complexity.Region.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.Region.ExternalLinks(childComplexity), true
+		return e.complexity.Region.ExternalLink(childComplexity), true
 
 	case "Region.id":
 		if e.complexity.Region.ID == nil {
@@ -6603,12 +6603,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Set.DisplayName(childComplexity), true
 
-	case "Set.externalLinks":
-		if e.complexity.Set.ExternalLinks == nil {
+	case "Set.externalLink":
+		if e.complexity.Set.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.Set.ExternalLinks(childComplexity), true
+		return e.complexity.Set.ExternalLink(childComplexity), true
 
 	case "Set.id":
 		if e.complexity.Set.ID == nil {
@@ -6708,12 +6708,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Settlement.DisplayName(childComplexity), true
 
-	case "Settlement.externalLinks":
-		if e.complexity.Settlement.ExternalLinks == nil {
+	case "Settlement.externalLink":
+		if e.complexity.Settlement.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.Settlement.ExternalLinks(childComplexity), true
+		return e.complexity.Settlement.ExternalLink(childComplexity), true
 
 	case "Settlement.id":
 		if e.complexity.Settlement.ID == nil {
@@ -6820,12 +6820,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Technique.DisplayName(childComplexity), true
 
-	case "Technique.externalLinks":
-		if e.complexity.Technique.ExternalLinks == nil {
+	case "Technique.externalLink":
+		if e.complexity.Technique.ExternalLink == nil {
 			break
 		}
 
-		return e.complexity.Technique.ExternalLinks(childComplexity), true
+		return e.complexity.Technique.ExternalLink(childComplexity), true
 
 	case "Technique.id":
 		if e.complexity.Technique.ID == nil {
@@ -10994,8 +10994,8 @@ func (ec *executionContext) fieldContext_Art_description(ctx context.Context, fi
 	return fc, nil
 }
 
-func (ec *executionContext) _Art_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.Art) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Art_externalLinks(ctx, field)
+func (ec *executionContext) _Art_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.Art) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Art_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -11008,7 +11008,7 @@ func (ec *executionContext) _Art_externalLinks(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -11017,12 +11017,12 @@ func (ec *executionContext) _Art_externalLinks(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Art_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Art_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Art",
 		Field:      field,
@@ -11169,8 +11169,8 @@ func (ec *executionContext) fieldContext_Art_artGenre(ctx context.Context, field
 				return ec.fieldContext_ArtGenre_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ArtGenre_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ArtGenre_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ArtGenre_externalLink(ctx, field)
 			case "art":
 				return ec.fieldContext_ArtGenre_art(ctx, field)
 			}
@@ -11232,8 +11232,8 @@ func (ec *executionContext) fieldContext_Art_artStyle(ctx context.Context, field
 				return ec.fieldContext_ArtStyle_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ArtStyle_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ArtStyle_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ArtStyle_externalLink(ctx, field)
 			case "art":
 				return ec.fieldContext_ArtStyle_art(ctx, field)
 			}
@@ -11440,8 +11440,8 @@ func (ec *executionContext) fieldContext_ArtEdge_node(ctx context.Context, field
 				return ec.fieldContext_Art_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Art_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Art_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Art_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Art_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -11838,8 +11838,8 @@ func (ec *executionContext) fieldContext_ArtGenre_description(ctx context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _ArtGenre_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.ArtGenre) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ArtGenre_externalLinks(ctx, field)
+func (ec *executionContext) _ArtGenre_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.ArtGenre) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ArtGenre_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -11852,7 +11852,7 @@ func (ec *executionContext) _ArtGenre_externalLinks(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -11861,12 +11861,12 @@ func (ec *executionContext) _ArtGenre_externalLinks(ctx context.Context, field g
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_ArtGenre_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_ArtGenre_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ArtGenre",
 		Field:      field,
@@ -11931,8 +11931,8 @@ func (ec *executionContext) fieldContext_ArtGenre_art(ctx context.Context, field
 				return ec.fieldContext_Art_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Art_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Art_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Art_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Art_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -12145,8 +12145,8 @@ func (ec *executionContext) fieldContext_ArtGenreEdge_node(ctx context.Context, 
 				return ec.fieldContext_ArtGenre_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ArtGenre_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ArtGenre_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ArtGenre_externalLink(ctx, field)
 			case "art":
 				return ec.fieldContext_ArtGenre_art(ctx, field)
 			}
@@ -12537,8 +12537,8 @@ func (ec *executionContext) fieldContext_ArtStyle_description(ctx context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _ArtStyle_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.ArtStyle) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ArtStyle_externalLinks(ctx, field)
+func (ec *executionContext) _ArtStyle_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.ArtStyle) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ArtStyle_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -12551,7 +12551,7 @@ func (ec *executionContext) _ArtStyle_externalLinks(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12560,12 +12560,12 @@ func (ec *executionContext) _ArtStyle_externalLinks(ctx context.Context, field g
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_ArtStyle_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_ArtStyle_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ArtStyle",
 		Field:      field,
@@ -12630,8 +12630,8 @@ func (ec *executionContext) fieldContext_ArtStyle_art(ctx context.Context, field
 				return ec.fieldContext_Art_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Art_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Art_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Art_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Art_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -12844,8 +12844,8 @@ func (ec *executionContext) fieldContext_ArtStyleEdge_node(ctx context.Context, 
 				return ec.fieldContext_ArtStyle_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ArtStyle_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ArtStyle_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ArtStyle_externalLink(ctx, field)
 			case "art":
 				return ec.fieldContext_ArtStyle_art(ctx, field)
 			}
@@ -13236,8 +13236,8 @@ func (ec *executionContext) fieldContext_Artifact_description(ctx context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _Artifact_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.Artifact) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Artifact_externalLinks(ctx, field)
+func (ec *executionContext) _Artifact_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.Artifact) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Artifact_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -13250,7 +13250,7 @@ func (ec *executionContext) _Artifact_externalLinks(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -13259,12 +13259,12 @@ func (ec *executionContext) _Artifact_externalLinks(ctx context.Context, field g
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Artifact_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Artifact_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Artifact",
 		Field:      field,
@@ -13786,8 +13786,8 @@ func (ec *executionContext) fieldContext_Artifact_authors(ctx context.Context, f
 				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Person_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Person_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Person_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Person_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -13879,8 +13879,8 @@ func (ec *executionContext) fieldContext_Artifact_mediums(ctx context.Context, f
 				return ec.fieldContext_Medium_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Medium_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Medium_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Medium_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Medium_artifacts(ctx, field)
 			}
@@ -13942,8 +13942,8 @@ func (ec *executionContext) fieldContext_Artifact_techniques(ctx context.Context
 				return ec.fieldContext_Technique_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Technique_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Technique_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Technique_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Technique_artifacts(ctx, field)
 			}
@@ -14005,8 +14005,8 @@ func (ec *executionContext) fieldContext_Artifact_period(ctx context.Context, fi
 				return ec.fieldContext_Period_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Period_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Period_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Period_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Period_artifacts(ctx, field)
 			}
@@ -14068,8 +14068,8 @@ func (ec *executionContext) fieldContext_Artifact_projects(ctx context.Context, 
 				return ec.fieldContext_Project_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Project_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Project_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Project_externalLink(ctx, field)
 			case "beginData":
 				return ec.fieldContext_Project_beginData(ctx, field)
 			case "endDate":
@@ -14139,8 +14139,8 @@ func (ec *executionContext) fieldContext_Artifact_publications(ctx context.Conte
 				return ec.fieldContext_Publication_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Publication_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Publication_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Publication_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Publication_artifacts(ctx, field)
 			case "authors":
@@ -14271,8 +14271,8 @@ func (ec *executionContext) fieldContext_Artifact_culturalAffiliation(ctx contex
 				return ec.fieldContext_Culture_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Culture_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Culture_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Culture_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Culture_artifacts(ctx, field)
 			}
@@ -14334,8 +14334,8 @@ func (ec *executionContext) fieldContext_Artifact_monument(ctx context.Context, 
 				return ec.fieldContext_Monument_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Monument_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Monument_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Monument_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Monument_artifacts(ctx, field)
 			case "sets":
@@ -14399,8 +14399,8 @@ func (ec *executionContext) fieldContext_Artifact_model(ctx context.Context, fie
 				return ec.fieldContext_Model_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Model_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Model_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Model_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Model_artifacts(ctx, field)
 			}
@@ -14462,8 +14462,8 @@ func (ec *executionContext) fieldContext_Artifact_set(ctx context.Context, field
 				return ec.fieldContext_Set_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Set_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Set_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Set_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Set_artifacts(ctx, field)
 			case "monuments":
@@ -14527,8 +14527,8 @@ func (ec *executionContext) fieldContext_Artifact_location(ctx context.Context, 
 				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Location_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Location_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Location_externalLink(ctx, field)
 			case "geometry":
 				return ec.fieldContext_Location_geometry(ctx, field)
 			case "artifacts":
@@ -14604,8 +14604,8 @@ func (ec *executionContext) fieldContext_Artifact_collection(ctx context.Context
 				return ec.fieldContext_Collection_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Collection_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Collection_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Collection_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Collection_artifacts(ctx, field)
 			case "books":
@@ -14675,8 +14675,8 @@ func (ec *executionContext) fieldContext_Artifact_license(ctx context.Context, f
 				return ec.fieldContext_License_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_License_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_License_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_License_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_License_artifacts(ctx, field)
 			case "books":
@@ -14887,8 +14887,8 @@ func (ec *executionContext) fieldContext_ArtifactEdge_node(ctx context.Context, 
 				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Artifact_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Artifact_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -15995,8 +15995,8 @@ func (ec *executionContext) fieldContext_Book_description(ctx context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _Book_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.Book) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Book_externalLinks(ctx, field)
+func (ec *executionContext) _Book_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.Book) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Book_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -16009,7 +16009,7 @@ func (ec *executionContext) _Book_externalLinks(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -16018,12 +16018,12 @@ func (ec *executionContext) _Book_externalLinks(ctx context.Context, field graph
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Book_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Book_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Book",
 		Field:      field,
@@ -16258,8 +16258,8 @@ func (ec *executionContext) fieldContext_Book_authors(ctx context.Context, field
 				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Person_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Person_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Person_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Person_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -16351,8 +16351,8 @@ func (ec *executionContext) fieldContext_Book_bookGenres(ctx context.Context, fi
 				return ec.fieldContext_BookGenre_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_BookGenre_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_BookGenre_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_BookGenre_externalLink(ctx, field)
 			case "books":
 				return ec.fieldContext_BookGenre_books(ctx, field)
 			}
@@ -16414,8 +16414,8 @@ func (ec *executionContext) fieldContext_Book_collection(ctx context.Context, fi
 				return ec.fieldContext_Collection_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Collection_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Collection_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Collection_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Collection_artifacts(ctx, field)
 			case "books":
@@ -16552,8 +16552,8 @@ func (ec *executionContext) fieldContext_Book_publisher(ctx context.Context, fie
 				return ec.fieldContext_Publisher_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Publisher_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Publisher_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Publisher_externalLink(ctx, field)
 			case "books":
 				return ec.fieldContext_Publisher_books(ctx, field)
 			}
@@ -16615,8 +16615,8 @@ func (ec *executionContext) fieldContext_Book_license(ctx context.Context, field
 				return ec.fieldContext_License_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_License_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_License_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_License_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_License_artifacts(ctx, field)
 			case "books":
@@ -16682,8 +16682,8 @@ func (ec *executionContext) fieldContext_Book_location(ctx context.Context, fiel
 				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Location_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Location_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Location_externalLink(ctx, field)
 			case "geometry":
 				return ec.fieldContext_Location_geometry(ctx, field)
 			case "artifacts":
@@ -16904,8 +16904,8 @@ func (ec *executionContext) fieldContext_BookEdge_node(ctx context.Context, fiel
 				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Book_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Book_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Book_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Book_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -17316,8 +17316,8 @@ func (ec *executionContext) fieldContext_BookGenre_description(ctx context.Conte
 	return fc, nil
 }
 
-func (ec *executionContext) _BookGenre_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.BookGenre) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_BookGenre_externalLinks(ctx, field)
+func (ec *executionContext) _BookGenre_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.BookGenre) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_BookGenre_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -17330,7 +17330,7 @@ func (ec *executionContext) _BookGenre_externalLinks(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -17339,12 +17339,12 @@ func (ec *executionContext) _BookGenre_externalLinks(ctx context.Context, field 
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_BookGenre_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_BookGenre_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "BookGenre",
 		Field:      field,
@@ -17409,8 +17409,8 @@ func (ec *executionContext) fieldContext_BookGenre_books(ctx context.Context, fi
 				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Book_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Book_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Book_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Book_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -17637,8 +17637,8 @@ func (ec *executionContext) fieldContext_BookGenreEdge_node(ctx context.Context,
 				return ec.fieldContext_BookGenre_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_BookGenre_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_BookGenre_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_BookGenre_externalLink(ctx, field)
 			case "books":
 				return ec.fieldContext_BookGenre_books(ctx, field)
 			}
@@ -18029,8 +18029,8 @@ func (ec *executionContext) fieldContext_Category_description(ctx context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _Category_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.Category) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Category_externalLinks(ctx, field)
+func (ec *executionContext) _Category_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.Category) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Category_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -18043,7 +18043,7 @@ func (ec *executionContext) _Category_externalLinks(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -18052,12 +18052,12 @@ func (ec *executionContext) _Category_externalLinks(ctx context.Context, field g
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Category_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Category_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Category",
 		Field:      field,
@@ -18122,8 +18122,8 @@ func (ec *executionContext) fieldContext_Category_collections(ctx context.Contex
 				return ec.fieldContext_Collection_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Collection_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Collection_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Collection_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Collection_artifacts(ctx, field)
 			case "books":
@@ -18338,8 +18338,8 @@ func (ec *executionContext) fieldContext_CategoryEdge_node(ctx context.Context, 
 				return ec.fieldContext_Category_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Category_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Category_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Category_externalLink(ctx, field)
 			case "collections":
 				return ec.fieldContext_Category_collections(ctx, field)
 			}
@@ -18730,8 +18730,8 @@ func (ec *executionContext) fieldContext_Collection_description(ctx context.Cont
 	return fc, nil
 }
 
-func (ec *executionContext) _Collection_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.Collection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Collection_externalLinks(ctx, field)
+func (ec *executionContext) _Collection_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.Collection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Collection_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -18744,7 +18744,7 @@ func (ec *executionContext) _Collection_externalLinks(ctx context.Context, field
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -18753,12 +18753,12 @@ func (ec *executionContext) _Collection_externalLinks(ctx context.Context, field
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Collection_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Collection_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Collection",
 		Field:      field,
@@ -18823,8 +18823,8 @@ func (ec *executionContext) fieldContext_Collection_artifacts(ctx context.Contex
 				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Artifact_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Artifact_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -18934,8 +18934,8 @@ func (ec *executionContext) fieldContext_Collection_books(ctx context.Context, f
 				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Book_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Book_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Book_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Book_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -19023,8 +19023,8 @@ func (ec *executionContext) fieldContext_Collection_people(ctx context.Context, 
 				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Person_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Person_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Person_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Person_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -19116,8 +19116,8 @@ func (ec *executionContext) fieldContext_Collection_protectedAreaPictures(ctx co
 				return ec.fieldContext_ProtectedAreaPicture_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProtectedAreaPicture_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ProtectedAreaPicture_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ProtectedAreaPicture_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_ProtectedAreaPicture_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -19193,8 +19193,8 @@ func (ec *executionContext) fieldContext_Collection_category(ctx context.Context
 				return ec.fieldContext_Category_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Category_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Category_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Category_externalLink(ctx, field)
 			case "collections":
 				return ec.fieldContext_Category_collections(ctx, field)
 			}
@@ -19401,8 +19401,8 @@ func (ec *executionContext) fieldContext_CollectionEdge_node(ctx context.Context
 				return ec.fieldContext_Collection_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Collection_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Collection_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Collection_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Collection_artifacts(ctx, field)
 			case "books":
@@ -19801,8 +19801,8 @@ func (ec *executionContext) fieldContext_Country_description(ctx context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _Country_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.Country) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Country_externalLinks(ctx, field)
+func (ec *executionContext) _Country_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.Country) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Country_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -19815,7 +19815,7 @@ func (ec *executionContext) _Country_externalLinks(ctx context.Context, field gr
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -19824,12 +19824,12 @@ func (ec *executionContext) _Country_externalLinks(ctx context.Context, field gr
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Country_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Country_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Country",
 		Field:      field,
@@ -19894,8 +19894,8 @@ func (ec *executionContext) fieldContext_Country_location(ctx context.Context, f
 				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Location_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Location_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Location_externalLink(ctx, field)
 			case "geometry":
 				return ec.fieldContext_Location_geometry(ctx, field)
 			case "artifacts":
@@ -20116,8 +20116,8 @@ func (ec *executionContext) fieldContext_CountryEdge_node(ctx context.Context, f
 				return ec.fieldContext_Country_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Country_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Country_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Country_externalLink(ctx, field)
 			case "location":
 				return ec.fieldContext_Country_location(ctx, field)
 			}
@@ -20508,8 +20508,8 @@ func (ec *executionContext) fieldContext_Culture_description(ctx context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _Culture_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.Culture) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Culture_externalLinks(ctx, field)
+func (ec *executionContext) _Culture_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.Culture) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Culture_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -20522,7 +20522,7 @@ func (ec *executionContext) _Culture_externalLinks(ctx context.Context, field gr
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -20531,12 +20531,12 @@ func (ec *executionContext) _Culture_externalLinks(ctx context.Context, field gr
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Culture_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Culture_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Culture",
 		Field:      field,
@@ -20601,8 +20601,8 @@ func (ec *executionContext) fieldContext_Culture_artifacts(ctx context.Context, 
 				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Artifact_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Artifact_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -20857,8 +20857,8 @@ func (ec *executionContext) fieldContext_CultureEdge_node(ctx context.Context, f
 				return ec.fieldContext_Culture_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Culture_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Culture_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Culture_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Culture_artifacts(ctx, field)
 			}
@@ -21249,8 +21249,8 @@ func (ec *executionContext) fieldContext_District_description(ctx context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _District_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.District) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_District_externalLinks(ctx, field)
+func (ec *executionContext) _District_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.District) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_District_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -21263,7 +21263,7 @@ func (ec *executionContext) _District_externalLinks(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -21272,12 +21272,12 @@ func (ec *executionContext) _District_externalLinks(ctx context.Context, field g
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_District_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_District_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "District",
 		Field:      field,
@@ -21342,8 +21342,8 @@ func (ec *executionContext) fieldContext_District_location(ctx context.Context, 
 				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Location_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Location_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Location_externalLink(ctx, field)
 			case "geometry":
 				return ec.fieldContext_Location_geometry(ctx, field)
 			case "artifacts":
@@ -21564,8 +21564,8 @@ func (ec *executionContext) fieldContext_DistrictEdge_node(ctx context.Context, 
 				return ec.fieldContext_District_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_District_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_District_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_District_externalLink(ctx, field)
 			case "location":
 				return ec.fieldContext_District_location(ctx, field)
 			}
@@ -21970,8 +21970,8 @@ func (ec *executionContext) fieldContext_Holder_artifacts(ctx context.Context, f
 				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Artifact_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Artifact_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -22081,8 +22081,8 @@ func (ec *executionContext) fieldContext_Holder_books(ctx context.Context, field
 				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Book_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Book_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Book_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Book_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -22164,8 +22164,8 @@ func (ec *executionContext) fieldContext_Holder_holderResponsibilities(ctx conte
 				return ec.fieldContext_HolderResponsibility_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_HolderResponsibility_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_HolderResponsibility_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_HolderResponsibility_externalLink(ctx, field)
 			case "holder":
 				return ec.fieldContext_HolderResponsibility_holder(ctx, field)
 			}
@@ -22233,8 +22233,8 @@ func (ec *executionContext) fieldContext_Holder_person(ctx context.Context, fiel
 				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Person_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Person_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Person_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Person_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -22332,8 +22332,8 @@ func (ec *executionContext) fieldContext_Holder_organization(ctx context.Context
 				return ec.fieldContext_Organization_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Organization_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Organization_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Organization_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Organization_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -22950,8 +22950,8 @@ func (ec *executionContext) fieldContext_HolderResponsibility_description(ctx co
 	return fc, nil
 }
 
-func (ec *executionContext) _HolderResponsibility_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.HolderResponsibility) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_HolderResponsibility_externalLinks(ctx, field)
+func (ec *executionContext) _HolderResponsibility_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.HolderResponsibility) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_HolderResponsibility_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -22964,7 +22964,7 @@ func (ec *executionContext) _HolderResponsibility_externalLinks(ctx context.Cont
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -22973,12 +22973,12 @@ func (ec *executionContext) _HolderResponsibility_externalLinks(ctx context.Cont
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_HolderResponsibility_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_HolderResponsibility_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "HolderResponsibility",
 		Field:      field,
@@ -23255,8 +23255,8 @@ func (ec *executionContext) fieldContext_HolderResponsibilityEdge_node(ctx conte
 				return ec.fieldContext_HolderResponsibility_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_HolderResponsibility_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_HolderResponsibility_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_HolderResponsibility_externalLink(ctx, field)
 			case "holder":
 				return ec.fieldContext_HolderResponsibility_holder(ctx, field)
 			}
@@ -23691,8 +23691,8 @@ func (ec *executionContext) fieldContext_License_description(ctx context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _License_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.License) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_License_externalLinks(ctx, field)
+func (ec *executionContext) _License_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.License) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_License_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -23705,7 +23705,7 @@ func (ec *executionContext) _License_externalLinks(ctx context.Context, field gr
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -23714,12 +23714,12 @@ func (ec *executionContext) _License_externalLinks(ctx context.Context, field gr
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_License_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_License_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "License",
 		Field:      field,
@@ -23784,8 +23784,8 @@ func (ec *executionContext) fieldContext_License_artifacts(ctx context.Context, 
 				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Artifact_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Artifact_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -23895,8 +23895,8 @@ func (ec *executionContext) fieldContext_License_books(ctx context.Context, fiel
 				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Book_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Book_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Book_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Book_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -23978,8 +23978,8 @@ func (ec *executionContext) fieldContext_License_protectedAreaPictures(ctx conte
 				return ec.fieldContext_ProtectedAreaPicture_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProtectedAreaPicture_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ProtectedAreaPicture_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ProtectedAreaPicture_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_ProtectedAreaPicture_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -24200,8 +24200,8 @@ func (ec *executionContext) fieldContext_LicenseEdge_node(ctx context.Context, f
 				return ec.fieldContext_License_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_License_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_License_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_License_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_License_artifacts(ctx, field)
 			case "books":
@@ -24596,8 +24596,8 @@ func (ec *executionContext) fieldContext_Location_description(ctx context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _Location_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.Location) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Location_externalLinks(ctx, field)
+func (ec *executionContext) _Location_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.Location) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Location_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -24610,7 +24610,7 @@ func (ec *executionContext) _Location_externalLinks(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -24619,12 +24619,12 @@ func (ec *executionContext) _Location_externalLinks(ctx context.Context, field g
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Location_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Location_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Location",
 		Field:      field,
@@ -24730,8 +24730,8 @@ func (ec *executionContext) fieldContext_Location_artifacts(ctx context.Context,
 				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Artifact_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Artifact_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -24841,8 +24841,8 @@ func (ec *executionContext) fieldContext_Location_books(ctx context.Context, fie
 				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Book_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Book_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Book_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Book_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -24924,8 +24924,8 @@ func (ec *executionContext) fieldContext_Location_protectedAreaPictures(ctx cont
 				return ec.fieldContext_ProtectedAreaPicture_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProtectedAreaPicture_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ProtectedAreaPicture_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ProtectedAreaPicture_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_ProtectedAreaPicture_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -25001,8 +25001,8 @@ func (ec *executionContext) fieldContext_Location_country(ctx context.Context, f
 				return ec.fieldContext_Country_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Country_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Country_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Country_externalLink(ctx, field)
 			case "location":
 				return ec.fieldContext_Country_location(ctx, field)
 			}
@@ -25064,8 +25064,8 @@ func (ec *executionContext) fieldContext_Location_district(ctx context.Context, 
 				return ec.fieldContext_District_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_District_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_District_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_District_externalLink(ctx, field)
 			case "location":
 				return ec.fieldContext_District_location(ctx, field)
 			}
@@ -25127,8 +25127,8 @@ func (ec *executionContext) fieldContext_Location_settlement(ctx context.Context
 				return ec.fieldContext_Settlement_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Settlement_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Settlement_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Settlement_externalLink(ctx, field)
 			case "location":
 				return ec.fieldContext_Settlement_location(ctx, field)
 			}
@@ -25190,8 +25190,8 @@ func (ec *executionContext) fieldContext_Location_region(ctx context.Context, fi
 				return ec.fieldContext_Region_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Region_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Region_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Region_externalLink(ctx, field)
 			case "location":
 				return ec.fieldContext_Region_location(ctx, field)
 			}
@@ -25398,8 +25398,8 @@ func (ec *executionContext) fieldContext_LocationEdge_node(ctx context.Context, 
 				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Location_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Location_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Location_externalLink(ctx, field)
 			case "geometry":
 				return ec.fieldContext_Location_geometry(ctx, field)
 			case "artifacts":
@@ -25804,8 +25804,8 @@ func (ec *executionContext) fieldContext_Medium_description(ctx context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _Medium_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.Medium) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Medium_externalLinks(ctx, field)
+func (ec *executionContext) _Medium_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.Medium) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Medium_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -25818,7 +25818,7 @@ func (ec *executionContext) _Medium_externalLinks(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -25827,12 +25827,12 @@ func (ec *executionContext) _Medium_externalLinks(ctx context.Context, field gra
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Medium_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Medium_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Medium",
 		Field:      field,
@@ -25897,8 +25897,8 @@ func (ec *executionContext) fieldContext_Medium_artifacts(ctx context.Context, f
 				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Artifact_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Artifact_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -26153,8 +26153,8 @@ func (ec *executionContext) fieldContext_MediumEdge_node(ctx context.Context, fi
 				return ec.fieldContext_Medium_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Medium_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Medium_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Medium_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Medium_artifacts(ctx, field)
 			}
@@ -26545,8 +26545,8 @@ func (ec *executionContext) fieldContext_Model_description(ctx context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _Model_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.Model) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Model_externalLinks(ctx, field)
+func (ec *executionContext) _Model_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.Model) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Model_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -26559,7 +26559,7 @@ func (ec *executionContext) _Model_externalLinks(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -26568,12 +26568,12 @@ func (ec *executionContext) _Model_externalLinks(ctx context.Context, field grap
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Model_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Model_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Model",
 		Field:      field,
@@ -26638,8 +26638,8 @@ func (ec *executionContext) fieldContext_Model_artifacts(ctx context.Context, fi
 				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Artifact_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Artifact_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -26894,8 +26894,8 @@ func (ec *executionContext) fieldContext_ModelEdge_node(ctx context.Context, fie
 				return ec.fieldContext_Model_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Model_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Model_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Model_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Model_artifacts(ctx, field)
 			}
@@ -27286,8 +27286,8 @@ func (ec *executionContext) fieldContext_Monument_description(ctx context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _Monument_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.Monument) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Monument_externalLinks(ctx, field)
+func (ec *executionContext) _Monument_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.Monument) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Monument_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -27300,7 +27300,7 @@ func (ec *executionContext) _Monument_externalLinks(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -27309,12 +27309,12 @@ func (ec *executionContext) _Monument_externalLinks(ctx context.Context, field g
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Monument_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Monument_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Monument",
 		Field:      field,
@@ -27379,8 +27379,8 @@ func (ec *executionContext) fieldContext_Monument_artifacts(ctx context.Context,
 				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Artifact_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Artifact_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -27490,8 +27490,8 @@ func (ec *executionContext) fieldContext_Monument_sets(ctx context.Context, fiel
 				return ec.fieldContext_Set_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Set_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Set_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Set_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Set_artifacts(ctx, field)
 			case "monuments":
@@ -27700,8 +27700,8 @@ func (ec *executionContext) fieldContext_MonumentEdge_node(ctx context.Context, 
 				return ec.fieldContext_Monument_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Monument_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Monument_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Monument_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Monument_artifacts(ctx, field)
 			case "sets":
@@ -27812,8 +27812,8 @@ func (ec *executionContext) fieldContext_Mutation_createArtifact(ctx context.Con
 				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Artifact_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Artifact_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -27937,8 +27937,8 @@ func (ec *executionContext) fieldContext_Mutation_updateArtifact(ctx context.Con
 				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Artifact_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Artifact_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -28062,8 +28062,8 @@ func (ec *executionContext) fieldContext_Mutation_createArt(ctx context.Context,
 				return ec.fieldContext_Art_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Art_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Art_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Art_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Art_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -28145,8 +28145,8 @@ func (ec *executionContext) fieldContext_Mutation_updateArt(ctx context.Context,
 				return ec.fieldContext_Art_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Art_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Art_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Art_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Art_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -28228,8 +28228,8 @@ func (ec *executionContext) fieldContext_Mutation_createArtGenre(ctx context.Con
 				return ec.fieldContext_ArtGenre_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ArtGenre_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ArtGenre_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ArtGenre_externalLink(ctx, field)
 			case "art":
 				return ec.fieldContext_ArtGenre_art(ctx, field)
 			}
@@ -28305,8 +28305,8 @@ func (ec *executionContext) fieldContext_Mutation_updateArtGenre(ctx context.Con
 				return ec.fieldContext_ArtGenre_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ArtGenre_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ArtGenre_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ArtGenre_externalLink(ctx, field)
 			case "art":
 				return ec.fieldContext_ArtGenre_art(ctx, field)
 			}
@@ -28382,8 +28382,8 @@ func (ec *executionContext) fieldContext_Mutation_createArtStyle(ctx context.Con
 				return ec.fieldContext_ArtStyle_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ArtStyle_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ArtStyle_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ArtStyle_externalLink(ctx, field)
 			case "art":
 				return ec.fieldContext_ArtStyle_art(ctx, field)
 			}
@@ -28459,8 +28459,8 @@ func (ec *executionContext) fieldContext_Mutation_updateArtStyle(ctx context.Con
 				return ec.fieldContext_ArtStyle_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ArtStyle_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ArtStyle_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ArtStyle_externalLink(ctx, field)
 			case "art":
 				return ec.fieldContext_ArtStyle_art(ctx, field)
 			}
@@ -28536,8 +28536,8 @@ func (ec *executionContext) fieldContext_Mutation_createBook(ctx context.Context
 				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Book_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Book_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Book_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Book_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -28633,8 +28633,8 @@ func (ec *executionContext) fieldContext_Mutation_updateBook(ctx context.Context
 				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Book_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Book_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Book_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Book_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -28730,8 +28730,8 @@ func (ec *executionContext) fieldContext_Mutation_createBookGenre(ctx context.Co
 				return ec.fieldContext_BookGenre_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_BookGenre_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_BookGenre_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_BookGenre_externalLink(ctx, field)
 			case "books":
 				return ec.fieldContext_BookGenre_books(ctx, field)
 			}
@@ -28807,8 +28807,8 @@ func (ec *executionContext) fieldContext_Mutation_updateBookGenre(ctx context.Co
 				return ec.fieldContext_BookGenre_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_BookGenre_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_BookGenre_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_BookGenre_externalLink(ctx, field)
 			case "books":
 				return ec.fieldContext_BookGenre_books(ctx, field)
 			}
@@ -28884,8 +28884,8 @@ func (ec *executionContext) fieldContext_Mutation_createCategory(ctx context.Con
 				return ec.fieldContext_Category_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Category_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Category_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Category_externalLink(ctx, field)
 			case "collections":
 				return ec.fieldContext_Category_collections(ctx, field)
 			}
@@ -28961,8 +28961,8 @@ func (ec *executionContext) fieldContext_Mutation_updateCategory(ctx context.Con
 				return ec.fieldContext_Category_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Category_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Category_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Category_externalLink(ctx, field)
 			case "collections":
 				return ec.fieldContext_Category_collections(ctx, field)
 			}
@@ -29038,8 +29038,8 @@ func (ec *executionContext) fieldContext_Mutation_createCollection(ctx context.C
 				return ec.fieldContext_Collection_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Collection_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Collection_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Collection_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Collection_artifacts(ctx, field)
 			case "books":
@@ -29123,8 +29123,8 @@ func (ec *executionContext) fieldContext_Mutation_updateCollection(ctx context.C
 				return ec.fieldContext_Collection_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Collection_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Collection_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Collection_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Collection_artifacts(ctx, field)
 			case "books":
@@ -29208,8 +29208,8 @@ func (ec *executionContext) fieldContext_Mutation_createCountry(ctx context.Cont
 				return ec.fieldContext_Country_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Country_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Country_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Country_externalLink(ctx, field)
 			case "location":
 				return ec.fieldContext_Country_location(ctx, field)
 			}
@@ -29285,8 +29285,8 @@ func (ec *executionContext) fieldContext_Mutation_updateCountry(ctx context.Cont
 				return ec.fieldContext_Country_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Country_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Country_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Country_externalLink(ctx, field)
 			case "location":
 				return ec.fieldContext_Country_location(ctx, field)
 			}
@@ -29362,8 +29362,8 @@ func (ec *executionContext) fieldContext_Mutation_createCulture(ctx context.Cont
 				return ec.fieldContext_Culture_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Culture_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Culture_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Culture_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Culture_artifacts(ctx, field)
 			}
@@ -29439,8 +29439,8 @@ func (ec *executionContext) fieldContext_Mutation_updateCulture(ctx context.Cont
 				return ec.fieldContext_Culture_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Culture_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Culture_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Culture_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Culture_artifacts(ctx, field)
 			}
@@ -29516,8 +29516,8 @@ func (ec *executionContext) fieldContext_Mutation_createDistrict(ctx context.Con
 				return ec.fieldContext_District_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_District_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_District_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_District_externalLink(ctx, field)
 			case "location":
 				return ec.fieldContext_District_location(ctx, field)
 			}
@@ -29593,8 +29593,8 @@ func (ec *executionContext) fieldContext_Mutation_updateDistrict(ctx context.Con
 				return ec.fieldContext_District_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_District_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_District_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_District_externalLink(ctx, field)
 			case "location":
 				return ec.fieldContext_District_location(ctx, field)
 			}
@@ -29832,8 +29832,8 @@ func (ec *executionContext) fieldContext_Mutation_createHolderResponsibility(ctx
 				return ec.fieldContext_HolderResponsibility_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_HolderResponsibility_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_HolderResponsibility_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_HolderResponsibility_externalLink(ctx, field)
 			case "holder":
 				return ec.fieldContext_HolderResponsibility_holder(ctx, field)
 			}
@@ -29909,8 +29909,8 @@ func (ec *executionContext) fieldContext_Mutation_updateHolderResponsibility(ctx
 				return ec.fieldContext_HolderResponsibility_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_HolderResponsibility_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_HolderResponsibility_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_HolderResponsibility_externalLink(ctx, field)
 			case "holder":
 				return ec.fieldContext_HolderResponsibility_holder(ctx, field)
 			}
@@ -29986,8 +29986,8 @@ func (ec *executionContext) fieldContext_Mutation_createLicense(ctx context.Cont
 				return ec.fieldContext_License_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_License_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_License_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_License_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_License_artifacts(ctx, field)
 			case "books":
@@ -30067,8 +30067,8 @@ func (ec *executionContext) fieldContext_Mutation_updateLicense(ctx context.Cont
 				return ec.fieldContext_License_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_License_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_License_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_License_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_License_artifacts(ctx, field)
 			case "books":
@@ -30148,8 +30148,8 @@ func (ec *executionContext) fieldContext_Mutation_createLocation(ctx context.Con
 				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Location_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Location_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Location_externalLink(ctx, field)
 			case "geometry":
 				return ec.fieldContext_Location_geometry(ctx, field)
 			case "artifacts":
@@ -30239,8 +30239,8 @@ func (ec *executionContext) fieldContext_Mutation_updateLocation(ctx context.Con
 				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Location_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Location_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Location_externalLink(ctx, field)
 			case "geometry":
 				return ec.fieldContext_Location_geometry(ctx, field)
 			case "artifacts":
@@ -30330,8 +30330,8 @@ func (ec *executionContext) fieldContext_Mutation_createMedium(ctx context.Conte
 				return ec.fieldContext_Medium_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Medium_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Medium_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Medium_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Medium_artifacts(ctx, field)
 			}
@@ -30407,8 +30407,8 @@ func (ec *executionContext) fieldContext_Mutation_updateMedium(ctx context.Conte
 				return ec.fieldContext_Medium_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Medium_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Medium_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Medium_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Medium_artifacts(ctx, field)
 			}
@@ -30484,8 +30484,8 @@ func (ec *executionContext) fieldContext_Mutation_createModel(ctx context.Contex
 				return ec.fieldContext_Model_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Model_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Model_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Model_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Model_artifacts(ctx, field)
 			}
@@ -30561,8 +30561,8 @@ func (ec *executionContext) fieldContext_Mutation_updateModel(ctx context.Contex
 				return ec.fieldContext_Model_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Model_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Model_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Model_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Model_artifacts(ctx, field)
 			}
@@ -30638,8 +30638,8 @@ func (ec *executionContext) fieldContext_Mutation_createMonument(ctx context.Con
 				return ec.fieldContext_Monument_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Monument_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Monument_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Monument_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Monument_artifacts(ctx, field)
 			case "sets":
@@ -30717,8 +30717,8 @@ func (ec *executionContext) fieldContext_Mutation_updateMonument(ctx context.Con
 				return ec.fieldContext_Monument_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Monument_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Monument_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Monument_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Monument_artifacts(ctx, field)
 			case "sets":
@@ -30802,8 +30802,8 @@ func (ec *executionContext) fieldContext_Mutation_createOrganization(ctx context
 				return ec.fieldContext_Organization_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Organization_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Organization_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Organization_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Organization_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -30899,8 +30899,8 @@ func (ec *executionContext) fieldContext_Mutation_updateOrganization(ctx context
 				return ec.fieldContext_Organization_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Organization_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Organization_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Organization_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Organization_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -30990,8 +30990,8 @@ func (ec *executionContext) fieldContext_Mutation_createOrganizationType(ctx con
 				return ec.fieldContext_OrganizationType_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_OrganizationType_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_OrganizationType_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_OrganizationType_externalLink(ctx, field)
 			case "organizations":
 				return ec.fieldContext_OrganizationType_organizations(ctx, field)
 			}
@@ -31067,8 +31067,8 @@ func (ec *executionContext) fieldContext_Mutation_updateOrganizationType(ctx con
 				return ec.fieldContext_OrganizationType_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_OrganizationType_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_OrganizationType_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_OrganizationType_externalLink(ctx, field)
 			case "organizations":
 				return ec.fieldContext_OrganizationType_organizations(ctx, field)
 			}
@@ -31144,8 +31144,8 @@ func (ec *executionContext) fieldContext_Mutation_createPeriod(ctx context.Conte
 				return ec.fieldContext_Period_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Period_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Period_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Period_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Period_artifacts(ctx, field)
 			}
@@ -31221,8 +31221,8 @@ func (ec *executionContext) fieldContext_Mutation_updatePeriod(ctx context.Conte
 				return ec.fieldContext_Period_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Period_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Period_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Period_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Period_artifacts(ctx, field)
 			}
@@ -31304,8 +31304,8 @@ func (ec *executionContext) fieldContext_Mutation_createPerson(ctx context.Conte
 				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Person_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Person_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Person_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Person_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -31417,8 +31417,8 @@ func (ec *executionContext) fieldContext_Mutation_updatePerson(ctx context.Conte
 				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Person_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Person_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Person_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Person_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -31524,8 +31524,8 @@ func (ec *executionContext) fieldContext_Mutation_createPersonRole(ctx context.C
 				return ec.fieldContext_PersonRole_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_PersonRole_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_PersonRole_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_PersonRole_externalLink(ctx, field)
 			case "person":
 				return ec.fieldContext_PersonRole_person(ctx, field)
 			}
@@ -31601,8 +31601,8 @@ func (ec *executionContext) fieldContext_Mutation_updatePersonRole(ctx context.C
 				return ec.fieldContext_PersonRole_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_PersonRole_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_PersonRole_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_PersonRole_externalLink(ctx, field)
 			case "person":
 				return ec.fieldContext_PersonRole_person(ctx, field)
 			}
@@ -31678,8 +31678,8 @@ func (ec *executionContext) fieldContext_Mutation_createProject(ctx context.Cont
 				return ec.fieldContext_Project_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Project_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Project_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Project_externalLink(ctx, field)
 			case "beginData":
 				return ec.fieldContext_Project_beginData(ctx, field)
 			case "endDate":
@@ -31763,8 +31763,8 @@ func (ec *executionContext) fieldContext_Mutation_updateProject(ctx context.Cont
 				return ec.fieldContext_Project_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Project_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Project_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Project_externalLink(ctx, field)
 			case "beginData":
 				return ec.fieldContext_Project_beginData(ctx, field)
 			case "endDate":
@@ -31848,8 +31848,8 @@ func (ec *executionContext) fieldContext_Mutation_createProjectType(ctx context.
 				return ec.fieldContext_ProjectType_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProjectType_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ProjectType_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ProjectType_externalLink(ctx, field)
 			case "projects":
 				return ec.fieldContext_ProjectType_projects(ctx, field)
 			}
@@ -31925,8 +31925,8 @@ func (ec *executionContext) fieldContext_Mutation_updateProjectType(ctx context.
 				return ec.fieldContext_ProjectType_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProjectType_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ProjectType_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ProjectType_externalLink(ctx, field)
 			case "projects":
 				return ec.fieldContext_ProjectType_projects(ctx, field)
 			}
@@ -32002,8 +32002,8 @@ func (ec *executionContext) fieldContext_Mutation_createProtectedArea(ctx contex
 				return ec.fieldContext_ProtectedArea_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProtectedArea_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ProtectedArea_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ProtectedArea_externalLink(ctx, field)
 			case "area":
 				return ec.fieldContext_ProtectedArea_area(ctx, field)
 			case "establishmentDate":
@@ -32085,8 +32085,8 @@ func (ec *executionContext) fieldContext_Mutation_updateProtectedArea(ctx contex
 				return ec.fieldContext_ProtectedArea_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProtectedArea_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ProtectedArea_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ProtectedArea_externalLink(ctx, field)
 			case "area":
 				return ec.fieldContext_ProtectedArea_area(ctx, field)
 			case "establishmentDate":
@@ -32168,8 +32168,8 @@ func (ec *executionContext) fieldContext_Mutation_createProtectedAreaCategory(ct
 				return ec.fieldContext_ProtectedAreaCategory_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProtectedAreaCategory_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ProtectedAreaCategory_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ProtectedAreaCategory_externalLink(ctx, field)
 			case "protectedAreas":
 				return ec.fieldContext_ProtectedAreaCategory_protectedAreas(ctx, field)
 			}
@@ -32245,8 +32245,8 @@ func (ec *executionContext) fieldContext_Mutation_updateProtectedAreaCategory(ct
 				return ec.fieldContext_ProtectedAreaCategory_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProtectedAreaCategory_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ProtectedAreaCategory_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ProtectedAreaCategory_externalLink(ctx, field)
 			case "protectedAreas":
 				return ec.fieldContext_ProtectedAreaCategory_protectedAreas(ctx, field)
 			}
@@ -32322,8 +32322,8 @@ func (ec *executionContext) fieldContext_Mutation_createProtectedAreaPicture(ctx
 				return ec.fieldContext_ProtectedAreaPicture_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProtectedAreaPicture_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ProtectedAreaPicture_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ProtectedAreaPicture_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_ProtectedAreaPicture_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -32413,8 +32413,8 @@ func (ec *executionContext) fieldContext_Mutation_updateProtectedAreaPicture(ctx
 				return ec.fieldContext_ProtectedAreaPicture_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProtectedAreaPicture_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ProtectedAreaPicture_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ProtectedAreaPicture_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_ProtectedAreaPicture_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -32504,8 +32504,8 @@ func (ec *executionContext) fieldContext_Mutation_createPublication(ctx context.
 				return ec.fieldContext_Publication_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Publication_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Publication_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Publication_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Publication_artifacts(ctx, field)
 			case "authors":
@@ -32583,8 +32583,8 @@ func (ec *executionContext) fieldContext_Mutation_updatePublication(ctx context.
 				return ec.fieldContext_Publication_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Publication_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Publication_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Publication_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Publication_artifacts(ctx, field)
 			case "authors":
@@ -32662,8 +32662,8 @@ func (ec *executionContext) fieldContext_Mutation_createPublisher(ctx context.Co
 				return ec.fieldContext_Publisher_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Publisher_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Publisher_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Publisher_externalLink(ctx, field)
 			case "books":
 				return ec.fieldContext_Publisher_books(ctx, field)
 			}
@@ -32739,8 +32739,8 @@ func (ec *executionContext) fieldContext_Mutation_updatePublisher(ctx context.Co
 				return ec.fieldContext_Publisher_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Publisher_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Publisher_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Publisher_externalLink(ctx, field)
 			case "books":
 				return ec.fieldContext_Publisher_books(ctx, field)
 			}
@@ -32816,8 +32816,8 @@ func (ec *executionContext) fieldContext_Mutation_createRegion(ctx context.Conte
 				return ec.fieldContext_Region_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Region_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Region_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Region_externalLink(ctx, field)
 			case "location":
 				return ec.fieldContext_Region_location(ctx, field)
 			}
@@ -32893,8 +32893,8 @@ func (ec *executionContext) fieldContext_Mutation_updateRegion(ctx context.Conte
 				return ec.fieldContext_Region_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Region_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Region_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Region_externalLink(ctx, field)
 			case "location":
 				return ec.fieldContext_Region_location(ctx, field)
 			}
@@ -32970,8 +32970,8 @@ func (ec *executionContext) fieldContext_Mutation_createSet(ctx context.Context,
 				return ec.fieldContext_Set_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Set_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Set_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Set_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Set_artifacts(ctx, field)
 			case "monuments":
@@ -33049,8 +33049,8 @@ func (ec *executionContext) fieldContext_Mutation_updateSet(ctx context.Context,
 				return ec.fieldContext_Set_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Set_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Set_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Set_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Set_artifacts(ctx, field)
 			case "monuments":
@@ -33128,8 +33128,8 @@ func (ec *executionContext) fieldContext_Mutation_createSettlement(ctx context.C
 				return ec.fieldContext_Settlement_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Settlement_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Settlement_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Settlement_externalLink(ctx, field)
 			case "location":
 				return ec.fieldContext_Settlement_location(ctx, field)
 			}
@@ -33205,8 +33205,8 @@ func (ec *executionContext) fieldContext_Mutation_updateSettlement(ctx context.C
 				return ec.fieldContext_Settlement_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Settlement_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Settlement_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Settlement_externalLink(ctx, field)
 			case "location":
 				return ec.fieldContext_Settlement_location(ctx, field)
 			}
@@ -33282,8 +33282,8 @@ func (ec *executionContext) fieldContext_Mutation_createTechnique(ctx context.Co
 				return ec.fieldContext_Technique_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Technique_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Technique_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Technique_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Technique_artifacts(ctx, field)
 			}
@@ -33359,8 +33359,8 @@ func (ec *executionContext) fieldContext_Mutation_updateTechnique(ctx context.Co
 				return ec.fieldContext_Technique_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Technique_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Technique_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Technique_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Technique_artifacts(ctx, field)
 			}
@@ -33841,8 +33841,8 @@ func (ec *executionContext) fieldContext_Organization_description(ctx context.Co
 	return fc, nil
 }
 
-func (ec *executionContext) _Organization_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.Organization) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Organization_externalLinks(ctx, field)
+func (ec *executionContext) _Organization_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.Organization) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Organization_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -33855,7 +33855,7 @@ func (ec *executionContext) _Organization_externalLinks(ctx context.Context, fie
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -33864,12 +33864,12 @@ func (ec *executionContext) _Organization_externalLinks(ctx context.Context, fie
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Organization_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Organization_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Organization",
 		Field:      field,
@@ -34145,8 +34145,8 @@ func (ec *executionContext) fieldContext_Organization_people(ctx context.Context
 				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Person_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Person_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Person_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Person_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -34305,8 +34305,8 @@ func (ec *executionContext) fieldContext_Organization_organizationType(ctx conte
 				return ec.fieldContext_OrganizationType_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_OrganizationType_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_OrganizationType_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_OrganizationType_externalLink(ctx, field)
 			case "organizations":
 				return ec.fieldContext_OrganizationType_organizations(ctx, field)
 			}
@@ -34519,8 +34519,8 @@ func (ec *executionContext) fieldContext_OrganizationEdge_node(ctx context.Conte
 				return ec.fieldContext_Organization_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Organization_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Organization_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Organization_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Organization_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -34925,8 +34925,8 @@ func (ec *executionContext) fieldContext_OrganizationType_description(ctx contex
 	return fc, nil
 }
 
-func (ec *executionContext) _OrganizationType_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.OrganizationType) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_OrganizationType_externalLinks(ctx, field)
+func (ec *executionContext) _OrganizationType_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.OrganizationType) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OrganizationType_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -34939,7 +34939,7 @@ func (ec *executionContext) _OrganizationType_externalLinks(ctx context.Context,
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -34948,12 +34948,12 @@ func (ec *executionContext) _OrganizationType_externalLinks(ctx context.Context,
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_OrganizationType_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_OrganizationType_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "OrganizationType",
 		Field:      field,
@@ -35024,8 +35024,8 @@ func (ec *executionContext) fieldContext_OrganizationType_organizations(ctx cont
 				return ec.fieldContext_Organization_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Organization_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Organization_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Organization_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Organization_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -35246,8 +35246,8 @@ func (ec *executionContext) fieldContext_OrganizationTypeEdge_node(ctx context.C
 				return ec.fieldContext_OrganizationType_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_OrganizationType_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_OrganizationType_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_OrganizationType_externalLink(ctx, field)
 			case "organizations":
 				return ec.fieldContext_OrganizationType_organizations(ctx, field)
 			}
@@ -35808,8 +35808,8 @@ func (ec *executionContext) fieldContext_Period_description(ctx context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _Period_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.Period) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Period_externalLinks(ctx, field)
+func (ec *executionContext) _Period_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.Period) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Period_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -35822,7 +35822,7 @@ func (ec *executionContext) _Period_externalLinks(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -35831,12 +35831,12 @@ func (ec *executionContext) _Period_externalLinks(ctx context.Context, field gra
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Period_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Period_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Period",
 		Field:      field,
@@ -35901,8 +35901,8 @@ func (ec *executionContext) fieldContext_Period_artifacts(ctx context.Context, f
 				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Artifact_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Artifact_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -36157,8 +36157,8 @@ func (ec *executionContext) fieldContext_PeriodEdge_node(ctx context.Context, fi
 				return ec.fieldContext_Period_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Period_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Period_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Period_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Period_artifacts(ctx, field)
 			}
@@ -36672,8 +36672,8 @@ func (ec *executionContext) fieldContext_Person_description(ctx context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _Person_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.Person) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Person_externalLinks(ctx, field)
+func (ec *executionContext) _Person_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.Person) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Person_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -36686,7 +36686,7 @@ func (ec *executionContext) _Person_externalLinks(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -36695,12 +36695,12 @@ func (ec *executionContext) _Person_externalLinks(ctx context.Context, field gra
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Person_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Person_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Person",
 		Field:      field,
@@ -37096,8 +37096,8 @@ func (ec *executionContext) fieldContext_Person_artifacts(ctx context.Context, f
 				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Artifact_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Artifact_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -37207,8 +37207,8 @@ func (ec *executionContext) fieldContext_Person_books(ctx context.Context, field
 				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Book_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Book_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Book_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Book_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -37290,8 +37290,8 @@ func (ec *executionContext) fieldContext_Person_projects(ctx context.Context, fi
 				return ec.fieldContext_Project_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Project_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Project_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Project_externalLink(ctx, field)
 			case "beginData":
 				return ec.fieldContext_Project_beginData(ctx, field)
 			case "endDate":
@@ -37361,8 +37361,8 @@ func (ec *executionContext) fieldContext_Person_publications(ctx context.Context
 				return ec.fieldContext_Publication_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Publication_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Publication_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Publication_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Publication_artifacts(ctx, field)
 			case "authors":
@@ -37426,8 +37426,8 @@ func (ec *executionContext) fieldContext_Person_personRoles(ctx context.Context,
 				return ec.fieldContext_PersonRole_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_PersonRole_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_PersonRole_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_PersonRole_externalLink(ctx, field)
 			case "person":
 				return ec.fieldContext_PersonRole_person(ctx, field)
 			}
@@ -37562,8 +37562,8 @@ func (ec *executionContext) fieldContext_Person_affiliation(ctx context.Context,
 				return ec.fieldContext_Organization_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Organization_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Organization_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Organization_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Organization_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -37639,8 +37639,8 @@ func (ec *executionContext) fieldContext_Person_collections(ctx context.Context,
 				return ec.fieldContext_Collection_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Collection_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Collection_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Collection_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Collection_artifacts(ctx, field)
 			case "books":
@@ -37861,8 +37861,8 @@ func (ec *executionContext) fieldContext_PersonEdge_node(ctx context.Context, fi
 				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Person_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Person_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Person_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Person_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -38283,8 +38283,8 @@ func (ec *executionContext) fieldContext_PersonRole_description(ctx context.Cont
 	return fc, nil
 }
 
-func (ec *executionContext) _PersonRole_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.PersonRole) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_PersonRole_externalLinks(ctx, field)
+func (ec *executionContext) _PersonRole_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.PersonRole) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PersonRole_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -38297,7 +38297,7 @@ func (ec *executionContext) _PersonRole_externalLinks(ctx context.Context, field
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -38306,12 +38306,12 @@ func (ec *executionContext) _PersonRole_externalLinks(ctx context.Context, field
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_PersonRole_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_PersonRole_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "PersonRole",
 		Field:      field,
@@ -38382,8 +38382,8 @@ func (ec *executionContext) fieldContext_PersonRole_person(ctx context.Context, 
 				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Person_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Person_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Person_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Person_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -38620,8 +38620,8 @@ func (ec *executionContext) fieldContext_PersonRoleEdge_node(ctx context.Context
 				return ec.fieldContext_PersonRole_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_PersonRole_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_PersonRole_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_PersonRole_externalLink(ctx, field)
 			case "person":
 				return ec.fieldContext_PersonRole_person(ctx, field)
 			}
@@ -39012,8 +39012,8 @@ func (ec *executionContext) fieldContext_Project_description(ctx context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _Project_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.Project) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Project_externalLinks(ctx, field)
+func (ec *executionContext) _Project_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.Project) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Project_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -39026,7 +39026,7 @@ func (ec *executionContext) _Project_externalLinks(ctx context.Context, field gr
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -39035,12 +39035,12 @@ func (ec *executionContext) _Project_externalLinks(ctx context.Context, field gr
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Project_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Project_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Project",
 		Field:      field,
@@ -39187,8 +39187,8 @@ func (ec *executionContext) fieldContext_Project_artifacts(ctx context.Context, 
 				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Artifact_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Artifact_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -39304,8 +39304,8 @@ func (ec *executionContext) fieldContext_Project_team(ctx context.Context, field
 				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Person_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Person_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Person_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Person_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -39397,8 +39397,8 @@ func (ec *executionContext) fieldContext_Project_projectType(ctx context.Context
 				return ec.fieldContext_ProjectType_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProjectType_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ProjectType_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ProjectType_externalLink(ctx, field)
 			case "projects":
 				return ec.fieldContext_ProjectType_projects(ctx, field)
 			}
@@ -39605,8 +39605,8 @@ func (ec *executionContext) fieldContext_ProjectEdge_node(ctx context.Context, f
 				return ec.fieldContext_Project_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Project_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Project_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Project_externalLink(ctx, field)
 			case "beginData":
 				return ec.fieldContext_Project_beginData(ctx, field)
 			case "endDate":
@@ -40005,8 +40005,8 @@ func (ec *executionContext) fieldContext_ProjectType_description(ctx context.Con
 	return fc, nil
 }
 
-func (ec *executionContext) _ProjectType_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.ProjectType) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProjectType_externalLinks(ctx, field)
+func (ec *executionContext) _ProjectType_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.ProjectType) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProjectType_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -40019,7 +40019,7 @@ func (ec *executionContext) _ProjectType_externalLinks(ctx context.Context, fiel
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -40028,12 +40028,12 @@ func (ec *executionContext) _ProjectType_externalLinks(ctx context.Context, fiel
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_ProjectType_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_ProjectType_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ProjectType",
 		Field:      field,
@@ -40098,8 +40098,8 @@ func (ec *executionContext) fieldContext_ProjectType_projects(ctx context.Contex
 				return ec.fieldContext_Project_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Project_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Project_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Project_externalLink(ctx, field)
 			case "beginData":
 				return ec.fieldContext_Project_beginData(ctx, field)
 			case "endDate":
@@ -40314,8 +40314,8 @@ func (ec *executionContext) fieldContext_ProjectTypeEdge_node(ctx context.Contex
 				return ec.fieldContext_ProjectType_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProjectType_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ProjectType_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ProjectType_externalLink(ctx, field)
 			case "projects":
 				return ec.fieldContext_ProjectType_projects(ctx, field)
 			}
@@ -40706,8 +40706,8 @@ func (ec *executionContext) fieldContext_ProtectedArea_description(ctx context.C
 	return fc, nil
 }
 
-func (ec *executionContext) _ProtectedArea_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedArea) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProtectedArea_externalLinks(ctx, field)
+func (ec *executionContext) _ProtectedArea_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedArea) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProtectedArea_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -40720,7 +40720,7 @@ func (ec *executionContext) _ProtectedArea_externalLinks(ctx context.Context, fi
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -40729,12 +40729,12 @@ func (ec *executionContext) _ProtectedArea_externalLinks(ctx context.Context, fi
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_ProtectedArea_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_ProtectedArea_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ProtectedArea",
 		Field:      field,
@@ -40881,8 +40881,8 @@ func (ec *executionContext) fieldContext_ProtectedArea_protectedAreaPictures(ctx
 				return ec.fieldContext_ProtectedAreaPicture_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProtectedAreaPicture_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ProtectedAreaPicture_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ProtectedAreaPicture_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_ProtectedAreaPicture_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -40958,8 +40958,8 @@ func (ec *executionContext) fieldContext_ProtectedArea_protectedAreaCategory(ctx
 				return ec.fieldContext_ProtectedAreaCategory_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProtectedAreaCategory_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ProtectedAreaCategory_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ProtectedAreaCategory_externalLink(ctx, field)
 			case "protectedAreas":
 				return ec.fieldContext_ProtectedAreaCategory_protectedAreas(ctx, field)
 			}
@@ -41306,8 +41306,8 @@ func (ec *executionContext) fieldContext_ProtectedAreaCategory_description(ctx c
 	return fc, nil
 }
 
-func (ec *executionContext) _ProtectedAreaCategory_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaCategory) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProtectedAreaCategory_externalLinks(ctx, field)
+func (ec *executionContext) _ProtectedAreaCategory_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaCategory) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProtectedAreaCategory_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -41320,7 +41320,7 @@ func (ec *executionContext) _ProtectedAreaCategory_externalLinks(ctx context.Con
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -41329,12 +41329,12 @@ func (ec *executionContext) _ProtectedAreaCategory_externalLinks(ctx context.Con
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_ProtectedAreaCategory_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_ProtectedAreaCategory_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ProtectedAreaCategory",
 		Field:      field,
@@ -41399,8 +41399,8 @@ func (ec *executionContext) fieldContext_ProtectedAreaCategory_protectedAreas(ct
 				return ec.fieldContext_ProtectedArea_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProtectedArea_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ProtectedArea_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ProtectedArea_externalLink(ctx, field)
 			case "area":
 				return ec.fieldContext_ProtectedArea_area(ctx, field)
 			case "establishmentDate":
@@ -41613,8 +41613,8 @@ func (ec *executionContext) fieldContext_ProtectedAreaCategoryEdge_node(ctx cont
 				return ec.fieldContext_ProtectedAreaCategory_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProtectedAreaCategory_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ProtectedAreaCategory_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ProtectedAreaCategory_externalLink(ctx, field)
 			case "protectedAreas":
 				return ec.fieldContext_ProtectedAreaCategory_protectedAreas(ctx, field)
 			}
@@ -41865,8 +41865,8 @@ func (ec *executionContext) fieldContext_ProtectedAreaEdge_node(ctx context.Cont
 				return ec.fieldContext_ProtectedArea_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProtectedArea_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ProtectedArea_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ProtectedArea_externalLink(ctx, field)
 			case "area":
 				return ec.fieldContext_ProtectedArea_area(ctx, field)
 			case "establishmentDate":
@@ -42263,8 +42263,8 @@ func (ec *executionContext) fieldContext_ProtectedAreaPicture_description(ctx co
 	return fc, nil
 }
 
-func (ec *executionContext) _ProtectedAreaPicture_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaPicture) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProtectedAreaPicture_externalLinks(ctx, field)
+func (ec *executionContext) _ProtectedAreaPicture_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaPicture) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProtectedAreaPicture_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -42277,7 +42277,7 @@ func (ec *executionContext) _ProtectedAreaPicture_externalLinks(ctx context.Cont
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -42286,12 +42286,12 @@ func (ec *executionContext) _ProtectedAreaPicture_externalLinks(ctx context.Cont
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_ProtectedAreaPicture_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_ProtectedAreaPicture_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ProtectedAreaPicture",
 		Field:      field,
@@ -42520,8 +42520,8 @@ func (ec *executionContext) fieldContext_ProtectedAreaPicture_collection(ctx con
 				return ec.fieldContext_Collection_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Collection_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Collection_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Collection_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Collection_artifacts(ctx, field)
 			case "books":
@@ -42591,8 +42591,8 @@ func (ec *executionContext) fieldContext_ProtectedAreaPicture_protectedArea(ctx 
 				return ec.fieldContext_ProtectedArea_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProtectedArea_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ProtectedArea_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ProtectedArea_externalLink(ctx, field)
 			case "area":
 				return ec.fieldContext_ProtectedArea_area(ctx, field)
 			case "establishmentDate":
@@ -42660,8 +42660,8 @@ func (ec *executionContext) fieldContext_ProtectedAreaPicture_location(ctx conte
 				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Location_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Location_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Location_externalLink(ctx, field)
 			case "geometry":
 				return ec.fieldContext_Location_geometry(ctx, field)
 			case "artifacts":
@@ -42737,8 +42737,8 @@ func (ec *executionContext) fieldContext_ProtectedAreaPicture_license(ctx contex
 				return ec.fieldContext_License_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_License_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_License_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_License_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_License_artifacts(ctx, field)
 			case "books":
@@ -42949,8 +42949,8 @@ func (ec *executionContext) fieldContext_ProtectedAreaPictureEdge_node(ctx conte
 				return ec.fieldContext_ProtectedAreaPicture_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_ProtectedAreaPicture_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_ProtectedAreaPicture_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_ProtectedAreaPicture_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_ProtectedAreaPicture_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -43355,8 +43355,8 @@ func (ec *executionContext) fieldContext_Publication_description(ctx context.Con
 	return fc, nil
 }
 
-func (ec *executionContext) _Publication_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.Publication) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Publication_externalLinks(ctx, field)
+func (ec *executionContext) _Publication_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.Publication) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Publication_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -43369,7 +43369,7 @@ func (ec *executionContext) _Publication_externalLinks(ctx context.Context, fiel
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -43378,12 +43378,12 @@ func (ec *executionContext) _Publication_externalLinks(ctx context.Context, fiel
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Publication_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Publication_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Publication",
 		Field:      field,
@@ -43448,8 +43448,8 @@ func (ec *executionContext) fieldContext_Publication_artifacts(ctx context.Conte
 				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Artifact_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Artifact_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -43565,8 +43565,8 @@ func (ec *executionContext) fieldContext_Publication_authors(ctx context.Context
 				return ec.fieldContext_Person_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Person_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Person_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Person_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Person_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -43803,8 +43803,8 @@ func (ec *executionContext) fieldContext_PublicationEdge_node(ctx context.Contex
 				return ec.fieldContext_Publication_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Publication_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Publication_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Publication_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Publication_artifacts(ctx, field)
 			case "authors":
@@ -44197,8 +44197,8 @@ func (ec *executionContext) fieldContext_Publisher_description(ctx context.Conte
 	return fc, nil
 }
 
-func (ec *executionContext) _Publisher_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.Publisher) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Publisher_externalLinks(ctx, field)
+func (ec *executionContext) _Publisher_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.Publisher) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Publisher_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -44211,7 +44211,7 @@ func (ec *executionContext) _Publisher_externalLinks(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -44220,12 +44220,12 @@ func (ec *executionContext) _Publisher_externalLinks(ctx context.Context, field 
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Publisher_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Publisher_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Publisher",
 		Field:      field,
@@ -44290,8 +44290,8 @@ func (ec *executionContext) fieldContext_Publisher_books(ctx context.Context, fi
 				return ec.fieldContext_Book_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Book_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Book_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Book_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Book_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -44518,8 +44518,8 @@ func (ec *executionContext) fieldContext_PublisherEdge_node(ctx context.Context,
 				return ec.fieldContext_Publisher_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Publisher_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Publisher_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Publisher_externalLink(ctx, field)
 			case "books":
 				return ec.fieldContext_Publisher_books(ctx, field)
 			}
@@ -47351,8 +47351,8 @@ func (ec *executionContext) fieldContext_Region_description(ctx context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _Region_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.Region) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Region_externalLinks(ctx, field)
+func (ec *executionContext) _Region_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.Region) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Region_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -47365,7 +47365,7 @@ func (ec *executionContext) _Region_externalLinks(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -47374,12 +47374,12 @@ func (ec *executionContext) _Region_externalLinks(ctx context.Context, field gra
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Region_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Region_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Region",
 		Field:      field,
@@ -47444,8 +47444,8 @@ func (ec *executionContext) fieldContext_Region_location(ctx context.Context, fi
 				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Location_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Location_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Location_externalLink(ctx, field)
 			case "geometry":
 				return ec.fieldContext_Location_geometry(ctx, field)
 			case "artifacts":
@@ -47666,8 +47666,8 @@ func (ec *executionContext) fieldContext_RegionEdge_node(ctx context.Context, fi
 				return ec.fieldContext_Region_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Region_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Region_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Region_externalLink(ctx, field)
 			case "location":
 				return ec.fieldContext_Region_location(ctx, field)
 			}
@@ -48058,8 +48058,8 @@ func (ec *executionContext) fieldContext_Set_description(ctx context.Context, fi
 	return fc, nil
 }
 
-func (ec *executionContext) _Set_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.Set) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Set_externalLinks(ctx, field)
+func (ec *executionContext) _Set_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.Set) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Set_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -48072,7 +48072,7 @@ func (ec *executionContext) _Set_externalLinks(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -48081,12 +48081,12 @@ func (ec *executionContext) _Set_externalLinks(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Set_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Set_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Set",
 		Field:      field,
@@ -48151,8 +48151,8 @@ func (ec *executionContext) fieldContext_Set_artifacts(ctx context.Context, fiel
 				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Artifact_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Artifact_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -48262,8 +48262,8 @@ func (ec *executionContext) fieldContext_Set_monuments(ctx context.Context, fiel
 				return ec.fieldContext_Monument_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Monument_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Monument_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Monument_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Monument_artifacts(ctx, field)
 			case "sets":
@@ -48472,8 +48472,8 @@ func (ec *executionContext) fieldContext_SetEdge_node(ctx context.Context, field
 				return ec.fieldContext_Set_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Set_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Set_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Set_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Set_artifacts(ctx, field)
 			case "monuments":
@@ -48866,8 +48866,8 @@ func (ec *executionContext) fieldContext_Settlement_description(ctx context.Cont
 	return fc, nil
 }
 
-func (ec *executionContext) _Settlement_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.Settlement) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Settlement_externalLinks(ctx, field)
+func (ec *executionContext) _Settlement_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.Settlement) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Settlement_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -48880,7 +48880,7 @@ func (ec *executionContext) _Settlement_externalLinks(ctx context.Context, field
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -48889,12 +48889,12 @@ func (ec *executionContext) _Settlement_externalLinks(ctx context.Context, field
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Settlement_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Settlement_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Settlement",
 		Field:      field,
@@ -48959,8 +48959,8 @@ func (ec *executionContext) fieldContext_Settlement_location(ctx context.Context
 				return ec.fieldContext_Location_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Location_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Location_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Location_externalLink(ctx, field)
 			case "geometry":
 				return ec.fieldContext_Location_geometry(ctx, field)
 			case "artifacts":
@@ -49181,8 +49181,8 @@ func (ec *executionContext) fieldContext_SettlementEdge_node(ctx context.Context
 				return ec.fieldContext_Settlement_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Settlement_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Settlement_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Settlement_externalLink(ctx, field)
 			case "location":
 				return ec.fieldContext_Settlement_location(ctx, field)
 			}
@@ -49573,8 +49573,8 @@ func (ec *executionContext) fieldContext_Technique_description(ctx context.Conte
 	return fc, nil
 }
 
-func (ec *executionContext) _Technique_externalLinks(ctx context.Context, field graphql.CollectedField, obj *ent.Technique) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Technique_externalLinks(ctx, field)
+func (ec *executionContext) _Technique_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.Technique) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Technique_externalLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -49587,7 +49587,7 @@ func (ec *executionContext) _Technique_externalLinks(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ExternalLinks, nil
+		return obj.ExternalLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -49596,12 +49596,12 @@ func (ec *executionContext) _Technique_externalLinks(ctx context.Context, field 
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Technique_externalLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Technique_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Technique",
 		Field:      field,
@@ -49666,8 +49666,8 @@ func (ec *executionContext) fieldContext_Technique_artifacts(ctx context.Context
 				return ec.fieldContext_Artifact_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Artifact_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Artifact_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Artifact_externalLink(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -49922,8 +49922,8 @@ func (ec *executionContext) fieldContext_TechniqueEdge_node(ctx context.Context,
 				return ec.fieldContext_Technique_abbreviation(ctx, field)
 			case "description":
 				return ec.fieldContext_Technique_description(ctx, field)
-			case "externalLinks":
-				return ec.fieldContext_Technique_externalLinks(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Technique_externalLink(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Technique_artifacts(ctx, field)
 			}
@@ -51799,7 +51799,7 @@ func (ec *executionContext) unmarshalInputArtGenreWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArt", "hasArtWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasArt", "hasArtWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -52724,6 +52724,141 @@ func (ec *executionContext) unmarshalInputArtGenreWhereInput(ctx context.Context
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasArt":
 			var err error
 
@@ -52839,7 +52974,7 @@ func (ec *executionContext) unmarshalInputArtStyleWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArt", "hasArtWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasArt", "hasArtWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -53764,6 +53899,141 @@ func (ec *executionContext) unmarshalInputArtStyleWhereInput(ctx context.Context
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasArt":
 			var err error
 
@@ -53795,7 +54065,7 @@ func (ec *executionContext) unmarshalInputArtWhereInput(ctx context.Context, obj
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "hasArtGenre", "hasArtGenreWith", "hasArtStyle", "hasArtStyleWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "hasArtGenre", "hasArtGenreWith", "hasArtStyle", "hasArtStyleWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -54720,6 +54990,141 @@ func (ec *executionContext) unmarshalInputArtWhereInput(ctx context.Context, obj
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "primaryImageURL":
 			var err error
 
@@ -54946,7 +55351,7 @@ func (ec *executionContext) unmarshalInputArtifactWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "deletedAt", "deletedAtNEQ", "deletedAtIn", "deletedAtNotIn", "deletedAtGT", "deletedAtGTE", "deletedAtLT", "deletedAtLTE", "deletedAtIsNil", "deletedAtNotNil", "deletedBy", "deletedByNEQ", "deletedByIn", "deletedByNotIn", "deletedByGT", "deletedByGTE", "deletedByLT", "deletedByLTE", "deletedByContains", "deletedByHasPrefix", "deletedByHasSuffix", "deletedByIsNil", "deletedByNotNil", "deletedByEqualFold", "deletedByContainsFold", "dating", "datingNEQ", "datingIn", "datingNotIn", "datingGT", "datingGTE", "datingLT", "datingLTE", "datingContains", "datingHasPrefix", "datingHasSuffix", "datingIsNil", "datingNotNil", "datingEqualFold", "datingContainsFold", "dimensions", "dimensionsNEQ", "dimensionsIn", "dimensionsNotIn", "dimensionsGT", "dimensionsGTE", "dimensionsLT", "dimensionsLTE", "dimensionsContains", "dimensionsHasPrefix", "dimensionsHasSuffix", "dimensionsIsNil", "dimensionsNotNil", "dimensionsEqualFold", "dimensionsContainsFold", "chemicalComposition", "chemicalCompositionNEQ", "chemicalCompositionIn", "chemicalCompositionNotIn", "chemicalCompositionGT", "chemicalCompositionGTE", "chemicalCompositionLT", "chemicalCompositionLTE", "chemicalCompositionContains", "chemicalCompositionHasPrefix", "chemicalCompositionHasSuffix", "chemicalCompositionIsNil", "chemicalCompositionNotNil", "chemicalCompositionEqualFold", "chemicalCompositionContainsFold", "number", "numberNEQ", "numberIn", "numberNotIn", "numberGT", "numberGTE", "numberLT", "numberLTE", "numberContains", "numberHasPrefix", "numberHasSuffix", "numberIsNil", "numberNotNil", "numberEqualFold", "numberContainsFold", "typology", "typologyNEQ", "typologyIn", "typologyNotIn", "typologyGT", "typologyGTE", "typologyLT", "typologyLTE", "typologyContains", "typologyHasPrefix", "typologyHasSuffix", "typologyIsNil", "typologyNotNil", "typologyEqualFold", "typologyContainsFold", "weight", "weightNEQ", "weightIn", "weightNotIn", "weightGT", "weightGTE", "weightLT", "weightLTE", "weightContains", "weightHasPrefix", "weightHasSuffix", "weightIsNil", "weightNotNil", "weightEqualFold", "weightContainsFold", "admissionDate", "admissionDateNEQ", "admissionDateIn", "admissionDateNotIn", "admissionDateGT", "admissionDateGTE", "admissionDateLT", "admissionDateLTE", "admissionDateIsNil", "admissionDateNotNil", "hasAuthors", "hasAuthorsWith", "hasMediums", "hasMediumsWith", "hasTechniques", "hasTechniquesWith", "hasPeriod", "hasPeriodWith", "hasProjects", "hasProjectsWith", "hasPublications", "hasPublicationsWith", "hasHolders", "hasHoldersWith", "hasCulturalAffiliation", "hasCulturalAffiliationWith", "hasMonument", "hasMonumentWith", "hasModel", "hasModelWith", "hasSet", "hasSetWith", "hasLocation", "hasLocationWith", "hasCollection", "hasCollectionWith", "hasLicense", "hasLicenseWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "deletedAt", "deletedAtNEQ", "deletedAtIn", "deletedAtNotIn", "deletedAtGT", "deletedAtGTE", "deletedAtLT", "deletedAtLTE", "deletedAtIsNil", "deletedAtNotNil", "deletedBy", "deletedByNEQ", "deletedByIn", "deletedByNotIn", "deletedByGT", "deletedByGTE", "deletedByLT", "deletedByLTE", "deletedByContains", "deletedByHasPrefix", "deletedByHasSuffix", "deletedByIsNil", "deletedByNotNil", "deletedByEqualFold", "deletedByContainsFold", "dating", "datingNEQ", "datingIn", "datingNotIn", "datingGT", "datingGTE", "datingLT", "datingLTE", "datingContains", "datingHasPrefix", "datingHasSuffix", "datingIsNil", "datingNotNil", "datingEqualFold", "datingContainsFold", "dimensions", "dimensionsNEQ", "dimensionsIn", "dimensionsNotIn", "dimensionsGT", "dimensionsGTE", "dimensionsLT", "dimensionsLTE", "dimensionsContains", "dimensionsHasPrefix", "dimensionsHasSuffix", "dimensionsIsNil", "dimensionsNotNil", "dimensionsEqualFold", "dimensionsContainsFold", "chemicalComposition", "chemicalCompositionNEQ", "chemicalCompositionIn", "chemicalCompositionNotIn", "chemicalCompositionGT", "chemicalCompositionGTE", "chemicalCompositionLT", "chemicalCompositionLTE", "chemicalCompositionContains", "chemicalCompositionHasPrefix", "chemicalCompositionHasSuffix", "chemicalCompositionIsNil", "chemicalCompositionNotNil", "chemicalCompositionEqualFold", "chemicalCompositionContainsFold", "number", "numberNEQ", "numberIn", "numberNotIn", "numberGT", "numberGTE", "numberLT", "numberLTE", "numberContains", "numberHasPrefix", "numberHasSuffix", "numberIsNil", "numberNotNil", "numberEqualFold", "numberContainsFold", "typology", "typologyNEQ", "typologyIn", "typologyNotIn", "typologyGT", "typologyGTE", "typologyLT", "typologyLTE", "typologyContains", "typologyHasPrefix", "typologyHasSuffix", "typologyIsNil", "typologyNotNil", "typologyEqualFold", "typologyContainsFold", "weight", "weightNEQ", "weightIn", "weightNotIn", "weightGT", "weightGTE", "weightLT", "weightLTE", "weightContains", "weightHasPrefix", "weightHasSuffix", "weightIsNil", "weightNotNil", "weightEqualFold", "weightContainsFold", "admissionDate", "admissionDateNEQ", "admissionDateIn", "admissionDateNotIn", "admissionDateGT", "admissionDateGTE", "admissionDateLT", "admissionDateLTE", "admissionDateIsNil", "admissionDateNotNil", "hasAuthors", "hasAuthorsWith", "hasMediums", "hasMediumsWith", "hasTechniques", "hasTechniquesWith", "hasPeriod", "hasPeriodWith", "hasProjects", "hasProjectsWith", "hasPublications", "hasPublicationsWith", "hasHolders", "hasHoldersWith", "hasCulturalAffiliation", "hasCulturalAffiliationWith", "hasMonument", "hasMonumentWith", "hasModel", "hasModelWith", "hasSet", "hasSetWith", "hasLocation", "hasLocationWith", "hasCollection", "hasCollectionWith", "hasLicense", "hasLicenseWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -55871,6 +56276,141 @@ func (ec *executionContext) unmarshalInputArtifactWhereInput(ctx context.Context
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "primaryImageURL":
 			var err error
 
@@ -58166,7 +58706,7 @@ func (ec *executionContext) unmarshalInputBookGenreWhereInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasBooks", "hasBooksWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasBooks", "hasBooksWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -59091,6 +59631,141 @@ func (ec *executionContext) unmarshalInputBookGenreWhereInput(ctx context.Contex
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasBooks":
 			var err error
 
@@ -59164,7 +59839,7 @@ func (ec *executionContext) unmarshalInputBookWhereInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "year", "yearNEQ", "yearIn", "yearNotIn", "yearGT", "yearGTE", "yearLT", "yearLTE", "yearIsNil", "yearNotNil", "hasAuthors", "hasAuthorsWith", "hasBookGenres", "hasBookGenresWith", "hasCollection", "hasCollectionWith", "hasHolders", "hasHoldersWith", "hasPublisher", "hasPublisherWith", "hasLicense", "hasLicenseWith", "hasLocation", "hasLocationWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "year", "yearNEQ", "yearIn", "yearNotIn", "yearGT", "yearGTE", "yearLT", "yearLTE", "yearIsNil", "yearNotNil", "hasAuthors", "hasAuthorsWith", "hasBookGenres", "hasBookGenresWith", "hasCollection", "hasCollectionWith", "hasHolders", "hasHoldersWith", "hasPublisher", "hasPublisherWith", "hasLicense", "hasLicenseWith", "hasLocation", "hasLocationWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -60089,6 +60764,141 @@ func (ec *executionContext) unmarshalInputBookWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "primaryImageURL":
 			var err error
 
@@ -60495,7 +61305,7 @@ func (ec *executionContext) unmarshalInputCategoryWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasCollections", "hasCollectionsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasCollections", "hasCollectionsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -61420,6 +62230,141 @@ func (ec *executionContext) unmarshalInputCategoryWhereInput(ctx context.Context
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasCollections":
 			var err error
 
@@ -61493,7 +62438,7 @@ func (ec *executionContext) unmarshalInputCollectionWhereInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasPeople", "hasPeopleWith", "hasProtectedAreaPictures", "hasProtectedAreaPicturesWith", "hasCategory", "hasCategoryWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasPeople", "hasPeopleWith", "hasProtectedAreaPictures", "hasProtectedAreaPicturesWith", "hasCategory", "hasCategoryWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -62418,6 +63363,141 @@ func (ec *executionContext) unmarshalInputCollectionWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasArtifacts":
 			var err error
 
@@ -62563,7 +63643,7 @@ func (ec *executionContext) unmarshalInputCountryWhereInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasLocation", "hasLocationWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasLocation", "hasLocationWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -63488,6 +64568,141 @@ func (ec *executionContext) unmarshalInputCountryWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasLocation":
 			var err error
 
@@ -63519,7 +64734,7 @@ func (ec *executionContext) unmarshalInputCreateArtGenreInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "artIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -63589,15 +64804,15 @@ func (ec *executionContext) unmarshalInputCreateArtGenreInput(ctx context.Contex
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "artIDs":
 			var err error
 
@@ -63620,7 +64835,7 @@ func (ec *executionContext) unmarshalInputCreateArtInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "artGenreIDs", "artStyleIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "primaryImageURL", "additionalImagesUrls", "artGenreIDs", "artStyleIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -63690,15 +64905,15 @@ func (ec *executionContext) unmarshalInputCreateArtInput(ctx context.Context, ob
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "primaryImageURL":
 			var err error
 
@@ -63748,7 +64963,7 @@ func (ec *executionContext) unmarshalInputCreateArtStyleInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "artIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -63818,15 +65033,15 @@ func (ec *executionContext) unmarshalInputCreateArtStyleInput(ctx context.Contex
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "artIDs":
 			var err error
 
@@ -63849,7 +65064,7 @@ func (ec *executionContext) unmarshalInputCreateArtifactInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "deletedAt", "deletedBy", "dating", "dimensions", "chemicalComposition", "number", "typology", "weight", "admissionDate", "authorIDs", "mediumIDs", "techniqueIDs", "periodID", "projectIDs", "publicationIDs", "holderIDs", "culturalAffiliationID", "monumentID", "modelID", "setID", "locationID", "collectionID", "licenseID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "primaryImageURL", "additionalImagesUrls", "deletedAt", "deletedBy", "dating", "dimensions", "chemicalComposition", "number", "typology", "weight", "admissionDate", "authorIDs", "mediumIDs", "techniqueIDs", "periodID", "projectIDs", "publicationIDs", "holderIDs", "culturalAffiliationID", "monumentID", "modelID", "setID", "locationID", "collectionID", "licenseID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -63919,15 +65134,15 @@ func (ec *executionContext) unmarshalInputCreateArtifactInput(ctx context.Contex
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "primaryImageURL":
 			var err error
 
@@ -64166,7 +65381,7 @@ func (ec *executionContext) unmarshalInputCreateBookGenreInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "bookIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "bookIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -64236,15 +65451,15 @@ func (ec *executionContext) unmarshalInputCreateBookGenreInput(ctx context.Conte
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "bookIDs":
 			var err error
 
@@ -64267,7 +65482,7 @@ func (ec *executionContext) unmarshalInputCreateBookInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "files", "year", "authorIDs", "bookGenreIDs", "collectionID", "holderIDs", "publisherID", "licenseID", "locationID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "primaryImageURL", "additionalImagesUrls", "files", "year", "authorIDs", "bookGenreIDs", "collectionID", "holderIDs", "publisherID", "licenseID", "locationID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -64337,15 +65552,15 @@ func (ec *executionContext) unmarshalInputCreateBookInput(ctx context.Context, o
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "primaryImageURL":
 			var err error
 
@@ -64458,7 +65673,7 @@ func (ec *executionContext) unmarshalInputCreateCategoryInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "collectionIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "collectionIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -64528,15 +65743,15 @@ func (ec *executionContext) unmarshalInputCreateCategoryInput(ctx context.Contex
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "collectionIDs":
 			var err error
 
@@ -64559,7 +65774,7 @@ func (ec *executionContext) unmarshalInputCreateCollectionInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs", "bookIDs", "personIDs", "protectedAreaPictureIDs", "categoryID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "artifactIDs", "bookIDs", "personIDs", "protectedAreaPictureIDs", "categoryID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -64629,15 +65844,15 @@ func (ec *executionContext) unmarshalInputCreateCollectionInput(ctx context.Cont
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "artifactIDs":
 			var err error
 
@@ -64696,7 +65911,7 @@ func (ec *executionContext) unmarshalInputCreateCountryInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "locationID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "locationID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -64766,15 +65981,15 @@ func (ec *executionContext) unmarshalInputCreateCountryInput(ctx context.Context
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "locationID":
 			var err error
 
@@ -64797,7 +66012,7 @@ func (ec *executionContext) unmarshalInputCreateCultureInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "artifactIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -64867,15 +66082,15 @@ func (ec *executionContext) unmarshalInputCreateCultureInput(ctx context.Context
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "artifactIDs":
 			var err error
 
@@ -64898,7 +66113,7 @@ func (ec *executionContext) unmarshalInputCreateDistrictInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "locationID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "locationID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -64968,15 +66183,15 @@ func (ec *executionContext) unmarshalInputCreateDistrictInput(ctx context.Contex
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "locationID":
 			var err error
 
@@ -65118,7 +66333,7 @@ func (ec *executionContext) unmarshalInputCreateHolderResponsibilityInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "holderIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "holderIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -65188,15 +66403,15 @@ func (ec *executionContext) unmarshalInputCreateHolderResponsibilityInput(ctx co
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "holderIDs":
 			var err error
 
@@ -65219,7 +66434,7 @@ func (ec *executionContext) unmarshalInputCreateLicenseInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs", "bookIDs", "protectedAreaPictureIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "artifactIDs", "bookIDs", "protectedAreaPictureIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -65289,15 +66504,15 @@ func (ec *executionContext) unmarshalInputCreateLicenseInput(ctx context.Context
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "artifactIDs":
 			var err error
 
@@ -65338,7 +66553,7 @@ func (ec *executionContext) unmarshalInputCreateLocationInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "geometry", "artifactIDs", "bookIDs", "protectedAreaPictureIDs", "countryID", "districtID", "settlementID", "regionID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "geometry", "artifactIDs", "bookIDs", "protectedAreaPictureIDs", "countryID", "districtID", "settlementID", "regionID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -65408,15 +66623,15 @@ func (ec *executionContext) unmarshalInputCreateLocationInput(ctx context.Contex
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "geometry":
 			var err error
 
@@ -65502,7 +66717,7 @@ func (ec *executionContext) unmarshalInputCreateMediumInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "artifactIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -65572,15 +66787,15 @@ func (ec *executionContext) unmarshalInputCreateMediumInput(ctx context.Context,
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "artifactIDs":
 			var err error
 
@@ -65603,7 +66818,7 @@ func (ec *executionContext) unmarshalInputCreateModelInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "artifactIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -65673,15 +66888,15 @@ func (ec *executionContext) unmarshalInputCreateModelInput(ctx context.Context, 
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "artifactIDs":
 			var err error
 
@@ -65704,7 +66919,7 @@ func (ec *executionContext) unmarshalInputCreateMonumentInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs", "setIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "artifactIDs", "setIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -65774,15 +66989,15 @@ func (ec *executionContext) unmarshalInputCreateMonumentInput(ctx context.Contex
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "artifactIDs":
 			var err error
 
@@ -65814,7 +67029,7 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "address", "phoneNumbers", "emails", "displayName", "abbreviation", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "previousNames", "isInAConsortium", "consortiumDocumentURL", "personIDs", "holderID", "organizationTypeID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "address", "phoneNumbers", "emails", "displayName", "abbreviation", "description", "externalLink", "primaryImageURL", "additionalImagesUrls", "previousNames", "isInAConsortium", "consortiumDocumentURL", "personIDs", "holderID", "organizationTypeID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -65911,15 +67126,15 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "primaryImageURL":
 			var err error
 
@@ -66005,7 +67220,7 @@ func (ec *executionContext) unmarshalInputCreateOrganizationTypeInput(ctx contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "organizationIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "organizationIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -66075,15 +67290,15 @@ func (ec *executionContext) unmarshalInputCreateOrganizationTypeInput(ctx contex
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "organizationIDs":
 			var err error
 
@@ -66106,7 +67321,7 @@ func (ec *executionContext) unmarshalInputCreatePeriodInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "artifactIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -66176,15 +67391,15 @@ func (ec *executionContext) unmarshalInputCreatePeriodInput(ctx context.Context,
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "artifactIDs":
 			var err error
 
@@ -66207,7 +67422,7 @@ func (ec *executionContext) unmarshalInputCreatePersonInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "address", "phoneNumbers", "emails", "displayName", "abbreviation", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "givenName", "familyName", "patronymicName", "beginData", "endDate", "gender", "artifactIDs", "bookIDs", "projectIDs", "publicationIDs", "personRoleIDs", "holderID", "affiliationID", "collectionsID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "address", "phoneNumbers", "emails", "displayName", "abbreviation", "description", "externalLink", "primaryImageURL", "additionalImagesUrls", "givenName", "familyName", "patronymicName", "beginData", "endDate", "gender", "artifactIDs", "bookIDs", "projectIDs", "publicationIDs", "personRoleIDs", "holderID", "affiliationID", "collectionsID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -66304,15 +67519,15 @@ func (ec *executionContext) unmarshalInputCreatePersonInput(ctx context.Context,
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "primaryImageURL":
 			var err error
 
@@ -66470,7 +67685,7 @@ func (ec *executionContext) unmarshalInputCreatePersonRoleInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "personIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "personIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -66540,15 +67755,15 @@ func (ec *executionContext) unmarshalInputCreatePersonRoleInput(ctx context.Cont
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "personIDs":
 			var err error
 
@@ -66571,7 +67786,7 @@ func (ec *executionContext) unmarshalInputCreateProjectInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "beginData", "endDate", "artifactIDs", "teamIDs", "projectTypeID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "beginData", "endDate", "artifactIDs", "teamIDs", "projectTypeID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -66641,15 +67856,15 @@ func (ec *executionContext) unmarshalInputCreateProjectInput(ctx context.Context
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "beginData":
 			var err error
 
@@ -66708,7 +67923,7 @@ func (ec *executionContext) unmarshalInputCreateProjectTypeInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "projectIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "projectIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -66778,15 +67993,15 @@ func (ec *executionContext) unmarshalInputCreateProjectTypeInput(ctx context.Con
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "projectIDs":
 			var err error
 
@@ -66809,7 +68024,7 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaCategoryInput(ctx c
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "protectedAreaIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "protectedAreaIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -66879,15 +68094,15 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaCategoryInput(ctx c
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "protectedAreaIDs":
 			var err error
 
@@ -66910,7 +68125,7 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "area", "establishmentDate", "protectedAreaPictureIDs", "protectedAreaCategoryID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "area", "establishmentDate", "protectedAreaPictureIDs", "protectedAreaCategoryID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -66980,15 +68195,15 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaInput(ctx context.C
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "area":
 			var err error
 
@@ -67038,7 +68253,7 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaPictureInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "primaryImageURL", "additionalImagesUrls", "shootingDate", "geometry", "collectionID", "protectedAreaID", "locationID", "licenseID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "primaryImageURL", "additionalImagesUrls", "shootingDate", "geometry", "collectionID", "protectedAreaID", "locationID", "licenseID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -67108,15 +68323,15 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaPictureInput(ctx co
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "primaryImageURL":
 			var err error
 
@@ -67202,7 +68417,7 @@ func (ec *executionContext) unmarshalInputCreatePublicationInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs", "authorIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "artifactIDs", "authorIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -67272,15 +68487,15 @@ func (ec *executionContext) unmarshalInputCreatePublicationInput(ctx context.Con
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "artifactIDs":
 			var err error
 
@@ -67312,7 +68527,7 @@ func (ec *executionContext) unmarshalInputCreatePublisherInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "bookIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "bookIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -67382,15 +68597,15 @@ func (ec *executionContext) unmarshalInputCreatePublisherInput(ctx context.Conte
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "bookIDs":
 			var err error
 
@@ -67413,7 +68628,7 @@ func (ec *executionContext) unmarshalInputCreateRegionInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "locationID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "locationID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -67483,15 +68698,15 @@ func (ec *executionContext) unmarshalInputCreateRegionInput(ctx context.Context,
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "locationID":
 			var err error
 
@@ -67514,7 +68729,7 @@ func (ec *executionContext) unmarshalInputCreateSetInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs", "monumentIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "artifactIDs", "monumentIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -67584,15 +68799,15 @@ func (ec *executionContext) unmarshalInputCreateSetInput(ctx context.Context, ob
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "artifactIDs":
 			var err error
 
@@ -67624,7 +68839,7 @@ func (ec *executionContext) unmarshalInputCreateSettlementInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "locationID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "locationID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -67694,15 +68909,15 @@ func (ec *executionContext) unmarshalInputCreateSettlementInput(ctx context.Cont
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "locationID":
 			var err error
 
@@ -67725,7 +68940,7 @@ func (ec *executionContext) unmarshalInputCreateTechniqueInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLinks", "artifactIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "artifactIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -67795,15 +69010,15 @@ func (ec *executionContext) unmarshalInputCreateTechniqueInput(ctx context.Conte
 				return it, err
 			}
 			it.Description = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
+			it.ExternalLink = data
 		case "artifactIDs":
 			var err error
 
@@ -67868,7 +69083,7 @@ func (ec *executionContext) unmarshalInputCultureWhereInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasArtifacts", "hasArtifactsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -68793,6 +70008,141 @@ func (ec *executionContext) unmarshalInputCultureWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasArtifacts":
 			var err error
 
@@ -68866,7 +70216,7 @@ func (ec *executionContext) unmarshalInputDistrictWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasLocation", "hasLocationWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasLocation", "hasLocationWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -69791,6 +71141,141 @@ func (ec *executionContext) unmarshalInputDistrictWhereInput(ctx context.Context
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasLocation":
 			var err error
 
@@ -69906,7 +71391,7 @@ func (ec *executionContext) unmarshalInputHolderResponsibilityWhereInput(ctx con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasHolder", "hasHolderWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasHolder", "hasHolderWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -70831,6 +72316,141 @@ func (ec *executionContext) unmarshalInputHolderResponsibilityWhereInput(ctx con
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasHolder":
 			var err error
 
@@ -71808,7 +73428,7 @@ func (ec *executionContext) unmarshalInputLicenseWhereInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasProtectedAreaPictures", "hasProtectedAreaPicturesWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasProtectedAreaPictures", "hasProtectedAreaPicturesWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -72733,6 +74353,141 @@ func (ec *executionContext) unmarshalInputLicenseWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasArtifacts":
 			var err error
 
@@ -72842,7 +74597,7 @@ func (ec *executionContext) unmarshalInputLocationWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "geometry", "geometryNEQ", "geometryIn", "geometryNotIn", "geometryGT", "geometryGTE", "geometryLT", "geometryLTE", "geometryIsNil", "geometryNotNil", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasProtectedAreaPictures", "hasProtectedAreaPicturesWith", "hasCountry", "hasCountryWith", "hasDistrict", "hasDistrictWith", "hasSettlement", "hasSettlementWith", "hasRegion", "hasRegionWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "geometry", "geometryNEQ", "geometryIn", "geometryNotIn", "geometryGT", "geometryGTE", "geometryLT", "geometryLTE", "geometryIsNil", "geometryNotNil", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasProtectedAreaPictures", "hasProtectedAreaPicturesWith", "hasCountry", "hasCountryWith", "hasDistrict", "hasDistrictWith", "hasSettlement", "hasSettlementWith", "hasRegion", "hasRegionWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -73767,6 +75522,141 @@ func (ec *executionContext) unmarshalInputLocationWhereInput(ctx context.Context
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "geometry":
 			var err error
 
@@ -74038,7 +75928,7 @@ func (ec *executionContext) unmarshalInputMediumWhereInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasArtifacts", "hasArtifactsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -74963,6 +76853,141 @@ func (ec *executionContext) unmarshalInputMediumWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasArtifacts":
 			var err error
 
@@ -75036,7 +77061,7 @@ func (ec *executionContext) unmarshalInputModelWhereInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasArtifacts", "hasArtifactsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -75961,6 +77986,141 @@ func (ec *executionContext) unmarshalInputModelWhereInput(ctx context.Context, o
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasArtifacts":
 			var err error
 
@@ -76034,7 +78194,7 @@ func (ec *executionContext) unmarshalInputMonumentWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasSets", "hasSetsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasArtifacts", "hasArtifactsWith", "hasSets", "hasSetsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -76959,6 +79119,141 @@ func (ec *executionContext) unmarshalInputMonumentWhereInput(ctx context.Context
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasArtifacts":
 			var err error
 
@@ -77092,7 +79387,7 @@ func (ec *executionContext) unmarshalInputOrganizationTypeWhereInput(ctx context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasOrganizations", "hasOrganizationsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasOrganizations", "hasOrganizationsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -78017,6 +80312,141 @@ func (ec *executionContext) unmarshalInputOrganizationTypeWhereInput(ctx context
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasOrganizations":
 			var err error
 
@@ -78048,7 +80478,7 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "address", "addressNEQ", "addressIn", "addressNotIn", "addressGT", "addressGTE", "addressLT", "addressLTE", "addressContains", "addressHasPrefix", "addressHasSuffix", "addressIsNil", "addressNotNil", "addressEqualFold", "addressContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "isInAConsortium", "isInAConsortiumNEQ", "isInAConsortiumIsNil", "isInAConsortiumNotNil", "consortiumDocumentURL", "consortiumDocumentURLNEQ", "consortiumDocumentURLIn", "consortiumDocumentURLNotIn", "consortiumDocumentURLGT", "consortiumDocumentURLGTE", "consortiumDocumentURLLT", "consortiumDocumentURLLTE", "consortiumDocumentURLContains", "consortiumDocumentURLHasPrefix", "consortiumDocumentURLHasSuffix", "consortiumDocumentURLIsNil", "consortiumDocumentURLNotNil", "consortiumDocumentURLEqualFold", "consortiumDocumentURLContainsFold", "hasPeople", "hasPeopleWith", "hasHolder", "hasHolderWith", "hasOrganizationType", "hasOrganizationTypeWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "address", "addressNEQ", "addressIn", "addressNotIn", "addressGT", "addressGTE", "addressLT", "addressLTE", "addressContains", "addressHasPrefix", "addressHasSuffix", "addressIsNil", "addressNotNil", "addressEqualFold", "addressContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "isInAConsortium", "isInAConsortiumNEQ", "isInAConsortiumIsNil", "isInAConsortiumNotNil", "consortiumDocumentURL", "consortiumDocumentURLNEQ", "consortiumDocumentURLIn", "consortiumDocumentURLNotIn", "consortiumDocumentURLGT", "consortiumDocumentURLGTE", "consortiumDocumentURLLT", "consortiumDocumentURLLTE", "consortiumDocumentURLContains", "consortiumDocumentURLHasPrefix", "consortiumDocumentURLHasSuffix", "consortiumDocumentURLIsNil", "consortiumDocumentURLNotNil", "consortiumDocumentURLEqualFold", "consortiumDocumentURLContainsFold", "hasPeople", "hasPeopleWith", "hasHolder", "hasHolderWith", "hasOrganizationType", "hasOrganizationTypeWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -79108,6 +81538,141 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "primaryImageURL":
 			var err error
 
@@ -79523,7 +82088,7 @@ func (ec *executionContext) unmarshalInputPeriodWhereInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasArtifacts", "hasArtifactsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -80448,6 +83013,141 @@ func (ec *executionContext) unmarshalInputPeriodWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasArtifacts":
 			var err error
 
@@ -80563,7 +83263,7 @@ func (ec *executionContext) unmarshalInputPersonRoleWhereInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasPerson", "hasPersonWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasPerson", "hasPersonWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -81488,6 +84188,141 @@ func (ec *executionContext) unmarshalInputPersonRoleWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasPerson":
 			var err error
 
@@ -81519,7 +84354,7 @@ func (ec *executionContext) unmarshalInputPersonWhereInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "address", "addressNEQ", "addressIn", "addressNotIn", "addressGT", "addressGTE", "addressLT", "addressLTE", "addressContains", "addressHasPrefix", "addressHasSuffix", "addressIsNil", "addressNotNil", "addressEqualFold", "addressContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "givenName", "givenNameNEQ", "givenNameIn", "givenNameNotIn", "givenNameGT", "givenNameGTE", "givenNameLT", "givenNameLTE", "givenNameContains", "givenNameHasPrefix", "givenNameHasSuffix", "givenNameIsNil", "givenNameNotNil", "givenNameEqualFold", "givenNameContainsFold", "familyName", "familyNameNEQ", "familyNameIn", "familyNameNotIn", "familyNameGT", "familyNameGTE", "familyNameLT", "familyNameLTE", "familyNameContains", "familyNameHasPrefix", "familyNameHasSuffix", "familyNameIsNil", "familyNameNotNil", "familyNameEqualFold", "familyNameContainsFold", "patronymicName", "patronymicNameNEQ", "patronymicNameIn", "patronymicNameNotIn", "patronymicNameGT", "patronymicNameGTE", "patronymicNameLT", "patronymicNameLTE", "patronymicNameContains", "patronymicNameHasPrefix", "patronymicNameHasSuffix", "patronymicNameIsNil", "patronymicNameNotNil", "patronymicNameEqualFold", "patronymicNameContainsFold", "beginData", "beginDataNEQ", "beginDataIn", "beginDataNotIn", "beginDataGT", "beginDataGTE", "beginDataLT", "beginDataLTE", "beginDataIsNil", "beginDataNotNil", "endDate", "endDateNEQ", "endDateIn", "endDateNotIn", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "gender", "genderNEQ", "genderIn", "genderNotIn", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasProjects", "hasProjectsWith", "hasPublications", "hasPublicationsWith", "hasPersonRoles", "hasPersonRolesWith", "hasHolder", "hasHolderWith", "hasAffiliation", "hasAffiliationWith", "hasCollections", "hasCollectionsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "address", "addressNEQ", "addressIn", "addressNotIn", "addressGT", "addressGTE", "addressLT", "addressLTE", "addressContains", "addressHasPrefix", "addressHasSuffix", "addressIsNil", "addressNotNil", "addressEqualFold", "addressContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "givenName", "givenNameNEQ", "givenNameIn", "givenNameNotIn", "givenNameGT", "givenNameGTE", "givenNameLT", "givenNameLTE", "givenNameContains", "givenNameHasPrefix", "givenNameHasSuffix", "givenNameIsNil", "givenNameNotNil", "givenNameEqualFold", "givenNameContainsFold", "familyName", "familyNameNEQ", "familyNameIn", "familyNameNotIn", "familyNameGT", "familyNameGTE", "familyNameLT", "familyNameLTE", "familyNameContains", "familyNameHasPrefix", "familyNameHasSuffix", "familyNameIsNil", "familyNameNotNil", "familyNameEqualFold", "familyNameContainsFold", "patronymicName", "patronymicNameNEQ", "patronymicNameIn", "patronymicNameNotIn", "patronymicNameGT", "patronymicNameGTE", "patronymicNameLT", "patronymicNameLTE", "patronymicNameContains", "patronymicNameHasPrefix", "patronymicNameHasSuffix", "patronymicNameIsNil", "patronymicNameNotNil", "patronymicNameEqualFold", "patronymicNameContainsFold", "beginData", "beginDataNEQ", "beginDataIn", "beginDataNotIn", "beginDataGT", "beginDataGTE", "beginDataLT", "beginDataLTE", "beginDataIsNil", "beginDataNotNil", "endDate", "endDateNEQ", "endDateIn", "endDateNotIn", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "gender", "genderNEQ", "genderIn", "genderNotIn", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasProjects", "hasProjectsWith", "hasPublications", "hasPublicationsWith", "hasPersonRoles", "hasPersonRolesWith", "hasHolder", "hasHolderWith", "hasAffiliation", "hasAffiliationWith", "hasCollections", "hasCollectionsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -82579,6 +85414,141 @@ func (ec *executionContext) unmarshalInputPersonWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "primaryImageURL":
 			var err error
 
@@ -83576,7 +86546,7 @@ func (ec *executionContext) unmarshalInputProjectTypeWhereInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasProjects", "hasProjectsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasProjects", "hasProjectsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -84501,6 +87471,141 @@ func (ec *executionContext) unmarshalInputProjectTypeWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasProjects":
 			var err error
 
@@ -84532,7 +87637,7 @@ func (ec *executionContext) unmarshalInputProjectWhereInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "beginData", "beginDataNEQ", "beginDataIn", "beginDataNotIn", "beginDataGT", "beginDataGTE", "beginDataLT", "beginDataLTE", "beginDataIsNil", "beginDataNotNil", "endDate", "endDateNEQ", "endDateIn", "endDateNotIn", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "hasArtifacts", "hasArtifactsWith", "hasTeam", "hasTeamWith", "hasProjectType", "hasProjectTypeWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "beginData", "beginDataNEQ", "beginDataIn", "beginDataNotIn", "beginDataGT", "beginDataGTE", "beginDataLT", "beginDataLTE", "beginDataIsNil", "beginDataNotNil", "endDate", "endDateNEQ", "endDateIn", "endDateNotIn", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "hasArtifacts", "hasArtifactsWith", "hasTeam", "hasTeamWith", "hasProjectType", "hasProjectTypeWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -85457,6 +88562,141 @@ func (ec *executionContext) unmarshalInputProjectWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "beginData":
 			var err error
 
@@ -85746,7 +88986,7 @@ func (ec *executionContext) unmarshalInputProtectedAreaCategoryWhereInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasProtectedAreas", "hasProtectedAreasWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasProtectedAreas", "hasProtectedAreasWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -86671,6 +89911,141 @@ func (ec *executionContext) unmarshalInputProtectedAreaCategoryWhereInput(ctx co
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasProtectedAreas":
 			var err error
 
@@ -86786,7 +90161,7 @@ func (ec *executionContext) unmarshalInputProtectedAreaPictureWhereInput(ctx con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "shootingDate", "shootingDateNEQ", "shootingDateIn", "shootingDateNotIn", "shootingDateGT", "shootingDateGTE", "shootingDateLT", "shootingDateLTE", "shootingDateIsNil", "shootingDateNotNil", "geometry", "geometryNEQ", "geometryIn", "geometryNotIn", "geometryGT", "geometryGTE", "geometryLT", "geometryLTE", "geometryIsNil", "geometryNotNil", "hasCollection", "hasCollectionWith", "hasProtectedArea", "hasProtectedAreaWith", "hasLocation", "hasLocationWith", "hasLicense", "hasLicenseWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "shootingDate", "shootingDateNEQ", "shootingDateIn", "shootingDateNotIn", "shootingDateGT", "shootingDateGTE", "shootingDateLT", "shootingDateLTE", "shootingDateIsNil", "shootingDateNotNil", "geometry", "geometryNEQ", "geometryIn", "geometryNotIn", "geometryGT", "geometryGTE", "geometryLT", "geometryLTE", "geometryIsNil", "geometryNotNil", "hasCollection", "hasCollectionWith", "hasProtectedArea", "hasProtectedAreaWith", "hasLocation", "hasLocationWith", "hasLicense", "hasLicenseWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -87711,6 +91086,141 @@ func (ec *executionContext) unmarshalInputProtectedAreaPictureWhereInput(ctx con
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "primaryImageURL":
 			var err error
 
@@ -88111,7 +91621,7 @@ func (ec *executionContext) unmarshalInputProtectedAreaWhereInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "area", "areaNEQ", "areaIn", "areaNotIn", "areaGT", "areaGTE", "areaLT", "areaLTE", "areaContains", "areaHasPrefix", "areaHasSuffix", "areaIsNil", "areaNotNil", "areaEqualFold", "areaContainsFold", "establishmentDate", "establishmentDateNEQ", "establishmentDateIn", "establishmentDateNotIn", "establishmentDateGT", "establishmentDateGTE", "establishmentDateLT", "establishmentDateLTE", "establishmentDateIsNil", "establishmentDateNotNil", "hasProtectedAreaPictures", "hasProtectedAreaPicturesWith", "hasProtectedAreaCategory", "hasProtectedAreaCategoryWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "area", "areaNEQ", "areaIn", "areaNotIn", "areaGT", "areaGTE", "areaLT", "areaLTE", "areaContains", "areaHasPrefix", "areaHasSuffix", "areaIsNil", "areaNotNil", "areaEqualFold", "areaContainsFold", "establishmentDate", "establishmentDateNEQ", "establishmentDateIn", "establishmentDateNotIn", "establishmentDateGT", "establishmentDateGTE", "establishmentDateLT", "establishmentDateLTE", "establishmentDateIsNil", "establishmentDateNotNil", "hasProtectedAreaPictures", "hasProtectedAreaPicturesWith", "hasProtectedAreaCategory", "hasProtectedAreaCategoryWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -89036,6 +92546,141 @@ func (ec *executionContext) unmarshalInputProtectedAreaWhereInput(ctx context.Co
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "area":
 			var err error
 
@@ -89352,7 +92997,7 @@ func (ec *executionContext) unmarshalInputPublicationWhereInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasAuthors", "hasAuthorsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasArtifacts", "hasArtifactsWith", "hasAuthors", "hasAuthorsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -90277,6 +93922,141 @@ func (ec *executionContext) unmarshalInputPublicationWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasArtifacts":
 			var err error
 
@@ -90368,7 +94148,7 @@ func (ec *executionContext) unmarshalInputPublisherWhereInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasBooks", "hasBooksWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasBooks", "hasBooksWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -91293,6 +95073,141 @@ func (ec *executionContext) unmarshalInputPublisherWhereInput(ctx context.Contex
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasBooks":
 			var err error
 
@@ -91366,7 +95281,7 @@ func (ec *executionContext) unmarshalInputRegionWhereInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasLocation", "hasLocationWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasLocation", "hasLocationWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -92291,6 +96206,141 @@ func (ec *executionContext) unmarshalInputRegionWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasLocation":
 			var err error
 
@@ -92364,7 +96414,7 @@ func (ec *executionContext) unmarshalInputSetWhereInput(ctx context.Context, obj
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith", "hasMonuments", "hasMonumentsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasArtifacts", "hasArtifactsWith", "hasMonuments", "hasMonumentsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -93289,6 +97339,141 @@ func (ec *executionContext) unmarshalInputSetWhereInput(ctx context.Context, obj
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasArtifacts":
 			var err error
 
@@ -93380,7 +97565,7 @@ func (ec *executionContext) unmarshalInputSettlementWhereInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasLocation", "hasLocationWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasLocation", "hasLocationWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -94305,6 +98490,141 @@ func (ec *executionContext) unmarshalInputSettlementWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasLocation":
 			var err error
 
@@ -94378,7 +98698,7 @@ func (ec *executionContext) unmarshalInputTechniqueWhereInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "hasArtifacts", "hasArtifactsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasArtifacts", "hasArtifactsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -95303,6 +99623,141 @@ func (ec *executionContext) unmarshalInputTechniqueWhereInput(ctx context.Contex
 				return it, err
 			}
 			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
 		case "hasArtifacts":
 			var err error
 
@@ -95334,7 +99789,7 @@ func (ec *executionContext) unmarshalInputUpdateArtGenreInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtIDs", "removeArtIDs", "clearArt"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addArtIDs", "removeArtIDs", "clearArt"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -95440,33 +99895,24 @@ func (ec *executionContext) unmarshalInputUpdateArtGenreInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "addArtIDs":
 			var err error
 
@@ -95507,7 +99953,7 @@ func (ec *executionContext) unmarshalInputUpdateArtInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "addArtGenreIDs", "removeArtGenreIDs", "clearArtGenre", "addArtStyleIDs", "removeArtStyleIDs", "clearArtStyle"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "addArtGenreIDs", "removeArtGenreIDs", "clearArtGenre", "addArtStyleIDs", "removeArtStyleIDs", "clearArtStyle"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -95613,33 +100059,24 @@ func (ec *executionContext) unmarshalInputUpdateArtInput(ctx context.Context, ob
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "primaryImageURL":
 			var err error
 
@@ -95752,7 +100189,7 @@ func (ec *executionContext) unmarshalInputUpdateArtStyleInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtIDs", "removeArtIDs", "clearArt"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addArtIDs", "removeArtIDs", "clearArt"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -95858,33 +100295,24 @@ func (ec *executionContext) unmarshalInputUpdateArtStyleInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "addArtIDs":
 			var err error
 
@@ -95925,7 +100353,7 @@ func (ec *executionContext) unmarshalInputUpdateArtifactInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "deletedAt", "clearDeletedAt", "deletedBy", "clearDeletedBy", "dating", "clearDating", "dimensions", "clearDimensions", "chemicalComposition", "clearChemicalComposition", "number", "clearNumber", "typology", "clearTypology", "weight", "clearWeight", "admissionDate", "clearAdmissionDate", "addAuthorIDs", "removeAuthorIDs", "clearAuthors", "addMediumIDs", "removeMediumIDs", "clearMediums", "addTechniqueIDs", "removeTechniqueIDs", "clearTechniques", "periodID", "clearPeriod", "addProjectIDs", "removeProjectIDs", "clearProjects", "addPublicationIDs", "removePublicationIDs", "clearPublications", "addHolderIDs", "removeHolderIDs", "clearHolders", "culturalAffiliationID", "clearCulturalAffiliation", "monumentID", "clearMonument", "modelID", "clearModel", "setID", "clearSet", "locationID", "clearLocation", "collectionID", "clearCollection", "licenseID", "clearLicense"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "deletedAt", "clearDeletedAt", "deletedBy", "clearDeletedBy", "dating", "clearDating", "dimensions", "clearDimensions", "chemicalComposition", "clearChemicalComposition", "number", "clearNumber", "typology", "clearTypology", "weight", "clearWeight", "admissionDate", "clearAdmissionDate", "addAuthorIDs", "removeAuthorIDs", "clearAuthors", "addMediumIDs", "removeMediumIDs", "clearMediums", "addTechniqueIDs", "removeTechniqueIDs", "clearTechniques", "periodID", "clearPeriod", "addProjectIDs", "removeProjectIDs", "clearProjects", "addPublicationIDs", "removePublicationIDs", "clearPublications", "addHolderIDs", "removeHolderIDs", "clearHolders", "culturalAffiliationID", "clearCulturalAffiliation", "monumentID", "clearMonument", "modelID", "clearModel", "setID", "clearSet", "locationID", "clearLocation", "collectionID", "clearCollection", "licenseID", "clearLicense"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -96031,33 +100459,24 @@ func (ec *executionContext) unmarshalInputUpdateArtifactInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "primaryImageURL":
 			var err error
 
@@ -96584,7 +101003,7 @@ func (ec *executionContext) unmarshalInputUpdateBookGenreInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addBookIDs", "removeBookIDs", "clearBooks"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addBookIDs", "removeBookIDs", "clearBooks"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -96690,33 +101109,24 @@ func (ec *executionContext) unmarshalInputUpdateBookGenreInput(ctx context.Conte
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "addBookIDs":
 			var err error
 
@@ -96757,7 +101167,7 @@ func (ec *executionContext) unmarshalInputUpdateBookInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "files", "appendFiles", "clearFiles", "year", "clearYear", "addAuthorIDs", "removeAuthorIDs", "clearAuthors", "addBookGenreIDs", "removeBookGenreIDs", "clearBookGenres", "collectionID", "clearCollection", "addHolderIDs", "removeHolderIDs", "clearHolders", "publisherID", "clearPublisher", "licenseID", "clearLicense", "locationID", "clearLocation"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "files", "appendFiles", "clearFiles", "year", "clearYear", "addAuthorIDs", "removeAuthorIDs", "clearAuthors", "addBookGenreIDs", "removeBookGenreIDs", "clearBookGenres", "collectionID", "clearCollection", "addHolderIDs", "removeHolderIDs", "clearHolders", "publisherID", "clearPublisher", "licenseID", "clearLicense", "locationID", "clearLocation"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -96863,33 +101273,24 @@ func (ec *executionContext) unmarshalInputUpdateBookInput(ctx context.Context, o
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "primaryImageURL":
 			var err error
 
@@ -97146,7 +101547,7 @@ func (ec *executionContext) unmarshalInputUpdateCategoryInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addCollectionIDs", "removeCollectionIDs", "clearCollections"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addCollectionIDs", "removeCollectionIDs", "clearCollections"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -97252,33 +101653,24 @@ func (ec *executionContext) unmarshalInputUpdateCategoryInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "addCollectionIDs":
 			var err error
 
@@ -97319,7 +101711,7 @@ func (ec *executionContext) unmarshalInputUpdateCollectionInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addPersonIDs", "removePersonIDs", "clearPeople", "addProtectedAreaPictureIDs", "removeProtectedAreaPictureIDs", "clearProtectedAreaPictures", "categoryID", "clearCategory"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addPersonIDs", "removePersonIDs", "clearPeople", "addProtectedAreaPictureIDs", "removeProtectedAreaPictureIDs", "clearProtectedAreaPictures", "categoryID", "clearCategory"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -97425,33 +101817,24 @@ func (ec *executionContext) unmarshalInputUpdateCollectionInput(ctx context.Cont
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "addArtifactIDs":
 			var err error
 
@@ -97591,7 +101974,7 @@ func (ec *executionContext) unmarshalInputUpdateCountryInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "locationID", "clearLocation"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "locationID", "clearLocation"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -97697,33 +102080,24 @@ func (ec *executionContext) unmarshalInputUpdateCountryInput(ctx context.Context
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "locationID":
 			var err error
 
@@ -97755,7 +102129,7 @@ func (ec *executionContext) unmarshalInputUpdateCultureInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -97861,33 +102235,24 @@ func (ec *executionContext) unmarshalInputUpdateCultureInput(ctx context.Context
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "addArtifactIDs":
 			var err error
 
@@ -97928,7 +102293,7 @@ func (ec *executionContext) unmarshalInputUpdateDistrictInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "locationID", "clearLocation"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "locationID", "clearLocation"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -98034,33 +102399,24 @@ func (ec *executionContext) unmarshalInputUpdateDistrictInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "locationID":
 			var err error
 
@@ -98301,7 +102657,7 @@ func (ec *executionContext) unmarshalInputUpdateHolderResponsibilityInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addHolderIDs", "removeHolderIDs", "clearHolder"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addHolderIDs", "removeHolderIDs", "clearHolder"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -98407,33 +102763,24 @@ func (ec *executionContext) unmarshalInputUpdateHolderResponsibilityInput(ctx co
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "addHolderIDs":
 			var err error
 
@@ -98474,7 +102821,7 @@ func (ec *executionContext) unmarshalInputUpdateLicenseInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addProtectedAreaPictureIDs", "removeProtectedAreaPictureIDs", "clearProtectedAreaPictures"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addProtectedAreaPictureIDs", "removeProtectedAreaPictureIDs", "clearProtectedAreaPictures"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -98580,33 +102927,24 @@ func (ec *executionContext) unmarshalInputUpdateLicenseInput(ctx context.Context
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "addArtifactIDs":
 			var err error
 
@@ -98701,7 +103039,7 @@ func (ec *executionContext) unmarshalInputUpdateLocationInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "geometry", "clearGeometry", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addProtectedAreaPictureIDs", "removeProtectedAreaPictureIDs", "clearProtectedAreaPictures", "countryID", "clearCountry", "districtID", "clearDistrict", "settlementID", "clearSettlement", "regionID", "clearRegion"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "geometry", "clearGeometry", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addProtectedAreaPictureIDs", "removeProtectedAreaPictureIDs", "clearProtectedAreaPictures", "countryID", "clearCountry", "districtID", "clearDistrict", "settlementID", "clearSettlement", "regionID", "clearRegion"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -98807,33 +103145,24 @@ func (ec *executionContext) unmarshalInputUpdateLocationInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "geometry":
 			var err error
 
@@ -99018,7 +103347,7 @@ func (ec *executionContext) unmarshalInputUpdateMediumInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -99124,33 +103453,24 @@ func (ec *executionContext) unmarshalInputUpdateMediumInput(ctx context.Context,
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "addArtifactIDs":
 			var err error
 
@@ -99191,7 +103511,7 @@ func (ec *executionContext) unmarshalInputUpdateModelInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -99297,33 +103617,24 @@ func (ec *executionContext) unmarshalInputUpdateModelInput(ctx context.Context, 
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "addArtifactIDs":
 			var err error
 
@@ -99364,7 +103675,7 @@ func (ec *executionContext) unmarshalInputUpdateMonumentInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addSetIDs", "removeSetIDs", "clearSets"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addSetIDs", "removeSetIDs", "clearSets"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -99470,33 +103781,24 @@ func (ec *executionContext) unmarshalInputUpdateMonumentInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "addArtifactIDs":
 			var err error
 
@@ -99564,7 +103866,7 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "address", "clearAddress", "phoneNumbers", "appendPhoneNumbers", "clearPhoneNumbers", "emails", "appendEmails", "clearEmails", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "previousNames", "appendPreviousNames", "clearPreviousNames", "isInAConsortium", "clearIsInAConsortium", "consortiumDocumentURL", "clearConsortiumDocumentURL", "addPersonIDs", "removePersonIDs", "clearPeople", "holderID", "clearHolder", "organizationTypeID", "clearOrganizationType"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "address", "clearAddress", "phoneNumbers", "appendPhoneNumbers", "clearPhoneNumbers", "emails", "appendEmails", "clearEmails", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "previousNames", "appendPreviousNames", "clearPreviousNames", "isInAConsortium", "clearIsInAConsortium", "consortiumDocumentURL", "clearConsortiumDocumentURL", "addPersonIDs", "removePersonIDs", "clearPeople", "holderID", "clearHolder", "organizationTypeID", "clearOrganizationType"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -99742,33 +104044,24 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "primaryImageURL":
 			var err error
 
@@ -99953,7 +104246,7 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationTypeInput(ctx contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addOrganizationIDs", "removeOrganizationIDs", "clearOrganizations"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addOrganizationIDs", "removeOrganizationIDs", "clearOrganizations"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -100059,33 +104352,24 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationTypeInput(ctx contex
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "addOrganizationIDs":
 			var err error
 
@@ -100126,7 +104410,7 @@ func (ec *executionContext) unmarshalInputUpdatePeriodInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -100232,33 +104516,24 @@ func (ec *executionContext) unmarshalInputUpdatePeriodInput(ctx context.Context,
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "addArtifactIDs":
 			var err error
 
@@ -100299,7 +104574,7 @@ func (ec *executionContext) unmarshalInputUpdatePersonInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "address", "clearAddress", "phoneNumbers", "appendPhoneNumbers", "clearPhoneNumbers", "emails", "appendEmails", "clearEmails", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "givenName", "clearGivenName", "familyName", "clearFamilyName", "patronymicName", "clearPatronymicName", "beginData", "clearBeginData", "endDate", "clearEndDate", "gender", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addProjectIDs", "removeProjectIDs", "clearProjects", "addPublicationIDs", "removePublicationIDs", "clearPublications", "addPersonRoleIDs", "removePersonRoleIDs", "clearPersonRoles", "holderID", "clearHolder", "affiliationID", "clearAffiliation", "collectionsID", "clearCollections"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "address", "clearAddress", "phoneNumbers", "appendPhoneNumbers", "clearPhoneNumbers", "emails", "appendEmails", "clearEmails", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "givenName", "clearGivenName", "familyName", "clearFamilyName", "patronymicName", "clearPatronymicName", "beginData", "clearBeginData", "endDate", "clearEndDate", "gender", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addProjectIDs", "removeProjectIDs", "clearProjects", "addPublicationIDs", "removePublicationIDs", "clearPublications", "addPersonRoleIDs", "removePersonRoleIDs", "clearPersonRoles", "holderID", "clearHolder", "affiliationID", "clearAffiliation", "collectionsID", "clearCollections"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -100477,33 +104752,24 @@ func (ec *executionContext) unmarshalInputUpdatePersonInput(ctx context.Context,
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "primaryImageURL":
 			var err error
 
@@ -100850,7 +105116,7 @@ func (ec *executionContext) unmarshalInputUpdatePersonRoleInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addPersonIDs", "removePersonIDs", "clearPerson"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addPersonIDs", "removePersonIDs", "clearPerson"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -100956,33 +105222,24 @@ func (ec *executionContext) unmarshalInputUpdatePersonRoleInput(ctx context.Cont
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "addPersonIDs":
 			var err error
 
@@ -101023,7 +105280,7 @@ func (ec *executionContext) unmarshalInputUpdateProjectInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "beginData", "clearBeginData", "endDate", "clearEndDate", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addTeamIDs", "removeTeamIDs", "clearTeam", "projectTypeID", "clearProjectType"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "beginData", "clearBeginData", "endDate", "clearEndDate", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addTeamIDs", "removeTeamIDs", "clearTeam", "projectTypeID", "clearProjectType"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -101129,33 +105386,24 @@ func (ec *executionContext) unmarshalInputUpdateProjectInput(ctx context.Context
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "beginData":
 			var err error
 
@@ -101277,7 +105525,7 @@ func (ec *executionContext) unmarshalInputUpdateProjectTypeInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addProjectIDs", "removeProjectIDs", "clearProjects"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addProjectIDs", "removeProjectIDs", "clearProjects"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -101383,33 +105631,24 @@ func (ec *executionContext) unmarshalInputUpdateProjectTypeInput(ctx context.Con
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "addProjectIDs":
 			var err error
 
@@ -101450,7 +105689,7 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaCategoryInput(ctx c
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addProtectedAreaIDs", "removeProtectedAreaIDs", "clearProtectedAreas"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addProtectedAreaIDs", "removeProtectedAreaIDs", "clearProtectedAreas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -101556,33 +105795,24 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaCategoryInput(ctx c
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "addProtectedAreaIDs":
 			var err error
 
@@ -101623,7 +105853,7 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "area", "clearArea", "establishmentDate", "clearEstablishmentDate", "addProtectedAreaPictureIDs", "removeProtectedAreaPictureIDs", "clearProtectedAreaPictures", "protectedAreaCategoryID", "clearProtectedAreaCategory"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "area", "clearArea", "establishmentDate", "clearEstablishmentDate", "addProtectedAreaPictureIDs", "removeProtectedAreaPictureIDs", "clearProtectedAreaPictures", "protectedAreaCategoryID", "clearProtectedAreaCategory"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -101729,33 +105959,24 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaInput(ctx context.C
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "area":
 			var err error
 
@@ -101850,7 +106071,7 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaPictureInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "shootingDate", "clearShootingDate", "geometry", "clearGeometry", "collectionID", "clearCollection", "protectedAreaID", "clearProtectedArea", "locationID", "clearLocation", "licenseID", "clearLicense"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "shootingDate", "clearShootingDate", "geometry", "clearGeometry", "collectionID", "clearCollection", "protectedAreaID", "clearProtectedArea", "locationID", "clearLocation", "licenseID", "clearLicense"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -101956,33 +106177,24 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaPictureInput(ctx co
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "primaryImageURL":
 			var err error
 
@@ -102149,7 +106361,7 @@ func (ec *executionContext) unmarshalInputUpdatePublicationInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addAuthorIDs", "removeAuthorIDs", "clearAuthors"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addAuthorIDs", "removeAuthorIDs", "clearAuthors"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -102255,33 +106467,24 @@ func (ec *executionContext) unmarshalInputUpdatePublicationInput(ctx context.Con
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "addArtifactIDs":
 			var err error
 
@@ -102349,7 +106552,7 @@ func (ec *executionContext) unmarshalInputUpdatePublisherInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addBookIDs", "removeBookIDs", "clearBooks"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addBookIDs", "removeBookIDs", "clearBooks"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -102455,33 +106658,24 @@ func (ec *executionContext) unmarshalInputUpdatePublisherInput(ctx context.Conte
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "addBookIDs":
 			var err error
 
@@ -102522,7 +106716,7 @@ func (ec *executionContext) unmarshalInputUpdateRegionInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "locationID", "clearLocation"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "locationID", "clearLocation"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -102628,33 +106822,24 @@ func (ec *executionContext) unmarshalInputUpdateRegionInput(ctx context.Context,
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "locationID":
 			var err error
 
@@ -102686,7 +106871,7 @@ func (ec *executionContext) unmarshalInputUpdateSetInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addMonumentIDs", "removeMonumentIDs", "clearMonuments"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addMonumentIDs", "removeMonumentIDs", "clearMonuments"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -102792,33 +106977,24 @@ func (ec *executionContext) unmarshalInputUpdateSetInput(ctx context.Context, ob
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "addArtifactIDs":
 			var err error
 
@@ -102886,7 +107062,7 @@ func (ec *executionContext) unmarshalInputUpdateSettlementInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "locationID", "clearLocation"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "locationID", "clearLocation"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -102992,33 +107168,24 @@ func (ec *executionContext) unmarshalInputUpdateSettlementInput(ctx context.Cont
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "locationID":
 			var err error
 
@@ -103050,7 +107217,7 @@ func (ec *executionContext) unmarshalInputUpdateTechniqueInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLinks", "appendExternalLinks", "clearExternalLinks", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -103156,33 +107323,24 @@ func (ec *executionContext) unmarshalInputUpdateTechniqueInput(ctx context.Conte
 				return it, err
 			}
 			it.ClearDescription = data
-		case "externalLinks":
+		case "externalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ExternalLinks = data
-		case "appendExternalLinks":
+			it.ExternalLink = data
+		case "clearExternalLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appendExternalLinks"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AppendExternalLinks = data
-		case "clearExternalLinks":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLinks"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearExternalLinks = data
+			it.ClearExternalLink = data
 		case "addArtifactIDs":
 			var err error
 
@@ -103449,8 +107607,8 @@ func (ec *executionContext) _Art(ctx context.Context, sel ast.SelectionSet, obj 
 			out.Values[i] = ec._Art_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Art_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._Art_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._Art_externalLink(ctx, field, obj)
 		case "primaryImageURL":
 			out.Values[i] = ec._Art_primaryImageURL(ctx, field, obj)
 		case "additionalImagesUrls":
@@ -103667,8 +107825,8 @@ func (ec *executionContext) _ArtGenre(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._ArtGenre_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._ArtGenre_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._ArtGenre_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._ArtGenre_externalLink(ctx, field, obj)
 		case "art":
 			field := field
 
@@ -103848,8 +108006,8 @@ func (ec *executionContext) _ArtStyle(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._ArtStyle_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._ArtStyle_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._ArtStyle_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._ArtStyle_externalLink(ctx, field, obj)
 		case "art":
 			field := field
 
@@ -104029,8 +108187,8 @@ func (ec *executionContext) _Artifact(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._Artifact_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Artifact_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._Artifact_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._Artifact_externalLink(ctx, field, obj)
 		case "primaryImageURL":
 			out.Values[i] = ec._Artifact_primaryImageURL(ctx, field, obj)
 		case "additionalImagesUrls":
@@ -104808,8 +108966,8 @@ func (ec *executionContext) _Book(ctx context.Context, sel ast.SelectionSet, obj
 			out.Values[i] = ec._Book_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Book_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._Book_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._Book_externalLink(ctx, field, obj)
 		case "primaryImageURL":
 			out.Values[i] = ec._Book_primaryImageURL(ctx, field, obj)
 		case "additionalImagesUrls":
@@ -105195,8 +109353,8 @@ func (ec *executionContext) _BookGenre(ctx context.Context, sel ast.SelectionSet
 			out.Values[i] = ec._BookGenre_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._BookGenre_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._BookGenre_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._BookGenre_externalLink(ctx, field, obj)
 		case "books":
 			field := field
 
@@ -105376,8 +109534,8 @@ func (ec *executionContext) _Category(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._Category_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Category_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._Category_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._Category_externalLink(ctx, field, obj)
 		case "collections":
 			field := field
 
@@ -105557,8 +109715,8 @@ func (ec *executionContext) _Collection(ctx context.Context, sel ast.SelectionSe
 			out.Values[i] = ec._Collection_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Collection_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._Collection_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._Collection_externalLink(ctx, field, obj)
 		case "artifacts":
 			field := field
 
@@ -105870,8 +110028,8 @@ func (ec *executionContext) _Country(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = ec._Country_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Country_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._Country_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._Country_externalLink(ctx, field, obj)
 		case "location":
 			field := field
 
@@ -106051,8 +110209,8 @@ func (ec *executionContext) _Culture(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = ec._Culture_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Culture_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._Culture_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._Culture_externalLink(ctx, field, obj)
 		case "artifacts":
 			field := field
 
@@ -106232,8 +110390,8 @@ func (ec *executionContext) _District(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._District_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._District_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._District_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._District_externalLink(ctx, field, obj)
 		case "location":
 			field := field
 
@@ -106725,8 +110883,8 @@ func (ec *executionContext) _HolderResponsibility(ctx context.Context, sel ast.S
 			out.Values[i] = ec._HolderResponsibility_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._HolderResponsibility_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._HolderResponsibility_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._HolderResponsibility_externalLink(ctx, field, obj)
 		case "holder":
 			field := field
 
@@ -106945,8 +111103,8 @@ func (ec *executionContext) _License(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = ec._License_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._License_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._License_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._License_externalLink(ctx, field, obj)
 		case "artifacts":
 			field := field
 
@@ -107192,8 +111350,8 @@ func (ec *executionContext) _Location(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._Location_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Location_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._Location_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._Location_externalLink(ctx, field, obj)
 		case "geometry":
 			out.Values[i] = ec._Location_geometry(ctx, field, obj)
 		case "artifacts":
@@ -107573,8 +111731,8 @@ func (ec *executionContext) _Medium(ctx context.Context, sel ast.SelectionSet, o
 			out.Values[i] = ec._Medium_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Medium_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._Medium_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._Medium_externalLink(ctx, field, obj)
 		case "artifacts":
 			field := field
 
@@ -107754,8 +111912,8 @@ func (ec *executionContext) _Model(ctx context.Context, sel ast.SelectionSet, ob
 			out.Values[i] = ec._Model_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Model_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._Model_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._Model_externalLink(ctx, field, obj)
 		case "artifacts":
 			field := field
 
@@ -107935,8 +112093,8 @@ func (ec *executionContext) _Monument(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._Monument_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Monument_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._Monument_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._Monument_externalLink(ctx, field, obj)
 		case "artifacts":
 			field := field
 
@@ -108673,8 +112831,8 @@ func (ec *executionContext) _Organization(ctx context.Context, sel ast.Selection
 			out.Values[i] = ec._Organization_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Organization_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._Organization_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._Organization_externalLink(ctx, field, obj)
 		case "primaryImageURL":
 			out.Values[i] = ec._Organization_primaryImageURL(ctx, field, obj)
 		case "additionalImagesUrls":
@@ -108930,8 +113088,8 @@ func (ec *executionContext) _OrganizationType(ctx context.Context, sel ast.Selec
 			out.Values[i] = ec._OrganizationType_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._OrganizationType_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._OrganizationType_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._OrganizationType_externalLink(ctx, field, obj)
 		case "organizations":
 			field := field
 
@@ -109159,8 +113317,8 @@ func (ec *executionContext) _Period(ctx context.Context, sel ast.SelectionSet, o
 			out.Values[i] = ec._Period_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Period_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._Period_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._Period_externalLink(ctx, field, obj)
 		case "artifacts":
 			field := field
 
@@ -109346,8 +113504,8 @@ func (ec *executionContext) _Person(ctx context.Context, sel ast.SelectionSet, o
 			out.Values[i] = ec._Person_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Person_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._Person_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._Person_externalLink(ctx, field, obj)
 		case "primaryImageURL":
 			out.Values[i] = ec._Person_primaryImageURL(ctx, field, obj)
 		case "additionalImagesUrls":
@@ -109777,8 +113935,8 @@ func (ec *executionContext) _PersonRole(ctx context.Context, sel ast.SelectionSe
 			out.Values[i] = ec._PersonRole_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._PersonRole_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._PersonRole_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._PersonRole_externalLink(ctx, field, obj)
 		case "person":
 			field := field
 
@@ -109958,8 +114116,8 @@ func (ec *executionContext) _Project(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = ec._Project_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Project_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._Project_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._Project_externalLink(ctx, field, obj)
 		case "beginData":
 			out.Values[i] = ec._Project_beginData(ctx, field, obj)
 		case "endDate":
@@ -110209,8 +114367,8 @@ func (ec *executionContext) _ProjectType(ctx context.Context, sel ast.SelectionS
 			out.Values[i] = ec._ProjectType_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._ProjectType_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._ProjectType_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._ProjectType_externalLink(ctx, field, obj)
 		case "projects":
 			field := field
 
@@ -110390,8 +114548,8 @@ func (ec *executionContext) _ProtectedArea(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._ProtectedArea_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._ProtectedArea_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._ProtectedArea_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._ProtectedArea_externalLink(ctx, field, obj)
 		case "area":
 			out.Values[i] = ec._ProtectedArea_area(ctx, field, obj)
 		case "establishmentDate":
@@ -110521,8 +114679,8 @@ func (ec *executionContext) _ProtectedAreaCategory(ctx context.Context, sel ast.
 			out.Values[i] = ec._ProtectedAreaCategory_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._ProtectedAreaCategory_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._ProtectedAreaCategory_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._ProtectedAreaCategory_externalLink(ctx, field, obj)
 		case "protectedAreas":
 			field := field
 
@@ -110789,8 +114947,8 @@ func (ec *executionContext) _ProtectedAreaPicture(ctx context.Context, sel ast.S
 			out.Values[i] = ec._ProtectedAreaPicture_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._ProtectedAreaPicture_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._ProtectedAreaPicture_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._ProtectedAreaPicture_externalLink(ctx, field, obj)
 		case "primaryImageURL":
 			out.Values[i] = ec._ProtectedAreaPicture_primaryImageURL(ctx, field, obj)
 		case "additionalImagesUrls":
@@ -111077,8 +115235,8 @@ func (ec *executionContext) _Publication(ctx context.Context, sel ast.SelectionS
 			out.Values[i] = ec._Publication_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Publication_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._Publication_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._Publication_externalLink(ctx, field, obj)
 		case "artifacts":
 			field := field
 
@@ -111291,8 +115449,8 @@ func (ec *executionContext) _Publisher(ctx context.Context, sel ast.SelectionSet
 			out.Values[i] = ec._Publisher_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Publisher_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._Publisher_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._Publisher_externalLink(ctx, field, obj)
 		case "books":
 			field := field
 
@@ -112333,8 +116491,8 @@ func (ec *executionContext) _Region(ctx context.Context, sel ast.SelectionSet, o
 			out.Values[i] = ec._Region_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Region_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._Region_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._Region_externalLink(ctx, field, obj)
 		case "location":
 			field := field
 
@@ -112514,8 +116672,8 @@ func (ec *executionContext) _Set(ctx context.Context, sel ast.SelectionSet, obj 
 			out.Values[i] = ec._Set_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Set_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._Set_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._Set_externalLink(ctx, field, obj)
 		case "artifacts":
 			field := field
 
@@ -112728,8 +116886,8 @@ func (ec *executionContext) _Settlement(ctx context.Context, sel ast.SelectionSe
 			out.Values[i] = ec._Settlement_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Settlement_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._Settlement_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._Settlement_externalLink(ctx, field, obj)
 		case "location":
 			field := field
 
@@ -112909,8 +117067,8 @@ func (ec *executionContext) _Technique(ctx context.Context, sel ast.SelectionSet
 			out.Values[i] = ec._Technique_abbreviation(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Technique_description(ctx, field, obj)
-		case "externalLinks":
-			out.Values[i] = ec._Technique_externalLinks(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._Technique_externalLink(ctx, field, obj)
 		case "artifacts":
 			field := field
 

@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/organization"
 	"github.com/dkrasnovdev/heritage-api/ent/organizationtype"
@@ -136,21 +135,23 @@ func (otu *OrganizationTypeUpdate) ClearDescription() *OrganizationTypeUpdate {
 	return otu
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (otu *OrganizationTypeUpdate) SetExternalLinks(s []string) *OrganizationTypeUpdate {
-	otu.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (otu *OrganizationTypeUpdate) SetExternalLink(s string) *OrganizationTypeUpdate {
+	otu.mutation.SetExternalLink(s)
 	return otu
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (otu *OrganizationTypeUpdate) AppendExternalLinks(s []string) *OrganizationTypeUpdate {
-	otu.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (otu *OrganizationTypeUpdate) SetNillableExternalLink(s *string) *OrganizationTypeUpdate {
+	if s != nil {
+		otu.SetExternalLink(*s)
+	}
 	return otu
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (otu *OrganizationTypeUpdate) ClearExternalLinks() *OrganizationTypeUpdate {
-	otu.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (otu *OrganizationTypeUpdate) ClearExternalLink() *OrganizationTypeUpdate {
+	otu.mutation.ClearExternalLink()
 	return otu
 }
 
@@ -279,16 +280,11 @@ func (otu *OrganizationTypeUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if otu.mutation.DescriptionCleared() {
 		_spec.ClearField(organizationtype.FieldDescription, field.TypeString)
 	}
-	if value, ok := otu.mutation.ExternalLinks(); ok {
-		_spec.SetField(organizationtype.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := otu.mutation.ExternalLink(); ok {
+		_spec.SetField(organizationtype.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := otu.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, organizationtype.FieldExternalLinks, value)
-		})
-	}
-	if otu.mutation.ExternalLinksCleared() {
-		_spec.ClearField(organizationtype.FieldExternalLinks, field.TypeJSON)
+	if otu.mutation.ExternalLinkCleared() {
+		_spec.ClearField(organizationtype.FieldExternalLink, field.TypeString)
 	}
 	if otu.mutation.OrganizationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -461,21 +457,23 @@ func (otuo *OrganizationTypeUpdateOne) ClearDescription() *OrganizationTypeUpdat
 	return otuo
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (otuo *OrganizationTypeUpdateOne) SetExternalLinks(s []string) *OrganizationTypeUpdateOne {
-	otuo.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (otuo *OrganizationTypeUpdateOne) SetExternalLink(s string) *OrganizationTypeUpdateOne {
+	otuo.mutation.SetExternalLink(s)
 	return otuo
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (otuo *OrganizationTypeUpdateOne) AppendExternalLinks(s []string) *OrganizationTypeUpdateOne {
-	otuo.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (otuo *OrganizationTypeUpdateOne) SetNillableExternalLink(s *string) *OrganizationTypeUpdateOne {
+	if s != nil {
+		otuo.SetExternalLink(*s)
+	}
 	return otuo
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (otuo *OrganizationTypeUpdateOne) ClearExternalLinks() *OrganizationTypeUpdateOne {
-	otuo.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (otuo *OrganizationTypeUpdateOne) ClearExternalLink() *OrganizationTypeUpdateOne {
+	otuo.mutation.ClearExternalLink()
 	return otuo
 }
 
@@ -634,16 +632,11 @@ func (otuo *OrganizationTypeUpdateOne) sqlSave(ctx context.Context) (_node *Orga
 	if otuo.mutation.DescriptionCleared() {
 		_spec.ClearField(organizationtype.FieldDescription, field.TypeString)
 	}
-	if value, ok := otuo.mutation.ExternalLinks(); ok {
-		_spec.SetField(organizationtype.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := otuo.mutation.ExternalLink(); ok {
+		_spec.SetField(organizationtype.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := otuo.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, organizationtype.FieldExternalLinks, value)
-		})
-	}
-	if otuo.mutation.ExternalLinksCleared() {
-		_spec.ClearField(organizationtype.FieldExternalLinks, field.TypeJSON)
+	if otuo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(organizationtype.FieldExternalLink, field.TypeString)
 	}
 	if otuo.mutation.OrganizationsCleared() {
 		edge := &sqlgraph.EdgeSpec{

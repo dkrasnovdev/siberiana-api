@@ -18,7 +18,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
 	}
@@ -38,7 +38,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// ArtGenresTable holds the schema information for the "art_genres" table.
 	ArtGenresTable = &schema.Table{
@@ -56,7 +56,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// ArtStylesTable holds the schema information for the "art_styles" table.
 	ArtStylesTable = &schema.Table{
@@ -74,7 +74,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
@@ -180,7 +180,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
 		{Name: "files", Type: field.TypeJSON, Nullable: true},
@@ -232,7 +232,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// BookGenresTable holds the schema information for the "book_genres" table.
 	BookGenresTable = &schema.Table{
@@ -250,7 +250,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// CategoriesTable holds the schema information for the "categories" table.
 	CategoriesTable = &schema.Table{
@@ -268,7 +268,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "category_collections", Type: field.TypeInt, Nullable: true},
 	}
 	// CollectionsTable holds the schema information for the "collections" table.
@@ -295,7 +295,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "location_country", Type: field.TypeInt, Unique: true, Nullable: true},
 	}
 	// CountriesTable holds the schema information for the "countries" table.
@@ -322,7 +322,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// CulturesTable holds the schema information for the "cultures" table.
 	CulturesTable = &schema.Table{
@@ -340,7 +340,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "location_district", Type: field.TypeInt, Unique: true, Nullable: true},
 	}
 	// DistrictsTable holds the schema information for the "districts" table.
@@ -383,7 +383,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// HolderResponsibilitiesTable holds the schema information for the "holder_responsibilities" table.
 	HolderResponsibilitiesTable = &schema.Table{
@@ -411,7 +411,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// LicensesTable holds the schema information for the "licenses" table.
 	LicensesTable = &schema.Table{
@@ -429,7 +429,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "geometry", Type: field.TypeOther, Nullable: true, SchemaType: map[string]string{"postgres": "geometry"}},
 	}
 	// LocationsTable holds the schema information for the "locations" table.
@@ -448,7 +448,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// MediaTable holds the schema information for the "media" table.
 	MediaTable = &schema.Table{
@@ -466,7 +466,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// ModelsTable holds the schema information for the "models" table.
 	ModelsTable = &schema.Table{
@@ -484,7 +484,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// MonumentsTable holds the schema information for the "monuments" table.
 	MonumentsTable = &schema.Table{
@@ -505,7 +505,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
 		{Name: "previous_names", Type: field.TypeJSON, Nullable: true},
@@ -544,7 +544,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// OrganizationTypesTable holds the schema information for the "organization_types" table.
 	OrganizationTypesTable = &schema.Table{
@@ -562,7 +562,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// PeriodsTable holds the schema information for the "periods" table.
 	PeriodsTable = &schema.Table{
@@ -583,7 +583,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
 		{Name: "given_name", Type: field.TypeString, Nullable: true},
@@ -632,7 +632,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// PersonRolesTable holds the schema information for the "person_roles" table.
 	PersonRolesTable = &schema.Table{
@@ -650,7 +650,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "begin_data", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
 		{Name: "end_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
 		{Name: "project_type_projects", Type: field.TypeInt, Nullable: true},
@@ -679,7 +679,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// ProjectTypesTable holds the schema information for the "project_types" table.
 	ProjectTypesTable = &schema.Table{
@@ -697,7 +697,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "area", Type: field.TypeString, Nullable: true},
 		{Name: "establishment_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
 		{Name: "protected_area_category_protected_areas", Type: field.TypeInt, Nullable: true},
@@ -726,7 +726,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// ProtectedAreaCategoriesTable holds the schema information for the "protected_area_categories" table.
 	ProtectedAreaCategoriesTable = &schema.Table{
@@ -744,7 +744,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
 		{Name: "shooting_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
@@ -796,7 +796,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// PublicationsTable holds the schema information for the "publications" table.
 	PublicationsTable = &schema.Table{
@@ -814,7 +814,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// PublishersTable holds the schema information for the "publishers" table.
 	PublishersTable = &schema.Table{
@@ -832,7 +832,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "location_region", Type: field.TypeInt, Unique: true, Nullable: true},
 	}
 	// RegionsTable holds the schema information for the "regions" table.
@@ -859,7 +859,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// SetsTable holds the schema information for the "sets" table.
 	SetsTable = &schema.Table{
@@ -877,7 +877,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "location_settlement", Type: field.TypeInt, Unique: true, Nullable: true},
 	}
 	// SettlementsTable holds the schema information for the "settlements" table.
@@ -904,7 +904,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_links", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
 	}
 	// TechniquesTable holds the schema information for the "techniques" table.
 	TechniquesTable = &schema.Table{

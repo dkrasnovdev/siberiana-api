@@ -194,21 +194,23 @@ func (ou *OrganizationUpdate) ClearDescription() *OrganizationUpdate {
 	return ou
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (ou *OrganizationUpdate) SetExternalLinks(s []string) *OrganizationUpdate {
-	ou.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (ou *OrganizationUpdate) SetExternalLink(s string) *OrganizationUpdate {
+	ou.mutation.SetExternalLink(s)
 	return ou
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (ou *OrganizationUpdate) AppendExternalLinks(s []string) *OrganizationUpdate {
-	ou.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (ou *OrganizationUpdate) SetNillableExternalLink(s *string) *OrganizationUpdate {
+	if s != nil {
+		ou.SetExternalLink(*s)
+	}
 	return ou
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (ou *OrganizationUpdate) ClearExternalLinks() *OrganizationUpdate {
-	ou.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (ou *OrganizationUpdate) ClearExternalLink() *OrganizationUpdate {
+	ou.mutation.ClearExternalLink()
 	return ou
 }
 
@@ -511,16 +513,11 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ou.mutation.DescriptionCleared() {
 		_spec.ClearField(organization.FieldDescription, field.TypeString)
 	}
-	if value, ok := ou.mutation.ExternalLinks(); ok {
-		_spec.SetField(organization.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := ou.mutation.ExternalLink(); ok {
+		_spec.SetField(organization.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := ou.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, organization.FieldExternalLinks, value)
-		})
-	}
-	if ou.mutation.ExternalLinksCleared() {
-		_spec.ClearField(organization.FieldExternalLinks, field.TypeJSON)
+	if ou.mutation.ExternalLinkCleared() {
+		_spec.ClearField(organization.FieldExternalLink, field.TypeString)
 	}
 	if value, ok := ou.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(organization.FieldPrimaryImageURL, field.TypeString, value)
@@ -847,21 +844,23 @@ func (ouo *OrganizationUpdateOne) ClearDescription() *OrganizationUpdateOne {
 	return ouo
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (ouo *OrganizationUpdateOne) SetExternalLinks(s []string) *OrganizationUpdateOne {
-	ouo.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (ouo *OrganizationUpdateOne) SetExternalLink(s string) *OrganizationUpdateOne {
+	ouo.mutation.SetExternalLink(s)
 	return ouo
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (ouo *OrganizationUpdateOne) AppendExternalLinks(s []string) *OrganizationUpdateOne {
-	ouo.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (ouo *OrganizationUpdateOne) SetNillableExternalLink(s *string) *OrganizationUpdateOne {
+	if s != nil {
+		ouo.SetExternalLink(*s)
+	}
 	return ouo
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (ouo *OrganizationUpdateOne) ClearExternalLinks() *OrganizationUpdateOne {
-	ouo.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (ouo *OrganizationUpdateOne) ClearExternalLink() *OrganizationUpdateOne {
+	ouo.mutation.ClearExternalLink()
 	return ouo
 }
 
@@ -1194,16 +1193,11 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 	if ouo.mutation.DescriptionCleared() {
 		_spec.ClearField(organization.FieldDescription, field.TypeString)
 	}
-	if value, ok := ouo.mutation.ExternalLinks(); ok {
-		_spec.SetField(organization.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := ouo.mutation.ExternalLink(); ok {
+		_spec.SetField(organization.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := ouo.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, organization.FieldExternalLinks, value)
-		})
-	}
-	if ouo.mutation.ExternalLinksCleared() {
-		_spec.ClearField(organization.FieldExternalLinks, field.TypeJSON)
+	if ouo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(organization.FieldExternalLink, field.TypeString)
 	}
 	if value, ok := ouo.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(organization.FieldPrimaryImageURL, field.TypeString, value)

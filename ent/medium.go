@@ -3,7 +3,6 @@
 package ent
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -32,8 +31,8 @@ type Medium struct {
 	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
-	// ExternalLinks holds the value of the "external_links" field.
-	ExternalLinks []string `json:"external_links,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MediumQuery when eager-loading is set.
 	Edges        MediumEdges `json:"edges"`
@@ -67,11 +66,9 @@ func (*Medium) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case medium.FieldExternalLinks:
-			values[i] = new([]byte)
 		case medium.FieldID:
 			values[i] = new(sql.NullInt64)
-		case medium.FieldCreatedBy, medium.FieldUpdatedBy, medium.FieldDisplayName, medium.FieldAbbreviation, medium.FieldDescription:
+		case medium.FieldCreatedBy, medium.FieldUpdatedBy, medium.FieldDisplayName, medium.FieldAbbreviation, medium.FieldDescription, medium.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case medium.FieldCreatedAt, medium.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -138,13 +135,11 @@ func (m *Medium) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				m.Description = value.String
 			}
-		case medium.FieldExternalLinks:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field external_links", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &m.ExternalLinks); err != nil {
-					return fmt.Errorf("unmarshal field external_links: %w", err)
-				}
+		case medium.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				m.ExternalLink = value.String
 			}
 		default:
 			m.selectValues.Set(columns[i], values[i])
@@ -208,8 +203,8 @@ func (m *Medium) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(m.Description)
 	builder.WriteString(", ")
-	builder.WriteString("external_links=")
-	builder.WriteString(fmt.Sprintf("%v", m.ExternalLinks))
+	builder.WriteString("external_link=")
+	builder.WriteString(m.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
 }

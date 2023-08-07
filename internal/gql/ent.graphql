@@ -9,7 +9,7 @@ type Art implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   artGenre: [ArtGenre!]
@@ -40,7 +40,7 @@ type ArtGenre implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   art: [Art!]
 }
 """A connection to a list of items."""
@@ -186,6 +186,22 @@ input ArtGenreWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """art edge predicates"""
   hasArt: Boolean
   hasArtWith: [ArtWhereInput!]
@@ -211,7 +227,7 @@ type ArtStyle implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   art: [Art!]
 }
 """A connection to a list of items."""
@@ -357,6 +373,22 @@ input ArtStyleWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """art edge predicates"""
   hasArt: Boolean
   hasArtWith: [ArtWhereInput!]
@@ -476,6 +508,22 @@ input ArtWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """primary_image_url field predicates"""
   primaryImageURL: String
   primaryImageURLNEQ: String
@@ -508,7 +556,7 @@ type Artifact implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   deletedAt: Time
@@ -678,6 +726,22 @@ input ArtifactWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """primary_image_url field predicates"""
   primaryImageURL: String
   primaryImageURLNEQ: String
@@ -1005,7 +1069,7 @@ type Book implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   files: [String!]
@@ -1043,7 +1107,7 @@ type BookGenre implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   books: [Book!]
 }
 """A connection to a list of items."""
@@ -1189,6 +1253,22 @@ input BookGenreWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """books edge predicates"""
   hasBooks: Boolean
   hasBooksWith: [BookWhereInput!]
@@ -1320,6 +1400,22 @@ input BookWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """primary_image_url field predicates"""
   primaryImageURL: String
   primaryImageURLNEQ: String
@@ -1378,7 +1474,7 @@ type Category implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   collections: [Collection!]
 }
 """A connection to a list of items."""
@@ -1524,6 +1620,22 @@ input CategoryWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """collections edge predicates"""
   hasCollections: Boolean
   hasCollectionsWith: [CollectionWhereInput!]
@@ -1537,7 +1649,7 @@ type Collection implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   artifacts: [Artifact!]
   books: [Book!]
   people: [Person!]
@@ -1687,6 +1799,22 @@ input CollectionWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -1712,7 +1840,7 @@ type Country implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   location: Location
 }
 """A connection to a list of items."""
@@ -1858,6 +1986,22 @@ input CountryWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """location edge predicates"""
   hasLocation: Boolean
   hasLocationWith: [LocationWhereInput!]
@@ -1874,7 +2018,7 @@ input CreateArtGenreInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   artIDs: [ID!]
 }
 """
@@ -1889,7 +2033,7 @@ input CreateArtInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   artGenreIDs: [ID!]
@@ -1907,7 +2051,7 @@ input CreateArtStyleInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   artIDs: [ID!]
 }
 """
@@ -1922,7 +2066,7 @@ input CreateArtifactInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   deletedAt: Time
@@ -1961,7 +2105,7 @@ input CreateBookGenreInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   bookIDs: [ID!]
 }
 """
@@ -1976,7 +2120,7 @@ input CreateBookInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   files: [String!]
@@ -2001,7 +2145,7 @@ input CreateCategoryInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   collectionIDs: [ID!]
 }
 """
@@ -2016,7 +2160,7 @@ input CreateCollectionInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   artifactIDs: [ID!]
   bookIDs: [ID!]
   personIDs: [ID!]
@@ -2035,7 +2179,7 @@ input CreateCountryInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   locationID: ID
 }
 """
@@ -2050,7 +2194,7 @@ input CreateCultureInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   artifactIDs: [ID!]
 }
 """
@@ -2065,7 +2209,7 @@ input CreateDistrictInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   locationID: ID
 }
 """
@@ -2097,7 +2241,7 @@ input CreateHolderResponsibilityInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   holderIDs: [ID!]
 }
 """
@@ -2112,7 +2256,7 @@ input CreateLicenseInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   artifactIDs: [ID!]
   bookIDs: [ID!]
   protectedAreaPictureIDs: [ID!]
@@ -2129,7 +2273,7 @@ input CreateLocationInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   geometry: Geometry
   artifactIDs: [ID!]
   bookIDs: [ID!]
@@ -2151,7 +2295,7 @@ input CreateMediumInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   artifactIDs: [ID!]
 }
 """
@@ -2166,7 +2310,7 @@ input CreateModelInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   artifactIDs: [ID!]
 }
 """
@@ -2181,7 +2325,7 @@ input CreateMonumentInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   artifactIDs: [ID!]
   setIDs: [ID!]
 }
@@ -2200,7 +2344,7 @@ input CreateOrganizationInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   previousNames: [String!]
@@ -2222,7 +2366,7 @@ input CreateOrganizationTypeInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   organizationIDs: [ID!]
 }
 """
@@ -2237,7 +2381,7 @@ input CreatePeriodInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   artifactIDs: [ID!]
 }
 """
@@ -2255,7 +2399,7 @@ input CreatePersonInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   givenName: String
@@ -2285,7 +2429,7 @@ input CreatePersonRoleInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   personIDs: [ID!]
 }
 """
@@ -2300,7 +2444,7 @@ input CreateProjectInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   beginData: Time
   endDate: Time
   artifactIDs: [ID!]
@@ -2319,7 +2463,7 @@ input CreateProjectTypeInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   projectIDs: [ID!]
 }
 """
@@ -2334,7 +2478,7 @@ input CreateProtectedAreaCategoryInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   protectedAreaIDs: [ID!]
 }
 """
@@ -2349,7 +2493,7 @@ input CreateProtectedAreaInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   area: String
   establishmentDate: Time
   protectedAreaPictureIDs: [ID!]
@@ -2367,7 +2511,7 @@ input CreateProtectedAreaPictureInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   shootingDate: Time
@@ -2389,7 +2533,7 @@ input CreatePublicationInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   artifactIDs: [ID!]
   authorIDs: [ID!]
 }
@@ -2405,7 +2549,7 @@ input CreatePublisherInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   bookIDs: [ID!]
 }
 """
@@ -2420,7 +2564,7 @@ input CreateRegionInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   locationID: ID
 }
 """
@@ -2435,7 +2579,7 @@ input CreateSetInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   artifactIDs: [ID!]
   monumentIDs: [ID!]
 }
@@ -2451,7 +2595,7 @@ input CreateSettlementInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   locationID: ID
 }
 """
@@ -2466,7 +2610,7 @@ input CreateTechniqueInput {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   artifactIDs: [ID!]
 }
 type Culture implements Node {
@@ -2478,7 +2622,7 @@ type Culture implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   artifacts: [Artifact!]
 }
 """A connection to a list of items."""
@@ -2624,6 +2768,22 @@ input CultureWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -2642,7 +2802,7 @@ type District implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   location: Location
 }
 """A connection to a list of items."""
@@ -2788,6 +2948,22 @@ input DistrictWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """location edge predicates"""
   hasLocation: Boolean
   hasLocationWith: [LocationWhereInput!]
@@ -2843,7 +3019,7 @@ type HolderResponsibility implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   holder: [Holder!]
 }
 """A connection to a list of items."""
@@ -2989,6 +3165,22 @@ input HolderResponsibilityWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """holder edge predicates"""
   hasHolder: Boolean
   hasHolderWith: [HolderWhereInput!]
@@ -3126,7 +3318,7 @@ type License implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   artifacts: [Artifact!]
   books: [Book!]
   protectedAreaPictures: [ProtectedAreaPicture!]
@@ -3274,6 +3466,22 @@ input LicenseWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -3293,7 +3501,7 @@ type Location implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   geometry: Geometry
   artifacts: [Artifact!]
   books: [Book!]
@@ -3446,6 +3654,22 @@ input LocationWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """geometry field predicates"""
   geometry: Geometry
   geometryNEQ: Geometry
@@ -3488,7 +3712,7 @@ type Medium implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   artifacts: [Artifact!]
 }
 """A connection to a list of items."""
@@ -3634,6 +3858,22 @@ input MediumWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -3647,7 +3887,7 @@ type Model implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   artifacts: [Artifact!]
 }
 """A connection to a list of items."""
@@ -3793,6 +4033,22 @@ input ModelWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -3806,7 +4062,7 @@ type Monument implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   artifacts: [Artifact!]
   sets: [Set!]
 }
@@ -3953,6 +4209,22 @@ input MonumentWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -3987,7 +4259,7 @@ type Organization implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   previousNames: [String!]
@@ -4034,7 +4306,7 @@ type OrganizationType implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   organizations: [Organization!]
 }
 """A connection to a list of items."""
@@ -4180,6 +4452,22 @@ input OrganizationTypeWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """organizations edge predicates"""
   hasOrganizations: Boolean
   hasOrganizationsWith: [OrganizationWhereInput!]
@@ -4315,6 +4603,22 @@ input OrganizationWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """primary_image_url field predicates"""
   primaryImageURL: String
   primaryImageURLNEQ: String
@@ -4385,7 +4689,7 @@ type Period implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   artifacts: [Artifact!]
 }
 """A connection to a list of items."""
@@ -4531,6 +4835,22 @@ input PeriodWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -4547,7 +4867,7 @@ type Person implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   givenName: String
@@ -4607,7 +4927,7 @@ type PersonRole implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   person: [Person!]
 }
 """A connection to a list of items."""
@@ -4753,6 +5073,22 @@ input PersonRoleWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """person edge predicates"""
   hasPerson: Boolean
   hasPersonWith: [PersonWhereInput!]
@@ -4888,6 +5224,22 @@ input PersonWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """primary_image_url field predicates"""
   primaryImageURL: String
   primaryImageURLNEQ: String
@@ -5013,7 +5365,7 @@ type Project implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   beginData: Time
   endDate: Time
   artifacts: [Artifact!]
@@ -5057,7 +5409,7 @@ type ProjectType implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   projects: [Project!]
 }
 """A connection to a list of items."""
@@ -5203,6 +5555,22 @@ input ProjectTypeWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """projects edge predicates"""
   hasProjects: Boolean
   hasProjectsWith: [ProjectWhereInput!]
@@ -5322,6 +5690,22 @@ input ProjectWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """begin_data field predicates"""
   beginData: Time
   beginDataNEQ: Time
@@ -5363,7 +5747,7 @@ type ProtectedArea implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   area: String
   establishmentDate: Time
   protectedAreaPictures: [ProtectedAreaPicture!]
@@ -5378,7 +5762,7 @@ type ProtectedAreaCategory implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   protectedAreas: [ProtectedArea!]
 }
 """A connection to a list of items."""
@@ -5524,6 +5908,22 @@ input ProtectedAreaCategoryWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """protected_areas edge predicates"""
   hasProtectedAreas: Boolean
   hasProtectedAreasWith: [ProtectedAreaWhereInput!]
@@ -5565,7 +5965,7 @@ type ProtectedAreaPicture implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   shootingDate: Time
@@ -5718,6 +6118,22 @@ input ProtectedAreaPictureWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """primary_image_url field predicates"""
   primaryImageURL: String
   primaryImageURLNEQ: String
@@ -5884,6 +6300,22 @@ input ProtectedAreaWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """area field predicates"""
   area: String
   areaNEQ: String
@@ -5927,7 +6359,7 @@ type Publication implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   artifacts: [Artifact!]
   authors: [Person!]
 }
@@ -6074,6 +6506,22 @@ input PublicationWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -6090,7 +6538,7 @@ type Publisher implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   books: [Book!]
 }
 """A connection to a list of items."""
@@ -6236,6 +6684,22 @@ input PublisherWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """books edge predicates"""
   hasBooks: Boolean
   hasBooksWith: [BookWhereInput!]
@@ -6926,7 +7390,7 @@ type Region implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   location: Location
 }
 """A connection to a list of items."""
@@ -7072,6 +7536,22 @@ input RegionWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """location edge predicates"""
   hasLocation: Boolean
   hasLocationWith: [LocationWhereInput!]
@@ -7085,7 +7565,7 @@ type Set implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   artifacts: [Artifact!]
   monuments: [Monument!]
 }
@@ -7232,6 +7712,22 @@ input SetWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -7248,7 +7744,7 @@ type Settlement implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   location: Location
 }
 """A connection to a list of items."""
@@ -7394,6 +7890,22 @@ input SettlementWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """location edge predicates"""
   hasLocation: Boolean
   hasLocationWith: [LocationWhereInput!]
@@ -7407,7 +7919,7 @@ type Technique implements Node {
   displayName: String
   abbreviation: String
   description: String
-  externalLinks: [String!]
+  externalLink: String
   artifacts: [Artifact!]
 }
 """A connection to a list of items."""
@@ -7553,6 +8065,22 @@ input TechniqueWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -7575,9 +8103,8 @@ input UpdateArtGenreInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   addArtIDs: [ID!]
   removeArtIDs: [ID!]
   clearArt: Boolean
@@ -7598,9 +8125,8 @@ input UpdateArtInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   primaryImageURL: String
   clearPrimaryImageURL: Boolean
   additionalImagesUrls: [String!]
@@ -7629,9 +8155,8 @@ input UpdateArtStyleInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   addArtIDs: [ID!]
   removeArtIDs: [ID!]
   clearArt: Boolean
@@ -7652,9 +8177,8 @@ input UpdateArtifactInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   primaryImageURL: String
   clearPrimaryImageURL: Boolean
   additionalImagesUrls: [String!]
@@ -7729,9 +8253,8 @@ input UpdateBookGenreInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   addBookIDs: [ID!]
   removeBookIDs: [ID!]
   clearBooks: Boolean
@@ -7752,9 +8275,8 @@ input UpdateBookInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   primaryImageURL: String
   clearPrimaryImageURL: Boolean
   additionalImagesUrls: [String!]
@@ -7799,9 +8321,8 @@ input UpdateCategoryInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   addCollectionIDs: [ID!]
   removeCollectionIDs: [ID!]
   clearCollections: Boolean
@@ -7822,9 +8343,8 @@ input UpdateCollectionInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -7856,9 +8376,8 @@ input UpdateCountryInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   locationID: ID
   clearLocation: Boolean
 }
@@ -7878,9 +8397,8 @@ input UpdateCultureInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -7901,9 +8419,8 @@ input UpdateDistrictInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   locationID: ID
   clearLocation: Boolean
 }
@@ -7950,9 +8467,8 @@ input UpdateHolderResponsibilityInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   addHolderIDs: [ID!]
   removeHolderIDs: [ID!]
   clearHolder: Boolean
@@ -7973,9 +8489,8 @@ input UpdateLicenseInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -8002,9 +8517,8 @@ input UpdateLocationInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   geometry: Geometry
   clearGeometry: Boolean
   addArtifactIDs: [ID!]
@@ -8041,9 +8555,8 @@ input UpdateMediumInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -8064,9 +8577,8 @@ input UpdateModelInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -8087,9 +8599,8 @@ input UpdateMonumentInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -8121,9 +8632,8 @@ input UpdateOrganizationInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   primaryImageURL: String
   clearPrimaryImageURL: Boolean
   additionalImagesUrls: [String!]
@@ -8160,9 +8670,8 @@ input UpdateOrganizationTypeInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   addOrganizationIDs: [ID!]
   removeOrganizationIDs: [ID!]
   clearOrganizations: Boolean
@@ -8183,9 +8692,8 @@ input UpdatePeriodInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -8214,9 +8722,8 @@ input UpdatePersonInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   primaryImageURL: String
   clearPrimaryImageURL: Boolean
   additionalImagesUrls: [String!]
@@ -8271,9 +8778,8 @@ input UpdatePersonRoleInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   addPersonIDs: [ID!]
   removePersonIDs: [ID!]
   clearPerson: Boolean
@@ -8294,9 +8800,8 @@ input UpdateProjectInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   beginData: Time
   clearBeginData: Boolean
   endDate: Time
@@ -8326,9 +8831,8 @@ input UpdateProjectTypeInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   addProjectIDs: [ID!]
   removeProjectIDs: [ID!]
   clearProjects: Boolean
@@ -8349,9 +8853,8 @@ input UpdateProtectedAreaCategoryInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   addProtectedAreaIDs: [ID!]
   removeProtectedAreaIDs: [ID!]
   clearProtectedAreas: Boolean
@@ -8372,9 +8875,8 @@ input UpdateProtectedAreaInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   area: String
   clearArea: Boolean
   establishmentDate: Time
@@ -8401,9 +8903,8 @@ input UpdateProtectedAreaPictureInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   primaryImageURL: String
   clearPrimaryImageURL: Boolean
   additionalImagesUrls: [String!]
@@ -8438,9 +8939,8 @@ input UpdatePublicationInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -8464,9 +8964,8 @@ input UpdatePublisherInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   addBookIDs: [ID!]
   removeBookIDs: [ID!]
   clearBooks: Boolean
@@ -8487,9 +8986,8 @@ input UpdateRegionInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   locationID: ID
   clearLocation: Boolean
 }
@@ -8509,9 +9007,8 @@ input UpdateSetInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -8535,9 +9032,8 @@ input UpdateSettlementInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   locationID: ID
   clearLocation: Boolean
 }
@@ -8557,9 +9053,8 @@ input UpdateTechniqueInput {
   clearAbbreviation: Boolean
   description: String
   clearDescription: Boolean
-  externalLinks: [String!]
-  appendExternalLinks: [String!]
-  clearExternalLinks: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean

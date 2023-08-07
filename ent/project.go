@@ -3,7 +3,6 @@
 package ent
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -33,8 +32,8 @@ type Project struct {
 	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
-	// ExternalLinks holds the value of the "external_links" field.
-	ExternalLinks []string `json:"external_links,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// BeginData holds the value of the "begin_data" field.
 	BeginData time.Time `json:"begin_data,omitempty"`
 	// EndDate holds the value of the "end_date" field.
@@ -100,11 +99,9 @@ func (*Project) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case project.FieldExternalLinks:
-			values[i] = new([]byte)
 		case project.FieldID:
 			values[i] = new(sql.NullInt64)
-		case project.FieldCreatedBy, project.FieldUpdatedBy, project.FieldDisplayName, project.FieldAbbreviation, project.FieldDescription:
+		case project.FieldCreatedBy, project.FieldUpdatedBy, project.FieldDisplayName, project.FieldAbbreviation, project.FieldDescription, project.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case project.FieldCreatedAt, project.FieldUpdatedAt, project.FieldBeginData, project.FieldEndDate:
 			values[i] = new(sql.NullTime)
@@ -173,13 +170,11 @@ func (pr *Project) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.Description = value.String
 			}
-		case project.FieldExternalLinks:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field external_links", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &pr.ExternalLinks); err != nil {
-					return fmt.Errorf("unmarshal field external_links: %w", err)
-				}
+		case project.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				pr.ExternalLink = value.String
 			}
 		case project.FieldBeginData:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -272,8 +267,8 @@ func (pr *Project) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(pr.Description)
 	builder.WriteString(", ")
-	builder.WriteString("external_links=")
-	builder.WriteString(fmt.Sprintf("%v", pr.ExternalLinks))
+	builder.WriteString("external_link=")
+	builder.WriteString(pr.ExternalLink)
 	builder.WriteString(", ")
 	builder.WriteString("begin_data=")
 	builder.WriteString(pr.BeginData.Format(time.ANSIC))

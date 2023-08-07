@@ -147,9 +147,17 @@ func (oc *OrganizationCreate) SetNillableDescription(s *string) *OrganizationCre
 	return oc
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (oc *OrganizationCreate) SetExternalLinks(s []string) *OrganizationCreate {
-	oc.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (oc *OrganizationCreate) SetExternalLink(s string) *OrganizationCreate {
+	oc.mutation.SetExternalLink(s)
+	return oc
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableExternalLink(s *string) *OrganizationCreate {
+	if s != nil {
+		oc.SetExternalLink(*s)
+	}
 	return oc
 }
 
@@ -388,9 +396,9 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		_spec.SetField(organization.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := oc.mutation.ExternalLinks(); ok {
-		_spec.SetField(organization.FieldExternalLinks, field.TypeJSON, value)
-		_node.ExternalLinks = value
+	if value, ok := oc.mutation.ExternalLink(); ok {
+		_spec.SetField(organization.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
 	}
 	if value, ok := oc.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(organization.FieldPrimaryImageURL, field.TypeString, value)

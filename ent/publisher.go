@@ -3,7 +3,6 @@
 package ent
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -32,8 +31,8 @@ type Publisher struct {
 	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
-	// ExternalLinks holds the value of the "external_links" field.
-	ExternalLinks []string `json:"external_links,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PublisherQuery when eager-loading is set.
 	Edges        PublisherEdges `json:"edges"`
@@ -67,11 +66,9 @@ func (*Publisher) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case publisher.FieldExternalLinks:
-			values[i] = new([]byte)
 		case publisher.FieldID:
 			values[i] = new(sql.NullInt64)
-		case publisher.FieldCreatedBy, publisher.FieldUpdatedBy, publisher.FieldDisplayName, publisher.FieldAbbreviation, publisher.FieldDescription:
+		case publisher.FieldCreatedBy, publisher.FieldUpdatedBy, publisher.FieldDisplayName, publisher.FieldAbbreviation, publisher.FieldDescription, publisher.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case publisher.FieldCreatedAt, publisher.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -138,13 +135,11 @@ func (pu *Publisher) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pu.Description = value.String
 			}
-		case publisher.FieldExternalLinks:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field external_links", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &pu.ExternalLinks); err != nil {
-					return fmt.Errorf("unmarshal field external_links: %w", err)
-				}
+		case publisher.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				pu.ExternalLink = value.String
 			}
 		default:
 			pu.selectValues.Set(columns[i], values[i])
@@ -208,8 +203,8 @@ func (pu *Publisher) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(pu.Description)
 	builder.WriteString(", ")
-	builder.WriteString("external_links=")
-	builder.WriteString(fmt.Sprintf("%v", pu.ExternalLinks))
+	builder.WriteString("external_link=")
+	builder.WriteString(pu.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
 }

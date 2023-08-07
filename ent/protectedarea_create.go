@@ -120,9 +120,17 @@ func (pac *ProtectedAreaCreate) SetNillableDescription(s *string) *ProtectedArea
 	return pac
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (pac *ProtectedAreaCreate) SetExternalLinks(s []string) *ProtectedAreaCreate {
-	pac.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (pac *ProtectedAreaCreate) SetExternalLink(s string) *ProtectedAreaCreate {
+	pac.mutation.SetExternalLink(s)
+	return pac
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (pac *ProtectedAreaCreate) SetNillableExternalLink(s *string) *ProtectedAreaCreate {
+	if s != nil {
+		pac.SetExternalLink(*s)
+	}
 	return pac
 }
 
@@ -304,9 +312,9 @@ func (pac *ProtectedAreaCreate) createSpec() (*ProtectedArea, *sqlgraph.CreateSp
 		_spec.SetField(protectedarea.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := pac.mutation.ExternalLinks(); ok {
-		_spec.SetField(protectedarea.FieldExternalLinks, field.TypeJSON, value)
-		_node.ExternalLinks = value
+	if value, ok := pac.mutation.ExternalLink(); ok {
+		_spec.SetField(protectedarea.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
 	}
 	if value, ok := pac.mutation.Area(); ok {
 		_spec.SetField(protectedarea.FieldArea, field.TypeString, value)

@@ -3,7 +3,6 @@
 package ent
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -37,8 +36,8 @@ type Location struct {
 	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
-	// ExternalLinks holds the value of the "external_links" field.
-	ExternalLinks []string `json:"external_links,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// Geometry holds the value of the "geometry" field.
 	Geometry *types.Geometry `json:"geometry,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -160,11 +159,9 @@ func (*Location) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case location.FieldGeometry:
 			values[i] = &sql.NullScanner{S: new(types.Geometry)}
-		case location.FieldExternalLinks:
-			values[i] = new([]byte)
 		case location.FieldID:
 			values[i] = new(sql.NullInt64)
-		case location.FieldCreatedBy, location.FieldUpdatedBy, location.FieldDisplayName, location.FieldAbbreviation, location.FieldDescription:
+		case location.FieldCreatedBy, location.FieldUpdatedBy, location.FieldDisplayName, location.FieldAbbreviation, location.FieldDescription, location.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case location.FieldCreatedAt, location.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -231,13 +228,11 @@ func (l *Location) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				l.Description = value.String
 			}
-		case location.FieldExternalLinks:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field external_links", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &l.ExternalLinks); err != nil {
-					return fmt.Errorf("unmarshal field external_links: %w", err)
-				}
+		case location.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				l.ExternalLink = value.String
 			}
 		case location.FieldGeometry:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
@@ -338,8 +333,8 @@ func (l *Location) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(l.Description)
 	builder.WriteString(", ")
-	builder.WriteString("external_links=")
-	builder.WriteString(fmt.Sprintf("%v", l.ExternalLinks))
+	builder.WriteString("external_link=")
+	builder.WriteString(l.ExternalLink)
 	builder.WriteString(", ")
 	if v := l.Geometry; v != nil {
 		builder.WriteString("geometry=")

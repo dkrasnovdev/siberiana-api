@@ -3,7 +3,6 @@
 package ent
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -32,8 +31,8 @@ type ProtectedAreaCategory struct {
 	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
-	// ExternalLinks holds the value of the "external_links" field.
-	ExternalLinks []string `json:"external_links,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProtectedAreaCategoryQuery when eager-loading is set.
 	Edges        ProtectedAreaCategoryEdges `json:"edges"`
@@ -67,11 +66,9 @@ func (*ProtectedAreaCategory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case protectedareacategory.FieldExternalLinks:
-			values[i] = new([]byte)
 		case protectedareacategory.FieldID:
 			values[i] = new(sql.NullInt64)
-		case protectedareacategory.FieldCreatedBy, protectedareacategory.FieldUpdatedBy, protectedareacategory.FieldDisplayName, protectedareacategory.FieldAbbreviation, protectedareacategory.FieldDescription:
+		case protectedareacategory.FieldCreatedBy, protectedareacategory.FieldUpdatedBy, protectedareacategory.FieldDisplayName, protectedareacategory.FieldAbbreviation, protectedareacategory.FieldDescription, protectedareacategory.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case protectedareacategory.FieldCreatedAt, protectedareacategory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -138,13 +135,11 @@ func (pac *ProtectedAreaCategory) assignValues(columns []string, values []any) e
 			} else if value.Valid {
 				pac.Description = value.String
 			}
-		case protectedareacategory.FieldExternalLinks:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field external_links", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &pac.ExternalLinks); err != nil {
-					return fmt.Errorf("unmarshal field external_links: %w", err)
-				}
+		case protectedareacategory.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				pac.ExternalLink = value.String
 			}
 		default:
 			pac.selectValues.Set(columns[i], values[i])
@@ -208,8 +203,8 @@ func (pac *ProtectedAreaCategory) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(pac.Description)
 	builder.WriteString(", ")
-	builder.WriteString("external_links=")
-	builder.WriteString(fmt.Sprintf("%v", pac.ExternalLinks))
+	builder.WriteString("external_link=")
+	builder.WriteString(pac.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -119,9 +119,17 @@ func (hrc *HolderResponsibilityCreate) SetNillableDescription(s *string) *Holder
 	return hrc
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (hrc *HolderResponsibilityCreate) SetExternalLinks(s []string) *HolderResponsibilityCreate {
-	hrc.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (hrc *HolderResponsibilityCreate) SetExternalLink(s string) *HolderResponsibilityCreate {
+	hrc.mutation.SetExternalLink(s)
+	return hrc
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (hrc *HolderResponsibilityCreate) SetNillableExternalLink(s *string) *HolderResponsibilityCreate {
+	if s != nil {
+		hrc.SetExternalLink(*s)
+	}
 	return hrc
 }
 
@@ -256,9 +264,9 @@ func (hrc *HolderResponsibilityCreate) createSpec() (*HolderResponsibility, *sql
 		_spec.SetField(holderresponsibility.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := hrc.mutation.ExternalLinks(); ok {
-		_spec.SetField(holderresponsibility.FieldExternalLinks, field.TypeJSON, value)
-		_node.ExternalLinks = value
+	if value, ok := hrc.mutation.ExternalLink(); ok {
+		_spec.SetField(holderresponsibility.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
 	}
 	if nodes := hrc.mutation.HolderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

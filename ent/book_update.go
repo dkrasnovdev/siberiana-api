@@ -142,21 +142,23 @@ func (bu *BookUpdate) ClearDescription() *BookUpdate {
 	return bu
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (bu *BookUpdate) SetExternalLinks(s []string) *BookUpdate {
-	bu.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (bu *BookUpdate) SetExternalLink(s string) *BookUpdate {
+	bu.mutation.SetExternalLink(s)
 	return bu
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (bu *BookUpdate) AppendExternalLinks(s []string) *BookUpdate {
-	bu.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (bu *BookUpdate) SetNillableExternalLink(s *string) *BookUpdate {
+	if s != nil {
+		bu.SetExternalLink(*s)
+	}
 	return bu
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (bu *BookUpdate) ClearExternalLinks() *BookUpdate {
-	bu.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (bu *BookUpdate) ClearExternalLink() *BookUpdate {
+	bu.mutation.ClearExternalLink()
 	return bu
 }
 
@@ -553,16 +555,11 @@ func (bu *BookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if bu.mutation.DescriptionCleared() {
 		_spec.ClearField(book.FieldDescription, field.TypeString)
 	}
-	if value, ok := bu.mutation.ExternalLinks(); ok {
-		_spec.SetField(book.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := bu.mutation.ExternalLink(); ok {
+		_spec.SetField(book.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := bu.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, book.FieldExternalLinks, value)
-		})
-	}
-	if bu.mutation.ExternalLinksCleared() {
-		_spec.ClearField(book.FieldExternalLinks, field.TypeJSON)
+	if bu.mutation.ExternalLinkCleared() {
+		_spec.ClearField(book.FieldExternalLink, field.TypeString)
 	}
 	if value, ok := bu.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(book.FieldPrimaryImageURL, field.TypeString, value)
@@ -978,21 +975,23 @@ func (buo *BookUpdateOne) ClearDescription() *BookUpdateOne {
 	return buo
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (buo *BookUpdateOne) SetExternalLinks(s []string) *BookUpdateOne {
-	buo.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (buo *BookUpdateOne) SetExternalLink(s string) *BookUpdateOne {
+	buo.mutation.SetExternalLink(s)
 	return buo
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (buo *BookUpdateOne) AppendExternalLinks(s []string) *BookUpdateOne {
-	buo.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (buo *BookUpdateOne) SetNillableExternalLink(s *string) *BookUpdateOne {
+	if s != nil {
+		buo.SetExternalLink(*s)
+	}
 	return buo
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (buo *BookUpdateOne) ClearExternalLinks() *BookUpdateOne {
-	buo.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (buo *BookUpdateOne) ClearExternalLink() *BookUpdateOne {
+	buo.mutation.ClearExternalLink()
 	return buo
 }
 
@@ -1419,16 +1418,11 @@ func (buo *BookUpdateOne) sqlSave(ctx context.Context) (_node *Book, err error) 
 	if buo.mutation.DescriptionCleared() {
 		_spec.ClearField(book.FieldDescription, field.TypeString)
 	}
-	if value, ok := buo.mutation.ExternalLinks(); ok {
-		_spec.SetField(book.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := buo.mutation.ExternalLink(); ok {
+		_spec.SetField(book.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := buo.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, book.FieldExternalLinks, value)
-		})
-	}
-	if buo.mutation.ExternalLinksCleared() {
-		_spec.ClearField(book.FieldExternalLinks, field.TypeJSON)
+	if buo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(book.FieldExternalLink, field.TypeString)
 	}
 	if value, ok := buo.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(book.FieldPrimaryImageURL, field.TypeString, value)

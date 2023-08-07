@@ -119,9 +119,17 @@ func (ptc *ProjectTypeCreate) SetNillableDescription(s *string) *ProjectTypeCrea
 	return ptc
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (ptc *ProjectTypeCreate) SetExternalLinks(s []string) *ProjectTypeCreate {
-	ptc.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (ptc *ProjectTypeCreate) SetExternalLink(s string) *ProjectTypeCreate {
+	ptc.mutation.SetExternalLink(s)
+	return ptc
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (ptc *ProjectTypeCreate) SetNillableExternalLink(s *string) *ProjectTypeCreate {
+	if s != nil {
+		ptc.SetExternalLink(*s)
+	}
 	return ptc
 }
 
@@ -256,9 +264,9 @@ func (ptc *ProjectTypeCreate) createSpec() (*ProjectType, *sqlgraph.CreateSpec) 
 		_spec.SetField(projecttype.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := ptc.mutation.ExternalLinks(); ok {
-		_spec.SetField(projecttype.FieldExternalLinks, field.TypeJSON, value)
-		_node.ExternalLinks = value
+	if value, ok := ptc.mutation.ExternalLink(); ok {
+		_spec.SetField(projecttype.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
 	}
 	if nodes := ptc.mutation.ProjectsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

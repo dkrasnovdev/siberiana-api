@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/art"
 	"github.com/dkrasnovdev/heritage-api/ent/artstyle"
@@ -136,21 +135,23 @@ func (asu *ArtStyleUpdate) ClearDescription() *ArtStyleUpdate {
 	return asu
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (asu *ArtStyleUpdate) SetExternalLinks(s []string) *ArtStyleUpdate {
-	asu.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (asu *ArtStyleUpdate) SetExternalLink(s string) *ArtStyleUpdate {
+	asu.mutation.SetExternalLink(s)
 	return asu
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (asu *ArtStyleUpdate) AppendExternalLinks(s []string) *ArtStyleUpdate {
-	asu.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (asu *ArtStyleUpdate) SetNillableExternalLink(s *string) *ArtStyleUpdate {
+	if s != nil {
+		asu.SetExternalLink(*s)
+	}
 	return asu
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (asu *ArtStyleUpdate) ClearExternalLinks() *ArtStyleUpdate {
-	asu.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (asu *ArtStyleUpdate) ClearExternalLink() *ArtStyleUpdate {
+	asu.mutation.ClearExternalLink()
 	return asu
 }
 
@@ -279,16 +280,11 @@ func (asu *ArtStyleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if asu.mutation.DescriptionCleared() {
 		_spec.ClearField(artstyle.FieldDescription, field.TypeString)
 	}
-	if value, ok := asu.mutation.ExternalLinks(); ok {
-		_spec.SetField(artstyle.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := asu.mutation.ExternalLink(); ok {
+		_spec.SetField(artstyle.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := asu.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, artstyle.FieldExternalLinks, value)
-		})
-	}
-	if asu.mutation.ExternalLinksCleared() {
-		_spec.ClearField(artstyle.FieldExternalLinks, field.TypeJSON)
+	if asu.mutation.ExternalLinkCleared() {
+		_spec.ClearField(artstyle.FieldExternalLink, field.TypeString)
 	}
 	if asu.mutation.ArtCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -461,21 +457,23 @@ func (asuo *ArtStyleUpdateOne) ClearDescription() *ArtStyleUpdateOne {
 	return asuo
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (asuo *ArtStyleUpdateOne) SetExternalLinks(s []string) *ArtStyleUpdateOne {
-	asuo.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (asuo *ArtStyleUpdateOne) SetExternalLink(s string) *ArtStyleUpdateOne {
+	asuo.mutation.SetExternalLink(s)
 	return asuo
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (asuo *ArtStyleUpdateOne) AppendExternalLinks(s []string) *ArtStyleUpdateOne {
-	asuo.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (asuo *ArtStyleUpdateOne) SetNillableExternalLink(s *string) *ArtStyleUpdateOne {
+	if s != nil {
+		asuo.SetExternalLink(*s)
+	}
 	return asuo
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (asuo *ArtStyleUpdateOne) ClearExternalLinks() *ArtStyleUpdateOne {
-	asuo.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (asuo *ArtStyleUpdateOne) ClearExternalLink() *ArtStyleUpdateOne {
+	asuo.mutation.ClearExternalLink()
 	return asuo
 }
 
@@ -634,16 +632,11 @@ func (asuo *ArtStyleUpdateOne) sqlSave(ctx context.Context) (_node *ArtStyle, er
 	if asuo.mutation.DescriptionCleared() {
 		_spec.ClearField(artstyle.FieldDescription, field.TypeString)
 	}
-	if value, ok := asuo.mutation.ExternalLinks(); ok {
-		_spec.SetField(artstyle.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := asuo.mutation.ExternalLink(); ok {
+		_spec.SetField(artstyle.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := asuo.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, artstyle.FieldExternalLinks, value)
-		})
-	}
-	if asuo.mutation.ExternalLinksCleared() {
-		_spec.ClearField(artstyle.FieldExternalLinks, field.TypeJSON)
+	if asuo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(artstyle.FieldExternalLink, field.TypeString)
 	}
 	if asuo.mutation.ArtCleared() {
 		edge := &sqlgraph.EdgeSpec{

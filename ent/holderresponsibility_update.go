@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/heritage-api/ent/holder"
 	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
@@ -136,21 +135,23 @@ func (hru *HolderResponsibilityUpdate) ClearDescription() *HolderResponsibilityU
 	return hru
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (hru *HolderResponsibilityUpdate) SetExternalLinks(s []string) *HolderResponsibilityUpdate {
-	hru.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (hru *HolderResponsibilityUpdate) SetExternalLink(s string) *HolderResponsibilityUpdate {
+	hru.mutation.SetExternalLink(s)
 	return hru
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (hru *HolderResponsibilityUpdate) AppendExternalLinks(s []string) *HolderResponsibilityUpdate {
-	hru.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (hru *HolderResponsibilityUpdate) SetNillableExternalLink(s *string) *HolderResponsibilityUpdate {
+	if s != nil {
+		hru.SetExternalLink(*s)
+	}
 	return hru
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (hru *HolderResponsibilityUpdate) ClearExternalLinks() *HolderResponsibilityUpdate {
-	hru.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (hru *HolderResponsibilityUpdate) ClearExternalLink() *HolderResponsibilityUpdate {
+	hru.mutation.ClearExternalLink()
 	return hru
 }
 
@@ -279,16 +280,11 @@ func (hru *HolderResponsibilityUpdate) sqlSave(ctx context.Context) (n int, err 
 	if hru.mutation.DescriptionCleared() {
 		_spec.ClearField(holderresponsibility.FieldDescription, field.TypeString)
 	}
-	if value, ok := hru.mutation.ExternalLinks(); ok {
-		_spec.SetField(holderresponsibility.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := hru.mutation.ExternalLink(); ok {
+		_spec.SetField(holderresponsibility.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := hru.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, holderresponsibility.FieldExternalLinks, value)
-		})
-	}
-	if hru.mutation.ExternalLinksCleared() {
-		_spec.ClearField(holderresponsibility.FieldExternalLinks, field.TypeJSON)
+	if hru.mutation.ExternalLinkCleared() {
+		_spec.ClearField(holderresponsibility.FieldExternalLink, field.TypeString)
 	}
 	if hru.mutation.HolderCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -461,21 +457,23 @@ func (hruo *HolderResponsibilityUpdateOne) ClearDescription() *HolderResponsibil
 	return hruo
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (hruo *HolderResponsibilityUpdateOne) SetExternalLinks(s []string) *HolderResponsibilityUpdateOne {
-	hruo.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (hruo *HolderResponsibilityUpdateOne) SetExternalLink(s string) *HolderResponsibilityUpdateOne {
+	hruo.mutation.SetExternalLink(s)
 	return hruo
 }
 
-// AppendExternalLinks appends s to the "external_links" field.
-func (hruo *HolderResponsibilityUpdateOne) AppendExternalLinks(s []string) *HolderResponsibilityUpdateOne {
-	hruo.mutation.AppendExternalLinks(s)
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (hruo *HolderResponsibilityUpdateOne) SetNillableExternalLink(s *string) *HolderResponsibilityUpdateOne {
+	if s != nil {
+		hruo.SetExternalLink(*s)
+	}
 	return hruo
 }
 
-// ClearExternalLinks clears the value of the "external_links" field.
-func (hruo *HolderResponsibilityUpdateOne) ClearExternalLinks() *HolderResponsibilityUpdateOne {
-	hruo.mutation.ClearExternalLinks()
+// ClearExternalLink clears the value of the "external_link" field.
+func (hruo *HolderResponsibilityUpdateOne) ClearExternalLink() *HolderResponsibilityUpdateOne {
+	hruo.mutation.ClearExternalLink()
 	return hruo
 }
 
@@ -634,16 +632,11 @@ func (hruo *HolderResponsibilityUpdateOne) sqlSave(ctx context.Context) (_node *
 	if hruo.mutation.DescriptionCleared() {
 		_spec.ClearField(holderresponsibility.FieldDescription, field.TypeString)
 	}
-	if value, ok := hruo.mutation.ExternalLinks(); ok {
-		_spec.SetField(holderresponsibility.FieldExternalLinks, field.TypeJSON, value)
+	if value, ok := hruo.mutation.ExternalLink(); ok {
+		_spec.SetField(holderresponsibility.FieldExternalLink, field.TypeString, value)
 	}
-	if value, ok := hruo.mutation.AppendedExternalLinks(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, holderresponsibility.FieldExternalLinks, value)
-		})
-	}
-	if hruo.mutation.ExternalLinksCleared() {
-		_spec.ClearField(holderresponsibility.FieldExternalLinks, field.TypeJSON)
+	if hruo.mutation.ExternalLinkCleared() {
+		_spec.ClearField(holderresponsibility.FieldExternalLink, field.TypeString)
 	}
 	if hruo.mutation.HolderCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -119,9 +119,17 @@ func (otc *OrganizationTypeCreate) SetNillableDescription(s *string) *Organizati
 	return otc
 }
 
-// SetExternalLinks sets the "external_links" field.
-func (otc *OrganizationTypeCreate) SetExternalLinks(s []string) *OrganizationTypeCreate {
-	otc.mutation.SetExternalLinks(s)
+// SetExternalLink sets the "external_link" field.
+func (otc *OrganizationTypeCreate) SetExternalLink(s string) *OrganizationTypeCreate {
+	otc.mutation.SetExternalLink(s)
+	return otc
+}
+
+// SetNillableExternalLink sets the "external_link" field if the given value is not nil.
+func (otc *OrganizationTypeCreate) SetNillableExternalLink(s *string) *OrganizationTypeCreate {
+	if s != nil {
+		otc.SetExternalLink(*s)
+	}
 	return otc
 }
 
@@ -256,9 +264,9 @@ func (otc *OrganizationTypeCreate) createSpec() (*OrganizationType, *sqlgraph.Cr
 		_spec.SetField(organizationtype.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := otc.mutation.ExternalLinks(); ok {
-		_spec.SetField(organizationtype.FieldExternalLinks, field.TypeJSON, value)
-		_node.ExternalLinks = value
+	if value, ok := otc.mutation.ExternalLink(); ok {
+		_spec.SetField(organizationtype.FieldExternalLink, field.TypeString, value)
+		_node.ExternalLink = value
 	}
 	if nodes := otc.mutation.OrganizationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

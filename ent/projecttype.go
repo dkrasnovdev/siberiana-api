@@ -3,7 +3,6 @@
 package ent
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -32,8 +31,8 @@ type ProjectType struct {
 	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
-	// ExternalLinks holds the value of the "external_links" field.
-	ExternalLinks []string `json:"external_links,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProjectTypeQuery when eager-loading is set.
 	Edges        ProjectTypeEdges `json:"edges"`
@@ -67,11 +66,9 @@ func (*ProjectType) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case projecttype.FieldExternalLinks:
-			values[i] = new([]byte)
 		case projecttype.FieldID:
 			values[i] = new(sql.NullInt64)
-		case projecttype.FieldCreatedBy, projecttype.FieldUpdatedBy, projecttype.FieldDisplayName, projecttype.FieldAbbreviation, projecttype.FieldDescription:
+		case projecttype.FieldCreatedBy, projecttype.FieldUpdatedBy, projecttype.FieldDisplayName, projecttype.FieldAbbreviation, projecttype.FieldDescription, projecttype.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case projecttype.FieldCreatedAt, projecttype.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -138,13 +135,11 @@ func (pt *ProjectType) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pt.Description = value.String
 			}
-		case projecttype.FieldExternalLinks:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field external_links", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &pt.ExternalLinks); err != nil {
-					return fmt.Errorf("unmarshal field external_links: %w", err)
-				}
+		case projecttype.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				pt.ExternalLink = value.String
 			}
 		default:
 			pt.selectValues.Set(columns[i], values[i])
@@ -208,8 +203,8 @@ func (pt *ProjectType) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(pt.Description)
 	builder.WriteString(", ")
-	builder.WriteString("external_links=")
-	builder.WriteString(fmt.Sprintf("%v", pt.ExternalLinks))
+	builder.WriteString("external_link=")
+	builder.WriteString(pt.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
 }

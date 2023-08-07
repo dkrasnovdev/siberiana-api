@@ -3,7 +3,6 @@
 package ent
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -32,8 +31,8 @@ type HolderResponsibility struct {
 	Abbreviation string `json:"abbreviation,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
-	// ExternalLinks holds the value of the "external_links" field.
-	ExternalLinks []string `json:"external_links,omitempty"`
+	// ExternalLink holds the value of the "external_link" field.
+	ExternalLink string `json:"external_link,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the HolderResponsibilityQuery when eager-loading is set.
 	Edges        HolderResponsibilityEdges `json:"edges"`
@@ -67,11 +66,9 @@ func (*HolderResponsibility) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case holderresponsibility.FieldExternalLinks:
-			values[i] = new([]byte)
 		case holderresponsibility.FieldID:
 			values[i] = new(sql.NullInt64)
-		case holderresponsibility.FieldCreatedBy, holderresponsibility.FieldUpdatedBy, holderresponsibility.FieldDisplayName, holderresponsibility.FieldAbbreviation, holderresponsibility.FieldDescription:
+		case holderresponsibility.FieldCreatedBy, holderresponsibility.FieldUpdatedBy, holderresponsibility.FieldDisplayName, holderresponsibility.FieldAbbreviation, holderresponsibility.FieldDescription, holderresponsibility.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case holderresponsibility.FieldCreatedAt, holderresponsibility.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -138,13 +135,11 @@ func (hr *HolderResponsibility) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				hr.Description = value.String
 			}
-		case holderresponsibility.FieldExternalLinks:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field external_links", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &hr.ExternalLinks); err != nil {
-					return fmt.Errorf("unmarshal field external_links: %w", err)
-				}
+		case holderresponsibility.FieldExternalLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_link", values[i])
+			} else if value.Valid {
+				hr.ExternalLink = value.String
 			}
 		default:
 			hr.selectValues.Set(columns[i], values[i])
@@ -208,8 +203,8 @@ func (hr *HolderResponsibility) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(hr.Description)
 	builder.WriteString(", ")
-	builder.WriteString("external_links=")
-	builder.WriteString(fmt.Sprintf("%v", hr.ExternalLinks))
+	builder.WriteString("external_link=")
+	builder.WriteString(hr.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
 }
