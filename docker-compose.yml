@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: ./docker/Dockerfile
     ports:
-      - 4000
+      - 4000:4000
     environment:
       POSTGRES_HOST: ${POSTGRES_HOST}
       POSTGRES_PORT: ${POSTGRES_PORT}
@@ -32,7 +32,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - 5432
+      - 5432:5432
     volumes:
       - heritage_data:/var/lib/postgresql/data
     healthcheck:
@@ -53,7 +53,7 @@ services:
       REDIS_PORT: ${REDIS_PORT}
       REDIS_PASSWORD: ${REDIS_PASSWORD}
     ports:
-      - 6379
+      - 6379:6379
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
