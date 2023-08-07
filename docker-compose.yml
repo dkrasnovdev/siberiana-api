@@ -19,7 +19,6 @@ services:
     depends_on:
       - heritage_postgres
       - heritage_redis
-      - minio
     networks:
       - siberiana-network
 
@@ -35,7 +34,7 @@ services:
     ports:
       - 5432
     volumes:
-      - data:/var/lib/postgresql/data
+      - heritage_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-h", "postgres", "-U", "${POSTGRES_USER}"]
       interval: 10s
@@ -65,7 +64,9 @@ services:
 
 volumes:
   heritage_cache:
+    external: true
   heritage_data:
+    external: true
 
 networks:
   siberiana-network:
