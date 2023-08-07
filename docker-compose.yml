@@ -63,29 +63,9 @@ services:
     networks:
       - siberiana-network
 
-  heritage_minio:
-    container_name: heritage_minio
-    build:
-      context: .
-      dockerfile: ./docker/Dockerfile.minio
-    ports:
-      - 9000
-      - 9001
-    environment:
-      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
-      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
-      - MINIO_SERVER_URL=${MINIO_SERVER_URL}
-      - MINIO_SERVER_REDIRECT_URL=${MINIO_SERVER_REDIRECT_URL}
-    volumes:
-      - ./minio:/data
-    command: server --console-address :9001 /data
-    networks:
-      - siberiana-network
-
 volumes:
   heritage_cache:
   heritage_data:
-  minio:
 
 networks:
   siberiana-network:
