@@ -24,8 +24,7 @@ type Config struct {
 	MINIO_SECRET_ACCESS_KEY string `mapstructure:"MINIO_SECRET_ACCESS_KEY"`
 	MINIO_USE_SSL           string `mapstructure:"MINIO_USE_SSL"`
 	OIDC_USERINFO_ENDPOINT  string `mapstructure:"OIDC_USERINFO_ENDPOINT"`
-	STORAGE_BASE_URL        string `mapstructure:"STORAGE_BASE_URL"`
-	STORAGE_DEFAULT_BUCKET  string `mapstructure:"STORAGE_DEFAULT_BUCKET"`
+	MINIO_DEFAULT_BUCKET    string `mapstructure:"MINIO_DEFAULT_BUCKET"`
 }
 
 // LoadConfig loads the application configuration from environment variables or a configuration file.
@@ -49,9 +48,8 @@ func LoadConfig() (config Config, err error) {
 			MINIO_ACCESS_KEY_ID:     os.Getenv("MINIO_ACCESS_KEY_ID"),
 			MINIO_SECRET_ACCESS_KEY: os.Getenv("MINIO_SECRET_ACCESS_KEY"),
 			MINIO_USE_SSL:           os.Getenv("MINIO_USE_SSL"),
+			MINIO_DEFAULT_BUCKET:    os.Getenv("MINIO_DEFAULT_BUCKET"),
 			OIDC_USERINFO_ENDPOINT:  os.Getenv("OIDC_USERINFO_ENDPOINT"),
-			STORAGE_BASE_URL:        os.Getenv("STORAGE_BASE_URL"),
-			STORAGE_DEFAULT_BUCKET:  os.Getenv("STORAGE_DEFAULT_BUCKET"),
 		}, nil
 	}
 
@@ -123,16 +121,12 @@ func LoadConfig() (config Config, err error) {
 		err = errors.New("MINIO_USE_SSL is required")
 	}
 
+	if config.MINIO_DEFAULT_BUCKET == "" {
+		err = errors.New("MINIO_DEFAULT_BUCKET is required")
+	}
+
 	if config.OIDC_USERINFO_ENDPOINT == "" {
 		err = errors.New("OIDC_USERINFO_ENDPOINT is required")
-	}
-
-	if config.STORAGE_BASE_URL == "" {
-		err = errors.New("STORAGE_BASE_URL is required")
-	}
-
-	if config.STORAGE_DEFAULT_BUCKET == "" {
-		err = errors.New("STORAGE_DEFAULT_BUCKET is required")
 	}
 
 	return

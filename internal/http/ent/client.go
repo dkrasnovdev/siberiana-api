@@ -74,5 +74,6 @@ func NewClient(env config.Config) *ent.Client {
 	)
 
 	// Create and return the ent client using the caching driver.
-	return ent.NewClient(ent.Driver(drv))
+	client := ent.NewClient(ent.Driver(drv))
+	return client
 }
