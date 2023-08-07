@@ -11,6 +11,7 @@ import (
 
 	"github.com/dkrasnovdev/heritage-api/config"
 	"github.com/dkrasnovdev/heritage-api/internal/ent/privacy"
+	"github.com/dkrasnovdev/heritage-api/pkg/response"
 )
 
 // CacheTTL specifies the time-to-live for cached user information.
@@ -44,7 +45,7 @@ func Authentication(next http.Handler) http.Handler {
 		parts := strings.Fields(authHeader)
 		if len(parts) != 2 || parts[0] != "Bearer" {
 			// Invalid header format, return an error response
-			http.Error(w, "Invalid authorization header format", http.StatusUnauthorized)
+			response.SendErrorResponse(w, http.StatusUnauthorized, "Invalid Authorization Header Format")
 			return
 		}
 		token := parts[1]
@@ -68,7 +69,7 @@ func Authentication(next http.Handler) http.Handler {
 		config, err := config.LoadConfig()
 		if err != nil {
 			log.Println("Error loading .env file:", err)
-			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			response.SendErrorResponse(w, http.StatusInternalServerError, "Internal Server Error")
 			return
 		}
 
@@ -77,7 +78,7 @@ func Authentication(next http.Handler) http.Handler {
 		req, err := http.NewRequest("GET", config.OIDC_USERINFO_ENDPOINT, nil)
 		if err != nil {
 			log.Println("Error creating request:", err)
-			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			response.SendErrorResponse(w, http.StatusInternalServerError, "Internal Server Error")
 			return
 		}
 
@@ -88,7 +89,7 @@ func Authentication(next http.Handler) http.Handler {
 		res, err := client.Do(req)
 		if err != nil {
 			log.Println("Error sending request:", err)
-			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			response.SendErrorResponse(w, http.StatusInternalServerError, "Authentication Failed")
 			return
 		}
 		defer res.Body.Close()
@@ -96,7 +97,7 @@ func Authentication(next http.Handler) http.Handler {
 		// If the response status code indicates an error
 		if res.StatusCode < 200 || res.StatusCode >= 300 {
 			log.Println("External endpoint returned an error:", res.Status)
-			http.Error(w, "Authentication failed", http.StatusUnauthorized)
+			response.SendErrorResponse(w, http.StatusUnauthorized, "Authentication Failed")
 			return
 		}
 
@@ -104,7 +105,7 @@ func Authentication(next http.Handler) http.Handler {
 		ior, err := io.ReadAll(res.Body)
 		if err != nil {
 			log.Println("Error reading response body:", err)
-			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			response.SendErrorResponse(w, http.StatusInternalServerError, "Internal Server Error")
 			return
 		}
 
@@ -113,7 +114,7 @@ func Authentication(next http.Handler) http.Handler {
 		err = json.Unmarshal(ior, &v)
 		if err != nil {
 			log.Println("Error unmarshaling response body:", err)
-			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			response.SendErrorResponse(w, http.StatusInternalServerError, "Internal Server Error")
 			return
 		}
 

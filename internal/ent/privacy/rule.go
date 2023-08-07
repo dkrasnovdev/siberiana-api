@@ -11,7 +11,7 @@ func DenyIfNoViewer() privacy.QueryMutationRule {
 	return privacy.ContextQueryMutationRule(func(ctx context.Context) error {
 		view := FromContext(ctx)
 		if view == nil {
-			return privacy.Denyf("viewer not found in the context or user not authenticated")
+			return privacy.Denyf("ot authenticated")
 		}
 		// Skip to the next privacy rule (equivalent to return nil).
 		return privacy.Skip

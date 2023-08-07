@@ -2,7 +2,6 @@ package minio
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"mime/multipart"
 	"net/http"
@@ -10,6 +9,7 @@ import (
 	"sync"
 
 	"github.com/dkrasnovdev/heritage-api/internal/ent/privacy"
+	"github.com/dkrasnovdev/heritage-api/pkg/response"
 	"github.com/minio/minio-go/v7"
 )
 
@@ -29,14 +29,14 @@ func Handler(client *minio.Client, defaultBucket string) http.HandlerFunc {
 		view := privacy.FromContext(r.Context())
 		if view == nil {
 			// Return a forbidden error if the viewer is missing.
-			http.Error(w, "Viewer not found in the context or user not authenticated", http.StatusForbidden)
+			response.SendErrorResponse(w, http.StatusForbidden, "Not authenticated")
 			return
 		}
 
 		// Check if the viewer is a moderator.
 		if !view.IsModerator() && !view.IsAdministrator() {
 			// Return a forbidden error if the viewer is not a moderator or an administrator.
-			http.Error(w, "Forbidden", http.StatusForbidden)
+			response.SendErrorResponse(w, http.StatusForbidden, "Forbidden")
 			return
 		}
 
@@ -48,7 +48,7 @@ func Handler(client *minio.Client, defaultBucket string) http.HandlerFunc {
 			// Parse the multipart form data for file uploads.
 			err := r.ParseMultipartForm(MaxFileSize)
 			if err != nil {
-				sendErrorResponse(w, http.StatusInternalServerError, "Failed to parse form data")
+				response.SendErrorResponse(w, http.StatusInternalServerError, "Failed to parse form data")
 				return
 			}
 
@@ -63,11 +63,11 @@ func Handler(client *minio.Client, defaultBucket string) http.HandlerFunc {
 			// Check if the specified bucket exists.
 			bucketExists, err := client.BucketExists(context.Background(), bucket)
 			if err != nil {
-				sendErrorResponse(w, http.StatusInternalServerError, "Failed to check bucket existence")
+				response.SendErrorResponse(w, http.StatusInternalServerError, "Failed to check bucket existence")
 				return
 			}
 			if !bucketExists {
-				sendErrorResponse(w, http.StatusBadRequest, "Specified bucket does not exist")
+				response.SendErrorResponse(w, http.StatusBadRequest, "Specified bucket does not exist")
 				return
 			}
 
@@ -85,7 +85,7 @@ func Handler(client *minio.Client, defaultBucket string) http.HandlerFunc {
 						// Open the file for reading.
 						file, err := handler.Open()
 						if err != nil {
-							sendErrorResponse(w, http.StatusInternalServerError, "Failed to open file")
+							response.SendErrorResponse(w, http.StatusInternalServerError, "Failed to open file")
 							return
 						}
 						defer file.Close()
@@ -101,7 +101,7 @@ func Handler(client *minio.Client, defaultBucket string) http.HandlerFunc {
 							ContentType: handler.Header.Get("Content-Type"),
 						})
 						if err != nil {
-							sendErrorResponse(w, http.StatusInternalServerError, "Failed to upload file to MinIO")
+							response.SendErrorResponse(w, http.StatusInternalServerError, "Failed to upload file to MinIO")
 							return
 						}
 
@@ -119,39 +119,13 @@ func Handler(client *minio.Client, defaultBucket string) http.HandlerFunc {
 			wg.Wait()
 
 			// Send the slice of public URLs as a response.
-			response := UploadResponse{
+			r := UploadResponse{
 				URLs: URLs,
 			}
-			sendJSONResponse(w, http.StatusOK, response)
+			response.SendJSONResponse(w, http.StatusOK, r)
 		default:
 			// Return an error message for unsupported HTTP methods.
-			sendErrorResponse(w, http.StatusMethodNotAllowed, http.StatusText(http.StatusMethodNotAllowed))
+			response.SendErrorResponse(w, http.StatusMethodNotAllowed, http.StatusText(http.StatusMethodNotAllowed))
 		}
-	}
-}
-
-// sendErrorResponse sends a JSON error response with the specified status code and error message.
-func sendErrorResponse(w http.ResponseWriter, statusCode int, message string) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(statusCode)
-	err := json.NewEncoder(w).Encode(map[string]string{"error": message})
-	if err != nil {
-		// If encoding the JSON response fails, send a plain-text response with the error message.
-		w.Header().Set("Content-Type", "text/plain")
-		w.WriteHeader(statusCode)
-		fmt.Fprint(w, message)
-	}
-}
-
-// sendJSONResponse sends a JSON response with the specified status code and payload.
-func sendJSONResponse(w http.ResponseWriter, statusCode int, payload interface{}) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(statusCode)
-	err := json.NewEncoder(w).Encode(payload)
-	if err != nil {
-		// If encoding the JSON response fails, send a plain-text response with the error message.
-		w.Header().Set("Content-Type", "text/plain")
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprint(w, "Failed to encode JSON response")
 	}
 }

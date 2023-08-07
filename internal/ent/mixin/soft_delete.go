@@ -77,7 +77,7 @@ func (d SoftDeleteMixin) Hooks() []ent.Hook {
 					// If the Viewer is not found, it means that the user information is missing or not properly authenticated.
 					if v == nil {
 						// Return an error indicating that the Viewer is not available or the user is not authenticated.
-						return nil, fmt.Errorf("viewer not found in the context or user not authenticated")
+						return nil, fmt.Errorf("not authenticated")
 					}
 
 					// Get the preferred username from the privacy policy.
