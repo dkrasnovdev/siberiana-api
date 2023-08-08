@@ -19,13 +19,14 @@ Before you begin, ensure you have the following installed:
 - Docker
 - Docker Compose
 
-You will also need to set up the Task CLI tool, Air and download the necessary packages. Here's how:
+You will also need to set up the Task CLI tool and Air. Here's how:
 
 1. **Install Task**: Task is a task runner that simplifies command execution. If you haven't already, install Task by following the instructions at [https://taskfile.dev/installation/](https://taskfile.dev/installation/).
 
 2. **Install Air**: Air is used for automatically rebuilding and restarting the application when code changes occur. There are multiple methods to install Air:
 
    a. **Install via Binary** (preferred):
+
    ```bash
    # Install Air binary into $(go env GOPATH)/bin/
    curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
@@ -35,11 +36,13 @@ You will also need to set up the Task CLI tool, Air and download the necessary p
    ```
 
    b. **Install via Go Install**:
+
    ```bash
    go install github.com/cosmtrek/air@latest
    ```
 
    c. **Using Docker**:
+
    ```bash
    docker run -it --rm \
        -w "<PROJECT>" \
@@ -52,31 +55,29 @@ You will also need to set up the Task CLI tool, Air and download the necessary p
 
    For more information on installation and usage, visit [https://github.com/cosmtrek/air](https://github.com/cosmtrek/air).
 
-3. **Download Required Packages**: Once Task and Air are installed, navigate to the root directory of the Siberiana GraphQL repository in your terminal. Run the following command to download the required packages specified in the Taskfile:
-
-   ```bash
-   task install
-   ```
-
-   This command ensures you have all the necessary packages ready for use.
-
-With Task, Air installed and packages downloaded, you're ready to set up your local development environment. Follow the steps outlined in the next section to start containers, run tasks, and access the application.
+With Task and Air. Follow the steps outlined in the next section to start containers, run tasks, and access the application.
 
 ## Getting Started
 
-1. Clone this repository to your local machine:
+1.  Clone this repository to your local machine:
 
-   ```bash
-   git clone https://github.com/dkrasnovdev/siberiana-api.git
-   cd siberiana-api
-   ```
+```bash
+git clone https://github.com/dkrasnovdev/siberiana-api.git
+cd siberiana-api
+```
 
-2. Copy the `.env.example` file and rename it to `.env`. Fill in the required environment variables with appropriate values.
+2.  Run the following command to download the required packages specified in the Taskfile:
 
-   ```bash
-   cp .env.example .env
-   # Edit .env file with your configuration
-   ```
+```bash
+task install
+```
+
+3.  Copy the `.env.example` file and rename it to `.env`. Fill in the required environment variables with appropriate values.
+
+```bash
+cp .env.example .env
+# Edit .env file with your configuration
+```
 
 ## Troubleshooting
 
