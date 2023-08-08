@@ -67,14 +67,14 @@ Follow the steps outlined in the next section to start containers, run tasks, an
 
 ## Getting Started
 
-1.  Clone this repository to your local machine:
+1. Clone this repository to your local machine:
 
 ```bash
 git clone https://github.com/dkrasnovdev/siberiana-api.git
 cd siberiana-api
 ```
 
-2.  Run the following command to download the required packages specified in the Taskfile:
+2. Run the following command to download the required packages specified in the Taskfile:
 
 ```bash
 task install
@@ -86,6 +86,60 @@ task install
 cp .env.example .env
 # Edit .env file with your configuration
 ```
+
+## For Local Development
+
+To work on the project locally, follow these steps:
+
+1. Start the required containers for local development:
+
+```bash
+docker-compose up -d siberiana_postgres siberiana_redis
+```
+
+2. Run the development task:
+
+```bash
+task dev
+```
+
+This will start the development server using Air, allowing automatic rebuilding and restarting on code changes.
+
+## Build a Binary
+
+To build a binary of the application, use the following task:
+
+```bash
+task build
+```
+
+After building, you can start the application using:
+
+```bash
+task start
+```
+
+## Running Application in Docker
+
+To run the application in a Docker container, follow these steps:
+
+1. Build the Docker image:
+
+```bash
+docker-compose build siberiana_graphql
+```
+
+2. Start the application in a Docker container:
+
+```bash
+docker-compose up -d siberiana_graphql
+```
+
+The application will be accessible at http://localhost:4000.
+
+## Deployment Using Nginx
+
+For deploying the project using Nginx as a reverse proxy, refer to the instructions in the [Siberiana Nginx Setup](https://github.com/dkrasnovdev/siberiana-nginx) repository.
 
 ## Troubleshooting
 
