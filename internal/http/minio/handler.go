@@ -22,7 +22,7 @@ type UploadResponse struct {
 }
 
 // Handler creates a new HTTP handler for handling file uploads using MinIO client.
-func Handler(client *minio.Client, defaultBucket string) http.HandlerFunc {
+func Handler(client *minio.Client, serverUrl, defaultBucket string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		// Check if the viewer is available in the request context.
@@ -106,7 +106,7 @@ func Handler(client *minio.Client, defaultBucket string) http.HandlerFunc {
 						}
 
 						// Generate the public URL of the uploaded file.
-						url := fmt.Sprintf("%s/%s", bucket, objectName)
+						url := fmt.Sprintf("%s/%s/%s", serverUrl, bucket, objectName)
 
 						mu.Lock()
 						URLs = append(URLs, url)

@@ -47,7 +47,7 @@ func main() {
 	minioClient := minio.NewClient(config)
 
 	// Create a new MinIO handler using the MinIO client.
-	minioHandler := httpMinio.Handler(minioClient, config.MINIO_DEFAULT_BUCKET)
+	minioHandler := httpMinio.Handler(minioClient, config.MINIO_SERVER_URL, config.MINIO_DEFAULT_BUCKET)
 
 	// Mount the MinIO handler on the "/upload" route of the chi router.
 	r.Mount("/upload", minioHandler)

@@ -18,6 +18,7 @@ type Config struct {
 	REDIS_HOST              string `mapstructure:"REDIS_HOST"`
 	REDIS_PORT              string `mapstructure:"REDIS_PORT"`
 	REDIS_PASSWORD          string `mapstructure:"REDIS_PASSWORD"`
+	MINIO_SERVER_URL        string `mapstructure:"MINIO_SERVER_URL"`
 	MINIO_ENDPOINT          string `mapstructure:"MINIO_ENDPOINT"`
 	MINIO_PORT              string `mapstructure:"MINIO_PORT"`
 	MINIO_ACCESS_KEY_ID     string `mapstructure:"MINIO_ACCESS_KEY_ID"`
@@ -43,6 +44,7 @@ func LoadConfig() (config Config, err error) {
 			REDIS_HOST:              os.Getenv("REDIS_HOST"),
 			REDIS_PORT:              os.Getenv("REDIS_PORT"),
 			REDIS_PASSWORD:          os.Getenv("REDIS_PASSWORD"),
+			MINIO_SERVER_URL:        os.Getenv("MINIO_SERVER_URL"),
 			MINIO_ENDPOINT:          os.Getenv("MINIO_ENDPOINT"),
 			MINIO_PORT:              os.Getenv("MINIO_PORT"),
 			MINIO_ACCESS_KEY_ID:     os.Getenv("MINIO_ACCESS_KEY_ID"),
@@ -103,6 +105,10 @@ func LoadConfig() (config Config, err error) {
 		err = errors.New("REDIS_PASSWORD is required")
 	}
 
+	if config.MINIO_SERVER_URL == "" {
+		err = errors.New("MINIO_SERVER_URL is required")
+	}
+
 	if config.MINIO_ENDPOINT == "" {
 		err = errors.New("MINIO_ENDPOINT is required")
 	}
@@ -114,9 +120,11 @@ func LoadConfig() (config Config, err error) {
 	if config.MINIO_ACCESS_KEY_ID == "" {
 		err = errors.New("MINIO_ACCESS_KEY_ID is required")
 	}
+
 	if config.MINIO_SECRET_ACCESS_KEY == "" {
 		err = errors.New("MINIO_SECRET_ACCESS_KEY is required")
 	}
+
 	if config.MINIO_USE_SSL == "" {
 		err = errors.New("MINIO_USE_SSL is required")
 	}
