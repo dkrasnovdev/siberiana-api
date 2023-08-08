@@ -9,7 +9,7 @@
 Siberiana | Aggregator of the Historical and Cultural Heritage of the Yenisei Siberia.
 </p>
 
-# Siberiana GraphQL API Setup
+# Siberiana GraphQL API
 
 ## Prerequisites
 
@@ -18,6 +18,49 @@ Before you begin, ensure you have the following installed:
 - Go (at least version 1.19)
 - Docker
 - Docker Compose
+
+You will also need to set up the Task CLI tool, Air and download the necessary packages. Here's how:
+
+1. **Install Task**: Task is a task runner that simplifies command execution. If you haven't already, install Task by following the instructions at [https://taskfile.dev/installation/](https://taskfile.dev/installation/).
+
+2. **Install Air**: Air is used for automatically rebuilding and restarting the application when code changes occur. There are multiple methods to install Air:
+
+   a. **Install via Binary** (preferred):
+   ```bash
+   # Install Air binary into $(go env GOPATH)/bin/
+   curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
+
+   # Alternatively, install it into ./bin/
+   # curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s
+   ```
+
+   b. **Install via Go Install**:
+   ```bash
+   go install github.com/cosmtrek/air@latest
+   ```
+
+   c. **Using Docker**:
+   ```bash
+   docker run -it --rm \
+       -w "<PROJECT>" \
+       -e "air_wd=<PROJECT>" \
+       -v $(pwd):<PROJECT> \
+       -p <PORT>:<APP SERVER PORT> \
+       cosmtrek/air
+       -c <CONF>
+   ```
+
+   For more information on installation and usage, visit [https://github.com/cosmtrek/air](https://github.com/cosmtrek/air).
+
+3. **Download Required Packages**: Once Task and Air are installed, navigate to the root directory of the Siberiana GraphQL repository in your terminal. Run the following command to download the required packages specified in the Taskfile:
+
+   ```bash
+   task install
+   ```
+
+   This command ensures you have all the necessary packages ready for use.
+
+With Task, Air installed and packages downloaded, you're ready to set up your local development environment. Follow the steps outlined in the next section to start containers, run tasks, and access the application.
 
 ## Getting Started
 
