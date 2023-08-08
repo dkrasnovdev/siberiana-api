@@ -11,7 +11,7 @@ Siberiana | Aggregator of the Historical and Cultural Heritage of the Yenisei Si
 
 # Siberiana GraphQL API
 
-The Siberiana GraphQL API serves as an essential gateway to access and interact with the vast historical and cultural heritage of the Yenisei Siberia region. By providing a powerful GraphQL interface, this API offers a comprehensive way to query and retrieve information about the rich historical artifacts, cultural landmarks, and heritage sites of the Yenisei Siberia area.
+Siberiana GraphQL API serves as an essential gateway to access and interact with the vast historical and cultural heritage of the Yenisei Siberia region. By providing a powerful GraphQL interface, this API offers a comprehensive way to query and retrieve information about the rich historical artifacts, cultural landmarks, and heritage sites of the Yenisei Siberia area.
 
 ## Prerequisites
 
