@@ -57,6 +57,12 @@ You will also need to set up the Task CLI tool and Air. Here's how:
 
    For more information on installation and usage, visit [https://github.com/cosmtrek/air](https://github.com/cosmtrek/air).
 
+   Ensure you have running Keycloak and MinIO instances. If you don't have them set up, use the following repositories to set them up:
+
+- **Keycloak Instance**: Follow the instructions at [https://github.com/dkrasnovdev/siberiana-keycloak](https://github.com/dkrasnovdev/siberiana-keycloak) to set up a running Keycloak instance. Keycloak provides authentication and authorization services for the Siberiana GraphQL API.
+
+- **MinIO Instance**: Set up a running MinIO instance by following the instructions at [https://github.com/dkrasnovdev/siberiana-minio](https://github.com/dkrasnovdev/siberiana-minio). MinIO is used for object storage and is an essential part of the Siberiana GraphQL API.
+
 Follow the steps outlined in the next section to start containers, run tasks, and access the application.
 
 ## Getting Started
@@ -74,13 +80,7 @@ cd siberiana-api
 task install
 ```
 
-3. Ensure you have running Keycloak and MinIO instances. If you don't have them set up, use the following repositories to set them up:
-
-   - **Keycloak Instance**: Follow the instructions at [https://github.com/dkrasnovdev/siberiana-keycloak](https://github.com/dkrasnovdev/siberiana-keycloak) to set up a running Keycloak instance. Keycloak provides authentication and authorization services for the Siberiana GraphQL API.
-
-   - **MinIO Instance**: Set up a running MinIO instance by following the instructions at [https://github.com/dkrasnovdev/siberiana-minio](https://github.com/dkrasnovdev/siberiana-minio). MinIO is used for object storage and is an essential part of the Siberiana GraphQL API.
-
-4. Copy the `.env.example` file and rename it to `.env`. Fill in the required environment variables with appropriate values.
+3. Copy the `.env.example` file and rename it to `.env`. Fill in the required environment variables with appropriate values.
 
 ```bash
 cp .env.example .env
