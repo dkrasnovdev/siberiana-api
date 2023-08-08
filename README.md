@@ -17,7 +17,7 @@ Siberiana GraphQL API serves as an essential gateway to access and interact with
 
 Before you begin, ensure you have the following installed:
 
-- [Go (at least version 1.19)](https://golang.org/)
+- [Go](https://golang.org/) (at least version 1.19)
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
 
