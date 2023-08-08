@@ -9,7 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
-	"github.com/dkrasnovdev/heritage-api/internal/ent/privacy"
+	"github.com/dkrasnovdev/siberiana-api/internal/ent/privacy"
 )
 
 // AuditMixin holds the schema definition for the mixin.

@@ -9,9 +9,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/holder"
-	"github.com/dkrasnovdev/heritage-api/ent/organization"
-	"github.com/dkrasnovdev/heritage-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/holder"
+	"github.com/dkrasnovdev/siberiana-api/ent/organization"
+	"github.com/dkrasnovdev/siberiana-api/ent/person"
 )
 
 // Holder is the model entity for the Holder schema.

@@ -12,9 +12,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/book"
-	"github.com/dkrasnovdev/heritage-api/ent/predicate"
-	"github.com/dkrasnovdev/heritage-api/ent/publisher"
+	"github.com/dkrasnovdev/siberiana-api/ent/book"
+	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
+	"github.com/dkrasnovdev/siberiana-api/ent/publisher"
 )
 
 // PublisherQuery is the builder for querying Publisher entities.

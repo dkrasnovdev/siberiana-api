@@ -3,8 +3,8 @@ package ent
 import (
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/dkrasnovdev/heritage-api/ent"
-	"github.com/dkrasnovdev/heritage-api/internal/gql/resolver"
+	"github.com/dkrasnovdev/siberiana-api/ent"
+	"github.com/dkrasnovdev/siberiana-api/internal/gql/resolver"
 )
 
 // NewGraphQLServer creates a new GraphQL server with the provided ent client.

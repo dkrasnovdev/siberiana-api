@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/location"
-	"github.com/dkrasnovdev/heritage-api/ent/settlement"
+	"github.com/dkrasnovdev/siberiana-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
 // SettlementCreate is the builder for creating a Settlement entity.

@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/district"
-	"github.com/dkrasnovdev/heritage-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/location"
 )
 
 // DistrictCreate is the builder for creating a District entity.

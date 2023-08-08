@@ -8,12 +8,12 @@ import (
 	"time"
 
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/dkrasnovdev/heritage-api/config"
-	"github.com/dkrasnovdev/heritage-api/internal/http/chi"
-	"github.com/dkrasnovdev/heritage-api/internal/http/ent"
-	httpMinio "github.com/dkrasnovdev/heritage-api/internal/http/minio"
-	"github.com/dkrasnovdev/heritage-api/internal/minio"
-	"github.com/dkrasnovdev/heritage-api/pkg/shutdown"
+	"github.com/dkrasnovdev/siberiana-api/config"
+	"github.com/dkrasnovdev/siberiana-api/internal/http/chi"
+	"github.com/dkrasnovdev/siberiana-api/internal/http/ent"
+	httpMinio "github.com/dkrasnovdev/siberiana-api/internal/http/minio"
+	"github.com/dkrasnovdev/siberiana-api/internal/minio"
+	"github.com/dkrasnovdev/siberiana-api/pkg/shutdown"
 )
 
 func main() {
@@ -53,7 +53,7 @@ func main() {
 	r.Mount("/upload", minioHandler)
 
 	// Mount the Apollo Sandbox on the "/" route of the chi router.
-	r.Mount("/", playground.ApolloSandboxHandler("Heritage GraphQL API", "/graphql"))
+	r.Mount("/", playground.ApolloSandboxHandler("Siberiana GraphQL API", "/graphql"))
 
 	// Start the HTTP server and listen for incoming requests on port 4000.
 	server := &http.Server{Addr: ":4000", Handler: r}

@@ -12,13 +12,13 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/artifact"
-	"github.com/dkrasnovdev/heritage-api/ent/book"
-	"github.com/dkrasnovdev/heritage-api/ent/holder"
-	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
-	"github.com/dkrasnovdev/heritage-api/ent/organization"
-	"github.com/dkrasnovdev/heritage-api/ent/person"
-	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
+	"github.com/dkrasnovdev/siberiana-api/ent/book"
+	"github.com/dkrasnovdev/siberiana-api/ent/holder"
+	"github.com/dkrasnovdev/siberiana-api/ent/holderresponsibility"
+	"github.com/dkrasnovdev/siberiana-api/ent/organization"
+	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 )
 
 // HolderQuery is the builder for querying Holder entities.

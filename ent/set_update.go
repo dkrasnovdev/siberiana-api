@@ -11,10 +11,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/artifact"
-	"github.com/dkrasnovdev/heritage-api/ent/monument"
-	"github.com/dkrasnovdev/heritage-api/ent/predicate"
-	"github.com/dkrasnovdev/heritage-api/ent/set"
+	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
+	"github.com/dkrasnovdev/siberiana-api/ent/monument"
+	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
+	"github.com/dkrasnovdev/siberiana-api/ent/set"
 )
 
 // SetUpdate is the builder for updating Set entities.

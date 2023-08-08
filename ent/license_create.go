@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/artifact"
-	"github.com/dkrasnovdev/heritage-api/ent/book"
-	"github.com/dkrasnovdev/heritage-api/ent/license"
-	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
+	"github.com/dkrasnovdev/siberiana-api/ent/book"
+	"github.com/dkrasnovdev/siberiana-api/ent/license"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 )
 
 // LicenseCreate is the builder for creating a License entity.

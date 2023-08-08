@@ -9,10 +9,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
-	gen "github.com/dkrasnovdev/heritage-api/ent"
-	"github.com/dkrasnovdev/heritage-api/ent/hook"
-	"github.com/dkrasnovdev/heritage-api/ent/intercept"
-	"github.com/dkrasnovdev/heritage-api/internal/ent/privacy"
+	gen "github.com/dkrasnovdev/siberiana-api/ent"
+	"github.com/dkrasnovdev/siberiana-api/ent/hook"
+	"github.com/dkrasnovdev/siberiana-api/ent/intercept"
+	"github.com/dkrasnovdev/siberiana-api/internal/ent/privacy"
 )
 
 // SoftDeleteMixin implements the soft delete pattern for schemas.

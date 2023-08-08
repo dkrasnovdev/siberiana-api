@@ -10,15 +10,15 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/artifact"
-	"github.com/dkrasnovdev/heritage-api/ent/collection"
-	"github.com/dkrasnovdev/heritage-api/ent/culture"
-	"github.com/dkrasnovdev/heritage-api/ent/license"
-	"github.com/dkrasnovdev/heritage-api/ent/location"
-	"github.com/dkrasnovdev/heritage-api/ent/model"
-	"github.com/dkrasnovdev/heritage-api/ent/monument"
-	"github.com/dkrasnovdev/heritage-api/ent/period"
-	"github.com/dkrasnovdev/heritage-api/ent/set"
+	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
+	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/culture"
+	"github.com/dkrasnovdev/siberiana-api/ent/license"
+	"github.com/dkrasnovdev/siberiana-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/model"
+	"github.com/dkrasnovdev/siberiana-api/ent/monument"
+	"github.com/dkrasnovdev/siberiana-api/ent/period"
+	"github.com/dkrasnovdev/siberiana-api/ent/set"
 )
 
 // Artifact is the model entity for the Artifact schema.

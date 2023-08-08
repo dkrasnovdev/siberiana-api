@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/artifact"
-	"github.com/dkrasnovdev/heritage-api/ent/model"
+	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
+	"github.com/dkrasnovdev/siberiana-api/ent/model"
 )
 
 // ModelCreate is the builder for creating a Model entity.

@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/holder"
-	"github.com/dkrasnovdev/heritage-api/ent/organization"
-	"github.com/dkrasnovdev/heritage-api/ent/organizationtype"
+	"github.com/dkrasnovdev/siberiana-api/ent/holder"
+	"github.com/dkrasnovdev/siberiana-api/ent/organization"
+	"github.com/dkrasnovdev/siberiana-api/ent/organizationtype"
 )
 
 // Organization is the model entity for the Organization schema.

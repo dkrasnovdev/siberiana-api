@@ -9,9 +9,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/dkrasnovdev/heritage-api/config"
-	"github.com/dkrasnovdev/heritage-api/internal/ent/privacy"
-	"github.com/dkrasnovdev/heritage-api/pkg/response"
+	"github.com/dkrasnovdev/siberiana-api/config"
+	"github.com/dkrasnovdev/siberiana-api/internal/ent/privacy"
+	"github.com/dkrasnovdev/siberiana-api/pkg/response"
 )
 
 // CacheTTL specifies the time-to-live for cached user information.

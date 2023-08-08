@@ -15,40 +15,40 @@ resolver:
 # autobind tells gqngen to search for any type names in the GraphQL schema in the
 # provided package. If they match it will use them, otherwise it will generate new.
 autobind:
-  - github.com/dkrasnovdev/heritage-api/ent
-  - github.com/dkrasnovdev/heritage-api/ent/art
-  - github.com/dkrasnovdev/heritage-api/ent/artgenre
-  - github.com/dkrasnovdev/heritage-api/ent/artstyle
-  - github.com/dkrasnovdev/heritage-api/ent/artifact
-  - github.com/dkrasnovdev/heritage-api/ent/book
-  - github.com/dkrasnovdev/heritage-api/ent/bookgenre
-  - github.com/dkrasnovdev/heritage-api/ent/category
-  - github.com/dkrasnovdev/heritage-api/ent/collection
-  - github.com/dkrasnovdev/heritage-api/ent/culture
-  - github.com/dkrasnovdev/heritage-api/ent/district
-  - github.com/dkrasnovdev/heritage-api/ent/holder
-  - github.com/dkrasnovdev/heritage-api/ent/holderresponsibility
-  - github.com/dkrasnovdev/heritage-api/ent/keyword
-  - github.com/dkrasnovdev/heritage-api/ent/license
-  - github.com/dkrasnovdev/heritage-api/ent/location
-  - github.com/dkrasnovdev/heritage-api/ent/medium
-  - github.com/dkrasnovdev/heritage-api/ent/model
-  - github.com/dkrasnovdev/heritage-api/ent/monument
-  - github.com/dkrasnovdev/heritage-api/ent/organization
-  - github.com/dkrasnovdev/heritage-api/ent/period
-  - github.com/dkrasnovdev/heritage-api/ent/person
-  - github.com/dkrasnovdev/heritage-api/ent/personrole
-  - github.com/dkrasnovdev/heritage-api/ent/project
-  - github.com/dkrasnovdev/heritage-api/ent/projecttype
-  - github.com/dkrasnovdev/heritage-api/ent/protectedarea
-  - github.com/dkrasnovdev/heritage-api/ent/protectedareacategory
-  - github.com/dkrasnovdev/heritage-api/ent/protectedareapicture
-  - github.com/dkrasnovdev/heritage-api/ent/publication
-  - github.com/dkrasnovdev/heritage-api/ent/publisher
-  - github.com/dkrasnovdev/heritage-api/ent/region
-  - github.com/dkrasnovdev/heritage-api/ent/set
-  - github.com/dkrasnovdev/heritage-api/ent/settlement
-  - github.com/dkrasnovdev/heritage-api/ent/technique
+  - github.com/dkrasnovdev/siberiana-api/ent
+  - github.com/dkrasnovdev/siberiana-api/ent/art
+  - github.com/dkrasnovdev/siberiana-api/ent/artgenre
+  - github.com/dkrasnovdev/siberiana-api/ent/artstyle
+  - github.com/dkrasnovdev/siberiana-api/ent/artifact
+  - github.com/dkrasnovdev/siberiana-api/ent/book
+  - github.com/dkrasnovdev/siberiana-api/ent/bookgenre
+  - github.com/dkrasnovdev/siberiana-api/ent/category
+  - github.com/dkrasnovdev/siberiana-api/ent/collection
+  - github.com/dkrasnovdev/siberiana-api/ent/culture
+  - github.com/dkrasnovdev/siberiana-api/ent/district
+  - github.com/dkrasnovdev/siberiana-api/ent/holder
+  - github.com/dkrasnovdev/siberiana-api/ent/holderresponsibility
+  - github.com/dkrasnovdev/siberiana-api/ent/keyword
+  - github.com/dkrasnovdev/siberiana-api/ent/license
+  - github.com/dkrasnovdev/siberiana-api/ent/location
+  - github.com/dkrasnovdev/siberiana-api/ent/medium
+  - github.com/dkrasnovdev/siberiana-api/ent/model
+  - github.com/dkrasnovdev/siberiana-api/ent/monument
+  - github.com/dkrasnovdev/siberiana-api/ent/organization
+  - github.com/dkrasnovdev/siberiana-api/ent/period
+  - github.com/dkrasnovdev/siberiana-api/ent/person
+  - github.com/dkrasnovdev/siberiana-api/ent/personrole
+  - github.com/dkrasnovdev/siberiana-api/ent/project
+  - github.com/dkrasnovdev/siberiana-api/ent/projecttype
+  - github.com/dkrasnovdev/siberiana-api/ent/protectedarea
+  - github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory
+  - github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture
+  - github.com/dkrasnovdev/siberiana-api/ent/publication
+  - github.com/dkrasnovdev/siberiana-api/ent/publisher
+  - github.com/dkrasnovdev/siberiana-api/ent/region
+  - github.com/dkrasnovdev/siberiana-api/ent/set
+  - github.com/dkrasnovdev/siberiana-api/ent/settlement
+  - github.com/dkrasnovdev/siberiana-api/ent/technique
 
 # This section declares type mapping between the GraphQL and Go type systems.
 models:
@@ -58,7 +58,7 @@ models:
       - github.com/99designs/gqlgen/graphql.IntID
   Node:
     model:
-      - github.com/dkrasnovdev/heritage-api/ent.Noder
+      - github.com/dkrasnovdev/siberiana-api/ent.Noder
   Geometry:
     model:
-      - github.com/dkrasnovdev/heritage-api/internal/ent/types.Geometry
+      - github.com/dkrasnovdev/siberiana-api/internal/ent/types.Geometry

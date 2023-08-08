@@ -10,12 +10,12 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/artifact"
-	"github.com/dkrasnovdev/heritage-api/ent/book"
-	"github.com/dkrasnovdev/heritage-api/ent/holder"
-	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
-	"github.com/dkrasnovdev/heritage-api/ent/organization"
-	"github.com/dkrasnovdev/heritage-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
+	"github.com/dkrasnovdev/siberiana-api/ent/book"
+	"github.com/dkrasnovdev/siberiana-api/ent/holder"
+	"github.com/dkrasnovdev/siberiana-api/ent/holderresponsibility"
+	"github.com/dkrasnovdev/siberiana-api/ent/organization"
+	"github.com/dkrasnovdev/siberiana-api/ent/person"
 )
 
 // HolderCreate is the builder for creating a Holder entity.

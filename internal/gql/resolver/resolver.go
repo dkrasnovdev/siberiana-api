@@ -2,8 +2,8 @@ package resolver
 
 import (
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/dkrasnovdev/heritage-api/ent"
-	"github.com/dkrasnovdev/heritage-api/internal/gql"
+	"github.com/dkrasnovdev/siberiana-api/ent"
+	"github.com/dkrasnovdev/siberiana-api/internal/gql"
 )
 
 // Resolver is the resolver root.

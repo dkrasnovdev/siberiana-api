@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/location"
-	"github.com/dkrasnovdev/heritage-api/ent/predicate"
-	"github.com/dkrasnovdev/heritage-api/ent/settlement"
+	"github.com/dkrasnovdev/siberiana-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
 // SettlementQuery is the builder for querying Settlement entities.

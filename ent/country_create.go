@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/country"
-	"github.com/dkrasnovdev/heritage-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/country"
+	"github.com/dkrasnovdev/siberiana-api/ent/location"
 )
 
 // CountryCreate is the builder for creating a Country entity.

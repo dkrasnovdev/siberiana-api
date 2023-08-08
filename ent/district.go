@@ -9,8 +9,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/district"
-	"github.com/dkrasnovdev/heritage-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/location"
 )
 
 // District is the model entity for the District schema.

@@ -5,8 +5,8 @@ package ent
 import (
 	"time"
 
-	"github.com/dkrasnovdev/heritage-api/ent/person"
-	"github.com/dkrasnovdev/heritage-api/internal/ent/types"
+	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/internal/ent/types"
 )
 
 // CreateArtInput represents a mutation input for creating arts.

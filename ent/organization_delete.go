@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/organization"
-	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/siberiana-api/ent/organization"
+	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 )
 
 // OrganizationDelete is the builder for deleting a Organization entity.

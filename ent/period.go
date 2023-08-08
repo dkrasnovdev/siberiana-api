@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/period"
+	"github.com/dkrasnovdev/siberiana-api/ent/period"
 )
 
 // Period is the model entity for the Period schema.

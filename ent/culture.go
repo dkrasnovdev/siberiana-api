@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/culture"
+	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 )
 
 // Culture is the model entity for the Culture schema.

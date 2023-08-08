@@ -9,8 +9,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/location"
-	"github.com/dkrasnovdev/heritage-api/ent/settlement"
+	"github.com/dkrasnovdev/siberiana-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
 // Settlement is the model entity for the Settlement schema.

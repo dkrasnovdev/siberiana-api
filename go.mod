@@ -1,4 +1,4 @@
-module github.com/dkrasnovdev/heritage-api
+module github.com/dkrasnovdev/siberiana-api
 
 go 1.20
 

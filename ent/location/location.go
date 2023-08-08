@@ -128,7 +128,7 @@ func ValidColumn(column string) bool {
 // package on the initialization of the application. Therefore,
 // it should be imported in the main as follows:
 //
-//	import _ "github.com/dkrasnovdev/heritage-api/ent/runtime"
+//	import _ "github.com/dkrasnovdev/siberiana-api/ent/runtime"
 var (
 	Hooks  [2]ent.Hook
 	Policy ent.Policy

@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/predicate"
-	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
-	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
+	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
 )
 
 // ProtectedAreaCategoryUpdate is the builder for updating ProtectedAreaCategory entities.

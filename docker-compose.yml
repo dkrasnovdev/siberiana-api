@@ -1,8 +1,8 @@
 version: "3.9"
 
 services:
-  heritage_graphql:
-    container_name: heritage_graphql
+  siberiana_graphql:
+    container_name: siberiana_graphql
     build:
       context: .
       dockerfile: ./docker/Dockerfile
@@ -26,13 +26,13 @@ services:
       MINIO_DEFAULT_BUCKET: ${MINIO_DEFAULT_BUCKET}
       OIDC_USERINFO_ENDPOINT: ${OIDC_USERINFO_ENDPOINT}
     depends_on:
-      - heritage_postgres
-      - heritage_redis
+      - siberiana_postgres
+      - siberiana_redis
     networks:
       - siberiana-network
 
-  heritage_postgres:
-    container_name: heritage_postgres
+  siberiana_postgres:
+    container_name: siberiana_postgres
     build:
       context: .
       dockerfile: ./docker/Dockerfile.postgres
@@ -43,7 +43,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - heritage_data:/var/lib/postgresql/data
+      - siberiana_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 10s
@@ -52,8 +52,8 @@ services:
     networks:
       - siberiana-network
 
-  heritage_redis:
-    container_name: heritage_redis
+  siberiana_redis:
+    container_name: siberiana_redis
     build:
       context: .
       dockerfile: ./docker/Dockerfile.redis
@@ -72,9 +72,9 @@ services:
       - siberiana-network
 
 volumes:
-  heritage_cache:
+  siberiana_cache:
     external: true
-  heritage_data:
+  siberiana_data:
     external: true
 
 networks:

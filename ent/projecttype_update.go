@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/predicate"
-	"github.com/dkrasnovdev/heritage-api/ent/project"
-	"github.com/dkrasnovdev/heritage-api/ent/projecttype"
+	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
+	"github.com/dkrasnovdev/siberiana-api/ent/project"
+	"github.com/dkrasnovdev/siberiana-api/ent/projecttype"
 )
 
 // ProjectTypeUpdate is the builder for updating ProjectType entities.

@@ -12,9 +12,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/person"
-	"github.com/dkrasnovdev/heritage-api/ent/personrole"
-	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/personrole"
+	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 )
 
 // PersonRoleQuery is the builder for querying PersonRole entities.

@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/set"
+	"github.com/dkrasnovdev/siberiana-api/ent/set"
 )
 
 // Set is the model entity for the Set schema.

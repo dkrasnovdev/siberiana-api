@@ -5,12 +5,12 @@ package enttest
 import (
 	"context"
 
-	"github.com/dkrasnovdev/heritage-api/ent"
+	"github.com/dkrasnovdev/siberiana-api/ent"
 	// required by schema hooks.
-	_ "github.com/dkrasnovdev/heritage-api/ent/runtime"
+	_ "github.com/dkrasnovdev/siberiana-api/ent/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
-	"github.com/dkrasnovdev/heritage-api/ent/migrate"
+	"github.com/dkrasnovdev/siberiana-api/ent/migrate"
 )
 
 type (

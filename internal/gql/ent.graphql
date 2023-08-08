@@ -4236,7 +4236,7 @@ input MonumentWhereInput {
 An object with an ID.
 Follows the [Relay Global Object Identification Specification](https://relay.dev/graphql/objectidentification.htm)
 """
-interface Node @goModel(model: "github.com/dkrasnovdev/heritage-api/ent.Noder") {
+interface Node @goModel(model: "github.com/dkrasnovdev/siberiana-api/ent.Noder") {
   """The id of the object."""
   id: ID!
 }
@@ -4902,7 +4902,7 @@ type PersonEdge {
   cursor: Cursor!
 }
 """PersonGender is enum for the field gender"""
-enum PersonGender @goModel(model: "github.com/dkrasnovdev/heritage-api/ent/person.Gender") {
+enum PersonGender @goModel(model: "github.com/dkrasnovdev/siberiana-api/ent/person.Gender") {
   female
   male
 }

@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/license"
+	"github.com/dkrasnovdev/siberiana-api/ent/license"
 )
 
 // License is the model entity for the License schema.

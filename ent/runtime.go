@@ -2,4 +2,4 @@
 
 package ent
 
-// The schema-stitching logic is generated in github.com/dkrasnovdev/heritage-api/ent/runtime/runtime.go
+// The schema-stitching logic is generated in github.com/dkrasnovdev/siberiana-api/ent/runtime/runtime.go

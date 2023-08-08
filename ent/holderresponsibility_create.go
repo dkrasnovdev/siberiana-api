@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/holder"
-	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
+	"github.com/dkrasnovdev/siberiana-api/ent/holder"
+	"github.com/dkrasnovdev/siberiana-api/ent/holderresponsibility"
 )
 
 // HolderResponsibilityCreate is the builder for creating a HolderResponsibility entity.

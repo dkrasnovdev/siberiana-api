@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/category"
-	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/siberiana-api/ent/category"
+	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 )
 
 // CategoryDelete is the builder for deleting a Category entity.

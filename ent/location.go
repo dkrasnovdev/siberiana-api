@@ -9,12 +9,12 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/country"
-	"github.com/dkrasnovdev/heritage-api/ent/district"
-	"github.com/dkrasnovdev/heritage-api/ent/location"
-	"github.com/dkrasnovdev/heritage-api/ent/region"
-	"github.com/dkrasnovdev/heritage-api/ent/settlement"
-	"github.com/dkrasnovdev/heritage-api/internal/ent/types"
+	"github.com/dkrasnovdev/siberiana-api/ent/country"
+	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
+	"github.com/dkrasnovdev/siberiana-api/internal/ent/types"
 )
 
 // Location is the model entity for the Location schema.

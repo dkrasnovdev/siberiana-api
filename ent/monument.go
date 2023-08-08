@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/monument"
+	"github.com/dkrasnovdev/siberiana-api/ent/monument"
 )
 
 // Monument is the model entity for the Monument schema.

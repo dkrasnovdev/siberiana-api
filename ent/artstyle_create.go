@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/art"
-	"github.com/dkrasnovdev/heritage-api/ent/artstyle"
+	"github.com/dkrasnovdev/siberiana-api/ent/art"
+	"github.com/dkrasnovdev/siberiana-api/ent/artstyle"
 )
 
 // ArtStyleCreate is the builder for creating a ArtStyle entity.

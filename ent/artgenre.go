@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/artgenre"
+	"github.com/dkrasnovdev/siberiana-api/ent/artgenre"
 )
 
 // ArtGenre is the model entity for the ArtGenre schema.

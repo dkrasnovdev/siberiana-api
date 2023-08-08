@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/organizationtype"
+	"github.com/dkrasnovdev/siberiana-api/ent/organizationtype"
 )
 
 // OrganizationType is the model entity for the OrganizationType schema.

@@ -12,9 +12,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/art"
-	"github.com/dkrasnovdev/heritage-api/ent/artgenre"
-	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/siberiana-api/ent/art"
+	"github.com/dkrasnovdev/siberiana-api/ent/artgenre"
+	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 )
 
 // ArtGenreQuery is the builder for querying ArtGenre entities.

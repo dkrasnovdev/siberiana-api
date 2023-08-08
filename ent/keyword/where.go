@@ -4,7 +4,7 @@ package keyword
 
 import (
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.

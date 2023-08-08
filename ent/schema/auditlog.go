@@ -7,8 +7,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/privacy"
-	rule "github.com/dkrasnovdev/heritage-api/internal/ent/privacy"
+	"github.com/dkrasnovdev/siberiana-api/ent/privacy"
+	rule "github.com/dkrasnovdev/siberiana-api/internal/ent/privacy"
 )
 
 // AuditLog holds the schema definition for the AuditLog entity.

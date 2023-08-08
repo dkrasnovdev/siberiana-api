@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/dkrasnovdev/heritage-api/ent"
+	"github.com/dkrasnovdev/siberiana-api/ent"
 
 	"entgo.io/ent/privacy"
 )

@@ -10,15 +10,15 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/artifact"
-	"github.com/dkrasnovdev/heritage-api/ent/book"
-	"github.com/dkrasnovdev/heritage-api/ent/country"
-	"github.com/dkrasnovdev/heritage-api/ent/district"
-	"github.com/dkrasnovdev/heritage-api/ent/location"
-	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
-	"github.com/dkrasnovdev/heritage-api/ent/region"
-	"github.com/dkrasnovdev/heritage-api/ent/settlement"
-	"github.com/dkrasnovdev/heritage-api/internal/ent/types"
+	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
+	"github.com/dkrasnovdev/siberiana-api/ent/book"
+	"github.com/dkrasnovdev/siberiana-api/ent/country"
+	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
+	"github.com/dkrasnovdev/siberiana-api/internal/ent/types"
 )
 
 // LocationCreate is the builder for creating a Location entity.

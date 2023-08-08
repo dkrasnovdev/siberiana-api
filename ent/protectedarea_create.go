@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
-	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
-	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 )
 
 // ProtectedAreaCreate is the builder for creating a ProtectedArea entity.

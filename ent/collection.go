@@ -9,8 +9,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/category"
-	"github.com/dkrasnovdev/heritage-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/category"
+	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 )
 
 // Collection is the model entity for the Collection schema.

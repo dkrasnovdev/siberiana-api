@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/protectedareacategory"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
 )
 
 // ProtectedAreaCategory is the model entity for the ProtectedAreaCategory schema.

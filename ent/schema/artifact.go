@@ -7,9 +7,9 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/privacy"
-	"github.com/dkrasnovdev/heritage-api/internal/ent/mixin"
-	rule "github.com/dkrasnovdev/heritage-api/internal/ent/privacy"
+	"github.com/dkrasnovdev/siberiana-api/ent/privacy"
+	"github.com/dkrasnovdev/siberiana-api/internal/ent/mixin"
+	rule "github.com/dkrasnovdev/siberiana-api/internal/ent/privacy"
 )
 
 // Artifact holds the schema definition for the Artifact entity.

@@ -7,8 +7,8 @@ package resolver
 import (
 	"context"
 
-	"github.com/dkrasnovdev/heritage-api/ent"
-	"github.com/dkrasnovdev/heritage-api/internal/gql"
+	"github.com/dkrasnovdev/siberiana-api/ent"
+	"github.com/dkrasnovdev/siberiana-api/internal/gql"
 )
 
 // CreateArtifact is the resolver for the createArtifact field.

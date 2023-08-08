@@ -8,7 +8,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/keyword"
+	"github.com/dkrasnovdev/siberiana-api/ent/keyword"
 )
 
 // Keyword is the model entity for the Keyword schema.

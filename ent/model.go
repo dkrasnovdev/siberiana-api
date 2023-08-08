@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/model"
+	"github.com/dkrasnovdev/siberiana-api/ent/model"
 )
 
 // Model is the model entity for the Model schema.

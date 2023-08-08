@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/artstyle"
+	"github.com/dkrasnovdev/siberiana-api/ent/artstyle"
 )
 
 // ArtStyle is the model entity for the ArtStyle schema.

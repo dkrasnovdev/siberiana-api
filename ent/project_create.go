@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/artifact"
-	"github.com/dkrasnovdev/heritage-api/ent/person"
-	"github.com/dkrasnovdev/heritage-api/ent/project"
-	"github.com/dkrasnovdev/heritage-api/ent/projecttype"
+	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
+	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/project"
+	"github.com/dkrasnovdev/siberiana-api/ent/projecttype"
 )
 
 // ProjectCreate is the builder for creating a Project entity.

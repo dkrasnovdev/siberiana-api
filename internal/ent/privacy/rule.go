@@ -3,7 +3,7 @@ package privacy
 import (
 	"context"
 
-	"github.com/dkrasnovdev/heritage-api/ent/privacy"
+	"github.com/dkrasnovdev/siberiana-api/ent/privacy"
 )
 
 // DenyIfNoViewer is a rule that returns deny decision if the viewer is missing in the context.

@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/personrole"
+	"github.com/dkrasnovdev/siberiana-api/ent/personrole"
 )
 
 // PersonRole is the model entity for the PersonRole schema.

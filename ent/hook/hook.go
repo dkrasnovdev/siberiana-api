@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/dkrasnovdev/heritage-api/ent"
+	"github.com/dkrasnovdev/siberiana-api/ent"
 )
 
 // The ArtFunc type is an adapter to allow the use of ordinary

@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/artgenre"
-	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/siberiana-api/ent/artgenre"
+	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 )
 
 // ArtGenreDelete is the builder for deleting a ArtGenre entity.

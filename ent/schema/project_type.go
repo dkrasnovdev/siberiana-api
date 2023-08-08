@@ -5,9 +5,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
-	"github.com/dkrasnovdev/heritage-api/ent/privacy"
-	"github.com/dkrasnovdev/heritage-api/internal/ent/mixin"
-	rule "github.com/dkrasnovdev/heritage-api/internal/ent/privacy"
+	"github.com/dkrasnovdev/siberiana-api/ent/privacy"
+	"github.com/dkrasnovdev/siberiana-api/internal/ent/mixin"
+	rule "github.com/dkrasnovdev/siberiana-api/internal/ent/privacy"
 )
 
 // ProjectType holds the schema definition for the ProjectType entity.

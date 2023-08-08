@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/category"
+	"github.com/dkrasnovdev/siberiana-api/ent/category"
 )
 
 // Category is the model entity for the Category schema.

@@ -10,12 +10,12 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/collection"
-	"github.com/dkrasnovdev/heritage-api/ent/license"
-	"github.com/dkrasnovdev/heritage-api/ent/location"
-	"github.com/dkrasnovdev/heritage-api/ent/protectedarea"
-	"github.com/dkrasnovdev/heritage-api/ent/protectedareapicture"
-	"github.com/dkrasnovdev/heritage-api/internal/ent/types"
+	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/license"
+	"github.com/dkrasnovdev/siberiana-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/siberiana-api/internal/ent/types"
 )
 
 // ProtectedAreaPictureCreate is the builder for creating a ProtectedAreaPicture entity.

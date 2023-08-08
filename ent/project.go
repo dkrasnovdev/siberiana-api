@@ -9,8 +9,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/project"
-	"github.com/dkrasnovdev/heritage-api/ent/projecttype"
+	"github.com/dkrasnovdev/siberiana-api/ent/project"
+	"github.com/dkrasnovdev/siberiana-api/ent/projecttype"
 )
 
 // Project is the model entity for the Project schema.

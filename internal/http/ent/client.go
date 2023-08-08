@@ -9,15 +9,15 @@ import (
 	"time"
 
 	"ariga.io/entcache"
-	"github.com/dkrasnovdev/heritage-api/config"
-	"github.com/dkrasnovdev/heritage-api/ent"
-	"github.com/dkrasnovdev/heritage-api/ent/migrate"
-	mig "github.com/dkrasnovdev/heritage-api/internal/ent/migrate"
+	"github.com/dkrasnovdev/siberiana-api/config"
+	"github.com/dkrasnovdev/siberiana-api/ent"
+	"github.com/dkrasnovdev/siberiana-api/ent/migrate"
+	mig "github.com/dkrasnovdev/siberiana-api/internal/ent/migrate"
 	"github.com/go-redis/redis/v8"
 
 	"entgo.io/ent/dialect"
 	entsql "entgo.io/ent/dialect/sql"
-	_ "github.com/dkrasnovdev/heritage-api/ent/runtime"
+	_ "github.com/dkrasnovdev/siberiana-api/ent/runtime"
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
 

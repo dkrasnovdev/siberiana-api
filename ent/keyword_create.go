@@ -8,7 +8,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/keyword"
+	"github.com/dkrasnovdev/siberiana-api/ent/keyword"
 )
 
 // KeywordCreate is the builder for creating a Keyword entity.

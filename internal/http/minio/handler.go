@@ -8,8 +8,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/dkrasnovdev/heritage-api/internal/ent/privacy"
-	"github.com/dkrasnovdev/heritage-api/pkg/response"
+	"github.com/dkrasnovdev/siberiana-api/internal/ent/privacy"
+	"github.com/dkrasnovdev/siberiana-api/pkg/response"
 	"github.com/minio/minio-go/v7"
 )
 

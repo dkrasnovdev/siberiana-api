@@ -12,9 +12,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/heritage-api/ent/art"
-	"github.com/dkrasnovdev/heritage-api/ent/artstyle"
-	"github.com/dkrasnovdev/heritage-api/ent/predicate"
+	"github.com/dkrasnovdev/siberiana-api/ent/art"
+	"github.com/dkrasnovdev/siberiana-api/ent/artstyle"
+	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 )
 
 // ArtStyleQuery is the builder for querying ArtStyle entities.

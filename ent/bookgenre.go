@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/bookgenre"
+	"github.com/dkrasnovdev/siberiana-api/ent/bookgenre"
 )
 
 // BookGenre is the model entity for the BookGenre schema.

@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/heritage-api/ent/holderresponsibility"
+	"github.com/dkrasnovdev/siberiana-api/ent/holderresponsibility"
 )
 
 // HolderResponsibility is the model entity for the HolderResponsibility schema.
