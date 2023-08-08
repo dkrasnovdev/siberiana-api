@@ -57,7 +57,7 @@ You will also need to set up the Task CLI tool and Air. Here's how:
 
    For more information on installation and usage, visit [https://github.com/cosmtrek/air](https://github.com/cosmtrek/air).
 
-With Task and Air. Follow the steps outlined in the next section to start containers, run tasks, and access the application.
+Follow the steps outlined in the next section to start containers, run tasks, and access the application.
 
 ## Getting Started
 
