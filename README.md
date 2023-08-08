@@ -17,9 +17,9 @@ Siberiana GraphQL API serves as an essential gateway to access and interact with
 
 Before you begin, ensure you have the following installed:
 
-- Go (at least version 1.19)
-- Docker
-- Docker Compose
+- [Go (at least version 1.19)](https://golang.org/)
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
 
 You will also need to set up the Task CLI tool and Air. Here's how:
 
