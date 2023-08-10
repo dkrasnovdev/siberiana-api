@@ -16,12 +16,12 @@ require (
 	github.com/spf13/viper v1.16.0
 	github.com/twpayne/go-geom v1.5.2
 	github.com/vektah/gqlparser/v2 v2.5.8
-	golang.org/x/exp v0.0.0-20230807204917-050eac23e9de
+	golang.org/x/exp v0.0.0-20230810033253-352e893a4cad
 	golang.org/x/sync v0.3.0
 )
 
 require (
-	ariga.io/atlas v0.13.0 // indirect
+	ariga.io/atlas v0.13.1 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/agnivade/levenshtein v1.1.1 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
@@ -35,7 +35,7 @@ require (
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
-	github.com/hashicorp/golang-lru/v2 v2.0.4 // indirect
+	github.com/hashicorp/golang-lru/v2 v2.0.5 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/hashicorp/hcl/v2 v2.17.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
