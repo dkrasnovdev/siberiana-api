@@ -241,8 +241,8 @@ func (p *artPager) applyFilter(query *ArtQuery) (*ArtQuery, error) {
 
 func (p *artPager) toCursor(a *Art) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(a).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(a).Value)
 	}
 	return Cursor{ID: a.ID, Value: cs}
 }
@@ -327,7 +327,8 @@ func (p *artPager) orderExpr(query *ArtQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to Art.
 func (a *ArtQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...ArtPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...ArtPaginateOption,
 ) (*ArtConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -358,6 +359,9 @@ func (a *ArtQuery) Paginate(
 	}
 	if a, err = pager.applyCursors(a, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		a.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		a.Limit(limit)
@@ -590,8 +594,8 @@ func (p *artgenrePager) applyFilter(query *ArtGenreQuery) (*ArtGenreQuery, error
 
 func (p *artgenrePager) toCursor(ag *ArtGenre) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(ag).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(ag).Value)
 	}
 	return Cursor{ID: ag.ID, Value: cs}
 }
@@ -676,7 +680,8 @@ func (p *artgenrePager) orderExpr(query *ArtGenreQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to ArtGenre.
 func (ag *ArtGenreQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...ArtGenrePaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...ArtGenrePaginateOption,
 ) (*ArtGenreConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -707,6 +712,9 @@ func (ag *ArtGenreQuery) Paginate(
 	}
 	if ag, err = pager.applyCursors(ag, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		ag.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		ag.Limit(limit)
@@ -939,8 +947,8 @@ func (p *artstylePager) applyFilter(query *ArtStyleQuery) (*ArtStyleQuery, error
 
 func (p *artstylePager) toCursor(as *ArtStyle) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(as).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(as).Value)
 	}
 	return Cursor{ID: as.ID, Value: cs}
 }
@@ -1025,7 +1033,8 @@ func (p *artstylePager) orderExpr(query *ArtStyleQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to ArtStyle.
 func (as *ArtStyleQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...ArtStylePaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...ArtStylePaginateOption,
 ) (*ArtStyleConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -1056,6 +1065,9 @@ func (as *ArtStyleQuery) Paginate(
 	}
 	if as, err = pager.applyCursors(as, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		as.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		as.Limit(limit)
@@ -1288,8 +1300,8 @@ func (p *artifactPager) applyFilter(query *ArtifactQuery) (*ArtifactQuery, error
 
 func (p *artifactPager) toCursor(a *Artifact) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(a).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(a).Value)
 	}
 	return Cursor{ID: a.ID, Value: cs}
 }
@@ -1374,7 +1386,8 @@ func (p *artifactPager) orderExpr(query *ArtifactQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to Artifact.
 func (a *ArtifactQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...ArtifactPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...ArtifactPaginateOption,
 ) (*ArtifactConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -1405,6 +1418,9 @@ func (a *ArtifactQuery) Paginate(
 	}
 	if a, err = pager.applyCursors(a, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		a.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		a.Limit(limit)
@@ -1637,8 +1653,8 @@ func (p *auditlogPager) applyFilter(query *AuditLogQuery) (*AuditLogQuery, error
 
 func (p *auditlogPager) toCursor(al *AuditLog) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(al).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(al).Value)
 	}
 	return Cursor{ID: al.ID, Value: cs}
 }
@@ -1723,7 +1739,8 @@ func (p *auditlogPager) orderExpr(query *AuditLogQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to AuditLog.
 func (al *AuditLogQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...AuditLogPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...AuditLogPaginateOption,
 ) (*AuditLogConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -1754,6 +1771,9 @@ func (al *AuditLogQuery) Paginate(
 	}
 	if al, err = pager.applyCursors(al, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		al.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		al.Limit(limit)
@@ -1968,8 +1988,8 @@ func (p *bookPager) applyFilter(query *BookQuery) (*BookQuery, error) {
 
 func (p *bookPager) toCursor(b *Book) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(b).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(b).Value)
 	}
 	return Cursor{ID: b.ID, Value: cs}
 }
@@ -2054,7 +2074,8 @@ func (p *bookPager) orderExpr(query *BookQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to Book.
 func (b *BookQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...BookPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...BookPaginateOption,
 ) (*BookConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -2085,6 +2106,9 @@ func (b *BookQuery) Paginate(
 	}
 	if b, err = pager.applyCursors(b, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		b.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		b.Limit(limit)
@@ -2317,8 +2341,8 @@ func (p *bookgenrePager) applyFilter(query *BookGenreQuery) (*BookGenreQuery, er
 
 func (p *bookgenrePager) toCursor(bg *BookGenre) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(bg).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(bg).Value)
 	}
 	return Cursor{ID: bg.ID, Value: cs}
 }
@@ -2403,7 +2427,8 @@ func (p *bookgenrePager) orderExpr(query *BookGenreQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to BookGenre.
 func (bg *BookGenreQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...BookGenrePaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...BookGenrePaginateOption,
 ) (*BookGenreConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -2434,6 +2459,9 @@ func (bg *BookGenreQuery) Paginate(
 	}
 	if bg, err = pager.applyCursors(bg, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		bg.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		bg.Limit(limit)
@@ -2666,8 +2694,8 @@ func (p *categoryPager) applyFilter(query *CategoryQuery) (*CategoryQuery, error
 
 func (p *categoryPager) toCursor(c *Category) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(c).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(c).Value)
 	}
 	return Cursor{ID: c.ID, Value: cs}
 }
@@ -2752,7 +2780,8 @@ func (p *categoryPager) orderExpr(query *CategoryQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to Category.
 func (c *CategoryQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...CategoryPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...CategoryPaginateOption,
 ) (*CategoryConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -2783,6 +2812,9 @@ func (c *CategoryQuery) Paginate(
 	}
 	if c, err = pager.applyCursors(c, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		c.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		c.Limit(limit)
@@ -3015,8 +3047,8 @@ func (p *collectionPager) applyFilter(query *CollectionQuery) (*CollectionQuery,
 
 func (p *collectionPager) toCursor(c *Collection) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(c).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(c).Value)
 	}
 	return Cursor{ID: c.ID, Value: cs}
 }
@@ -3101,7 +3133,8 @@ func (p *collectionPager) orderExpr(query *CollectionQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to Collection.
 func (c *CollectionQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...CollectionPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...CollectionPaginateOption,
 ) (*CollectionConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -3132,6 +3165,9 @@ func (c *CollectionQuery) Paginate(
 	}
 	if c, err = pager.applyCursors(c, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		c.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		c.Limit(limit)
@@ -3364,8 +3400,8 @@ func (p *countryPager) applyFilter(query *CountryQuery) (*CountryQuery, error) {
 
 func (p *countryPager) toCursor(c *Country) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(c).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(c).Value)
 	}
 	return Cursor{ID: c.ID, Value: cs}
 }
@@ -3450,7 +3486,8 @@ func (p *countryPager) orderExpr(query *CountryQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to Country.
 func (c *CountryQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...CountryPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...CountryPaginateOption,
 ) (*CountryConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -3481,6 +3518,9 @@ func (c *CountryQuery) Paginate(
 	}
 	if c, err = pager.applyCursors(c, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		c.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		c.Limit(limit)
@@ -3713,8 +3753,8 @@ func (p *culturePager) applyFilter(query *CultureQuery) (*CultureQuery, error) {
 
 func (p *culturePager) toCursor(c *Culture) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(c).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(c).Value)
 	}
 	return Cursor{ID: c.ID, Value: cs}
 }
@@ -3799,7 +3839,8 @@ func (p *culturePager) orderExpr(query *CultureQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to Culture.
 func (c *CultureQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...CulturePaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...CulturePaginateOption,
 ) (*CultureConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -3830,6 +3871,9 @@ func (c *CultureQuery) Paginate(
 	}
 	if c, err = pager.applyCursors(c, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		c.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		c.Limit(limit)
@@ -4062,8 +4106,8 @@ func (p *districtPager) applyFilter(query *DistrictQuery) (*DistrictQuery, error
 
 func (p *districtPager) toCursor(d *District) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(d).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(d).Value)
 	}
 	return Cursor{ID: d.ID, Value: cs}
 }
@@ -4148,7 +4192,8 @@ func (p *districtPager) orderExpr(query *DistrictQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to District.
 func (d *DistrictQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...DistrictPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...DistrictPaginateOption,
 ) (*DistrictConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -4179,6 +4224,9 @@ func (d *DistrictQuery) Paginate(
 	}
 	if d, err = pager.applyCursors(d, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		d.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		d.Limit(limit)
@@ -4411,8 +4459,8 @@ func (p *holderPager) applyFilter(query *HolderQuery) (*HolderQuery, error) {
 
 func (p *holderPager) toCursor(h *Holder) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(h).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(h).Value)
 	}
 	return Cursor{ID: h.ID, Value: cs}
 }
@@ -4497,7 +4545,8 @@ func (p *holderPager) orderExpr(query *HolderQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to Holder.
 func (h *HolderQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...HolderPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...HolderPaginateOption,
 ) (*HolderConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -4528,6 +4577,9 @@ func (h *HolderQuery) Paginate(
 	}
 	if h, err = pager.applyCursors(h, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		h.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		h.Limit(limit)
@@ -4760,8 +4812,8 @@ func (p *holderresponsibilityPager) applyFilter(query *HolderResponsibilityQuery
 
 func (p *holderresponsibilityPager) toCursor(hr *HolderResponsibility) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(hr).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(hr).Value)
 	}
 	return Cursor{ID: hr.ID, Value: cs}
 }
@@ -4846,7 +4898,8 @@ func (p *holderresponsibilityPager) orderExpr(query *HolderResponsibilityQuery) 
 // Paginate executes the query and returns a relay based cursor connection to HolderResponsibility.
 func (hr *HolderResponsibilityQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...HolderResponsibilityPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...HolderResponsibilityPaginateOption,
 ) (*HolderResponsibilityConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -4877,6 +4930,9 @@ func (hr *HolderResponsibilityQuery) Paginate(
 	}
 	if hr, err = pager.applyCursors(hr, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		hr.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		hr.Limit(limit)
@@ -5159,7 +5215,8 @@ func (p *keywordPager) orderExpr(query *KeywordQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to Keyword.
 func (k *KeywordQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...KeywordPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...KeywordPaginateOption,
 ) (*KeywordConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -5190,6 +5247,9 @@ func (k *KeywordQuery) Paginate(
 	}
 	if k, err = pager.applyCursors(k, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		k.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		k.Limit(limit)
@@ -5357,8 +5417,8 @@ func (p *licensePager) applyFilter(query *LicenseQuery) (*LicenseQuery, error) {
 
 func (p *licensePager) toCursor(l *License) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(l).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(l).Value)
 	}
 	return Cursor{ID: l.ID, Value: cs}
 }
@@ -5443,7 +5503,8 @@ func (p *licensePager) orderExpr(query *LicenseQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to License.
 func (l *LicenseQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...LicensePaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...LicensePaginateOption,
 ) (*LicenseConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -5474,6 +5535,9 @@ func (l *LicenseQuery) Paginate(
 	}
 	if l, err = pager.applyCursors(l, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		l.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		l.Limit(limit)
@@ -5706,8 +5770,8 @@ func (p *locationPager) applyFilter(query *LocationQuery) (*LocationQuery, error
 
 func (p *locationPager) toCursor(l *Location) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(l).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(l).Value)
 	}
 	return Cursor{ID: l.ID, Value: cs}
 }
@@ -5792,7 +5856,8 @@ func (p *locationPager) orderExpr(query *LocationQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to Location.
 func (l *LocationQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...LocationPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...LocationPaginateOption,
 ) (*LocationConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -5823,6 +5888,9 @@ func (l *LocationQuery) Paginate(
 	}
 	if l, err = pager.applyCursors(l, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		l.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		l.Limit(limit)
@@ -6055,8 +6123,8 @@ func (p *mediumPager) applyFilter(query *MediumQuery) (*MediumQuery, error) {
 
 func (p *mediumPager) toCursor(m *Medium) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(m).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(m).Value)
 	}
 	return Cursor{ID: m.ID, Value: cs}
 }
@@ -6141,7 +6209,8 @@ func (p *mediumPager) orderExpr(query *MediumQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to Medium.
 func (m *MediumQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...MediumPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...MediumPaginateOption,
 ) (*MediumConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -6172,6 +6241,9 @@ func (m *MediumQuery) Paginate(
 	}
 	if m, err = pager.applyCursors(m, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		m.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		m.Limit(limit)
@@ -6404,8 +6476,8 @@ func (p *modelPager) applyFilter(query *ModelQuery) (*ModelQuery, error) {
 
 func (p *modelPager) toCursor(m *Model) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(m).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(m).Value)
 	}
 	return Cursor{ID: m.ID, Value: cs}
 }
@@ -6490,7 +6562,8 @@ func (p *modelPager) orderExpr(query *ModelQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to Model.
 func (m *ModelQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...ModelPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...ModelPaginateOption,
 ) (*ModelConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -6521,6 +6594,9 @@ func (m *ModelQuery) Paginate(
 	}
 	if m, err = pager.applyCursors(m, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		m.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		m.Limit(limit)
@@ -6753,8 +6829,8 @@ func (p *monumentPager) applyFilter(query *MonumentQuery) (*MonumentQuery, error
 
 func (p *monumentPager) toCursor(m *Monument) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(m).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(m).Value)
 	}
 	return Cursor{ID: m.ID, Value: cs}
 }
@@ -6839,7 +6915,8 @@ func (p *monumentPager) orderExpr(query *MonumentQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to Monument.
 func (m *MonumentQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...MonumentPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...MonumentPaginateOption,
 ) (*MonumentConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -6870,6 +6947,9 @@ func (m *MonumentQuery) Paginate(
 	}
 	if m, err = pager.applyCursors(m, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		m.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		m.Limit(limit)
@@ -7152,7 +7232,8 @@ func (p *organizationPager) orderExpr(query *OrganizationQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to Organization.
 func (o *OrganizationQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...OrganizationPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...OrganizationPaginateOption,
 ) (*OrganizationConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -7183,6 +7264,9 @@ func (o *OrganizationQuery) Paginate(
 	}
 	if o, err = pager.applyCursors(o, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		o.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		o.Limit(limit)
@@ -7415,8 +7499,8 @@ func (p *organizationtypePager) applyFilter(query *OrganizationTypeQuery) (*Orga
 
 func (p *organizationtypePager) toCursor(ot *OrganizationType) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(ot).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(ot).Value)
 	}
 	return Cursor{ID: ot.ID, Value: cs}
 }
@@ -7501,7 +7585,8 @@ func (p *organizationtypePager) orderExpr(query *OrganizationTypeQuery) sql.Quer
 // Paginate executes the query and returns a relay based cursor connection to OrganizationType.
 func (ot *OrganizationTypeQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...OrganizationTypePaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...OrganizationTypePaginateOption,
 ) (*OrganizationTypeConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -7532,6 +7617,9 @@ func (ot *OrganizationTypeQuery) Paginate(
 	}
 	if ot, err = pager.applyCursors(ot, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		ot.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		ot.Limit(limit)
@@ -7764,8 +7852,8 @@ func (p *periodPager) applyFilter(query *PeriodQuery) (*PeriodQuery, error) {
 
 func (p *periodPager) toCursor(pe *Period) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(pe).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(pe).Value)
 	}
 	return Cursor{ID: pe.ID, Value: cs}
 }
@@ -7850,7 +7938,8 @@ func (p *periodPager) orderExpr(query *PeriodQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to Period.
 func (pe *PeriodQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...PeriodPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...PeriodPaginateOption,
 ) (*PeriodConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -7881,6 +7970,9 @@ func (pe *PeriodQuery) Paginate(
 	}
 	if pe, err = pager.applyCursors(pe, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		pe.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		pe.Limit(limit)
@@ -8113,8 +8205,8 @@ func (p *personPager) applyFilter(query *PersonQuery) (*PersonQuery, error) {
 
 func (p *personPager) toCursor(pe *Person) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(pe).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(pe).Value)
 	}
 	return Cursor{ID: pe.ID, Value: cs}
 }
@@ -8199,7 +8291,8 @@ func (p *personPager) orderExpr(query *PersonQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to Person.
 func (pe *PersonQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...PersonPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...PersonPaginateOption,
 ) (*PersonConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -8230,6 +8323,9 @@ func (pe *PersonQuery) Paginate(
 	}
 	if pe, err = pager.applyCursors(pe, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		pe.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		pe.Limit(limit)
@@ -8462,8 +8558,8 @@ func (p *personrolePager) applyFilter(query *PersonRoleQuery) (*PersonRoleQuery,
 
 func (p *personrolePager) toCursor(pr *PersonRole) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(pr).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(pr).Value)
 	}
 	return Cursor{ID: pr.ID, Value: cs}
 }
@@ -8548,7 +8644,8 @@ func (p *personrolePager) orderExpr(query *PersonRoleQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to PersonRole.
 func (pr *PersonRoleQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...PersonRolePaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...PersonRolePaginateOption,
 ) (*PersonRoleConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -8579,6 +8676,9 @@ func (pr *PersonRoleQuery) Paginate(
 	}
 	if pr, err = pager.applyCursors(pr, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		pr.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		pr.Limit(limit)
@@ -8811,8 +8911,8 @@ func (p *projectPager) applyFilter(query *ProjectQuery) (*ProjectQuery, error) {
 
 func (p *projectPager) toCursor(pr *Project) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(pr).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(pr).Value)
 	}
 	return Cursor{ID: pr.ID, Value: cs}
 }
@@ -8897,7 +8997,8 @@ func (p *projectPager) orderExpr(query *ProjectQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to Project.
 func (pr *ProjectQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...ProjectPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...ProjectPaginateOption,
 ) (*ProjectConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -8928,6 +9029,9 @@ func (pr *ProjectQuery) Paginate(
 	}
 	if pr, err = pager.applyCursors(pr, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		pr.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		pr.Limit(limit)
@@ -9160,8 +9264,8 @@ func (p *projecttypePager) applyFilter(query *ProjectTypeQuery) (*ProjectTypeQue
 
 func (p *projecttypePager) toCursor(pt *ProjectType) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(pt).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(pt).Value)
 	}
 	return Cursor{ID: pt.ID, Value: cs}
 }
@@ -9246,7 +9350,8 @@ func (p *projecttypePager) orderExpr(query *ProjectTypeQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to ProjectType.
 func (pt *ProjectTypeQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...ProjectTypePaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...ProjectTypePaginateOption,
 ) (*ProjectTypeConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -9277,6 +9382,9 @@ func (pt *ProjectTypeQuery) Paginate(
 	}
 	if pt, err = pager.applyCursors(pt, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		pt.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		pt.Limit(limit)
@@ -9509,8 +9617,8 @@ func (p *protectedareaPager) applyFilter(query *ProtectedAreaQuery) (*ProtectedA
 
 func (p *protectedareaPager) toCursor(pa *ProtectedArea) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(pa).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(pa).Value)
 	}
 	return Cursor{ID: pa.ID, Value: cs}
 }
@@ -9595,7 +9703,8 @@ func (p *protectedareaPager) orderExpr(query *ProtectedAreaQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to ProtectedArea.
 func (pa *ProtectedAreaQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...ProtectedAreaPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...ProtectedAreaPaginateOption,
 ) (*ProtectedAreaConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -9626,6 +9735,9 @@ func (pa *ProtectedAreaQuery) Paginate(
 	}
 	if pa, err = pager.applyCursors(pa, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		pa.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		pa.Limit(limit)
@@ -9858,8 +9970,8 @@ func (p *protectedareacategoryPager) applyFilter(query *ProtectedAreaCategoryQue
 
 func (p *protectedareacategoryPager) toCursor(pac *ProtectedAreaCategory) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(pac).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(pac).Value)
 	}
 	return Cursor{ID: pac.ID, Value: cs}
 }
@@ -9944,7 +10056,8 @@ func (p *protectedareacategoryPager) orderExpr(query *ProtectedAreaCategoryQuery
 // Paginate executes the query and returns a relay based cursor connection to ProtectedAreaCategory.
 func (pac *ProtectedAreaCategoryQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...ProtectedAreaCategoryPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...ProtectedAreaCategoryPaginateOption,
 ) (*ProtectedAreaCategoryConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -9975,6 +10088,9 @@ func (pac *ProtectedAreaCategoryQuery) Paginate(
 	}
 	if pac, err = pager.applyCursors(pac, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		pac.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		pac.Limit(limit)
@@ -10207,8 +10323,8 @@ func (p *protectedareapicturePager) applyFilter(query *ProtectedAreaPictureQuery
 
 func (p *protectedareapicturePager) toCursor(pap *ProtectedAreaPicture) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(pap).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(pap).Value)
 	}
 	return Cursor{ID: pap.ID, Value: cs}
 }
@@ -10293,7 +10409,8 @@ func (p *protectedareapicturePager) orderExpr(query *ProtectedAreaPictureQuery) 
 // Paginate executes the query and returns a relay based cursor connection to ProtectedAreaPicture.
 func (pap *ProtectedAreaPictureQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...ProtectedAreaPicturePaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...ProtectedAreaPicturePaginateOption,
 ) (*ProtectedAreaPictureConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -10324,6 +10441,9 @@ func (pap *ProtectedAreaPictureQuery) Paginate(
 	}
 	if pap, err = pager.applyCursors(pap, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		pap.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		pap.Limit(limit)
@@ -10556,8 +10676,8 @@ func (p *publicationPager) applyFilter(query *PublicationQuery) (*PublicationQue
 
 func (p *publicationPager) toCursor(pu *Publication) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(pu).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(pu).Value)
 	}
 	return Cursor{ID: pu.ID, Value: cs}
 }
@@ -10642,7 +10762,8 @@ func (p *publicationPager) orderExpr(query *PublicationQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to Publication.
 func (pu *PublicationQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...PublicationPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...PublicationPaginateOption,
 ) (*PublicationConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -10673,6 +10794,9 @@ func (pu *PublicationQuery) Paginate(
 	}
 	if pu, err = pager.applyCursors(pu, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		pu.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		pu.Limit(limit)
@@ -10905,8 +11029,8 @@ func (p *publisherPager) applyFilter(query *PublisherQuery) (*PublisherQuery, er
 
 func (p *publisherPager) toCursor(pu *Publisher) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(pu).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(pu).Value)
 	}
 	return Cursor{ID: pu.ID, Value: cs}
 }
@@ -10991,7 +11115,8 @@ func (p *publisherPager) orderExpr(query *PublisherQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to Publisher.
 func (pu *PublisherQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...PublisherPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...PublisherPaginateOption,
 ) (*PublisherConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -11022,6 +11147,9 @@ func (pu *PublisherQuery) Paginate(
 	}
 	if pu, err = pager.applyCursors(pu, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		pu.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		pu.Limit(limit)
@@ -11254,8 +11382,8 @@ func (p *regionPager) applyFilter(query *RegionQuery) (*RegionQuery, error) {
 
 func (p *regionPager) toCursor(r *Region) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(r).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(r).Value)
 	}
 	return Cursor{ID: r.ID, Value: cs}
 }
@@ -11340,7 +11468,8 @@ func (p *regionPager) orderExpr(query *RegionQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to Region.
 func (r *RegionQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...RegionPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...RegionPaginateOption,
 ) (*RegionConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -11371,6 +11500,9 @@ func (r *RegionQuery) Paginate(
 	}
 	if r, err = pager.applyCursors(r, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		r.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		r.Limit(limit)
@@ -11603,8 +11735,8 @@ func (p *setPager) applyFilter(query *SetQuery) (*SetQuery, error) {
 
 func (p *setPager) toCursor(s *Set) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(s).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(s).Value)
 	}
 	return Cursor{ID: s.ID, Value: cs}
 }
@@ -11689,7 +11821,8 @@ func (p *setPager) orderExpr(query *SetQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to Set.
 func (s *SetQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...SetPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...SetPaginateOption,
 ) (*SetConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -11720,6 +11853,9 @@ func (s *SetQuery) Paginate(
 	}
 	if s, err = pager.applyCursors(s, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		s.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		s.Limit(limit)
@@ -11952,8 +12088,8 @@ func (p *settlementPager) applyFilter(query *SettlementQuery) (*SettlementQuery,
 
 func (p *settlementPager) toCursor(s *Settlement) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(s).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(s).Value)
 	}
 	return Cursor{ID: s.ID, Value: cs}
 }
@@ -12038,7 +12174,8 @@ func (p *settlementPager) orderExpr(query *SettlementQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to Settlement.
 func (s *SettlementQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...SettlementPaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...SettlementPaginateOption,
 ) (*SettlementConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -12069,6 +12206,9 @@ func (s *SettlementQuery) Paginate(
 	}
 	if s, err = pager.applyCursors(s, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		s.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		s.Limit(limit)
@@ -12301,8 +12441,8 @@ func (p *techniquePager) applyFilter(query *TechniqueQuery) (*TechniqueQuery, er
 
 func (p *techniquePager) toCursor(t *Technique) Cursor {
 	cs := make([]any, 0, len(p.order))
-	for _, o := range p.order {
-		cs = append(cs, o.Field.toCursor(t).Value)
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(t).Value)
 	}
 	return Cursor{ID: t.ID, Value: cs}
 }
@@ -12387,7 +12527,8 @@ func (p *techniquePager) orderExpr(query *TechniqueQuery) sql.Querier {
 // Paginate executes the query and returns a relay based cursor connection to Technique.
 func (t *TechniqueQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...TechniquePaginateOption,
+	before *Cursor, last *int, offset *int,
+	opts ...TechniquePaginateOption,
 ) (*TechniqueConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -12418,6 +12559,9 @@ func (t *TechniqueQuery) Paginate(
 	}
 	if t, err = pager.applyCursors(t, after, before); err != nil {
 		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		t.Offset(*offset)
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		t.Limit(limit)

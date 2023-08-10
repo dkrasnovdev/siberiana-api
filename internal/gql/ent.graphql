@@ -6728,6 +6728,9 @@ type Query {
     """Returns the last _n_ elements from the list."""
     last: Int
 
+    """Skips _n_ elements in the list."""
+    offset: Int
+
     """Ordering options for Arts returned from the connection."""
     orderBy: [ArtOrder!]
 
@@ -6746,6 +6749,9 @@ type Query {
 
     """Returns the last _n_ elements from the list."""
     last: Int
+
+    """Skips _n_ elements in the list."""
+    offset: Int
 
     """Ordering options for ArtGenres returned from the connection."""
     orderBy: [ArtGenreOrder!]
@@ -6766,6 +6772,9 @@ type Query {
     """Returns the last _n_ elements from the list."""
     last: Int
 
+    """Skips _n_ elements in the list."""
+    offset: Int
+
     """Ordering options for ArtStyles returned from the connection."""
     orderBy: [ArtStyleOrder!]
 
@@ -6784,6 +6793,9 @@ type Query {
 
     """Returns the last _n_ elements from the list."""
     last: Int
+
+    """Skips _n_ elements in the list."""
+    offset: Int
 
     """Ordering options for Artifacts returned from the connection."""
     orderBy: [ArtifactOrder!]
@@ -6804,6 +6816,9 @@ type Query {
     """Returns the last _n_ elements from the list."""
     last: Int
 
+    """Skips _n_ elements in the list."""
+    offset: Int
+
     """Ordering options for AuditLogs returned from the connection."""
     orderBy: [AuditLogOrder!]
 
@@ -6822,6 +6837,9 @@ type Query {
 
     """Returns the last _n_ elements from the list."""
     last: Int
+
+    """Skips _n_ elements in the list."""
+    offset: Int
 
     """Ordering options for Books returned from the connection."""
     orderBy: [BookOrder!]
@@ -6842,6 +6860,9 @@ type Query {
     """Returns the last _n_ elements from the list."""
     last: Int
 
+    """Skips _n_ elements in the list."""
+    offset: Int
+
     """Ordering options for BookGenres returned from the connection."""
     orderBy: [BookGenreOrder!]
 
@@ -6860,6 +6881,9 @@ type Query {
 
     """Returns the last _n_ elements from the list."""
     last: Int
+
+    """Skips _n_ elements in the list."""
+    offset: Int
 
     """Ordering options for Categories returned from the connection."""
     orderBy: [CategoryOrder!]
@@ -6880,6 +6904,9 @@ type Query {
     """Returns the last _n_ elements from the list."""
     last: Int
 
+    """Skips _n_ elements in the list."""
+    offset: Int
+
     """Ordering options for Collections returned from the connection."""
     orderBy: [CollectionOrder!]
 
@@ -6898,6 +6925,9 @@ type Query {
 
     """Returns the last _n_ elements from the list."""
     last: Int
+
+    """Skips _n_ elements in the list."""
+    offset: Int
 
     """Ordering options for Countries returned from the connection."""
     orderBy: [CountryOrder!]
@@ -6918,6 +6948,9 @@ type Query {
     """Returns the last _n_ elements from the list."""
     last: Int
 
+    """Skips _n_ elements in the list."""
+    offset: Int
+
     """Ordering options for Cultures returned from the connection."""
     orderBy: [CultureOrder!]
 
@@ -6936,6 +6969,9 @@ type Query {
 
     """Returns the last _n_ elements from the list."""
     last: Int
+
+    """Skips _n_ elements in the list."""
+    offset: Int
 
     """Ordering options for Districts returned from the connection."""
     orderBy: [DistrictOrder!]
@@ -6956,6 +6992,9 @@ type Query {
     """Returns the last _n_ elements from the list."""
     last: Int
 
+    """Skips _n_ elements in the list."""
+    offset: Int
+
     """Ordering options for Holders returned from the connection."""
     orderBy: [HolderOrder!]
 
@@ -6974,6 +7013,9 @@ type Query {
 
     """Returns the last _n_ elements from the list."""
     last: Int
+
+    """Skips _n_ elements in the list."""
+    offset: Int
 
     """Ordering options for HolderResponsibilities returned from the connection."""
     orderBy: [HolderResponsibilityOrder!]
@@ -6994,6 +7036,9 @@ type Query {
     """Returns the last _n_ elements from the list."""
     last: Int
 
+    """Skips _n_ elements in the list."""
+    offset: Int
+
     """Ordering options for Licenses returned from the connection."""
     orderBy: [LicenseOrder!]
 
@@ -7012,6 +7057,9 @@ type Query {
 
     """Returns the last _n_ elements from the list."""
     last: Int
+
+    """Skips _n_ elements in the list."""
+    offset: Int
 
     """Ordering options for Locations returned from the connection."""
     orderBy: [LocationOrder!]
@@ -7032,6 +7080,9 @@ type Query {
     """Returns the last _n_ elements from the list."""
     last: Int
 
+    """Skips _n_ elements in the list."""
+    offset: Int
+
     """Ordering options for Media returned from the connection."""
     orderBy: [MediumOrder!]
 
@@ -7050,6 +7101,9 @@ type Query {
 
     """Returns the last _n_ elements from the list."""
     last: Int
+
+    """Skips _n_ elements in the list."""
+    offset: Int
 
     """Ordering options for Models returned from the connection."""
     orderBy: [ModelOrder!]
@@ -7070,6 +7124,9 @@ type Query {
     """Returns the last _n_ elements from the list."""
     last: Int
 
+    """Skips _n_ elements in the list."""
+    offset: Int
+
     """Ordering options for Monuments returned from the connection."""
     orderBy: [MonumentOrder!]
 
@@ -7088,6 +7145,9 @@ type Query {
 
     """Returns the last _n_ elements from the list."""
     last: Int
+
+    """Skips _n_ elements in the list."""
+    offset: Int
 
     """Ordering options for Organizations returned from the connection."""
     orderBy: OrganizationOrder
@@ -7108,6 +7168,9 @@ type Query {
     """Returns the last _n_ elements from the list."""
     last: Int
 
+    """Skips _n_ elements in the list."""
+    offset: Int
+
     """Ordering options for OrganizationTypes returned from the connection."""
     orderBy: [OrganizationTypeOrder!]
 
@@ -7126,6 +7189,9 @@ type Query {
 
     """Returns the last _n_ elements from the list."""
     last: Int
+
+    """Skips _n_ elements in the list."""
+    offset: Int
 
     """Ordering options for Periods returned from the connection."""
     orderBy: [PeriodOrder!]
@@ -7146,6 +7212,9 @@ type Query {
     """Returns the last _n_ elements from the list."""
     last: Int
 
+    """Skips _n_ elements in the list."""
+    offset: Int
+
     """Ordering options for Persons returned from the connection."""
     orderBy: [PersonOrder!]
 
@@ -7164,6 +7233,9 @@ type Query {
 
     """Returns the last _n_ elements from the list."""
     last: Int
+
+    """Skips _n_ elements in the list."""
+    offset: Int
 
     """Ordering options for PersonRoles returned from the connection."""
     orderBy: [PersonRoleOrder!]
@@ -7184,6 +7256,9 @@ type Query {
     """Returns the last _n_ elements from the list."""
     last: Int
 
+    """Skips _n_ elements in the list."""
+    offset: Int
+
     """Ordering options for Projects returned from the connection."""
     orderBy: [ProjectOrder!]
 
@@ -7202,6 +7277,9 @@ type Query {
 
     """Returns the last _n_ elements from the list."""
     last: Int
+
+    """Skips _n_ elements in the list."""
+    offset: Int
 
     """Ordering options for ProjectTypes returned from the connection."""
     orderBy: [ProjectTypeOrder!]
@@ -7222,6 +7300,9 @@ type Query {
     """Returns the last _n_ elements from the list."""
     last: Int
 
+    """Skips _n_ elements in the list."""
+    offset: Int
+
     """Ordering options for ProtectedAreas returned from the connection."""
     orderBy: [ProtectedAreaOrder!]
 
@@ -7240,6 +7321,9 @@ type Query {
 
     """Returns the last _n_ elements from the list."""
     last: Int
+
+    """Skips _n_ elements in the list."""
+    offset: Int
 
     """Ordering options for ProtectedAreaCategories returned from the connection."""
     orderBy: [ProtectedAreaCategoryOrder!]
@@ -7260,6 +7344,9 @@ type Query {
     """Returns the last _n_ elements from the list."""
     last: Int
 
+    """Skips _n_ elements in the list."""
+    offset: Int
+
     """Ordering options for ProtectedAreaPictures returned from the connection."""
     orderBy: [ProtectedAreaPictureOrder!]
 
@@ -7278,6 +7365,9 @@ type Query {
 
     """Returns the last _n_ elements from the list."""
     last: Int
+
+    """Skips _n_ elements in the list."""
+    offset: Int
 
     """Ordering options for Publications returned from the connection."""
     orderBy: [PublicationOrder!]
@@ -7298,6 +7388,9 @@ type Query {
     """Returns the last _n_ elements from the list."""
     last: Int
 
+    """Skips _n_ elements in the list."""
+    offset: Int
+
     """Ordering options for Publishers returned from the connection."""
     orderBy: [PublisherOrder!]
 
@@ -7316,6 +7409,9 @@ type Query {
 
     """Returns the last _n_ elements from the list."""
     last: Int
+
+    """Skips _n_ elements in the list."""
+    offset: Int
 
     """Ordering options for Regions returned from the connection."""
     orderBy: [RegionOrder!]
@@ -7336,6 +7432,9 @@ type Query {
     """Returns the last _n_ elements from the list."""
     last: Int
 
+    """Skips _n_ elements in the list."""
+    offset: Int
+
     """Ordering options for Sets returned from the connection."""
     orderBy: [SetOrder!]
 
@@ -7355,6 +7454,9 @@ type Query {
     """Returns the last _n_ elements from the list."""
     last: Int
 
+    """Skips _n_ elements in the list."""
+    offset: Int
+
     """Ordering options for Settlements returned from the connection."""
     orderBy: [SettlementOrder!]
 
@@ -7373,6 +7475,9 @@ type Query {
 
     """Returns the last _n_ elements from the list."""
     last: Int
+
+    """Skips _n_ elements in the list."""
+    offset: Int
 
     """Ordering options for Techniques returned from the connection."""
     orderBy: [TechniqueOrder!]

@@ -972,43 +972,43 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		ArtGenres               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtGenreOrder, where *ent.ArtGenreWhereInput) int
-		ArtStyles               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtStyleOrder, where *ent.ArtStyleWhereInput) int
-		Artifacts               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtifactOrder, where *ent.ArtifactWhereInput) int
-		Arts                    func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtOrder, where *ent.ArtWhereInput) int
-		AuditLogs               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.AuditLogOrder, where *ent.AuditLogWhereInput) int
-		BookGenres              func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.BookGenreOrder, where *ent.BookGenreWhereInput) int
-		Books                   func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.BookOrder, where *ent.BookWhereInput) int
-		Categories              func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.CategoryOrder, where *ent.CategoryWhereInput) int
-		Collections             func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.CollectionOrder, where *ent.CollectionWhereInput) int
-		Countries               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.CountryOrder, where *ent.CountryWhereInput) int
-		Cultures                func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.CultureOrder, where *ent.CultureWhereInput) int
-		Districts               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.DistrictOrder, where *ent.DistrictWhereInput) int
-		HolderResponsibilities  func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.HolderResponsibilityOrder, where *ent.HolderResponsibilityWhereInput) int
-		Holders                 func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.HolderOrder, where *ent.HolderWhereInput) int
-		Licenses                func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.LicenseOrder, where *ent.LicenseWhereInput) int
-		Locations               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.LocationOrder, where *ent.LocationWhereInput) int
-		Media                   func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.MediumOrder, where *ent.MediumWhereInput) int
-		Models                  func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ModelOrder, where *ent.ModelWhereInput) int
-		Monuments               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.MonumentOrder, where *ent.MonumentWhereInput) int
+		ArtGenres               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ArtGenreOrder, where *ent.ArtGenreWhereInput) int
+		ArtStyles               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ArtStyleOrder, where *ent.ArtStyleWhereInput) int
+		Artifacts               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ArtifactOrder, where *ent.ArtifactWhereInput) int
+		Arts                    func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ArtOrder, where *ent.ArtWhereInput) int
+		AuditLogs               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.AuditLogOrder, where *ent.AuditLogWhereInput) int
+		BookGenres              func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.BookGenreOrder, where *ent.BookGenreWhereInput) int
+		Books                   func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.BookOrder, where *ent.BookWhereInput) int
+		Categories              func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.CategoryOrder, where *ent.CategoryWhereInput) int
+		Collections             func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.CollectionOrder, where *ent.CollectionWhereInput) int
+		Countries               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.CountryOrder, where *ent.CountryWhereInput) int
+		Cultures                func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.CultureOrder, where *ent.CultureWhereInput) int
+		Districts               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.DistrictOrder, where *ent.DistrictWhereInput) int
+		HolderResponsibilities  func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.HolderResponsibilityOrder, where *ent.HolderResponsibilityWhereInput) int
+		Holders                 func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.HolderOrder, where *ent.HolderWhereInput) int
+		Licenses                func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.LicenseOrder, where *ent.LicenseWhereInput) int
+		Locations               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.LocationOrder, where *ent.LocationWhereInput) int
+		Media                   func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.MediumOrder, where *ent.MediumWhereInput) int
+		Models                  func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ModelOrder, where *ent.ModelWhereInput) int
+		Monuments               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.MonumentOrder, where *ent.MonumentWhereInput) int
 		Node                    func(childComplexity int, id int) int
 		Nodes                   func(childComplexity int, ids []int) int
-		OrganizationTypes       func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.OrganizationTypeOrder, where *ent.OrganizationTypeWhereInput) int
-		Organizations           func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.OrganizationOrder, where *ent.OrganizationWhereInput) int
-		Periods                 func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.PeriodOrder, where *ent.PeriodWhereInput) int
-		PersonRoles             func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.PersonRoleOrder, where *ent.PersonRoleWhereInput) int
-		Persons                 func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.PersonOrder, where *ent.PersonWhereInput) int
-		ProjectTypes            func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ProjectTypeOrder, where *ent.ProjectTypeWhereInput) int
-		Projects                func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ProjectOrder, where *ent.ProjectWhereInput) int
-		ProtectedAreaCategories func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ProtectedAreaCategoryOrder, where *ent.ProtectedAreaCategoryWhereInput) int
-		ProtectedAreaPictures   func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ProtectedAreaPictureOrder, where *ent.ProtectedAreaPictureWhereInput) int
-		ProtectedAreas          func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ProtectedAreaOrder, where *ent.ProtectedAreaWhereInput) int
-		Publications            func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.PublicationOrder, where *ent.PublicationWhereInput) int
-		Publishers              func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.PublisherOrder, where *ent.PublisherWhereInput) int
-		Regions                 func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.RegionOrder, where *ent.RegionWhereInput) int
-		Sets                    func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.SetOrder, where *ent.SetWhereInput) int
-		Settlements             func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.SettlementOrder, where *ent.SettlementWhereInput) int
-		Techniques              func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.TechniqueOrder, where *ent.TechniqueWhereInput) int
+		OrganizationTypes       func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.OrganizationTypeOrder, where *ent.OrganizationTypeWhereInput) int
+		Organizations           func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy *ent.OrganizationOrder, where *ent.OrganizationWhereInput) int
+		Periods                 func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PeriodOrder, where *ent.PeriodWhereInput) int
+		PersonRoles             func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PersonRoleOrder, where *ent.PersonRoleWhereInput) int
+		Persons                 func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PersonOrder, where *ent.PersonWhereInput) int
+		ProjectTypes            func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ProjectTypeOrder, where *ent.ProjectTypeWhereInput) int
+		Projects                func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ProjectOrder, where *ent.ProjectWhereInput) int
+		ProtectedAreaCategories func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ProtectedAreaCategoryOrder, where *ent.ProtectedAreaCategoryWhereInput) int
+		ProtectedAreaPictures   func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ProtectedAreaPictureOrder, where *ent.ProtectedAreaPictureWhereInput) int
+		ProtectedAreas          func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ProtectedAreaOrder, where *ent.ProtectedAreaWhereInput) int
+		Publications            func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PublicationOrder, where *ent.PublicationWhereInput) int
+		Publishers              func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PublisherOrder, where *ent.PublisherWhereInput) int
+		Regions                 func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.RegionOrder, where *ent.RegionWhereInput) int
+		Sets                    func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.SetOrder, where *ent.SetWhereInput) int
+		Settlements             func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.SettlementOrder, where *ent.SettlementWhereInput) int
+		Techniques              func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.TechniqueOrder, where *ent.TechniqueWhereInput) int
 	}
 
 	Region struct {
@@ -1182,41 +1182,41 @@ type MutationResolver interface {
 type QueryResolver interface {
 	Node(ctx context.Context, id int) (ent.Noder, error)
 	Nodes(ctx context.Context, ids []int) ([]ent.Noder, error)
-	Arts(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtOrder, where *ent.ArtWhereInput) (*ent.ArtConnection, error)
-	ArtGenres(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtGenreOrder, where *ent.ArtGenreWhereInput) (*ent.ArtGenreConnection, error)
-	ArtStyles(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtStyleOrder, where *ent.ArtStyleWhereInput) (*ent.ArtStyleConnection, error)
-	Artifacts(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ArtifactOrder, where *ent.ArtifactWhereInput) (*ent.ArtifactConnection, error)
-	AuditLogs(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.AuditLogOrder, where *ent.AuditLogWhereInput) (*ent.AuditLogConnection, error)
-	Books(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.BookOrder, where *ent.BookWhereInput) (*ent.BookConnection, error)
-	BookGenres(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.BookGenreOrder, where *ent.BookGenreWhereInput) (*ent.BookGenreConnection, error)
-	Categories(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.CategoryOrder, where *ent.CategoryWhereInput) (*ent.CategoryConnection, error)
-	Collections(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.CollectionOrder, where *ent.CollectionWhereInput) (*ent.CollectionConnection, error)
-	Countries(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.CountryOrder, where *ent.CountryWhereInput) (*ent.CountryConnection, error)
-	Cultures(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.CultureOrder, where *ent.CultureWhereInput) (*ent.CultureConnection, error)
-	Districts(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.DistrictOrder, where *ent.DistrictWhereInput) (*ent.DistrictConnection, error)
-	Holders(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.HolderOrder, where *ent.HolderWhereInput) (*ent.HolderConnection, error)
-	HolderResponsibilities(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.HolderResponsibilityOrder, where *ent.HolderResponsibilityWhereInput) (*ent.HolderResponsibilityConnection, error)
-	Licenses(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.LicenseOrder, where *ent.LicenseWhereInput) (*ent.LicenseConnection, error)
-	Locations(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.LocationOrder, where *ent.LocationWhereInput) (*ent.LocationConnection, error)
-	Media(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.MediumOrder, where *ent.MediumWhereInput) (*ent.MediumConnection, error)
-	Models(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ModelOrder, where *ent.ModelWhereInput) (*ent.ModelConnection, error)
-	Monuments(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.MonumentOrder, where *ent.MonumentWhereInput) (*ent.MonumentConnection, error)
-	Organizations(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.OrganizationOrder, where *ent.OrganizationWhereInput) (*ent.OrganizationConnection, error)
-	OrganizationTypes(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.OrganizationTypeOrder, where *ent.OrganizationTypeWhereInput) (*ent.OrganizationTypeConnection, error)
-	Periods(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.PeriodOrder, where *ent.PeriodWhereInput) (*ent.PeriodConnection, error)
-	Persons(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.PersonOrder, where *ent.PersonWhereInput) (*ent.PersonConnection, error)
-	PersonRoles(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.PersonRoleOrder, where *ent.PersonRoleWhereInput) (*ent.PersonRoleConnection, error)
-	Projects(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ProjectOrder, where *ent.ProjectWhereInput) (*ent.ProjectConnection, error)
-	ProjectTypes(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ProjectTypeOrder, where *ent.ProjectTypeWhereInput) (*ent.ProjectTypeConnection, error)
-	ProtectedAreas(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ProtectedAreaOrder, where *ent.ProtectedAreaWhereInput) (*ent.ProtectedAreaConnection, error)
-	ProtectedAreaCategories(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ProtectedAreaCategoryOrder, where *ent.ProtectedAreaCategoryWhereInput) (*ent.ProtectedAreaCategoryConnection, error)
-	ProtectedAreaPictures(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.ProtectedAreaPictureOrder, where *ent.ProtectedAreaPictureWhereInput) (*ent.ProtectedAreaPictureConnection, error)
-	Publications(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.PublicationOrder, where *ent.PublicationWhereInput) (*ent.PublicationConnection, error)
-	Publishers(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.PublisherOrder, where *ent.PublisherWhereInput) (*ent.PublisherConnection, error)
-	Regions(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.RegionOrder, where *ent.RegionWhereInput) (*ent.RegionConnection, error)
-	Sets(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.SetOrder, where *ent.SetWhereInput) (*ent.SetConnection, error)
-	Settlements(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.SettlementOrder, where *ent.SettlementWhereInput) (*ent.SettlementConnection, error)
-	Techniques(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy []*ent.TechniqueOrder, where *ent.TechniqueWhereInput) (*ent.TechniqueConnection, error)
+	Arts(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ArtOrder, where *ent.ArtWhereInput) (*ent.ArtConnection, error)
+	ArtGenres(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ArtGenreOrder, where *ent.ArtGenreWhereInput) (*ent.ArtGenreConnection, error)
+	ArtStyles(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ArtStyleOrder, where *ent.ArtStyleWhereInput) (*ent.ArtStyleConnection, error)
+	Artifacts(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ArtifactOrder, where *ent.ArtifactWhereInput) (*ent.ArtifactConnection, error)
+	AuditLogs(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.AuditLogOrder, where *ent.AuditLogWhereInput) (*ent.AuditLogConnection, error)
+	Books(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.BookOrder, where *ent.BookWhereInput) (*ent.BookConnection, error)
+	BookGenres(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.BookGenreOrder, where *ent.BookGenreWhereInput) (*ent.BookGenreConnection, error)
+	Categories(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.CategoryOrder, where *ent.CategoryWhereInput) (*ent.CategoryConnection, error)
+	Collections(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.CollectionOrder, where *ent.CollectionWhereInput) (*ent.CollectionConnection, error)
+	Countries(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.CountryOrder, where *ent.CountryWhereInput) (*ent.CountryConnection, error)
+	Cultures(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.CultureOrder, where *ent.CultureWhereInput) (*ent.CultureConnection, error)
+	Districts(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.DistrictOrder, where *ent.DistrictWhereInput) (*ent.DistrictConnection, error)
+	Holders(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.HolderOrder, where *ent.HolderWhereInput) (*ent.HolderConnection, error)
+	HolderResponsibilities(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.HolderResponsibilityOrder, where *ent.HolderResponsibilityWhereInput) (*ent.HolderResponsibilityConnection, error)
+	Licenses(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.LicenseOrder, where *ent.LicenseWhereInput) (*ent.LicenseConnection, error)
+	Locations(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.LocationOrder, where *ent.LocationWhereInput) (*ent.LocationConnection, error)
+	Media(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.MediumOrder, where *ent.MediumWhereInput) (*ent.MediumConnection, error)
+	Models(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ModelOrder, where *ent.ModelWhereInput) (*ent.ModelConnection, error)
+	Monuments(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.MonumentOrder, where *ent.MonumentWhereInput) (*ent.MonumentConnection, error)
+	Organizations(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy *ent.OrganizationOrder, where *ent.OrganizationWhereInput) (*ent.OrganizationConnection, error)
+	OrganizationTypes(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.OrganizationTypeOrder, where *ent.OrganizationTypeWhereInput) (*ent.OrganizationTypeConnection, error)
+	Periods(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PeriodOrder, where *ent.PeriodWhereInput) (*ent.PeriodConnection, error)
+	Persons(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PersonOrder, where *ent.PersonWhereInput) (*ent.PersonConnection, error)
+	PersonRoles(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PersonRoleOrder, where *ent.PersonRoleWhereInput) (*ent.PersonRoleConnection, error)
+	Projects(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ProjectOrder, where *ent.ProjectWhereInput) (*ent.ProjectConnection, error)
+	ProjectTypes(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ProjectTypeOrder, where *ent.ProjectTypeWhereInput) (*ent.ProjectTypeConnection, error)
+	ProtectedAreas(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ProtectedAreaOrder, where *ent.ProtectedAreaWhereInput) (*ent.ProtectedAreaConnection, error)
+	ProtectedAreaCategories(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ProtectedAreaCategoryOrder, where *ent.ProtectedAreaCategoryWhereInput) (*ent.ProtectedAreaCategoryConnection, error)
+	ProtectedAreaPictures(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ProtectedAreaPictureOrder, where *ent.ProtectedAreaPictureWhereInput) (*ent.ProtectedAreaPictureConnection, error)
+	Publications(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PublicationOrder, where *ent.PublicationWhereInput) (*ent.PublicationConnection, error)
+	Publishers(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PublisherOrder, where *ent.PublisherWhereInput) (*ent.PublisherConnection, error)
+	Regions(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.RegionOrder, where *ent.RegionWhereInput) (*ent.RegionConnection, error)
+	Sets(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.SetOrder, where *ent.SetWhereInput) (*ent.SetConnection, error)
+	Settlements(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.SettlementOrder, where *ent.SettlementWhereInput) (*ent.SettlementConnection, error)
+	Techniques(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.TechniqueOrder, where *ent.TechniqueWhereInput) (*ent.TechniqueConnection, error)
 }
 
 type executableSchema struct {
@@ -6022,7 +6022,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ArtGenres(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.ArtGenreOrder), args["where"].(*ent.ArtGenreWhereInput)), true
+		return e.complexity.Query.ArtGenres(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.ArtGenreOrder), args["where"].(*ent.ArtGenreWhereInput)), true
 
 	case "Query.artStyles":
 		if e.complexity.Query.ArtStyles == nil {
@@ -6034,7 +6034,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ArtStyles(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.ArtStyleOrder), args["where"].(*ent.ArtStyleWhereInput)), true
+		return e.complexity.Query.ArtStyles(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.ArtStyleOrder), args["where"].(*ent.ArtStyleWhereInput)), true
 
 	case "Query.artifacts":
 		if e.complexity.Query.Artifacts == nil {
@@ -6046,7 +6046,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Artifacts(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.ArtifactOrder), args["where"].(*ent.ArtifactWhereInput)), true
+		return e.complexity.Query.Artifacts(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.ArtifactOrder), args["where"].(*ent.ArtifactWhereInput)), true
 
 	case "Query.arts":
 		if e.complexity.Query.Arts == nil {
@@ -6058,7 +6058,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Arts(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.ArtOrder), args["where"].(*ent.ArtWhereInput)), true
+		return e.complexity.Query.Arts(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.ArtOrder), args["where"].(*ent.ArtWhereInput)), true
 
 	case "Query.auditLogs":
 		if e.complexity.Query.AuditLogs == nil {
@@ -6070,7 +6070,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.AuditLogs(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.AuditLogOrder), args["where"].(*ent.AuditLogWhereInput)), true
+		return e.complexity.Query.AuditLogs(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.AuditLogOrder), args["where"].(*ent.AuditLogWhereInput)), true
 
 	case "Query.bookGenres":
 		if e.complexity.Query.BookGenres == nil {
@@ -6082,7 +6082,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.BookGenres(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.BookGenreOrder), args["where"].(*ent.BookGenreWhereInput)), true
+		return e.complexity.Query.BookGenres(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.BookGenreOrder), args["where"].(*ent.BookGenreWhereInput)), true
 
 	case "Query.books":
 		if e.complexity.Query.Books == nil {
@@ -6094,7 +6094,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Books(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.BookOrder), args["where"].(*ent.BookWhereInput)), true
+		return e.complexity.Query.Books(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.BookOrder), args["where"].(*ent.BookWhereInput)), true
 
 	case "Query.categories":
 		if e.complexity.Query.Categories == nil {
@@ -6106,7 +6106,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Categories(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.CategoryOrder), args["where"].(*ent.CategoryWhereInput)), true
+		return e.complexity.Query.Categories(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.CategoryOrder), args["where"].(*ent.CategoryWhereInput)), true
 
 	case "Query.collections":
 		if e.complexity.Query.Collections == nil {
@@ -6118,7 +6118,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Collections(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.CollectionOrder), args["where"].(*ent.CollectionWhereInput)), true
+		return e.complexity.Query.Collections(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.CollectionOrder), args["where"].(*ent.CollectionWhereInput)), true
 
 	case "Query.countries":
 		if e.complexity.Query.Countries == nil {
@@ -6130,7 +6130,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Countries(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.CountryOrder), args["where"].(*ent.CountryWhereInput)), true
+		return e.complexity.Query.Countries(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.CountryOrder), args["where"].(*ent.CountryWhereInput)), true
 
 	case "Query.cultures":
 		if e.complexity.Query.Cultures == nil {
@@ -6142,7 +6142,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Cultures(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.CultureOrder), args["where"].(*ent.CultureWhereInput)), true
+		return e.complexity.Query.Cultures(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.CultureOrder), args["where"].(*ent.CultureWhereInput)), true
 
 	case "Query.districts":
 		if e.complexity.Query.Districts == nil {
@@ -6154,7 +6154,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Districts(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.DistrictOrder), args["where"].(*ent.DistrictWhereInput)), true
+		return e.complexity.Query.Districts(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.DistrictOrder), args["where"].(*ent.DistrictWhereInput)), true
 
 	case "Query.holderResponsibilities":
 		if e.complexity.Query.HolderResponsibilities == nil {
@@ -6166,7 +6166,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.HolderResponsibilities(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.HolderResponsibilityOrder), args["where"].(*ent.HolderResponsibilityWhereInput)), true
+		return e.complexity.Query.HolderResponsibilities(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.HolderResponsibilityOrder), args["where"].(*ent.HolderResponsibilityWhereInput)), true
 
 	case "Query.holders":
 		if e.complexity.Query.Holders == nil {
@@ -6178,7 +6178,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Holders(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.HolderOrder), args["where"].(*ent.HolderWhereInput)), true
+		return e.complexity.Query.Holders(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.HolderOrder), args["where"].(*ent.HolderWhereInput)), true
 
 	case "Query.licenses":
 		if e.complexity.Query.Licenses == nil {
@@ -6190,7 +6190,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Licenses(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.LicenseOrder), args["where"].(*ent.LicenseWhereInput)), true
+		return e.complexity.Query.Licenses(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.LicenseOrder), args["where"].(*ent.LicenseWhereInput)), true
 
 	case "Query.locations":
 		if e.complexity.Query.Locations == nil {
@@ -6202,7 +6202,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Locations(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.LocationOrder), args["where"].(*ent.LocationWhereInput)), true
+		return e.complexity.Query.Locations(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.LocationOrder), args["where"].(*ent.LocationWhereInput)), true
 
 	case "Query.media":
 		if e.complexity.Query.Media == nil {
@@ -6214,7 +6214,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Media(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.MediumOrder), args["where"].(*ent.MediumWhereInput)), true
+		return e.complexity.Query.Media(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.MediumOrder), args["where"].(*ent.MediumWhereInput)), true
 
 	case "Query.models":
 		if e.complexity.Query.Models == nil {
@@ -6226,7 +6226,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Models(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.ModelOrder), args["where"].(*ent.ModelWhereInput)), true
+		return e.complexity.Query.Models(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.ModelOrder), args["where"].(*ent.ModelWhereInput)), true
 
 	case "Query.monuments":
 		if e.complexity.Query.Monuments == nil {
@@ -6238,7 +6238,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Monuments(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.MonumentOrder), args["where"].(*ent.MonumentWhereInput)), true
+		return e.complexity.Query.Monuments(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.MonumentOrder), args["where"].(*ent.MonumentWhereInput)), true
 
 	case "Query.node":
 		if e.complexity.Query.Node == nil {
@@ -6274,7 +6274,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.OrganizationTypes(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.OrganizationTypeOrder), args["where"].(*ent.OrganizationTypeWhereInput)), true
+		return e.complexity.Query.OrganizationTypes(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.OrganizationTypeOrder), args["where"].(*ent.OrganizationTypeWhereInput)), true
 
 	case "Query.organizations":
 		if e.complexity.Query.Organizations == nil {
@@ -6286,7 +6286,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Organizations(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].(*ent.OrganizationOrder), args["where"].(*ent.OrganizationWhereInput)), true
+		return e.complexity.Query.Organizations(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].(*ent.OrganizationOrder), args["where"].(*ent.OrganizationWhereInput)), true
 
 	case "Query.periods":
 		if e.complexity.Query.Periods == nil {
@@ -6298,7 +6298,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Periods(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.PeriodOrder), args["where"].(*ent.PeriodWhereInput)), true
+		return e.complexity.Query.Periods(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.PeriodOrder), args["where"].(*ent.PeriodWhereInput)), true
 
 	case "Query.personRoles":
 		if e.complexity.Query.PersonRoles == nil {
@@ -6310,7 +6310,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.PersonRoles(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.PersonRoleOrder), args["where"].(*ent.PersonRoleWhereInput)), true
+		return e.complexity.Query.PersonRoles(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.PersonRoleOrder), args["where"].(*ent.PersonRoleWhereInput)), true
 
 	case "Query.persons":
 		if e.complexity.Query.Persons == nil {
@@ -6322,7 +6322,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Persons(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.PersonOrder), args["where"].(*ent.PersonWhereInput)), true
+		return e.complexity.Query.Persons(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.PersonOrder), args["where"].(*ent.PersonWhereInput)), true
 
 	case "Query.projectTypes":
 		if e.complexity.Query.ProjectTypes == nil {
@@ -6334,7 +6334,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ProjectTypes(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.ProjectTypeOrder), args["where"].(*ent.ProjectTypeWhereInput)), true
+		return e.complexity.Query.ProjectTypes(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.ProjectTypeOrder), args["where"].(*ent.ProjectTypeWhereInput)), true
 
 	case "Query.projects":
 		if e.complexity.Query.Projects == nil {
@@ -6346,7 +6346,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Projects(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.ProjectOrder), args["where"].(*ent.ProjectWhereInput)), true
+		return e.complexity.Query.Projects(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.ProjectOrder), args["where"].(*ent.ProjectWhereInput)), true
 
 	case "Query.protectedAreaCategories":
 		if e.complexity.Query.ProtectedAreaCategories == nil {
@@ -6358,7 +6358,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ProtectedAreaCategories(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.ProtectedAreaCategoryOrder), args["where"].(*ent.ProtectedAreaCategoryWhereInput)), true
+		return e.complexity.Query.ProtectedAreaCategories(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.ProtectedAreaCategoryOrder), args["where"].(*ent.ProtectedAreaCategoryWhereInput)), true
 
 	case "Query.protectedAreaPictures":
 		if e.complexity.Query.ProtectedAreaPictures == nil {
@@ -6370,7 +6370,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ProtectedAreaPictures(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.ProtectedAreaPictureOrder), args["where"].(*ent.ProtectedAreaPictureWhereInput)), true
+		return e.complexity.Query.ProtectedAreaPictures(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.ProtectedAreaPictureOrder), args["where"].(*ent.ProtectedAreaPictureWhereInput)), true
 
 	case "Query.protectedAreas":
 		if e.complexity.Query.ProtectedAreas == nil {
@@ -6382,7 +6382,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ProtectedAreas(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.ProtectedAreaOrder), args["where"].(*ent.ProtectedAreaWhereInput)), true
+		return e.complexity.Query.ProtectedAreas(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.ProtectedAreaOrder), args["where"].(*ent.ProtectedAreaWhereInput)), true
 
 	case "Query.publications":
 		if e.complexity.Query.Publications == nil {
@@ -6394,7 +6394,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Publications(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.PublicationOrder), args["where"].(*ent.PublicationWhereInput)), true
+		return e.complexity.Query.Publications(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.PublicationOrder), args["where"].(*ent.PublicationWhereInput)), true
 
 	case "Query.publishers":
 		if e.complexity.Query.Publishers == nil {
@@ -6406,7 +6406,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Publishers(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.PublisherOrder), args["where"].(*ent.PublisherWhereInput)), true
+		return e.complexity.Query.Publishers(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.PublisherOrder), args["where"].(*ent.PublisherWhereInput)), true
 
 	case "Query.regions":
 		if e.complexity.Query.Regions == nil {
@@ -6418,7 +6418,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Regions(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.RegionOrder), args["where"].(*ent.RegionWhereInput)), true
+		return e.complexity.Query.Regions(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.RegionOrder), args["where"].(*ent.RegionWhereInput)), true
 
 	case "Query.sets":
 		if e.complexity.Query.Sets == nil {
@@ -6430,7 +6430,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Sets(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.SetOrder), args["where"].(*ent.SetWhereInput)), true
+		return e.complexity.Query.Sets(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.SetOrder), args["where"].(*ent.SetWhereInput)), true
 
 	case "Query.settlements":
 		if e.complexity.Query.Settlements == nil {
@@ -6442,7 +6442,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Settlements(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.SettlementOrder), args["where"].(*ent.SettlementWhereInput)), true
+		return e.complexity.Query.Settlements(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.SettlementOrder), args["where"].(*ent.SettlementWhereInput)), true
 
 	case "Query.techniques":
 		if e.complexity.Query.Techniques == nil {
@@ -6454,7 +6454,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Techniques(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].([]*ent.TechniqueOrder), args["where"].(*ent.TechniqueWhereInput)), true
+		return e.complexity.Query.Techniques(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.TechniqueOrder), args["where"].(*ent.TechniqueWhereInput)), true
 
 	case "Region.abbreviation":
 		if e.complexity.Region.Abbreviation == nil {
@@ -8528,24 +8528,33 @@ func (ec *executionContext) field_Query_artGenres_args(ctx context.Context, rawA
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.ArtGenreOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.ArtGenreOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOArtGenreOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐArtGenreOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOArtGenreOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐArtGenreOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.ArtGenreWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.ArtGenreWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOArtGenreWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐArtGenreWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOArtGenreWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐArtGenreWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -8588,24 +8597,33 @@ func (ec *executionContext) field_Query_artStyles_args(ctx context.Context, rawA
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.ArtStyleOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.ArtStyleOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOArtStyleOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐArtStyleOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOArtStyleOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐArtStyleOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.ArtStyleWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.ArtStyleWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOArtStyleWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐArtStyleWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOArtStyleWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐArtStyleWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -8648,24 +8666,33 @@ func (ec *executionContext) field_Query_artifacts_args(ctx context.Context, rawA
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.ArtifactOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.ArtifactOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOArtifactOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐArtifactOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOArtifactOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐArtifactOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.ArtifactWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.ArtifactWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOArtifactWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐArtifactWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOArtifactWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐArtifactWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -8708,24 +8735,33 @@ func (ec *executionContext) field_Query_arts_args(ctx context.Context, rawArgs m
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.ArtOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.ArtOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOArtOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐArtOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOArtOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐArtOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.ArtWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.ArtWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOArtWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐArtWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOArtWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐArtWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -8768,24 +8804,33 @@ func (ec *executionContext) field_Query_auditLogs_args(ctx context.Context, rawA
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.AuditLogOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.AuditLogOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOAuditLogOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐAuditLogOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOAuditLogOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐAuditLogOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.AuditLogWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.AuditLogWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOAuditLogWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐAuditLogWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOAuditLogWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐAuditLogWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -8828,24 +8873,33 @@ func (ec *executionContext) field_Query_bookGenres_args(ctx context.Context, raw
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.BookGenreOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.BookGenreOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOBookGenreOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐBookGenreOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOBookGenreOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐBookGenreOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.BookGenreWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.BookGenreWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOBookGenreWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐBookGenreWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOBookGenreWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐBookGenreWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -8888,24 +8942,33 @@ func (ec *executionContext) field_Query_books_args(ctx context.Context, rawArgs 
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.BookOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.BookOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOBookOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐBookOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOBookOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐBookOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.BookWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.BookWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOBookWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐBookWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOBookWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐBookWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -8948,24 +9011,33 @@ func (ec *executionContext) field_Query_categories_args(ctx context.Context, raw
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.CategoryOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.CategoryOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOCategoryOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCategoryOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOCategoryOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCategoryOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.CategoryWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.CategoryWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOCategoryWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCategoryWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOCategoryWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCategoryWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -9008,24 +9080,33 @@ func (ec *executionContext) field_Query_collections_args(ctx context.Context, ra
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.CollectionOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.CollectionOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOCollectionOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCollectionOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOCollectionOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCollectionOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.CollectionWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.CollectionWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOCollectionWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCollectionWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOCollectionWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCollectionWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -9068,24 +9149,33 @@ func (ec *executionContext) field_Query_countries_args(ctx context.Context, rawA
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.CountryOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.CountryOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOCountryOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCountryOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOCountryOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCountryOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.CountryWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.CountryWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOCountryWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCountryWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOCountryWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCountryWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -9128,24 +9218,33 @@ func (ec *executionContext) field_Query_cultures_args(ctx context.Context, rawAr
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.CultureOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.CultureOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOCultureOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCultureOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOCultureOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCultureOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.CultureWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.CultureWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOCultureWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCultureWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOCultureWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCultureWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -9188,24 +9287,33 @@ func (ec *executionContext) field_Query_districts_args(ctx context.Context, rawA
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.DistrictOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.DistrictOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalODistrictOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐDistrictOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalODistrictOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐDistrictOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.DistrictWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.DistrictWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalODistrictWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐDistrictWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalODistrictWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐDistrictWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -9248,24 +9356,33 @@ func (ec *executionContext) field_Query_holderResponsibilities_args(ctx context.
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.HolderResponsibilityOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.HolderResponsibilityOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOHolderResponsibilityOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐHolderResponsibilityOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOHolderResponsibilityOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐHolderResponsibilityOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.HolderResponsibilityWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.HolderResponsibilityWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOHolderResponsibilityWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐHolderResponsibilityWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOHolderResponsibilityWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐHolderResponsibilityWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -9308,24 +9425,33 @@ func (ec *executionContext) field_Query_holders_args(ctx context.Context, rawArg
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.HolderOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.HolderOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOHolderOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐHolderOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOHolderOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐHolderOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.HolderWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.HolderWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOHolderWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐHolderWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOHolderWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐHolderWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -9368,24 +9494,33 @@ func (ec *executionContext) field_Query_licenses_args(ctx context.Context, rawAr
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.LicenseOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.LicenseOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOLicenseOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLicenseOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOLicenseOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLicenseOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.LicenseWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.LicenseWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOLicenseWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLicenseWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOLicenseWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLicenseWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -9428,24 +9563,33 @@ func (ec *executionContext) field_Query_locations_args(ctx context.Context, rawA
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.LocationOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.LocationOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOLocationOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLocationOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOLocationOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLocationOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.LocationWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.LocationWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOLocationWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLocationWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOLocationWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLocationWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -9488,24 +9632,33 @@ func (ec *executionContext) field_Query_media_args(ctx context.Context, rawArgs 
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.MediumOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.MediumOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOMediumOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐMediumOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOMediumOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐMediumOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.MediumWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.MediumWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOMediumWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐMediumWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOMediumWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐMediumWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -9548,24 +9701,33 @@ func (ec *executionContext) field_Query_models_args(ctx context.Context, rawArgs
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.ModelOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.ModelOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOModelOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐModelOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOModelOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐModelOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.ModelWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.ModelWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOModelWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐModelWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOModelWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐModelWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -9608,24 +9770,33 @@ func (ec *executionContext) field_Query_monuments_args(ctx context.Context, rawA
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.MonumentOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.MonumentOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOMonumentOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐMonumentOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOMonumentOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐMonumentOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.MonumentWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.MonumentWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOMonumentWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐMonumentWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOMonumentWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐMonumentWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -9698,24 +9869,33 @@ func (ec *executionContext) field_Query_organizationTypes_args(ctx context.Conte
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.OrganizationTypeOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.OrganizationTypeOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOOrganizationTypeOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐOrganizationTypeOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOOrganizationTypeOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐOrganizationTypeOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.OrganizationTypeWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.OrganizationTypeWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOOrganizationTypeWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐOrganizationTypeWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOOrganizationTypeWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐOrganizationTypeWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -9758,24 +9938,33 @@ func (ec *executionContext) field_Query_organizations_args(ctx context.Context, 
 		}
 	}
 	args["last"] = arg3
-	var arg4 *ent.OrganizationOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 *ent.OrganizationOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOOrganizationOrder2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐOrganizationOrder(ctx, tmp)
+		arg5, err = ec.unmarshalOOrganizationOrder2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐOrganizationOrder(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.OrganizationWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.OrganizationWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOOrganizationWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐOrganizationWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOOrganizationWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐOrganizationWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -9818,24 +10007,33 @@ func (ec *executionContext) field_Query_periods_args(ctx context.Context, rawArg
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.PeriodOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.PeriodOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOPeriodOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOPeriodOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.PeriodWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.PeriodWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOPeriodWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOPeriodWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -9878,24 +10076,33 @@ func (ec *executionContext) field_Query_personRoles_args(ctx context.Context, ra
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.PersonRoleOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.PersonRoleOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOPersonRoleOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPersonRoleOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOPersonRoleOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPersonRoleOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.PersonRoleWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.PersonRoleWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOPersonRoleWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPersonRoleWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOPersonRoleWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPersonRoleWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -9938,24 +10145,33 @@ func (ec *executionContext) field_Query_persons_args(ctx context.Context, rawArg
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.PersonOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.PersonOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOPersonOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPersonOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOPersonOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPersonOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.PersonWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.PersonWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOPersonWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPersonWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOPersonWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPersonWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -9998,24 +10214,33 @@ func (ec *executionContext) field_Query_projectTypes_args(ctx context.Context, r
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.ProjectTypeOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.ProjectTypeOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOProjectTypeOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐProjectTypeOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOProjectTypeOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐProjectTypeOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.ProjectTypeWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.ProjectTypeWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOProjectTypeWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐProjectTypeWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOProjectTypeWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐProjectTypeWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -10058,24 +10283,33 @@ func (ec *executionContext) field_Query_projects_args(ctx context.Context, rawAr
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.ProjectOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.ProjectOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOProjectOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐProjectOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOProjectOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐProjectOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.ProjectWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.ProjectWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOProjectWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐProjectWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOProjectWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐProjectWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -10118,24 +10352,33 @@ func (ec *executionContext) field_Query_protectedAreaCategories_args(ctx context
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.ProtectedAreaCategoryOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.ProtectedAreaCategoryOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOProtectedAreaCategoryOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐProtectedAreaCategoryOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOProtectedAreaCategoryOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐProtectedAreaCategoryOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.ProtectedAreaCategoryWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.ProtectedAreaCategoryWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOProtectedAreaCategoryWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐProtectedAreaCategoryWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOProtectedAreaCategoryWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐProtectedAreaCategoryWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -10178,24 +10421,33 @@ func (ec *executionContext) field_Query_protectedAreaPictures_args(ctx context.C
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.ProtectedAreaPictureOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.ProtectedAreaPictureOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOProtectedAreaPictureOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐProtectedAreaPictureOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOProtectedAreaPictureOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐProtectedAreaPictureOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.ProtectedAreaPictureWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.ProtectedAreaPictureWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOProtectedAreaPictureWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐProtectedAreaPictureWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOProtectedAreaPictureWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐProtectedAreaPictureWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -10238,24 +10490,33 @@ func (ec *executionContext) field_Query_protectedAreas_args(ctx context.Context,
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.ProtectedAreaOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.ProtectedAreaOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOProtectedAreaOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐProtectedAreaOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOProtectedAreaOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐProtectedAreaOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.ProtectedAreaWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.ProtectedAreaWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOProtectedAreaWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐProtectedAreaWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOProtectedAreaWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐProtectedAreaWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -10298,24 +10559,33 @@ func (ec *executionContext) field_Query_publications_args(ctx context.Context, r
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.PublicationOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.PublicationOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOPublicationOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPublicationOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOPublicationOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPublicationOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.PublicationWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.PublicationWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOPublicationWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPublicationWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOPublicationWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPublicationWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -10358,24 +10628,33 @@ func (ec *executionContext) field_Query_publishers_args(ctx context.Context, raw
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.PublisherOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.PublisherOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOPublisherOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPublisherOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOPublisherOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPublisherOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.PublisherWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.PublisherWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOPublisherWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPublisherWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOPublisherWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPublisherWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -10418,24 +10697,33 @@ func (ec *executionContext) field_Query_regions_args(ctx context.Context, rawArg
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.RegionOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.RegionOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalORegionOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐRegionOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalORegionOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐRegionOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.RegionWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.RegionWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalORegionWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐRegionWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalORegionWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐRegionWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -10478,24 +10766,33 @@ func (ec *executionContext) field_Query_sets_args(ctx context.Context, rawArgs m
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.SetOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.SetOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOSetOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐSetOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOSetOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐSetOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.SetWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.SetWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOSetWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐSetWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOSetWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐSetWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -10538,24 +10835,33 @@ func (ec *executionContext) field_Query_settlements_args(ctx context.Context, ra
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.SettlementOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.SettlementOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOSettlementOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐSettlementOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOSettlementOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐSettlementOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.SettlementWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.SettlementWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOSettlementWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐSettlementWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOSettlementWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐSettlementWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -10598,24 +10904,33 @@ func (ec *executionContext) field_Query_techniques_args(ctx context.Context, raw
 		}
 	}
 	args["last"] = arg3
-	var arg4 []*ent.TechniqueOrder
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.TechniqueOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOTechniqueOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐTechniqueOrderᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalOTechniqueOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐTechniqueOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["orderBy"] = arg4
-	var arg5 *ent.TechniqueWhereInput
+	args["orderBy"] = arg5
+	var arg6 *ent.TechniqueWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg5, err = ec.unmarshalOTechniqueWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐTechniqueWhereInput(ctx, tmp)
+		arg6, err = ec.unmarshalOTechniqueWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐTechniqueWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["where"] = arg5
+	args["where"] = arg6
 	return args, nil
 }
 
@@ -44694,7 +45009,7 @@ func (ec *executionContext) _Query_arts(ctx context.Context, field graphql.Colle
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Arts(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.ArtOrder), fc.Args["where"].(*ent.ArtWhereInput))
+		return ec.resolvers.Query().Arts(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.ArtOrder), fc.Args["where"].(*ent.ArtWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -44757,7 +45072,7 @@ func (ec *executionContext) _Query_artGenres(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ArtGenres(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.ArtGenreOrder), fc.Args["where"].(*ent.ArtGenreWhereInput))
+		return ec.resolvers.Query().ArtGenres(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.ArtGenreOrder), fc.Args["where"].(*ent.ArtGenreWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -44820,7 +45135,7 @@ func (ec *executionContext) _Query_artStyles(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ArtStyles(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.ArtStyleOrder), fc.Args["where"].(*ent.ArtStyleWhereInput))
+		return ec.resolvers.Query().ArtStyles(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.ArtStyleOrder), fc.Args["where"].(*ent.ArtStyleWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -44883,7 +45198,7 @@ func (ec *executionContext) _Query_artifacts(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Artifacts(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.ArtifactOrder), fc.Args["where"].(*ent.ArtifactWhereInput))
+		return ec.resolvers.Query().Artifacts(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.ArtifactOrder), fc.Args["where"].(*ent.ArtifactWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -44946,7 +45261,7 @@ func (ec *executionContext) _Query_auditLogs(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().AuditLogs(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.AuditLogOrder), fc.Args["where"].(*ent.AuditLogWhereInput))
+		return ec.resolvers.Query().AuditLogs(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.AuditLogOrder), fc.Args["where"].(*ent.AuditLogWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -45009,7 +45324,7 @@ func (ec *executionContext) _Query_books(ctx context.Context, field graphql.Coll
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Books(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.BookOrder), fc.Args["where"].(*ent.BookWhereInput))
+		return ec.resolvers.Query().Books(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.BookOrder), fc.Args["where"].(*ent.BookWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -45072,7 +45387,7 @@ func (ec *executionContext) _Query_bookGenres(ctx context.Context, field graphql
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().BookGenres(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.BookGenreOrder), fc.Args["where"].(*ent.BookGenreWhereInput))
+		return ec.resolvers.Query().BookGenres(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.BookGenreOrder), fc.Args["where"].(*ent.BookGenreWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -45135,7 +45450,7 @@ func (ec *executionContext) _Query_categories(ctx context.Context, field graphql
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Categories(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.CategoryOrder), fc.Args["where"].(*ent.CategoryWhereInput))
+		return ec.resolvers.Query().Categories(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.CategoryOrder), fc.Args["where"].(*ent.CategoryWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -45198,7 +45513,7 @@ func (ec *executionContext) _Query_collections(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Collections(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.CollectionOrder), fc.Args["where"].(*ent.CollectionWhereInput))
+		return ec.resolvers.Query().Collections(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.CollectionOrder), fc.Args["where"].(*ent.CollectionWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -45261,7 +45576,7 @@ func (ec *executionContext) _Query_countries(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Countries(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.CountryOrder), fc.Args["where"].(*ent.CountryWhereInput))
+		return ec.resolvers.Query().Countries(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.CountryOrder), fc.Args["where"].(*ent.CountryWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -45324,7 +45639,7 @@ func (ec *executionContext) _Query_cultures(ctx context.Context, field graphql.C
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Cultures(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.CultureOrder), fc.Args["where"].(*ent.CultureWhereInput))
+		return ec.resolvers.Query().Cultures(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.CultureOrder), fc.Args["where"].(*ent.CultureWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -45387,7 +45702,7 @@ func (ec *executionContext) _Query_districts(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Districts(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.DistrictOrder), fc.Args["where"].(*ent.DistrictWhereInput))
+		return ec.resolvers.Query().Districts(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.DistrictOrder), fc.Args["where"].(*ent.DistrictWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -45450,7 +45765,7 @@ func (ec *executionContext) _Query_holders(ctx context.Context, field graphql.Co
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Holders(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.HolderOrder), fc.Args["where"].(*ent.HolderWhereInput))
+		return ec.resolvers.Query().Holders(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.HolderOrder), fc.Args["where"].(*ent.HolderWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -45513,7 +45828,7 @@ func (ec *executionContext) _Query_holderResponsibilities(ctx context.Context, f
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().HolderResponsibilities(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.HolderResponsibilityOrder), fc.Args["where"].(*ent.HolderResponsibilityWhereInput))
+		return ec.resolvers.Query().HolderResponsibilities(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.HolderResponsibilityOrder), fc.Args["where"].(*ent.HolderResponsibilityWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -45576,7 +45891,7 @@ func (ec *executionContext) _Query_licenses(ctx context.Context, field graphql.C
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Licenses(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.LicenseOrder), fc.Args["where"].(*ent.LicenseWhereInput))
+		return ec.resolvers.Query().Licenses(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.LicenseOrder), fc.Args["where"].(*ent.LicenseWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -45639,7 +45954,7 @@ func (ec *executionContext) _Query_locations(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Locations(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.LocationOrder), fc.Args["where"].(*ent.LocationWhereInput))
+		return ec.resolvers.Query().Locations(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.LocationOrder), fc.Args["where"].(*ent.LocationWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -45702,7 +46017,7 @@ func (ec *executionContext) _Query_media(ctx context.Context, field graphql.Coll
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Media(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.MediumOrder), fc.Args["where"].(*ent.MediumWhereInput))
+		return ec.resolvers.Query().Media(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.MediumOrder), fc.Args["where"].(*ent.MediumWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -45765,7 +46080,7 @@ func (ec *executionContext) _Query_models(ctx context.Context, field graphql.Col
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Models(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.ModelOrder), fc.Args["where"].(*ent.ModelWhereInput))
+		return ec.resolvers.Query().Models(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.ModelOrder), fc.Args["where"].(*ent.ModelWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -45828,7 +46143,7 @@ func (ec *executionContext) _Query_monuments(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Monuments(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.MonumentOrder), fc.Args["where"].(*ent.MonumentWhereInput))
+		return ec.resolvers.Query().Monuments(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.MonumentOrder), fc.Args["where"].(*ent.MonumentWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -45891,7 +46206,7 @@ func (ec *executionContext) _Query_organizations(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Organizations(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].(*ent.OrganizationOrder), fc.Args["where"].(*ent.OrganizationWhereInput))
+		return ec.resolvers.Query().Organizations(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].(*ent.OrganizationOrder), fc.Args["where"].(*ent.OrganizationWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -45954,7 +46269,7 @@ func (ec *executionContext) _Query_organizationTypes(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().OrganizationTypes(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.OrganizationTypeOrder), fc.Args["where"].(*ent.OrganizationTypeWhereInput))
+		return ec.resolvers.Query().OrganizationTypes(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.OrganizationTypeOrder), fc.Args["where"].(*ent.OrganizationTypeWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -46017,7 +46332,7 @@ func (ec *executionContext) _Query_periods(ctx context.Context, field graphql.Co
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Periods(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.PeriodOrder), fc.Args["where"].(*ent.PeriodWhereInput))
+		return ec.resolvers.Query().Periods(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.PeriodOrder), fc.Args["where"].(*ent.PeriodWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -46080,7 +46395,7 @@ func (ec *executionContext) _Query_persons(ctx context.Context, field graphql.Co
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Persons(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.PersonOrder), fc.Args["where"].(*ent.PersonWhereInput))
+		return ec.resolvers.Query().Persons(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.PersonOrder), fc.Args["where"].(*ent.PersonWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -46143,7 +46458,7 @@ func (ec *executionContext) _Query_personRoles(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().PersonRoles(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.PersonRoleOrder), fc.Args["where"].(*ent.PersonRoleWhereInput))
+		return ec.resolvers.Query().PersonRoles(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.PersonRoleOrder), fc.Args["where"].(*ent.PersonRoleWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -46206,7 +46521,7 @@ func (ec *executionContext) _Query_projects(ctx context.Context, field graphql.C
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Projects(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.ProjectOrder), fc.Args["where"].(*ent.ProjectWhereInput))
+		return ec.resolvers.Query().Projects(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.ProjectOrder), fc.Args["where"].(*ent.ProjectWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -46269,7 +46584,7 @@ func (ec *executionContext) _Query_projectTypes(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ProjectTypes(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.ProjectTypeOrder), fc.Args["where"].(*ent.ProjectTypeWhereInput))
+		return ec.resolvers.Query().ProjectTypes(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.ProjectTypeOrder), fc.Args["where"].(*ent.ProjectTypeWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -46332,7 +46647,7 @@ func (ec *executionContext) _Query_protectedAreas(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ProtectedAreas(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.ProtectedAreaOrder), fc.Args["where"].(*ent.ProtectedAreaWhereInput))
+		return ec.resolvers.Query().ProtectedAreas(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.ProtectedAreaOrder), fc.Args["where"].(*ent.ProtectedAreaWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -46395,7 +46710,7 @@ func (ec *executionContext) _Query_protectedAreaCategories(ctx context.Context, 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ProtectedAreaCategories(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.ProtectedAreaCategoryOrder), fc.Args["where"].(*ent.ProtectedAreaCategoryWhereInput))
+		return ec.resolvers.Query().ProtectedAreaCategories(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.ProtectedAreaCategoryOrder), fc.Args["where"].(*ent.ProtectedAreaCategoryWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -46458,7 +46773,7 @@ func (ec *executionContext) _Query_protectedAreaPictures(ctx context.Context, fi
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ProtectedAreaPictures(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.ProtectedAreaPictureOrder), fc.Args["where"].(*ent.ProtectedAreaPictureWhereInput))
+		return ec.resolvers.Query().ProtectedAreaPictures(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.ProtectedAreaPictureOrder), fc.Args["where"].(*ent.ProtectedAreaPictureWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -46521,7 +46836,7 @@ func (ec *executionContext) _Query_publications(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Publications(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.PublicationOrder), fc.Args["where"].(*ent.PublicationWhereInput))
+		return ec.resolvers.Query().Publications(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.PublicationOrder), fc.Args["where"].(*ent.PublicationWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -46584,7 +46899,7 @@ func (ec *executionContext) _Query_publishers(ctx context.Context, field graphql
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Publishers(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.PublisherOrder), fc.Args["where"].(*ent.PublisherWhereInput))
+		return ec.resolvers.Query().Publishers(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.PublisherOrder), fc.Args["where"].(*ent.PublisherWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -46647,7 +46962,7 @@ func (ec *executionContext) _Query_regions(ctx context.Context, field graphql.Co
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Regions(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.RegionOrder), fc.Args["where"].(*ent.RegionWhereInput))
+		return ec.resolvers.Query().Regions(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.RegionOrder), fc.Args["where"].(*ent.RegionWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -46710,7 +47025,7 @@ func (ec *executionContext) _Query_sets(ctx context.Context, field graphql.Colle
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Sets(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.SetOrder), fc.Args["where"].(*ent.SetWhereInput))
+		return ec.resolvers.Query().Sets(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.SetOrder), fc.Args["where"].(*ent.SetWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -46773,7 +47088,7 @@ func (ec *executionContext) _Query_settlements(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Settlements(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.SettlementOrder), fc.Args["where"].(*ent.SettlementWhereInput))
+		return ec.resolvers.Query().Settlements(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.SettlementOrder), fc.Args["where"].(*ent.SettlementWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -46836,7 +47151,7 @@ func (ec *executionContext) _Query_techniques(ctx context.Context, field graphql
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Techniques(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.TechniqueOrder), fc.Args["where"].(*ent.TechniqueWhereInput))
+		return ec.resolvers.Query().Techniques(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.TechniqueOrder), fc.Args["where"].(*ent.TechniqueWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
