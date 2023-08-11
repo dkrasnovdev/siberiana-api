@@ -16,7 +16,7 @@ func NewClient(env config.Config) *minio.Client {
 
 	// Create a new MinIO client with the specified options.
 	client, err := minio.New(fmt.Sprintf("%s:%s", env.MINIO_ENDPOINT, env.MINIO_PORT), &minio.Options{
-		Creds:  credentials.NewStaticV4(env.MINIO_ACCESS_KEY_ID, env.MINIO_SECRET_ACCESS_KEY, ""),
+		Creds:  credentials.NewStaticV4(env.MINIO_ACCESS_KEY, env.MINIO_SECRET_KEY, ""),
 		Secure: useSSL,
 	})
 	if err != nil {
