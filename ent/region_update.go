@@ -155,6 +155,26 @@ func (ru *RegionUpdate) ClearExternalLink() *RegionUpdate {
 	return ru
 }
 
+// SetSlug sets the "slug" field.
+func (ru *RegionUpdate) SetSlug(s string) *RegionUpdate {
+	ru.mutation.SetSlug(s)
+	return ru
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (ru *RegionUpdate) SetNillableSlug(s *string) *RegionUpdate {
+	if s != nil {
+		ru.SetSlug(*s)
+	}
+	return ru
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (ru *RegionUpdate) ClearSlug() *RegionUpdate {
+	ru.mutation.ClearSlug()
+	return ru
+}
+
 // SetLocationID sets the "location" edge to the Location entity by ID.
 func (ru *RegionUpdate) SetLocationID(id int) *RegionUpdate {
 	ru.mutation.SetLocationID(id)
@@ -274,6 +294,12 @@ func (ru *RegionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ru.mutation.ExternalLinkCleared() {
 		_spec.ClearField(region.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := ru.mutation.Slug(); ok {
+		_spec.SetField(region.FieldSlug, field.TypeString, value)
+	}
+	if ru.mutation.SlugCleared() {
+		_spec.ClearField(region.FieldSlug, field.TypeString)
 	}
 	if ru.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -450,6 +476,26 @@ func (ruo *RegionUpdateOne) ClearExternalLink() *RegionUpdateOne {
 	return ruo
 }
 
+// SetSlug sets the "slug" field.
+func (ruo *RegionUpdateOne) SetSlug(s string) *RegionUpdateOne {
+	ruo.mutation.SetSlug(s)
+	return ruo
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (ruo *RegionUpdateOne) SetNillableSlug(s *string) *RegionUpdateOne {
+	if s != nil {
+		ruo.SetSlug(*s)
+	}
+	return ruo
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (ruo *RegionUpdateOne) ClearSlug() *RegionUpdateOne {
+	ruo.mutation.ClearSlug()
+	return ruo
+}
+
 // SetLocationID sets the "location" edge to the Location entity by ID.
 func (ruo *RegionUpdateOne) SetLocationID(id int) *RegionUpdateOne {
 	ruo.mutation.SetLocationID(id)
@@ -599,6 +645,12 @@ func (ruo *RegionUpdateOne) sqlSave(ctx context.Context) (_node *Region, err err
 	}
 	if ruo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(region.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := ruo.mutation.Slug(); ok {
+		_spec.SetField(region.FieldSlug, field.TypeString, value)
+	}
+	if ruo.mutation.SlugCleared() {
+		_spec.ClearField(region.FieldSlug, field.TypeString)
 	}
 	if ruo.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -155,6 +155,26 @@ func (bgu *BookGenreUpdate) ClearExternalLink() *BookGenreUpdate {
 	return bgu
 }
 
+// SetSlug sets the "slug" field.
+func (bgu *BookGenreUpdate) SetSlug(s string) *BookGenreUpdate {
+	bgu.mutation.SetSlug(s)
+	return bgu
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (bgu *BookGenreUpdate) SetNillableSlug(s *string) *BookGenreUpdate {
+	if s != nil {
+		bgu.SetSlug(*s)
+	}
+	return bgu
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (bgu *BookGenreUpdate) ClearSlug() *BookGenreUpdate {
+	bgu.mutation.ClearSlug()
+	return bgu
+}
+
 // AddBookIDs adds the "books" edge to the Book entity by IDs.
 func (bgu *BookGenreUpdate) AddBookIDs(ids ...int) *BookGenreUpdate {
 	bgu.mutation.AddBookIDs(ids...)
@@ -285,6 +305,12 @@ func (bgu *BookGenreUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if bgu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(bookgenre.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := bgu.mutation.Slug(); ok {
+		_spec.SetField(bookgenre.FieldSlug, field.TypeString, value)
+	}
+	if bgu.mutation.SlugCleared() {
+		_spec.ClearField(bookgenre.FieldSlug, field.TypeString)
 	}
 	if bgu.mutation.BooksCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -477,6 +503,26 @@ func (bguo *BookGenreUpdateOne) ClearExternalLink() *BookGenreUpdateOne {
 	return bguo
 }
 
+// SetSlug sets the "slug" field.
+func (bguo *BookGenreUpdateOne) SetSlug(s string) *BookGenreUpdateOne {
+	bguo.mutation.SetSlug(s)
+	return bguo
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (bguo *BookGenreUpdateOne) SetNillableSlug(s *string) *BookGenreUpdateOne {
+	if s != nil {
+		bguo.SetSlug(*s)
+	}
+	return bguo
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (bguo *BookGenreUpdateOne) ClearSlug() *BookGenreUpdateOne {
+	bguo.mutation.ClearSlug()
+	return bguo
+}
+
 // AddBookIDs adds the "books" edge to the Book entity by IDs.
 func (bguo *BookGenreUpdateOne) AddBookIDs(ids ...int) *BookGenreUpdateOne {
 	bguo.mutation.AddBookIDs(ids...)
@@ -637,6 +683,12 @@ func (bguo *BookGenreUpdateOne) sqlSave(ctx context.Context) (_node *BookGenre, 
 	}
 	if bguo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(bookgenre.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := bguo.mutation.Slug(); ok {
+		_spec.SetField(bookgenre.FieldSlug, field.TypeString, value)
+	}
+	if bguo.mutation.SlugCleared() {
+		_spec.ClearField(bookgenre.FieldSlug, field.TypeString)
 	}
 	if bguo.mutation.BooksCleared() {
 		edge := &sqlgraph.EdgeSpec{

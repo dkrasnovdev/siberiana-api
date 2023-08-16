@@ -133,6 +133,20 @@ func (sc *SettlementCreate) SetNillableExternalLink(s *string) *SettlementCreate
 	return sc
 }
 
+// SetSlug sets the "slug" field.
+func (sc *SettlementCreate) SetSlug(s string) *SettlementCreate {
+	sc.mutation.SetSlug(s)
+	return sc
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (sc *SettlementCreate) SetNillableSlug(s *string) *SettlementCreate {
+	if s != nil {
+		sc.SetSlug(*s)
+	}
+	return sc
+}
+
 // SetLocationID sets the "location" edge to the Location entity by ID.
 func (sc *SettlementCreate) SetLocationID(id int) *SettlementCreate {
 	sc.mutation.SetLocationID(id)
@@ -271,6 +285,10 @@ func (sc *SettlementCreate) createSpec() (*Settlement, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.ExternalLink(); ok {
 		_spec.SetField(settlement.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
+	}
+	if value, ok := sc.mutation.Slug(); ok {
+		_spec.SetField(settlement.FieldSlug, field.TypeString, value)
+		_node.Slug = value
 	}
 	if nodes := sc.mutation.LocationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

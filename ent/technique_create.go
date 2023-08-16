@@ -133,6 +133,20 @@ func (tc *TechniqueCreate) SetNillableExternalLink(s *string) *TechniqueCreate {
 	return tc
 }
 
+// SetSlug sets the "slug" field.
+func (tc *TechniqueCreate) SetSlug(s string) *TechniqueCreate {
+	tc.mutation.SetSlug(s)
+	return tc
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (tc *TechniqueCreate) SetNillableSlug(s *string) *TechniqueCreate {
+	if s != nil {
+		tc.SetSlug(*s)
+	}
+	return tc
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (tc *TechniqueCreate) AddArtifactIDs(ids ...int) *TechniqueCreate {
 	tc.mutation.AddArtifactIDs(ids...)
@@ -267,6 +281,10 @@ func (tc *TechniqueCreate) createSpec() (*Technique, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.ExternalLink(); ok {
 		_spec.SetField(technique.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
+	}
+	if value, ok := tc.mutation.Slug(); ok {
+		_spec.SetField(technique.FieldSlug, field.TypeString, value)
+		_node.Slug = value
 	}
 	if nodes := tc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

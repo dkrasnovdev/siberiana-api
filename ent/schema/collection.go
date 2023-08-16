@@ -35,6 +35,7 @@ func (Collection) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixin.AuditMixin{},
 		mixin.DetailsMixin{},
+		mixin.ImagesMixin{},
 	}
 }
 

@@ -157,6 +157,26 @@ func (lu *LicenseUpdate) ClearExternalLink() *LicenseUpdate {
 	return lu
 }
 
+// SetSlug sets the "slug" field.
+func (lu *LicenseUpdate) SetSlug(s string) *LicenseUpdate {
+	lu.mutation.SetSlug(s)
+	return lu
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (lu *LicenseUpdate) SetNillableSlug(s *string) *LicenseUpdate {
+	if s != nil {
+		lu.SetSlug(*s)
+	}
+	return lu
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (lu *LicenseUpdate) ClearSlug() *LicenseUpdate {
+	lu.mutation.ClearSlug()
+	return lu
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (lu *LicenseUpdate) AddArtifactIDs(ids ...int) *LicenseUpdate {
 	lu.mutation.AddArtifactIDs(ids...)
@@ -359,6 +379,12 @@ func (lu *LicenseUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if lu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(license.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := lu.mutation.Slug(); ok {
+		_spec.SetField(license.FieldSlug, field.TypeString, value)
+	}
+	if lu.mutation.SlugCleared() {
+		_spec.ClearField(license.FieldSlug, field.TypeString)
 	}
 	if lu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -641,6 +667,26 @@ func (luo *LicenseUpdateOne) ClearExternalLink() *LicenseUpdateOne {
 	return luo
 }
 
+// SetSlug sets the "slug" field.
+func (luo *LicenseUpdateOne) SetSlug(s string) *LicenseUpdateOne {
+	luo.mutation.SetSlug(s)
+	return luo
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (luo *LicenseUpdateOne) SetNillableSlug(s *string) *LicenseUpdateOne {
+	if s != nil {
+		luo.SetSlug(*s)
+	}
+	return luo
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (luo *LicenseUpdateOne) ClearSlug() *LicenseUpdateOne {
+	luo.mutation.ClearSlug()
+	return luo
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (luo *LicenseUpdateOne) AddArtifactIDs(ids ...int) *LicenseUpdateOne {
 	luo.mutation.AddArtifactIDs(ids...)
@@ -873,6 +919,12 @@ func (luo *LicenseUpdateOne) sqlSave(ctx context.Context) (_node *License, err e
 	}
 	if luo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(license.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := luo.mutation.Slug(); ok {
+		_spec.SetField(license.FieldSlug, field.TypeString, value)
+	}
+	if luo.mutation.SlugCleared() {
+		_spec.ClearField(license.FieldSlug, field.TypeString)
 	}
 	if luo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

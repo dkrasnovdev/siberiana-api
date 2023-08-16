@@ -133,6 +133,20 @@ func (pacc *ProtectedAreaCategoryCreate) SetNillableExternalLink(s *string) *Pro
 	return pacc
 }
 
+// SetSlug sets the "slug" field.
+func (pacc *ProtectedAreaCategoryCreate) SetSlug(s string) *ProtectedAreaCategoryCreate {
+	pacc.mutation.SetSlug(s)
+	return pacc
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (pacc *ProtectedAreaCategoryCreate) SetNillableSlug(s *string) *ProtectedAreaCategoryCreate {
+	if s != nil {
+		pacc.SetSlug(*s)
+	}
+	return pacc
+}
+
 // AddProtectedAreaIDs adds the "protected_areas" edge to the ProtectedArea entity by IDs.
 func (pacc *ProtectedAreaCategoryCreate) AddProtectedAreaIDs(ids ...int) *ProtectedAreaCategoryCreate {
 	pacc.mutation.AddProtectedAreaIDs(ids...)
@@ -267,6 +281,10 @@ func (pacc *ProtectedAreaCategoryCreate) createSpec() (*ProtectedAreaCategory, *
 	if value, ok := pacc.mutation.ExternalLink(); ok {
 		_spec.SetField(protectedareacategory.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
+	}
+	if value, ok := pacc.mutation.Slug(); ok {
+		_spec.SetField(protectedareacategory.FieldSlug, field.TypeString, value)
+		_node.Slug = value
 	}
 	if nodes := pacc.mutation.ProtectedAreasIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

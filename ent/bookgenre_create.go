@@ -133,6 +133,20 @@ func (bgc *BookGenreCreate) SetNillableExternalLink(s *string) *BookGenreCreate 
 	return bgc
 }
 
+// SetSlug sets the "slug" field.
+func (bgc *BookGenreCreate) SetSlug(s string) *BookGenreCreate {
+	bgc.mutation.SetSlug(s)
+	return bgc
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (bgc *BookGenreCreate) SetNillableSlug(s *string) *BookGenreCreate {
+	if s != nil {
+		bgc.SetSlug(*s)
+	}
+	return bgc
+}
+
 // AddBookIDs adds the "books" edge to the Book entity by IDs.
 func (bgc *BookGenreCreate) AddBookIDs(ids ...int) *BookGenreCreate {
 	bgc.mutation.AddBookIDs(ids...)
@@ -267,6 +281,10 @@ func (bgc *BookGenreCreate) createSpec() (*BookGenre, *sqlgraph.CreateSpec) {
 	if value, ok := bgc.mutation.ExternalLink(); ok {
 		_spec.SetField(bookgenre.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
+	}
+	if value, ok := bgc.mutation.Slug(); ok {
+		_spec.SetField(bookgenre.FieldSlug, field.TypeString, value)
+		_node.Slug = value
 	}
 	if nodes := bgc.mutation.BooksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

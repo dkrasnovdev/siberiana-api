@@ -95,6 +95,16 @@ func ExternalLink(v string) predicate.Collection {
 	return predicate.Collection(sql.FieldEQ(FieldExternalLink, v))
 }
 
+// Slug applies equality check predicate on the "slug" field. It's identical to SlugEQ.
+func Slug(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldEQ(FieldSlug, v))
+}
+
+// PrimaryImageURL applies equality check predicate on the "primary_image_url" field. It's identical to PrimaryImageURLEQ.
+func PrimaryImageURL(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldEQ(FieldPrimaryImageURL, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Collection {
 	return predicate.Collection(sql.FieldEQ(FieldCreatedAt, v))
@@ -623,6 +633,166 @@ func ExternalLinkEqualFold(v string) predicate.Collection {
 // ExternalLinkContainsFold applies the ContainsFold predicate on the "external_link" field.
 func ExternalLinkContainsFold(v string) predicate.Collection {
 	return predicate.Collection(sql.FieldContainsFold(FieldExternalLink, v))
+}
+
+// SlugEQ applies the EQ predicate on the "slug" field.
+func SlugEQ(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldEQ(FieldSlug, v))
+}
+
+// SlugNEQ applies the NEQ predicate on the "slug" field.
+func SlugNEQ(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldNEQ(FieldSlug, v))
+}
+
+// SlugIn applies the In predicate on the "slug" field.
+func SlugIn(vs ...string) predicate.Collection {
+	return predicate.Collection(sql.FieldIn(FieldSlug, vs...))
+}
+
+// SlugNotIn applies the NotIn predicate on the "slug" field.
+func SlugNotIn(vs ...string) predicate.Collection {
+	return predicate.Collection(sql.FieldNotIn(FieldSlug, vs...))
+}
+
+// SlugGT applies the GT predicate on the "slug" field.
+func SlugGT(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldGT(FieldSlug, v))
+}
+
+// SlugGTE applies the GTE predicate on the "slug" field.
+func SlugGTE(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldGTE(FieldSlug, v))
+}
+
+// SlugLT applies the LT predicate on the "slug" field.
+func SlugLT(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldLT(FieldSlug, v))
+}
+
+// SlugLTE applies the LTE predicate on the "slug" field.
+func SlugLTE(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldLTE(FieldSlug, v))
+}
+
+// SlugContains applies the Contains predicate on the "slug" field.
+func SlugContains(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldContains(FieldSlug, v))
+}
+
+// SlugHasPrefix applies the HasPrefix predicate on the "slug" field.
+func SlugHasPrefix(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldHasPrefix(FieldSlug, v))
+}
+
+// SlugHasSuffix applies the HasSuffix predicate on the "slug" field.
+func SlugHasSuffix(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldHasSuffix(FieldSlug, v))
+}
+
+// SlugIsNil applies the IsNil predicate on the "slug" field.
+func SlugIsNil() predicate.Collection {
+	return predicate.Collection(sql.FieldIsNull(FieldSlug))
+}
+
+// SlugNotNil applies the NotNil predicate on the "slug" field.
+func SlugNotNil() predicate.Collection {
+	return predicate.Collection(sql.FieldNotNull(FieldSlug))
+}
+
+// SlugEqualFold applies the EqualFold predicate on the "slug" field.
+func SlugEqualFold(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldEqualFold(FieldSlug, v))
+}
+
+// SlugContainsFold applies the ContainsFold predicate on the "slug" field.
+func SlugContainsFold(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldContainsFold(FieldSlug, v))
+}
+
+// PrimaryImageURLEQ applies the EQ predicate on the "primary_image_url" field.
+func PrimaryImageURLEQ(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldEQ(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLNEQ applies the NEQ predicate on the "primary_image_url" field.
+func PrimaryImageURLNEQ(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldNEQ(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLIn applies the In predicate on the "primary_image_url" field.
+func PrimaryImageURLIn(vs ...string) predicate.Collection {
+	return predicate.Collection(sql.FieldIn(FieldPrimaryImageURL, vs...))
+}
+
+// PrimaryImageURLNotIn applies the NotIn predicate on the "primary_image_url" field.
+func PrimaryImageURLNotIn(vs ...string) predicate.Collection {
+	return predicate.Collection(sql.FieldNotIn(FieldPrimaryImageURL, vs...))
+}
+
+// PrimaryImageURLGT applies the GT predicate on the "primary_image_url" field.
+func PrimaryImageURLGT(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldGT(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLGTE applies the GTE predicate on the "primary_image_url" field.
+func PrimaryImageURLGTE(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldGTE(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLLT applies the LT predicate on the "primary_image_url" field.
+func PrimaryImageURLLT(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldLT(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLLTE applies the LTE predicate on the "primary_image_url" field.
+func PrimaryImageURLLTE(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldLTE(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLContains applies the Contains predicate on the "primary_image_url" field.
+func PrimaryImageURLContains(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldContains(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLHasPrefix applies the HasPrefix predicate on the "primary_image_url" field.
+func PrimaryImageURLHasPrefix(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldHasPrefix(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLHasSuffix applies the HasSuffix predicate on the "primary_image_url" field.
+func PrimaryImageURLHasSuffix(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldHasSuffix(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLIsNil applies the IsNil predicate on the "primary_image_url" field.
+func PrimaryImageURLIsNil() predicate.Collection {
+	return predicate.Collection(sql.FieldIsNull(FieldPrimaryImageURL))
+}
+
+// PrimaryImageURLNotNil applies the NotNil predicate on the "primary_image_url" field.
+func PrimaryImageURLNotNil() predicate.Collection {
+	return predicate.Collection(sql.FieldNotNull(FieldPrimaryImageURL))
+}
+
+// PrimaryImageURLEqualFold applies the EqualFold predicate on the "primary_image_url" field.
+func PrimaryImageURLEqualFold(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldEqualFold(FieldPrimaryImageURL, v))
+}
+
+// PrimaryImageURLContainsFold applies the ContainsFold predicate on the "primary_image_url" field.
+func PrimaryImageURLContainsFold(v string) predicate.Collection {
+	return predicate.Collection(sql.FieldContainsFold(FieldPrimaryImageURL, v))
+}
+
+// AdditionalImagesUrlsIsNil applies the IsNil predicate on the "additional_images_urls" field.
+func AdditionalImagesUrlsIsNil() predicate.Collection {
+	return predicate.Collection(sql.FieldIsNull(FieldAdditionalImagesUrls))
+}
+
+// AdditionalImagesUrlsNotNil applies the NotNil predicate on the "additional_images_urls" field.
+func AdditionalImagesUrlsNotNil() predicate.Collection {
+	return predicate.Collection(sql.FieldNotNull(FieldAdditionalImagesUrls))
 }
 
 // HasArtifacts applies the HasEdge predicate on the "artifacts" edge.

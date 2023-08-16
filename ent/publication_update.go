@@ -156,6 +156,26 @@ func (pu *PublicationUpdate) ClearExternalLink() *PublicationUpdate {
 	return pu
 }
 
+// SetSlug sets the "slug" field.
+func (pu *PublicationUpdate) SetSlug(s string) *PublicationUpdate {
+	pu.mutation.SetSlug(s)
+	return pu
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (pu *PublicationUpdate) SetNillableSlug(s *string) *PublicationUpdate {
+	if s != nil {
+		pu.SetSlug(*s)
+	}
+	return pu
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (pu *PublicationUpdate) ClearSlug() *PublicationUpdate {
+	pu.mutation.ClearSlug()
+	return pu
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (pu *PublicationUpdate) AddArtifactIDs(ids ...int) *PublicationUpdate {
 	pu.mutation.AddArtifactIDs(ids...)
@@ -322,6 +342,12 @@ func (pu *PublicationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(publication.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := pu.mutation.Slug(); ok {
+		_spec.SetField(publication.FieldSlug, field.TypeString, value)
+	}
+	if pu.mutation.SlugCleared() {
+		_spec.ClearField(publication.FieldSlug, field.TypeString)
 	}
 	if pu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -559,6 +585,26 @@ func (puo *PublicationUpdateOne) ClearExternalLink() *PublicationUpdateOne {
 	return puo
 }
 
+// SetSlug sets the "slug" field.
+func (puo *PublicationUpdateOne) SetSlug(s string) *PublicationUpdateOne {
+	puo.mutation.SetSlug(s)
+	return puo
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (puo *PublicationUpdateOne) SetNillableSlug(s *string) *PublicationUpdateOne {
+	if s != nil {
+		puo.SetSlug(*s)
+	}
+	return puo
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (puo *PublicationUpdateOne) ClearSlug() *PublicationUpdateOne {
+	puo.mutation.ClearSlug()
+	return puo
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (puo *PublicationUpdateOne) AddArtifactIDs(ids ...int) *PublicationUpdateOne {
 	puo.mutation.AddArtifactIDs(ids...)
@@ -755,6 +801,12 @@ func (puo *PublicationUpdateOne) sqlSave(ctx context.Context) (_node *Publicatio
 	}
 	if puo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(publication.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := puo.mutation.Slug(); ok {
+		_spec.SetField(publication.FieldSlug, field.TypeString, value)
+	}
+	if puo.mutation.SlugCleared() {
+		_spec.ClearField(publication.FieldSlug, field.TypeString)
 	}
 	if puo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

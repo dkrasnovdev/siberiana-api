@@ -33,6 +33,8 @@ type ProjectType struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
+	// Slug holds the value of the "slug" field.
+	Slug string `json:"slug,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProjectTypeQuery when eager-loading is set.
 	Edges        ProjectTypeEdges `json:"edges"`
@@ -68,7 +70,7 @@ func (*ProjectType) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case projecttype.FieldID:
 			values[i] = new(sql.NullInt64)
-		case projecttype.FieldCreatedBy, projecttype.FieldUpdatedBy, projecttype.FieldDisplayName, projecttype.FieldAbbreviation, projecttype.FieldDescription, projecttype.FieldExternalLink:
+		case projecttype.FieldCreatedBy, projecttype.FieldUpdatedBy, projecttype.FieldDisplayName, projecttype.FieldAbbreviation, projecttype.FieldDescription, projecttype.FieldExternalLink, projecttype.FieldSlug:
 			values[i] = new(sql.NullString)
 		case projecttype.FieldCreatedAt, projecttype.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -141,6 +143,12 @@ func (pt *ProjectType) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pt.ExternalLink = value.String
 			}
+		case projecttype.FieldSlug:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field slug", values[i])
+			} else if value.Valid {
+				pt.Slug = value.String
+			}
 		default:
 			pt.selectValues.Set(columns[i], values[i])
 		}
@@ -205,6 +213,9 @@ func (pt *ProjectType) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(pt.ExternalLink)
+	builder.WriteString(", ")
+	builder.WriteString("slug=")
+	builder.WriteString(pt.Slug)
 	builder.WriteByte(')')
 	return builder.String()
 }

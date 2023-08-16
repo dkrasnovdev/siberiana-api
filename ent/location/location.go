@@ -31,6 +31,8 @@ const (
 	FieldDescription = "description"
 	// FieldExternalLink holds the string denoting the external_link field in the database.
 	FieldExternalLink = "external_link"
+	// FieldSlug holds the string denoting the slug field in the database.
+	FieldSlug = "slug"
 	// FieldGeometry holds the string denoting the geometry field in the database.
 	FieldGeometry = "geometry"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
@@ -111,6 +113,7 @@ var Columns = []string{
 	FieldAbbreviation,
 	FieldDescription,
 	FieldExternalLink,
+	FieldSlug,
 	FieldGeometry,
 }
 
@@ -186,6 +189,11 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByExternalLink orders the results by the external_link field.
 func ByExternalLink(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalLink, opts...).ToFunc()
+}
+
+// BySlug orders the results by the slug field.
+func BySlug(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSlug, opts...).ToFunc()
 }
 
 // ByGeometry orders the results by the geometry field.

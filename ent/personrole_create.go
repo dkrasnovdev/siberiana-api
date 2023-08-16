@@ -133,6 +133,20 @@ func (prc *PersonRoleCreate) SetNillableExternalLink(s *string) *PersonRoleCreat
 	return prc
 }
 
+// SetSlug sets the "slug" field.
+func (prc *PersonRoleCreate) SetSlug(s string) *PersonRoleCreate {
+	prc.mutation.SetSlug(s)
+	return prc
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (prc *PersonRoleCreate) SetNillableSlug(s *string) *PersonRoleCreate {
+	if s != nil {
+		prc.SetSlug(*s)
+	}
+	return prc
+}
+
 // AddPersonIDs adds the "person" edge to the Person entity by IDs.
 func (prc *PersonRoleCreate) AddPersonIDs(ids ...int) *PersonRoleCreate {
 	prc.mutation.AddPersonIDs(ids...)
@@ -267,6 +281,10 @@ func (prc *PersonRoleCreate) createSpec() (*PersonRole, *sqlgraph.CreateSpec) {
 	if value, ok := prc.mutation.ExternalLink(); ok {
 		_spec.SetField(personrole.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
+	}
+	if value, ok := prc.mutation.Slug(); ok {
+		_spec.SetField(personrole.FieldSlug, field.TypeString, value)
+		_node.Slug = value
 	}
 	if nodes := prc.mutation.PersonIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

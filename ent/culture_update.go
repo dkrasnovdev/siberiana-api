@@ -155,6 +155,26 @@ func (cu *CultureUpdate) ClearExternalLink() *CultureUpdate {
 	return cu
 }
 
+// SetSlug sets the "slug" field.
+func (cu *CultureUpdate) SetSlug(s string) *CultureUpdate {
+	cu.mutation.SetSlug(s)
+	return cu
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (cu *CultureUpdate) SetNillableSlug(s *string) *CultureUpdate {
+	if s != nil {
+		cu.SetSlug(*s)
+	}
+	return cu
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (cu *CultureUpdate) ClearSlug() *CultureUpdate {
+	cu.mutation.ClearSlug()
+	return cu
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (cu *CultureUpdate) AddArtifactIDs(ids ...int) *CultureUpdate {
 	cu.mutation.AddArtifactIDs(ids...)
@@ -285,6 +305,12 @@ func (cu *CultureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if cu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(culture.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := cu.mutation.Slug(); ok {
+		_spec.SetField(culture.FieldSlug, field.TypeString, value)
+	}
+	if cu.mutation.SlugCleared() {
+		_spec.ClearField(culture.FieldSlug, field.TypeString)
 	}
 	if cu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -477,6 +503,26 @@ func (cuo *CultureUpdateOne) ClearExternalLink() *CultureUpdateOne {
 	return cuo
 }
 
+// SetSlug sets the "slug" field.
+func (cuo *CultureUpdateOne) SetSlug(s string) *CultureUpdateOne {
+	cuo.mutation.SetSlug(s)
+	return cuo
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (cuo *CultureUpdateOne) SetNillableSlug(s *string) *CultureUpdateOne {
+	if s != nil {
+		cuo.SetSlug(*s)
+	}
+	return cuo
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (cuo *CultureUpdateOne) ClearSlug() *CultureUpdateOne {
+	cuo.mutation.ClearSlug()
+	return cuo
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (cuo *CultureUpdateOne) AddArtifactIDs(ids ...int) *CultureUpdateOne {
 	cuo.mutation.AddArtifactIDs(ids...)
@@ -637,6 +683,12 @@ func (cuo *CultureUpdateOne) sqlSave(ctx context.Context) (_node *Culture, err e
 	}
 	if cuo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(culture.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := cuo.mutation.Slug(); ok {
+		_spec.SetField(culture.FieldSlug, field.TypeString, value)
+	}
+	if cuo.mutation.SlugCleared() {
+		_spec.ClearField(culture.FieldSlug, field.TypeString)
 	}
 	if cuo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

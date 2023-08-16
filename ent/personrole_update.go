@@ -155,6 +155,26 @@ func (pru *PersonRoleUpdate) ClearExternalLink() *PersonRoleUpdate {
 	return pru
 }
 
+// SetSlug sets the "slug" field.
+func (pru *PersonRoleUpdate) SetSlug(s string) *PersonRoleUpdate {
+	pru.mutation.SetSlug(s)
+	return pru
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (pru *PersonRoleUpdate) SetNillableSlug(s *string) *PersonRoleUpdate {
+	if s != nil {
+		pru.SetSlug(*s)
+	}
+	return pru
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (pru *PersonRoleUpdate) ClearSlug() *PersonRoleUpdate {
+	pru.mutation.ClearSlug()
+	return pru
+}
+
 // AddPersonIDs adds the "person" edge to the Person entity by IDs.
 func (pru *PersonRoleUpdate) AddPersonIDs(ids ...int) *PersonRoleUpdate {
 	pru.mutation.AddPersonIDs(ids...)
@@ -285,6 +305,12 @@ func (pru *PersonRoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pru.mutation.ExternalLinkCleared() {
 		_spec.ClearField(personrole.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := pru.mutation.Slug(); ok {
+		_spec.SetField(personrole.FieldSlug, field.TypeString, value)
+	}
+	if pru.mutation.SlugCleared() {
+		_spec.ClearField(personrole.FieldSlug, field.TypeString)
 	}
 	if pru.mutation.PersonCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -477,6 +503,26 @@ func (pruo *PersonRoleUpdateOne) ClearExternalLink() *PersonRoleUpdateOne {
 	return pruo
 }
 
+// SetSlug sets the "slug" field.
+func (pruo *PersonRoleUpdateOne) SetSlug(s string) *PersonRoleUpdateOne {
+	pruo.mutation.SetSlug(s)
+	return pruo
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (pruo *PersonRoleUpdateOne) SetNillableSlug(s *string) *PersonRoleUpdateOne {
+	if s != nil {
+		pruo.SetSlug(*s)
+	}
+	return pruo
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (pruo *PersonRoleUpdateOne) ClearSlug() *PersonRoleUpdateOne {
+	pruo.mutation.ClearSlug()
+	return pruo
+}
+
 // AddPersonIDs adds the "person" edge to the Person entity by IDs.
 func (pruo *PersonRoleUpdateOne) AddPersonIDs(ids ...int) *PersonRoleUpdateOne {
 	pruo.mutation.AddPersonIDs(ids...)
@@ -637,6 +683,12 @@ func (pruo *PersonRoleUpdateOne) sqlSave(ctx context.Context) (_node *PersonRole
 	}
 	if pruo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(personrole.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := pruo.mutation.Slug(); ok {
+		_spec.SetField(personrole.FieldSlug, field.TypeString, value)
+	}
+	if pruo.mutation.SlugCleared() {
+		_spec.ClearField(personrole.FieldSlug, field.TypeString)
 	}
 	if pruo.mutation.PersonCleared() {
 		edge := &sqlgraph.EdgeSpec{

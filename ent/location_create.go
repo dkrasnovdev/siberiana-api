@@ -140,6 +140,20 @@ func (lc *LocationCreate) SetNillableExternalLink(s *string) *LocationCreate {
 	return lc
 }
 
+// SetSlug sets the "slug" field.
+func (lc *LocationCreate) SetSlug(s string) *LocationCreate {
+	lc.mutation.SetSlug(s)
+	return lc
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (lc *LocationCreate) SetNillableSlug(s *string) *LocationCreate {
+	if s != nil {
+		lc.SetSlug(*s)
+	}
+	return lc
+}
+
 // SetGeometry sets the "geometry" field.
 func (lc *LocationCreate) SetGeometry(t types.Geometry) *LocationCreate {
 	lc.mutation.SetGeometry(t)
@@ -394,6 +408,10 @@ func (lc *LocationCreate) createSpec() (*Location, *sqlgraph.CreateSpec) {
 	if value, ok := lc.mutation.ExternalLink(); ok {
 		_spec.SetField(location.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
+	}
+	if value, ok := lc.mutation.Slug(); ok {
+		_spec.SetField(location.FieldSlug, field.TypeString, value)
+		_node.Slug = value
 	}
 	if value, ok := lc.mutation.Geometry(); ok {
 		_spec.SetField(location.FieldGeometry, field.TypeOther, value)

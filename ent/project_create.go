@@ -135,6 +135,20 @@ func (pc *ProjectCreate) SetNillableExternalLink(s *string) *ProjectCreate {
 	return pc
 }
 
+// SetSlug sets the "slug" field.
+func (pc *ProjectCreate) SetSlug(s string) *ProjectCreate {
+	pc.mutation.SetSlug(s)
+	return pc
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableSlug(s *string) *ProjectCreate {
+	if s != nil {
+		pc.SetSlug(*s)
+	}
+	return pc
+}
+
 // SetBeginData sets the "begin_data" field.
 func (pc *ProjectCreate) SetBeginData(t time.Time) *ProjectCreate {
 	pc.mutation.SetBeginData(t)
@@ -331,6 +345,10 @@ func (pc *ProjectCreate) createSpec() (*Project, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.ExternalLink(); ok {
 		_spec.SetField(project.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
+	}
+	if value, ok := pc.mutation.Slug(); ok {
+		_spec.SetField(project.FieldSlug, field.TypeString, value)
+		_node.Slug = value
 	}
 	if value, ok := pc.mutation.BeginData(); ok {
 		_spec.SetField(project.FieldBeginData, field.TypeTime, value)

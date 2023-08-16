@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
@@ -156,6 +157,64 @@ func (cu *CollectionUpdate) SetNillableExternalLink(s *string) *CollectionUpdate
 // ClearExternalLink clears the value of the "external_link" field.
 func (cu *CollectionUpdate) ClearExternalLink() *CollectionUpdate {
 	cu.mutation.ClearExternalLink()
+	return cu
+}
+
+// SetSlug sets the "slug" field.
+func (cu *CollectionUpdate) SetSlug(s string) *CollectionUpdate {
+	cu.mutation.SetSlug(s)
+	return cu
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (cu *CollectionUpdate) SetNillableSlug(s *string) *CollectionUpdate {
+	if s != nil {
+		cu.SetSlug(*s)
+	}
+	return cu
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (cu *CollectionUpdate) ClearSlug() *CollectionUpdate {
+	cu.mutation.ClearSlug()
+	return cu
+}
+
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (cu *CollectionUpdate) SetPrimaryImageURL(s string) *CollectionUpdate {
+	cu.mutation.SetPrimaryImageURL(s)
+	return cu
+}
+
+// SetNillablePrimaryImageURL sets the "primary_image_url" field if the given value is not nil.
+func (cu *CollectionUpdate) SetNillablePrimaryImageURL(s *string) *CollectionUpdate {
+	if s != nil {
+		cu.SetPrimaryImageURL(*s)
+	}
+	return cu
+}
+
+// ClearPrimaryImageURL clears the value of the "primary_image_url" field.
+func (cu *CollectionUpdate) ClearPrimaryImageURL() *CollectionUpdate {
+	cu.mutation.ClearPrimaryImageURL()
+	return cu
+}
+
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (cu *CollectionUpdate) SetAdditionalImagesUrls(s []string) *CollectionUpdate {
+	cu.mutation.SetAdditionalImagesUrls(s)
+	return cu
+}
+
+// AppendAdditionalImagesUrls appends s to the "additional_images_urls" field.
+func (cu *CollectionUpdate) AppendAdditionalImagesUrls(s []string) *CollectionUpdate {
+	cu.mutation.AppendAdditionalImagesUrls(s)
+	return cu
+}
+
+// ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
+func (cu *CollectionUpdate) ClearAdditionalImagesUrls() *CollectionUpdate {
+	cu.mutation.ClearAdditionalImagesUrls()
 	return cu
 }
 
@@ -422,6 +481,29 @@ func (cu *CollectionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if cu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(collection.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := cu.mutation.Slug(); ok {
+		_spec.SetField(collection.FieldSlug, field.TypeString, value)
+	}
+	if cu.mutation.SlugCleared() {
+		_spec.ClearField(collection.FieldSlug, field.TypeString)
+	}
+	if value, ok := cu.mutation.PrimaryImageURL(); ok {
+		_spec.SetField(collection.FieldPrimaryImageURL, field.TypeString, value)
+	}
+	if cu.mutation.PrimaryImageURLCleared() {
+		_spec.ClearField(collection.FieldPrimaryImageURL, field.TypeString)
+	}
+	if value, ok := cu.mutation.AdditionalImagesUrls(); ok {
+		_spec.SetField(collection.FieldAdditionalImagesUrls, field.TypeJSON, value)
+	}
+	if value, ok := cu.mutation.AppendedAdditionalImagesUrls(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, collection.FieldAdditionalImagesUrls, value)
+		})
+	}
+	if cu.mutation.AdditionalImagesUrlsCleared() {
+		_spec.ClearField(collection.FieldAdditionalImagesUrls, field.TypeJSON)
 	}
 	if cu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -778,6 +860,64 @@ func (cuo *CollectionUpdateOne) ClearExternalLink() *CollectionUpdateOne {
 	return cuo
 }
 
+// SetSlug sets the "slug" field.
+func (cuo *CollectionUpdateOne) SetSlug(s string) *CollectionUpdateOne {
+	cuo.mutation.SetSlug(s)
+	return cuo
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (cuo *CollectionUpdateOne) SetNillableSlug(s *string) *CollectionUpdateOne {
+	if s != nil {
+		cuo.SetSlug(*s)
+	}
+	return cuo
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (cuo *CollectionUpdateOne) ClearSlug() *CollectionUpdateOne {
+	cuo.mutation.ClearSlug()
+	return cuo
+}
+
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (cuo *CollectionUpdateOne) SetPrimaryImageURL(s string) *CollectionUpdateOne {
+	cuo.mutation.SetPrimaryImageURL(s)
+	return cuo
+}
+
+// SetNillablePrimaryImageURL sets the "primary_image_url" field if the given value is not nil.
+func (cuo *CollectionUpdateOne) SetNillablePrimaryImageURL(s *string) *CollectionUpdateOne {
+	if s != nil {
+		cuo.SetPrimaryImageURL(*s)
+	}
+	return cuo
+}
+
+// ClearPrimaryImageURL clears the value of the "primary_image_url" field.
+func (cuo *CollectionUpdateOne) ClearPrimaryImageURL() *CollectionUpdateOne {
+	cuo.mutation.ClearPrimaryImageURL()
+	return cuo
+}
+
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (cuo *CollectionUpdateOne) SetAdditionalImagesUrls(s []string) *CollectionUpdateOne {
+	cuo.mutation.SetAdditionalImagesUrls(s)
+	return cuo
+}
+
+// AppendAdditionalImagesUrls appends s to the "additional_images_urls" field.
+func (cuo *CollectionUpdateOne) AppendAdditionalImagesUrls(s []string) *CollectionUpdateOne {
+	cuo.mutation.AppendAdditionalImagesUrls(s)
+	return cuo
+}
+
+// ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
+func (cuo *CollectionUpdateOne) ClearAdditionalImagesUrls() *CollectionUpdateOne {
+	cuo.mutation.ClearAdditionalImagesUrls()
+	return cuo
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (cuo *CollectionUpdateOne) AddArtifactIDs(ids ...int) *CollectionUpdateOne {
 	cuo.mutation.AddArtifactIDs(ids...)
@@ -1071,6 +1211,29 @@ func (cuo *CollectionUpdateOne) sqlSave(ctx context.Context) (_node *Collection,
 	}
 	if cuo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(collection.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := cuo.mutation.Slug(); ok {
+		_spec.SetField(collection.FieldSlug, field.TypeString, value)
+	}
+	if cuo.mutation.SlugCleared() {
+		_spec.ClearField(collection.FieldSlug, field.TypeString)
+	}
+	if value, ok := cuo.mutation.PrimaryImageURL(); ok {
+		_spec.SetField(collection.FieldPrimaryImageURL, field.TypeString, value)
+	}
+	if cuo.mutation.PrimaryImageURLCleared() {
+		_spec.ClearField(collection.FieldPrimaryImageURL, field.TypeString)
+	}
+	if value, ok := cuo.mutation.AdditionalImagesUrls(); ok {
+		_spec.SetField(collection.FieldAdditionalImagesUrls, field.TypeJSON, value)
+	}
+	if value, ok := cuo.mutation.AppendedAdditionalImagesUrls(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, collection.FieldAdditionalImagesUrls, value)
+		})
+	}
+	if cuo.mutation.AdditionalImagesUrlsCleared() {
+		_spec.ClearField(collection.FieldAdditionalImagesUrls, field.TypeJSON)
 	}
 	if cuo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -156,6 +156,26 @@ func (pau *ProtectedAreaUpdate) ClearExternalLink() *ProtectedAreaUpdate {
 	return pau
 }
 
+// SetSlug sets the "slug" field.
+func (pau *ProtectedAreaUpdate) SetSlug(s string) *ProtectedAreaUpdate {
+	pau.mutation.SetSlug(s)
+	return pau
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (pau *ProtectedAreaUpdate) SetNillableSlug(s *string) *ProtectedAreaUpdate {
+	if s != nil {
+		pau.SetSlug(*s)
+	}
+	return pau
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (pau *ProtectedAreaUpdate) ClearSlug() *ProtectedAreaUpdate {
+	pau.mutation.ClearSlug()
+	return pau
+}
+
 // SetArea sets the "area" field.
 func (pau *ProtectedAreaUpdate) SetArea(s string) *ProtectedAreaUpdate {
 	pau.mutation.SetArea(s)
@@ -351,6 +371,12 @@ func (pau *ProtectedAreaUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	if pau.mutation.ExternalLinkCleared() {
 		_spec.ClearField(protectedarea.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := pau.mutation.Slug(); ok {
+		_spec.SetField(protectedarea.FieldSlug, field.TypeString, value)
+	}
+	if pau.mutation.SlugCleared() {
+		_spec.ClearField(protectedarea.FieldSlug, field.TypeString)
 	}
 	if value, ok := pau.mutation.Area(); ok {
 		_spec.SetField(protectedarea.FieldArea, field.TypeString, value)
@@ -584,6 +610,26 @@ func (pauo *ProtectedAreaUpdateOne) ClearExternalLink() *ProtectedAreaUpdateOne 
 	return pauo
 }
 
+// SetSlug sets the "slug" field.
+func (pauo *ProtectedAreaUpdateOne) SetSlug(s string) *ProtectedAreaUpdateOne {
+	pauo.mutation.SetSlug(s)
+	return pauo
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (pauo *ProtectedAreaUpdateOne) SetNillableSlug(s *string) *ProtectedAreaUpdateOne {
+	if s != nil {
+		pauo.SetSlug(*s)
+	}
+	return pauo
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (pauo *ProtectedAreaUpdateOne) ClearSlug() *ProtectedAreaUpdateOne {
+	pauo.mutation.ClearSlug()
+	return pauo
+}
+
 // SetArea sets the "area" field.
 func (pauo *ProtectedAreaUpdateOne) SetArea(s string) *ProtectedAreaUpdateOne {
 	pauo.mutation.SetArea(s)
@@ -809,6 +855,12 @@ func (pauo *ProtectedAreaUpdateOne) sqlSave(ctx context.Context) (_node *Protect
 	}
 	if pauo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(protectedarea.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := pauo.mutation.Slug(); ok {
+		_spec.SetField(protectedarea.FieldSlug, field.TypeString, value)
+	}
+	if pauo.mutation.SlugCleared() {
+		_spec.ClearField(protectedarea.FieldSlug, field.TypeString)
 	}
 	if value, ok := pauo.mutation.Area(); ok {
 		_spec.SetField(protectedarea.FieldArea, field.TypeString, value)

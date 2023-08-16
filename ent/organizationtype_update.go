@@ -155,6 +155,26 @@ func (otu *OrganizationTypeUpdate) ClearExternalLink() *OrganizationTypeUpdate {
 	return otu
 }
 
+// SetSlug sets the "slug" field.
+func (otu *OrganizationTypeUpdate) SetSlug(s string) *OrganizationTypeUpdate {
+	otu.mutation.SetSlug(s)
+	return otu
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (otu *OrganizationTypeUpdate) SetNillableSlug(s *string) *OrganizationTypeUpdate {
+	if s != nil {
+		otu.SetSlug(*s)
+	}
+	return otu
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (otu *OrganizationTypeUpdate) ClearSlug() *OrganizationTypeUpdate {
+	otu.mutation.ClearSlug()
+	return otu
+}
+
 // AddOrganizationIDs adds the "organizations" edge to the Organization entity by IDs.
 func (otu *OrganizationTypeUpdate) AddOrganizationIDs(ids ...int) *OrganizationTypeUpdate {
 	otu.mutation.AddOrganizationIDs(ids...)
@@ -285,6 +305,12 @@ func (otu *OrganizationTypeUpdate) sqlSave(ctx context.Context) (n int, err erro
 	}
 	if otu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(organizationtype.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := otu.mutation.Slug(); ok {
+		_spec.SetField(organizationtype.FieldSlug, field.TypeString, value)
+	}
+	if otu.mutation.SlugCleared() {
+		_spec.ClearField(organizationtype.FieldSlug, field.TypeString)
 	}
 	if otu.mutation.OrganizationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -477,6 +503,26 @@ func (otuo *OrganizationTypeUpdateOne) ClearExternalLink() *OrganizationTypeUpda
 	return otuo
 }
 
+// SetSlug sets the "slug" field.
+func (otuo *OrganizationTypeUpdateOne) SetSlug(s string) *OrganizationTypeUpdateOne {
+	otuo.mutation.SetSlug(s)
+	return otuo
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (otuo *OrganizationTypeUpdateOne) SetNillableSlug(s *string) *OrganizationTypeUpdateOne {
+	if s != nil {
+		otuo.SetSlug(*s)
+	}
+	return otuo
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (otuo *OrganizationTypeUpdateOne) ClearSlug() *OrganizationTypeUpdateOne {
+	otuo.mutation.ClearSlug()
+	return otuo
+}
+
 // AddOrganizationIDs adds the "organizations" edge to the Organization entity by IDs.
 func (otuo *OrganizationTypeUpdateOne) AddOrganizationIDs(ids ...int) *OrganizationTypeUpdateOne {
 	otuo.mutation.AddOrganizationIDs(ids...)
@@ -637,6 +683,12 @@ func (otuo *OrganizationTypeUpdateOne) sqlSave(ctx context.Context) (_node *Orga
 	}
 	if otuo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(organizationtype.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := otuo.mutation.Slug(); ok {
+		_spec.SetField(organizationtype.FieldSlug, field.TypeString, value)
+	}
+	if otuo.mutation.SlugCleared() {
+		_spec.ClearField(organizationtype.FieldSlug, field.TypeString)
 	}
 	if otuo.mutation.OrganizationsCleared() {
 		edge := &sqlgraph.EdgeSpec{

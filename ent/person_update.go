@@ -219,6 +219,26 @@ func (pu *PersonUpdate) ClearExternalLink() *PersonUpdate {
 	return pu
 }
 
+// SetSlug sets the "slug" field.
+func (pu *PersonUpdate) SetSlug(s string) *PersonUpdate {
+	pu.mutation.SetSlug(s)
+	return pu
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (pu *PersonUpdate) SetNillableSlug(s *string) *PersonUpdate {
+	if s != nil {
+		pu.SetSlug(*s)
+	}
+	return pu
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (pu *PersonUpdate) ClearSlug() *PersonUpdate {
+	pu.mutation.ClearSlug()
+	return pu
+}
+
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (pu *PersonUpdate) SetPrimaryImageURL(s string) *PersonUpdate {
 	pu.mutation.SetPrimaryImageURL(s)
@@ -753,6 +773,12 @@ func (pu *PersonUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(person.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := pu.mutation.Slug(); ok {
+		_spec.SetField(person.FieldSlug, field.TypeString, value)
+	}
+	if pu.mutation.SlugCleared() {
+		_spec.ClearField(person.FieldSlug, field.TypeString)
 	}
 	if value, ok := pu.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(person.FieldPrimaryImageURL, field.TypeString, value)
@@ -1315,6 +1341,26 @@ func (puo *PersonUpdateOne) SetNillableExternalLink(s *string) *PersonUpdateOne 
 // ClearExternalLink clears the value of the "external_link" field.
 func (puo *PersonUpdateOne) ClearExternalLink() *PersonUpdateOne {
 	puo.mutation.ClearExternalLink()
+	return puo
+}
+
+// SetSlug sets the "slug" field.
+func (puo *PersonUpdateOne) SetSlug(s string) *PersonUpdateOne {
+	puo.mutation.SetSlug(s)
+	return puo
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (puo *PersonUpdateOne) SetNillableSlug(s *string) *PersonUpdateOne {
+	if s != nil {
+		puo.SetSlug(*s)
+	}
+	return puo
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (puo *PersonUpdateOne) ClearSlug() *PersonUpdateOne {
+	puo.mutation.ClearSlug()
 	return puo
 }
 
@@ -1882,6 +1928,12 @@ func (puo *PersonUpdateOne) sqlSave(ctx context.Context) (_node *Person, err err
 	}
 	if puo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(person.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := puo.mutation.Slug(); ok {
+		_spec.SetField(person.FieldSlug, field.TypeString, value)
+	}
+	if puo.mutation.SlugCleared() {
+		_spec.ClearField(person.FieldSlug, field.TypeString)
 	}
 	if value, ok := puo.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(person.FieldPrimaryImageURL, field.TypeString, value)

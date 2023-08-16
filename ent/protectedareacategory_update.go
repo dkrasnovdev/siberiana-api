@@ -155,6 +155,26 @@ func (pacu *ProtectedAreaCategoryUpdate) ClearExternalLink() *ProtectedAreaCateg
 	return pacu
 }
 
+// SetSlug sets the "slug" field.
+func (pacu *ProtectedAreaCategoryUpdate) SetSlug(s string) *ProtectedAreaCategoryUpdate {
+	pacu.mutation.SetSlug(s)
+	return pacu
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (pacu *ProtectedAreaCategoryUpdate) SetNillableSlug(s *string) *ProtectedAreaCategoryUpdate {
+	if s != nil {
+		pacu.SetSlug(*s)
+	}
+	return pacu
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (pacu *ProtectedAreaCategoryUpdate) ClearSlug() *ProtectedAreaCategoryUpdate {
+	pacu.mutation.ClearSlug()
+	return pacu
+}
+
 // AddProtectedAreaIDs adds the "protected_areas" edge to the ProtectedArea entity by IDs.
 func (pacu *ProtectedAreaCategoryUpdate) AddProtectedAreaIDs(ids ...int) *ProtectedAreaCategoryUpdate {
 	pacu.mutation.AddProtectedAreaIDs(ids...)
@@ -285,6 +305,12 @@ func (pacu *ProtectedAreaCategoryUpdate) sqlSave(ctx context.Context) (n int, er
 	}
 	if pacu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(protectedareacategory.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := pacu.mutation.Slug(); ok {
+		_spec.SetField(protectedareacategory.FieldSlug, field.TypeString, value)
+	}
+	if pacu.mutation.SlugCleared() {
+		_spec.ClearField(protectedareacategory.FieldSlug, field.TypeString)
 	}
 	if pacu.mutation.ProtectedAreasCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -477,6 +503,26 @@ func (pacuo *ProtectedAreaCategoryUpdateOne) ClearExternalLink() *ProtectedAreaC
 	return pacuo
 }
 
+// SetSlug sets the "slug" field.
+func (pacuo *ProtectedAreaCategoryUpdateOne) SetSlug(s string) *ProtectedAreaCategoryUpdateOne {
+	pacuo.mutation.SetSlug(s)
+	return pacuo
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (pacuo *ProtectedAreaCategoryUpdateOne) SetNillableSlug(s *string) *ProtectedAreaCategoryUpdateOne {
+	if s != nil {
+		pacuo.SetSlug(*s)
+	}
+	return pacuo
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (pacuo *ProtectedAreaCategoryUpdateOne) ClearSlug() *ProtectedAreaCategoryUpdateOne {
+	pacuo.mutation.ClearSlug()
+	return pacuo
+}
+
 // AddProtectedAreaIDs adds the "protected_areas" edge to the ProtectedArea entity by IDs.
 func (pacuo *ProtectedAreaCategoryUpdateOne) AddProtectedAreaIDs(ids ...int) *ProtectedAreaCategoryUpdateOne {
 	pacuo.mutation.AddProtectedAreaIDs(ids...)
@@ -637,6 +683,12 @@ func (pacuo *ProtectedAreaCategoryUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if pacuo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(protectedareacategory.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := pacuo.mutation.Slug(); ok {
+		_spec.SetField(protectedareacategory.FieldSlug, field.TypeString, value)
+	}
+	if pacuo.mutation.SlugCleared() {
+		_spec.ClearField(protectedareacategory.FieldSlug, field.TypeString)
 	}
 	if pacuo.mutation.ProtectedAreasCleared() {
 		edge := &sqlgraph.EdgeSpec{

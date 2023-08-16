@@ -33,6 +33,8 @@ type Set struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
+	// Slug holds the value of the "slug" field.
+	Slug string `json:"slug,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SetQuery when eager-loading is set.
 	Edges        SetEdges `json:"edges"`
@@ -80,7 +82,7 @@ func (*Set) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case set.FieldID:
 			values[i] = new(sql.NullInt64)
-		case set.FieldCreatedBy, set.FieldUpdatedBy, set.FieldDisplayName, set.FieldAbbreviation, set.FieldDescription, set.FieldExternalLink:
+		case set.FieldCreatedBy, set.FieldUpdatedBy, set.FieldDisplayName, set.FieldAbbreviation, set.FieldDescription, set.FieldExternalLink, set.FieldSlug:
 			values[i] = new(sql.NullString)
 		case set.FieldCreatedAt, set.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -153,6 +155,12 @@ func (s *Set) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.ExternalLink = value.String
 			}
+		case set.FieldSlug:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field slug", values[i])
+			} else if value.Valid {
+				s.Slug = value.String
+			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
 		}
@@ -222,6 +230,9 @@ func (s *Set) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(s.ExternalLink)
+	builder.WriteString(", ")
+	builder.WriteString("slug=")
+	builder.WriteString(s.Slug)
 	builder.WriteByte(')')
 	return builder.String()
 }

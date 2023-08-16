@@ -155,6 +155,26 @@ func (agu *ArtGenreUpdate) ClearExternalLink() *ArtGenreUpdate {
 	return agu
 }
 
+// SetSlug sets the "slug" field.
+func (agu *ArtGenreUpdate) SetSlug(s string) *ArtGenreUpdate {
+	agu.mutation.SetSlug(s)
+	return agu
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (agu *ArtGenreUpdate) SetNillableSlug(s *string) *ArtGenreUpdate {
+	if s != nil {
+		agu.SetSlug(*s)
+	}
+	return agu
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (agu *ArtGenreUpdate) ClearSlug() *ArtGenreUpdate {
+	agu.mutation.ClearSlug()
+	return agu
+}
+
 // AddArtIDs adds the "art" edge to the Art entity by IDs.
 func (agu *ArtGenreUpdate) AddArtIDs(ids ...int) *ArtGenreUpdate {
 	agu.mutation.AddArtIDs(ids...)
@@ -285,6 +305,12 @@ func (agu *ArtGenreUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if agu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(artgenre.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := agu.mutation.Slug(); ok {
+		_spec.SetField(artgenre.FieldSlug, field.TypeString, value)
+	}
+	if agu.mutation.SlugCleared() {
+		_spec.ClearField(artgenre.FieldSlug, field.TypeString)
 	}
 	if agu.mutation.ArtCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -477,6 +503,26 @@ func (aguo *ArtGenreUpdateOne) ClearExternalLink() *ArtGenreUpdateOne {
 	return aguo
 }
 
+// SetSlug sets the "slug" field.
+func (aguo *ArtGenreUpdateOne) SetSlug(s string) *ArtGenreUpdateOne {
+	aguo.mutation.SetSlug(s)
+	return aguo
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (aguo *ArtGenreUpdateOne) SetNillableSlug(s *string) *ArtGenreUpdateOne {
+	if s != nil {
+		aguo.SetSlug(*s)
+	}
+	return aguo
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (aguo *ArtGenreUpdateOne) ClearSlug() *ArtGenreUpdateOne {
+	aguo.mutation.ClearSlug()
+	return aguo
+}
+
 // AddArtIDs adds the "art" edge to the Art entity by IDs.
 func (aguo *ArtGenreUpdateOne) AddArtIDs(ids ...int) *ArtGenreUpdateOne {
 	aguo.mutation.AddArtIDs(ids...)
@@ -637,6 +683,12 @@ func (aguo *ArtGenreUpdateOne) sqlSave(ctx context.Context) (_node *ArtGenre, er
 	}
 	if aguo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(artgenre.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := aguo.mutation.Slug(); ok {
+		_spec.SetField(artgenre.FieldSlug, field.TypeString, value)
+	}
+	if aguo.mutation.SlugCleared() {
+		_spec.ClearField(artgenre.FieldSlug, field.TypeString)
 	}
 	if aguo.mutation.ArtCleared() {
 		edge := &sqlgraph.EdgeSpec{

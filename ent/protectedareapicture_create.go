@@ -137,6 +137,20 @@ func (papc *ProtectedAreaPictureCreate) SetNillableExternalLink(s *string) *Prot
 	return papc
 }
 
+// SetSlug sets the "slug" field.
+func (papc *ProtectedAreaPictureCreate) SetSlug(s string) *ProtectedAreaPictureCreate {
+	papc.mutation.SetSlug(s)
+	return papc
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (papc *ProtectedAreaPictureCreate) SetNillableSlug(s *string) *ProtectedAreaPictureCreate {
+	if s != nil {
+		papc.SetSlug(*s)
+	}
+	return papc
+}
+
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (papc *ProtectedAreaPictureCreate) SetPrimaryImageURL(s string) *ProtectedAreaPictureCreate {
 	papc.mutation.SetPrimaryImageURL(s)
@@ -380,6 +394,10 @@ func (papc *ProtectedAreaPictureCreate) createSpec() (*ProtectedAreaPicture, *sq
 	if value, ok := papc.mutation.ExternalLink(); ok {
 		_spec.SetField(protectedareapicture.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
+	}
+	if value, ok := papc.mutation.Slug(); ok {
+		_spec.SetField(protectedareapicture.FieldSlug, field.TypeString, value)
+		_node.Slug = value
 	}
 	if value, ok := papc.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(protectedareapicture.FieldPrimaryImageURL, field.TypeString, value)

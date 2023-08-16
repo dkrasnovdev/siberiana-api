@@ -169,6 +169,26 @@ func (au *ArtifactUpdate) ClearExternalLink() *ArtifactUpdate {
 	return au
 }
 
+// SetSlug sets the "slug" field.
+func (au *ArtifactUpdate) SetSlug(s string) *ArtifactUpdate {
+	au.mutation.SetSlug(s)
+	return au
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableSlug(s *string) *ArtifactUpdate {
+	if s != nil {
+		au.SetSlug(*s)
+	}
+	return au
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (au *ArtifactUpdate) ClearSlug() *ArtifactUpdate {
+	au.mutation.ClearSlug()
+	return au
+}
+
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (au *ArtifactUpdate) SetPrimaryImageURL(s string) *ArtifactUpdate {
 	au.mutation.SetPrimaryImageURL(s)
@@ -898,6 +918,12 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if au.mutation.ExternalLinkCleared() {
 		_spec.ClearField(artifact.FieldExternalLink, field.TypeString)
 	}
+	if value, ok := au.mutation.Slug(); ok {
+		_spec.SetField(artifact.FieldSlug, field.TypeString, value)
+	}
+	if au.mutation.SlugCleared() {
+		_spec.ClearField(artifact.FieldSlug, field.TypeString)
+	}
 	if value, ok := au.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(artifact.FieldPrimaryImageURL, field.TypeString, value)
 	}
@@ -1614,6 +1640,26 @@ func (auo *ArtifactUpdateOne) SetNillableExternalLink(s *string) *ArtifactUpdate
 // ClearExternalLink clears the value of the "external_link" field.
 func (auo *ArtifactUpdateOne) ClearExternalLink() *ArtifactUpdateOne {
 	auo.mutation.ClearExternalLink()
+	return auo
+}
+
+// SetSlug sets the "slug" field.
+func (auo *ArtifactUpdateOne) SetSlug(s string) *ArtifactUpdateOne {
+	auo.mutation.SetSlug(s)
+	return auo
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableSlug(s *string) *ArtifactUpdateOne {
+	if s != nil {
+		auo.SetSlug(*s)
+	}
+	return auo
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (auo *ArtifactUpdateOne) ClearSlug() *ArtifactUpdateOne {
+	auo.mutation.ClearSlug()
 	return auo
 }
 
@@ -2375,6 +2421,12 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 	}
 	if auo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(artifact.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := auo.mutation.Slug(); ok {
+		_spec.SetField(artifact.FieldSlug, field.TypeString, value)
+	}
+	if auo.mutation.SlugCleared() {
+		_spec.ClearField(artifact.FieldSlug, field.TypeString)
 	}
 	if value, ok := auo.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(artifact.FieldPrimaryImageURL, field.TypeString, value)

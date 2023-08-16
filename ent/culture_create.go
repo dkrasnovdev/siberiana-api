@@ -133,6 +133,20 @@ func (cc *CultureCreate) SetNillableExternalLink(s *string) *CultureCreate {
 	return cc
 }
 
+// SetSlug sets the "slug" field.
+func (cc *CultureCreate) SetSlug(s string) *CultureCreate {
+	cc.mutation.SetSlug(s)
+	return cc
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (cc *CultureCreate) SetNillableSlug(s *string) *CultureCreate {
+	if s != nil {
+		cc.SetSlug(*s)
+	}
+	return cc
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (cc *CultureCreate) AddArtifactIDs(ids ...int) *CultureCreate {
 	cc.mutation.AddArtifactIDs(ids...)
@@ -267,6 +281,10 @@ func (cc *CultureCreate) createSpec() (*Culture, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.ExternalLink(); ok {
 		_spec.SetField(culture.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
+	}
+	if value, ok := cc.mutation.Slug(); ok {
+		_spec.SetField(culture.FieldSlug, field.TypeString, value)
+		_node.Slug = value
 	}
 	if nodes := cc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

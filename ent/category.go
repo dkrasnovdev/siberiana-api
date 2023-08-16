@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -33,6 +34,12 @@ type Category struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
+	// Slug holds the value of the "slug" field.
+	Slug string `json:"slug,omitempty"`
+	// PrimaryImageURL holds the value of the "primary_image_url" field.
+	PrimaryImageURL string `json:"primary_image_url,omitempty"`
+	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
+	AdditionalImagesUrls []string `json:"additional_images_urls,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CategoryQuery when eager-loading is set.
 	Edges        CategoryEdges `json:"edges"`
@@ -66,9 +73,11 @@ func (*Category) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case category.FieldAdditionalImagesUrls:
+			values[i] = new([]byte)
 		case category.FieldID:
 			values[i] = new(sql.NullInt64)
-		case category.FieldCreatedBy, category.FieldUpdatedBy, category.FieldDisplayName, category.FieldAbbreviation, category.FieldDescription, category.FieldExternalLink:
+		case category.FieldCreatedBy, category.FieldUpdatedBy, category.FieldDisplayName, category.FieldAbbreviation, category.FieldDescription, category.FieldExternalLink, category.FieldSlug, category.FieldPrimaryImageURL:
 			values[i] = new(sql.NullString)
 		case category.FieldCreatedAt, category.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -141,6 +150,26 @@ func (c *Category) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.ExternalLink = value.String
 			}
+		case category.FieldSlug:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field slug", values[i])
+			} else if value.Valid {
+				c.Slug = value.String
+			}
+		case category.FieldPrimaryImageURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field primary_image_url", values[i])
+			} else if value.Valid {
+				c.PrimaryImageURL = value.String
+			}
+		case category.FieldAdditionalImagesUrls:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field additional_images_urls", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &c.AdditionalImagesUrls); err != nil {
+					return fmt.Errorf("unmarshal field additional_images_urls: %w", err)
+				}
+			}
 		default:
 			c.selectValues.Set(columns[i], values[i])
 		}
@@ -205,6 +234,15 @@ func (c *Category) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(c.ExternalLink)
+	builder.WriteString(", ")
+	builder.WriteString("slug=")
+	builder.WriteString(c.Slug)
+	builder.WriteString(", ")
+	builder.WriteString("primary_image_url=")
+	builder.WriteString(c.PrimaryImageURL)
+	builder.WriteString(", ")
+	builder.WriteString("additional_images_urls=")
+	builder.WriteString(fmt.Sprintf("%v", c.AdditionalImagesUrls))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -137,6 +137,40 @@ func (cc *CollectionCreate) SetNillableExternalLink(s *string) *CollectionCreate
 	return cc
 }
 
+// SetSlug sets the "slug" field.
+func (cc *CollectionCreate) SetSlug(s string) *CollectionCreate {
+	cc.mutation.SetSlug(s)
+	return cc
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (cc *CollectionCreate) SetNillableSlug(s *string) *CollectionCreate {
+	if s != nil {
+		cc.SetSlug(*s)
+	}
+	return cc
+}
+
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (cc *CollectionCreate) SetPrimaryImageURL(s string) *CollectionCreate {
+	cc.mutation.SetPrimaryImageURL(s)
+	return cc
+}
+
+// SetNillablePrimaryImageURL sets the "primary_image_url" field if the given value is not nil.
+func (cc *CollectionCreate) SetNillablePrimaryImageURL(s *string) *CollectionCreate {
+	if s != nil {
+		cc.SetPrimaryImageURL(*s)
+	}
+	return cc
+}
+
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (cc *CollectionCreate) SetAdditionalImagesUrls(s []string) *CollectionCreate {
+	cc.mutation.SetAdditionalImagesUrls(s)
+	return cc
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (cc *CollectionCreate) AddArtifactIDs(ids ...int) *CollectionCreate {
 	cc.mutation.AddArtifactIDs(ids...)
@@ -335,6 +369,18 @@ func (cc *CollectionCreate) createSpec() (*Collection, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.ExternalLink(); ok {
 		_spec.SetField(collection.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
+	}
+	if value, ok := cc.mutation.Slug(); ok {
+		_spec.SetField(collection.FieldSlug, field.TypeString, value)
+		_node.Slug = value
+	}
+	if value, ok := cc.mutation.PrimaryImageURL(); ok {
+		_spec.SetField(collection.FieldPrimaryImageURL, field.TypeString, value)
+		_node.PrimaryImageURL = value
+	}
+	if value, ok := cc.mutation.AdditionalImagesUrls(); ok {
+		_spec.SetField(collection.FieldAdditionalImagesUrls, field.TypeJSON, value)
+		_node.AdditionalImagesUrls = value
 	}
 	if nodes := cc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

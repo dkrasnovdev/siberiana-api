@@ -160,6 +160,26 @@ func (papu *ProtectedAreaPictureUpdate) ClearExternalLink() *ProtectedAreaPictur
 	return papu
 }
 
+// SetSlug sets the "slug" field.
+func (papu *ProtectedAreaPictureUpdate) SetSlug(s string) *ProtectedAreaPictureUpdate {
+	papu.mutation.SetSlug(s)
+	return papu
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (papu *ProtectedAreaPictureUpdate) SetNillableSlug(s *string) *ProtectedAreaPictureUpdate {
+	if s != nil {
+		papu.SetSlug(*s)
+	}
+	return papu
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (papu *ProtectedAreaPictureUpdate) ClearSlug() *ProtectedAreaPictureUpdate {
+	papu.mutation.ClearSlug()
+	return papu
+}
+
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (papu *ProtectedAreaPictureUpdate) SetPrimaryImageURL(s string) *ProtectedAreaPictureUpdate {
 	papu.mutation.SetPrimaryImageURL(s)
@@ -432,6 +452,12 @@ func (papu *ProtectedAreaPictureUpdate) sqlSave(ctx context.Context) (n int, err
 	}
 	if papu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(protectedareapicture.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := papu.mutation.Slug(); ok {
+		_spec.SetField(protectedareapicture.FieldSlug, field.TypeString, value)
+	}
+	if papu.mutation.SlugCleared() {
+		_spec.ClearField(protectedareapicture.FieldSlug, field.TypeString)
 	}
 	if value, ok := papu.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(protectedareapicture.FieldPrimaryImageURL, field.TypeString, value)
@@ -721,6 +747,26 @@ func (papuo *ProtectedAreaPictureUpdateOne) SetNillableExternalLink(s *string) *
 // ClearExternalLink clears the value of the "external_link" field.
 func (papuo *ProtectedAreaPictureUpdateOne) ClearExternalLink() *ProtectedAreaPictureUpdateOne {
 	papuo.mutation.ClearExternalLink()
+	return papuo
+}
+
+// SetSlug sets the "slug" field.
+func (papuo *ProtectedAreaPictureUpdateOne) SetSlug(s string) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.SetSlug(s)
+	return papuo
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (papuo *ProtectedAreaPictureUpdateOne) SetNillableSlug(s *string) *ProtectedAreaPictureUpdateOne {
+	if s != nil {
+		papuo.SetSlug(*s)
+	}
+	return papuo
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (papuo *ProtectedAreaPictureUpdateOne) ClearSlug() *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.ClearSlug()
 	return papuo
 }
 
@@ -1026,6 +1072,12 @@ func (papuo *ProtectedAreaPictureUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if papuo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(protectedareapicture.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := papuo.mutation.Slug(); ok {
+		_spec.SetField(protectedareapicture.FieldSlug, field.TypeString, value)
+	}
+	if papuo.mutation.SlugCleared() {
+		_spec.ClearField(protectedareapicture.FieldSlug, field.TypeString)
 	}
 	if value, ok := papuo.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(protectedareapicture.FieldPrimaryImageURL, field.TypeString, value)

@@ -111,6 +111,7 @@ type ArtMutation struct {
 	abbreviation                 *string
 	description                  *string
 	external_link                *string
+	slug                         *string
 	primary_image_url            *string
 	additional_images_urls       *[]string
 	appendadditional_images_urls []string
@@ -590,6 +591,55 @@ func (m *ArtMutation) ResetExternalLink() {
 	delete(m.clearedFields, art.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *ArtMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *ArtMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *ArtMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[art.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *ArtMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[art.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *ArtMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, art.FieldSlug)
+}
+
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (m *ArtMutation) SetPrimaryImageURL(s string) {
 	m.primary_image_url = &s
@@ -846,7 +896,7 @@ func (m *ArtMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArtMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 11)
 	if m.created_at != nil {
 		fields = append(fields, art.FieldCreatedAt)
 	}
@@ -870,6 +920,9 @@ func (m *ArtMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, art.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, art.FieldSlug)
 	}
 	if m.primary_image_url != nil {
 		fields = append(fields, art.FieldPrimaryImageURL)
@@ -901,6 +954,8 @@ func (m *ArtMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case art.FieldExternalLink:
 		return m.ExternalLink()
+	case art.FieldSlug:
+		return m.Slug()
 	case art.FieldPrimaryImageURL:
 		return m.PrimaryImageURL()
 	case art.FieldAdditionalImagesUrls:
@@ -930,6 +985,8 @@ func (m *ArtMutation) OldField(ctx context.Context, name string) (ent.Value, err
 		return m.OldDescription(ctx)
 	case art.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case art.FieldSlug:
+		return m.OldSlug(ctx)
 	case art.FieldPrimaryImageURL:
 		return m.OldPrimaryImageURL(ctx)
 	case art.FieldAdditionalImagesUrls:
@@ -999,6 +1056,13 @@ func (m *ArtMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case art.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	case art.FieldPrimaryImageURL:
 		v, ok := value.(string)
 		if !ok {
@@ -1061,6 +1125,9 @@ func (m *ArtMutation) ClearedFields() []string {
 	if m.FieldCleared(art.FieldExternalLink) {
 		fields = append(fields, art.FieldExternalLink)
 	}
+	if m.FieldCleared(art.FieldSlug) {
+		fields = append(fields, art.FieldSlug)
+	}
 	if m.FieldCleared(art.FieldPrimaryImageURL) {
 		fields = append(fields, art.FieldPrimaryImageURL)
 	}
@@ -1099,6 +1166,9 @@ func (m *ArtMutation) ClearField(name string) error {
 	case art.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case art.FieldSlug:
+		m.ClearSlug()
+		return nil
 	case art.FieldPrimaryImageURL:
 		m.ClearPrimaryImageURL()
 		return nil
@@ -1136,6 +1206,9 @@ func (m *ArtMutation) ResetField(name string) error {
 		return nil
 	case art.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case art.FieldSlug:
+		m.ResetSlug()
 		return nil
 	case art.FieldPrimaryImageURL:
 		m.ResetPrimaryImageURL()
@@ -1271,6 +1344,7 @@ type ArtGenreMutation struct {
 	abbreviation  *string
 	description   *string
 	external_link *string
+	slug          *string
 	clearedFields map[string]struct{}
 	art           map[int]struct{}
 	removedart    map[int]struct{}
@@ -1744,6 +1818,55 @@ func (m *ArtGenreMutation) ResetExternalLink() {
 	delete(m.clearedFields, artgenre.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *ArtGenreMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *ArtGenreMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the ArtGenre entity.
+// If the ArtGenre object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtGenreMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *ArtGenreMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[artgenre.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *ArtGenreMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[artgenre.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *ArtGenreMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, artgenre.FieldSlug)
+}
+
 // AddArtIDs adds the "art" edge to the Art entity by ids.
 func (m *ArtGenreMutation) AddArtIDs(ids ...int) {
 	if m.art == nil {
@@ -1832,7 +1955,7 @@ func (m *ArtGenreMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArtGenreMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, artgenre.FieldCreatedAt)
 	}
@@ -1856,6 +1979,9 @@ func (m *ArtGenreMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, artgenre.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, artgenre.FieldSlug)
 	}
 	return fields
 }
@@ -1881,6 +2007,8 @@ func (m *ArtGenreMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case artgenre.FieldExternalLink:
 		return m.ExternalLink()
+	case artgenre.FieldSlug:
+		return m.Slug()
 	}
 	return nil, false
 }
@@ -1906,6 +2034,8 @@ func (m *ArtGenreMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldDescription(ctx)
 	case artgenre.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case artgenre.FieldSlug:
+		return m.OldSlug(ctx)
 	}
 	return nil, fmt.Errorf("unknown ArtGenre field %s", name)
 }
@@ -1971,6 +2101,13 @@ func (m *ArtGenreMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case artgenre.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ArtGenre field %s", name)
 }
@@ -2019,6 +2156,9 @@ func (m *ArtGenreMutation) ClearedFields() []string {
 	if m.FieldCleared(artgenre.FieldExternalLink) {
 		fields = append(fields, artgenre.FieldExternalLink)
 	}
+	if m.FieldCleared(artgenre.FieldSlug) {
+		fields = append(fields, artgenre.FieldSlug)
+	}
 	return fields
 }
 
@@ -2051,6 +2191,9 @@ func (m *ArtGenreMutation) ClearField(name string) error {
 	case artgenre.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case artgenre.FieldSlug:
+		m.ClearSlug()
+		return nil
 	}
 	return fmt.Errorf("unknown ArtGenre nullable field %s", name)
 }
@@ -2082,6 +2225,9 @@ func (m *ArtGenreMutation) ResetField(name string) error {
 		return nil
 	case artgenre.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case artgenre.FieldSlug:
+		m.ResetSlug()
 		return nil
 	}
 	return fmt.Errorf("unknown ArtGenre field %s", name)
@@ -2185,6 +2331,7 @@ type ArtStyleMutation struct {
 	abbreviation  *string
 	description   *string
 	external_link *string
+	slug          *string
 	clearedFields map[string]struct{}
 	art           map[int]struct{}
 	removedart    map[int]struct{}
@@ -2658,6 +2805,55 @@ func (m *ArtStyleMutation) ResetExternalLink() {
 	delete(m.clearedFields, artstyle.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *ArtStyleMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *ArtStyleMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the ArtStyle entity.
+// If the ArtStyle object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtStyleMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *ArtStyleMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[artstyle.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *ArtStyleMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[artstyle.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *ArtStyleMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, artstyle.FieldSlug)
+}
+
 // AddArtIDs adds the "art" edge to the Art entity by ids.
 func (m *ArtStyleMutation) AddArtIDs(ids ...int) {
 	if m.art == nil {
@@ -2746,7 +2942,7 @@ func (m *ArtStyleMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArtStyleMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, artstyle.FieldCreatedAt)
 	}
@@ -2770,6 +2966,9 @@ func (m *ArtStyleMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, artstyle.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, artstyle.FieldSlug)
 	}
 	return fields
 }
@@ -2795,6 +2994,8 @@ func (m *ArtStyleMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case artstyle.FieldExternalLink:
 		return m.ExternalLink()
+	case artstyle.FieldSlug:
+		return m.Slug()
 	}
 	return nil, false
 }
@@ -2820,6 +3021,8 @@ func (m *ArtStyleMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldDescription(ctx)
 	case artstyle.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case artstyle.FieldSlug:
+		return m.OldSlug(ctx)
 	}
 	return nil, fmt.Errorf("unknown ArtStyle field %s", name)
 }
@@ -2885,6 +3088,13 @@ func (m *ArtStyleMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case artstyle.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ArtStyle field %s", name)
 }
@@ -2933,6 +3143,9 @@ func (m *ArtStyleMutation) ClearedFields() []string {
 	if m.FieldCleared(artstyle.FieldExternalLink) {
 		fields = append(fields, artstyle.FieldExternalLink)
 	}
+	if m.FieldCleared(artstyle.FieldSlug) {
+		fields = append(fields, artstyle.FieldSlug)
+	}
 	return fields
 }
 
@@ -2965,6 +3178,9 @@ func (m *ArtStyleMutation) ClearField(name string) error {
 	case artstyle.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case artstyle.FieldSlug:
+		m.ClearSlug()
+		return nil
 	}
 	return fmt.Errorf("unknown ArtStyle nullable field %s", name)
 }
@@ -2996,6 +3212,9 @@ func (m *ArtStyleMutation) ResetField(name string) error {
 		return nil
 	case artstyle.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case artstyle.FieldSlug:
+		m.ResetSlug()
 		return nil
 	}
 	return fmt.Errorf("unknown ArtStyle field %s", name)
@@ -3099,6 +3318,7 @@ type ArtifactMutation struct {
 	abbreviation                 *string
 	description                  *string
 	external_link                *string
+	slug                         *string
 	primary_image_url            *string
 	additional_images_urls       *[]string
 	appendadditional_images_urls []string
@@ -3613,6 +3833,55 @@ func (m *ArtifactMutation) ExternalLinkCleared() bool {
 func (m *ArtifactMutation) ResetExternalLink() {
 	m.external_link = nil
 	delete(m.clearedFields, artifact.FieldExternalLink)
+}
+
+// SetSlug sets the "slug" field.
+func (m *ArtifactMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *ArtifactMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the Artifact entity.
+// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtifactMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *ArtifactMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[artifact.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *ArtifactMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[artifact.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *ArtifactMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, artifact.FieldSlug)
 }
 
 // SetPrimaryImageURL sets the "primary_image_url" field.
@@ -4840,7 +5109,7 @@ func (m *ArtifactMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArtifactMutation) Fields() []string {
-	fields := make([]string, 0, 19)
+	fields := make([]string, 0, 20)
 	if m.created_at != nil {
 		fields = append(fields, artifact.FieldCreatedAt)
 	}
@@ -4864,6 +5133,9 @@ func (m *ArtifactMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, artifact.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, artifact.FieldSlug)
 	}
 	if m.primary_image_url != nil {
 		fields = append(fields, artifact.FieldPrimaryImageURL)
@@ -4922,6 +5194,8 @@ func (m *ArtifactMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case artifact.FieldExternalLink:
 		return m.ExternalLink()
+	case artifact.FieldSlug:
+		return m.Slug()
 	case artifact.FieldPrimaryImageURL:
 		return m.PrimaryImageURL()
 	case artifact.FieldAdditionalImagesUrls:
@@ -4969,6 +5243,8 @@ func (m *ArtifactMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldDescription(ctx)
 	case artifact.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case artifact.FieldSlug:
+		return m.OldSlug(ctx)
 	case artifact.FieldPrimaryImageURL:
 		return m.OldPrimaryImageURL(ctx)
 	case artifact.FieldAdditionalImagesUrls:
@@ -5055,6 +5331,13 @@ func (m *ArtifactMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetExternalLink(v)
+		return nil
+	case artifact.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
 		return nil
 	case artifact.FieldPrimaryImageURL:
 		v, ok := value.(string)
@@ -5181,6 +5464,9 @@ func (m *ArtifactMutation) ClearedFields() []string {
 	if m.FieldCleared(artifact.FieldExternalLink) {
 		fields = append(fields, artifact.FieldExternalLink)
 	}
+	if m.FieldCleared(artifact.FieldSlug) {
+		fields = append(fields, artifact.FieldSlug)
+	}
 	if m.FieldCleared(artifact.FieldPrimaryImageURL) {
 		fields = append(fields, artifact.FieldPrimaryImageURL)
 	}
@@ -5246,6 +5532,9 @@ func (m *ArtifactMutation) ClearField(name string) error {
 	case artifact.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case artifact.FieldSlug:
+		m.ClearSlug()
+		return nil
 	case artifact.FieldPrimaryImageURL:
 		m.ClearPrimaryImageURL()
 		return nil
@@ -5310,6 +5599,9 @@ func (m *ArtifactMutation) ResetField(name string) error {
 		return nil
 	case artifact.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case artifact.FieldSlug:
+		m.ResetSlug()
 		return nil
 	case artifact.FieldPrimaryImageURL:
 		m.ResetPrimaryImageURL()
@@ -6738,6 +7030,7 @@ type BookMutation struct {
 	abbreviation                 *string
 	description                  *string
 	external_link                *string
+	slug                         *string
 	primary_image_url            *string
 	additional_images_urls       *[]string
 	appendadditional_images_urls []string
@@ -7230,6 +7523,55 @@ func (m *BookMutation) ExternalLinkCleared() bool {
 func (m *BookMutation) ResetExternalLink() {
 	m.external_link = nil
 	delete(m.clearedFields, book.FieldExternalLink)
+}
+
+// SetSlug sets the "slug" field.
+func (m *BookMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *BookMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the Book entity.
+// If the Book object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BookMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *BookMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[book.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *BookMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[book.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *BookMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, book.FieldSlug)
 }
 
 // SetPrimaryImageURL sets the "primary_image_url" field.
@@ -7833,7 +8175,7 @@ func (m *BookMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *BookMutation) Fields() []string {
-	fields := make([]string, 0, 12)
+	fields := make([]string, 0, 13)
 	if m.created_at != nil {
 		fields = append(fields, book.FieldCreatedAt)
 	}
@@ -7857,6 +8199,9 @@ func (m *BookMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, book.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, book.FieldSlug)
 	}
 	if m.primary_image_url != nil {
 		fields = append(fields, book.FieldPrimaryImageURL)
@@ -7894,6 +8239,8 @@ func (m *BookMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case book.FieldExternalLink:
 		return m.ExternalLink()
+	case book.FieldSlug:
+		return m.Slug()
 	case book.FieldPrimaryImageURL:
 		return m.PrimaryImageURL()
 	case book.FieldAdditionalImagesUrls:
@@ -7927,6 +8274,8 @@ func (m *BookMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldDescription(ctx)
 	case book.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case book.FieldSlug:
+		return m.OldSlug(ctx)
 	case book.FieldPrimaryImageURL:
 		return m.OldPrimaryImageURL(ctx)
 	case book.FieldAdditionalImagesUrls:
@@ -7999,6 +8348,13 @@ func (m *BookMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetExternalLink(v)
+		return nil
+	case book.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
 		return nil
 	case book.FieldPrimaryImageURL:
 		v, ok := value.(string)
@@ -8091,6 +8447,9 @@ func (m *BookMutation) ClearedFields() []string {
 	if m.FieldCleared(book.FieldExternalLink) {
 		fields = append(fields, book.FieldExternalLink)
 	}
+	if m.FieldCleared(book.FieldSlug) {
+		fields = append(fields, book.FieldSlug)
+	}
 	if m.FieldCleared(book.FieldPrimaryImageURL) {
 		fields = append(fields, book.FieldPrimaryImageURL)
 	}
@@ -8135,6 +8494,9 @@ func (m *BookMutation) ClearField(name string) error {
 	case book.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case book.FieldSlug:
+		m.ClearSlug()
+		return nil
 	case book.FieldPrimaryImageURL:
 		m.ClearPrimaryImageURL()
 		return nil
@@ -8178,6 +8540,9 @@ func (m *BookMutation) ResetField(name string) error {
 		return nil
 	case book.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case book.FieldSlug:
+		m.ResetSlug()
 		return nil
 	case book.FieldPrimaryImageURL:
 		m.ResetPrimaryImageURL()
@@ -8417,6 +8782,7 @@ type BookGenreMutation struct {
 	abbreviation  *string
 	description   *string
 	external_link *string
+	slug          *string
 	clearedFields map[string]struct{}
 	books         map[int]struct{}
 	removedbooks  map[int]struct{}
@@ -8890,6 +9256,55 @@ func (m *BookGenreMutation) ResetExternalLink() {
 	delete(m.clearedFields, bookgenre.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *BookGenreMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *BookGenreMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the BookGenre entity.
+// If the BookGenre object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BookGenreMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *BookGenreMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[bookgenre.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *BookGenreMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[bookgenre.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *BookGenreMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, bookgenre.FieldSlug)
+}
+
 // AddBookIDs adds the "books" edge to the Book entity by ids.
 func (m *BookGenreMutation) AddBookIDs(ids ...int) {
 	if m.books == nil {
@@ -8978,7 +9393,7 @@ func (m *BookGenreMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *BookGenreMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, bookgenre.FieldCreatedAt)
 	}
@@ -9002,6 +9417,9 @@ func (m *BookGenreMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, bookgenre.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, bookgenre.FieldSlug)
 	}
 	return fields
 }
@@ -9027,6 +9445,8 @@ func (m *BookGenreMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case bookgenre.FieldExternalLink:
 		return m.ExternalLink()
+	case bookgenre.FieldSlug:
+		return m.Slug()
 	}
 	return nil, false
 }
@@ -9052,6 +9472,8 @@ func (m *BookGenreMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldDescription(ctx)
 	case bookgenre.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case bookgenre.FieldSlug:
+		return m.OldSlug(ctx)
 	}
 	return nil, fmt.Errorf("unknown BookGenre field %s", name)
 }
@@ -9117,6 +9539,13 @@ func (m *BookGenreMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case bookgenre.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	}
 	return fmt.Errorf("unknown BookGenre field %s", name)
 }
@@ -9165,6 +9594,9 @@ func (m *BookGenreMutation) ClearedFields() []string {
 	if m.FieldCleared(bookgenre.FieldExternalLink) {
 		fields = append(fields, bookgenre.FieldExternalLink)
 	}
+	if m.FieldCleared(bookgenre.FieldSlug) {
+		fields = append(fields, bookgenre.FieldSlug)
+	}
 	return fields
 }
 
@@ -9197,6 +9629,9 @@ func (m *BookGenreMutation) ClearField(name string) error {
 	case bookgenre.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case bookgenre.FieldSlug:
+		m.ClearSlug()
+		return nil
 	}
 	return fmt.Errorf("unknown BookGenre nullable field %s", name)
 }
@@ -9228,6 +9663,9 @@ func (m *BookGenreMutation) ResetField(name string) error {
 		return nil
 	case bookgenre.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case bookgenre.FieldSlug:
+		m.ResetSlug()
 		return nil
 	}
 	return fmt.Errorf("unknown BookGenre field %s", name)
@@ -9320,24 +9758,28 @@ func (m *BookGenreMutation) ResetEdge(name string) error {
 // CategoryMutation represents an operation that mutates the Category nodes in the graph.
 type CategoryMutation struct {
 	config
-	op                 Op
-	typ                string
-	id                 *int
-	created_at         *time.Time
-	created_by         *string
-	updated_at         *time.Time
-	updated_by         *string
-	display_name       *string
-	abbreviation       *string
-	description        *string
-	external_link      *string
-	clearedFields      map[string]struct{}
-	collections        map[int]struct{}
-	removedcollections map[int]struct{}
-	clearedcollections bool
-	done               bool
-	oldValue           func(context.Context) (*Category, error)
-	predicates         []predicate.Category
+	op                           Op
+	typ                          string
+	id                           *int
+	created_at                   *time.Time
+	created_by                   *string
+	updated_at                   *time.Time
+	updated_by                   *string
+	display_name                 *string
+	abbreviation                 *string
+	description                  *string
+	external_link                *string
+	slug                         *string
+	primary_image_url            *string
+	additional_images_urls       *[]string
+	appendadditional_images_urls []string
+	clearedFields                map[string]struct{}
+	collections                  map[int]struct{}
+	removedcollections           map[int]struct{}
+	clearedcollections           bool
+	done                         bool
+	oldValue                     func(context.Context) (*Category, error)
+	predicates                   []predicate.Category
 }
 
 var _ ent.Mutation = (*CategoryMutation)(nil)
@@ -9804,6 +10246,169 @@ func (m *CategoryMutation) ResetExternalLink() {
 	delete(m.clearedFields, category.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *CategoryMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *CategoryMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *CategoryMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[category.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *CategoryMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[category.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *CategoryMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, category.FieldSlug)
+}
+
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (m *CategoryMutation) SetPrimaryImageURL(s string) {
+	m.primary_image_url = &s
+}
+
+// PrimaryImageURL returns the value of the "primary_image_url" field in the mutation.
+func (m *CategoryMutation) PrimaryImageURL() (r string, exists bool) {
+	v := m.primary_image_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPrimaryImageURL returns the old "primary_image_url" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldPrimaryImageURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPrimaryImageURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPrimaryImageURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPrimaryImageURL: %w", err)
+	}
+	return oldValue.PrimaryImageURL, nil
+}
+
+// ClearPrimaryImageURL clears the value of the "primary_image_url" field.
+func (m *CategoryMutation) ClearPrimaryImageURL() {
+	m.primary_image_url = nil
+	m.clearedFields[category.FieldPrimaryImageURL] = struct{}{}
+}
+
+// PrimaryImageURLCleared returns if the "primary_image_url" field was cleared in this mutation.
+func (m *CategoryMutation) PrimaryImageURLCleared() bool {
+	_, ok := m.clearedFields[category.FieldPrimaryImageURL]
+	return ok
+}
+
+// ResetPrimaryImageURL resets all changes to the "primary_image_url" field.
+func (m *CategoryMutation) ResetPrimaryImageURL() {
+	m.primary_image_url = nil
+	delete(m.clearedFields, category.FieldPrimaryImageURL)
+}
+
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (m *CategoryMutation) SetAdditionalImagesUrls(s []string) {
+	m.additional_images_urls = &s
+	m.appendadditional_images_urls = nil
+}
+
+// AdditionalImagesUrls returns the value of the "additional_images_urls" field in the mutation.
+func (m *CategoryMutation) AdditionalImagesUrls() (r []string, exists bool) {
+	v := m.additional_images_urls
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAdditionalImagesUrls returns the old "additional_images_urls" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldAdditionalImagesUrls(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAdditionalImagesUrls is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAdditionalImagesUrls requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAdditionalImagesUrls: %w", err)
+	}
+	return oldValue.AdditionalImagesUrls, nil
+}
+
+// AppendAdditionalImagesUrls adds s to the "additional_images_urls" field.
+func (m *CategoryMutation) AppendAdditionalImagesUrls(s []string) {
+	m.appendadditional_images_urls = append(m.appendadditional_images_urls, s...)
+}
+
+// AppendedAdditionalImagesUrls returns the list of values that were appended to the "additional_images_urls" field in this mutation.
+func (m *CategoryMutation) AppendedAdditionalImagesUrls() ([]string, bool) {
+	if len(m.appendadditional_images_urls) == 0 {
+		return nil, false
+	}
+	return m.appendadditional_images_urls, true
+}
+
+// ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
+func (m *CategoryMutation) ClearAdditionalImagesUrls() {
+	m.additional_images_urls = nil
+	m.appendadditional_images_urls = nil
+	m.clearedFields[category.FieldAdditionalImagesUrls] = struct{}{}
+}
+
+// AdditionalImagesUrlsCleared returns if the "additional_images_urls" field was cleared in this mutation.
+func (m *CategoryMutation) AdditionalImagesUrlsCleared() bool {
+	_, ok := m.clearedFields[category.FieldAdditionalImagesUrls]
+	return ok
+}
+
+// ResetAdditionalImagesUrls resets all changes to the "additional_images_urls" field.
+func (m *CategoryMutation) ResetAdditionalImagesUrls() {
+	m.additional_images_urls = nil
+	m.appendadditional_images_urls = nil
+	delete(m.clearedFields, category.FieldAdditionalImagesUrls)
+}
+
 // AddCollectionIDs adds the "collections" edge to the Collection entity by ids.
 func (m *CategoryMutation) AddCollectionIDs(ids ...int) {
 	if m.collections == nil {
@@ -9892,7 +10497,7 @@ func (m *CategoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CategoryMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 11)
 	if m.created_at != nil {
 		fields = append(fields, category.FieldCreatedAt)
 	}
@@ -9916,6 +10521,15 @@ func (m *CategoryMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, category.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, category.FieldSlug)
+	}
+	if m.primary_image_url != nil {
+		fields = append(fields, category.FieldPrimaryImageURL)
+	}
+	if m.additional_images_urls != nil {
+		fields = append(fields, category.FieldAdditionalImagesUrls)
 	}
 	return fields
 }
@@ -9941,6 +10555,12 @@ func (m *CategoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case category.FieldExternalLink:
 		return m.ExternalLink()
+	case category.FieldSlug:
+		return m.Slug()
+	case category.FieldPrimaryImageURL:
+		return m.PrimaryImageURL()
+	case category.FieldAdditionalImagesUrls:
+		return m.AdditionalImagesUrls()
 	}
 	return nil, false
 }
@@ -9966,6 +10586,12 @@ func (m *CategoryMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldDescription(ctx)
 	case category.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case category.FieldSlug:
+		return m.OldSlug(ctx)
+	case category.FieldPrimaryImageURL:
+		return m.OldPrimaryImageURL(ctx)
+	case category.FieldAdditionalImagesUrls:
+		return m.OldAdditionalImagesUrls(ctx)
 	}
 	return nil, fmt.Errorf("unknown Category field %s", name)
 }
@@ -10031,6 +10657,27 @@ func (m *CategoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case category.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
+	case category.FieldPrimaryImageURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPrimaryImageURL(v)
+		return nil
+	case category.FieldAdditionalImagesUrls:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAdditionalImagesUrls(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Category field %s", name)
 }
@@ -10079,6 +10726,15 @@ func (m *CategoryMutation) ClearedFields() []string {
 	if m.FieldCleared(category.FieldExternalLink) {
 		fields = append(fields, category.FieldExternalLink)
 	}
+	if m.FieldCleared(category.FieldSlug) {
+		fields = append(fields, category.FieldSlug)
+	}
+	if m.FieldCleared(category.FieldPrimaryImageURL) {
+		fields = append(fields, category.FieldPrimaryImageURL)
+	}
+	if m.FieldCleared(category.FieldAdditionalImagesUrls) {
+		fields = append(fields, category.FieldAdditionalImagesUrls)
+	}
 	return fields
 }
 
@@ -10111,6 +10767,15 @@ func (m *CategoryMutation) ClearField(name string) error {
 	case category.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case category.FieldSlug:
+		m.ClearSlug()
+		return nil
+	case category.FieldPrimaryImageURL:
+		m.ClearPrimaryImageURL()
+		return nil
+	case category.FieldAdditionalImagesUrls:
+		m.ClearAdditionalImagesUrls()
+		return nil
 	}
 	return fmt.Errorf("unknown Category nullable field %s", name)
 }
@@ -10142,6 +10807,15 @@ func (m *CategoryMutation) ResetField(name string) error {
 		return nil
 	case category.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case category.FieldSlug:
+		m.ResetSlug()
+		return nil
+	case category.FieldPrimaryImageURL:
+		m.ResetPrimaryImageURL()
+		return nil
+	case category.FieldAdditionalImagesUrls:
+		m.ResetAdditionalImagesUrls()
 		return nil
 	}
 	return fmt.Errorf("unknown Category field %s", name)
@@ -10245,6 +10919,10 @@ type CollectionMutation struct {
 	abbreviation                   *string
 	description                    *string
 	external_link                  *string
+	slug                           *string
+	primary_image_url              *string
+	additional_images_urls         *[]string
+	appendadditional_images_urls   []string
 	clearedFields                  map[string]struct{}
 	artifacts                      map[int]struct{}
 	removedartifacts               map[int]struct{}
@@ -10729,6 +11407,169 @@ func (m *CollectionMutation) ResetExternalLink() {
 	delete(m.clearedFields, collection.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *CollectionMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *CollectionMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the Collection entity.
+// If the Collection object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CollectionMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *CollectionMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[collection.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *CollectionMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[collection.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *CollectionMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, collection.FieldSlug)
+}
+
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (m *CollectionMutation) SetPrimaryImageURL(s string) {
+	m.primary_image_url = &s
+}
+
+// PrimaryImageURL returns the value of the "primary_image_url" field in the mutation.
+func (m *CollectionMutation) PrimaryImageURL() (r string, exists bool) {
+	v := m.primary_image_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPrimaryImageURL returns the old "primary_image_url" field's value of the Collection entity.
+// If the Collection object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CollectionMutation) OldPrimaryImageURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPrimaryImageURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPrimaryImageURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPrimaryImageURL: %w", err)
+	}
+	return oldValue.PrimaryImageURL, nil
+}
+
+// ClearPrimaryImageURL clears the value of the "primary_image_url" field.
+func (m *CollectionMutation) ClearPrimaryImageURL() {
+	m.primary_image_url = nil
+	m.clearedFields[collection.FieldPrimaryImageURL] = struct{}{}
+}
+
+// PrimaryImageURLCleared returns if the "primary_image_url" field was cleared in this mutation.
+func (m *CollectionMutation) PrimaryImageURLCleared() bool {
+	_, ok := m.clearedFields[collection.FieldPrimaryImageURL]
+	return ok
+}
+
+// ResetPrimaryImageURL resets all changes to the "primary_image_url" field.
+func (m *CollectionMutation) ResetPrimaryImageURL() {
+	m.primary_image_url = nil
+	delete(m.clearedFields, collection.FieldPrimaryImageURL)
+}
+
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (m *CollectionMutation) SetAdditionalImagesUrls(s []string) {
+	m.additional_images_urls = &s
+	m.appendadditional_images_urls = nil
+}
+
+// AdditionalImagesUrls returns the value of the "additional_images_urls" field in the mutation.
+func (m *CollectionMutation) AdditionalImagesUrls() (r []string, exists bool) {
+	v := m.additional_images_urls
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAdditionalImagesUrls returns the old "additional_images_urls" field's value of the Collection entity.
+// If the Collection object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CollectionMutation) OldAdditionalImagesUrls(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAdditionalImagesUrls is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAdditionalImagesUrls requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAdditionalImagesUrls: %w", err)
+	}
+	return oldValue.AdditionalImagesUrls, nil
+}
+
+// AppendAdditionalImagesUrls adds s to the "additional_images_urls" field.
+func (m *CollectionMutation) AppendAdditionalImagesUrls(s []string) {
+	m.appendadditional_images_urls = append(m.appendadditional_images_urls, s...)
+}
+
+// AppendedAdditionalImagesUrls returns the list of values that were appended to the "additional_images_urls" field in this mutation.
+func (m *CollectionMutation) AppendedAdditionalImagesUrls() ([]string, bool) {
+	if len(m.appendadditional_images_urls) == 0 {
+		return nil, false
+	}
+	return m.appendadditional_images_urls, true
+}
+
+// ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
+func (m *CollectionMutation) ClearAdditionalImagesUrls() {
+	m.additional_images_urls = nil
+	m.appendadditional_images_urls = nil
+	m.clearedFields[collection.FieldAdditionalImagesUrls] = struct{}{}
+}
+
+// AdditionalImagesUrlsCleared returns if the "additional_images_urls" field was cleared in this mutation.
+func (m *CollectionMutation) AdditionalImagesUrlsCleared() bool {
+	_, ok := m.clearedFields[collection.FieldAdditionalImagesUrls]
+	return ok
+}
+
+// ResetAdditionalImagesUrls resets all changes to the "additional_images_urls" field.
+func (m *CollectionMutation) ResetAdditionalImagesUrls() {
+	m.additional_images_urls = nil
+	m.appendadditional_images_urls = nil
+	delete(m.clearedFields, collection.FieldAdditionalImagesUrls)
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
 func (m *CollectionMutation) AddArtifactIDs(ids ...int) {
 	if m.artifacts == nil {
@@ -11018,7 +11859,7 @@ func (m *CollectionMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CollectionMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 11)
 	if m.created_at != nil {
 		fields = append(fields, collection.FieldCreatedAt)
 	}
@@ -11042,6 +11883,15 @@ func (m *CollectionMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, collection.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, collection.FieldSlug)
+	}
+	if m.primary_image_url != nil {
+		fields = append(fields, collection.FieldPrimaryImageURL)
+	}
+	if m.additional_images_urls != nil {
+		fields = append(fields, collection.FieldAdditionalImagesUrls)
 	}
 	return fields
 }
@@ -11067,6 +11917,12 @@ func (m *CollectionMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case collection.FieldExternalLink:
 		return m.ExternalLink()
+	case collection.FieldSlug:
+		return m.Slug()
+	case collection.FieldPrimaryImageURL:
+		return m.PrimaryImageURL()
+	case collection.FieldAdditionalImagesUrls:
+		return m.AdditionalImagesUrls()
 	}
 	return nil, false
 }
@@ -11092,6 +11948,12 @@ func (m *CollectionMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldDescription(ctx)
 	case collection.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case collection.FieldSlug:
+		return m.OldSlug(ctx)
+	case collection.FieldPrimaryImageURL:
+		return m.OldPrimaryImageURL(ctx)
+	case collection.FieldAdditionalImagesUrls:
+		return m.OldAdditionalImagesUrls(ctx)
 	}
 	return nil, fmt.Errorf("unknown Collection field %s", name)
 }
@@ -11157,6 +12019,27 @@ func (m *CollectionMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case collection.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
+	case collection.FieldPrimaryImageURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPrimaryImageURL(v)
+		return nil
+	case collection.FieldAdditionalImagesUrls:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAdditionalImagesUrls(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Collection field %s", name)
 }
@@ -11205,6 +12088,15 @@ func (m *CollectionMutation) ClearedFields() []string {
 	if m.FieldCleared(collection.FieldExternalLink) {
 		fields = append(fields, collection.FieldExternalLink)
 	}
+	if m.FieldCleared(collection.FieldSlug) {
+		fields = append(fields, collection.FieldSlug)
+	}
+	if m.FieldCleared(collection.FieldPrimaryImageURL) {
+		fields = append(fields, collection.FieldPrimaryImageURL)
+	}
+	if m.FieldCleared(collection.FieldAdditionalImagesUrls) {
+		fields = append(fields, collection.FieldAdditionalImagesUrls)
+	}
 	return fields
 }
 
@@ -11237,6 +12129,15 @@ func (m *CollectionMutation) ClearField(name string) error {
 	case collection.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case collection.FieldSlug:
+		m.ClearSlug()
+		return nil
+	case collection.FieldPrimaryImageURL:
+		m.ClearPrimaryImageURL()
+		return nil
+	case collection.FieldAdditionalImagesUrls:
+		m.ClearAdditionalImagesUrls()
+		return nil
 	}
 	return fmt.Errorf("unknown Collection nullable field %s", name)
 }
@@ -11268,6 +12169,15 @@ func (m *CollectionMutation) ResetField(name string) error {
 		return nil
 	case collection.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case collection.FieldSlug:
+		m.ResetSlug()
+		return nil
+	case collection.FieldPrimaryImageURL:
+		m.ResetPrimaryImageURL()
+		return nil
+	case collection.FieldAdditionalImagesUrls:
+		m.ResetAdditionalImagesUrls()
 		return nil
 	}
 	return fmt.Errorf("unknown Collection field %s", name)
@@ -11467,6 +12377,7 @@ type CountryMutation struct {
 	abbreviation    *string
 	description     *string
 	external_link   *string
+	slug            *string
 	clearedFields   map[string]struct{}
 	location        *int
 	clearedlocation bool
@@ -11939,6 +12850,55 @@ func (m *CountryMutation) ResetExternalLink() {
 	delete(m.clearedFields, country.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *CountryMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *CountryMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the Country entity.
+// If the Country object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CountryMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *CountryMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[country.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *CountryMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[country.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *CountryMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, country.FieldSlug)
+}
+
 // SetLocationID sets the "location" edge to the Location entity by id.
 func (m *CountryMutation) SetLocationID(id int) {
 	m.location = &id
@@ -12012,7 +12972,7 @@ func (m *CountryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CountryMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, country.FieldCreatedAt)
 	}
@@ -12036,6 +12996,9 @@ func (m *CountryMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, country.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, country.FieldSlug)
 	}
 	return fields
 }
@@ -12061,6 +13024,8 @@ func (m *CountryMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case country.FieldExternalLink:
 		return m.ExternalLink()
+	case country.FieldSlug:
+		return m.Slug()
 	}
 	return nil, false
 }
@@ -12086,6 +13051,8 @@ func (m *CountryMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldDescription(ctx)
 	case country.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case country.FieldSlug:
+		return m.OldSlug(ctx)
 	}
 	return nil, fmt.Errorf("unknown Country field %s", name)
 }
@@ -12151,6 +13118,13 @@ func (m *CountryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case country.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Country field %s", name)
 }
@@ -12199,6 +13173,9 @@ func (m *CountryMutation) ClearedFields() []string {
 	if m.FieldCleared(country.FieldExternalLink) {
 		fields = append(fields, country.FieldExternalLink)
 	}
+	if m.FieldCleared(country.FieldSlug) {
+		fields = append(fields, country.FieldSlug)
+	}
 	return fields
 }
 
@@ -12231,6 +13208,9 @@ func (m *CountryMutation) ClearField(name string) error {
 	case country.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case country.FieldSlug:
+		m.ClearSlug()
+		return nil
 	}
 	return fmt.Errorf("unknown Country nullable field %s", name)
 }
@@ -12262,6 +13242,9 @@ func (m *CountryMutation) ResetField(name string) error {
 		return nil
 	case country.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case country.FieldSlug:
+		m.ResetSlug()
 		return nil
 	}
 	return fmt.Errorf("unknown Country field %s", name)
@@ -12355,6 +13338,7 @@ type CultureMutation struct {
 	abbreviation     *string
 	description      *string
 	external_link    *string
+	slug             *string
 	clearedFields    map[string]struct{}
 	artifacts        map[int]struct{}
 	removedartifacts map[int]struct{}
@@ -12828,6 +13812,55 @@ func (m *CultureMutation) ResetExternalLink() {
 	delete(m.clearedFields, culture.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *CultureMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *CultureMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the Culture entity.
+// If the Culture object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CultureMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *CultureMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[culture.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *CultureMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[culture.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *CultureMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, culture.FieldSlug)
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
 func (m *CultureMutation) AddArtifactIDs(ids ...int) {
 	if m.artifacts == nil {
@@ -12916,7 +13949,7 @@ func (m *CultureMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CultureMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, culture.FieldCreatedAt)
 	}
@@ -12940,6 +13973,9 @@ func (m *CultureMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, culture.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, culture.FieldSlug)
 	}
 	return fields
 }
@@ -12965,6 +14001,8 @@ func (m *CultureMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case culture.FieldExternalLink:
 		return m.ExternalLink()
+	case culture.FieldSlug:
+		return m.Slug()
 	}
 	return nil, false
 }
@@ -12990,6 +14028,8 @@ func (m *CultureMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldDescription(ctx)
 	case culture.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case culture.FieldSlug:
+		return m.OldSlug(ctx)
 	}
 	return nil, fmt.Errorf("unknown Culture field %s", name)
 }
@@ -13055,6 +14095,13 @@ func (m *CultureMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case culture.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Culture field %s", name)
 }
@@ -13103,6 +14150,9 @@ func (m *CultureMutation) ClearedFields() []string {
 	if m.FieldCleared(culture.FieldExternalLink) {
 		fields = append(fields, culture.FieldExternalLink)
 	}
+	if m.FieldCleared(culture.FieldSlug) {
+		fields = append(fields, culture.FieldSlug)
+	}
 	return fields
 }
 
@@ -13135,6 +14185,9 @@ func (m *CultureMutation) ClearField(name string) error {
 	case culture.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case culture.FieldSlug:
+		m.ClearSlug()
+		return nil
 	}
 	return fmt.Errorf("unknown Culture nullable field %s", name)
 }
@@ -13166,6 +14219,9 @@ func (m *CultureMutation) ResetField(name string) error {
 		return nil
 	case culture.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case culture.FieldSlug:
+		m.ResetSlug()
 		return nil
 	}
 	return fmt.Errorf("unknown Culture field %s", name)
@@ -13269,6 +14325,7 @@ type DistrictMutation struct {
 	abbreviation    *string
 	description     *string
 	external_link   *string
+	slug            *string
 	clearedFields   map[string]struct{}
 	location        *int
 	clearedlocation bool
@@ -13741,6 +14798,55 @@ func (m *DistrictMutation) ResetExternalLink() {
 	delete(m.clearedFields, district.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *DistrictMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *DistrictMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the District entity.
+// If the District object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DistrictMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *DistrictMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[district.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *DistrictMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[district.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *DistrictMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, district.FieldSlug)
+}
+
 // SetLocationID sets the "location" edge to the Location entity by id.
 func (m *DistrictMutation) SetLocationID(id int) {
 	m.location = &id
@@ -13814,7 +14920,7 @@ func (m *DistrictMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *DistrictMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, district.FieldCreatedAt)
 	}
@@ -13838,6 +14944,9 @@ func (m *DistrictMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, district.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, district.FieldSlug)
 	}
 	return fields
 }
@@ -13863,6 +14972,8 @@ func (m *DistrictMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case district.FieldExternalLink:
 		return m.ExternalLink()
+	case district.FieldSlug:
+		return m.Slug()
 	}
 	return nil, false
 }
@@ -13888,6 +14999,8 @@ func (m *DistrictMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldDescription(ctx)
 	case district.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case district.FieldSlug:
+		return m.OldSlug(ctx)
 	}
 	return nil, fmt.Errorf("unknown District field %s", name)
 }
@@ -13953,6 +15066,13 @@ func (m *DistrictMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case district.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	}
 	return fmt.Errorf("unknown District field %s", name)
 }
@@ -14001,6 +15121,9 @@ func (m *DistrictMutation) ClearedFields() []string {
 	if m.FieldCleared(district.FieldExternalLink) {
 		fields = append(fields, district.FieldExternalLink)
 	}
+	if m.FieldCleared(district.FieldSlug) {
+		fields = append(fields, district.FieldSlug)
+	}
 	return fields
 }
 
@@ -14033,6 +15156,9 @@ func (m *DistrictMutation) ClearField(name string) error {
 	case district.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case district.FieldSlug:
+		m.ClearSlug()
+		return nil
 	}
 	return fmt.Errorf("unknown District nullable field %s", name)
 }
@@ -14064,6 +15190,9 @@ func (m *DistrictMutation) ResetField(name string) error {
 		return nil
 	case district.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case district.FieldSlug:
+		m.ResetSlug()
 		return nil
 	}
 	return fmt.Errorf("unknown District field %s", name)
@@ -15190,6 +16319,7 @@ type HolderResponsibilityMutation struct {
 	abbreviation  *string
 	description   *string
 	external_link *string
+	slug          *string
 	clearedFields map[string]struct{}
 	holder        map[int]struct{}
 	removedholder map[int]struct{}
@@ -15663,6 +16793,55 @@ func (m *HolderResponsibilityMutation) ResetExternalLink() {
 	delete(m.clearedFields, holderresponsibility.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *HolderResponsibilityMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *HolderResponsibilityMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the HolderResponsibility entity.
+// If the HolderResponsibility object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *HolderResponsibilityMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *HolderResponsibilityMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[holderresponsibility.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *HolderResponsibilityMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[holderresponsibility.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *HolderResponsibilityMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, holderresponsibility.FieldSlug)
+}
+
 // AddHolderIDs adds the "holder" edge to the Holder entity by ids.
 func (m *HolderResponsibilityMutation) AddHolderIDs(ids ...int) {
 	if m.holder == nil {
@@ -15751,7 +16930,7 @@ func (m *HolderResponsibilityMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *HolderResponsibilityMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, holderresponsibility.FieldCreatedAt)
 	}
@@ -15775,6 +16954,9 @@ func (m *HolderResponsibilityMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, holderresponsibility.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, holderresponsibility.FieldSlug)
 	}
 	return fields
 }
@@ -15800,6 +16982,8 @@ func (m *HolderResponsibilityMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case holderresponsibility.FieldExternalLink:
 		return m.ExternalLink()
+	case holderresponsibility.FieldSlug:
+		return m.Slug()
 	}
 	return nil, false
 }
@@ -15825,6 +17009,8 @@ func (m *HolderResponsibilityMutation) OldField(ctx context.Context, name string
 		return m.OldDescription(ctx)
 	case holderresponsibility.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case holderresponsibility.FieldSlug:
+		return m.OldSlug(ctx)
 	}
 	return nil, fmt.Errorf("unknown HolderResponsibility field %s", name)
 }
@@ -15890,6 +17076,13 @@ func (m *HolderResponsibilityMutation) SetField(name string, value ent.Value) er
 		}
 		m.SetExternalLink(v)
 		return nil
+	case holderresponsibility.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	}
 	return fmt.Errorf("unknown HolderResponsibility field %s", name)
 }
@@ -15938,6 +17131,9 @@ func (m *HolderResponsibilityMutation) ClearedFields() []string {
 	if m.FieldCleared(holderresponsibility.FieldExternalLink) {
 		fields = append(fields, holderresponsibility.FieldExternalLink)
 	}
+	if m.FieldCleared(holderresponsibility.FieldSlug) {
+		fields = append(fields, holderresponsibility.FieldSlug)
+	}
 	return fields
 }
 
@@ -15970,6 +17166,9 @@ func (m *HolderResponsibilityMutation) ClearField(name string) error {
 	case holderresponsibility.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case holderresponsibility.FieldSlug:
+		m.ClearSlug()
+		return nil
 	}
 	return fmt.Errorf("unknown HolderResponsibility nullable field %s", name)
 }
@@ -16001,6 +17200,9 @@ func (m *HolderResponsibilityMutation) ResetField(name string) error {
 		return nil
 	case holderresponsibility.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case holderresponsibility.FieldSlug:
+		m.ResetSlug()
 		return nil
 	}
 	return fmt.Errorf("unknown HolderResponsibility field %s", name)
@@ -16368,6 +17570,7 @@ type LicenseMutation struct {
 	abbreviation                   *string
 	description                    *string
 	external_link                  *string
+	slug                           *string
 	clearedFields                  map[string]struct{}
 	artifacts                      map[int]struct{}
 	removedartifacts               map[int]struct{}
@@ -16847,6 +18050,55 @@ func (m *LicenseMutation) ResetExternalLink() {
 	delete(m.clearedFields, license.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *LicenseMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *LicenseMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the License entity.
+// If the License object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LicenseMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *LicenseMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[license.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *LicenseMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[license.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *LicenseMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, license.FieldSlug)
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
 func (m *LicenseMutation) AddArtifactIDs(ids ...int) {
 	if m.artifacts == nil {
@@ -17043,7 +18295,7 @@ func (m *LicenseMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *LicenseMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, license.FieldCreatedAt)
 	}
@@ -17067,6 +18319,9 @@ func (m *LicenseMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, license.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, license.FieldSlug)
 	}
 	return fields
 }
@@ -17092,6 +18347,8 @@ func (m *LicenseMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case license.FieldExternalLink:
 		return m.ExternalLink()
+	case license.FieldSlug:
+		return m.Slug()
 	}
 	return nil, false
 }
@@ -17117,6 +18374,8 @@ func (m *LicenseMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldDescription(ctx)
 	case license.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case license.FieldSlug:
+		return m.OldSlug(ctx)
 	}
 	return nil, fmt.Errorf("unknown License field %s", name)
 }
@@ -17182,6 +18441,13 @@ func (m *LicenseMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case license.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	}
 	return fmt.Errorf("unknown License field %s", name)
 }
@@ -17230,6 +18496,9 @@ func (m *LicenseMutation) ClearedFields() []string {
 	if m.FieldCleared(license.FieldExternalLink) {
 		fields = append(fields, license.FieldExternalLink)
 	}
+	if m.FieldCleared(license.FieldSlug) {
+		fields = append(fields, license.FieldSlug)
+	}
 	return fields
 }
 
@@ -17262,6 +18531,9 @@ func (m *LicenseMutation) ClearField(name string) error {
 	case license.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case license.FieldSlug:
+		m.ClearSlug()
+		return nil
 	}
 	return fmt.Errorf("unknown License nullable field %s", name)
 }
@@ -17293,6 +18565,9 @@ func (m *LicenseMutation) ResetField(name string) error {
 		return nil
 	case license.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case license.FieldSlug:
+		m.ResetSlug()
 		return nil
 	}
 	return fmt.Errorf("unknown License field %s", name)
@@ -17448,6 +18723,7 @@ type LocationMutation struct {
 	abbreviation                   *string
 	description                    *string
 	external_link                  *string
+	slug                           *string
 	geometry                       *types.Geometry
 	clearedFields                  map[string]struct{}
 	artifacts                      map[int]struct{}
@@ -17936,6 +19212,55 @@ func (m *LocationMutation) ResetExternalLink() {
 	delete(m.clearedFields, location.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *LocationMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *LocationMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the Location entity.
+// If the Location object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LocationMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *LocationMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[location.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *LocationMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[location.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *LocationMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, location.FieldSlug)
+}
+
 // SetGeometry sets the "geometry" field.
 func (m *LocationMutation) SetGeometry(t types.Geometry) {
 	m.geometry = &t
@@ -18337,7 +19662,7 @@ func (m *LocationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *LocationMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 10)
 	if m.created_at != nil {
 		fields = append(fields, location.FieldCreatedAt)
 	}
@@ -18361,6 +19686,9 @@ func (m *LocationMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, location.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, location.FieldSlug)
 	}
 	if m.geometry != nil {
 		fields = append(fields, location.FieldGeometry)
@@ -18389,6 +19717,8 @@ func (m *LocationMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case location.FieldExternalLink:
 		return m.ExternalLink()
+	case location.FieldSlug:
+		return m.Slug()
 	case location.FieldGeometry:
 		return m.Geometry()
 	}
@@ -18416,6 +19746,8 @@ func (m *LocationMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldDescription(ctx)
 	case location.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case location.FieldSlug:
+		return m.OldSlug(ctx)
 	case location.FieldGeometry:
 		return m.OldGeometry(ctx)
 	}
@@ -18483,6 +19815,13 @@ func (m *LocationMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case location.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	case location.FieldGeometry:
 		v, ok := value.(types.Geometry)
 		if !ok {
@@ -18538,6 +19877,9 @@ func (m *LocationMutation) ClearedFields() []string {
 	if m.FieldCleared(location.FieldExternalLink) {
 		fields = append(fields, location.FieldExternalLink)
 	}
+	if m.FieldCleared(location.FieldSlug) {
+		fields = append(fields, location.FieldSlug)
+	}
 	if m.FieldCleared(location.FieldGeometry) {
 		fields = append(fields, location.FieldGeometry)
 	}
@@ -18573,6 +19915,9 @@ func (m *LocationMutation) ClearField(name string) error {
 	case location.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case location.FieldSlug:
+		m.ClearSlug()
+		return nil
 	case location.FieldGeometry:
 		m.ClearGeometry()
 		return nil
@@ -18607,6 +19952,9 @@ func (m *LocationMutation) ResetField(name string) error {
 		return nil
 	case location.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case location.FieldSlug:
+		m.ResetSlug()
 		return nil
 	case location.FieldGeometry:
 		m.ResetGeometry()
@@ -18837,6 +20185,7 @@ type MediumMutation struct {
 	abbreviation     *string
 	description      *string
 	external_link    *string
+	slug             *string
 	clearedFields    map[string]struct{}
 	artifacts        map[int]struct{}
 	removedartifacts map[int]struct{}
@@ -19310,6 +20659,55 @@ func (m *MediumMutation) ResetExternalLink() {
 	delete(m.clearedFields, medium.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *MediumMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *MediumMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the Medium entity.
+// If the Medium object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MediumMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *MediumMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[medium.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *MediumMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[medium.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *MediumMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, medium.FieldSlug)
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
 func (m *MediumMutation) AddArtifactIDs(ids ...int) {
 	if m.artifacts == nil {
@@ -19398,7 +20796,7 @@ func (m *MediumMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MediumMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, medium.FieldCreatedAt)
 	}
@@ -19422,6 +20820,9 @@ func (m *MediumMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, medium.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, medium.FieldSlug)
 	}
 	return fields
 }
@@ -19447,6 +20848,8 @@ func (m *MediumMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case medium.FieldExternalLink:
 		return m.ExternalLink()
+	case medium.FieldSlug:
+		return m.Slug()
 	}
 	return nil, false
 }
@@ -19472,6 +20875,8 @@ func (m *MediumMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldDescription(ctx)
 	case medium.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case medium.FieldSlug:
+		return m.OldSlug(ctx)
 	}
 	return nil, fmt.Errorf("unknown Medium field %s", name)
 }
@@ -19537,6 +20942,13 @@ func (m *MediumMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case medium.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Medium field %s", name)
 }
@@ -19585,6 +20997,9 @@ func (m *MediumMutation) ClearedFields() []string {
 	if m.FieldCleared(medium.FieldExternalLink) {
 		fields = append(fields, medium.FieldExternalLink)
 	}
+	if m.FieldCleared(medium.FieldSlug) {
+		fields = append(fields, medium.FieldSlug)
+	}
 	return fields
 }
 
@@ -19617,6 +21032,9 @@ func (m *MediumMutation) ClearField(name string) error {
 	case medium.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case medium.FieldSlug:
+		m.ClearSlug()
+		return nil
 	}
 	return fmt.Errorf("unknown Medium nullable field %s", name)
 }
@@ -19648,6 +21066,9 @@ func (m *MediumMutation) ResetField(name string) error {
 		return nil
 	case medium.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case medium.FieldSlug:
+		m.ResetSlug()
 		return nil
 	}
 	return fmt.Errorf("unknown Medium field %s", name)
@@ -19751,6 +21172,7 @@ type ModelMutation struct {
 	abbreviation     *string
 	description      *string
 	external_link    *string
+	slug             *string
 	clearedFields    map[string]struct{}
 	artifacts        map[int]struct{}
 	removedartifacts map[int]struct{}
@@ -20224,6 +21646,55 @@ func (m *ModelMutation) ResetExternalLink() {
 	delete(m.clearedFields, model.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *ModelMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *ModelMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the Model entity.
+// If the Model object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ModelMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *ModelMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[model.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *ModelMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[model.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *ModelMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, model.FieldSlug)
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
 func (m *ModelMutation) AddArtifactIDs(ids ...int) {
 	if m.artifacts == nil {
@@ -20312,7 +21783,7 @@ func (m *ModelMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ModelMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, model.FieldCreatedAt)
 	}
@@ -20336,6 +21807,9 @@ func (m *ModelMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, model.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, model.FieldSlug)
 	}
 	return fields
 }
@@ -20361,6 +21835,8 @@ func (m *ModelMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case model.FieldExternalLink:
 		return m.ExternalLink()
+	case model.FieldSlug:
+		return m.Slug()
 	}
 	return nil, false
 }
@@ -20386,6 +21862,8 @@ func (m *ModelMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldDescription(ctx)
 	case model.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case model.FieldSlug:
+		return m.OldSlug(ctx)
 	}
 	return nil, fmt.Errorf("unknown Model field %s", name)
 }
@@ -20451,6 +21929,13 @@ func (m *ModelMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case model.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Model field %s", name)
 }
@@ -20499,6 +21984,9 @@ func (m *ModelMutation) ClearedFields() []string {
 	if m.FieldCleared(model.FieldExternalLink) {
 		fields = append(fields, model.FieldExternalLink)
 	}
+	if m.FieldCleared(model.FieldSlug) {
+		fields = append(fields, model.FieldSlug)
+	}
 	return fields
 }
 
@@ -20531,6 +22019,9 @@ func (m *ModelMutation) ClearField(name string) error {
 	case model.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case model.FieldSlug:
+		m.ClearSlug()
+		return nil
 	}
 	return fmt.Errorf("unknown Model nullable field %s", name)
 }
@@ -20562,6 +22053,9 @@ func (m *ModelMutation) ResetField(name string) error {
 		return nil
 	case model.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case model.FieldSlug:
+		m.ResetSlug()
 		return nil
 	}
 	return fmt.Errorf("unknown Model field %s", name)
@@ -20665,6 +22159,7 @@ type MonumentMutation struct {
 	abbreviation     *string
 	description      *string
 	external_link    *string
+	slug             *string
 	clearedFields    map[string]struct{}
 	artifacts        map[int]struct{}
 	removedartifacts map[int]struct{}
@@ -21141,6 +22636,55 @@ func (m *MonumentMutation) ResetExternalLink() {
 	delete(m.clearedFields, monument.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *MonumentMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *MonumentMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the Monument entity.
+// If the Monument object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MonumentMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *MonumentMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[monument.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *MonumentMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[monument.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *MonumentMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, monument.FieldSlug)
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
 func (m *MonumentMutation) AddArtifactIDs(ids ...int) {
 	if m.artifacts == nil {
@@ -21283,7 +22827,7 @@ func (m *MonumentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MonumentMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, monument.FieldCreatedAt)
 	}
@@ -21307,6 +22851,9 @@ func (m *MonumentMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, monument.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, monument.FieldSlug)
 	}
 	return fields
 }
@@ -21332,6 +22879,8 @@ func (m *MonumentMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case monument.FieldExternalLink:
 		return m.ExternalLink()
+	case monument.FieldSlug:
+		return m.Slug()
 	}
 	return nil, false
 }
@@ -21357,6 +22906,8 @@ func (m *MonumentMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldDescription(ctx)
 	case monument.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case monument.FieldSlug:
+		return m.OldSlug(ctx)
 	}
 	return nil, fmt.Errorf("unknown Monument field %s", name)
 }
@@ -21422,6 +22973,13 @@ func (m *MonumentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case monument.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Monument field %s", name)
 }
@@ -21470,6 +23028,9 @@ func (m *MonumentMutation) ClearedFields() []string {
 	if m.FieldCleared(monument.FieldExternalLink) {
 		fields = append(fields, monument.FieldExternalLink)
 	}
+	if m.FieldCleared(monument.FieldSlug) {
+		fields = append(fields, monument.FieldSlug)
+	}
 	return fields
 }
 
@@ -21502,6 +23063,9 @@ func (m *MonumentMutation) ClearField(name string) error {
 	case monument.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case monument.FieldSlug:
+		m.ClearSlug()
+		return nil
 	}
 	return fmt.Errorf("unknown Monument nullable field %s", name)
 }
@@ -21533,6 +23097,9 @@ func (m *MonumentMutation) ResetField(name string) error {
 		return nil
 	case monument.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case monument.FieldSlug:
+		m.ResetSlug()
 		return nil
 	}
 	return fmt.Errorf("unknown Monument field %s", name)
@@ -21667,6 +23234,7 @@ type OrganizationMutation struct {
 	abbreviation                 *string
 	description                  *string
 	external_link                *string
+	slug                         *string
 	primary_image_url            *string
 	additional_images_urls       *[]string
 	appendadditional_images_urls []string
@@ -22330,6 +23898,55 @@ func (m *OrganizationMutation) ResetExternalLink() {
 	delete(m.clearedFields, organization.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *OrganizationMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *OrganizationMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the Organization entity.
+// If the Organization object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *OrganizationMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[organization.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *OrganizationMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[organization.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *OrganizationMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, organization.FieldSlug)
+}
+
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (m *OrganizationMutation) SetPrimaryImageURL(s string) {
 	m.primary_image_url = &s
@@ -22773,7 +24390,7 @@ func (m *OrganizationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrganizationMutation) Fields() []string {
-	fields := make([]string, 0, 16)
+	fields := make([]string, 0, 17)
 	if m.created_at != nil {
 		fields = append(fields, organization.FieldCreatedAt)
 	}
@@ -22806,6 +24423,9 @@ func (m *OrganizationMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, organization.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, organization.FieldSlug)
 	}
 	if m.primary_image_url != nil {
 		fields = append(fields, organization.FieldPrimaryImageURL)
@@ -22852,6 +24472,8 @@ func (m *OrganizationMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case organization.FieldExternalLink:
 		return m.ExternalLink()
+	case organization.FieldSlug:
+		return m.Slug()
 	case organization.FieldPrimaryImageURL:
 		return m.PrimaryImageURL()
 	case organization.FieldAdditionalImagesUrls:
@@ -22893,6 +24515,8 @@ func (m *OrganizationMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldDescription(ctx)
 	case organization.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case organization.FieldSlug:
+		return m.OldSlug(ctx)
 	case organization.FieldPrimaryImageURL:
 		return m.OldPrimaryImageURL(ctx)
 	case organization.FieldAdditionalImagesUrls:
@@ -22989,6 +24613,13 @@ func (m *OrganizationMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case organization.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	case organization.FieldPrimaryImageURL:
 		v, ok := value.(string)
 		if !ok {
@@ -23081,6 +24712,9 @@ func (m *OrganizationMutation) ClearedFields() []string {
 	if m.FieldCleared(organization.FieldExternalLink) {
 		fields = append(fields, organization.FieldExternalLink)
 	}
+	if m.FieldCleared(organization.FieldSlug) {
+		fields = append(fields, organization.FieldSlug)
+	}
 	if m.FieldCleared(organization.FieldPrimaryImageURL) {
 		fields = append(fields, organization.FieldPrimaryImageURL)
 	}
@@ -23137,6 +24771,9 @@ func (m *OrganizationMutation) ClearField(name string) error {
 	case organization.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case organization.FieldSlug:
+		m.ClearSlug()
+		return nil
 	case organization.FieldPrimaryImageURL:
 		m.ClearPrimaryImageURL()
 		return nil
@@ -23192,6 +24829,9 @@ func (m *OrganizationMutation) ResetField(name string) error {
 		return nil
 	case organization.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case organization.FieldSlug:
+		m.ResetSlug()
 		return nil
 	case organization.FieldPrimaryImageURL:
 		m.ResetPrimaryImageURL()
@@ -23346,6 +24986,7 @@ type OrganizationTypeMutation struct {
 	abbreviation         *string
 	description          *string
 	external_link        *string
+	slug                 *string
 	clearedFields        map[string]struct{}
 	organizations        map[int]struct{}
 	removedorganizations map[int]struct{}
@@ -23819,6 +25460,55 @@ func (m *OrganizationTypeMutation) ResetExternalLink() {
 	delete(m.clearedFields, organizationtype.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *OrganizationTypeMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *OrganizationTypeMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the OrganizationType entity.
+// If the OrganizationType object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationTypeMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *OrganizationTypeMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[organizationtype.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *OrganizationTypeMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[organizationtype.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *OrganizationTypeMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, organizationtype.FieldSlug)
+}
+
 // AddOrganizationIDs adds the "organizations" edge to the Organization entity by ids.
 func (m *OrganizationTypeMutation) AddOrganizationIDs(ids ...int) {
 	if m.organizations == nil {
@@ -23907,7 +25597,7 @@ func (m *OrganizationTypeMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrganizationTypeMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, organizationtype.FieldCreatedAt)
 	}
@@ -23931,6 +25621,9 @@ func (m *OrganizationTypeMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, organizationtype.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, organizationtype.FieldSlug)
 	}
 	return fields
 }
@@ -23956,6 +25649,8 @@ func (m *OrganizationTypeMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case organizationtype.FieldExternalLink:
 		return m.ExternalLink()
+	case organizationtype.FieldSlug:
+		return m.Slug()
 	}
 	return nil, false
 }
@@ -23981,6 +25676,8 @@ func (m *OrganizationTypeMutation) OldField(ctx context.Context, name string) (e
 		return m.OldDescription(ctx)
 	case organizationtype.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case organizationtype.FieldSlug:
+		return m.OldSlug(ctx)
 	}
 	return nil, fmt.Errorf("unknown OrganizationType field %s", name)
 }
@@ -24046,6 +25743,13 @@ func (m *OrganizationTypeMutation) SetField(name string, value ent.Value) error 
 		}
 		m.SetExternalLink(v)
 		return nil
+	case organizationtype.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	}
 	return fmt.Errorf("unknown OrganizationType field %s", name)
 }
@@ -24094,6 +25798,9 @@ func (m *OrganizationTypeMutation) ClearedFields() []string {
 	if m.FieldCleared(organizationtype.FieldExternalLink) {
 		fields = append(fields, organizationtype.FieldExternalLink)
 	}
+	if m.FieldCleared(organizationtype.FieldSlug) {
+		fields = append(fields, organizationtype.FieldSlug)
+	}
 	return fields
 }
 
@@ -24126,6 +25833,9 @@ func (m *OrganizationTypeMutation) ClearField(name string) error {
 	case organizationtype.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case organizationtype.FieldSlug:
+		m.ClearSlug()
+		return nil
 	}
 	return fmt.Errorf("unknown OrganizationType nullable field %s", name)
 }
@@ -24157,6 +25867,9 @@ func (m *OrganizationTypeMutation) ResetField(name string) error {
 		return nil
 	case organizationtype.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case organizationtype.FieldSlug:
+		m.ResetSlug()
 		return nil
 	}
 	return fmt.Errorf("unknown OrganizationType field %s", name)
@@ -24260,6 +25973,7 @@ type PeriodMutation struct {
 	abbreviation     *string
 	description      *string
 	external_link    *string
+	slug             *string
 	clearedFields    map[string]struct{}
 	artifacts        map[int]struct{}
 	removedartifacts map[int]struct{}
@@ -24733,6 +26447,55 @@ func (m *PeriodMutation) ResetExternalLink() {
 	delete(m.clearedFields, period.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *PeriodMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *PeriodMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the Period entity.
+// If the Period object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PeriodMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *PeriodMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[period.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *PeriodMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[period.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *PeriodMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, period.FieldSlug)
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
 func (m *PeriodMutation) AddArtifactIDs(ids ...int) {
 	if m.artifacts == nil {
@@ -24821,7 +26584,7 @@ func (m *PeriodMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PeriodMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, period.FieldCreatedAt)
 	}
@@ -24845,6 +26608,9 @@ func (m *PeriodMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, period.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, period.FieldSlug)
 	}
 	return fields
 }
@@ -24870,6 +26636,8 @@ func (m *PeriodMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case period.FieldExternalLink:
 		return m.ExternalLink()
+	case period.FieldSlug:
+		return m.Slug()
 	}
 	return nil, false
 }
@@ -24895,6 +26663,8 @@ func (m *PeriodMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldDescription(ctx)
 	case period.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case period.FieldSlug:
+		return m.OldSlug(ctx)
 	}
 	return nil, fmt.Errorf("unknown Period field %s", name)
 }
@@ -24960,6 +26730,13 @@ func (m *PeriodMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case period.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Period field %s", name)
 }
@@ -25008,6 +26785,9 @@ func (m *PeriodMutation) ClearedFields() []string {
 	if m.FieldCleared(period.FieldExternalLink) {
 		fields = append(fields, period.FieldExternalLink)
 	}
+	if m.FieldCleared(period.FieldSlug) {
+		fields = append(fields, period.FieldSlug)
+	}
 	return fields
 }
 
@@ -25040,6 +26820,9 @@ func (m *PeriodMutation) ClearField(name string) error {
 	case period.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case period.FieldSlug:
+		m.ClearSlug()
+		return nil
 	}
 	return fmt.Errorf("unknown Period nullable field %s", name)
 }
@@ -25071,6 +26854,9 @@ func (m *PeriodMutation) ResetField(name string) error {
 		return nil
 	case period.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case period.FieldSlug:
+		m.ResetSlug()
 		return nil
 	}
 	return fmt.Errorf("unknown Period field %s", name)
@@ -25179,6 +26965,7 @@ type PersonMutation struct {
 	abbreviation                 *string
 	description                  *string
 	external_link                *string
+	slug                         *string
 	primary_image_url            *string
 	additional_images_urls       *[]string
 	appendadditional_images_urls []string
@@ -25856,6 +27643,55 @@ func (m *PersonMutation) ExternalLinkCleared() bool {
 func (m *PersonMutation) ResetExternalLink() {
 	m.external_link = nil
 	delete(m.clearedFields, person.FieldExternalLink)
+}
+
+// SetSlug sets the "slug" field.
+func (m *PersonMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *PersonMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the Person entity.
+// If the Person object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *PersonMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[person.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *PersonMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[person.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *PersonMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, person.FieldSlug)
 }
 
 // SetPrimaryImageURL sets the "primary_image_url" field.
@@ -26674,7 +28510,7 @@ func (m *PersonMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PersonMutation) Fields() []string {
-	fields := make([]string, 0, 19)
+	fields := make([]string, 0, 20)
 	if m.created_at != nil {
 		fields = append(fields, person.FieldCreatedAt)
 	}
@@ -26707,6 +28543,9 @@ func (m *PersonMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, person.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, person.FieldSlug)
 	}
 	if m.primary_image_url != nil {
 		fields = append(fields, person.FieldPrimaryImageURL)
@@ -26762,6 +28601,8 @@ func (m *PersonMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case person.FieldExternalLink:
 		return m.ExternalLink()
+	case person.FieldSlug:
+		return m.Slug()
 	case person.FieldPrimaryImageURL:
 		return m.PrimaryImageURL()
 	case person.FieldAdditionalImagesUrls:
@@ -26809,6 +28650,8 @@ func (m *PersonMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldDescription(ctx)
 	case person.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case person.FieldSlug:
+		return m.OldSlug(ctx)
 	case person.FieldPrimaryImageURL:
 		return m.OldPrimaryImageURL(ctx)
 	case person.FieldAdditionalImagesUrls:
@@ -26910,6 +28753,13 @@ func (m *PersonMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetExternalLink(v)
+		return nil
+	case person.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
 		return nil
 	case person.FieldPrimaryImageURL:
 		v, ok := value.(string)
@@ -27024,6 +28874,9 @@ func (m *PersonMutation) ClearedFields() []string {
 	if m.FieldCleared(person.FieldExternalLink) {
 		fields = append(fields, person.FieldExternalLink)
 	}
+	if m.FieldCleared(person.FieldSlug) {
+		fields = append(fields, person.FieldSlug)
+	}
 	if m.FieldCleared(person.FieldPrimaryImageURL) {
 		fields = append(fields, person.FieldPrimaryImageURL)
 	}
@@ -27086,6 +28939,9 @@ func (m *PersonMutation) ClearField(name string) error {
 	case person.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case person.FieldSlug:
+		m.ClearSlug()
+		return nil
 	case person.FieldPrimaryImageURL:
 		m.ClearPrimaryImageURL()
 		return nil
@@ -27147,6 +29003,9 @@ func (m *PersonMutation) ResetField(name string) error {
 		return nil
 	case person.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case person.FieldSlug:
+		m.ResetSlug()
 		return nil
 	case person.FieldPrimaryImageURL:
 		m.ResetPrimaryImageURL()
@@ -27432,6 +29291,7 @@ type PersonRoleMutation struct {
 	abbreviation  *string
 	description   *string
 	external_link *string
+	slug          *string
 	clearedFields map[string]struct{}
 	person        map[int]struct{}
 	removedperson map[int]struct{}
@@ -27905,6 +29765,55 @@ func (m *PersonRoleMutation) ResetExternalLink() {
 	delete(m.clearedFields, personrole.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *PersonRoleMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *PersonRoleMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the PersonRole entity.
+// If the PersonRole object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonRoleMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *PersonRoleMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[personrole.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *PersonRoleMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[personrole.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *PersonRoleMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, personrole.FieldSlug)
+}
+
 // AddPersonIDs adds the "person" edge to the Person entity by ids.
 func (m *PersonRoleMutation) AddPersonIDs(ids ...int) {
 	if m.person == nil {
@@ -27993,7 +29902,7 @@ func (m *PersonRoleMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PersonRoleMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, personrole.FieldCreatedAt)
 	}
@@ -28017,6 +29926,9 @@ func (m *PersonRoleMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, personrole.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, personrole.FieldSlug)
 	}
 	return fields
 }
@@ -28042,6 +29954,8 @@ func (m *PersonRoleMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case personrole.FieldExternalLink:
 		return m.ExternalLink()
+	case personrole.FieldSlug:
+		return m.Slug()
 	}
 	return nil, false
 }
@@ -28067,6 +29981,8 @@ func (m *PersonRoleMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldDescription(ctx)
 	case personrole.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case personrole.FieldSlug:
+		return m.OldSlug(ctx)
 	}
 	return nil, fmt.Errorf("unknown PersonRole field %s", name)
 }
@@ -28132,6 +30048,13 @@ func (m *PersonRoleMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case personrole.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	}
 	return fmt.Errorf("unknown PersonRole field %s", name)
 }
@@ -28180,6 +30103,9 @@ func (m *PersonRoleMutation) ClearedFields() []string {
 	if m.FieldCleared(personrole.FieldExternalLink) {
 		fields = append(fields, personrole.FieldExternalLink)
 	}
+	if m.FieldCleared(personrole.FieldSlug) {
+		fields = append(fields, personrole.FieldSlug)
+	}
 	return fields
 }
 
@@ -28212,6 +30138,9 @@ func (m *PersonRoleMutation) ClearField(name string) error {
 	case personrole.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case personrole.FieldSlug:
+		m.ClearSlug()
+		return nil
 	}
 	return fmt.Errorf("unknown PersonRole nullable field %s", name)
 }
@@ -28243,6 +30172,9 @@ func (m *PersonRoleMutation) ResetField(name string) error {
 		return nil
 	case personrole.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case personrole.FieldSlug:
+		m.ResetSlug()
 		return nil
 	}
 	return fmt.Errorf("unknown PersonRole field %s", name)
@@ -28346,6 +30278,7 @@ type ProjectMutation struct {
 	abbreviation        *string
 	description         *string
 	external_link       *string
+	slug                *string
 	begin_data          *time.Time
 	end_date            *time.Time
 	clearedFields       map[string]struct{}
@@ -28826,6 +30759,55 @@ func (m *ProjectMutation) ResetExternalLink() {
 	delete(m.clearedFields, project.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *ProjectMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *ProjectMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the Project entity.
+// If the Project object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProjectMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *ProjectMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[project.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *ProjectMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[project.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *ProjectMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, project.FieldSlug)
+}
+
 // SetBeginData sets the "begin_data" field.
 func (m *ProjectMutation) SetBeginData(t time.Time) {
 	m.begin_data = &t
@@ -29105,7 +31087,7 @@ func (m *ProjectMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProjectMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 11)
 	if m.created_at != nil {
 		fields = append(fields, project.FieldCreatedAt)
 	}
@@ -29129,6 +31111,9 @@ func (m *ProjectMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, project.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, project.FieldSlug)
 	}
 	if m.begin_data != nil {
 		fields = append(fields, project.FieldBeginData)
@@ -29160,6 +31145,8 @@ func (m *ProjectMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case project.FieldExternalLink:
 		return m.ExternalLink()
+	case project.FieldSlug:
+		return m.Slug()
 	case project.FieldBeginData:
 		return m.BeginData()
 	case project.FieldEndDate:
@@ -29189,6 +31176,8 @@ func (m *ProjectMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldDescription(ctx)
 	case project.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case project.FieldSlug:
+		return m.OldSlug(ctx)
 	case project.FieldBeginData:
 		return m.OldBeginData(ctx)
 	case project.FieldEndDate:
@@ -29258,6 +31247,13 @@ func (m *ProjectMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case project.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	case project.FieldBeginData:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -29320,6 +31316,9 @@ func (m *ProjectMutation) ClearedFields() []string {
 	if m.FieldCleared(project.FieldExternalLink) {
 		fields = append(fields, project.FieldExternalLink)
 	}
+	if m.FieldCleared(project.FieldSlug) {
+		fields = append(fields, project.FieldSlug)
+	}
 	if m.FieldCleared(project.FieldBeginData) {
 		fields = append(fields, project.FieldBeginData)
 	}
@@ -29358,6 +31357,9 @@ func (m *ProjectMutation) ClearField(name string) error {
 	case project.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case project.FieldSlug:
+		m.ClearSlug()
+		return nil
 	case project.FieldBeginData:
 		m.ClearBeginData()
 		return nil
@@ -29395,6 +31397,9 @@ func (m *ProjectMutation) ResetField(name string) error {
 		return nil
 	case project.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case project.FieldSlug:
+		m.ResetSlug()
 		return nil
 	case project.FieldBeginData:
 		m.ResetBeginData()
@@ -29548,6 +31553,7 @@ type ProjectTypeMutation struct {
 	abbreviation    *string
 	description     *string
 	external_link   *string
+	slug            *string
 	clearedFields   map[string]struct{}
 	projects        map[int]struct{}
 	removedprojects map[int]struct{}
@@ -30021,6 +32027,55 @@ func (m *ProjectTypeMutation) ResetExternalLink() {
 	delete(m.clearedFields, projecttype.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *ProjectTypeMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *ProjectTypeMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the ProjectType entity.
+// If the ProjectType object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProjectTypeMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *ProjectTypeMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[projecttype.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *ProjectTypeMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[projecttype.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *ProjectTypeMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, projecttype.FieldSlug)
+}
+
 // AddProjectIDs adds the "projects" edge to the Project entity by ids.
 func (m *ProjectTypeMutation) AddProjectIDs(ids ...int) {
 	if m.projects == nil {
@@ -30109,7 +32164,7 @@ func (m *ProjectTypeMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProjectTypeMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, projecttype.FieldCreatedAt)
 	}
@@ -30133,6 +32188,9 @@ func (m *ProjectTypeMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, projecttype.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, projecttype.FieldSlug)
 	}
 	return fields
 }
@@ -30158,6 +32216,8 @@ func (m *ProjectTypeMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case projecttype.FieldExternalLink:
 		return m.ExternalLink()
+	case projecttype.FieldSlug:
+		return m.Slug()
 	}
 	return nil, false
 }
@@ -30183,6 +32243,8 @@ func (m *ProjectTypeMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldDescription(ctx)
 	case projecttype.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case projecttype.FieldSlug:
+		return m.OldSlug(ctx)
 	}
 	return nil, fmt.Errorf("unknown ProjectType field %s", name)
 }
@@ -30248,6 +32310,13 @@ func (m *ProjectTypeMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case projecttype.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ProjectType field %s", name)
 }
@@ -30296,6 +32365,9 @@ func (m *ProjectTypeMutation) ClearedFields() []string {
 	if m.FieldCleared(projecttype.FieldExternalLink) {
 		fields = append(fields, projecttype.FieldExternalLink)
 	}
+	if m.FieldCleared(projecttype.FieldSlug) {
+		fields = append(fields, projecttype.FieldSlug)
+	}
 	return fields
 }
 
@@ -30328,6 +32400,9 @@ func (m *ProjectTypeMutation) ClearField(name string) error {
 	case projecttype.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case projecttype.FieldSlug:
+		m.ClearSlug()
+		return nil
 	}
 	return fmt.Errorf("unknown ProjectType nullable field %s", name)
 }
@@ -30359,6 +32434,9 @@ func (m *ProjectTypeMutation) ResetField(name string) error {
 		return nil
 	case projecttype.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case projecttype.FieldSlug:
+		m.ResetSlug()
 		return nil
 	}
 	return fmt.Errorf("unknown ProjectType field %s", name)
@@ -30462,6 +32540,7 @@ type ProtectedAreaMutation struct {
 	abbreviation                   *string
 	description                    *string
 	external_link                  *string
+	slug                           *string
 	area                           *string
 	establishment_date             *time.Time
 	clearedFields                  map[string]struct{}
@@ -30939,6 +33018,55 @@ func (m *ProtectedAreaMutation) ResetExternalLink() {
 	delete(m.clearedFields, protectedarea.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *ProtectedAreaMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *ProtectedAreaMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the ProtectedArea entity.
+// If the ProtectedArea object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *ProtectedAreaMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[protectedarea.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *ProtectedAreaMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[protectedarea.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *ProtectedAreaMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, protectedarea.FieldSlug)
+}
+
 // SetArea sets the "area" field.
 func (m *ProtectedAreaMutation) SetArea(s string) {
 	m.area = &s
@@ -31164,7 +33292,7 @@ func (m *ProtectedAreaMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProtectedAreaMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 11)
 	if m.created_at != nil {
 		fields = append(fields, protectedarea.FieldCreatedAt)
 	}
@@ -31188,6 +33316,9 @@ func (m *ProtectedAreaMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, protectedarea.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, protectedarea.FieldSlug)
 	}
 	if m.area != nil {
 		fields = append(fields, protectedarea.FieldArea)
@@ -31219,6 +33350,8 @@ func (m *ProtectedAreaMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case protectedarea.FieldExternalLink:
 		return m.ExternalLink()
+	case protectedarea.FieldSlug:
+		return m.Slug()
 	case protectedarea.FieldArea:
 		return m.Area()
 	case protectedarea.FieldEstablishmentDate:
@@ -31248,6 +33381,8 @@ func (m *ProtectedAreaMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldDescription(ctx)
 	case protectedarea.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case protectedarea.FieldSlug:
+		return m.OldSlug(ctx)
 	case protectedarea.FieldArea:
 		return m.OldArea(ctx)
 	case protectedarea.FieldEstablishmentDate:
@@ -31317,6 +33452,13 @@ func (m *ProtectedAreaMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case protectedarea.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	case protectedarea.FieldArea:
 		v, ok := value.(string)
 		if !ok {
@@ -31379,6 +33521,9 @@ func (m *ProtectedAreaMutation) ClearedFields() []string {
 	if m.FieldCleared(protectedarea.FieldExternalLink) {
 		fields = append(fields, protectedarea.FieldExternalLink)
 	}
+	if m.FieldCleared(protectedarea.FieldSlug) {
+		fields = append(fields, protectedarea.FieldSlug)
+	}
 	if m.FieldCleared(protectedarea.FieldArea) {
 		fields = append(fields, protectedarea.FieldArea)
 	}
@@ -31417,6 +33562,9 @@ func (m *ProtectedAreaMutation) ClearField(name string) error {
 	case protectedarea.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case protectedarea.FieldSlug:
+		m.ClearSlug()
+		return nil
 	case protectedarea.FieldArea:
 		m.ClearArea()
 		return nil
@@ -31454,6 +33602,9 @@ func (m *ProtectedAreaMutation) ResetField(name string) error {
 		return nil
 	case protectedarea.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case protectedarea.FieldSlug:
+		m.ResetSlug()
 		return nil
 	case protectedarea.FieldArea:
 		m.ResetArea()
@@ -31581,6 +33732,7 @@ type ProtectedAreaCategoryMutation struct {
 	abbreviation           *string
 	description            *string
 	external_link          *string
+	slug                   *string
 	clearedFields          map[string]struct{}
 	protected_areas        map[int]struct{}
 	removedprotected_areas map[int]struct{}
@@ -32054,6 +34206,55 @@ func (m *ProtectedAreaCategoryMutation) ResetExternalLink() {
 	delete(m.clearedFields, protectedareacategory.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *ProtectedAreaCategoryMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *ProtectedAreaCategoryMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the ProtectedAreaCategory entity.
+// If the ProtectedAreaCategory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaCategoryMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *ProtectedAreaCategoryMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[protectedareacategory.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *ProtectedAreaCategoryMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[protectedareacategory.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *ProtectedAreaCategoryMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, protectedareacategory.FieldSlug)
+}
+
 // AddProtectedAreaIDs adds the "protected_areas" edge to the ProtectedArea entity by ids.
 func (m *ProtectedAreaCategoryMutation) AddProtectedAreaIDs(ids ...int) {
 	if m.protected_areas == nil {
@@ -32142,7 +34343,7 @@ func (m *ProtectedAreaCategoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProtectedAreaCategoryMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, protectedareacategory.FieldCreatedAt)
 	}
@@ -32166,6 +34367,9 @@ func (m *ProtectedAreaCategoryMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, protectedareacategory.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, protectedareacategory.FieldSlug)
 	}
 	return fields
 }
@@ -32191,6 +34395,8 @@ func (m *ProtectedAreaCategoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case protectedareacategory.FieldExternalLink:
 		return m.ExternalLink()
+	case protectedareacategory.FieldSlug:
+		return m.Slug()
 	}
 	return nil, false
 }
@@ -32216,6 +34422,8 @@ func (m *ProtectedAreaCategoryMutation) OldField(ctx context.Context, name strin
 		return m.OldDescription(ctx)
 	case protectedareacategory.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case protectedareacategory.FieldSlug:
+		return m.OldSlug(ctx)
 	}
 	return nil, fmt.Errorf("unknown ProtectedAreaCategory field %s", name)
 }
@@ -32281,6 +34489,13 @@ func (m *ProtectedAreaCategoryMutation) SetField(name string, value ent.Value) e
 		}
 		m.SetExternalLink(v)
 		return nil
+	case protectedareacategory.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ProtectedAreaCategory field %s", name)
 }
@@ -32329,6 +34544,9 @@ func (m *ProtectedAreaCategoryMutation) ClearedFields() []string {
 	if m.FieldCleared(protectedareacategory.FieldExternalLink) {
 		fields = append(fields, protectedareacategory.FieldExternalLink)
 	}
+	if m.FieldCleared(protectedareacategory.FieldSlug) {
+		fields = append(fields, protectedareacategory.FieldSlug)
+	}
 	return fields
 }
 
@@ -32361,6 +34579,9 @@ func (m *ProtectedAreaCategoryMutation) ClearField(name string) error {
 	case protectedareacategory.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case protectedareacategory.FieldSlug:
+		m.ClearSlug()
+		return nil
 	}
 	return fmt.Errorf("unknown ProtectedAreaCategory nullable field %s", name)
 }
@@ -32392,6 +34613,9 @@ func (m *ProtectedAreaCategoryMutation) ResetField(name string) error {
 		return nil
 	case protectedareacategory.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case protectedareacategory.FieldSlug:
+		m.ResetSlug()
 		return nil
 	}
 	return fmt.Errorf("unknown ProtectedAreaCategory field %s", name)
@@ -32495,6 +34719,7 @@ type ProtectedAreaPictureMutation struct {
 	abbreviation                 *string
 	description                  *string
 	external_link                *string
+	slug                         *string
 	primary_image_url            *string
 	additional_images_urls       *[]string
 	appendadditional_images_urls []string
@@ -32978,6 +35203,55 @@ func (m *ProtectedAreaPictureMutation) ResetExternalLink() {
 	delete(m.clearedFields, protectedareapicture.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *ProtectedAreaPictureMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *ProtectedAreaPictureMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the ProtectedAreaPicture entity.
+// If the ProtectedAreaPicture object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaPictureMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *ProtectedAreaPictureMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[protectedareapicture.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *ProtectedAreaPictureMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[protectedareapicture.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *ProtectedAreaPictureMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, protectedareapicture.FieldSlug)
+}
+
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (m *ProtectedAreaPictureMutation) SetPrimaryImageURL(s string) {
 	m.primary_image_url = &s
@@ -33380,7 +35654,7 @@ func (m *ProtectedAreaPictureMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProtectedAreaPictureMutation) Fields() []string {
-	fields := make([]string, 0, 12)
+	fields := make([]string, 0, 13)
 	if m.created_at != nil {
 		fields = append(fields, protectedareapicture.FieldCreatedAt)
 	}
@@ -33404,6 +35678,9 @@ func (m *ProtectedAreaPictureMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, protectedareapicture.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, protectedareapicture.FieldSlug)
 	}
 	if m.primary_image_url != nil {
 		fields = append(fields, protectedareapicture.FieldPrimaryImageURL)
@@ -33441,6 +35718,8 @@ func (m *ProtectedAreaPictureMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case protectedareapicture.FieldExternalLink:
 		return m.ExternalLink()
+	case protectedareapicture.FieldSlug:
+		return m.Slug()
 	case protectedareapicture.FieldPrimaryImageURL:
 		return m.PrimaryImageURL()
 	case protectedareapicture.FieldAdditionalImagesUrls:
@@ -33474,6 +35753,8 @@ func (m *ProtectedAreaPictureMutation) OldField(ctx context.Context, name string
 		return m.OldDescription(ctx)
 	case protectedareapicture.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case protectedareapicture.FieldSlug:
+		return m.OldSlug(ctx)
 	case protectedareapicture.FieldPrimaryImageURL:
 		return m.OldPrimaryImageURL(ctx)
 	case protectedareapicture.FieldAdditionalImagesUrls:
@@ -33546,6 +35827,13 @@ func (m *ProtectedAreaPictureMutation) SetField(name string, value ent.Value) er
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetExternalLink(v)
+		return nil
+	case protectedareapicture.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
 		return nil
 	case protectedareapicture.FieldPrimaryImageURL:
 		v, ok := value.(string)
@@ -33623,6 +35911,9 @@ func (m *ProtectedAreaPictureMutation) ClearedFields() []string {
 	if m.FieldCleared(protectedareapicture.FieldExternalLink) {
 		fields = append(fields, protectedareapicture.FieldExternalLink)
 	}
+	if m.FieldCleared(protectedareapicture.FieldSlug) {
+		fields = append(fields, protectedareapicture.FieldSlug)
+	}
 	if m.FieldCleared(protectedareapicture.FieldPrimaryImageURL) {
 		fields = append(fields, protectedareapicture.FieldPrimaryImageURL)
 	}
@@ -33667,6 +35958,9 @@ func (m *ProtectedAreaPictureMutation) ClearField(name string) error {
 	case protectedareapicture.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case protectedareapicture.FieldSlug:
+		m.ClearSlug()
+		return nil
 	case protectedareapicture.FieldPrimaryImageURL:
 		m.ClearPrimaryImageURL()
 		return nil
@@ -33710,6 +36004,9 @@ func (m *ProtectedAreaPictureMutation) ResetField(name string) error {
 		return nil
 	case protectedareapicture.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case protectedareapicture.FieldSlug:
+		m.ResetSlug()
 		return nil
 	case protectedareapicture.FieldPrimaryImageURL:
 		m.ResetPrimaryImageURL()
@@ -33869,6 +36166,7 @@ type PublicationMutation struct {
 	abbreviation     *string
 	description      *string
 	external_link    *string
+	slug             *string
 	clearedFields    map[string]struct{}
 	artifacts        map[int]struct{}
 	removedartifacts map[int]struct{}
@@ -34345,6 +36643,55 @@ func (m *PublicationMutation) ResetExternalLink() {
 	delete(m.clearedFields, publication.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *PublicationMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *PublicationMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the Publication entity.
+// If the Publication object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PublicationMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *PublicationMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[publication.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *PublicationMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[publication.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *PublicationMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, publication.FieldSlug)
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
 func (m *PublicationMutation) AddArtifactIDs(ids ...int) {
 	if m.artifacts == nil {
@@ -34487,7 +36834,7 @@ func (m *PublicationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PublicationMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, publication.FieldCreatedAt)
 	}
@@ -34511,6 +36858,9 @@ func (m *PublicationMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, publication.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, publication.FieldSlug)
 	}
 	return fields
 }
@@ -34536,6 +36886,8 @@ func (m *PublicationMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case publication.FieldExternalLink:
 		return m.ExternalLink()
+	case publication.FieldSlug:
+		return m.Slug()
 	}
 	return nil, false
 }
@@ -34561,6 +36913,8 @@ func (m *PublicationMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldDescription(ctx)
 	case publication.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case publication.FieldSlug:
+		return m.OldSlug(ctx)
 	}
 	return nil, fmt.Errorf("unknown Publication field %s", name)
 }
@@ -34626,6 +36980,13 @@ func (m *PublicationMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case publication.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Publication field %s", name)
 }
@@ -34674,6 +37035,9 @@ func (m *PublicationMutation) ClearedFields() []string {
 	if m.FieldCleared(publication.FieldExternalLink) {
 		fields = append(fields, publication.FieldExternalLink)
 	}
+	if m.FieldCleared(publication.FieldSlug) {
+		fields = append(fields, publication.FieldSlug)
+	}
 	return fields
 }
 
@@ -34706,6 +37070,9 @@ func (m *PublicationMutation) ClearField(name string) error {
 	case publication.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case publication.FieldSlug:
+		m.ClearSlug()
+		return nil
 	}
 	return fmt.Errorf("unknown Publication nullable field %s", name)
 }
@@ -34737,6 +37104,9 @@ func (m *PublicationMutation) ResetField(name string) error {
 		return nil
 	case publication.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case publication.FieldSlug:
+		m.ResetSlug()
 		return nil
 	}
 	return fmt.Errorf("unknown Publication field %s", name)
@@ -34866,6 +37236,7 @@ type PublisherMutation struct {
 	abbreviation  *string
 	description   *string
 	external_link *string
+	slug          *string
 	clearedFields map[string]struct{}
 	books         map[int]struct{}
 	removedbooks  map[int]struct{}
@@ -35339,6 +37710,55 @@ func (m *PublisherMutation) ResetExternalLink() {
 	delete(m.clearedFields, publisher.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *PublisherMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *PublisherMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the Publisher entity.
+// If the Publisher object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PublisherMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *PublisherMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[publisher.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *PublisherMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[publisher.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *PublisherMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, publisher.FieldSlug)
+}
+
 // AddBookIDs adds the "books" edge to the Book entity by ids.
 func (m *PublisherMutation) AddBookIDs(ids ...int) {
 	if m.books == nil {
@@ -35427,7 +37847,7 @@ func (m *PublisherMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PublisherMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, publisher.FieldCreatedAt)
 	}
@@ -35451,6 +37871,9 @@ func (m *PublisherMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, publisher.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, publisher.FieldSlug)
 	}
 	return fields
 }
@@ -35476,6 +37899,8 @@ func (m *PublisherMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case publisher.FieldExternalLink:
 		return m.ExternalLink()
+	case publisher.FieldSlug:
+		return m.Slug()
 	}
 	return nil, false
 }
@@ -35501,6 +37926,8 @@ func (m *PublisherMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldDescription(ctx)
 	case publisher.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case publisher.FieldSlug:
+		return m.OldSlug(ctx)
 	}
 	return nil, fmt.Errorf("unknown Publisher field %s", name)
 }
@@ -35566,6 +37993,13 @@ func (m *PublisherMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case publisher.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Publisher field %s", name)
 }
@@ -35614,6 +38048,9 @@ func (m *PublisherMutation) ClearedFields() []string {
 	if m.FieldCleared(publisher.FieldExternalLink) {
 		fields = append(fields, publisher.FieldExternalLink)
 	}
+	if m.FieldCleared(publisher.FieldSlug) {
+		fields = append(fields, publisher.FieldSlug)
+	}
 	return fields
 }
 
@@ -35646,6 +38083,9 @@ func (m *PublisherMutation) ClearField(name string) error {
 	case publisher.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case publisher.FieldSlug:
+		m.ClearSlug()
+		return nil
 	}
 	return fmt.Errorf("unknown Publisher nullable field %s", name)
 }
@@ -35677,6 +38117,9 @@ func (m *PublisherMutation) ResetField(name string) error {
 		return nil
 	case publisher.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case publisher.FieldSlug:
+		m.ResetSlug()
 		return nil
 	}
 	return fmt.Errorf("unknown Publisher field %s", name)
@@ -35780,6 +38223,7 @@ type RegionMutation struct {
 	abbreviation    *string
 	description     *string
 	external_link   *string
+	slug            *string
 	clearedFields   map[string]struct{}
 	location        *int
 	clearedlocation bool
@@ -36252,6 +38696,55 @@ func (m *RegionMutation) ResetExternalLink() {
 	delete(m.clearedFields, region.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *RegionMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *RegionMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the Region entity.
+// If the Region object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RegionMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *RegionMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[region.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *RegionMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[region.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *RegionMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, region.FieldSlug)
+}
+
 // SetLocationID sets the "location" edge to the Location entity by id.
 func (m *RegionMutation) SetLocationID(id int) {
 	m.location = &id
@@ -36325,7 +38818,7 @@ func (m *RegionMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *RegionMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, region.FieldCreatedAt)
 	}
@@ -36349,6 +38842,9 @@ func (m *RegionMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, region.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, region.FieldSlug)
 	}
 	return fields
 }
@@ -36374,6 +38870,8 @@ func (m *RegionMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case region.FieldExternalLink:
 		return m.ExternalLink()
+	case region.FieldSlug:
+		return m.Slug()
 	}
 	return nil, false
 }
@@ -36399,6 +38897,8 @@ func (m *RegionMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldDescription(ctx)
 	case region.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case region.FieldSlug:
+		return m.OldSlug(ctx)
 	}
 	return nil, fmt.Errorf("unknown Region field %s", name)
 }
@@ -36464,6 +38964,13 @@ func (m *RegionMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case region.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Region field %s", name)
 }
@@ -36512,6 +39019,9 @@ func (m *RegionMutation) ClearedFields() []string {
 	if m.FieldCleared(region.FieldExternalLink) {
 		fields = append(fields, region.FieldExternalLink)
 	}
+	if m.FieldCleared(region.FieldSlug) {
+		fields = append(fields, region.FieldSlug)
+	}
 	return fields
 }
 
@@ -36544,6 +39054,9 @@ func (m *RegionMutation) ClearField(name string) error {
 	case region.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case region.FieldSlug:
+		m.ClearSlug()
+		return nil
 	}
 	return fmt.Errorf("unknown Region nullable field %s", name)
 }
@@ -36575,6 +39088,9 @@ func (m *RegionMutation) ResetField(name string) error {
 		return nil
 	case region.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case region.FieldSlug:
+		m.ResetSlug()
 		return nil
 	}
 	return fmt.Errorf("unknown Region field %s", name)
@@ -36668,6 +39184,7 @@ type SetMutation struct {
 	abbreviation     *string
 	description      *string
 	external_link    *string
+	slug             *string
 	clearedFields    map[string]struct{}
 	artifacts        map[int]struct{}
 	removedartifacts map[int]struct{}
@@ -37144,6 +39661,55 @@ func (m *SetMutation) ResetExternalLink() {
 	delete(m.clearedFields, set.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *SetMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *SetMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the Set entity.
+// If the Set object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SetMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *SetMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[set.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *SetMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[set.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *SetMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, set.FieldSlug)
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
 func (m *SetMutation) AddArtifactIDs(ids ...int) {
 	if m.artifacts == nil {
@@ -37286,7 +39852,7 @@ func (m *SetMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SetMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, set.FieldCreatedAt)
 	}
@@ -37310,6 +39876,9 @@ func (m *SetMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, set.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, set.FieldSlug)
 	}
 	return fields
 }
@@ -37335,6 +39904,8 @@ func (m *SetMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case set.FieldExternalLink:
 		return m.ExternalLink()
+	case set.FieldSlug:
+		return m.Slug()
 	}
 	return nil, false
 }
@@ -37360,6 +39931,8 @@ func (m *SetMutation) OldField(ctx context.Context, name string) (ent.Value, err
 		return m.OldDescription(ctx)
 	case set.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case set.FieldSlug:
+		return m.OldSlug(ctx)
 	}
 	return nil, fmt.Errorf("unknown Set field %s", name)
 }
@@ -37425,6 +39998,13 @@ func (m *SetMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case set.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Set field %s", name)
 }
@@ -37473,6 +40053,9 @@ func (m *SetMutation) ClearedFields() []string {
 	if m.FieldCleared(set.FieldExternalLink) {
 		fields = append(fields, set.FieldExternalLink)
 	}
+	if m.FieldCleared(set.FieldSlug) {
+		fields = append(fields, set.FieldSlug)
+	}
 	return fields
 }
 
@@ -37505,6 +40088,9 @@ func (m *SetMutation) ClearField(name string) error {
 	case set.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case set.FieldSlug:
+		m.ClearSlug()
+		return nil
 	}
 	return fmt.Errorf("unknown Set nullable field %s", name)
 }
@@ -37536,6 +40122,9 @@ func (m *SetMutation) ResetField(name string) error {
 		return nil
 	case set.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case set.FieldSlug:
+		m.ResetSlug()
 		return nil
 	}
 	return fmt.Errorf("unknown Set field %s", name)
@@ -37665,6 +40254,7 @@ type SettlementMutation struct {
 	abbreviation    *string
 	description     *string
 	external_link   *string
+	slug            *string
 	clearedFields   map[string]struct{}
 	location        *int
 	clearedlocation bool
@@ -38137,6 +40727,55 @@ func (m *SettlementMutation) ResetExternalLink() {
 	delete(m.clearedFields, settlement.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *SettlementMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *SettlementMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the Settlement entity.
+// If the Settlement object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettlementMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *SettlementMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[settlement.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *SettlementMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[settlement.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *SettlementMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, settlement.FieldSlug)
+}
+
 // SetLocationID sets the "location" edge to the Location entity by id.
 func (m *SettlementMutation) SetLocationID(id int) {
 	m.location = &id
@@ -38210,7 +40849,7 @@ func (m *SettlementMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SettlementMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, settlement.FieldCreatedAt)
 	}
@@ -38234,6 +40873,9 @@ func (m *SettlementMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, settlement.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, settlement.FieldSlug)
 	}
 	return fields
 }
@@ -38259,6 +40901,8 @@ func (m *SettlementMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case settlement.FieldExternalLink:
 		return m.ExternalLink()
+	case settlement.FieldSlug:
+		return m.Slug()
 	}
 	return nil, false
 }
@@ -38284,6 +40928,8 @@ func (m *SettlementMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldDescription(ctx)
 	case settlement.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case settlement.FieldSlug:
+		return m.OldSlug(ctx)
 	}
 	return nil, fmt.Errorf("unknown Settlement field %s", name)
 }
@@ -38349,6 +40995,13 @@ func (m *SettlementMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case settlement.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Settlement field %s", name)
 }
@@ -38397,6 +41050,9 @@ func (m *SettlementMutation) ClearedFields() []string {
 	if m.FieldCleared(settlement.FieldExternalLink) {
 		fields = append(fields, settlement.FieldExternalLink)
 	}
+	if m.FieldCleared(settlement.FieldSlug) {
+		fields = append(fields, settlement.FieldSlug)
+	}
 	return fields
 }
 
@@ -38429,6 +41085,9 @@ func (m *SettlementMutation) ClearField(name string) error {
 	case settlement.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case settlement.FieldSlug:
+		m.ClearSlug()
+		return nil
 	}
 	return fmt.Errorf("unknown Settlement nullable field %s", name)
 }
@@ -38460,6 +41119,9 @@ func (m *SettlementMutation) ResetField(name string) error {
 		return nil
 	case settlement.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case settlement.FieldSlug:
+		m.ResetSlug()
 		return nil
 	}
 	return fmt.Errorf("unknown Settlement field %s", name)
@@ -38553,6 +41215,7 @@ type TechniqueMutation struct {
 	abbreviation     *string
 	description      *string
 	external_link    *string
+	slug             *string
 	clearedFields    map[string]struct{}
 	artifacts        map[int]struct{}
 	removedartifacts map[int]struct{}
@@ -39026,6 +41689,55 @@ func (m *TechniqueMutation) ResetExternalLink() {
 	delete(m.clearedFields, technique.FieldExternalLink)
 }
 
+// SetSlug sets the "slug" field.
+func (m *TechniqueMutation) SetSlug(s string) {
+	m.slug = &s
+}
+
+// Slug returns the value of the "slug" field in the mutation.
+func (m *TechniqueMutation) Slug() (r string, exists bool) {
+	v := m.slug
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlug returns the old "slug" field's value of the Technique entity.
+// If the Technique object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TechniqueMutation) OldSlug(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlug requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+	}
+	return oldValue.Slug, nil
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (m *TechniqueMutation) ClearSlug() {
+	m.slug = nil
+	m.clearedFields[technique.FieldSlug] = struct{}{}
+}
+
+// SlugCleared returns if the "slug" field was cleared in this mutation.
+func (m *TechniqueMutation) SlugCleared() bool {
+	_, ok := m.clearedFields[technique.FieldSlug]
+	return ok
+}
+
+// ResetSlug resets all changes to the "slug" field.
+func (m *TechniqueMutation) ResetSlug() {
+	m.slug = nil
+	delete(m.clearedFields, technique.FieldSlug)
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
 func (m *TechniqueMutation) AddArtifactIDs(ids ...int) {
 	if m.artifacts == nil {
@@ -39114,7 +41826,7 @@ func (m *TechniqueMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TechniqueMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, technique.FieldCreatedAt)
 	}
@@ -39138,6 +41850,9 @@ func (m *TechniqueMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, technique.FieldExternalLink)
+	}
+	if m.slug != nil {
+		fields = append(fields, technique.FieldSlug)
 	}
 	return fields
 }
@@ -39163,6 +41878,8 @@ func (m *TechniqueMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case technique.FieldExternalLink:
 		return m.ExternalLink()
+	case technique.FieldSlug:
+		return m.Slug()
 	}
 	return nil, false
 }
@@ -39188,6 +41905,8 @@ func (m *TechniqueMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldDescription(ctx)
 	case technique.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case technique.FieldSlug:
+		return m.OldSlug(ctx)
 	}
 	return nil, fmt.Errorf("unknown Technique field %s", name)
 }
@@ -39253,6 +41972,13 @@ func (m *TechniqueMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case technique.FieldSlug:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlug(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Technique field %s", name)
 }
@@ -39301,6 +42027,9 @@ func (m *TechniqueMutation) ClearedFields() []string {
 	if m.FieldCleared(technique.FieldExternalLink) {
 		fields = append(fields, technique.FieldExternalLink)
 	}
+	if m.FieldCleared(technique.FieldSlug) {
+		fields = append(fields, technique.FieldSlug)
+	}
 	return fields
 }
 
@@ -39333,6 +42062,9 @@ func (m *TechniqueMutation) ClearField(name string) error {
 	case technique.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case technique.FieldSlug:
+		m.ClearSlug()
+		return nil
 	}
 	return fmt.Errorf("unknown Technique nullable field %s", name)
 }
@@ -39364,6 +42096,9 @@ func (m *TechniqueMutation) ResetField(name string) error {
 		return nil
 	case technique.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case technique.FieldSlug:
+		m.ResetSlug()
 		return nil
 	}
 	return fmt.Errorf("unknown Technique field %s", name)

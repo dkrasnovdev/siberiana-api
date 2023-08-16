@@ -42,6 +42,8 @@ type Organization struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
+	// Slug holds the value of the "slug" field.
+	Slug string `json:"slug,omitempty"`
 	// PrimaryImageURL holds the value of the "primary_image_url" field.
 	PrimaryImageURL string `json:"primary_image_url,omitempty"`
 	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
@@ -123,7 +125,7 @@ func (*Organization) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case organization.FieldID:
 			values[i] = new(sql.NullInt64)
-		case organization.FieldCreatedBy, organization.FieldUpdatedBy, organization.FieldAddress, organization.FieldDisplayName, organization.FieldAbbreviation, organization.FieldDescription, organization.FieldExternalLink, organization.FieldPrimaryImageURL, organization.FieldConsortiumDocumentURL:
+		case organization.FieldCreatedBy, organization.FieldUpdatedBy, organization.FieldAddress, organization.FieldDisplayName, organization.FieldAbbreviation, organization.FieldDescription, organization.FieldExternalLink, organization.FieldSlug, organization.FieldPrimaryImageURL, organization.FieldConsortiumDocumentURL:
 			values[i] = new(sql.NullString)
 		case organization.FieldCreatedAt, organization.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -221,6 +223,12 @@ func (o *Organization) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field external_link", values[i])
 			} else if value.Valid {
 				o.ExternalLink = value.String
+			}
+		case organization.FieldSlug:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field slug", values[i])
+			} else if value.Valid {
+				o.Slug = value.String
 			}
 		case organization.FieldPrimaryImageURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -353,6 +361,9 @@ func (o *Organization) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(o.ExternalLink)
+	builder.WriteString(", ")
+	builder.WriteString("slug=")
+	builder.WriteString(o.Slug)
 	builder.WriteString(", ")
 	builder.WriteString("primary_image_url=")
 	builder.WriteString(o.PrimaryImageURL)

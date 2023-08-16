@@ -33,6 +33,8 @@ type Period struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
+	// Slug holds the value of the "slug" field.
+	Slug string `json:"slug,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PeriodQuery when eager-loading is set.
 	Edges        PeriodEdges `json:"edges"`
@@ -68,7 +70,7 @@ func (*Period) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case period.FieldID:
 			values[i] = new(sql.NullInt64)
-		case period.FieldCreatedBy, period.FieldUpdatedBy, period.FieldDisplayName, period.FieldAbbreviation, period.FieldDescription, period.FieldExternalLink:
+		case period.FieldCreatedBy, period.FieldUpdatedBy, period.FieldDisplayName, period.FieldAbbreviation, period.FieldDescription, period.FieldExternalLink, period.FieldSlug:
 			values[i] = new(sql.NullString)
 		case period.FieldCreatedAt, period.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -141,6 +143,12 @@ func (pe *Period) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pe.ExternalLink = value.String
 			}
+		case period.FieldSlug:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field slug", values[i])
+			} else if value.Valid {
+				pe.Slug = value.String
+			}
 		default:
 			pe.selectValues.Set(columns[i], values[i])
 		}
@@ -205,6 +213,9 @@ func (pe *Period) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(pe.ExternalLink)
+	builder.WriteString(", ")
+	builder.WriteString("slug=")
+	builder.WriteString(pe.Slug)
 	builder.WriteByte(')')
 	return builder.String()
 }

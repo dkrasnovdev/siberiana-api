@@ -19,6 +19,7 @@ type CreateArtInput struct {
 	Abbreviation         *string
 	Description          *string
 	ExternalLink         *string
+	Slug                 *string
 	PrimaryImageURL      *string
 	AdditionalImagesUrls []string
 	ArtGenreIDs          []int
@@ -50,6 +51,9 @@ func (i *CreateArtInput) Mutate(m *ArtMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
 	}
 	if v := i.PrimaryImageURL; v != nil {
 		m.SetPrimaryImageURL(*v)
@@ -86,6 +90,8 @@ type UpdateArtInput struct {
 	Description                *string
 	ClearExternalLink          bool
 	ExternalLink               *string
+	ClearSlug                  bool
+	Slug                       *string
 	ClearPrimaryImageURL       bool
 	PrimaryImageURL            *string
 	ClearAdditionalImagesUrls  bool
@@ -139,6 +145,12 @@ func (i *UpdateArtInput) Mutate(m *ArtMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
 	}
 	if i.ClearPrimaryImageURL {
 		m.ClearPrimaryImageURL()
@@ -197,6 +209,7 @@ type CreateArtGenreInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
+	Slug         *string
 	ArtIDs       []int
 }
 
@@ -226,6 +239,9 @@ func (i *CreateArtGenreInput) Mutate(m *ArtGenreMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if v := i.ArtIDs; len(v) > 0 {
 		m.AddArtIDs(v...)
 	}
@@ -252,6 +268,8 @@ type UpdateArtGenreInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
+	ClearSlug         bool
+	Slug              *string
 	ClearArt          bool
 	AddArtIDs         []int
 	RemoveArtIDs      []int
@@ -298,6 +316,12 @@ func (i *UpdateArtGenreInput) Mutate(m *ArtGenreMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if i.ClearArt {
 		m.ClearArt()
 	}
@@ -331,6 +355,7 @@ type CreateArtStyleInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
+	Slug         *string
 	ArtIDs       []int
 }
 
@@ -360,6 +385,9 @@ func (i *CreateArtStyleInput) Mutate(m *ArtStyleMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if v := i.ArtIDs; len(v) > 0 {
 		m.AddArtIDs(v...)
 	}
@@ -386,6 +414,8 @@ type UpdateArtStyleInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
+	ClearSlug         bool
+	Slug              *string
 	ClearArt          bool
 	AddArtIDs         []int
 	RemoveArtIDs      []int
@@ -432,6 +462,12 @@ func (i *UpdateArtStyleInput) Mutate(m *ArtStyleMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if i.ClearArt {
 		m.ClearArt()
 	}
@@ -465,6 +501,7 @@ type CreateArtifactInput struct {
 	Abbreviation          *string
 	Description           *string
 	ExternalLink          *string
+	Slug                  *string
 	PrimaryImageURL       *string
 	AdditionalImagesUrls  []string
 	DeletedAt             *time.Time
@@ -517,6 +554,9 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
 	}
 	if v := i.PrimaryImageURL; v != nil {
 		m.SetPrimaryImageURL(*v)
@@ -616,6 +656,8 @@ type UpdateArtifactInput struct {
 	Description                *string
 	ClearExternalLink          bool
 	ExternalLink               *string
+	ClearSlug                  bool
+	Slug                       *string
 	ClearPrimaryImageURL       bool
 	PrimaryImageURL            *string
 	ClearAdditionalImagesUrls  bool
@@ -715,6 +757,12 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
 	}
 	if i.ClearPrimaryImageURL {
 		m.ClearPrimaryImageURL()
@@ -911,6 +959,7 @@ type CreateBookInput struct {
 	Abbreviation         *string
 	Description          *string
 	ExternalLink         *string
+	Slug                 *string
 	PrimaryImageURL      *string
 	AdditionalImagesUrls []string
 	Files                []string
@@ -949,6 +998,9 @@ func (i *CreateBookInput) Mutate(m *BookMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
 	}
 	if v := i.PrimaryImageURL; v != nil {
 		m.SetPrimaryImageURL(*v)
@@ -1006,6 +1058,8 @@ type UpdateBookInput struct {
 	Description                *string
 	ClearExternalLink          bool
 	ExternalLink               *string
+	ClearSlug                  bool
+	Slug                       *string
 	ClearPrimaryImageURL       bool
 	PrimaryImageURL            *string
 	ClearAdditionalImagesUrls  bool
@@ -1075,6 +1129,12 @@ func (i *UpdateBookInput) Mutate(m *BookMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
 	}
 	if i.ClearPrimaryImageURL {
 		m.ClearPrimaryImageURL()
@@ -1181,6 +1241,7 @@ type CreateBookGenreInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
+	Slug         *string
 	BookIDs      []int
 }
 
@@ -1210,6 +1271,9 @@ func (i *CreateBookGenreInput) Mutate(m *BookGenreMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if v := i.BookIDs; len(v) > 0 {
 		m.AddBookIDs(v...)
 	}
@@ -1236,6 +1300,8 @@ type UpdateBookGenreInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
+	ClearSlug         bool
+	Slug              *string
 	ClearBooks        bool
 	AddBookIDs        []int
 	RemoveBookIDs     []int
@@ -1282,6 +1348,12 @@ func (i *UpdateBookGenreInput) Mutate(m *BookGenreMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if i.ClearBooks {
 		m.ClearBooks()
 	}
@@ -1307,15 +1379,18 @@ func (c *BookGenreUpdateOne) SetInput(i UpdateBookGenreInput) *BookGenreUpdateOn
 
 // CreateCategoryInput represents a mutation input for creating categories.
 type CreateCategoryInput struct {
-	CreatedAt     *time.Time
-	CreatedBy     *string
-	UpdatedAt     *time.Time
-	UpdatedBy     *string
-	DisplayName   *string
-	Abbreviation  *string
-	Description   *string
-	ExternalLink  *string
-	CollectionIDs []int
+	CreatedAt            *time.Time
+	CreatedBy            *string
+	UpdatedAt            *time.Time
+	UpdatedBy            *string
+	DisplayName          *string
+	Abbreviation         *string
+	Description          *string
+	ExternalLink         *string
+	Slug                 *string
+	PrimaryImageURL      *string
+	AdditionalImagesUrls []string
+	CollectionIDs        []int
 }
 
 // Mutate applies the CreateCategoryInput on the CategoryMutation builder.
@@ -1344,6 +1419,15 @@ func (i *CreateCategoryInput) Mutate(m *CategoryMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
+	}
 	if v := i.CollectionIDs; len(v) > 0 {
 		m.AddCollectionIDs(v...)
 	}
@@ -1357,22 +1441,29 @@ func (c *CategoryCreate) SetInput(i CreateCategoryInput) *CategoryCreate {
 
 // UpdateCategoryInput represents a mutation input for updating categories.
 type UpdateCategoryInput struct {
-	ClearCreatedBy      bool
-	CreatedBy           *string
-	UpdatedAt           *time.Time
-	ClearUpdatedBy      bool
-	UpdatedBy           *string
-	ClearDisplayName    bool
-	DisplayName         *string
-	ClearAbbreviation   bool
-	Abbreviation        *string
-	ClearDescription    bool
-	Description         *string
-	ClearExternalLink   bool
-	ExternalLink        *string
-	ClearCollections    bool
-	AddCollectionIDs    []int
-	RemoveCollectionIDs []int
+	ClearCreatedBy             bool
+	CreatedBy                  *string
+	UpdatedAt                  *time.Time
+	ClearUpdatedBy             bool
+	UpdatedBy                  *string
+	ClearDisplayName           bool
+	DisplayName                *string
+	ClearAbbreviation          bool
+	Abbreviation               *string
+	ClearDescription           bool
+	Description                *string
+	ClearExternalLink          bool
+	ExternalLink               *string
+	ClearSlug                  bool
+	Slug                       *string
+	ClearPrimaryImageURL       bool
+	PrimaryImageURL            *string
+	ClearAdditionalImagesUrls  bool
+	AdditionalImagesUrls       []string
+	AppendAdditionalImagesUrls []string
+	ClearCollections           bool
+	AddCollectionIDs           []int
+	RemoveCollectionIDs        []int
 }
 
 // Mutate applies the UpdateCategoryInput on the CategoryMutation builder.
@@ -1416,6 +1507,27 @@ func (i *UpdateCategoryInput) Mutate(m *CategoryMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
+	if i.ClearPrimaryImageURL {
+		m.ClearPrimaryImageURL()
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if i.ClearAdditionalImagesUrls {
+		m.ClearAdditionalImagesUrls()
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
+	}
+	if i.AppendAdditionalImagesUrls != nil {
+		m.AppendAdditionalImagesUrls(i.AdditionalImagesUrls)
+	}
 	if i.ClearCollections {
 		m.ClearCollections()
 	}
@@ -1449,6 +1561,9 @@ type CreateCollectionInput struct {
 	Abbreviation            *string
 	Description             *string
 	ExternalLink            *string
+	Slug                    *string
+	PrimaryImageURL         *string
+	AdditionalImagesUrls    []string
 	ArtifactIDs             []int
 	BookIDs                 []int
 	PersonIDs               []int
@@ -1481,6 +1596,15 @@ func (i *CreateCollectionInput) Mutate(m *CollectionMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
 	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
@@ -1520,6 +1644,13 @@ type UpdateCollectionInput struct {
 	Description                   *string
 	ClearExternalLink             bool
 	ExternalLink                  *string
+	ClearSlug                     bool
+	Slug                          *string
+	ClearPrimaryImageURL          bool
+	PrimaryImageURL               *string
+	ClearAdditionalImagesUrls     bool
+	AdditionalImagesUrls          []string
+	AppendAdditionalImagesUrls    []string
 	ClearArtifacts                bool
 	AddArtifactIDs                []int
 	RemoveArtifactIDs             []int
@@ -1576,6 +1707,27 @@ func (i *UpdateCollectionInput) Mutate(m *CollectionMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
+	if i.ClearPrimaryImageURL {
+		m.ClearPrimaryImageURL()
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if i.ClearAdditionalImagesUrls {
+		m.ClearAdditionalImagesUrls()
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
+	}
+	if i.AppendAdditionalImagesUrls != nil {
+		m.AppendAdditionalImagesUrls(i.AdditionalImagesUrls)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
@@ -1643,6 +1795,7 @@ type CreateCountryInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
+	Slug         *string
 	LocationID   *int
 }
 
@@ -1672,6 +1825,9 @@ func (i *CreateCountryInput) Mutate(m *CountryMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if v := i.LocationID; v != nil {
 		m.SetLocationID(*v)
 	}
@@ -1698,6 +1854,8 @@ type UpdateCountryInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
+	ClearSlug         bool
+	Slug              *string
 	ClearLocation     bool
 	LocationID        *int
 }
@@ -1743,6 +1901,12 @@ func (i *UpdateCountryInput) Mutate(m *CountryMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if i.ClearLocation {
 		m.ClearLocation()
 	}
@@ -1773,6 +1937,7 @@ type CreateCultureInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
+	Slug         *string
 	ArtifactIDs  []int
 }
 
@@ -1802,6 +1967,9 @@ func (i *CreateCultureInput) Mutate(m *CultureMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
@@ -1828,6 +1996,8 @@ type UpdateCultureInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
+	ClearSlug         bool
+	Slug              *string
 	ClearArtifacts    bool
 	AddArtifactIDs    []int
 	RemoveArtifactIDs []int
@@ -1874,6 +2044,12 @@ func (i *UpdateCultureInput) Mutate(m *CultureMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
 	}
@@ -1907,6 +2083,7 @@ type CreateDistrictInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
+	Slug         *string
 	LocationID   *int
 }
 
@@ -1936,6 +2113,9 @@ func (i *CreateDistrictInput) Mutate(m *DistrictMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if v := i.LocationID; v != nil {
 		m.SetLocationID(*v)
 	}
@@ -1962,6 +2142,8 @@ type UpdateDistrictInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
+	ClearSlug         bool
+	Slug              *string
 	ClearLocation     bool
 	LocationID        *int
 }
@@ -2006,6 +2188,12 @@ func (i *UpdateDistrictInput) Mutate(m *DistrictMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
 	}
 	if i.ClearLocation {
 		m.ClearLocation()
@@ -2197,6 +2385,7 @@ type CreateHolderResponsibilityInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
+	Slug         *string
 	HolderIDs    []int
 }
 
@@ -2226,6 +2415,9 @@ func (i *CreateHolderResponsibilityInput) Mutate(m *HolderResponsibilityMutation
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if v := i.HolderIDs; len(v) > 0 {
 		m.AddHolderIDs(v...)
 	}
@@ -2252,6 +2444,8 @@ type UpdateHolderResponsibilityInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
+	ClearSlug         bool
+	Slug              *string
 	ClearHolder       bool
 	AddHolderIDs      []int
 	RemoveHolderIDs   []int
@@ -2298,6 +2492,12 @@ func (i *UpdateHolderResponsibilityInput) Mutate(m *HolderResponsibilityMutation
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if i.ClearHolder {
 		m.ClearHolder()
 	}
@@ -2331,6 +2531,7 @@ type CreateLicenseInput struct {
 	Abbreviation            *string
 	Description             *string
 	ExternalLink            *string
+	Slug                    *string
 	ArtifactIDs             []int
 	BookIDs                 []int
 	ProtectedAreaPictureIDs []int
@@ -2361,6 +2562,9 @@ func (i *CreateLicenseInput) Mutate(m *LicenseMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
 	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
@@ -2394,6 +2598,8 @@ type UpdateLicenseInput struct {
 	Description                   *string
 	ClearExternalLink             bool
 	ExternalLink                  *string
+	ClearSlug                     bool
+	Slug                          *string
 	ClearArtifacts                bool
 	AddArtifactIDs                []int
 	RemoveArtifactIDs             []int
@@ -2446,6 +2652,12 @@ func (i *UpdateLicenseInput) Mutate(m *LicenseMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
 	}
@@ -2497,6 +2709,7 @@ type CreateLocationInput struct {
 	Abbreviation            *string
 	Description             *string
 	ExternalLink            *string
+	Slug                    *string
 	Geometry                *types.Geometry
 	ArtifactIDs             []int
 	BookIDs                 []int
@@ -2532,6 +2745,9 @@ func (i *CreateLocationInput) Mutate(m *LocationMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
 	}
 	if v := i.Geometry; v != nil {
 		m.SetGeometry(*v)
@@ -2580,6 +2796,8 @@ type UpdateLocationInput struct {
 	Description                   *string
 	ClearExternalLink             bool
 	ExternalLink                  *string
+	ClearSlug                     bool
+	Slug                          *string
 	ClearGeometry                 bool
 	Geometry                      *types.Geometry
 	ClearArtifacts                bool
@@ -2641,6 +2859,12 @@ func (i *UpdateLocationInput) Mutate(m *LocationMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
 	}
 	if i.ClearGeometry {
 		m.ClearGeometry()
@@ -2723,6 +2947,7 @@ type CreateMediumInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
+	Slug         *string
 	ArtifactIDs  []int
 }
 
@@ -2752,6 +2977,9 @@ func (i *CreateMediumInput) Mutate(m *MediumMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
@@ -2778,6 +3006,8 @@ type UpdateMediumInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
+	ClearSlug         bool
+	Slug              *string
 	ClearArtifacts    bool
 	AddArtifactIDs    []int
 	RemoveArtifactIDs []int
@@ -2824,6 +3054,12 @@ func (i *UpdateMediumInput) Mutate(m *MediumMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
 	}
@@ -2857,6 +3093,7 @@ type CreateModelInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
+	Slug         *string
 	ArtifactIDs  []int
 }
 
@@ -2886,6 +3123,9 @@ func (i *CreateModelInput) Mutate(m *ModelMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
@@ -2912,6 +3152,8 @@ type UpdateModelInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
+	ClearSlug         bool
+	Slug              *string
 	ClearArtifacts    bool
 	AddArtifactIDs    []int
 	RemoveArtifactIDs []int
@@ -2958,6 +3200,12 @@ func (i *UpdateModelInput) Mutate(m *ModelMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
 	}
@@ -2991,6 +3239,7 @@ type CreateMonumentInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
+	Slug         *string
 	ArtifactIDs  []int
 	SetIDs       []int
 }
@@ -3021,6 +3270,9 @@ func (i *CreateMonumentInput) Mutate(m *MonumentMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
@@ -3050,6 +3302,8 @@ type UpdateMonumentInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
+	ClearSlug         bool
+	Slug              *string
 	ClearArtifacts    bool
 	AddArtifactIDs    []int
 	RemoveArtifactIDs []int
@@ -3099,6 +3353,12 @@ func (i *UpdateMonumentInput) Mutate(m *MonumentMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
 	}
@@ -3144,6 +3404,7 @@ type CreateOrganizationInput struct {
 	Abbreviation          *string
 	Description           *string
 	ExternalLink          *string
+	Slug                  *string
 	PrimaryImageURL       *string
 	AdditionalImagesUrls  []string
 	PreviousNames         []string
@@ -3188,6 +3449,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
 	}
 	if v := i.PrimaryImageURL; v != nil {
 		m.SetPrimaryImageURL(*v)
@@ -3244,6 +3508,8 @@ type UpdateOrganizationInput struct {
 	Description                *string
 	ClearExternalLink          bool
 	ExternalLink               *string
+	ClearSlug                  bool
+	Slug                       *string
 	ClearPrimaryImageURL       bool
 	PrimaryImageURL            *string
 	ClearAdditionalImagesUrls  bool
@@ -3330,6 +3596,12 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if i.ClearPrimaryImageURL {
 		m.ClearPrimaryImageURL()
 	}
@@ -3411,6 +3683,7 @@ type CreateOrganizationTypeInput struct {
 	Abbreviation    *string
 	Description     *string
 	ExternalLink    *string
+	Slug            *string
 	OrganizationIDs []int
 }
 
@@ -3440,6 +3713,9 @@ func (i *CreateOrganizationTypeInput) Mutate(m *OrganizationTypeMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if v := i.OrganizationIDs; len(v) > 0 {
 		m.AddOrganizationIDs(v...)
 	}
@@ -3466,6 +3742,8 @@ type UpdateOrganizationTypeInput struct {
 	Description           *string
 	ClearExternalLink     bool
 	ExternalLink          *string
+	ClearSlug             bool
+	Slug                  *string
 	ClearOrganizations    bool
 	AddOrganizationIDs    []int
 	RemoveOrganizationIDs []int
@@ -3512,6 +3790,12 @@ func (i *UpdateOrganizationTypeInput) Mutate(m *OrganizationTypeMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if i.ClearOrganizations {
 		m.ClearOrganizations()
 	}
@@ -3545,6 +3829,7 @@ type CreatePeriodInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
+	Slug         *string
 	ArtifactIDs  []int
 }
 
@@ -3574,6 +3859,9 @@ func (i *CreatePeriodInput) Mutate(m *PeriodMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
@@ -3600,6 +3888,8 @@ type UpdatePeriodInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
+	ClearSlug         bool
+	Slug              *string
 	ClearArtifacts    bool
 	AddArtifactIDs    []int
 	RemoveArtifactIDs []int
@@ -3646,6 +3936,12 @@ func (i *UpdatePeriodInput) Mutate(m *PeriodMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
 	}
@@ -3682,6 +3978,7 @@ type CreatePersonInput struct {
 	Abbreviation         *string
 	Description          *string
 	ExternalLink         *string
+	Slug                 *string
 	PrimaryImageURL      *string
 	AdditionalImagesUrls []string
 	GivenName            *string
@@ -3734,6 +4031,9 @@ func (i *CreatePersonInput) Mutate(m *PersonMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
 	}
 	if v := i.PrimaryImageURL; v != nil {
 		m.SetPrimaryImageURL(*v)
@@ -3812,6 +4112,8 @@ type UpdatePersonInput struct {
 	Description                *string
 	ClearExternalLink          bool
 	ExternalLink               *string
+	ClearSlug                  bool
+	Slug                       *string
 	ClearPrimaryImageURL       bool
 	PrimaryImageURL            *string
 	ClearAdditionalImagesUrls  bool
@@ -3915,6 +4217,12 @@ func (i *UpdatePersonInput) Mutate(m *PersonMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
 	}
 	if i.ClearPrimaryImageURL {
 		m.ClearPrimaryImageURL()
@@ -4051,6 +4359,7 @@ type CreatePersonRoleInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
+	Slug         *string
 	PersonIDs    []int
 }
 
@@ -4080,6 +4389,9 @@ func (i *CreatePersonRoleInput) Mutate(m *PersonRoleMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if v := i.PersonIDs; len(v) > 0 {
 		m.AddPersonIDs(v...)
 	}
@@ -4106,6 +4418,8 @@ type UpdatePersonRoleInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
+	ClearSlug         bool
+	Slug              *string
 	ClearPerson       bool
 	AddPersonIDs      []int
 	RemovePersonIDs   []int
@@ -4152,6 +4466,12 @@ func (i *UpdatePersonRoleInput) Mutate(m *PersonRoleMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if i.ClearPerson {
 		m.ClearPerson()
 	}
@@ -4185,6 +4505,7 @@ type CreateProjectInput struct {
 	Abbreviation  *string
 	Description   *string
 	ExternalLink  *string
+	Slug          *string
 	BeginData     *time.Time
 	EndDate       *time.Time
 	ArtifactIDs   []int
@@ -4217,6 +4538,9 @@ func (i *CreateProjectInput) Mutate(m *ProjectMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
 	}
 	if v := i.BeginData; v != nil {
 		m.SetBeginData(*v)
@@ -4256,6 +4580,8 @@ type UpdateProjectInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
+	ClearSlug         bool
+	Slug              *string
 	ClearBeginData    bool
 	BeginData         *time.Time
 	ClearEndDate      bool
@@ -4310,6 +4636,12 @@ func (i *UpdateProjectInput) Mutate(m *ProjectMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
 	}
 	if i.ClearBeginData {
 		m.ClearBeginData()
@@ -4371,6 +4703,7 @@ type CreateProjectTypeInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
+	Slug         *string
 	ProjectIDs   []int
 }
 
@@ -4400,6 +4733,9 @@ func (i *CreateProjectTypeInput) Mutate(m *ProjectTypeMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if v := i.ProjectIDs; len(v) > 0 {
 		m.AddProjectIDs(v...)
 	}
@@ -4426,6 +4762,8 @@ type UpdateProjectTypeInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
+	ClearSlug         bool
+	Slug              *string
 	ClearProjects     bool
 	AddProjectIDs     []int
 	RemoveProjectIDs  []int
@@ -4472,6 +4810,12 @@ func (i *UpdateProjectTypeInput) Mutate(m *ProjectTypeMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if i.ClearProjects {
 		m.ClearProjects()
 	}
@@ -4505,6 +4849,7 @@ type CreateProtectedAreaInput struct {
 	Abbreviation            *string
 	Description             *string
 	ExternalLink            *string
+	Slug                    *string
 	Area                    *string
 	EstablishmentDate       *time.Time
 	ProtectedAreaPictureIDs []int
@@ -4536,6 +4881,9 @@ func (i *CreateProtectedAreaInput) Mutate(m *ProtectedAreaMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
 	}
 	if v := i.Area; v != nil {
 		m.SetArea(*v)
@@ -4572,6 +4920,8 @@ type UpdateProtectedAreaInput struct {
 	Description                   *string
 	ClearExternalLink             bool
 	ExternalLink                  *string
+	ClearSlug                     bool
+	Slug                          *string
 	ClearArea                     bool
 	Area                          *string
 	ClearEstablishmentDate        bool
@@ -4624,6 +4974,12 @@ func (i *UpdateProtectedAreaInput) Mutate(m *ProtectedAreaMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if i.ClearArea {
 		m.ClearArea()
 	}
@@ -4675,6 +5031,7 @@ type CreateProtectedAreaCategoryInput struct {
 	Abbreviation     *string
 	Description      *string
 	ExternalLink     *string
+	Slug             *string
 	ProtectedAreaIDs []int
 }
 
@@ -4704,6 +5061,9 @@ func (i *CreateProtectedAreaCategoryInput) Mutate(m *ProtectedAreaCategoryMutati
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if v := i.ProtectedAreaIDs; len(v) > 0 {
 		m.AddProtectedAreaIDs(v...)
 	}
@@ -4730,6 +5090,8 @@ type UpdateProtectedAreaCategoryInput struct {
 	Description            *string
 	ClearExternalLink      bool
 	ExternalLink           *string
+	ClearSlug              bool
+	Slug                   *string
 	ClearProtectedAreas    bool
 	AddProtectedAreaIDs    []int
 	RemoveProtectedAreaIDs []int
@@ -4776,6 +5138,12 @@ func (i *UpdateProtectedAreaCategoryInput) Mutate(m *ProtectedAreaCategoryMutati
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if i.ClearProtectedAreas {
 		m.ClearProtectedAreas()
 	}
@@ -4809,6 +5177,7 @@ type CreateProtectedAreaPictureInput struct {
 	Abbreviation         *string
 	Description          *string
 	ExternalLink         *string
+	Slug                 *string
 	PrimaryImageURL      *string
 	AdditionalImagesUrls []string
 	ShootingDate         *time.Time
@@ -4844,6 +5213,9 @@ func (i *CreateProtectedAreaPictureInput) Mutate(m *ProtectedAreaPictureMutation
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
 	}
 	if v := i.PrimaryImageURL; v != nil {
 		m.SetPrimaryImageURL(*v)
@@ -4892,6 +5264,8 @@ type UpdateProtectedAreaPictureInput struct {
 	Description                *string
 	ClearExternalLink          bool
 	ExternalLink               *string
+	ClearSlug                  bool
+	Slug                       *string
 	ClearPrimaryImageURL       bool
 	PrimaryImageURL            *string
 	ClearAdditionalImagesUrls  bool
@@ -4951,6 +5325,12 @@ func (i *UpdateProtectedAreaPictureInput) Mutate(m *ProtectedAreaPictureMutation
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
 	}
 	if i.ClearPrimaryImageURL {
 		m.ClearPrimaryImageURL()
@@ -5027,6 +5407,7 @@ type CreatePublicationInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
+	Slug         *string
 	ArtifactIDs  []int
 	AuthorIDs    []int
 }
@@ -5057,6 +5438,9 @@ func (i *CreatePublicationInput) Mutate(m *PublicationMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
@@ -5086,6 +5470,8 @@ type UpdatePublicationInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
+	ClearSlug         bool
+	Slug              *string
 	ClearArtifacts    bool
 	AddArtifactIDs    []int
 	RemoveArtifactIDs []int
@@ -5135,6 +5521,12 @@ func (i *UpdatePublicationInput) Mutate(m *PublicationMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
 	}
@@ -5177,6 +5569,7 @@ type CreatePublisherInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
+	Slug         *string
 	BookIDs      []int
 }
 
@@ -5206,6 +5599,9 @@ func (i *CreatePublisherInput) Mutate(m *PublisherMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if v := i.BookIDs; len(v) > 0 {
 		m.AddBookIDs(v...)
 	}
@@ -5232,6 +5628,8 @@ type UpdatePublisherInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
+	ClearSlug         bool
+	Slug              *string
 	ClearBooks        bool
 	AddBookIDs        []int
 	RemoveBookIDs     []int
@@ -5278,6 +5676,12 @@ func (i *UpdatePublisherInput) Mutate(m *PublisherMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if i.ClearBooks {
 		m.ClearBooks()
 	}
@@ -5311,6 +5715,7 @@ type CreateRegionInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
+	Slug         *string
 	LocationID   *int
 }
 
@@ -5340,6 +5745,9 @@ func (i *CreateRegionInput) Mutate(m *RegionMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if v := i.LocationID; v != nil {
 		m.SetLocationID(*v)
 	}
@@ -5366,6 +5774,8 @@ type UpdateRegionInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
+	ClearSlug         bool
+	Slug              *string
 	ClearLocation     bool
 	LocationID        *int
 }
@@ -5411,6 +5821,12 @@ func (i *UpdateRegionInput) Mutate(m *RegionMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if i.ClearLocation {
 		m.ClearLocation()
 	}
@@ -5441,6 +5857,7 @@ type CreateSetInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
+	Slug         *string
 	ArtifactIDs  []int
 	MonumentIDs  []int
 }
@@ -5471,6 +5888,9 @@ func (i *CreateSetInput) Mutate(m *SetMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
@@ -5500,6 +5920,8 @@ type UpdateSetInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
+	ClearSlug         bool
+	Slug              *string
 	ClearArtifacts    bool
 	AddArtifactIDs    []int
 	RemoveArtifactIDs []int
@@ -5549,6 +5971,12 @@ func (i *UpdateSetInput) Mutate(m *SetMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
 	}
@@ -5591,6 +6019,7 @@ type CreateSettlementInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
+	Slug         *string
 	LocationID   *int
 }
 
@@ -5620,6 +6049,9 @@ func (i *CreateSettlementInput) Mutate(m *SettlementMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if v := i.LocationID; v != nil {
 		m.SetLocationID(*v)
 	}
@@ -5646,6 +6078,8 @@ type UpdateSettlementInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
+	ClearSlug         bool
+	Slug              *string
 	ClearLocation     bool
 	LocationID        *int
 }
@@ -5691,6 +6125,12 @@ func (i *UpdateSettlementInput) Mutate(m *SettlementMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if i.ClearLocation {
 		m.ClearLocation()
 	}
@@ -5721,6 +6161,7 @@ type CreateTechniqueInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
+	Slug         *string
 	ArtifactIDs  []int
 }
 
@@ -5750,6 +6191,9 @@ func (i *CreateTechniqueInput) Mutate(m *TechniqueMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
@@ -5776,6 +6220,8 @@ type UpdateTechniqueInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
+	ClearSlug         bool
+	Slug              *string
 	ClearArtifacts    bool
 	AddArtifactIDs    []int
 	RemoveArtifactIDs []int
@@ -5821,6 +6267,12 @@ func (i *UpdateTechniqueInput) Mutate(m *TechniqueMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if i.ClearSlug {
+		m.ClearSlug()
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()

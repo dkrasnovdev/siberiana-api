@@ -162,6 +162,26 @@ func (lu *LocationUpdate) ClearExternalLink() *LocationUpdate {
 	return lu
 }
 
+// SetSlug sets the "slug" field.
+func (lu *LocationUpdate) SetSlug(s string) *LocationUpdate {
+	lu.mutation.SetSlug(s)
+	return lu
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (lu *LocationUpdate) SetNillableSlug(s *string) *LocationUpdate {
+	if s != nil {
+		lu.SetSlug(*s)
+	}
+	return lu
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (lu *LocationUpdate) ClearSlug() *LocationUpdate {
+	lu.mutation.ClearSlug()
+	return lu
+}
+
 // SetGeometry sets the "geometry" field.
 func (lu *LocationUpdate) SetGeometry(t types.Geometry) *LocationUpdate {
 	lu.mutation.SetGeometry(t)
@@ -484,6 +504,12 @@ func (lu *LocationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if lu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(location.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := lu.mutation.Slug(); ok {
+		_spec.SetField(location.FieldSlug, field.TypeString, value)
+	}
+	if lu.mutation.SlugCleared() {
+		_spec.ClearField(location.FieldSlug, field.TypeString)
 	}
 	if value, ok := lu.mutation.Geometry(); ok {
 		_spec.SetField(location.FieldGeometry, field.TypeOther, value)
@@ -888,6 +914,26 @@ func (luo *LocationUpdateOne) ClearExternalLink() *LocationUpdateOne {
 	return luo
 }
 
+// SetSlug sets the "slug" field.
+func (luo *LocationUpdateOne) SetSlug(s string) *LocationUpdateOne {
+	luo.mutation.SetSlug(s)
+	return luo
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (luo *LocationUpdateOne) SetNillableSlug(s *string) *LocationUpdateOne {
+	if s != nil {
+		luo.SetSlug(*s)
+	}
+	return luo
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (luo *LocationUpdateOne) ClearSlug() *LocationUpdateOne {
+	luo.mutation.ClearSlug()
+	return luo
+}
+
 // SetGeometry sets the "geometry" field.
 func (luo *LocationUpdateOne) SetGeometry(t types.Geometry) *LocationUpdateOne {
 	luo.mutation.SetGeometry(t)
@@ -1240,6 +1286,12 @@ func (luo *LocationUpdateOne) sqlSave(ctx context.Context) (_node *Location, err
 	}
 	if luo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(location.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := luo.mutation.Slug(); ok {
+		_spec.SetField(location.FieldSlug, field.TypeString, value)
+	}
+	if luo.mutation.SlugCleared() {
+		_spec.ClearField(location.FieldSlug, field.TypeString)
 	}
 	if value, ok := luo.mutation.Geometry(); ok {
 		_spec.SetField(location.FieldGeometry, field.TypeOther, value)

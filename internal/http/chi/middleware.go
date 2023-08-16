@@ -15,7 +15,7 @@ import (
 )
 
 // CacheTTL specifies the time-to-live for cached user information.
-const CacheTTL = 5 * time.Minute
+const CacheTTL = 24 * time.Hour
 
 // userCacheEntry represents an entry in the user cache with an expiration time.
 type userCacheEntry struct {

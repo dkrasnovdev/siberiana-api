@@ -31,6 +31,8 @@ const (
 	FieldDescription = "description"
 	// FieldExternalLink holds the string denoting the external_link field in the database.
 	FieldExternalLink = "external_link"
+	// FieldSlug holds the string denoting the slug field in the database.
+	FieldSlug = "slug"
 	// FieldPrimaryImageURL holds the string denoting the primary_image_url field in the database.
 	FieldPrimaryImageURL = "primary_image_url"
 	// FieldAdditionalImagesUrls holds the string denoting the additional_images_urls field in the database.
@@ -64,6 +66,7 @@ var Columns = []string{
 	FieldAbbreviation,
 	FieldDescription,
 	FieldExternalLink,
+	FieldSlug,
 	FieldPrimaryImageURL,
 	FieldAdditionalImagesUrls,
 }
@@ -149,6 +152,11 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByExternalLink orders the results by the external_link field.
 func ByExternalLink(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalLink, opts...).ToFunc()
+}
+
+// BySlug orders the results by the slug field.
+func BySlug(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSlug, opts...).ToFunc()
 }
 
 // ByPrimaryImageURL orders the results by the primary_image_url field.

@@ -33,6 +33,8 @@ type License struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
+	// Slug holds the value of the "slug" field.
+	Slug string `json:"slug,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the LicenseQuery when eager-loading is set.
 	Edges        LicenseEdges `json:"edges"`
@@ -92,7 +94,7 @@ func (*License) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case license.FieldID:
 			values[i] = new(sql.NullInt64)
-		case license.FieldCreatedBy, license.FieldUpdatedBy, license.FieldDisplayName, license.FieldAbbreviation, license.FieldDescription, license.FieldExternalLink:
+		case license.FieldCreatedBy, license.FieldUpdatedBy, license.FieldDisplayName, license.FieldAbbreviation, license.FieldDescription, license.FieldExternalLink, license.FieldSlug:
 			values[i] = new(sql.NullString)
 		case license.FieldCreatedAt, license.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -164,6 +166,12 @@ func (l *License) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field external_link", values[i])
 			} else if value.Valid {
 				l.ExternalLink = value.String
+			}
+		case license.FieldSlug:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field slug", values[i])
+			} else if value.Valid {
+				l.Slug = value.String
 			}
 		default:
 			l.selectValues.Set(columns[i], values[i])
@@ -239,6 +247,9 @@ func (l *License) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(l.ExternalLink)
+	builder.WriteString(", ")
+	builder.WriteString("slug=")
+	builder.WriteString(l.Slug)
 	builder.WriteByte(')')
 	return builder.String()
 }

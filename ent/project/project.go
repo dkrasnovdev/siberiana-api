@@ -31,6 +31,8 @@ const (
 	FieldDescription = "description"
 	// FieldExternalLink holds the string denoting the external_link field in the database.
 	FieldExternalLink = "external_link"
+	// FieldSlug holds the string denoting the slug field in the database.
+	FieldSlug = "slug"
 	// FieldBeginData holds the string denoting the begin_data field in the database.
 	FieldBeginData = "begin_data"
 	// FieldEndDate holds the string denoting the end_date field in the database.
@@ -73,6 +75,7 @@ var Columns = []string{
 	FieldAbbreviation,
 	FieldDescription,
 	FieldExternalLink,
+	FieldSlug,
 	FieldBeginData,
 	FieldEndDate,
 }
@@ -169,6 +172,11 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByExternalLink orders the results by the external_link field.
 func ByExternalLink(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalLink, opts...).ToFunc()
+}
+
+// BySlug orders the results by the slug field.
+func BySlug(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSlug, opts...).ToFunc()
 }
 
 // ByBeginData orders the results by the begin_data field.

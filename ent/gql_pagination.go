@@ -326,9 +326,9 @@ func (p *artPager) orderExpr(query *ArtQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to Art.
 func (a *ArtQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...ArtPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...ArtPaginateOption,
 ) (*ArtConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -343,7 +343,7 @@ func (a *ArtQuery) Paginate(
 	conn := &ArtConnection{Edges: []*ArtEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := a.Clone()
 			c.ctx.Fields = nil
@@ -362,6 +362,7 @@ func (a *ArtQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		a.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		a.Limit(limit)
@@ -679,9 +680,9 @@ func (p *artgenrePager) orderExpr(query *ArtGenreQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to ArtGenre.
 func (ag *ArtGenreQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...ArtGenrePaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...ArtGenrePaginateOption,
 ) (*ArtGenreConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -696,7 +697,7 @@ func (ag *ArtGenreQuery) Paginate(
 	conn := &ArtGenreConnection{Edges: []*ArtGenreEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := ag.Clone()
 			c.ctx.Fields = nil
@@ -715,6 +716,7 @@ func (ag *ArtGenreQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		ag.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		ag.Limit(limit)
@@ -1032,9 +1034,9 @@ func (p *artstylePager) orderExpr(query *ArtStyleQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to ArtStyle.
 func (as *ArtStyleQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...ArtStylePaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...ArtStylePaginateOption,
 ) (*ArtStyleConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -1049,7 +1051,7 @@ func (as *ArtStyleQuery) Paginate(
 	conn := &ArtStyleConnection{Edges: []*ArtStyleEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := as.Clone()
 			c.ctx.Fields = nil
@@ -1068,6 +1070,7 @@ func (as *ArtStyleQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		as.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		as.Limit(limit)
@@ -1385,9 +1388,9 @@ func (p *artifactPager) orderExpr(query *ArtifactQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to Artifact.
 func (a *ArtifactQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...ArtifactPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...ArtifactPaginateOption,
 ) (*ArtifactConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -1402,7 +1405,7 @@ func (a *ArtifactQuery) Paginate(
 	conn := &ArtifactConnection{Edges: []*ArtifactEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := a.Clone()
 			c.ctx.Fields = nil
@@ -1421,6 +1424,7 @@ func (a *ArtifactQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		a.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		a.Limit(limit)
@@ -1738,9 +1742,9 @@ func (p *auditlogPager) orderExpr(query *AuditLogQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to AuditLog.
 func (al *AuditLogQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...AuditLogPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...AuditLogPaginateOption,
 ) (*AuditLogConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -1755,7 +1759,7 @@ func (al *AuditLogQuery) Paginate(
 	conn := &AuditLogConnection{Edges: []*AuditLogEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := al.Clone()
 			c.ctx.Fields = nil
@@ -1774,6 +1778,7 @@ func (al *AuditLogQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		al.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		al.Limit(limit)
@@ -2073,9 +2078,9 @@ func (p *bookPager) orderExpr(query *BookQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to Book.
 func (b *BookQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...BookPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...BookPaginateOption,
 ) (*BookConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -2090,7 +2095,7 @@ func (b *BookQuery) Paginate(
 	conn := &BookConnection{Edges: []*BookEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := b.Clone()
 			c.ctx.Fields = nil
@@ -2109,6 +2114,7 @@ func (b *BookQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		b.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		b.Limit(limit)
@@ -2426,9 +2432,9 @@ func (p *bookgenrePager) orderExpr(query *BookGenreQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to BookGenre.
 func (bg *BookGenreQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...BookGenrePaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...BookGenrePaginateOption,
 ) (*BookGenreConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -2443,7 +2449,7 @@ func (bg *BookGenreQuery) Paginate(
 	conn := &BookGenreConnection{Edges: []*BookGenreEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := bg.Clone()
 			c.ctx.Fields = nil
@@ -2462,6 +2468,7 @@ func (bg *BookGenreQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		bg.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		bg.Limit(limit)
@@ -2779,9 +2786,9 @@ func (p *categoryPager) orderExpr(query *CategoryQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to Category.
 func (c *CategoryQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...CategoryPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...CategoryPaginateOption,
 ) (*CategoryConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -2796,7 +2803,7 @@ func (c *CategoryQuery) Paginate(
 	conn := &CategoryConnection{Edges: []*CategoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := c.Clone()
 			c.ctx.Fields = nil
@@ -2815,6 +2822,7 @@ func (c *CategoryQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		c.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		c.Limit(limit)
@@ -3132,9 +3140,9 @@ func (p *collectionPager) orderExpr(query *CollectionQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to Collection.
 func (c *CollectionQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...CollectionPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...CollectionPaginateOption,
 ) (*CollectionConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -3149,7 +3157,7 @@ func (c *CollectionQuery) Paginate(
 	conn := &CollectionConnection{Edges: []*CollectionEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := c.Clone()
 			c.ctx.Fields = nil
@@ -3168,6 +3176,7 @@ func (c *CollectionQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		c.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		c.Limit(limit)
@@ -3485,9 +3494,9 @@ func (p *countryPager) orderExpr(query *CountryQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to Country.
 func (c *CountryQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...CountryPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...CountryPaginateOption,
 ) (*CountryConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -3502,7 +3511,7 @@ func (c *CountryQuery) Paginate(
 	conn := &CountryConnection{Edges: []*CountryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := c.Clone()
 			c.ctx.Fields = nil
@@ -3521,6 +3530,7 @@ func (c *CountryQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		c.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		c.Limit(limit)
@@ -3838,9 +3848,9 @@ func (p *culturePager) orderExpr(query *CultureQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to Culture.
 func (c *CultureQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...CulturePaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...CulturePaginateOption,
 ) (*CultureConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -3855,7 +3865,7 @@ func (c *CultureQuery) Paginate(
 	conn := &CultureConnection{Edges: []*CultureEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := c.Clone()
 			c.ctx.Fields = nil
@@ -3874,6 +3884,7 @@ func (c *CultureQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		c.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		c.Limit(limit)
@@ -4191,9 +4202,9 @@ func (p *districtPager) orderExpr(query *DistrictQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to District.
 func (d *DistrictQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...DistrictPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...DistrictPaginateOption,
 ) (*DistrictConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -4208,7 +4219,7 @@ func (d *DistrictQuery) Paginate(
 	conn := &DistrictConnection{Edges: []*DistrictEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := d.Clone()
 			c.ctx.Fields = nil
@@ -4227,6 +4238,7 @@ func (d *DistrictQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		d.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		d.Limit(limit)
@@ -4544,9 +4556,9 @@ func (p *holderPager) orderExpr(query *HolderQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to Holder.
 func (h *HolderQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...HolderPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...HolderPaginateOption,
 ) (*HolderConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -4561,7 +4573,7 @@ func (h *HolderQuery) Paginate(
 	conn := &HolderConnection{Edges: []*HolderEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := h.Clone()
 			c.ctx.Fields = nil
@@ -4580,6 +4592,7 @@ func (h *HolderQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		h.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		h.Limit(limit)
@@ -4897,9 +4910,9 @@ func (p *holderresponsibilityPager) orderExpr(query *HolderResponsibilityQuery) 
 
 // Paginate executes the query and returns a relay based cursor connection to HolderResponsibility.
 func (hr *HolderResponsibilityQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...HolderResponsibilityPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...HolderResponsibilityPaginateOption,
 ) (*HolderResponsibilityConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -4914,7 +4927,7 @@ func (hr *HolderResponsibilityQuery) Paginate(
 	conn := &HolderResponsibilityConnection{Edges: []*HolderResponsibilityEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := hr.Clone()
 			c.ctx.Fields = nil
@@ -4933,6 +4946,7 @@ func (hr *HolderResponsibilityQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		hr.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		hr.Limit(limit)
@@ -5214,9 +5228,9 @@ func (p *keywordPager) orderExpr(query *KeywordQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to Keyword.
 func (k *KeywordQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...KeywordPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...KeywordPaginateOption,
 ) (*KeywordConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -5231,7 +5245,7 @@ func (k *KeywordQuery) Paginate(
 	conn := &KeywordConnection{Edges: []*KeywordEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := k.Clone()
 			c.ctx.Fields = nil
@@ -5250,6 +5264,7 @@ func (k *KeywordQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		k.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		k.Limit(limit)
@@ -5502,9 +5517,9 @@ func (p *licensePager) orderExpr(query *LicenseQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to License.
 func (l *LicenseQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...LicensePaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...LicensePaginateOption,
 ) (*LicenseConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -5519,7 +5534,7 @@ func (l *LicenseQuery) Paginate(
 	conn := &LicenseConnection{Edges: []*LicenseEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := l.Clone()
 			c.ctx.Fields = nil
@@ -5538,6 +5553,7 @@ func (l *LicenseQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		l.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		l.Limit(limit)
@@ -5855,9 +5871,9 @@ func (p *locationPager) orderExpr(query *LocationQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to Location.
 func (l *LocationQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...LocationPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...LocationPaginateOption,
 ) (*LocationConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -5872,7 +5888,7 @@ func (l *LocationQuery) Paginate(
 	conn := &LocationConnection{Edges: []*LocationEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := l.Clone()
 			c.ctx.Fields = nil
@@ -5891,6 +5907,7 @@ func (l *LocationQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		l.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		l.Limit(limit)
@@ -6208,9 +6225,9 @@ func (p *mediumPager) orderExpr(query *MediumQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to Medium.
 func (m *MediumQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...MediumPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...MediumPaginateOption,
 ) (*MediumConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -6225,7 +6242,7 @@ func (m *MediumQuery) Paginate(
 	conn := &MediumConnection{Edges: []*MediumEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := m.Clone()
 			c.ctx.Fields = nil
@@ -6244,6 +6261,7 @@ func (m *MediumQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		m.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		m.Limit(limit)
@@ -6561,9 +6579,9 @@ func (p *modelPager) orderExpr(query *ModelQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to Model.
 func (m *ModelQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...ModelPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...ModelPaginateOption,
 ) (*ModelConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -6578,7 +6596,7 @@ func (m *ModelQuery) Paginate(
 	conn := &ModelConnection{Edges: []*ModelEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := m.Clone()
 			c.ctx.Fields = nil
@@ -6597,6 +6615,7 @@ func (m *ModelQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		m.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		m.Limit(limit)
@@ -6914,9 +6933,9 @@ func (p *monumentPager) orderExpr(query *MonumentQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to Monument.
 func (m *MonumentQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...MonumentPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...MonumentPaginateOption,
 ) (*MonumentConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -6931,7 +6950,7 @@ func (m *MonumentQuery) Paginate(
 	conn := &MonumentConnection{Edges: []*MonumentEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := m.Clone()
 			c.ctx.Fields = nil
@@ -6950,6 +6969,7 @@ func (m *MonumentQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		m.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		m.Limit(limit)
@@ -7231,9 +7251,9 @@ func (p *organizationPager) orderExpr(query *OrganizationQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to Organization.
 func (o *OrganizationQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...OrganizationPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...OrganizationPaginateOption,
 ) (*OrganizationConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -7248,7 +7268,7 @@ func (o *OrganizationQuery) Paginate(
 	conn := &OrganizationConnection{Edges: []*OrganizationEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := o.Clone()
 			c.ctx.Fields = nil
@@ -7267,6 +7287,7 @@ func (o *OrganizationQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		o.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		o.Limit(limit)
@@ -7584,9 +7605,9 @@ func (p *organizationtypePager) orderExpr(query *OrganizationTypeQuery) sql.Quer
 
 // Paginate executes the query and returns a relay based cursor connection to OrganizationType.
 func (ot *OrganizationTypeQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...OrganizationTypePaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...OrganizationTypePaginateOption,
 ) (*OrganizationTypeConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -7601,7 +7622,7 @@ func (ot *OrganizationTypeQuery) Paginate(
 	conn := &OrganizationTypeConnection{Edges: []*OrganizationTypeEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := ot.Clone()
 			c.ctx.Fields = nil
@@ -7620,6 +7641,7 @@ func (ot *OrganizationTypeQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		ot.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		ot.Limit(limit)
@@ -7937,9 +7959,9 @@ func (p *periodPager) orderExpr(query *PeriodQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to Period.
 func (pe *PeriodQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...PeriodPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...PeriodPaginateOption,
 ) (*PeriodConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -7954,7 +7976,7 @@ func (pe *PeriodQuery) Paginate(
 	conn := &PeriodConnection{Edges: []*PeriodEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := pe.Clone()
 			c.ctx.Fields = nil
@@ -7973,6 +7995,7 @@ func (pe *PeriodQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		pe.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		pe.Limit(limit)
@@ -8290,9 +8313,9 @@ func (p *personPager) orderExpr(query *PersonQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to Person.
 func (pe *PersonQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...PersonPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...PersonPaginateOption,
 ) (*PersonConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -8307,7 +8330,7 @@ func (pe *PersonQuery) Paginate(
 	conn := &PersonConnection{Edges: []*PersonEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := pe.Clone()
 			c.ctx.Fields = nil
@@ -8326,6 +8349,7 @@ func (pe *PersonQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		pe.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		pe.Limit(limit)
@@ -8643,9 +8667,9 @@ func (p *personrolePager) orderExpr(query *PersonRoleQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to PersonRole.
 func (pr *PersonRoleQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...PersonRolePaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...PersonRolePaginateOption,
 ) (*PersonRoleConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -8660,7 +8684,7 @@ func (pr *PersonRoleQuery) Paginate(
 	conn := &PersonRoleConnection{Edges: []*PersonRoleEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := pr.Clone()
 			c.ctx.Fields = nil
@@ -8679,6 +8703,7 @@ func (pr *PersonRoleQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		pr.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		pr.Limit(limit)
@@ -8996,9 +9021,9 @@ func (p *projectPager) orderExpr(query *ProjectQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to Project.
 func (pr *ProjectQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...ProjectPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...ProjectPaginateOption,
 ) (*ProjectConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -9013,7 +9038,7 @@ func (pr *ProjectQuery) Paginate(
 	conn := &ProjectConnection{Edges: []*ProjectEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := pr.Clone()
 			c.ctx.Fields = nil
@@ -9032,6 +9057,7 @@ func (pr *ProjectQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		pr.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		pr.Limit(limit)
@@ -9349,9 +9375,9 @@ func (p *projecttypePager) orderExpr(query *ProjectTypeQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to ProjectType.
 func (pt *ProjectTypeQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...ProjectTypePaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...ProjectTypePaginateOption,
 ) (*ProjectTypeConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -9366,7 +9392,7 @@ func (pt *ProjectTypeQuery) Paginate(
 	conn := &ProjectTypeConnection{Edges: []*ProjectTypeEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := pt.Clone()
 			c.ctx.Fields = nil
@@ -9385,6 +9411,7 @@ func (pt *ProjectTypeQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		pt.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		pt.Limit(limit)
@@ -9702,9 +9729,9 @@ func (p *protectedareaPager) orderExpr(query *ProtectedAreaQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to ProtectedArea.
 func (pa *ProtectedAreaQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...ProtectedAreaPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...ProtectedAreaPaginateOption,
 ) (*ProtectedAreaConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -9719,7 +9746,7 @@ func (pa *ProtectedAreaQuery) Paginate(
 	conn := &ProtectedAreaConnection{Edges: []*ProtectedAreaEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := pa.Clone()
 			c.ctx.Fields = nil
@@ -9738,6 +9765,7 @@ func (pa *ProtectedAreaQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		pa.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		pa.Limit(limit)
@@ -10055,9 +10083,9 @@ func (p *protectedareacategoryPager) orderExpr(query *ProtectedAreaCategoryQuery
 
 // Paginate executes the query and returns a relay based cursor connection to ProtectedAreaCategory.
 func (pac *ProtectedAreaCategoryQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...ProtectedAreaCategoryPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...ProtectedAreaCategoryPaginateOption,
 ) (*ProtectedAreaCategoryConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -10072,7 +10100,7 @@ func (pac *ProtectedAreaCategoryQuery) Paginate(
 	conn := &ProtectedAreaCategoryConnection{Edges: []*ProtectedAreaCategoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := pac.Clone()
 			c.ctx.Fields = nil
@@ -10091,6 +10119,7 @@ func (pac *ProtectedAreaCategoryQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		pac.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		pac.Limit(limit)
@@ -10408,9 +10437,9 @@ func (p *protectedareapicturePager) orderExpr(query *ProtectedAreaPictureQuery) 
 
 // Paginate executes the query and returns a relay based cursor connection to ProtectedAreaPicture.
 func (pap *ProtectedAreaPictureQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...ProtectedAreaPicturePaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...ProtectedAreaPicturePaginateOption,
 ) (*ProtectedAreaPictureConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -10425,7 +10454,7 @@ func (pap *ProtectedAreaPictureQuery) Paginate(
 	conn := &ProtectedAreaPictureConnection{Edges: []*ProtectedAreaPictureEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := pap.Clone()
 			c.ctx.Fields = nil
@@ -10444,6 +10473,7 @@ func (pap *ProtectedAreaPictureQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		pap.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		pap.Limit(limit)
@@ -10761,9 +10791,9 @@ func (p *publicationPager) orderExpr(query *PublicationQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to Publication.
 func (pu *PublicationQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...PublicationPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...PublicationPaginateOption,
 ) (*PublicationConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -10778,7 +10808,7 @@ func (pu *PublicationQuery) Paginate(
 	conn := &PublicationConnection{Edges: []*PublicationEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := pu.Clone()
 			c.ctx.Fields = nil
@@ -10797,6 +10827,7 @@ func (pu *PublicationQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		pu.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		pu.Limit(limit)
@@ -11114,9 +11145,9 @@ func (p *publisherPager) orderExpr(query *PublisherQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to Publisher.
 func (pu *PublisherQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...PublisherPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...PublisherPaginateOption,
 ) (*PublisherConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -11131,7 +11162,7 @@ func (pu *PublisherQuery) Paginate(
 	conn := &PublisherConnection{Edges: []*PublisherEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := pu.Clone()
 			c.ctx.Fields = nil
@@ -11150,6 +11181,7 @@ func (pu *PublisherQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		pu.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		pu.Limit(limit)
@@ -11467,9 +11499,9 @@ func (p *regionPager) orderExpr(query *RegionQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to Region.
 func (r *RegionQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...RegionPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...RegionPaginateOption,
 ) (*RegionConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -11484,7 +11516,7 @@ func (r *RegionQuery) Paginate(
 	conn := &RegionConnection{Edges: []*RegionEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := r.Clone()
 			c.ctx.Fields = nil
@@ -11503,6 +11535,7 @@ func (r *RegionQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		r.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		r.Limit(limit)
@@ -11820,9 +11853,9 @@ func (p *setPager) orderExpr(query *SetQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to Set.
 func (s *SetQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...SetPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...SetPaginateOption,
 ) (*SetConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -11837,7 +11870,7 @@ func (s *SetQuery) Paginate(
 	conn := &SetConnection{Edges: []*SetEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := s.Clone()
 			c.ctx.Fields = nil
@@ -11856,6 +11889,7 @@ func (s *SetQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		s.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		s.Limit(limit)
@@ -12173,9 +12207,9 @@ func (p *settlementPager) orderExpr(query *SettlementQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to Settlement.
 func (s *SettlementQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...SettlementPaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...SettlementPaginateOption,
 ) (*SettlementConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -12190,7 +12224,7 @@ func (s *SettlementQuery) Paginate(
 	conn := &SettlementConnection{Edges: []*SettlementEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := s.Clone()
 			c.ctx.Fields = nil
@@ -12209,6 +12243,7 @@ func (s *SettlementQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		s.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		s.Limit(limit)
@@ -12526,9 +12561,9 @@ func (p *techniquePager) orderExpr(query *TechniqueQuery) sql.Querier {
 
 // Paginate executes the query and returns a relay based cursor connection to Technique.
 func (t *TechniqueQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, offset *int,
-	opts ...TechniquePaginateOption,
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...TechniquePaginateOption,
 ) (*TechniqueConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
@@ -12543,7 +12578,7 @@ func (t *TechniqueQuery) Paginate(
 	conn := &TechniqueConnection{Edges: []*TechniqueEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
 			c := t.Clone()
 			c.ctx.Fields = nil
@@ -12562,6 +12597,7 @@ func (t *TechniqueQuery) Paginate(
 	}
 	if offset != nil && *offset != 0 {
 		t.Offset(*offset)
+
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
 		t.Limit(limit)

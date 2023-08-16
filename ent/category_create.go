@@ -133,6 +133,40 @@ func (cc *CategoryCreate) SetNillableExternalLink(s *string) *CategoryCreate {
 	return cc
 }
 
+// SetSlug sets the "slug" field.
+func (cc *CategoryCreate) SetSlug(s string) *CategoryCreate {
+	cc.mutation.SetSlug(s)
+	return cc
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (cc *CategoryCreate) SetNillableSlug(s *string) *CategoryCreate {
+	if s != nil {
+		cc.SetSlug(*s)
+	}
+	return cc
+}
+
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (cc *CategoryCreate) SetPrimaryImageURL(s string) *CategoryCreate {
+	cc.mutation.SetPrimaryImageURL(s)
+	return cc
+}
+
+// SetNillablePrimaryImageURL sets the "primary_image_url" field if the given value is not nil.
+func (cc *CategoryCreate) SetNillablePrimaryImageURL(s *string) *CategoryCreate {
+	if s != nil {
+		cc.SetPrimaryImageURL(*s)
+	}
+	return cc
+}
+
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (cc *CategoryCreate) SetAdditionalImagesUrls(s []string) *CategoryCreate {
+	cc.mutation.SetAdditionalImagesUrls(s)
+	return cc
+}
+
 // AddCollectionIDs adds the "collections" edge to the Collection entity by IDs.
 func (cc *CategoryCreate) AddCollectionIDs(ids ...int) *CategoryCreate {
 	cc.mutation.AddCollectionIDs(ids...)
@@ -267,6 +301,18 @@ func (cc *CategoryCreate) createSpec() (*Category, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.ExternalLink(); ok {
 		_spec.SetField(category.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
+	}
+	if value, ok := cc.mutation.Slug(); ok {
+		_spec.SetField(category.FieldSlug, field.TypeString, value)
+		_node.Slug = value
+	}
+	if value, ok := cc.mutation.PrimaryImageURL(); ok {
+		_spec.SetField(category.FieldPrimaryImageURL, field.TypeString, value)
+		_node.PrimaryImageURL = value
+	}
+	if value, ok := cc.mutation.AdditionalImagesUrls(); ok {
+		_spec.SetField(category.FieldAdditionalImagesUrls, field.TypeJSON, value)
+		_node.AdditionalImagesUrls = value
 	}
 	if nodes := cc.mutation.CollectionsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -100,6 +100,11 @@ func ExternalLink(v string) predicate.Person {
 	return predicate.Person(sql.FieldEQ(FieldExternalLink, v))
 }
 
+// Slug applies equality check predicate on the "slug" field. It's identical to SlugEQ.
+func Slug(v string) predicate.Person {
+	return predicate.Person(sql.FieldEQ(FieldSlug, v))
+}
+
 // PrimaryImageURL applies equality check predicate on the "primary_image_url" field. It's identical to PrimaryImageURLEQ.
 func PrimaryImageURL(v string) predicate.Person {
 	return predicate.Person(sql.FieldEQ(FieldPrimaryImageURL, v))
@@ -753,6 +758,81 @@ func ExternalLinkEqualFold(v string) predicate.Person {
 // ExternalLinkContainsFold applies the ContainsFold predicate on the "external_link" field.
 func ExternalLinkContainsFold(v string) predicate.Person {
 	return predicate.Person(sql.FieldContainsFold(FieldExternalLink, v))
+}
+
+// SlugEQ applies the EQ predicate on the "slug" field.
+func SlugEQ(v string) predicate.Person {
+	return predicate.Person(sql.FieldEQ(FieldSlug, v))
+}
+
+// SlugNEQ applies the NEQ predicate on the "slug" field.
+func SlugNEQ(v string) predicate.Person {
+	return predicate.Person(sql.FieldNEQ(FieldSlug, v))
+}
+
+// SlugIn applies the In predicate on the "slug" field.
+func SlugIn(vs ...string) predicate.Person {
+	return predicate.Person(sql.FieldIn(FieldSlug, vs...))
+}
+
+// SlugNotIn applies the NotIn predicate on the "slug" field.
+func SlugNotIn(vs ...string) predicate.Person {
+	return predicate.Person(sql.FieldNotIn(FieldSlug, vs...))
+}
+
+// SlugGT applies the GT predicate on the "slug" field.
+func SlugGT(v string) predicate.Person {
+	return predicate.Person(sql.FieldGT(FieldSlug, v))
+}
+
+// SlugGTE applies the GTE predicate on the "slug" field.
+func SlugGTE(v string) predicate.Person {
+	return predicate.Person(sql.FieldGTE(FieldSlug, v))
+}
+
+// SlugLT applies the LT predicate on the "slug" field.
+func SlugLT(v string) predicate.Person {
+	return predicate.Person(sql.FieldLT(FieldSlug, v))
+}
+
+// SlugLTE applies the LTE predicate on the "slug" field.
+func SlugLTE(v string) predicate.Person {
+	return predicate.Person(sql.FieldLTE(FieldSlug, v))
+}
+
+// SlugContains applies the Contains predicate on the "slug" field.
+func SlugContains(v string) predicate.Person {
+	return predicate.Person(sql.FieldContains(FieldSlug, v))
+}
+
+// SlugHasPrefix applies the HasPrefix predicate on the "slug" field.
+func SlugHasPrefix(v string) predicate.Person {
+	return predicate.Person(sql.FieldHasPrefix(FieldSlug, v))
+}
+
+// SlugHasSuffix applies the HasSuffix predicate on the "slug" field.
+func SlugHasSuffix(v string) predicate.Person {
+	return predicate.Person(sql.FieldHasSuffix(FieldSlug, v))
+}
+
+// SlugIsNil applies the IsNil predicate on the "slug" field.
+func SlugIsNil() predicate.Person {
+	return predicate.Person(sql.FieldIsNull(FieldSlug))
+}
+
+// SlugNotNil applies the NotNil predicate on the "slug" field.
+func SlugNotNil() predicate.Person {
+	return predicate.Person(sql.FieldNotNull(FieldSlug))
+}
+
+// SlugEqualFold applies the EqualFold predicate on the "slug" field.
+func SlugEqualFold(v string) predicate.Person {
+	return predicate.Person(sql.FieldEqualFold(FieldSlug, v))
+}
+
+// SlugContainsFold applies the ContainsFold predicate on the "slug" field.
+func SlugContainsFold(v string) predicate.Person {
+	return predicate.Person(sql.FieldContainsFold(FieldSlug, v))
 }
 
 // PrimaryImageURLEQ applies the EQ predicate on the "primary_image_url" field.

@@ -155,6 +155,26 @@ func (su *SettlementUpdate) ClearExternalLink() *SettlementUpdate {
 	return su
 }
 
+// SetSlug sets the "slug" field.
+func (su *SettlementUpdate) SetSlug(s string) *SettlementUpdate {
+	su.mutation.SetSlug(s)
+	return su
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (su *SettlementUpdate) SetNillableSlug(s *string) *SettlementUpdate {
+	if s != nil {
+		su.SetSlug(*s)
+	}
+	return su
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (su *SettlementUpdate) ClearSlug() *SettlementUpdate {
+	su.mutation.ClearSlug()
+	return su
+}
+
 // SetLocationID sets the "location" edge to the Location entity by ID.
 func (su *SettlementUpdate) SetLocationID(id int) *SettlementUpdate {
 	su.mutation.SetLocationID(id)
@@ -274,6 +294,12 @@ func (su *SettlementUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.ExternalLinkCleared() {
 		_spec.ClearField(settlement.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := su.mutation.Slug(); ok {
+		_spec.SetField(settlement.FieldSlug, field.TypeString, value)
+	}
+	if su.mutation.SlugCleared() {
+		_spec.ClearField(settlement.FieldSlug, field.TypeString)
 	}
 	if su.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -450,6 +476,26 @@ func (suo *SettlementUpdateOne) ClearExternalLink() *SettlementUpdateOne {
 	return suo
 }
 
+// SetSlug sets the "slug" field.
+func (suo *SettlementUpdateOne) SetSlug(s string) *SettlementUpdateOne {
+	suo.mutation.SetSlug(s)
+	return suo
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (suo *SettlementUpdateOne) SetNillableSlug(s *string) *SettlementUpdateOne {
+	if s != nil {
+		suo.SetSlug(*s)
+	}
+	return suo
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (suo *SettlementUpdateOne) ClearSlug() *SettlementUpdateOne {
+	suo.mutation.ClearSlug()
+	return suo
+}
+
 // SetLocationID sets the "location" edge to the Location entity by ID.
 func (suo *SettlementUpdateOne) SetLocationID(id int) *SettlementUpdateOne {
 	suo.mutation.SetLocationID(id)
@@ -599,6 +645,12 @@ func (suo *SettlementUpdateOne) sqlSave(ctx context.Context) (_node *Settlement,
 	}
 	if suo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(settlement.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := suo.mutation.Slug(); ok {
+		_spec.SetField(settlement.FieldSlug, field.TypeString, value)
+	}
+	if suo.mutation.SlugCleared() {
+		_spec.ClearField(settlement.FieldSlug, field.TypeString)
 	}
 	if suo.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{

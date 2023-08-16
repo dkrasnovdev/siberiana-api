@@ -155,6 +155,26 @@ func (cu *CountryUpdate) ClearExternalLink() *CountryUpdate {
 	return cu
 }
 
+// SetSlug sets the "slug" field.
+func (cu *CountryUpdate) SetSlug(s string) *CountryUpdate {
+	cu.mutation.SetSlug(s)
+	return cu
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (cu *CountryUpdate) SetNillableSlug(s *string) *CountryUpdate {
+	if s != nil {
+		cu.SetSlug(*s)
+	}
+	return cu
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (cu *CountryUpdate) ClearSlug() *CountryUpdate {
+	cu.mutation.ClearSlug()
+	return cu
+}
+
 // SetLocationID sets the "location" edge to the Location entity by ID.
 func (cu *CountryUpdate) SetLocationID(id int) *CountryUpdate {
 	cu.mutation.SetLocationID(id)
@@ -274,6 +294,12 @@ func (cu *CountryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if cu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(country.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := cu.mutation.Slug(); ok {
+		_spec.SetField(country.FieldSlug, field.TypeString, value)
+	}
+	if cu.mutation.SlugCleared() {
+		_spec.ClearField(country.FieldSlug, field.TypeString)
 	}
 	if cu.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -450,6 +476,26 @@ func (cuo *CountryUpdateOne) ClearExternalLink() *CountryUpdateOne {
 	return cuo
 }
 
+// SetSlug sets the "slug" field.
+func (cuo *CountryUpdateOne) SetSlug(s string) *CountryUpdateOne {
+	cuo.mutation.SetSlug(s)
+	return cuo
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (cuo *CountryUpdateOne) SetNillableSlug(s *string) *CountryUpdateOne {
+	if s != nil {
+		cuo.SetSlug(*s)
+	}
+	return cuo
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (cuo *CountryUpdateOne) ClearSlug() *CountryUpdateOne {
+	cuo.mutation.ClearSlug()
+	return cuo
+}
+
 // SetLocationID sets the "location" edge to the Location entity by ID.
 func (cuo *CountryUpdateOne) SetLocationID(id int) *CountryUpdateOne {
 	cuo.mutation.SetLocationID(id)
@@ -599,6 +645,12 @@ func (cuo *CountryUpdateOne) sqlSave(ctx context.Context) (_node *Country, err e
 	}
 	if cuo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(country.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := cuo.mutation.Slug(); ok {
+		_spec.SetField(country.FieldSlug, field.TypeString, value)
+	}
+	if cuo.mutation.SlugCleared() {
+		_spec.ClearField(country.FieldSlug, field.TypeString)
 	}
 	if cuo.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -34,6 +34,8 @@ type Art struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
+	// Slug holds the value of the "slug" field.
+	Slug string `json:"slug,omitempty"`
 	// PrimaryImageURL holds the value of the "primary_image_url" field.
 	PrimaryImageURL string `json:"primary_image_url,omitempty"`
 	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
@@ -87,7 +89,7 @@ func (*Art) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case art.FieldID:
 			values[i] = new(sql.NullInt64)
-		case art.FieldCreatedBy, art.FieldUpdatedBy, art.FieldDisplayName, art.FieldAbbreviation, art.FieldDescription, art.FieldExternalLink, art.FieldPrimaryImageURL:
+		case art.FieldCreatedBy, art.FieldUpdatedBy, art.FieldDisplayName, art.FieldAbbreviation, art.FieldDescription, art.FieldExternalLink, art.FieldSlug, art.FieldPrimaryImageURL:
 			values[i] = new(sql.NullString)
 		case art.FieldCreatedAt, art.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -159,6 +161,12 @@ func (a *Art) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field external_link", values[i])
 			} else if value.Valid {
 				a.ExternalLink = value.String
+			}
+		case art.FieldSlug:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field slug", values[i])
+			} else if value.Valid {
+				a.Slug = value.String
 			}
 		case art.FieldPrimaryImageURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -243,6 +251,9 @@ func (a *Art) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(a.ExternalLink)
+	builder.WriteString(", ")
+	builder.WriteString("slug=")
+	builder.WriteString(a.Slug)
 	builder.WriteString(", ")
 	builder.WriteString("primary_image_url=")
 	builder.WriteString(a.PrimaryImageURL)

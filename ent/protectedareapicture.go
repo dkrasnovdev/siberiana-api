@@ -39,6 +39,8 @@ type ProtectedAreaPicture struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
+	// Slug holds the value of the "slug" field.
+	Slug string `json:"slug,omitempty"`
 	// PrimaryImageURL holds the value of the "primary_image_url" field.
 	PrimaryImageURL string `json:"primary_image_url,omitempty"`
 	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
@@ -137,7 +139,7 @@ func (*ProtectedAreaPicture) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case protectedareapicture.FieldID:
 			values[i] = new(sql.NullInt64)
-		case protectedareapicture.FieldCreatedBy, protectedareapicture.FieldUpdatedBy, protectedareapicture.FieldDisplayName, protectedareapicture.FieldAbbreviation, protectedareapicture.FieldDescription, protectedareapicture.FieldExternalLink, protectedareapicture.FieldPrimaryImageURL:
+		case protectedareapicture.FieldCreatedBy, protectedareapicture.FieldUpdatedBy, protectedareapicture.FieldDisplayName, protectedareapicture.FieldAbbreviation, protectedareapicture.FieldDescription, protectedareapicture.FieldExternalLink, protectedareapicture.FieldSlug, protectedareapicture.FieldPrimaryImageURL:
 			values[i] = new(sql.NullString)
 		case protectedareapicture.FieldCreatedAt, protectedareapicture.FieldUpdatedAt, protectedareapicture.FieldShootingDate:
 			values[i] = new(sql.NullTime)
@@ -217,6 +219,12 @@ func (pap *ProtectedAreaPicture) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field external_link", values[i])
 			} else if value.Valid {
 				pap.ExternalLink = value.String
+			}
+		case protectedareapicture.FieldSlug:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field slug", values[i])
+			} else if value.Valid {
+				pap.Slug = value.String
 			}
 		case protectedareapicture.FieldPrimaryImageURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -352,6 +360,9 @@ func (pap *ProtectedAreaPicture) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(pap.ExternalLink)
+	builder.WriteString(", ")
+	builder.WriteString("slug=")
+	builder.WriteString(pap.Slug)
 	builder.WriteString(", ")
 	builder.WriteString("primary_image_url=")
 	builder.WriteString(pap.PrimaryImageURL)

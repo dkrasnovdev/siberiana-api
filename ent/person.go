@@ -43,6 +43,8 @@ type Person struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
+	// Slug holds the value of the "slug" field.
+	Slug string `json:"slug,omitempty"`
 	// PrimaryImageURL holds the value of the "primary_image_url" field.
 	PrimaryImageURL string `json:"primary_image_url,omitempty"`
 	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
@@ -192,7 +194,7 @@ func (*Person) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case person.FieldID:
 			values[i] = new(sql.NullInt64)
-		case person.FieldCreatedBy, person.FieldUpdatedBy, person.FieldAddress, person.FieldDisplayName, person.FieldAbbreviation, person.FieldDescription, person.FieldExternalLink, person.FieldPrimaryImageURL, person.FieldGivenName, person.FieldFamilyName, person.FieldPatronymicName, person.FieldGender:
+		case person.FieldCreatedBy, person.FieldUpdatedBy, person.FieldAddress, person.FieldDisplayName, person.FieldAbbreviation, person.FieldDescription, person.FieldExternalLink, person.FieldSlug, person.FieldPrimaryImageURL, person.FieldGivenName, person.FieldFamilyName, person.FieldPatronymicName, person.FieldGender:
 			values[i] = new(sql.NullString)
 		case person.FieldCreatedAt, person.FieldUpdatedAt, person.FieldBeginData, person.FieldEndDate:
 			values[i] = new(sql.NullTime)
@@ -292,6 +294,12 @@ func (pe *Person) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field external_link", values[i])
 			} else if value.Valid {
 				pe.ExternalLink = value.String
+			}
+		case person.FieldSlug:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field slug", values[i])
+			} else if value.Valid {
+				pe.Slug = value.String
 			}
 		case person.FieldPrimaryImageURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -472,6 +480,9 @@ func (pe *Person) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(pe.ExternalLink)
+	builder.WriteString(", ")
+	builder.WriteString("slug=")
+	builder.WriteString(pe.Slug)
 	builder.WriteString(", ")
 	builder.WriteString("primary_image_url=")
 	builder.WriteString(pe.PrimaryImageURL)

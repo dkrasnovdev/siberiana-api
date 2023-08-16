@@ -95,6 +95,11 @@ func ExternalLink(v string) predicate.ProtectedArea {
 	return predicate.ProtectedArea(sql.FieldEQ(FieldExternalLink, v))
 }
 
+// Slug applies equality check predicate on the "slug" field. It's identical to SlugEQ.
+func Slug(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldEQ(FieldSlug, v))
+}
+
 // Area applies equality check predicate on the "area" field. It's identical to AreaEQ.
 func Area(v string) predicate.ProtectedArea {
 	return predicate.ProtectedArea(sql.FieldEQ(FieldArea, v))
@@ -633,6 +638,81 @@ func ExternalLinkEqualFold(v string) predicate.ProtectedArea {
 // ExternalLinkContainsFold applies the ContainsFold predicate on the "external_link" field.
 func ExternalLinkContainsFold(v string) predicate.ProtectedArea {
 	return predicate.ProtectedArea(sql.FieldContainsFold(FieldExternalLink, v))
+}
+
+// SlugEQ applies the EQ predicate on the "slug" field.
+func SlugEQ(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldEQ(FieldSlug, v))
+}
+
+// SlugNEQ applies the NEQ predicate on the "slug" field.
+func SlugNEQ(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldNEQ(FieldSlug, v))
+}
+
+// SlugIn applies the In predicate on the "slug" field.
+func SlugIn(vs ...string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldIn(FieldSlug, vs...))
+}
+
+// SlugNotIn applies the NotIn predicate on the "slug" field.
+func SlugNotIn(vs ...string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldNotIn(FieldSlug, vs...))
+}
+
+// SlugGT applies the GT predicate on the "slug" field.
+func SlugGT(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldGT(FieldSlug, v))
+}
+
+// SlugGTE applies the GTE predicate on the "slug" field.
+func SlugGTE(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldGTE(FieldSlug, v))
+}
+
+// SlugLT applies the LT predicate on the "slug" field.
+func SlugLT(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldLT(FieldSlug, v))
+}
+
+// SlugLTE applies the LTE predicate on the "slug" field.
+func SlugLTE(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldLTE(FieldSlug, v))
+}
+
+// SlugContains applies the Contains predicate on the "slug" field.
+func SlugContains(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldContains(FieldSlug, v))
+}
+
+// SlugHasPrefix applies the HasPrefix predicate on the "slug" field.
+func SlugHasPrefix(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldHasPrefix(FieldSlug, v))
+}
+
+// SlugHasSuffix applies the HasSuffix predicate on the "slug" field.
+func SlugHasSuffix(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldHasSuffix(FieldSlug, v))
+}
+
+// SlugIsNil applies the IsNil predicate on the "slug" field.
+func SlugIsNil() predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldIsNull(FieldSlug))
+}
+
+// SlugNotNil applies the NotNil predicate on the "slug" field.
+func SlugNotNil() predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldNotNull(FieldSlug))
+}
+
+// SlugEqualFold applies the EqualFold predicate on the "slug" field.
+func SlugEqualFold(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldEqualFold(FieldSlug, v))
+}
+
+// SlugContainsFold applies the ContainsFold predicate on the "slug" field.
+func SlugContainsFold(v string) predicate.ProtectedArea {
+	return predicate.ProtectedArea(sql.FieldContainsFold(FieldSlug, v))
 }
 
 // AreaEQ applies the EQ predicate on the "area" field.

@@ -155,6 +155,26 @@ func (pu *PeriodUpdate) ClearExternalLink() *PeriodUpdate {
 	return pu
 }
 
+// SetSlug sets the "slug" field.
+func (pu *PeriodUpdate) SetSlug(s string) *PeriodUpdate {
+	pu.mutation.SetSlug(s)
+	return pu
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (pu *PeriodUpdate) SetNillableSlug(s *string) *PeriodUpdate {
+	if s != nil {
+		pu.SetSlug(*s)
+	}
+	return pu
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (pu *PeriodUpdate) ClearSlug() *PeriodUpdate {
+	pu.mutation.ClearSlug()
+	return pu
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (pu *PeriodUpdate) AddArtifactIDs(ids ...int) *PeriodUpdate {
 	pu.mutation.AddArtifactIDs(ids...)
@@ -285,6 +305,12 @@ func (pu *PeriodUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(period.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := pu.mutation.Slug(); ok {
+		_spec.SetField(period.FieldSlug, field.TypeString, value)
+	}
+	if pu.mutation.SlugCleared() {
+		_spec.ClearField(period.FieldSlug, field.TypeString)
 	}
 	if pu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -477,6 +503,26 @@ func (puo *PeriodUpdateOne) ClearExternalLink() *PeriodUpdateOne {
 	return puo
 }
 
+// SetSlug sets the "slug" field.
+func (puo *PeriodUpdateOne) SetSlug(s string) *PeriodUpdateOne {
+	puo.mutation.SetSlug(s)
+	return puo
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (puo *PeriodUpdateOne) SetNillableSlug(s *string) *PeriodUpdateOne {
+	if s != nil {
+		puo.SetSlug(*s)
+	}
+	return puo
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (puo *PeriodUpdateOne) ClearSlug() *PeriodUpdateOne {
+	puo.mutation.ClearSlug()
+	return puo
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (puo *PeriodUpdateOne) AddArtifactIDs(ids ...int) *PeriodUpdateOne {
 	puo.mutation.AddArtifactIDs(ids...)
@@ -637,6 +683,12 @@ func (puo *PeriodUpdateOne) sqlSave(ctx context.Context) (_node *Period, err err
 	}
 	if puo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(period.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := puo.mutation.Slug(); ok {
+		_spec.SetField(period.FieldSlug, field.TypeString, value)
+	}
+	if puo.mutation.SlugCleared() {
+		_spec.ClearField(period.FieldSlug, field.TypeString)
 	}
 	if puo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

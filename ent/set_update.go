@@ -156,6 +156,26 @@ func (su *SetUpdate) ClearExternalLink() *SetUpdate {
 	return su
 }
 
+// SetSlug sets the "slug" field.
+func (su *SetUpdate) SetSlug(s string) *SetUpdate {
+	su.mutation.SetSlug(s)
+	return su
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (su *SetUpdate) SetNillableSlug(s *string) *SetUpdate {
+	if s != nil {
+		su.SetSlug(*s)
+	}
+	return su
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (su *SetUpdate) ClearSlug() *SetUpdate {
+	su.mutation.ClearSlug()
+	return su
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (su *SetUpdate) AddArtifactIDs(ids ...int) *SetUpdate {
 	su.mutation.AddArtifactIDs(ids...)
@@ -322,6 +342,12 @@ func (su *SetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.ExternalLinkCleared() {
 		_spec.ClearField(set.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := su.mutation.Slug(); ok {
+		_spec.SetField(set.FieldSlug, field.TypeString, value)
+	}
+	if su.mutation.SlugCleared() {
+		_spec.ClearField(set.FieldSlug, field.TypeString)
 	}
 	if su.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -559,6 +585,26 @@ func (suo *SetUpdateOne) ClearExternalLink() *SetUpdateOne {
 	return suo
 }
 
+// SetSlug sets the "slug" field.
+func (suo *SetUpdateOne) SetSlug(s string) *SetUpdateOne {
+	suo.mutation.SetSlug(s)
+	return suo
+}
+
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (suo *SetUpdateOne) SetNillableSlug(s *string) *SetUpdateOne {
+	if s != nil {
+		suo.SetSlug(*s)
+	}
+	return suo
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (suo *SetUpdateOne) ClearSlug() *SetUpdateOne {
+	suo.mutation.ClearSlug()
+	return suo
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (suo *SetUpdateOne) AddArtifactIDs(ids ...int) *SetUpdateOne {
 	suo.mutation.AddArtifactIDs(ids...)
@@ -755,6 +801,12 @@ func (suo *SetUpdateOne) sqlSave(ctx context.Context) (_node *Set, err error) {
 	}
 	if suo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(set.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := suo.mutation.Slug(); ok {
+		_spec.SetField(set.FieldSlug, field.TypeString, value)
+	}
+	if suo.mutation.SlugCleared() {
+		_spec.ClearField(set.FieldSlug, field.TypeString)
 	}
 	if suo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
