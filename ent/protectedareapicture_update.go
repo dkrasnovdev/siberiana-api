@@ -264,14 +264,6 @@ func (papu *ProtectedAreaPictureUpdate) SetCollectionID(id int) *ProtectedAreaPi
 	return papu
 }
 
-// SetNillableCollectionID sets the "collection" edge to the Collection entity by ID if the given value is not nil.
-func (papu *ProtectedAreaPictureUpdate) SetNillableCollectionID(id *int) *ProtectedAreaPictureUpdate {
-	if id != nil {
-		papu = papu.SetCollectionID(*id)
-	}
-	return papu
-}
-
 // SetCollection sets the "collection" edge to the Collection entity.
 func (papu *ProtectedAreaPictureUpdate) SetCollection(c *Collection) *ProtectedAreaPictureUpdate {
 	return papu.SetCollectionID(c.ID)
@@ -405,7 +397,18 @@ func (papu *ProtectedAreaPictureUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (papu *ProtectedAreaPictureUpdate) check() error {
+	if _, ok := papu.mutation.CollectionID(); papu.mutation.CollectionCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "ProtectedAreaPicture.collection"`)
+	}
+	return nil
+}
+
 func (papu *ProtectedAreaPictureUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := papu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(protectedareapicture.Table, protectedareapicture.Columns, sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt))
 	if ps := papu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -854,14 +857,6 @@ func (papuo *ProtectedAreaPictureUpdateOne) SetCollectionID(id int) *ProtectedAr
 	return papuo
 }
 
-// SetNillableCollectionID sets the "collection" edge to the Collection entity by ID if the given value is not nil.
-func (papuo *ProtectedAreaPictureUpdateOne) SetNillableCollectionID(id *int) *ProtectedAreaPictureUpdateOne {
-	if id != nil {
-		papuo = papuo.SetCollectionID(*id)
-	}
-	return papuo
-}
-
 // SetCollection sets the "collection" edge to the Collection entity.
 func (papuo *ProtectedAreaPictureUpdateOne) SetCollection(c *Collection) *ProtectedAreaPictureUpdateOne {
 	return papuo.SetCollectionID(c.ID)
@@ -1008,7 +1003,18 @@ func (papuo *ProtectedAreaPictureUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (papuo *ProtectedAreaPictureUpdateOne) check() error {
+	if _, ok := papuo.mutation.CollectionID(); papuo.mutation.CollectionCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "ProtectedAreaPicture.collection"`)
+	}
+	return nil
+}
+
 func (papuo *ProtectedAreaPictureUpdateOne) sqlSave(ctx context.Context) (_node *ProtectedAreaPicture, err error) {
+	if err := papuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(protectedareapicture.Table, protectedareapicture.Columns, sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt))
 	id, ok := papuo.mutation.ID()
 	if !ok {

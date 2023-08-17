@@ -229,14 +229,6 @@ func (bc *BookCreate) SetCollectionID(id int) *BookCreate {
 	return bc
 }
 
-// SetNillableCollectionID sets the "collection" edge to the Collection entity by ID if the given value is not nil.
-func (bc *BookCreate) SetNillableCollectionID(id *int) *BookCreate {
-	if id != nil {
-		bc = bc.SetCollectionID(*id)
-	}
-	return bc
-}
-
 // SetCollection sets the "collection" edge to the Collection entity.
 func (bc *BookCreate) SetCollection(c *Collection) *BookCreate {
 	return bc.SetCollectionID(c.ID)
@@ -380,6 +372,9 @@ func (bc *BookCreate) check() error {
 		if err := book.YearValidator(v); err != nil {
 			return &ValidationError{Name: "year", err: fmt.Errorf(`ent: validator failed for field "Book.year": %w`, err)}
 		}
+	}
+	if _, ok := bc.mutation.CollectionID(); !ok {
+		return &ValidationError{Name: "collection", err: errors.New(`ent: missing required edge "Book.collection"`)}
 	}
 	return nil
 }

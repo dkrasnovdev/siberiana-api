@@ -301,14 +301,6 @@ func (bu *BookUpdate) SetCollectionID(id int) *BookUpdate {
 	return bu
 }
 
-// SetNillableCollectionID sets the "collection" edge to the Collection entity by ID if the given value is not nil.
-func (bu *BookUpdate) SetNillableCollectionID(id *int) *BookUpdate {
-	if id != nil {
-		bu = bu.SetCollectionID(*id)
-	}
-	return bu
-}
-
 // SetCollection sets the "collection" edge to the Collection entity.
 func (bu *BookUpdate) SetCollection(c *Collection) *BookUpdate {
 	return bu.SetCollectionID(c.ID)
@@ -526,6 +518,9 @@ func (bu *BookUpdate) check() error {
 		if err := book.YearValidator(v); err != nil {
 			return &ValidationError{Name: "year", err: fmt.Errorf(`ent: validator failed for field "Book.year": %w`, err)}
 		}
+	}
+	if _, ok := bu.mutation.CollectionID(); bu.mutation.CollectionCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Book.collection"`)
 	}
 	return nil
 }
@@ -1160,14 +1155,6 @@ func (buo *BookUpdateOne) SetCollectionID(id int) *BookUpdateOne {
 	return buo
 }
 
-// SetNillableCollectionID sets the "collection" edge to the Collection entity by ID if the given value is not nil.
-func (buo *BookUpdateOne) SetNillableCollectionID(id *int) *BookUpdateOne {
-	if id != nil {
-		buo = buo.SetCollectionID(*id)
-	}
-	return buo
-}
-
 // SetCollection sets the "collection" edge to the Collection entity.
 func (buo *BookUpdateOne) SetCollection(c *Collection) *BookUpdateOne {
 	return buo.SetCollectionID(c.ID)
@@ -1398,6 +1385,9 @@ func (buo *BookUpdateOne) check() error {
 		if err := book.YearValidator(v); err != nil {
 			return &ValidationError{Name: "year", err: fmt.Errorf(`ent: validator failed for field "Book.year": %w`, err)}
 		}
+	}
+	if _, ok := buo.mutation.CollectionID(); buo.mutation.CollectionCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Book.collection"`)
 	}
 	return nil
 }

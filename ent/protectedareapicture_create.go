@@ -205,14 +205,6 @@ func (papc *ProtectedAreaPictureCreate) SetCollectionID(id int) *ProtectedAreaPi
 	return papc
 }
 
-// SetNillableCollectionID sets the "collection" edge to the Collection entity by ID if the given value is not nil.
-func (papc *ProtectedAreaPictureCreate) SetNillableCollectionID(id *int) *ProtectedAreaPictureCreate {
-	if id != nil {
-		papc = papc.SetCollectionID(*id)
-	}
-	return papc
-}
-
 // SetCollection sets the "collection" edge to the Collection entity.
 func (papc *ProtectedAreaPictureCreate) SetCollection(c *Collection) *ProtectedAreaPictureCreate {
 	return papc.SetCollectionID(c.ID)
@@ -336,6 +328,9 @@ func (papc *ProtectedAreaPictureCreate) check() error {
 	}
 	if _, ok := papc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "ProtectedAreaPicture.updated_at"`)}
+	}
+	if _, ok := papc.mutation.CollectionID(); !ok {
+		return &ValidationError{Name: "collection", err: errors.New(`ent: missing required edge "ProtectedAreaPicture.collection"`)}
 	}
 	return nil
 }

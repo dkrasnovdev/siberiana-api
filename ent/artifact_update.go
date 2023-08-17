@@ -617,14 +617,6 @@ func (au *ArtifactUpdate) SetCollectionID(id int) *ArtifactUpdate {
 	return au
 }
 
-// SetNillableCollectionID sets the "collection" edge to the Collection entity by ID if the given value is not nil.
-func (au *ArtifactUpdate) SetNillableCollectionID(id *int) *ArtifactUpdate {
-	if id != nil {
-		au = au.SetCollectionID(*id)
-	}
-	return au
-}
-
 // SetCollection sets the "collection" edge to the Collection entity.
 func (au *ArtifactUpdate) SetCollection(c *Collection) *ArtifactUpdate {
 	return au.SetCollectionID(c.ID)
@@ -870,7 +862,18 @@ func (au *ArtifactUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (au *ArtifactUpdate) check() error {
+	if _, ok := au.mutation.CollectionID(); au.mutation.CollectionCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Artifact.collection"`)
+	}
+	return nil
+}
+
 func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := au.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(artifact.Table, artifact.Columns, sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt))
 	if ps := au.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -2091,14 +2094,6 @@ func (auo *ArtifactUpdateOne) SetCollectionID(id int) *ArtifactUpdateOne {
 	return auo
 }
 
-// SetNillableCollectionID sets the "collection" edge to the Collection entity by ID if the given value is not nil.
-func (auo *ArtifactUpdateOne) SetNillableCollectionID(id *int) *ArtifactUpdateOne {
-	if id != nil {
-		auo = auo.SetCollectionID(*id)
-	}
-	return auo
-}
-
 // SetCollection sets the "collection" edge to the Collection entity.
 func (auo *ArtifactUpdateOne) SetCollection(c *Collection) *ArtifactUpdateOne {
 	return auo.SetCollectionID(c.ID)
@@ -2357,7 +2352,18 @@ func (auo *ArtifactUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (auo *ArtifactUpdateOne) check() error {
+	if _, ok := auo.mutation.CollectionID(); auo.mutation.CollectionCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Artifact.collection"`)
+	}
+	return nil
+}
+
 func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err error) {
+	if err := auo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(artifact.Table, artifact.Columns, sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt))
 	id, ok := auo.mutation.ID()
 	if !ok {

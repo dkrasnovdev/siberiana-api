@@ -181,7 +181,7 @@ func (a *Artifact) Collection(ctx context.Context) (*Collection, error) {
 	if IsNotLoaded(err) {
 		result, err = a.QueryCollection().Only(ctx)
 	}
-	return result, MaskNotFound(err)
+	return result, err
 }
 
 func (a *Artifact) License(ctx context.Context) (*License, error) {
@@ -221,7 +221,7 @@ func (b *Book) Collection(ctx context.Context) (*Collection, error) {
 	if IsNotLoaded(err) {
 		result, err = b.QueryCollection().Only(ctx)
 	}
-	return result, MaskNotFound(err)
+	return result, err
 }
 
 func (b *Book) Holders(ctx context.Context) (result []*Holder, err error) {
@@ -337,7 +337,7 @@ func (c *Collection) Category(ctx context.Context) (*Category, error) {
 	if IsNotLoaded(err) {
 		result, err = c.QueryCategory().Only(ctx)
 	}
-	return result, MaskNotFound(err)
+	return result, err
 }
 
 func (c *Country) Location(ctx context.Context) (*Location, error) {
@@ -813,7 +813,7 @@ func (pap *ProtectedAreaPicture) Collection(ctx context.Context) (*Collection, e
 	if IsNotLoaded(err) {
 		result, err = pap.QueryCollection().Only(ctx)
 	}
-	return result, MaskNotFound(err)
+	return result, err
 }
 
 func (pap *ProtectedAreaPicture) ProtectedArea(ctx context.Context) (*ProtectedArea, error) {

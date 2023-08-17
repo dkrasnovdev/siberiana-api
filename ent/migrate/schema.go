@@ -90,7 +90,7 @@ var (
 		{Name: "typology", Type: field.TypeString, Nullable: true},
 		{Name: "weight", Type: field.TypeString, Nullable: true},
 		{Name: "admission_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
-		{Name: "collection_artifacts", Type: field.TypeInt, Nullable: true},
+		{Name: "collection_artifacts", Type: field.TypeInt},
 		{Name: "culture_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "license_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "location_artifacts", Type: field.TypeInt, Nullable: true},
@@ -109,7 +109,7 @@ var (
 				Symbol:     "artifacts_collections_artifacts",
 				Columns:    []*schema.Column{ArtifactsColumns[21]},
 				RefColumns: []*schema.Column{CollectionsColumns[0]},
-				OnDelete:   schema.SetNull,
+				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "artifacts_cultures_artifacts",
@@ -190,7 +190,7 @@ var (
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
 		{Name: "files", Type: field.TypeJSON, Nullable: true},
 		{Name: "year", Type: field.TypeInt, Nullable: true},
-		{Name: "collection_books", Type: field.TypeInt, Nullable: true},
+		{Name: "collection_books", Type: field.TypeInt},
 		{Name: "license_books", Type: field.TypeInt, Nullable: true},
 		{Name: "location_books", Type: field.TypeInt, Nullable: true},
 		{Name: "publisher_books", Type: field.TypeInt, Nullable: true},
@@ -205,7 +205,7 @@ var (
 				Symbol:     "books_collections_books",
 				Columns:    []*schema.Column{BooksColumns[14]},
 				RefColumns: []*schema.Column{CollectionsColumns[0]},
-				OnDelete:   schema.SetNull,
+				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "books_licenses_books",
@@ -281,7 +281,7 @@ var (
 		{Name: "slug", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
-		{Name: "category_collections", Type: field.TypeInt, Nullable: true},
+		{Name: "category_collections", Type: field.TypeInt},
 	}
 	// CollectionsTable holds the schema information for the "collections" table.
 	CollectionsTable = &schema.Table{
@@ -293,7 +293,7 @@ var (
 				Symbol:     "collections_categories_collections",
 				Columns:    []*schema.Column{CollectionsColumns[12]},
 				RefColumns: []*schema.Column{CategoriesColumns[0]},
-				OnDelete:   schema.SetNull,
+				OnDelete:   schema.NoAction,
 			},
 		},
 	}
@@ -780,7 +780,7 @@ var (
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
 		{Name: "shooting_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
 		{Name: "geometry", Type: field.TypeOther, Nullable: true, SchemaType: map[string]string{"postgres": "geometry"}},
-		{Name: "collection_protected_area_pictures", Type: field.TypeInt, Nullable: true},
+		{Name: "collection_protected_area_pictures", Type: field.TypeInt},
 		{Name: "license_protected_area_pictures", Type: field.TypeInt, Nullable: true},
 		{Name: "location_protected_area_pictures", Type: field.TypeInt, Nullable: true},
 		{Name: "protected_area_protected_area_pictures", Type: field.TypeInt, Nullable: true},
@@ -795,7 +795,7 @@ var (
 				Symbol:     "protected_area_pictures_collections_protected_area_pictures",
 				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[14]},
 				RefColumns: []*schema.Column{CollectionsColumns[0]},
-				OnDelete:   schema.SetNull,
+				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "protected_area_pictures_licenses_protected_area_pictures",

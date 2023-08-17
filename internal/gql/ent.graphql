@@ -632,7 +632,7 @@ type Artifact implements Node {
   model: Model
   set: Set
   location: Location
-  collection: Collection
+  collection: Collection!
   license: License
 }
 """A connection to a list of items."""
@@ -1145,7 +1145,7 @@ type Book implements Node {
   year: Int
   authors: [Person!]
   bookGenres: [BookGenre!]
-  collection: Collection
+  collection: Collection!
   holders: [Holder!]
   publisher: Publisher
   license: License
@@ -1794,7 +1794,7 @@ type Collection implements Node {
   books: [Book!]
   people: [Person!]
   protectedAreaPictures: [ProtectedAreaPicture!]
-  category: Category
+  category: Category!
 }
 """A connection to a list of items."""
 type CollectionConnection {
@@ -2283,7 +2283,7 @@ input CreateArtifactInput {
   modelID: ID
   setID: ID
   locationID: ID
-  collectionID: ID
+  collectionID: ID!
   licenseID: ID
 }
 """
@@ -2322,7 +2322,7 @@ input CreateBookInput {
   year: Int
   authorIDs: [ID!]
   bookGenreIDs: [ID!]
-  collectionID: ID
+  collectionID: ID!
   holderIDs: [ID!]
   publisherID: ID
   licenseID: ID
@@ -2366,7 +2366,7 @@ input CreateCollectionInput {
   bookIDs: [ID!]
   personIDs: [ID!]
   protectedAreaPictureIDs: [ID!]
-  categoryID: ID
+  categoryID: ID!
 }
 """
 CreateCountryInput is used for create Country object.
@@ -2736,7 +2736,7 @@ input CreateProtectedAreaPictureInput {
   additionalImagesUrls: [String!]
   shootingDate: Time
   geometry: Geometry
-  collectionID: ID
+  collectionID: ID!
   protectedAreaID: ID
   locationID: ID
   licenseID: ID
@@ -6470,7 +6470,7 @@ type ProtectedAreaPicture implements Node {
   additionalImagesUrls: [String!]
   shootingDate: Time
   geometry: Geometry
-  collection: Collection
+  collection: Collection!
   protectedArea: ProtectedArea
   location: Location
   license: License
@@ -8980,7 +8980,6 @@ input UpdateArtifactInput {
   locationID: ID
   clearLocation: Boolean
   collectionID: ID
-  clearCollection: Boolean
   licenseID: ID
   clearLicense: Boolean
 }
@@ -9045,7 +9044,6 @@ input UpdateBookInput {
   removeBookGenreIDs: [ID!]
   clearBookGenres: Boolean
   collectionID: ID
-  clearCollection: Boolean
   addHolderIDs: [ID!]
   removeHolderIDs: [ID!]
   clearHolders: Boolean
@@ -9123,7 +9121,6 @@ input UpdateCollectionInput {
   removeProtectedAreaPictureIDs: [ID!]
   clearProtectedAreaPictures: Boolean
   categoryID: ID
-  clearCategory: Boolean
 }
 """
 UpdateCountryInput is used for update Country object.
@@ -9718,7 +9715,6 @@ input UpdateProtectedAreaPictureInput {
   geometry: Geometry
   clearGeometry: Boolean
   collectionID: ID
-  clearCollection: Boolean
   protectedAreaID: ID
   clearProtectedArea: Boolean
   locationID: ID

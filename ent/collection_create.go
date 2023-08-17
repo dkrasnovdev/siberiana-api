@@ -237,14 +237,6 @@ func (cc *CollectionCreate) SetCategoryID(id int) *CollectionCreate {
 	return cc
 }
 
-// SetNillableCategoryID sets the "category" edge to the Category entity by ID if the given value is not nil.
-func (cc *CollectionCreate) SetNillableCategoryID(id *int) *CollectionCreate {
-	if id != nil {
-		cc = cc.SetCategoryID(*id)
-	}
-	return cc
-}
-
 // SetCategory sets the "category" edge to the Category entity.
 func (cc *CollectionCreate) SetCategory(c *Category) *CollectionCreate {
 	return cc.SetCategoryID(c.ID)
@@ -311,6 +303,9 @@ func (cc *CollectionCreate) check() error {
 	}
 	if _, ok := cc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Collection.updated_at"`)}
+	}
+	if _, ok := cc.mutation.CategoryID(); !ok {
+		return &ValidationError{Name: "category", err: errors.New(`ent: missing required edge "Collection.category"`)}
 	}
 	return nil
 }

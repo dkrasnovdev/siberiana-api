@@ -64,7 +64,7 @@ func (Book) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("authors", Person.Type).Ref("books"),
 		edge.From("book_genres", BookGenre.Type).Ref("books"),
-		edge.From("collection", Collection.Type).Ref("books").Unique(),
+		edge.From("collection", Collection.Type).Ref("books").Unique().Required(),
 		edge.From("holders", Holder.Type).Ref("books"),
 		edge.From("publisher", Publisher.Type).Ref("books").Unique(),
 		edge.From("license", License.Type).Ref("books").Unique(),

@@ -15384,11 +15384,14 @@ func (ec *executionContext) _Artifact_collection(ctx context.Context, field grap
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*ent.Collection)
 	fc.Result = res
-	return ec.marshalOCollection2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCollection(ctx, field.Selections, res)
+	return ec.marshalNCollection2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCollection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Artifact_collection(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -17249,11 +17252,14 @@ func (ec *executionContext) _Book_collection(ctx context.Context, field graphql.
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*ent.Collection)
 	fc.Result = res
-	return ec.marshalOCollection2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCollection(ctx, field.Selections, res)
+	return ec.marshalNCollection2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCollection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Book_collection(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20353,11 +20359,14 @@ func (ec *executionContext) _Collection_category(ctx context.Context, field grap
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*ent.Category)
 	fc.Result = res
-	return ec.marshalOCategory2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCategory(ctx, field.Selections, res)
+	return ec.marshalNCategory2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCategory(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Collection_category(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -44741,11 +44750,14 @@ func (ec *executionContext) _ProtectedAreaPicture_collection(ctx context.Context
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*ent.Collection)
 	fc.Result = res
-	return ec.marshalOCollection2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCollection(ctx, field.Selections, res)
+	return ec.marshalNCollection2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCollection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ProtectedAreaPicture_collection(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -69415,7 +69427,7 @@ func (ec *executionContext) unmarshalInputCreateArtifactInput(ctx context.Contex
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("collectionID"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			data, err := ec.unmarshalNID2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -69698,7 +69710,7 @@ func (ec *executionContext) unmarshalInputCreateBookInput(ctx context.Context, o
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("collectionID"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			data, err := ec.unmarshalNID2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -70026,7 +70038,7 @@ func (ec *executionContext) unmarshalInputCreateCollectionInput(ctx context.Cont
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryID"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			data, err := ec.unmarshalNID2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -72676,7 +72688,7 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaPictureInput(ctx co
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("collectionID"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			data, err := ec.unmarshalNID2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -108005,7 +108017,7 @@ func (ec *executionContext) unmarshalInputUpdateArtifactInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "slug", "clearSlug", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "deletedAt", "clearDeletedAt", "deletedBy", "clearDeletedBy", "dating", "clearDating", "dimensions", "clearDimensions", "chemicalComposition", "clearChemicalComposition", "number", "clearNumber", "typology", "clearTypology", "weight", "clearWeight", "admissionDate", "clearAdmissionDate", "addAuthorIDs", "removeAuthorIDs", "clearAuthors", "addMediumIDs", "removeMediumIDs", "clearMediums", "addTechniqueIDs", "removeTechniqueIDs", "clearTechniques", "periodID", "clearPeriod", "addProjectIDs", "removeProjectIDs", "clearProjects", "addPublicationIDs", "removePublicationIDs", "clearPublications", "addHolderIDs", "removeHolderIDs", "clearHolders", "culturalAffiliationID", "clearCulturalAffiliation", "monumentID", "clearMonument", "modelID", "clearModel", "setID", "clearSet", "locationID", "clearLocation", "collectionID", "clearCollection", "licenseID", "clearLicense"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "slug", "clearSlug", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "deletedAt", "clearDeletedAt", "deletedBy", "clearDeletedBy", "dating", "clearDating", "dimensions", "clearDimensions", "chemicalComposition", "clearChemicalComposition", "number", "clearNumber", "typology", "clearTypology", "weight", "clearWeight", "admissionDate", "clearAdmissionDate", "addAuthorIDs", "removeAuthorIDs", "clearAuthors", "addMediumIDs", "removeMediumIDs", "clearMediums", "addTechniqueIDs", "removeTechniqueIDs", "clearTechniques", "periodID", "clearPeriod", "addProjectIDs", "removeProjectIDs", "clearProjects", "addPublicationIDs", "removePublicationIDs", "clearPublications", "addHolderIDs", "removeHolderIDs", "clearHolders", "culturalAffiliationID", "clearCulturalAffiliation", "monumentID", "clearMonument", "modelID", "clearModel", "setID", "clearSet", "locationID", "clearLocation", "collectionID", "licenseID", "clearLicense"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -108633,15 +108645,6 @@ func (ec *executionContext) unmarshalInputUpdateArtifactInput(ctx context.Contex
 				return it, err
 			}
 			it.CollectionID = data
-		case "clearCollection":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearCollection"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearCollection = data
 		case "licenseID":
 			var err error
 
@@ -108855,7 +108858,7 @@ func (ec *executionContext) unmarshalInputUpdateBookInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "slug", "clearSlug", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "files", "appendFiles", "clearFiles", "year", "clearYear", "addAuthorIDs", "removeAuthorIDs", "clearAuthors", "addBookGenreIDs", "removeBookGenreIDs", "clearBookGenres", "collectionID", "clearCollection", "addHolderIDs", "removeHolderIDs", "clearHolders", "publisherID", "clearPublisher", "licenseID", "clearLicense", "locationID", "clearLocation"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "slug", "clearSlug", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "files", "appendFiles", "clearFiles", "year", "clearYear", "addAuthorIDs", "removeAuthorIDs", "clearAuthors", "addBookGenreIDs", "removeBookGenreIDs", "clearBookGenres", "collectionID", "addHolderIDs", "removeHolderIDs", "clearHolders", "publisherID", "clearPublisher", "licenseID", "clearLicense", "locationID", "clearLocation"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -109150,15 +109153,6 @@ func (ec *executionContext) unmarshalInputUpdateBookInput(ctx context.Context, o
 				return it, err
 			}
 			it.CollectionID = data
-		case "clearCollection":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearCollection"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearCollection = data
 		case "addHolderIDs":
 			var err error
 
@@ -109480,7 +109474,7 @@ func (ec *executionContext) unmarshalInputUpdateCollectionInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "slug", "clearSlug", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addPersonIDs", "removePersonIDs", "clearPeople", "addProtectedAreaPictureIDs", "removeProtectedAreaPictureIDs", "clearProtectedAreaPictures", "categoryID", "clearCategory"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "slug", "clearSlug", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addPersonIDs", "removePersonIDs", "clearPeople", "addProtectedAreaPictureIDs", "removeProtectedAreaPictureIDs", "clearProtectedAreaPictures", "categoryID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -109784,15 +109778,6 @@ func (ec *executionContext) unmarshalInputUpdateCollectionInput(ctx context.Cont
 				return it, err
 			}
 			it.CategoryID = data
-		case "clearCategory":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearCategory"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearCategory = data
 		}
 	}
 
@@ -114227,7 +114212,7 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaPictureInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "slug", "clearSlug", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "shootingDate", "clearShootingDate", "geometry", "clearGeometry", "collectionID", "clearCollection", "protectedAreaID", "clearProtectedArea", "locationID", "clearLocation", "licenseID", "clearLicense"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "slug", "clearSlug", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "shootingDate", "clearShootingDate", "geometry", "clearGeometry", "collectionID", "protectedAreaID", "clearProtectedArea", "locationID", "clearLocation", "licenseID", "clearLicense"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -114459,15 +114444,6 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaPictureInput(ctx co
 				return it, err
 			}
 			it.CollectionID = data
-		case "clearCollection":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearCollection"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearCollection = data
 		case "protectedAreaID":
 			var err error
 
@@ -116907,6 +116883,9 @@ func (ec *executionContext) _Artifact(ctx context.Context, sel ast.SelectionSet,
 					}
 				}()
 				res = ec._Artifact_collection(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
 				return res
 			}
 
@@ -117344,6 +117323,9 @@ func (ec *executionContext) _Book(ctx context.Context, sel ast.SelectionSet, obj
 					}
 				}()
 				res = ec._Book_collection(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
 				return res
 			}
 
@@ -118165,6 +118147,9 @@ func (ec *executionContext) _Collection(ctx context.Context, sel ast.SelectionSe
 					}
 				}()
 				res = ec._Collection_category(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
 				return res
 			}
 
@@ -123311,6 +123296,9 @@ func (ec *executionContext) _ProtectedAreaPicture(ctx context.Context, sel ast.S
 					}
 				}()
 				res = ec._ProtectedAreaPicture_collection(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
 				return res
 			}
 

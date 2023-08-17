@@ -516,14 +516,6 @@ func (ac *ArtifactCreate) SetCollectionID(id int) *ArtifactCreate {
 	return ac
 }
 
-// SetNillableCollectionID sets the "collection" edge to the Collection entity by ID if the given value is not nil.
-func (ac *ArtifactCreate) SetNillableCollectionID(id *int) *ArtifactCreate {
-	if id != nil {
-		ac = ac.SetCollectionID(*id)
-	}
-	return ac
-}
-
 // SetCollection sets the "collection" edge to the Collection entity.
 func (ac *ArtifactCreate) SetCollection(c *Collection) *ArtifactCreate {
 	return ac.SetCollectionID(c.ID)
@@ -609,6 +601,9 @@ func (ac *ArtifactCreate) check() error {
 	}
 	if _, ok := ac.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Artifact.updated_at"`)}
+	}
+	if _, ok := ac.mutation.CollectionID(); !ok {
+		return &ValidationError{Name: "collection", err: errors.New(`ent: missing required edge "Artifact.collection"`)}
 	}
 	return nil
 }

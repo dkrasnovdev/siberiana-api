@@ -284,14 +284,6 @@ func (cu *CollectionUpdate) SetCategoryID(id int) *CollectionUpdate {
 	return cu
 }
 
-// SetNillableCategoryID sets the "category" edge to the Category entity by ID if the given value is not nil.
-func (cu *CollectionUpdate) SetNillableCategoryID(id *int) *CollectionUpdate {
-	if id != nil {
-		cu = cu.SetCategoryID(*id)
-	}
-	return cu
-}
-
 // SetCategory sets the "category" edge to the Category entity.
 func (cu *CollectionUpdate) SetCategory(c *Category) *CollectionUpdate {
 	return cu.SetCategoryID(c.ID)
@@ -434,7 +426,18 @@ func (cu *CollectionUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (cu *CollectionUpdate) check() error {
+	if _, ok := cu.mutation.CategoryID(); cu.mutation.CategoryCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Collection.category"`)
+	}
+	return nil
+}
+
 func (cu *CollectionUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := cu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(collection.Table, collection.Columns, sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt))
 	if ps := cu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -984,14 +987,6 @@ func (cuo *CollectionUpdateOne) SetCategoryID(id int) *CollectionUpdateOne {
 	return cuo
 }
 
-// SetNillableCategoryID sets the "category" edge to the Category entity by ID if the given value is not nil.
-func (cuo *CollectionUpdateOne) SetNillableCategoryID(id *int) *CollectionUpdateOne {
-	if id != nil {
-		cuo = cuo.SetCategoryID(*id)
-	}
-	return cuo
-}
-
 // SetCategory sets the "category" edge to the Category entity.
 func (cuo *CollectionUpdateOne) SetCategory(c *Category) *CollectionUpdateOne {
 	return cuo.SetCategoryID(c.ID)
@@ -1147,7 +1142,18 @@ func (cuo *CollectionUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (cuo *CollectionUpdateOne) check() error {
+	if _, ok := cuo.mutation.CategoryID(); cuo.mutation.CategoryCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Collection.category"`)
+	}
+	return nil
+}
+
 func (cuo *CollectionUpdateOne) sqlSave(ctx context.Context) (_node *Collection, err error) {
+	if err := cuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(collection.Table, collection.Columns, sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt))
 	id, ok := cuo.mutation.ID()
 	if !ok {

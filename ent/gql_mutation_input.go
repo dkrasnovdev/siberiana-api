@@ -525,7 +525,7 @@ type CreateArtifactInput struct {
 	ModelID               *int
 	SetID                 *int
 	LocationID            *int
-	CollectionID          *int
+	CollectionID          int
 	LicenseID             *int
 }
 
@@ -627,9 +627,7 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.LocationID; v != nil {
 		m.SetLocationID(*v)
 	}
-	if v := i.CollectionID; v != nil {
-		m.SetCollectionID(*v)
-	}
+	m.SetCollectionID(i.CollectionID)
 	if v := i.LicenseID; v != nil {
 		m.SetLicenseID(*v)
 	}
@@ -711,7 +709,6 @@ type UpdateArtifactInput struct {
 	SetID                      *int
 	ClearLocation              bool
 	LocationID                 *int
-	ClearCollection            bool
 	CollectionID               *int
 	ClearLicense               bool
 	LicenseID                  *int
@@ -923,9 +920,6 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.LocationID; v != nil {
 		m.SetLocationID(*v)
 	}
-	if i.ClearCollection {
-		m.ClearCollection()
-	}
 	if v := i.CollectionID; v != nil {
 		m.SetCollectionID(*v)
 	}
@@ -966,7 +960,7 @@ type CreateBookInput struct {
 	Year                 *int
 	AuthorIDs            []int
 	BookGenreIDs         []int
-	CollectionID         *int
+	CollectionID         int
 	HolderIDs            []int
 	PublisherID          *int
 	LicenseID            *int
@@ -1020,9 +1014,7 @@ func (i *CreateBookInput) Mutate(m *BookMutation) {
 	if v := i.BookGenreIDs; len(v) > 0 {
 		m.AddBookGenreIDs(v...)
 	}
-	if v := i.CollectionID; v != nil {
-		m.SetCollectionID(*v)
-	}
+	m.SetCollectionID(i.CollectionID)
 	if v := i.HolderIDs; len(v) > 0 {
 		m.AddHolderIDs(v...)
 	}
@@ -1076,7 +1068,6 @@ type UpdateBookInput struct {
 	ClearBookGenres            bool
 	AddBookGenreIDs            []int
 	RemoveBookGenreIDs         []int
-	ClearCollection            bool
 	CollectionID               *int
 	ClearHolders               bool
 	AddHolderIDs               []int
@@ -1183,9 +1174,6 @@ func (i *UpdateBookInput) Mutate(m *BookMutation) {
 	}
 	if v := i.RemoveBookGenreIDs; len(v) > 0 {
 		m.RemoveBookGenreIDs(v...)
-	}
-	if i.ClearCollection {
-		m.ClearCollection()
 	}
 	if v := i.CollectionID; v != nil {
 		m.SetCollectionID(*v)
@@ -1568,7 +1556,7 @@ type CreateCollectionInput struct {
 	BookIDs                 []int
 	PersonIDs               []int
 	ProtectedAreaPictureIDs []int
-	CategoryID              *int
+	CategoryID              int
 }
 
 // Mutate applies the CreateCollectionInput on the CollectionMutation builder.
@@ -1618,9 +1606,7 @@ func (i *CreateCollectionInput) Mutate(m *CollectionMutation) {
 	if v := i.ProtectedAreaPictureIDs; len(v) > 0 {
 		m.AddProtectedAreaPictureIDs(v...)
 	}
-	if v := i.CategoryID; v != nil {
-		m.SetCategoryID(*v)
-	}
+	m.SetCategoryID(i.CategoryID)
 }
 
 // SetInput applies the change-set in the CreateCollectionInput on the CollectionCreate builder.
@@ -1663,7 +1649,6 @@ type UpdateCollectionInput struct {
 	ClearProtectedAreaPictures    bool
 	AddProtectedAreaPictureIDs    []int
 	RemoveProtectedAreaPictureIDs []int
-	ClearCategory                 bool
 	CategoryID                    *int
 }
 
@@ -1764,9 +1749,6 @@ func (i *UpdateCollectionInput) Mutate(m *CollectionMutation) {
 	}
 	if v := i.RemoveProtectedAreaPictureIDs; len(v) > 0 {
 		m.RemoveProtectedAreaPictureIDs(v...)
-	}
-	if i.ClearCategory {
-		m.ClearCategory()
 	}
 	if v := i.CategoryID; v != nil {
 		m.SetCategoryID(*v)
@@ -5182,7 +5164,7 @@ type CreateProtectedAreaPictureInput struct {
 	AdditionalImagesUrls []string
 	ShootingDate         *time.Time
 	Geometry             *types.Geometry
-	CollectionID         *int
+	CollectionID         int
 	ProtectedAreaID      *int
 	LocationID           *int
 	LicenseID            *int
@@ -5229,9 +5211,7 @@ func (i *CreateProtectedAreaPictureInput) Mutate(m *ProtectedAreaPictureMutation
 	if v := i.Geometry; v != nil {
 		m.SetGeometry(*v)
 	}
-	if v := i.CollectionID; v != nil {
-		m.SetCollectionID(*v)
-	}
+	m.SetCollectionID(i.CollectionID)
 	if v := i.ProtectedAreaID; v != nil {
 		m.SetProtectedAreaID(*v)
 	}
@@ -5275,7 +5255,6 @@ type UpdateProtectedAreaPictureInput struct {
 	ShootingDate               *time.Time
 	ClearGeometry              bool
 	Geometry                   *types.Geometry
-	ClearCollection            bool
 	CollectionID               *int
 	ClearProtectedArea         bool
 	ProtectedAreaID            *int
@@ -5358,9 +5337,6 @@ func (i *UpdateProtectedAreaPictureInput) Mutate(m *ProtectedAreaPictureMutation
 	}
 	if v := i.Geometry; v != nil {
 		m.SetGeometry(*v)
-	}
-	if i.ClearCollection {
-		m.ClearCollection()
 	}
 	if v := i.CollectionID; v != nil {
 		m.SetCollectionID(*v)
