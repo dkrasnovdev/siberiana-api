@@ -162,26 +162,6 @@ func (bu *BookUpdate) ClearExternalLink() *BookUpdate {
 	return bu
 }
 
-// SetSlug sets the "slug" field.
-func (bu *BookUpdate) SetSlug(s string) *BookUpdate {
-	bu.mutation.SetSlug(s)
-	return bu
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (bu *BookUpdate) SetNillableSlug(s *string) *BookUpdate {
-	if s != nil {
-		bu.SetSlug(*s)
-	}
-	return bu
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (bu *BookUpdate) ClearSlug() *BookUpdate {
-	bu.mutation.ClearSlug()
-	return bu
-}
-
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (bu *BookUpdate) SetPrimaryImageURL(s string) *BookUpdate {
 	bu.mutation.SetPrimaryImageURL(s)
@@ -575,12 +555,6 @@ func (bu *BookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if bu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(book.FieldExternalLink, field.TypeString)
-	}
-	if value, ok := bu.mutation.Slug(); ok {
-		_spec.SetField(book.FieldSlug, field.TypeString, value)
-	}
-	if bu.mutation.SlugCleared() {
-		_spec.ClearField(book.FieldSlug, field.TypeString)
 	}
 	if value, ok := bu.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(book.FieldPrimaryImageURL, field.TypeString, value)
@@ -1016,26 +990,6 @@ func (buo *BookUpdateOne) ClearExternalLink() *BookUpdateOne {
 	return buo
 }
 
-// SetSlug sets the "slug" field.
-func (buo *BookUpdateOne) SetSlug(s string) *BookUpdateOne {
-	buo.mutation.SetSlug(s)
-	return buo
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (buo *BookUpdateOne) SetNillableSlug(s *string) *BookUpdateOne {
-	if s != nil {
-		buo.SetSlug(*s)
-	}
-	return buo
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (buo *BookUpdateOne) ClearSlug() *BookUpdateOne {
-	buo.mutation.ClearSlug()
-	return buo
-}
-
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (buo *BookUpdateOne) SetPrimaryImageURL(s string) *BookUpdateOne {
 	buo.mutation.SetPrimaryImageURL(s)
@@ -1459,12 +1413,6 @@ func (buo *BookUpdateOne) sqlSave(ctx context.Context) (_node *Book, err error) 
 	}
 	if buo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(book.FieldExternalLink, field.TypeString)
-	}
-	if value, ok := buo.mutation.Slug(); ok {
-		_spec.SetField(book.FieldSlug, field.TypeString, value)
-	}
-	if buo.mutation.SlugCleared() {
-		_spec.ClearField(book.FieldSlug, field.TypeString)
 	}
 	if value, ok := buo.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(book.FieldPrimaryImageURL, field.TypeString, value)

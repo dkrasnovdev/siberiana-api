@@ -33,8 +33,6 @@ type ArtStyle struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
-	// Slug holds the value of the "slug" field.
-	Slug string `json:"slug,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ArtStyleQuery when eager-loading is set.
 	Edges        ArtStyleEdges `json:"edges"`
@@ -70,7 +68,7 @@ func (*ArtStyle) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case artstyle.FieldID:
 			values[i] = new(sql.NullInt64)
-		case artstyle.FieldCreatedBy, artstyle.FieldUpdatedBy, artstyle.FieldDisplayName, artstyle.FieldAbbreviation, artstyle.FieldDescription, artstyle.FieldExternalLink, artstyle.FieldSlug:
+		case artstyle.FieldCreatedBy, artstyle.FieldUpdatedBy, artstyle.FieldDisplayName, artstyle.FieldAbbreviation, artstyle.FieldDescription, artstyle.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case artstyle.FieldCreatedAt, artstyle.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -143,12 +141,6 @@ func (as *ArtStyle) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				as.ExternalLink = value.String
 			}
-		case artstyle.FieldSlug:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field slug", values[i])
-			} else if value.Valid {
-				as.Slug = value.String
-			}
 		default:
 			as.selectValues.Set(columns[i], values[i])
 		}
@@ -213,9 +205,6 @@ func (as *ArtStyle) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(as.ExternalLink)
-	builder.WriteString(", ")
-	builder.WriteString("slug=")
-	builder.WriteString(as.Slug)
 	builder.WriteByte(')')
 	return builder.String()
 }

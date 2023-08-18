@@ -10,7 +10,6 @@ type Art implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   artGenre: [ArtGenre!]
@@ -42,7 +41,6 @@ type ArtGenre implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   art: [Art!]
 }
 """A connection to a list of items."""
@@ -204,22 +202,6 @@ input ArtGenreWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """art edge predicates"""
   hasArt: Boolean
   hasArtWith: [ArtWhereInput!]
@@ -246,7 +228,6 @@ type ArtStyle implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   art: [Art!]
 }
 """A connection to a list of items."""
@@ -408,22 +389,6 @@ input ArtStyleWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """art edge predicates"""
   hasArt: Boolean
   hasArtWith: [ArtWhereInput!]
@@ -559,22 +524,6 @@ input ArtWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """primary_image_url field predicates"""
   primaryImageURL: String
   primaryImageURLNEQ: String
@@ -608,7 +557,6 @@ type Artifact implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   deletedAt: Time
@@ -794,22 +742,6 @@ input ArtifactWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """primary_image_url field predicates"""
   primaryImageURL: String
   primaryImageURLNEQ: String
@@ -1138,7 +1070,6 @@ type Book implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   files: [String!]
@@ -1177,7 +1108,6 @@ type BookGenre implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   books: [Book!]
 }
 """A connection to a list of items."""
@@ -1339,22 +1269,6 @@ input BookGenreWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """books edge predicates"""
   hasBooks: Boolean
   hasBooksWith: [BookWhereInput!]
@@ -1502,22 +1416,6 @@ input BookWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """primary_image_url field predicates"""
   primaryImageURL: String
   primaryImageURLNEQ: String
@@ -1577,9 +1475,9 @@ type Category implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
+  slug: String!
   collections: [Collection!]
 }
 """A connection to a list of items."""
@@ -1741,22 +1639,6 @@ input CategoryWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """primary_image_url field predicates"""
   primaryImageURL: String
   primaryImageURLNEQ: String
@@ -1773,6 +1655,20 @@ input CategoryWhereInput {
   primaryImageURLNotNil: Boolean
   primaryImageURLEqualFold: String
   primaryImageURLContainsFold: String
+  """slug field predicates"""
+  slug: String
+  slugNEQ: String
+  slugIn: [String!]
+  slugNotIn: [String!]
+  slugGT: String
+  slugGTE: String
+  slugLT: String
+  slugLTE: String
+  slugContains: String
+  slugHasPrefix: String
+  slugHasSuffix: String
+  slugEqualFold: String
+  slugContainsFold: String
   """collections edge predicates"""
   hasCollections: Boolean
   hasCollectionsWith: [CollectionWhereInput!]
@@ -1787,9 +1683,9 @@ type Collection implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
+  slug: String!
   artifacts: [Artifact!]
   books: [Book!]
   people: [Person!]
@@ -1955,22 +1851,6 @@ input CollectionWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """primary_image_url field predicates"""
   primaryImageURL: String
   primaryImageURLNEQ: String
@@ -1987,6 +1867,20 @@ input CollectionWhereInput {
   primaryImageURLNotNil: Boolean
   primaryImageURLEqualFold: String
   primaryImageURLContainsFold: String
+  """slug field predicates"""
+  slug: String
+  slugNEQ: String
+  slugIn: [String!]
+  slugNotIn: [String!]
+  slugGT: String
+  slugGTE: String
+  slugLT: String
+  slugLTE: String
+  slugContains: String
+  slugHasPrefix: String
+  slugHasSuffix: String
+  slugEqualFold: String
+  slugContainsFold: String
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -2013,7 +1907,6 @@ type Country implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   location: Location
 }
 """A connection to a list of items."""
@@ -2175,22 +2068,6 @@ input CountryWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """location edge predicates"""
   hasLocation: Boolean
   hasLocationWith: [LocationWhereInput!]
@@ -2208,7 +2085,6 @@ input CreateArtGenreInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   artIDs: [ID!]
 }
 """
@@ -2224,7 +2100,6 @@ input CreateArtInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   artGenreIDs: [ID!]
@@ -2243,7 +2118,6 @@ input CreateArtStyleInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   artIDs: [ID!]
 }
 """
@@ -2259,7 +2133,6 @@ input CreateArtifactInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   deletedAt: Time
@@ -2299,7 +2172,6 @@ input CreateBookGenreInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   bookIDs: [ID!]
 }
 """
@@ -2315,7 +2187,6 @@ input CreateBookInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   files: [String!]
@@ -2341,9 +2212,9 @@ input CreateCategoryInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
+  slug: String!
   collectionIDs: [ID!]
 }
 """
@@ -2359,9 +2230,9 @@ input CreateCollectionInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
+  slug: String!
   artifactIDs: [ID!]
   bookIDs: [ID!]
   personIDs: [ID!]
@@ -2381,7 +2252,6 @@ input CreateCountryInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   locationID: ID
 }
 """
@@ -2397,7 +2267,6 @@ input CreateCultureInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   artifactIDs: [ID!]
 }
 """
@@ -2413,7 +2282,6 @@ input CreateDistrictInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   locationID: ID
 }
 """
@@ -2446,7 +2314,6 @@ input CreateHolderResponsibilityInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   holderIDs: [ID!]
 }
 """
@@ -2462,7 +2329,6 @@ input CreateLicenseInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   artifactIDs: [ID!]
   bookIDs: [ID!]
   protectedAreaPictureIDs: [ID!]
@@ -2480,7 +2346,6 @@ input CreateLocationInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   geometry: Geometry
   artifactIDs: [ID!]
   bookIDs: [ID!]
@@ -2503,7 +2368,6 @@ input CreateMediumInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   artifactIDs: [ID!]
 }
 """
@@ -2519,7 +2383,6 @@ input CreateModelInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   artifactIDs: [ID!]
 }
 """
@@ -2535,7 +2398,6 @@ input CreateMonumentInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   artifactIDs: [ID!]
   setIDs: [ID!]
 }
@@ -2555,7 +2417,6 @@ input CreateOrganizationInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   previousNames: [String!]
@@ -2578,7 +2439,6 @@ input CreateOrganizationTypeInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   organizationIDs: [ID!]
 }
 """
@@ -2594,7 +2454,6 @@ input CreatePeriodInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   artifactIDs: [ID!]
 }
 """
@@ -2613,7 +2472,6 @@ input CreatePersonInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   givenName: String
@@ -2644,7 +2502,6 @@ input CreatePersonRoleInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   personIDs: [ID!]
 }
 """
@@ -2660,7 +2517,6 @@ input CreateProjectInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   beginData: Time
   endDate: Time
   artifactIDs: [ID!]
@@ -2680,7 +2536,6 @@ input CreateProjectTypeInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   projectIDs: [ID!]
 }
 """
@@ -2696,7 +2551,6 @@ input CreateProtectedAreaCategoryInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   protectedAreaIDs: [ID!]
 }
 """
@@ -2712,7 +2566,6 @@ input CreateProtectedAreaInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   area: String
   establishmentDate: Time
   protectedAreaPictureIDs: [ID!]
@@ -2731,7 +2584,6 @@ input CreateProtectedAreaPictureInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   shootingDate: Time
@@ -2754,7 +2606,6 @@ input CreatePublicationInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   artifactIDs: [ID!]
   authorIDs: [ID!]
 }
@@ -2771,7 +2622,6 @@ input CreatePublisherInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   bookIDs: [ID!]
 }
 """
@@ -2787,7 +2637,6 @@ input CreateRegionInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   locationID: ID
 }
 """
@@ -2803,7 +2652,6 @@ input CreateSetInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   artifactIDs: [ID!]
   monumentIDs: [ID!]
 }
@@ -2820,7 +2668,6 @@ input CreateSettlementInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   locationID: ID
 }
 """
@@ -2836,7 +2683,6 @@ input CreateTechniqueInput {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   artifactIDs: [ID!]
 }
 type Culture implements Node {
@@ -2849,7 +2695,6 @@ type Culture implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   artifacts: [Artifact!]
 }
 """A connection to a list of items."""
@@ -3011,22 +2856,6 @@ input CultureWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -3046,7 +2875,6 @@ type District implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   location: Location
 }
 """A connection to a list of items."""
@@ -3208,22 +3036,6 @@ input DistrictWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """location edge predicates"""
   hasLocation: Boolean
   hasLocationWith: [LocationWhereInput!]
@@ -3280,7 +3092,6 @@ type HolderResponsibility implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   holder: [Holder!]
 }
 """A connection to a list of items."""
@@ -3442,22 +3253,6 @@ input HolderResponsibilityWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """holder edge predicates"""
   hasHolder: Boolean
   hasHolderWith: [HolderWhereInput!]
@@ -3596,7 +3391,6 @@ type License implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   artifacts: [Artifact!]
   books: [Book!]
   protectedAreaPictures: [ProtectedAreaPicture!]
@@ -3760,22 +3554,6 @@ input LicenseWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -3796,7 +3574,6 @@ type Location implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   geometry: Geometry
   artifacts: [Artifact!]
   books: [Book!]
@@ -3965,22 +3742,6 @@ input LocationWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """geometry field predicates"""
   geometry: Geometry
   geometryNEQ: Geometry
@@ -4024,7 +3785,6 @@ type Medium implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   artifacts: [Artifact!]
 }
 """A connection to a list of items."""
@@ -4186,22 +3946,6 @@ input MediumWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -4216,7 +3960,6 @@ type Model implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   artifacts: [Artifact!]
 }
 """A connection to a list of items."""
@@ -4378,22 +4121,6 @@ input ModelWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -4408,7 +4135,6 @@ type Monument implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   artifacts: [Artifact!]
   sets: [Set!]
 }
@@ -4571,22 +4297,6 @@ input MonumentWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -4622,7 +4332,6 @@ type Organization implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   previousNames: [String!]
@@ -4670,7 +4379,6 @@ type OrganizationType implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   organizations: [Organization!]
 }
 """A connection to a list of items."""
@@ -4832,22 +4540,6 @@ input OrganizationTypeWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """organizations edge predicates"""
   hasOrganizations: Boolean
   hasOrganizationsWith: [OrganizationWhereInput!]
@@ -4999,22 +4691,6 @@ input OrganizationWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """primary_image_url field predicates"""
   primaryImageURL: String
   primaryImageURLNEQ: String
@@ -5086,7 +4762,6 @@ type Period implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   artifacts: [Artifact!]
 }
 """A connection to a list of items."""
@@ -5248,22 +4923,6 @@ input PeriodWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -5281,7 +4940,6 @@ type Person implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   givenName: String
@@ -5342,7 +5000,6 @@ type PersonRole implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   person: [Person!]
 }
 """A connection to a list of items."""
@@ -5504,22 +5161,6 @@ input PersonRoleWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """person edge predicates"""
   hasPerson: Boolean
   hasPersonWith: [PersonWhereInput!]
@@ -5671,22 +5312,6 @@ input PersonWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """primary_image_url field predicates"""
   primaryImageURL: String
   primaryImageURLNEQ: String
@@ -5813,7 +5438,6 @@ type Project implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   beginData: Time
   endDate: Time
   artifacts: [Artifact!]
@@ -5858,7 +5482,6 @@ type ProjectType implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   projects: [Project!]
 }
 """A connection to a list of items."""
@@ -6020,22 +5643,6 @@ input ProjectTypeWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """projects edge predicates"""
   hasProjects: Boolean
   hasProjectsWith: [ProjectWhereInput!]
@@ -6171,22 +5778,6 @@ input ProjectWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """begin_data field predicates"""
   beginData: Time
   beginDataNEQ: Time
@@ -6229,7 +5820,6 @@ type ProtectedArea implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   area: String
   establishmentDate: Time
   protectedAreaPictures: [ProtectedAreaPicture!]
@@ -6245,7 +5835,6 @@ type ProtectedAreaCategory implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   protectedAreas: [ProtectedArea!]
 }
 """A connection to a list of items."""
@@ -6407,22 +5996,6 @@ input ProtectedAreaCategoryWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """protected_areas edge predicates"""
   hasProtectedAreas: Boolean
   hasProtectedAreasWith: [ProtectedAreaWhereInput!]
@@ -6465,7 +6038,6 @@ type ProtectedAreaPicture implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
   shootingDate: Time
@@ -6634,22 +6206,6 @@ input ProtectedAreaPictureWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """primary_image_url field predicates"""
   primaryImageURL: String
   primaryImageURLNEQ: String
@@ -6832,22 +6388,6 @@ input ProtectedAreaWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """area field predicates"""
   area: String
   areaNEQ: String
@@ -6892,7 +6432,6 @@ type Publication implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   artifacts: [Artifact!]
   authors: [Person!]
 }
@@ -7055,22 +6594,6 @@ input PublicationWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -7088,7 +6611,6 @@ type Publisher implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   books: [Book!]
 }
 """A connection to a list of items."""
@@ -7250,22 +6772,6 @@ input PublisherWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """books edge predicates"""
   hasBooks: Boolean
   hasBooksWith: [BookWhereInput!]
@@ -8062,7 +7568,6 @@ type Region implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   location: Location
 }
 """A connection to a list of items."""
@@ -8224,22 +7729,6 @@ input RegionWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """location edge predicates"""
   hasLocation: Boolean
   hasLocationWith: [LocationWhereInput!]
@@ -8254,7 +7743,6 @@ type Set implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   artifacts: [Artifact!]
   monuments: [Monument!]
 }
@@ -8417,22 +7905,6 @@ input SetWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -8450,7 +7922,6 @@ type Settlement implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   location: Location
 }
 """A connection to a list of items."""
@@ -8612,22 +8083,6 @@ input SettlementWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """location edge predicates"""
   hasLocation: Boolean
   hasLocationWith: [LocationWhereInput!]
@@ -8642,7 +8097,6 @@ type Technique implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  slug: String
   artifacts: [Artifact!]
 }
 """A connection to a list of items."""
@@ -8804,22 +8258,6 @@ input TechniqueWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """slug field predicates"""
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -8844,8 +8282,6 @@ input UpdateArtGenreInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   addArtIDs: [ID!]
   removeArtIDs: [ID!]
   clearArt: Boolean
@@ -8868,8 +8304,6 @@ input UpdateArtInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   primaryImageURL: String
   clearPrimaryImageURL: Boolean
   additionalImagesUrls: [String!]
@@ -8900,8 +8334,6 @@ input UpdateArtStyleInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   addArtIDs: [ID!]
   removeArtIDs: [ID!]
   clearArt: Boolean
@@ -8924,8 +8356,6 @@ input UpdateArtifactInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   primaryImageURL: String
   clearPrimaryImageURL: Boolean
   additionalImagesUrls: [String!]
@@ -9001,8 +8431,6 @@ input UpdateBookGenreInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   addBookIDs: [ID!]
   removeBookIDs: [ID!]
   clearBooks: Boolean
@@ -9025,8 +8453,6 @@ input UpdateBookInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   primaryImageURL: String
   clearPrimaryImageURL: Boolean
   additionalImagesUrls: [String!]
@@ -9072,13 +8498,12 @@ input UpdateCategoryInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   primaryImageURL: String
   clearPrimaryImageURL: Boolean
   additionalImagesUrls: [String!]
   appendAdditionalImagesUrls: [String!]
   clearAdditionalImagesUrls: Boolean
+  slug: String
   addCollectionIDs: [ID!]
   removeCollectionIDs: [ID!]
   clearCollections: Boolean
@@ -9101,13 +8526,12 @@ input UpdateCollectionInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   primaryImageURL: String
   clearPrimaryImageURL: Boolean
   additionalImagesUrls: [String!]
   appendAdditionalImagesUrls: [String!]
   clearAdditionalImagesUrls: Boolean
+  slug: String
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -9140,8 +8564,6 @@ input UpdateCountryInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   locationID: ID
   clearLocation: Boolean
 }
@@ -9163,8 +8585,6 @@ input UpdateCultureInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -9187,8 +8607,6 @@ input UpdateDistrictInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   locationID: ID
   clearLocation: Boolean
 }
@@ -9237,8 +8655,6 @@ input UpdateHolderResponsibilityInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   addHolderIDs: [ID!]
   removeHolderIDs: [ID!]
   clearHolder: Boolean
@@ -9261,8 +8677,6 @@ input UpdateLicenseInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -9291,8 +8705,6 @@ input UpdateLocationInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   geometry: Geometry
   clearGeometry: Boolean
   addArtifactIDs: [ID!]
@@ -9331,8 +8743,6 @@ input UpdateMediumInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -9355,8 +8765,6 @@ input UpdateModelInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -9379,8 +8787,6 @@ input UpdateMonumentInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -9414,8 +8820,6 @@ input UpdateOrganizationInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   primaryImageURL: String
   clearPrimaryImageURL: Boolean
   additionalImagesUrls: [String!]
@@ -9454,8 +8858,6 @@ input UpdateOrganizationTypeInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   addOrganizationIDs: [ID!]
   removeOrganizationIDs: [ID!]
   clearOrganizations: Boolean
@@ -9478,8 +8880,6 @@ input UpdatePeriodInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -9510,8 +8910,6 @@ input UpdatePersonInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   primaryImageURL: String
   clearPrimaryImageURL: Boolean
   additionalImagesUrls: [String!]
@@ -9568,8 +8966,6 @@ input UpdatePersonRoleInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   addPersonIDs: [ID!]
   removePersonIDs: [ID!]
   clearPerson: Boolean
@@ -9592,8 +8988,6 @@ input UpdateProjectInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   beginData: Time
   clearBeginData: Boolean
   endDate: Time
@@ -9625,8 +9019,6 @@ input UpdateProjectTypeInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   addProjectIDs: [ID!]
   removeProjectIDs: [ID!]
   clearProjects: Boolean
@@ -9649,8 +9041,6 @@ input UpdateProtectedAreaCategoryInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   addProtectedAreaIDs: [ID!]
   removeProtectedAreaIDs: [ID!]
   clearProtectedAreas: Boolean
@@ -9673,8 +9063,6 @@ input UpdateProtectedAreaInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   area: String
   clearArea: Boolean
   establishmentDate: Time
@@ -9703,8 +9091,6 @@ input UpdateProtectedAreaPictureInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   primaryImageURL: String
   clearPrimaryImageURL: Boolean
   additionalImagesUrls: [String!]
@@ -9740,8 +9126,6 @@ input UpdatePublicationInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -9767,8 +9151,6 @@ input UpdatePublisherInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   addBookIDs: [ID!]
   removeBookIDs: [ID!]
   clearBooks: Boolean
@@ -9791,8 +9173,6 @@ input UpdateRegionInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   locationID: ID
   clearLocation: Boolean
 }
@@ -9814,8 +9194,6 @@ input UpdateSetInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -9841,8 +9219,6 @@ input UpdateSettlementInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   locationID: ID
   clearLocation: Boolean
 }
@@ -9864,8 +9240,6 @@ input UpdateTechniqueInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  slug: String
-  clearSlug: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean

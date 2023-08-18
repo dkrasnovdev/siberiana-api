@@ -155,26 +155,6 @@ func (hru *HolderResponsibilityUpdate) ClearExternalLink() *HolderResponsibility
 	return hru
 }
 
-// SetSlug sets the "slug" field.
-func (hru *HolderResponsibilityUpdate) SetSlug(s string) *HolderResponsibilityUpdate {
-	hru.mutation.SetSlug(s)
-	return hru
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (hru *HolderResponsibilityUpdate) SetNillableSlug(s *string) *HolderResponsibilityUpdate {
-	if s != nil {
-		hru.SetSlug(*s)
-	}
-	return hru
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (hru *HolderResponsibilityUpdate) ClearSlug() *HolderResponsibilityUpdate {
-	hru.mutation.ClearSlug()
-	return hru
-}
-
 // AddHolderIDs adds the "holder" edge to the Holder entity by IDs.
 func (hru *HolderResponsibilityUpdate) AddHolderIDs(ids ...int) *HolderResponsibilityUpdate {
 	hru.mutation.AddHolderIDs(ids...)
@@ -305,12 +285,6 @@ func (hru *HolderResponsibilityUpdate) sqlSave(ctx context.Context) (n int, err 
 	}
 	if hru.mutation.ExternalLinkCleared() {
 		_spec.ClearField(holderresponsibility.FieldExternalLink, field.TypeString)
-	}
-	if value, ok := hru.mutation.Slug(); ok {
-		_spec.SetField(holderresponsibility.FieldSlug, field.TypeString, value)
-	}
-	if hru.mutation.SlugCleared() {
-		_spec.ClearField(holderresponsibility.FieldSlug, field.TypeString)
 	}
 	if hru.mutation.HolderCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -503,26 +477,6 @@ func (hruo *HolderResponsibilityUpdateOne) ClearExternalLink() *HolderResponsibi
 	return hruo
 }
 
-// SetSlug sets the "slug" field.
-func (hruo *HolderResponsibilityUpdateOne) SetSlug(s string) *HolderResponsibilityUpdateOne {
-	hruo.mutation.SetSlug(s)
-	return hruo
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (hruo *HolderResponsibilityUpdateOne) SetNillableSlug(s *string) *HolderResponsibilityUpdateOne {
-	if s != nil {
-		hruo.SetSlug(*s)
-	}
-	return hruo
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (hruo *HolderResponsibilityUpdateOne) ClearSlug() *HolderResponsibilityUpdateOne {
-	hruo.mutation.ClearSlug()
-	return hruo
-}
-
 // AddHolderIDs adds the "holder" edge to the Holder entity by IDs.
 func (hruo *HolderResponsibilityUpdateOne) AddHolderIDs(ids ...int) *HolderResponsibilityUpdateOne {
 	hruo.mutation.AddHolderIDs(ids...)
@@ -683,12 +637,6 @@ func (hruo *HolderResponsibilityUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if hruo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(holderresponsibility.FieldExternalLink, field.TypeString)
-	}
-	if value, ok := hruo.mutation.Slug(); ok {
-		_spec.SetField(holderresponsibility.FieldSlug, field.TypeString, value)
-	}
-	if hruo.mutation.SlugCleared() {
-		_spec.ClearField(holderresponsibility.FieldSlug, field.TypeString)
 	}
 	if hruo.mutation.HolderCleared() {
 		edge := &sqlgraph.EdgeSpec{

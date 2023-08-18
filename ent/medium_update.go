@@ -155,26 +155,6 @@ func (mu *MediumUpdate) ClearExternalLink() *MediumUpdate {
 	return mu
 }
 
-// SetSlug sets the "slug" field.
-func (mu *MediumUpdate) SetSlug(s string) *MediumUpdate {
-	mu.mutation.SetSlug(s)
-	return mu
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (mu *MediumUpdate) SetNillableSlug(s *string) *MediumUpdate {
-	if s != nil {
-		mu.SetSlug(*s)
-	}
-	return mu
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (mu *MediumUpdate) ClearSlug() *MediumUpdate {
-	mu.mutation.ClearSlug()
-	return mu
-}
-
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (mu *MediumUpdate) AddArtifactIDs(ids ...int) *MediumUpdate {
 	mu.mutation.AddArtifactIDs(ids...)
@@ -305,12 +285,6 @@ func (mu *MediumUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if mu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(medium.FieldExternalLink, field.TypeString)
-	}
-	if value, ok := mu.mutation.Slug(); ok {
-		_spec.SetField(medium.FieldSlug, field.TypeString, value)
-	}
-	if mu.mutation.SlugCleared() {
-		_spec.ClearField(medium.FieldSlug, field.TypeString)
 	}
 	if mu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -503,26 +477,6 @@ func (muo *MediumUpdateOne) ClearExternalLink() *MediumUpdateOne {
 	return muo
 }
 
-// SetSlug sets the "slug" field.
-func (muo *MediumUpdateOne) SetSlug(s string) *MediumUpdateOne {
-	muo.mutation.SetSlug(s)
-	return muo
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (muo *MediumUpdateOne) SetNillableSlug(s *string) *MediumUpdateOne {
-	if s != nil {
-		muo.SetSlug(*s)
-	}
-	return muo
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (muo *MediumUpdateOne) ClearSlug() *MediumUpdateOne {
-	muo.mutation.ClearSlug()
-	return muo
-}
-
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (muo *MediumUpdateOne) AddArtifactIDs(ids ...int) *MediumUpdateOne {
 	muo.mutation.AddArtifactIDs(ids...)
@@ -683,12 +637,6 @@ func (muo *MediumUpdateOne) sqlSave(ctx context.Context) (_node *Medium, err err
 	}
 	if muo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(medium.FieldExternalLink, field.TypeString)
-	}
-	if value, ok := muo.mutation.Slug(); ok {
-		_spec.SetField(medium.FieldSlug, field.TypeString, value)
-	}
-	if muo.mutation.SlugCleared() {
-		_spec.ClearField(medium.FieldSlug, field.TypeString)
 	}
 	if muo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

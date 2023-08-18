@@ -155,26 +155,6 @@ func (du *DistrictUpdate) ClearExternalLink() *DistrictUpdate {
 	return du
 }
 
-// SetSlug sets the "slug" field.
-func (du *DistrictUpdate) SetSlug(s string) *DistrictUpdate {
-	du.mutation.SetSlug(s)
-	return du
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (du *DistrictUpdate) SetNillableSlug(s *string) *DistrictUpdate {
-	if s != nil {
-		du.SetSlug(*s)
-	}
-	return du
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (du *DistrictUpdate) ClearSlug() *DistrictUpdate {
-	du.mutation.ClearSlug()
-	return du
-}
-
 // SetLocationID sets the "location" edge to the Location entity by ID.
 func (du *DistrictUpdate) SetLocationID(id int) *DistrictUpdate {
 	du.mutation.SetLocationID(id)
@@ -294,12 +274,6 @@ func (du *DistrictUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if du.mutation.ExternalLinkCleared() {
 		_spec.ClearField(district.FieldExternalLink, field.TypeString)
-	}
-	if value, ok := du.mutation.Slug(); ok {
-		_spec.SetField(district.FieldSlug, field.TypeString, value)
-	}
-	if du.mutation.SlugCleared() {
-		_spec.ClearField(district.FieldSlug, field.TypeString)
 	}
 	if du.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -476,26 +450,6 @@ func (duo *DistrictUpdateOne) ClearExternalLink() *DistrictUpdateOne {
 	return duo
 }
 
-// SetSlug sets the "slug" field.
-func (duo *DistrictUpdateOne) SetSlug(s string) *DistrictUpdateOne {
-	duo.mutation.SetSlug(s)
-	return duo
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (duo *DistrictUpdateOne) SetNillableSlug(s *string) *DistrictUpdateOne {
-	if s != nil {
-		duo.SetSlug(*s)
-	}
-	return duo
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (duo *DistrictUpdateOne) ClearSlug() *DistrictUpdateOne {
-	duo.mutation.ClearSlug()
-	return duo
-}
-
 // SetLocationID sets the "location" edge to the Location entity by ID.
 func (duo *DistrictUpdateOne) SetLocationID(id int) *DistrictUpdateOne {
 	duo.mutation.SetLocationID(id)
@@ -645,12 +599,6 @@ func (duo *DistrictUpdateOne) sqlSave(ctx context.Context) (_node *District, err
 	}
 	if duo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(district.FieldExternalLink, field.TypeString)
-	}
-	if value, ok := duo.mutation.Slug(); ok {
-		_spec.SetField(district.FieldSlug, field.TypeString, value)
-	}
-	if duo.mutation.SlugCleared() {
-		_spec.ClearField(district.FieldSlug, field.TypeString)
 	}
 	if duo.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -157,26 +157,6 @@ func (au *ArtUpdate) ClearExternalLink() *ArtUpdate {
 	return au
 }
 
-// SetSlug sets the "slug" field.
-func (au *ArtUpdate) SetSlug(s string) *ArtUpdate {
-	au.mutation.SetSlug(s)
-	return au
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (au *ArtUpdate) SetNillableSlug(s *string) *ArtUpdate {
-	if s != nil {
-		au.SetSlug(*s)
-	}
-	return au
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (au *ArtUpdate) ClearSlug() *ArtUpdate {
-	au.mutation.ClearSlug()
-	return au
-}
-
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (au *ArtUpdate) SetPrimaryImageURL(s string) *ArtUpdate {
 	au.mutation.SetPrimaryImageURL(s)
@@ -381,12 +361,6 @@ func (au *ArtUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if au.mutation.ExternalLinkCleared() {
 		_spec.ClearField(art.FieldExternalLink, field.TypeString)
-	}
-	if value, ok := au.mutation.Slug(); ok {
-		_spec.SetField(art.FieldSlug, field.TypeString, value)
-	}
-	if au.mutation.SlugCleared() {
-		_spec.ClearField(art.FieldSlug, field.TypeString)
 	}
 	if value, ok := au.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(art.FieldPrimaryImageURL, field.TypeString, value)
@@ -641,26 +615,6 @@ func (auo *ArtUpdateOne) ClearExternalLink() *ArtUpdateOne {
 	return auo
 }
 
-// SetSlug sets the "slug" field.
-func (auo *ArtUpdateOne) SetSlug(s string) *ArtUpdateOne {
-	auo.mutation.SetSlug(s)
-	return auo
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (auo *ArtUpdateOne) SetNillableSlug(s *string) *ArtUpdateOne {
-	if s != nil {
-		auo.SetSlug(*s)
-	}
-	return auo
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (auo *ArtUpdateOne) ClearSlug() *ArtUpdateOne {
-	auo.mutation.ClearSlug()
-	return auo
-}
-
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (auo *ArtUpdateOne) SetPrimaryImageURL(s string) *ArtUpdateOne {
 	auo.mutation.SetPrimaryImageURL(s)
@@ -895,12 +849,6 @@ func (auo *ArtUpdateOne) sqlSave(ctx context.Context) (_node *Art, err error) {
 	}
 	if auo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(art.FieldExternalLink, field.TypeString)
-	}
-	if value, ok := auo.mutation.Slug(); ok {
-		_spec.SetField(art.FieldSlug, field.TypeString, value)
-	}
-	if auo.mutation.SlugCleared() {
-		_spec.ClearField(art.FieldSlug, field.TypeString)
 	}
 	if value, ok := auo.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(art.FieldPrimaryImageURL, field.TypeString, value)

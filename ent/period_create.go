@@ -133,20 +133,6 @@ func (pc *PeriodCreate) SetNillableExternalLink(s *string) *PeriodCreate {
 	return pc
 }
 
-// SetSlug sets the "slug" field.
-func (pc *PeriodCreate) SetSlug(s string) *PeriodCreate {
-	pc.mutation.SetSlug(s)
-	return pc
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (pc *PeriodCreate) SetNillableSlug(s *string) *PeriodCreate {
-	if s != nil {
-		pc.SetSlug(*s)
-	}
-	return pc
-}
-
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (pc *PeriodCreate) AddArtifactIDs(ids ...int) *PeriodCreate {
 	pc.mutation.AddArtifactIDs(ids...)
@@ -281,10 +267,6 @@ func (pc *PeriodCreate) createSpec() (*Period, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.ExternalLink(); ok {
 		_spec.SetField(period.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
-	}
-	if value, ok := pc.mutation.Slug(); ok {
-		_spec.SetField(period.FieldSlug, field.TypeString, value)
-		_node.Slug = value
 	}
 	if nodes := pc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

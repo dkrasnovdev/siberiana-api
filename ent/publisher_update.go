@@ -155,26 +155,6 @@ func (pu *PublisherUpdate) ClearExternalLink() *PublisherUpdate {
 	return pu
 }
 
-// SetSlug sets the "slug" field.
-func (pu *PublisherUpdate) SetSlug(s string) *PublisherUpdate {
-	pu.mutation.SetSlug(s)
-	return pu
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (pu *PublisherUpdate) SetNillableSlug(s *string) *PublisherUpdate {
-	if s != nil {
-		pu.SetSlug(*s)
-	}
-	return pu
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (pu *PublisherUpdate) ClearSlug() *PublisherUpdate {
-	pu.mutation.ClearSlug()
-	return pu
-}
-
 // AddBookIDs adds the "books" edge to the Book entity by IDs.
 func (pu *PublisherUpdate) AddBookIDs(ids ...int) *PublisherUpdate {
 	pu.mutation.AddBookIDs(ids...)
@@ -305,12 +285,6 @@ func (pu *PublisherUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(publisher.FieldExternalLink, field.TypeString)
-	}
-	if value, ok := pu.mutation.Slug(); ok {
-		_spec.SetField(publisher.FieldSlug, field.TypeString, value)
-	}
-	if pu.mutation.SlugCleared() {
-		_spec.ClearField(publisher.FieldSlug, field.TypeString)
 	}
 	if pu.mutation.BooksCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -503,26 +477,6 @@ func (puo *PublisherUpdateOne) ClearExternalLink() *PublisherUpdateOne {
 	return puo
 }
 
-// SetSlug sets the "slug" field.
-func (puo *PublisherUpdateOne) SetSlug(s string) *PublisherUpdateOne {
-	puo.mutation.SetSlug(s)
-	return puo
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (puo *PublisherUpdateOne) SetNillableSlug(s *string) *PublisherUpdateOne {
-	if s != nil {
-		puo.SetSlug(*s)
-	}
-	return puo
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (puo *PublisherUpdateOne) ClearSlug() *PublisherUpdateOne {
-	puo.mutation.ClearSlug()
-	return puo
-}
-
 // AddBookIDs adds the "books" edge to the Book entity by IDs.
 func (puo *PublisherUpdateOne) AddBookIDs(ids ...int) *PublisherUpdateOne {
 	puo.mutation.AddBookIDs(ids...)
@@ -683,12 +637,6 @@ func (puo *PublisherUpdateOne) sqlSave(ctx context.Context) (_node *Publisher, e
 	}
 	if puo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(publisher.FieldExternalLink, field.TypeString)
-	}
-	if value, ok := puo.mutation.Slug(); ok {
-		_spec.SetField(publisher.FieldSlug, field.TypeString, value)
-	}
-	if puo.mutation.SlugCleared() {
-		_spec.ClearField(publisher.FieldSlug, field.TypeString)
 	}
 	if puo.mutation.BooksCleared() {
 		edge := &sqlgraph.EdgeSpec{

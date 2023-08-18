@@ -95,11 +95,6 @@ func ExternalLink(v string) predicate.Country {
 	return predicate.Country(sql.FieldEQ(FieldExternalLink, v))
 }
 
-// Slug applies equality check predicate on the "slug" field. It's identical to SlugEQ.
-func Slug(v string) predicate.Country {
-	return predicate.Country(sql.FieldEQ(FieldSlug, v))
-}
-
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Country {
 	return predicate.Country(sql.FieldEQ(FieldCreatedAt, v))
@@ -628,81 +623,6 @@ func ExternalLinkEqualFold(v string) predicate.Country {
 // ExternalLinkContainsFold applies the ContainsFold predicate on the "external_link" field.
 func ExternalLinkContainsFold(v string) predicate.Country {
 	return predicate.Country(sql.FieldContainsFold(FieldExternalLink, v))
-}
-
-// SlugEQ applies the EQ predicate on the "slug" field.
-func SlugEQ(v string) predicate.Country {
-	return predicate.Country(sql.FieldEQ(FieldSlug, v))
-}
-
-// SlugNEQ applies the NEQ predicate on the "slug" field.
-func SlugNEQ(v string) predicate.Country {
-	return predicate.Country(sql.FieldNEQ(FieldSlug, v))
-}
-
-// SlugIn applies the In predicate on the "slug" field.
-func SlugIn(vs ...string) predicate.Country {
-	return predicate.Country(sql.FieldIn(FieldSlug, vs...))
-}
-
-// SlugNotIn applies the NotIn predicate on the "slug" field.
-func SlugNotIn(vs ...string) predicate.Country {
-	return predicate.Country(sql.FieldNotIn(FieldSlug, vs...))
-}
-
-// SlugGT applies the GT predicate on the "slug" field.
-func SlugGT(v string) predicate.Country {
-	return predicate.Country(sql.FieldGT(FieldSlug, v))
-}
-
-// SlugGTE applies the GTE predicate on the "slug" field.
-func SlugGTE(v string) predicate.Country {
-	return predicate.Country(sql.FieldGTE(FieldSlug, v))
-}
-
-// SlugLT applies the LT predicate on the "slug" field.
-func SlugLT(v string) predicate.Country {
-	return predicate.Country(sql.FieldLT(FieldSlug, v))
-}
-
-// SlugLTE applies the LTE predicate on the "slug" field.
-func SlugLTE(v string) predicate.Country {
-	return predicate.Country(sql.FieldLTE(FieldSlug, v))
-}
-
-// SlugContains applies the Contains predicate on the "slug" field.
-func SlugContains(v string) predicate.Country {
-	return predicate.Country(sql.FieldContains(FieldSlug, v))
-}
-
-// SlugHasPrefix applies the HasPrefix predicate on the "slug" field.
-func SlugHasPrefix(v string) predicate.Country {
-	return predicate.Country(sql.FieldHasPrefix(FieldSlug, v))
-}
-
-// SlugHasSuffix applies the HasSuffix predicate on the "slug" field.
-func SlugHasSuffix(v string) predicate.Country {
-	return predicate.Country(sql.FieldHasSuffix(FieldSlug, v))
-}
-
-// SlugIsNil applies the IsNil predicate on the "slug" field.
-func SlugIsNil() predicate.Country {
-	return predicate.Country(sql.FieldIsNull(FieldSlug))
-}
-
-// SlugNotNil applies the NotNil predicate on the "slug" field.
-func SlugNotNil() predicate.Country {
-	return predicate.Country(sql.FieldNotNull(FieldSlug))
-}
-
-// SlugEqualFold applies the EqualFold predicate on the "slug" field.
-func SlugEqualFold(v string) predicate.Country {
-	return predicate.Country(sql.FieldEqualFold(FieldSlug, v))
-}
-
-// SlugContainsFold applies the ContainsFold predicate on the "slug" field.
-func SlugContainsFold(v string) predicate.Country {
-	return predicate.Country(sql.FieldContainsFold(FieldSlug, v))
 }
 
 // HasLocation applies the HasEdge predicate on the "location" edge.

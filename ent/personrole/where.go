@@ -95,11 +95,6 @@ func ExternalLink(v string) predicate.PersonRole {
 	return predicate.PersonRole(sql.FieldEQ(FieldExternalLink, v))
 }
 
-// Slug applies equality check predicate on the "slug" field. It's identical to SlugEQ.
-func Slug(v string) predicate.PersonRole {
-	return predicate.PersonRole(sql.FieldEQ(FieldSlug, v))
-}
-
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.PersonRole {
 	return predicate.PersonRole(sql.FieldEQ(FieldCreatedAt, v))
@@ -628,81 +623,6 @@ func ExternalLinkEqualFold(v string) predicate.PersonRole {
 // ExternalLinkContainsFold applies the ContainsFold predicate on the "external_link" field.
 func ExternalLinkContainsFold(v string) predicate.PersonRole {
 	return predicate.PersonRole(sql.FieldContainsFold(FieldExternalLink, v))
-}
-
-// SlugEQ applies the EQ predicate on the "slug" field.
-func SlugEQ(v string) predicate.PersonRole {
-	return predicate.PersonRole(sql.FieldEQ(FieldSlug, v))
-}
-
-// SlugNEQ applies the NEQ predicate on the "slug" field.
-func SlugNEQ(v string) predicate.PersonRole {
-	return predicate.PersonRole(sql.FieldNEQ(FieldSlug, v))
-}
-
-// SlugIn applies the In predicate on the "slug" field.
-func SlugIn(vs ...string) predicate.PersonRole {
-	return predicate.PersonRole(sql.FieldIn(FieldSlug, vs...))
-}
-
-// SlugNotIn applies the NotIn predicate on the "slug" field.
-func SlugNotIn(vs ...string) predicate.PersonRole {
-	return predicate.PersonRole(sql.FieldNotIn(FieldSlug, vs...))
-}
-
-// SlugGT applies the GT predicate on the "slug" field.
-func SlugGT(v string) predicate.PersonRole {
-	return predicate.PersonRole(sql.FieldGT(FieldSlug, v))
-}
-
-// SlugGTE applies the GTE predicate on the "slug" field.
-func SlugGTE(v string) predicate.PersonRole {
-	return predicate.PersonRole(sql.FieldGTE(FieldSlug, v))
-}
-
-// SlugLT applies the LT predicate on the "slug" field.
-func SlugLT(v string) predicate.PersonRole {
-	return predicate.PersonRole(sql.FieldLT(FieldSlug, v))
-}
-
-// SlugLTE applies the LTE predicate on the "slug" field.
-func SlugLTE(v string) predicate.PersonRole {
-	return predicate.PersonRole(sql.FieldLTE(FieldSlug, v))
-}
-
-// SlugContains applies the Contains predicate on the "slug" field.
-func SlugContains(v string) predicate.PersonRole {
-	return predicate.PersonRole(sql.FieldContains(FieldSlug, v))
-}
-
-// SlugHasPrefix applies the HasPrefix predicate on the "slug" field.
-func SlugHasPrefix(v string) predicate.PersonRole {
-	return predicate.PersonRole(sql.FieldHasPrefix(FieldSlug, v))
-}
-
-// SlugHasSuffix applies the HasSuffix predicate on the "slug" field.
-func SlugHasSuffix(v string) predicate.PersonRole {
-	return predicate.PersonRole(sql.FieldHasSuffix(FieldSlug, v))
-}
-
-// SlugIsNil applies the IsNil predicate on the "slug" field.
-func SlugIsNil() predicate.PersonRole {
-	return predicate.PersonRole(sql.FieldIsNull(FieldSlug))
-}
-
-// SlugNotNil applies the NotNil predicate on the "slug" field.
-func SlugNotNil() predicate.PersonRole {
-	return predicate.PersonRole(sql.FieldNotNull(FieldSlug))
-}
-
-// SlugEqualFold applies the EqualFold predicate on the "slug" field.
-func SlugEqualFold(v string) predicate.PersonRole {
-	return predicate.PersonRole(sql.FieldEqualFold(FieldSlug, v))
-}
-
-// SlugContainsFold applies the ContainsFold predicate on the "slug" field.
-func SlugContainsFold(v string) predicate.PersonRole {
-	return predicate.PersonRole(sql.FieldContainsFold(FieldSlug, v))
 }
 
 // HasPerson applies the HasEdge predicate on the "person" edge.

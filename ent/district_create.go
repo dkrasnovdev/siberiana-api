@@ -133,20 +133,6 @@ func (dc *DistrictCreate) SetNillableExternalLink(s *string) *DistrictCreate {
 	return dc
 }
 
-// SetSlug sets the "slug" field.
-func (dc *DistrictCreate) SetSlug(s string) *DistrictCreate {
-	dc.mutation.SetSlug(s)
-	return dc
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (dc *DistrictCreate) SetNillableSlug(s *string) *DistrictCreate {
-	if s != nil {
-		dc.SetSlug(*s)
-	}
-	return dc
-}
-
 // SetLocationID sets the "location" edge to the Location entity by ID.
 func (dc *DistrictCreate) SetLocationID(id int) *DistrictCreate {
 	dc.mutation.SetLocationID(id)
@@ -285,10 +271,6 @@ func (dc *DistrictCreate) createSpec() (*District, *sqlgraph.CreateSpec) {
 	if value, ok := dc.mutation.ExternalLink(); ok {
 		_spec.SetField(district.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
-	}
-	if value, ok := dc.mutation.Slug(); ok {
-		_spec.SetField(district.FieldSlug, field.TypeString, value)
-		_node.Slug = value
 	}
 	if nodes := dc.mutation.LocationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

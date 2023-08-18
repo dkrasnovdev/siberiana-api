@@ -100,11 +100,6 @@ func ExternalLink(v string) predicate.Organization {
 	return predicate.Organization(sql.FieldEQ(FieldExternalLink, v))
 }
 
-// Slug applies equality check predicate on the "slug" field. It's identical to SlugEQ.
-func Slug(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldEQ(FieldSlug, v))
-}
-
 // PrimaryImageURL applies equality check predicate on the "primary_image_url" field. It's identical to PrimaryImageURLEQ.
 func PrimaryImageURL(v string) predicate.Organization {
 	return predicate.Organization(sql.FieldEQ(FieldPrimaryImageURL, v))
@@ -743,81 +738,6 @@ func ExternalLinkEqualFold(v string) predicate.Organization {
 // ExternalLinkContainsFold applies the ContainsFold predicate on the "external_link" field.
 func ExternalLinkContainsFold(v string) predicate.Organization {
 	return predicate.Organization(sql.FieldContainsFold(FieldExternalLink, v))
-}
-
-// SlugEQ applies the EQ predicate on the "slug" field.
-func SlugEQ(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldEQ(FieldSlug, v))
-}
-
-// SlugNEQ applies the NEQ predicate on the "slug" field.
-func SlugNEQ(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldNEQ(FieldSlug, v))
-}
-
-// SlugIn applies the In predicate on the "slug" field.
-func SlugIn(vs ...string) predicate.Organization {
-	return predicate.Organization(sql.FieldIn(FieldSlug, vs...))
-}
-
-// SlugNotIn applies the NotIn predicate on the "slug" field.
-func SlugNotIn(vs ...string) predicate.Organization {
-	return predicate.Organization(sql.FieldNotIn(FieldSlug, vs...))
-}
-
-// SlugGT applies the GT predicate on the "slug" field.
-func SlugGT(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldGT(FieldSlug, v))
-}
-
-// SlugGTE applies the GTE predicate on the "slug" field.
-func SlugGTE(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldGTE(FieldSlug, v))
-}
-
-// SlugLT applies the LT predicate on the "slug" field.
-func SlugLT(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldLT(FieldSlug, v))
-}
-
-// SlugLTE applies the LTE predicate on the "slug" field.
-func SlugLTE(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldLTE(FieldSlug, v))
-}
-
-// SlugContains applies the Contains predicate on the "slug" field.
-func SlugContains(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldContains(FieldSlug, v))
-}
-
-// SlugHasPrefix applies the HasPrefix predicate on the "slug" field.
-func SlugHasPrefix(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldHasPrefix(FieldSlug, v))
-}
-
-// SlugHasSuffix applies the HasSuffix predicate on the "slug" field.
-func SlugHasSuffix(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldHasSuffix(FieldSlug, v))
-}
-
-// SlugIsNil applies the IsNil predicate on the "slug" field.
-func SlugIsNil() predicate.Organization {
-	return predicate.Organization(sql.FieldIsNull(FieldSlug))
-}
-
-// SlugNotNil applies the NotNil predicate on the "slug" field.
-func SlugNotNil() predicate.Organization {
-	return predicate.Organization(sql.FieldNotNull(FieldSlug))
-}
-
-// SlugEqualFold applies the EqualFold predicate on the "slug" field.
-func SlugEqualFold(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldEqualFold(FieldSlug, v))
-}
-
-// SlugContainsFold applies the ContainsFold predicate on the "slug" field.
-func SlugContainsFold(v string) predicate.Organization {
-	return predicate.Organization(sql.FieldContainsFold(FieldSlug, v))
 }
 
 // PrimaryImageURLEQ applies the EQ predicate on the "primary_image_url" field.

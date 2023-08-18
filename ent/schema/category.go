@@ -5,6 +5,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
+	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/siberiana-api/ent/privacy"
 	"github.com/dkrasnovdev/siberiana-api/internal/ent/mixin"
 	rule "github.com/dkrasnovdev/siberiana-api/internal/ent/privacy"
@@ -46,6 +47,14 @@ func (Category) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 		entgql.MultiOrder(),
+	}
+}
+
+// Fields of the Category.
+func (Category) Fields() []ent.Field {
+	return []ent.Field{
+		field.String("slug").
+			Unique(),
 	}
 }
 

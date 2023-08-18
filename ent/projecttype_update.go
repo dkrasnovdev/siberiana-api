@@ -155,26 +155,6 @@ func (ptu *ProjectTypeUpdate) ClearExternalLink() *ProjectTypeUpdate {
 	return ptu
 }
 
-// SetSlug sets the "slug" field.
-func (ptu *ProjectTypeUpdate) SetSlug(s string) *ProjectTypeUpdate {
-	ptu.mutation.SetSlug(s)
-	return ptu
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (ptu *ProjectTypeUpdate) SetNillableSlug(s *string) *ProjectTypeUpdate {
-	if s != nil {
-		ptu.SetSlug(*s)
-	}
-	return ptu
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (ptu *ProjectTypeUpdate) ClearSlug() *ProjectTypeUpdate {
-	ptu.mutation.ClearSlug()
-	return ptu
-}
-
 // AddProjectIDs adds the "projects" edge to the Project entity by IDs.
 func (ptu *ProjectTypeUpdate) AddProjectIDs(ids ...int) *ProjectTypeUpdate {
 	ptu.mutation.AddProjectIDs(ids...)
@@ -305,12 +285,6 @@ func (ptu *ProjectTypeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ptu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(projecttype.FieldExternalLink, field.TypeString)
-	}
-	if value, ok := ptu.mutation.Slug(); ok {
-		_spec.SetField(projecttype.FieldSlug, field.TypeString, value)
-	}
-	if ptu.mutation.SlugCleared() {
-		_spec.ClearField(projecttype.FieldSlug, field.TypeString)
 	}
 	if ptu.mutation.ProjectsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -503,26 +477,6 @@ func (ptuo *ProjectTypeUpdateOne) ClearExternalLink() *ProjectTypeUpdateOne {
 	return ptuo
 }
 
-// SetSlug sets the "slug" field.
-func (ptuo *ProjectTypeUpdateOne) SetSlug(s string) *ProjectTypeUpdateOne {
-	ptuo.mutation.SetSlug(s)
-	return ptuo
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (ptuo *ProjectTypeUpdateOne) SetNillableSlug(s *string) *ProjectTypeUpdateOne {
-	if s != nil {
-		ptuo.SetSlug(*s)
-	}
-	return ptuo
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (ptuo *ProjectTypeUpdateOne) ClearSlug() *ProjectTypeUpdateOne {
-	ptuo.mutation.ClearSlug()
-	return ptuo
-}
-
 // AddProjectIDs adds the "projects" edge to the Project entity by IDs.
 func (ptuo *ProjectTypeUpdateOne) AddProjectIDs(ids ...int) *ProjectTypeUpdateOne {
 	ptuo.mutation.AddProjectIDs(ids...)
@@ -683,12 +637,6 @@ func (ptuo *ProjectTypeUpdateOne) sqlSave(ctx context.Context) (_node *ProjectTy
 	}
 	if ptuo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(projecttype.FieldExternalLink, field.TypeString)
-	}
-	if value, ok := ptuo.mutation.Slug(); ok {
-		_spec.SetField(projecttype.FieldSlug, field.TypeString, value)
-	}
-	if ptuo.mutation.SlugCleared() {
-		_spec.ClearField(projecttype.FieldSlug, field.TypeString)
 	}
 	if ptuo.mutation.ProjectsCleared() {
 		edge := &sqlgraph.EdgeSpec{

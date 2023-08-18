@@ -134,20 +134,6 @@ func (pac *ProtectedAreaCreate) SetNillableExternalLink(s *string) *ProtectedAre
 	return pac
 }
 
-// SetSlug sets the "slug" field.
-func (pac *ProtectedAreaCreate) SetSlug(s string) *ProtectedAreaCreate {
-	pac.mutation.SetSlug(s)
-	return pac
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (pac *ProtectedAreaCreate) SetNillableSlug(s *string) *ProtectedAreaCreate {
-	if s != nil {
-		pac.SetSlug(*s)
-	}
-	return pac
-}
-
 // SetArea sets the "area" field.
 func (pac *ProtectedAreaCreate) SetArea(s string) *ProtectedAreaCreate {
 	pac.mutation.SetArea(s)
@@ -329,10 +315,6 @@ func (pac *ProtectedAreaCreate) createSpec() (*ProtectedArea, *sqlgraph.CreateSp
 	if value, ok := pac.mutation.ExternalLink(); ok {
 		_spec.SetField(protectedarea.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
-	}
-	if value, ok := pac.mutation.Slug(); ok {
-		_spec.SetField(protectedarea.FieldSlug, field.TypeString, value)
-		_node.Slug = value
 	}
 	if value, ok := pac.mutation.Area(); ok {
 		_spec.SetField(protectedarea.FieldArea, field.TypeString, value)

@@ -31,12 +31,12 @@ const (
 	FieldDescription = "description"
 	// FieldExternalLink holds the string denoting the external_link field in the database.
 	FieldExternalLink = "external_link"
-	// FieldSlug holds the string denoting the slug field in the database.
-	FieldSlug = "slug"
 	// FieldPrimaryImageURL holds the string denoting the primary_image_url field in the database.
 	FieldPrimaryImageURL = "primary_image_url"
 	// FieldAdditionalImagesUrls holds the string denoting the additional_images_urls field in the database.
 	FieldAdditionalImagesUrls = "additional_images_urls"
+	// FieldSlug holds the string denoting the slug field in the database.
+	FieldSlug = "slug"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
 	// EdgeBooks holds the string denoting the books edge name in mutations.
@@ -97,9 +97,9 @@ var Columns = []string{
 	FieldAbbreviation,
 	FieldDescription,
 	FieldExternalLink,
-	FieldSlug,
 	FieldPrimaryImageURL,
 	FieldAdditionalImagesUrls,
+	FieldSlug,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "collections"
@@ -187,14 +187,14 @@ func ByExternalLink(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalLink, opts...).ToFunc()
 }
 
-// BySlug orders the results by the slug field.
-func BySlug(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSlug, opts...).ToFunc()
-}
-
 // ByPrimaryImageURL orders the results by the primary_image_url field.
 func ByPrimaryImageURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPrimaryImageURL, opts...).ToFunc()
+}
+
+// BySlug orders the results by the slug field.
+func BySlug(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSlug, opts...).ToFunc()
 }
 
 // ByArtifactsCount orders the results by artifacts count.

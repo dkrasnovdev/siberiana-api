@@ -133,20 +133,6 @@ func (cc *CountryCreate) SetNillableExternalLink(s *string) *CountryCreate {
 	return cc
 }
 
-// SetSlug sets the "slug" field.
-func (cc *CountryCreate) SetSlug(s string) *CountryCreate {
-	cc.mutation.SetSlug(s)
-	return cc
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (cc *CountryCreate) SetNillableSlug(s *string) *CountryCreate {
-	if s != nil {
-		cc.SetSlug(*s)
-	}
-	return cc
-}
-
 // SetLocationID sets the "location" edge to the Location entity by ID.
 func (cc *CountryCreate) SetLocationID(id int) *CountryCreate {
 	cc.mutation.SetLocationID(id)
@@ -285,10 +271,6 @@ func (cc *CountryCreate) createSpec() (*Country, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.ExternalLink(); ok {
 		_spec.SetField(country.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
-	}
-	if value, ok := cc.mutation.Slug(); ok {
-		_spec.SetField(country.FieldSlug, field.TypeString, value)
-		_node.Slug = value
 	}
 	if nodes := cc.mutation.LocationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

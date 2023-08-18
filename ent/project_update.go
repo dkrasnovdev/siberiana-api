@@ -157,26 +157,6 @@ func (pu *ProjectUpdate) ClearExternalLink() *ProjectUpdate {
 	return pu
 }
 
-// SetSlug sets the "slug" field.
-func (pu *ProjectUpdate) SetSlug(s string) *ProjectUpdate {
-	pu.mutation.SetSlug(s)
-	return pu
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (pu *ProjectUpdate) SetNillableSlug(s *string) *ProjectUpdate {
-	if s != nil {
-		pu.SetSlug(*s)
-	}
-	return pu
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (pu *ProjectUpdate) ClearSlug() *ProjectUpdate {
-	pu.mutation.ClearSlug()
-	return pu
-}
-
 // SetBeginData sets the "begin_data" field.
 func (pu *ProjectUpdate) SetBeginData(t time.Time) *ProjectUpdate {
 	pu.mutation.SetBeginData(t)
@@ -408,12 +388,6 @@ func (pu *ProjectUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(project.FieldExternalLink, field.TypeString)
-	}
-	if value, ok := pu.mutation.Slug(); ok {
-		_spec.SetField(project.FieldSlug, field.TypeString, value)
-	}
-	if pu.mutation.SlugCleared() {
-		_spec.ClearField(project.FieldSlug, field.TypeString)
 	}
 	if value, ok := pu.mutation.BeginData(); ok {
 		_spec.SetField(project.FieldBeginData, field.TypeTime, value)
@@ -692,26 +666,6 @@ func (puo *ProjectUpdateOne) ClearExternalLink() *ProjectUpdateOne {
 	return puo
 }
 
-// SetSlug sets the "slug" field.
-func (puo *ProjectUpdateOne) SetSlug(s string) *ProjectUpdateOne {
-	puo.mutation.SetSlug(s)
-	return puo
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (puo *ProjectUpdateOne) SetNillableSlug(s *string) *ProjectUpdateOne {
-	if s != nil {
-		puo.SetSlug(*s)
-	}
-	return puo
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (puo *ProjectUpdateOne) ClearSlug() *ProjectUpdateOne {
-	puo.mutation.ClearSlug()
-	return puo
-}
-
 // SetBeginData sets the "begin_data" field.
 func (puo *ProjectUpdateOne) SetBeginData(t time.Time) *ProjectUpdateOne {
 	puo.mutation.SetBeginData(t)
@@ -973,12 +927,6 @@ func (puo *ProjectUpdateOne) sqlSave(ctx context.Context) (_node *Project, err e
 	}
 	if puo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(project.FieldExternalLink, field.TypeString)
-	}
-	if value, ok := puo.mutation.Slug(); ok {
-		_spec.SetField(project.FieldSlug, field.TypeString, value)
-	}
-	if puo.mutation.SlugCleared() {
-		_spec.ClearField(project.FieldSlug, field.TypeString)
 	}
 	if value, ok := puo.mutation.BeginData(); ok {
 		_spec.SetField(project.FieldBeginData, field.TypeTime, value)

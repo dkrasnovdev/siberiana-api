@@ -95,11 +95,6 @@ func ExternalLink(v string) predicate.ArtStyle {
 	return predicate.ArtStyle(sql.FieldEQ(FieldExternalLink, v))
 }
 
-// Slug applies equality check predicate on the "slug" field. It's identical to SlugEQ.
-func Slug(v string) predicate.ArtStyle {
-	return predicate.ArtStyle(sql.FieldEQ(FieldSlug, v))
-}
-
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.ArtStyle {
 	return predicate.ArtStyle(sql.FieldEQ(FieldCreatedAt, v))
@@ -628,81 +623,6 @@ func ExternalLinkEqualFold(v string) predicate.ArtStyle {
 // ExternalLinkContainsFold applies the ContainsFold predicate on the "external_link" field.
 func ExternalLinkContainsFold(v string) predicate.ArtStyle {
 	return predicate.ArtStyle(sql.FieldContainsFold(FieldExternalLink, v))
-}
-
-// SlugEQ applies the EQ predicate on the "slug" field.
-func SlugEQ(v string) predicate.ArtStyle {
-	return predicate.ArtStyle(sql.FieldEQ(FieldSlug, v))
-}
-
-// SlugNEQ applies the NEQ predicate on the "slug" field.
-func SlugNEQ(v string) predicate.ArtStyle {
-	return predicate.ArtStyle(sql.FieldNEQ(FieldSlug, v))
-}
-
-// SlugIn applies the In predicate on the "slug" field.
-func SlugIn(vs ...string) predicate.ArtStyle {
-	return predicate.ArtStyle(sql.FieldIn(FieldSlug, vs...))
-}
-
-// SlugNotIn applies the NotIn predicate on the "slug" field.
-func SlugNotIn(vs ...string) predicate.ArtStyle {
-	return predicate.ArtStyle(sql.FieldNotIn(FieldSlug, vs...))
-}
-
-// SlugGT applies the GT predicate on the "slug" field.
-func SlugGT(v string) predicate.ArtStyle {
-	return predicate.ArtStyle(sql.FieldGT(FieldSlug, v))
-}
-
-// SlugGTE applies the GTE predicate on the "slug" field.
-func SlugGTE(v string) predicate.ArtStyle {
-	return predicate.ArtStyle(sql.FieldGTE(FieldSlug, v))
-}
-
-// SlugLT applies the LT predicate on the "slug" field.
-func SlugLT(v string) predicate.ArtStyle {
-	return predicate.ArtStyle(sql.FieldLT(FieldSlug, v))
-}
-
-// SlugLTE applies the LTE predicate on the "slug" field.
-func SlugLTE(v string) predicate.ArtStyle {
-	return predicate.ArtStyle(sql.FieldLTE(FieldSlug, v))
-}
-
-// SlugContains applies the Contains predicate on the "slug" field.
-func SlugContains(v string) predicate.ArtStyle {
-	return predicate.ArtStyle(sql.FieldContains(FieldSlug, v))
-}
-
-// SlugHasPrefix applies the HasPrefix predicate on the "slug" field.
-func SlugHasPrefix(v string) predicate.ArtStyle {
-	return predicate.ArtStyle(sql.FieldHasPrefix(FieldSlug, v))
-}
-
-// SlugHasSuffix applies the HasSuffix predicate on the "slug" field.
-func SlugHasSuffix(v string) predicate.ArtStyle {
-	return predicate.ArtStyle(sql.FieldHasSuffix(FieldSlug, v))
-}
-
-// SlugIsNil applies the IsNil predicate on the "slug" field.
-func SlugIsNil() predicate.ArtStyle {
-	return predicate.ArtStyle(sql.FieldIsNull(FieldSlug))
-}
-
-// SlugNotNil applies the NotNil predicate on the "slug" field.
-func SlugNotNil() predicate.ArtStyle {
-	return predicate.ArtStyle(sql.FieldNotNull(FieldSlug))
-}
-
-// SlugEqualFold applies the EqualFold predicate on the "slug" field.
-func SlugEqualFold(v string) predicate.ArtStyle {
-	return predicate.ArtStyle(sql.FieldEqualFold(FieldSlug, v))
-}
-
-// SlugContainsFold applies the ContainsFold predicate on the "slug" field.
-func SlugContainsFold(v string) predicate.ArtStyle {
-	return predicate.ArtStyle(sql.FieldContainsFold(FieldSlug, v))
 }
 
 // HasArt applies the HasEdge predicate on the "art" edge.

@@ -34,8 +34,6 @@ type Region struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
-	// Slug holds the value of the "slug" field.
-	Slug string `json:"slug,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the RegionQuery when eager-loading is set.
 	Edges           RegionEdges `json:"edges"`
@@ -74,7 +72,7 @@ func (*Region) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case region.FieldID:
 			values[i] = new(sql.NullInt64)
-		case region.FieldCreatedBy, region.FieldUpdatedBy, region.FieldDisplayName, region.FieldAbbreviation, region.FieldDescription, region.FieldExternalLink, region.FieldSlug:
+		case region.FieldCreatedBy, region.FieldUpdatedBy, region.FieldDisplayName, region.FieldAbbreviation, region.FieldDescription, region.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case region.FieldCreatedAt, region.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -149,12 +147,6 @@ func (r *Region) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				r.ExternalLink = value.String
 			}
-		case region.FieldSlug:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field slug", values[i])
-			} else if value.Valid {
-				r.Slug = value.String
-			}
 		case region.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field location_region", value)
@@ -226,9 +218,6 @@ func (r *Region) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(r.ExternalLink)
-	builder.WriteString(", ")
-	builder.WriteString("slug=")
-	builder.WriteString(r.Slug)
 	builder.WriteByte(')')
 	return builder.String()
 }

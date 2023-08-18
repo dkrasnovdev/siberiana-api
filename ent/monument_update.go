@@ -156,26 +156,6 @@ func (mu *MonumentUpdate) ClearExternalLink() *MonumentUpdate {
 	return mu
 }
 
-// SetSlug sets the "slug" field.
-func (mu *MonumentUpdate) SetSlug(s string) *MonumentUpdate {
-	mu.mutation.SetSlug(s)
-	return mu
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (mu *MonumentUpdate) SetNillableSlug(s *string) *MonumentUpdate {
-	if s != nil {
-		mu.SetSlug(*s)
-	}
-	return mu
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (mu *MonumentUpdate) ClearSlug() *MonumentUpdate {
-	mu.mutation.ClearSlug()
-	return mu
-}
-
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (mu *MonumentUpdate) AddArtifactIDs(ids ...int) *MonumentUpdate {
 	mu.mutation.AddArtifactIDs(ids...)
@@ -342,12 +322,6 @@ func (mu *MonumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if mu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(monument.FieldExternalLink, field.TypeString)
-	}
-	if value, ok := mu.mutation.Slug(); ok {
-		_spec.SetField(monument.FieldSlug, field.TypeString, value)
-	}
-	if mu.mutation.SlugCleared() {
-		_spec.ClearField(monument.FieldSlug, field.TypeString)
 	}
 	if mu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -585,26 +559,6 @@ func (muo *MonumentUpdateOne) ClearExternalLink() *MonumentUpdateOne {
 	return muo
 }
 
-// SetSlug sets the "slug" field.
-func (muo *MonumentUpdateOne) SetSlug(s string) *MonumentUpdateOne {
-	muo.mutation.SetSlug(s)
-	return muo
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (muo *MonumentUpdateOne) SetNillableSlug(s *string) *MonumentUpdateOne {
-	if s != nil {
-		muo.SetSlug(*s)
-	}
-	return muo
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (muo *MonumentUpdateOne) ClearSlug() *MonumentUpdateOne {
-	muo.mutation.ClearSlug()
-	return muo
-}
-
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (muo *MonumentUpdateOne) AddArtifactIDs(ids ...int) *MonumentUpdateOne {
 	muo.mutation.AddArtifactIDs(ids...)
@@ -801,12 +755,6 @@ func (muo *MonumentUpdateOne) sqlSave(ctx context.Context) (_node *Monument, err
 	}
 	if muo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(monument.FieldExternalLink, field.TypeString)
-	}
-	if value, ok := muo.mutation.Slug(); ok {
-		_spec.SetField(monument.FieldSlug, field.TypeString, value)
-	}
-	if muo.mutation.SlugCleared() {
-		_spec.ClearField(monument.FieldSlug, field.TypeString)
 	}
 	if muo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

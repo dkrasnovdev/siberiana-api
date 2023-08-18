@@ -133,20 +133,6 @@ func (otc *OrganizationTypeCreate) SetNillableExternalLink(s *string) *Organizat
 	return otc
 }
 
-// SetSlug sets the "slug" field.
-func (otc *OrganizationTypeCreate) SetSlug(s string) *OrganizationTypeCreate {
-	otc.mutation.SetSlug(s)
-	return otc
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (otc *OrganizationTypeCreate) SetNillableSlug(s *string) *OrganizationTypeCreate {
-	if s != nil {
-		otc.SetSlug(*s)
-	}
-	return otc
-}
-
 // AddOrganizationIDs adds the "organizations" edge to the Organization entity by IDs.
 func (otc *OrganizationTypeCreate) AddOrganizationIDs(ids ...int) *OrganizationTypeCreate {
 	otc.mutation.AddOrganizationIDs(ids...)
@@ -281,10 +267,6 @@ func (otc *OrganizationTypeCreate) createSpec() (*OrganizationType, *sqlgraph.Cr
 	if value, ok := otc.mutation.ExternalLink(); ok {
 		_spec.SetField(organizationtype.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
-	}
-	if value, ok := otc.mutation.Slug(); ok {
-		_spec.SetField(organizationtype.FieldSlug, field.TypeString, value)
-		_node.Slug = value
 	}
 	if nodes := otc.mutation.OrganizationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

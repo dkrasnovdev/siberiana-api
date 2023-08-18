@@ -33,8 +33,6 @@ type PersonRole struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
-	// Slug holds the value of the "slug" field.
-	Slug string `json:"slug,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PersonRoleQuery when eager-loading is set.
 	Edges        PersonRoleEdges `json:"edges"`
@@ -70,7 +68,7 @@ func (*PersonRole) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case personrole.FieldID:
 			values[i] = new(sql.NullInt64)
-		case personrole.FieldCreatedBy, personrole.FieldUpdatedBy, personrole.FieldDisplayName, personrole.FieldAbbreviation, personrole.FieldDescription, personrole.FieldExternalLink, personrole.FieldSlug:
+		case personrole.FieldCreatedBy, personrole.FieldUpdatedBy, personrole.FieldDisplayName, personrole.FieldAbbreviation, personrole.FieldDescription, personrole.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case personrole.FieldCreatedAt, personrole.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -143,12 +141,6 @@ func (pr *PersonRole) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.ExternalLink = value.String
 			}
-		case personrole.FieldSlug:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field slug", values[i])
-			} else if value.Valid {
-				pr.Slug = value.String
-			}
 		default:
 			pr.selectValues.Set(columns[i], values[i])
 		}
@@ -213,9 +205,6 @@ func (pr *PersonRole) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(pr.ExternalLink)
-	builder.WriteString(", ")
-	builder.WriteString("slug=")
-	builder.WriteString(pr.Slug)
 	builder.WriteByte(')')
 	return builder.String()
 }

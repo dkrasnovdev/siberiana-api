@@ -42,8 +42,6 @@ type Artifact struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
-	// Slug holds the value of the "slug" field.
-	Slug string `json:"slug,omitempty"`
 	// PrimaryImageURL holds the value of the "primary_image_url" field.
 	PrimaryImageURL string `json:"primary_image_url,omitempty"`
 	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
@@ -291,7 +289,7 @@ func (*Artifact) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case artifact.FieldID:
 			values[i] = new(sql.NullInt64)
-		case artifact.FieldCreatedBy, artifact.FieldUpdatedBy, artifact.FieldDisplayName, artifact.FieldAbbreviation, artifact.FieldDescription, artifact.FieldExternalLink, artifact.FieldSlug, artifact.FieldPrimaryImageURL, artifact.FieldDeletedBy, artifact.FieldDating, artifact.FieldDimensions, artifact.FieldChemicalComposition, artifact.FieldNumber, artifact.FieldTypology, artifact.FieldWeight:
+		case artifact.FieldCreatedBy, artifact.FieldUpdatedBy, artifact.FieldDisplayName, artifact.FieldAbbreviation, artifact.FieldDescription, artifact.FieldExternalLink, artifact.FieldPrimaryImageURL, artifact.FieldDeletedBy, artifact.FieldDating, artifact.FieldDimensions, artifact.FieldChemicalComposition, artifact.FieldNumber, artifact.FieldTypology, artifact.FieldWeight:
 			values[i] = new(sql.NullString)
 		case artifact.FieldCreatedAt, artifact.FieldUpdatedAt, artifact.FieldDeletedAt, artifact.FieldAdmissionDate:
 			values[i] = new(sql.NullTime)
@@ -379,12 +377,6 @@ func (a *Artifact) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field external_link", values[i])
 			} else if value.Valid {
 				a.ExternalLink = value.String
-			}
-		case artifact.FieldSlug:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field slug", values[i])
-			} else if value.Valid {
-				a.Slug = value.String
 			}
 		case artifact.FieldPrimaryImageURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -639,9 +631,6 @@ func (a *Artifact) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(a.ExternalLink)
-	builder.WriteString(", ")
-	builder.WriteString("slug=")
-	builder.WriteString(a.Slug)
 	builder.WriteString(", ")
 	builder.WriteString("primary_image_url=")
 	builder.WriteString(a.PrimaryImageURL)

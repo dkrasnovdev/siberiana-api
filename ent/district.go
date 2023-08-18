@@ -34,8 +34,6 @@ type District struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
-	// Slug holds the value of the "slug" field.
-	Slug string `json:"slug,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the DistrictQuery when eager-loading is set.
 	Edges             DistrictEdges `json:"edges"`
@@ -74,7 +72,7 @@ func (*District) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case district.FieldID:
 			values[i] = new(sql.NullInt64)
-		case district.FieldCreatedBy, district.FieldUpdatedBy, district.FieldDisplayName, district.FieldAbbreviation, district.FieldDescription, district.FieldExternalLink, district.FieldSlug:
+		case district.FieldCreatedBy, district.FieldUpdatedBy, district.FieldDisplayName, district.FieldAbbreviation, district.FieldDescription, district.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case district.FieldCreatedAt, district.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -149,12 +147,6 @@ func (d *District) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				d.ExternalLink = value.String
 			}
-		case district.FieldSlug:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field slug", values[i])
-			} else if value.Valid {
-				d.Slug = value.String
-			}
 		case district.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field location_district", value)
@@ -226,9 +218,6 @@ func (d *District) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(d.ExternalLink)
-	builder.WriteString(", ")
-	builder.WriteString("slug=")
-	builder.WriteString(d.Slug)
 	builder.WriteByte(')')
 	return builder.String()
 }

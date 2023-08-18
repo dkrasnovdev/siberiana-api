@@ -35,12 +35,12 @@ type Collection struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
-	// Slug holds the value of the "slug" field.
-	Slug string `json:"slug,omitempty"`
 	// PrimaryImageURL holds the value of the "primary_image_url" field.
 	PrimaryImageURL string `json:"primary_image_url,omitempty"`
 	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
 	AdditionalImagesUrls []string `json:"additional_images_urls,omitempty"`
+	// Slug holds the value of the "slug" field.
+	Slug string `json:"slug,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CollectionQuery when eager-loading is set.
 	Edges                CollectionEdges `json:"edges"`
@@ -130,7 +130,7 @@ func (*Collection) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case collection.FieldID:
 			values[i] = new(sql.NullInt64)
-		case collection.FieldCreatedBy, collection.FieldUpdatedBy, collection.FieldDisplayName, collection.FieldAbbreviation, collection.FieldDescription, collection.FieldExternalLink, collection.FieldSlug, collection.FieldPrimaryImageURL:
+		case collection.FieldCreatedBy, collection.FieldUpdatedBy, collection.FieldDisplayName, collection.FieldAbbreviation, collection.FieldDescription, collection.FieldExternalLink, collection.FieldPrimaryImageURL, collection.FieldSlug:
 			values[i] = new(sql.NullString)
 		case collection.FieldCreatedAt, collection.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -205,12 +205,6 @@ func (c *Collection) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.ExternalLink = value.String
 			}
-		case collection.FieldSlug:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field slug", values[i])
-			} else if value.Valid {
-				c.Slug = value.String
-			}
 		case collection.FieldPrimaryImageURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field primary_image_url", values[i])
@@ -224,6 +218,12 @@ func (c *Collection) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &c.AdditionalImagesUrls); err != nil {
 					return fmt.Errorf("unmarshal field additional_images_urls: %w", err)
 				}
+			}
+		case collection.FieldSlug:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field slug", values[i])
+			} else if value.Valid {
+				c.Slug = value.String
 			}
 		case collection.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -317,14 +317,14 @@ func (c *Collection) String() string {
 	builder.WriteString("external_link=")
 	builder.WriteString(c.ExternalLink)
 	builder.WriteString(", ")
-	builder.WriteString("slug=")
-	builder.WriteString(c.Slug)
-	builder.WriteString(", ")
 	builder.WriteString("primary_image_url=")
 	builder.WriteString(c.PrimaryImageURL)
 	builder.WriteString(", ")
 	builder.WriteString("additional_images_urls=")
 	builder.WriteString(fmt.Sprintf("%v", c.AdditionalImagesUrls))
+	builder.WriteString(", ")
+	builder.WriteString("slug=")
+	builder.WriteString(c.Slug)
 	builder.WriteByte(')')
 	return builder.String()
 }

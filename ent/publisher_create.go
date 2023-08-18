@@ -133,20 +133,6 @@ func (pc *PublisherCreate) SetNillableExternalLink(s *string) *PublisherCreate {
 	return pc
 }
 
-// SetSlug sets the "slug" field.
-func (pc *PublisherCreate) SetSlug(s string) *PublisherCreate {
-	pc.mutation.SetSlug(s)
-	return pc
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (pc *PublisherCreate) SetNillableSlug(s *string) *PublisherCreate {
-	if s != nil {
-		pc.SetSlug(*s)
-	}
-	return pc
-}
-
 // AddBookIDs adds the "books" edge to the Book entity by IDs.
 func (pc *PublisherCreate) AddBookIDs(ids ...int) *PublisherCreate {
 	pc.mutation.AddBookIDs(ids...)
@@ -281,10 +267,6 @@ func (pc *PublisherCreate) createSpec() (*Publisher, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.ExternalLink(); ok {
 		_spec.SetField(publisher.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
-	}
-	if value, ok := pc.mutation.Slug(); ok {
-		_spec.SetField(publisher.FieldSlug, field.TypeString, value)
-		_node.Slug = value
 	}
 	if nodes := pc.mutation.BooksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

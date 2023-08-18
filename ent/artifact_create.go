@@ -146,20 +146,6 @@ func (ac *ArtifactCreate) SetNillableExternalLink(s *string) *ArtifactCreate {
 	return ac
 }
 
-// SetSlug sets the "slug" field.
-func (ac *ArtifactCreate) SetSlug(s string) *ArtifactCreate {
-	ac.mutation.SetSlug(s)
-	return ac
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (ac *ArtifactCreate) SetNillableSlug(s *string) *ArtifactCreate {
-	if s != nil {
-		ac.SetSlug(*s)
-	}
-	return ac
-}
-
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (ac *ArtifactCreate) SetPrimaryImageURL(s string) *ArtifactCreate {
 	ac.mutation.SetPrimaryImageURL(s)
@@ -662,10 +648,6 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.ExternalLink(); ok {
 		_spec.SetField(artifact.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
-	}
-	if value, ok := ac.mutation.Slug(); ok {
-		_spec.SetField(artifact.FieldSlug, field.TypeString, value)
-		_node.Slug = value
 	}
 	if value, ok := ac.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(artifact.FieldPrimaryImageURL, field.TypeString, value)

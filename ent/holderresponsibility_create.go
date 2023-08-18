@@ -133,20 +133,6 @@ func (hrc *HolderResponsibilityCreate) SetNillableExternalLink(s *string) *Holde
 	return hrc
 }
 
-// SetSlug sets the "slug" field.
-func (hrc *HolderResponsibilityCreate) SetSlug(s string) *HolderResponsibilityCreate {
-	hrc.mutation.SetSlug(s)
-	return hrc
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (hrc *HolderResponsibilityCreate) SetNillableSlug(s *string) *HolderResponsibilityCreate {
-	if s != nil {
-		hrc.SetSlug(*s)
-	}
-	return hrc
-}
-
 // AddHolderIDs adds the "holder" edge to the Holder entity by IDs.
 func (hrc *HolderResponsibilityCreate) AddHolderIDs(ids ...int) *HolderResponsibilityCreate {
 	hrc.mutation.AddHolderIDs(ids...)
@@ -281,10 +267,6 @@ func (hrc *HolderResponsibilityCreate) createSpec() (*HolderResponsibility, *sql
 	if value, ok := hrc.mutation.ExternalLink(); ok {
 		_spec.SetField(holderresponsibility.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
-	}
-	if value, ok := hrc.mutation.Slug(); ok {
-		_spec.SetField(holderresponsibility.FieldSlug, field.TypeString, value)
-		_node.Slug = value
 	}
 	if nodes := hrc.mutation.HolderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

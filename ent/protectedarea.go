@@ -34,8 +34,6 @@ type ProtectedArea struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
-	// Slug holds the value of the "slug" field.
-	Slug string `json:"slug,omitempty"`
 	// Area holds the value of the "area" field.
 	Area string `json:"area,omitempty"`
 	// EstablishmentDate holds the value of the "establishment_date" field.
@@ -91,7 +89,7 @@ func (*ProtectedArea) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case protectedarea.FieldID:
 			values[i] = new(sql.NullInt64)
-		case protectedarea.FieldCreatedBy, protectedarea.FieldUpdatedBy, protectedarea.FieldDisplayName, protectedarea.FieldAbbreviation, protectedarea.FieldDescription, protectedarea.FieldExternalLink, protectedarea.FieldSlug, protectedarea.FieldArea:
+		case protectedarea.FieldCreatedBy, protectedarea.FieldUpdatedBy, protectedarea.FieldDisplayName, protectedarea.FieldAbbreviation, protectedarea.FieldDescription, protectedarea.FieldExternalLink, protectedarea.FieldArea:
 			values[i] = new(sql.NullString)
 		case protectedarea.FieldCreatedAt, protectedarea.FieldUpdatedAt, protectedarea.FieldEstablishmentDate:
 			values[i] = new(sql.NullTime)
@@ -165,12 +163,6 @@ func (pa *ProtectedArea) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field external_link", values[i])
 			} else if value.Valid {
 				pa.ExternalLink = value.String
-			}
-		case protectedarea.FieldSlug:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field slug", values[i])
-			} else if value.Valid {
-				pa.Slug = value.String
 			}
 		case protectedarea.FieldArea:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -260,9 +252,6 @@ func (pa *ProtectedArea) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(pa.ExternalLink)
-	builder.WriteString(", ")
-	builder.WriteString("slug=")
-	builder.WriteString(pa.Slug)
 	builder.WriteString(", ")
 	builder.WriteString("area=")
 	builder.WriteString(pa.Area)

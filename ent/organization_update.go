@@ -214,26 +214,6 @@ func (ou *OrganizationUpdate) ClearExternalLink() *OrganizationUpdate {
 	return ou
 }
 
-// SetSlug sets the "slug" field.
-func (ou *OrganizationUpdate) SetSlug(s string) *OrganizationUpdate {
-	ou.mutation.SetSlug(s)
-	return ou
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (ou *OrganizationUpdate) SetNillableSlug(s *string) *OrganizationUpdate {
-	if s != nil {
-		ou.SetSlug(*s)
-	}
-	return ou
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (ou *OrganizationUpdate) ClearSlug() *OrganizationUpdate {
-	ou.mutation.ClearSlug()
-	return ou
-}
-
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (ou *OrganizationUpdate) SetPrimaryImageURL(s string) *OrganizationUpdate {
 	ou.mutation.SetPrimaryImageURL(s)
@@ -538,12 +518,6 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ou.mutation.ExternalLinkCleared() {
 		_spec.ClearField(organization.FieldExternalLink, field.TypeString)
-	}
-	if value, ok := ou.mutation.Slug(); ok {
-		_spec.SetField(organization.FieldSlug, field.TypeString, value)
-	}
-	if ou.mutation.SlugCleared() {
-		_spec.ClearField(organization.FieldSlug, field.TypeString)
 	}
 	if value, ok := ou.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(organization.FieldPrimaryImageURL, field.TypeString, value)
@@ -890,26 +864,6 @@ func (ouo *OrganizationUpdateOne) ClearExternalLink() *OrganizationUpdateOne {
 	return ouo
 }
 
-// SetSlug sets the "slug" field.
-func (ouo *OrganizationUpdateOne) SetSlug(s string) *OrganizationUpdateOne {
-	ouo.mutation.SetSlug(s)
-	return ouo
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (ouo *OrganizationUpdateOne) SetNillableSlug(s *string) *OrganizationUpdateOne {
-	if s != nil {
-		ouo.SetSlug(*s)
-	}
-	return ouo
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (ouo *OrganizationUpdateOne) ClearSlug() *OrganizationUpdateOne {
-	ouo.mutation.ClearSlug()
-	return ouo
-}
-
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (ouo *OrganizationUpdateOne) SetPrimaryImageURL(s string) *OrganizationUpdateOne {
 	ouo.mutation.SetPrimaryImageURL(s)
@@ -1244,12 +1198,6 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 	}
 	if ouo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(organization.FieldExternalLink, field.TypeString)
-	}
-	if value, ok := ouo.mutation.Slug(); ok {
-		_spec.SetField(organization.FieldSlug, field.TypeString, value)
-	}
-	if ouo.mutation.SlugCleared() {
-		_spec.ClearField(organization.FieldSlug, field.TypeString)
 	}
 	if value, ok := ouo.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(organization.FieldPrimaryImageURL, field.TypeString, value)

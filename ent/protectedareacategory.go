@@ -33,8 +33,6 @@ type ProtectedAreaCategory struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
-	// Slug holds the value of the "slug" field.
-	Slug string `json:"slug,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProtectedAreaCategoryQuery when eager-loading is set.
 	Edges        ProtectedAreaCategoryEdges `json:"edges"`
@@ -70,7 +68,7 @@ func (*ProtectedAreaCategory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case protectedareacategory.FieldID:
 			values[i] = new(sql.NullInt64)
-		case protectedareacategory.FieldCreatedBy, protectedareacategory.FieldUpdatedBy, protectedareacategory.FieldDisplayName, protectedareacategory.FieldAbbreviation, protectedareacategory.FieldDescription, protectedareacategory.FieldExternalLink, protectedareacategory.FieldSlug:
+		case protectedareacategory.FieldCreatedBy, protectedareacategory.FieldUpdatedBy, protectedareacategory.FieldDisplayName, protectedareacategory.FieldAbbreviation, protectedareacategory.FieldDescription, protectedareacategory.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case protectedareacategory.FieldCreatedAt, protectedareacategory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -143,12 +141,6 @@ func (pac *ProtectedAreaCategory) assignValues(columns []string, values []any) e
 			} else if value.Valid {
 				pac.ExternalLink = value.String
 			}
-		case protectedareacategory.FieldSlug:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field slug", values[i])
-			} else if value.Valid {
-				pac.Slug = value.String
-			}
 		default:
 			pac.selectValues.Set(columns[i], values[i])
 		}
@@ -213,9 +205,6 @@ func (pac *ProtectedAreaCategory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(pac.ExternalLink)
-	builder.WriteString(", ")
-	builder.WriteString("slug=")
-	builder.WriteString(pac.Slug)
 	builder.WriteByte(')')
 	return builder.String()
 }

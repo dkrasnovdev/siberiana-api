@@ -133,20 +133,6 @@ func (ptc *ProjectTypeCreate) SetNillableExternalLink(s *string) *ProjectTypeCre
 	return ptc
 }
 
-// SetSlug sets the "slug" field.
-func (ptc *ProjectTypeCreate) SetSlug(s string) *ProjectTypeCreate {
-	ptc.mutation.SetSlug(s)
-	return ptc
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (ptc *ProjectTypeCreate) SetNillableSlug(s *string) *ProjectTypeCreate {
-	if s != nil {
-		ptc.SetSlug(*s)
-	}
-	return ptc
-}
-
 // AddProjectIDs adds the "projects" edge to the Project entity by IDs.
 func (ptc *ProjectTypeCreate) AddProjectIDs(ids ...int) *ProjectTypeCreate {
 	ptc.mutation.AddProjectIDs(ids...)
@@ -281,10 +267,6 @@ func (ptc *ProjectTypeCreate) createSpec() (*ProjectType, *sqlgraph.CreateSpec) 
 	if value, ok := ptc.mutation.ExternalLink(); ok {
 		_spec.SetField(projecttype.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
-	}
-	if value, ok := ptc.mutation.Slug(); ok {
-		_spec.SetField(projecttype.FieldSlug, field.TypeString, value)
-		_node.Slug = value
 	}
 	if nodes := ptc.mutation.ProjectsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

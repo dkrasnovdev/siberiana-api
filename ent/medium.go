@@ -33,8 +33,6 @@ type Medium struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
-	// Slug holds the value of the "slug" field.
-	Slug string `json:"slug,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MediumQuery when eager-loading is set.
 	Edges        MediumEdges `json:"edges"`
@@ -70,7 +68,7 @@ func (*Medium) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case medium.FieldID:
 			values[i] = new(sql.NullInt64)
-		case medium.FieldCreatedBy, medium.FieldUpdatedBy, medium.FieldDisplayName, medium.FieldAbbreviation, medium.FieldDescription, medium.FieldExternalLink, medium.FieldSlug:
+		case medium.FieldCreatedBy, medium.FieldUpdatedBy, medium.FieldDisplayName, medium.FieldAbbreviation, medium.FieldDescription, medium.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case medium.FieldCreatedAt, medium.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -143,12 +141,6 @@ func (m *Medium) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				m.ExternalLink = value.String
 			}
-		case medium.FieldSlug:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field slug", values[i])
-			} else if value.Valid {
-				m.Slug = value.String
-			}
 		default:
 			m.selectValues.Set(columns[i], values[i])
 		}
@@ -213,9 +205,6 @@ func (m *Medium) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(m.ExternalLink)
-	builder.WriteString(", ")
-	builder.WriteString("slug=")
-	builder.WriteString(m.Slug)
 	builder.WriteByte(')')
 	return builder.String()
 }

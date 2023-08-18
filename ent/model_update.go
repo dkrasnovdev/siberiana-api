@@ -155,26 +155,6 @@ func (mu *ModelUpdate) ClearExternalLink() *ModelUpdate {
 	return mu
 }
 
-// SetSlug sets the "slug" field.
-func (mu *ModelUpdate) SetSlug(s string) *ModelUpdate {
-	mu.mutation.SetSlug(s)
-	return mu
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (mu *ModelUpdate) SetNillableSlug(s *string) *ModelUpdate {
-	if s != nil {
-		mu.SetSlug(*s)
-	}
-	return mu
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (mu *ModelUpdate) ClearSlug() *ModelUpdate {
-	mu.mutation.ClearSlug()
-	return mu
-}
-
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (mu *ModelUpdate) AddArtifactIDs(ids ...int) *ModelUpdate {
 	mu.mutation.AddArtifactIDs(ids...)
@@ -305,12 +285,6 @@ func (mu *ModelUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if mu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(model.FieldExternalLink, field.TypeString)
-	}
-	if value, ok := mu.mutation.Slug(); ok {
-		_spec.SetField(model.FieldSlug, field.TypeString, value)
-	}
-	if mu.mutation.SlugCleared() {
-		_spec.ClearField(model.FieldSlug, field.TypeString)
 	}
 	if mu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -503,26 +477,6 @@ func (muo *ModelUpdateOne) ClearExternalLink() *ModelUpdateOne {
 	return muo
 }
 
-// SetSlug sets the "slug" field.
-func (muo *ModelUpdateOne) SetSlug(s string) *ModelUpdateOne {
-	muo.mutation.SetSlug(s)
-	return muo
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (muo *ModelUpdateOne) SetNillableSlug(s *string) *ModelUpdateOne {
-	if s != nil {
-		muo.SetSlug(*s)
-	}
-	return muo
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (muo *ModelUpdateOne) ClearSlug() *ModelUpdateOne {
-	muo.mutation.ClearSlug()
-	return muo
-}
-
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (muo *ModelUpdateOne) AddArtifactIDs(ids ...int) *ModelUpdateOne {
 	muo.mutation.AddArtifactIDs(ids...)
@@ -683,12 +637,6 @@ func (muo *ModelUpdateOne) sqlSave(ctx context.Context) (_node *Model, err error
 	}
 	if muo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(model.FieldExternalLink, field.TypeString)
-	}
-	if value, ok := muo.mutation.Slug(); ok {
-		_spec.SetField(model.FieldSlug, field.TypeString, value)
-	}
-	if muo.mutation.SlugCleared() {
-		_spec.ClearField(model.FieldSlug, field.TypeString)
 	}
 	if muo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

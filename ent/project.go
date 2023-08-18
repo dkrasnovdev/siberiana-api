@@ -34,8 +34,6 @@ type Project struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
-	// Slug holds the value of the "slug" field.
-	Slug string `json:"slug,omitempty"`
 	// BeginData holds the value of the "begin_data" field.
 	BeginData time.Time `json:"begin_data,omitempty"`
 	// EndDate holds the value of the "end_date" field.
@@ -103,7 +101,7 @@ func (*Project) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case project.FieldID:
 			values[i] = new(sql.NullInt64)
-		case project.FieldCreatedBy, project.FieldUpdatedBy, project.FieldDisplayName, project.FieldAbbreviation, project.FieldDescription, project.FieldExternalLink, project.FieldSlug:
+		case project.FieldCreatedBy, project.FieldUpdatedBy, project.FieldDisplayName, project.FieldAbbreviation, project.FieldDescription, project.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case project.FieldCreatedAt, project.FieldUpdatedAt, project.FieldBeginData, project.FieldEndDate:
 			values[i] = new(sql.NullTime)
@@ -177,12 +175,6 @@ func (pr *Project) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field external_link", values[i])
 			} else if value.Valid {
 				pr.ExternalLink = value.String
-			}
-		case project.FieldSlug:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field slug", values[i])
-			} else if value.Valid {
-				pr.Slug = value.String
 			}
 		case project.FieldBeginData:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -277,9 +269,6 @@ func (pr *Project) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(pr.ExternalLink)
-	builder.WriteString(", ")
-	builder.WriteString("slug=")
-	builder.WriteString(pr.Slug)
 	builder.WriteString(", ")
 	builder.WriteString("begin_data=")
 	builder.WriteString(pr.BeginData.Format(time.ANSIC))

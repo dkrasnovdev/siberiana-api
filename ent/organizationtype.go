@@ -33,8 +33,6 @@ type OrganizationType struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
-	// Slug holds the value of the "slug" field.
-	Slug string `json:"slug,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrganizationTypeQuery when eager-loading is set.
 	Edges        OrganizationTypeEdges `json:"edges"`
@@ -70,7 +68,7 @@ func (*OrganizationType) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case organizationtype.FieldID:
 			values[i] = new(sql.NullInt64)
-		case organizationtype.FieldCreatedBy, organizationtype.FieldUpdatedBy, organizationtype.FieldDisplayName, organizationtype.FieldAbbreviation, organizationtype.FieldDescription, organizationtype.FieldExternalLink, organizationtype.FieldSlug:
+		case organizationtype.FieldCreatedBy, organizationtype.FieldUpdatedBy, organizationtype.FieldDisplayName, organizationtype.FieldAbbreviation, organizationtype.FieldDescription, organizationtype.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case organizationtype.FieldCreatedAt, organizationtype.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -143,12 +141,6 @@ func (ot *OrganizationType) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ot.ExternalLink = value.String
 			}
-		case organizationtype.FieldSlug:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field slug", values[i])
-			} else if value.Valid {
-				ot.Slug = value.String
-			}
 		default:
 			ot.selectValues.Set(columns[i], values[i])
 		}
@@ -213,9 +205,6 @@ func (ot *OrganizationType) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(ot.ExternalLink)
-	builder.WriteString(", ")
-	builder.WriteString("slug=")
-	builder.WriteString(ot.Slug)
 	builder.WriteByte(')')
 	return builder.String()
 }

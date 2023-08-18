@@ -186,23 +186,6 @@ type ArtWhereInput struct {
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
-
 	// "primary_image_url" field predicates.
 	PrimaryImageURL             *string  `json:"primaryImageURL,omitempty"`
 	PrimaryImageURLNEQ          *string  `json:"primaryImageURLNEQ,omitempty"`
@@ -642,51 +625,6 @@ func (i *ArtWhereInput) P() (predicate.Art, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, art.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, art.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, art.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, art.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, art.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, art.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, art.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, art.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, art.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, art.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, art.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, art.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, art.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, art.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, art.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, art.SlugContainsFold(*i.SlugContainsFold))
-	}
 	if i.PrimaryImageURL != nil {
 		predicates = append(predicates, art.PrimaryImageURLEQ(*i.PrimaryImageURL))
 	}
@@ -917,23 +855,6 @@ type ArtGenreWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "art" edge predicates.
 	HasArt     *bool            `json:"hasArt,omitempty"`
@@ -1353,51 +1274,6 @@ func (i *ArtGenreWhereInput) P() (predicate.ArtGenre, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, artgenre.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, artgenre.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, artgenre.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, artgenre.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, artgenre.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, artgenre.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, artgenre.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, artgenre.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, artgenre.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, artgenre.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, artgenre.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, artgenre.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, artgenre.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, artgenre.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, artgenre.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, artgenre.SlugContainsFold(*i.SlugContainsFold))
-	}
 
 	if i.HasArt != nil {
 		p := artgenre.HasArt()
@@ -1565,23 +1441,6 @@ type ArtStyleWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "art" edge predicates.
 	HasArt     *bool            `json:"hasArt,omitempty"`
@@ -2001,51 +1860,6 @@ func (i *ArtStyleWhereInput) P() (predicate.ArtStyle, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, artstyle.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, artstyle.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, artstyle.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, artstyle.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, artstyle.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, artstyle.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, artstyle.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, artstyle.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, artstyle.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, artstyle.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, artstyle.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, artstyle.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, artstyle.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, artstyle.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, artstyle.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, artstyle.SlugContainsFold(*i.SlugContainsFold))
-	}
 
 	if i.HasArt != nil {
 		p := artstyle.HasArt()
@@ -2213,23 +2027,6 @@ type ArtifactWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "primary_image_url" field predicates.
 	PrimaryImageURL             *string  `json:"primaryImageURL,omitempty"`
@@ -2860,51 +2657,6 @@ func (i *ArtifactWhereInput) P() (predicate.Artifact, error) {
 	}
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, artifact.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
-	}
-	if i.Slug != nil {
-		predicates = append(predicates, artifact.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, artifact.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, artifact.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, artifact.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, artifact.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, artifact.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, artifact.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, artifact.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, artifact.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, artifact.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, artifact.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, artifact.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, artifact.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, artifact.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, artifact.SlugContainsFold(*i.SlugContainsFold))
 	}
 	if i.PrimaryImageURL != nil {
 		predicates = append(predicates, artifact.PrimaryImageURLEQ(*i.PrimaryImageURL))
@@ -4114,23 +3866,6 @@ type BookWhereInput struct {
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
-
 	// "primary_image_url" field predicates.
 	PrimaryImageURL             *string  `json:"primaryImageURL,omitempty"`
 	PrimaryImageURLNEQ          *string  `json:"primaryImageURLNEQ,omitempty"`
@@ -4602,51 +4337,6 @@ func (i *BookWhereInput) P() (predicate.Book, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, book.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, book.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, book.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, book.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, book.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, book.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, book.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, book.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, book.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, book.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, book.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, book.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, book.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, book.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, book.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, book.SlugContainsFold(*i.SlugContainsFold))
-	}
 	if i.PrimaryImageURL != nil {
 		predicates = append(predicates, book.PrimaryImageURLEQ(*i.PrimaryImageURL))
 	}
@@ -4997,23 +4687,6 @@ type BookGenreWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "books" edge predicates.
 	HasBooks     *bool             `json:"hasBooks,omitempty"`
@@ -5433,51 +5106,6 @@ func (i *BookGenreWhereInput) P() (predicate.BookGenre, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, bookgenre.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, bookgenre.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, bookgenre.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, bookgenre.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, bookgenre.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, bookgenre.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, bookgenre.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, bookgenre.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, bookgenre.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, bookgenre.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, bookgenre.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, bookgenre.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, bookgenre.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, bookgenre.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, bookgenre.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, bookgenre.SlugContainsFold(*i.SlugContainsFold))
-	}
 
 	if i.HasBooks != nil {
 		p := bookgenre.HasBooks()
@@ -5646,23 +5274,6 @@ type CategoryWhereInput struct {
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
-
 	// "primary_image_url" field predicates.
 	PrimaryImageURL             *string  `json:"primaryImageURL,omitempty"`
 	PrimaryImageURLNEQ          *string  `json:"primaryImageURLNEQ,omitempty"`
@@ -5679,6 +5290,21 @@ type CategoryWhereInput struct {
 	PrimaryImageURLNotNil       bool     `json:"primaryImageURLNotNil,omitempty"`
 	PrimaryImageURLEqualFold    *string  `json:"primaryImageURLEqualFold,omitempty"`
 	PrimaryImageURLContainsFold *string  `json:"primaryImageURLContainsFold,omitempty"`
+
+	// "slug" field predicates.
+	Slug             *string  `json:"slug,omitempty"`
+	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
+	SlugIn           []string `json:"slugIn,omitempty"`
+	SlugNotIn        []string `json:"slugNotIn,omitempty"`
+	SlugGT           *string  `json:"slugGT,omitempty"`
+	SlugGTE          *string  `json:"slugGTE,omitempty"`
+	SlugLT           *string  `json:"slugLT,omitempty"`
+	SlugLTE          *string  `json:"slugLTE,omitempty"`
+	SlugContains     *string  `json:"slugContains,omitempty"`
+	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
+	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
+	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
+	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "collections" edge predicates.
 	HasCollections     *bool                   `json:"hasCollections,omitempty"`
@@ -6098,51 +5724,6 @@ func (i *CategoryWhereInput) P() (predicate.Category, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, category.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, category.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, category.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, category.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, category.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, category.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, category.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, category.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, category.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, category.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, category.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, category.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, category.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, category.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, category.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, category.SlugContainsFold(*i.SlugContainsFold))
-	}
 	if i.PrimaryImageURL != nil {
 		predicates = append(predicates, category.PrimaryImageURLEQ(*i.PrimaryImageURL))
 	}
@@ -6187,6 +5768,45 @@ func (i *CategoryWhereInput) P() (predicate.Category, error) {
 	}
 	if i.PrimaryImageURLContainsFold != nil {
 		predicates = append(predicates, category.PrimaryImageURLContainsFold(*i.PrimaryImageURLContainsFold))
+	}
+	if i.Slug != nil {
+		predicates = append(predicates, category.SlugEQ(*i.Slug))
+	}
+	if i.SlugNEQ != nil {
+		predicates = append(predicates, category.SlugNEQ(*i.SlugNEQ))
+	}
+	if len(i.SlugIn) > 0 {
+		predicates = append(predicates, category.SlugIn(i.SlugIn...))
+	}
+	if len(i.SlugNotIn) > 0 {
+		predicates = append(predicates, category.SlugNotIn(i.SlugNotIn...))
+	}
+	if i.SlugGT != nil {
+		predicates = append(predicates, category.SlugGT(*i.SlugGT))
+	}
+	if i.SlugGTE != nil {
+		predicates = append(predicates, category.SlugGTE(*i.SlugGTE))
+	}
+	if i.SlugLT != nil {
+		predicates = append(predicates, category.SlugLT(*i.SlugLT))
+	}
+	if i.SlugLTE != nil {
+		predicates = append(predicates, category.SlugLTE(*i.SlugLTE))
+	}
+	if i.SlugContains != nil {
+		predicates = append(predicates, category.SlugContains(*i.SlugContains))
+	}
+	if i.SlugHasPrefix != nil {
+		predicates = append(predicates, category.SlugHasPrefix(*i.SlugHasPrefix))
+	}
+	if i.SlugHasSuffix != nil {
+		predicates = append(predicates, category.SlugHasSuffix(*i.SlugHasSuffix))
+	}
+	if i.SlugEqualFold != nil {
+		predicates = append(predicates, category.SlugEqualFold(*i.SlugEqualFold))
+	}
+	if i.SlugContainsFold != nil {
+		predicates = append(predicates, category.SlugContainsFold(*i.SlugContainsFold))
 	}
 
 	if i.HasCollections != nil {
@@ -6356,23 +5976,6 @@ type CollectionWhereInput struct {
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
-
 	// "primary_image_url" field predicates.
 	PrimaryImageURL             *string  `json:"primaryImageURL,omitempty"`
 	PrimaryImageURLNEQ          *string  `json:"primaryImageURLNEQ,omitempty"`
@@ -6389,6 +5992,21 @@ type CollectionWhereInput struct {
 	PrimaryImageURLNotNil       bool     `json:"primaryImageURLNotNil,omitempty"`
 	PrimaryImageURLEqualFold    *string  `json:"primaryImageURLEqualFold,omitempty"`
 	PrimaryImageURLContainsFold *string  `json:"primaryImageURLContainsFold,omitempty"`
+
+	// "slug" field predicates.
+	Slug             *string  `json:"slug,omitempty"`
+	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
+	SlugIn           []string `json:"slugIn,omitempty"`
+	SlugNotIn        []string `json:"slugNotIn,omitempty"`
+	SlugGT           *string  `json:"slugGT,omitempty"`
+	SlugGTE          *string  `json:"slugGTE,omitempty"`
+	SlugLT           *string  `json:"slugLT,omitempty"`
+	SlugLTE          *string  `json:"slugLTE,omitempty"`
+	SlugContains     *string  `json:"slugContains,omitempty"`
+	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
+	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
+	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
+	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -6824,51 +6442,6 @@ func (i *CollectionWhereInput) P() (predicate.Collection, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, collection.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, collection.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, collection.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, collection.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, collection.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, collection.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, collection.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, collection.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, collection.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, collection.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, collection.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, collection.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, collection.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, collection.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, collection.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, collection.SlugContainsFold(*i.SlugContainsFold))
-	}
 	if i.PrimaryImageURL != nil {
 		predicates = append(predicates, collection.PrimaryImageURLEQ(*i.PrimaryImageURL))
 	}
@@ -6913,6 +6486,45 @@ func (i *CollectionWhereInput) P() (predicate.Collection, error) {
 	}
 	if i.PrimaryImageURLContainsFold != nil {
 		predicates = append(predicates, collection.PrimaryImageURLContainsFold(*i.PrimaryImageURLContainsFold))
+	}
+	if i.Slug != nil {
+		predicates = append(predicates, collection.SlugEQ(*i.Slug))
+	}
+	if i.SlugNEQ != nil {
+		predicates = append(predicates, collection.SlugNEQ(*i.SlugNEQ))
+	}
+	if len(i.SlugIn) > 0 {
+		predicates = append(predicates, collection.SlugIn(i.SlugIn...))
+	}
+	if len(i.SlugNotIn) > 0 {
+		predicates = append(predicates, collection.SlugNotIn(i.SlugNotIn...))
+	}
+	if i.SlugGT != nil {
+		predicates = append(predicates, collection.SlugGT(*i.SlugGT))
+	}
+	if i.SlugGTE != nil {
+		predicates = append(predicates, collection.SlugGTE(*i.SlugGTE))
+	}
+	if i.SlugLT != nil {
+		predicates = append(predicates, collection.SlugLT(*i.SlugLT))
+	}
+	if i.SlugLTE != nil {
+		predicates = append(predicates, collection.SlugLTE(*i.SlugLTE))
+	}
+	if i.SlugContains != nil {
+		predicates = append(predicates, collection.SlugContains(*i.SlugContains))
+	}
+	if i.SlugHasPrefix != nil {
+		predicates = append(predicates, collection.SlugHasPrefix(*i.SlugHasPrefix))
+	}
+	if i.SlugHasSuffix != nil {
+		predicates = append(predicates, collection.SlugHasSuffix(*i.SlugHasSuffix))
+	}
+	if i.SlugEqualFold != nil {
+		predicates = append(predicates, collection.SlugEqualFold(*i.SlugEqualFold))
+	}
+	if i.SlugContainsFold != nil {
+		predicates = append(predicates, collection.SlugContainsFold(*i.SlugContainsFold))
 	}
 
 	if i.HasArtifacts != nil {
@@ -7153,23 +6765,6 @@ type CountryWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "location" edge predicates.
 	HasLocation     *bool                 `json:"hasLocation,omitempty"`
@@ -7589,51 +7184,6 @@ func (i *CountryWhereInput) P() (predicate.Country, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, country.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, country.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, country.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, country.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, country.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, country.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, country.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, country.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, country.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, country.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, country.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, country.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, country.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, country.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, country.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, country.SlugContainsFold(*i.SlugContainsFold))
-	}
 
 	if i.HasLocation != nil {
 		p := country.HasLocation()
@@ -7801,23 +7351,6 @@ type CultureWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -8237,51 +7770,6 @@ func (i *CultureWhereInput) P() (predicate.Culture, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, culture.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, culture.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, culture.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, culture.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, culture.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, culture.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, culture.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, culture.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, culture.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, culture.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, culture.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, culture.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, culture.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, culture.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, culture.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, culture.SlugContainsFold(*i.SlugContainsFold))
-	}
 
 	if i.HasArtifacts != nil {
 		p := culture.HasArtifacts()
@@ -8449,23 +7937,6 @@ type DistrictWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "location" edge predicates.
 	HasLocation     *bool                 `json:"hasLocation,omitempty"`
@@ -8884,51 +8355,6 @@ func (i *DistrictWhereInput) P() (predicate.District, error) {
 	}
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, district.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
-	}
-	if i.Slug != nil {
-		predicates = append(predicates, district.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, district.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, district.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, district.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, district.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, district.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, district.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, district.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, district.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, district.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, district.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, district.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, district.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, district.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, district.SlugContainsFold(*i.SlugContainsFold))
 	}
 
 	if i.HasLocation != nil {
@@ -9600,23 +9026,6 @@ type HolderResponsibilityWhereInput struct {
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
-
 	// "holder" edge predicates.
 	HasHolder     *bool               `json:"hasHolder,omitempty"`
 	HasHolderWith []*HolderWhereInput `json:"hasHolderWith,omitempty"`
@@ -10035,51 +9444,6 @@ func (i *HolderResponsibilityWhereInput) P() (predicate.HolderResponsibility, er
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, holderresponsibility.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, holderresponsibility.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, holderresponsibility.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, holderresponsibility.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, holderresponsibility.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, holderresponsibility.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, holderresponsibility.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, holderresponsibility.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, holderresponsibility.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, holderresponsibility.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, holderresponsibility.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, holderresponsibility.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, holderresponsibility.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, holderresponsibility.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, holderresponsibility.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, holderresponsibility.SlugContainsFold(*i.SlugContainsFold))
-	}
 
 	if i.HasHolder != nil {
 		p := holderresponsibility.HasHolder()
@@ -10371,23 +9735,6 @@ type LicenseWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -10815,51 +10162,6 @@ func (i *LicenseWhereInput) P() (predicate.License, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, license.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, license.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, license.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, license.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, license.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, license.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, license.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, license.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, license.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, license.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, license.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, license.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, license.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, license.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, license.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, license.SlugContainsFold(*i.SlugContainsFold))
-	}
 
 	if i.HasArtifacts != nil {
 		p := license.HasArtifacts()
@@ -11063,23 +10365,6 @@ type LocationWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "geometry" field predicates.
 	Geometry       *types.Geometry  `json:"geometry,omitempty"`
@@ -11535,51 +10820,6 @@ func (i *LocationWhereInput) P() (predicate.Location, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, location.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, location.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, location.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, location.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, location.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, location.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, location.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, location.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, location.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, location.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, location.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, location.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, location.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, location.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, location.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, location.SlugContainsFold(*i.SlugContainsFold))
-	}
 	if i.Geometry != nil {
 		predicates = append(predicates, location.GeometryEQ(*i.Geometry))
 	}
@@ -11885,23 +11125,6 @@ type MediumWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -12321,51 +11544,6 @@ func (i *MediumWhereInput) P() (predicate.Medium, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, medium.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, medium.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, medium.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, medium.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, medium.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, medium.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, medium.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, medium.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, medium.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, medium.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, medium.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, medium.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, medium.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, medium.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, medium.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, medium.SlugContainsFold(*i.SlugContainsFold))
-	}
 
 	if i.HasArtifacts != nil {
 		p := medium.HasArtifacts()
@@ -12533,23 +11711,6 @@ type ModelWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -12969,51 +12130,6 @@ func (i *ModelWhereInput) P() (predicate.Model, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, model.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, model.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, model.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, model.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, model.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, model.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, model.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, model.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, model.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, model.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, model.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, model.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, model.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, model.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, model.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, model.SlugContainsFold(*i.SlugContainsFold))
-	}
 
 	if i.HasArtifacts != nil {
 		p := model.HasArtifacts()
@@ -13181,23 +12297,6 @@ type MonumentWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -13621,51 +12720,6 @@ func (i *MonumentWhereInput) P() (predicate.Monument, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, monument.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, monument.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, monument.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, monument.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, monument.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, monument.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, monument.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, monument.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, monument.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, monument.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, monument.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, monument.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, monument.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, monument.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, monument.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, monument.SlugContainsFold(*i.SlugContainsFold))
-	}
 
 	if i.HasArtifacts != nil {
 		p := monument.HasArtifacts()
@@ -13868,23 +12922,6 @@ type OrganizationWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "primary_image_url" field predicates.
 	PrimaryImageURL             *string  `json:"primaryImageURL,omitempty"`
@@ -14397,51 +13434,6 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, organization.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, organization.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, organization.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, organization.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, organization.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, organization.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, organization.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, organization.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, organization.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, organization.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, organization.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, organization.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, organization.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, organization.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, organization.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, organization.SlugContainsFold(*i.SlugContainsFold))
-	}
 	if i.PrimaryImageURL != nil {
 		predicates = append(predicates, organization.PrimaryImageURLEQ(*i.PrimaryImageURL))
 	}
@@ -14747,23 +13739,6 @@ type OrganizationTypeWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "organizations" edge predicates.
 	HasOrganizations     *bool                     `json:"hasOrganizations,omitempty"`
@@ -15183,51 +14158,6 @@ func (i *OrganizationTypeWhereInput) P() (predicate.OrganizationType, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, organizationtype.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, organizationtype.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, organizationtype.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, organizationtype.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, organizationtype.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, organizationtype.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, organizationtype.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, organizationtype.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, organizationtype.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, organizationtype.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, organizationtype.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, organizationtype.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, organizationtype.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, organizationtype.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, organizationtype.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, organizationtype.SlugContainsFold(*i.SlugContainsFold))
-	}
 
 	if i.HasOrganizations != nil {
 		p := organizationtype.HasOrganizations()
@@ -15395,23 +14325,6 @@ type PeriodWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -15831,51 +14744,6 @@ func (i *PeriodWhereInput) P() (predicate.Period, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, period.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, period.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, period.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, period.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, period.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, period.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, period.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, period.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, period.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, period.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, period.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, period.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, period.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, period.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, period.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, period.SlugContainsFold(*i.SlugContainsFold))
-	}
 
 	if i.HasArtifacts != nil {
 		p := period.HasArtifacts()
@@ -16060,23 +14928,6 @@ type PersonWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "primary_image_url" field predicates.
 	PrimaryImageURL             *string  `json:"primaryImageURL,omitempty"`
@@ -16667,51 +15518,6 @@ func (i *PersonWhereInput) P() (predicate.Person, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, person.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, person.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, person.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, person.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, person.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, person.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, person.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, person.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, person.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, person.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, person.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, person.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, person.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, person.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, person.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, person.SlugContainsFold(*i.SlugContainsFold))
-	}
 	if i.PrimaryImageURL != nil {
 		predicates = append(predicates, person.PrimaryImageURLEQ(*i.PrimaryImageURL))
 	}
@@ -17258,23 +16064,6 @@ type PersonRoleWhereInput struct {
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
-
 	// "person" edge predicates.
 	HasPerson     *bool               `json:"hasPerson,omitempty"`
 	HasPersonWith []*PersonWhereInput `json:"hasPersonWith,omitempty"`
@@ -17693,51 +16482,6 @@ func (i *PersonRoleWhereInput) P() (predicate.PersonRole, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, personrole.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, personrole.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, personrole.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, personrole.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, personrole.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, personrole.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, personrole.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, personrole.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, personrole.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, personrole.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, personrole.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, personrole.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, personrole.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, personrole.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, personrole.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, personrole.SlugContainsFold(*i.SlugContainsFold))
-	}
 
 	if i.HasPerson != nil {
 		p := personrole.HasPerson()
@@ -17905,23 +16649,6 @@ type ProjectWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "begin_data" field predicates.
 	BeginData       *time.Time  `json:"beginData,omitempty"`
@@ -18373,51 +17100,6 @@ func (i *ProjectWhereInput) P() (predicate.Project, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, project.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, project.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, project.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, project.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, project.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, project.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, project.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, project.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, project.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, project.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, project.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, project.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, project.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, project.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, project.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, project.SlugContainsFold(*i.SlugContainsFold))
-	}
 	if i.BeginData != nil {
 		predicates = append(predicates, project.BeginDataEQ(*i.BeginData))
 	}
@@ -18681,23 +17363,6 @@ type ProjectTypeWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "projects" edge predicates.
 	HasProjects     *bool                `json:"hasProjects,omitempty"`
@@ -19117,51 +17782,6 @@ func (i *ProjectTypeWhereInput) P() (predicate.ProjectType, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, projecttype.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, projecttype.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, projecttype.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, projecttype.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, projecttype.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, projecttype.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, projecttype.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, projecttype.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, projecttype.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, projecttype.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, projecttype.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, projecttype.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, projecttype.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, projecttype.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, projecttype.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, projecttype.SlugContainsFold(*i.SlugContainsFold))
-	}
 
 	if i.HasProjects != nil {
 		p := projecttype.HasProjects()
@@ -19329,23 +17949,6 @@ type ProtectedAreaWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "area" field predicates.
 	Area             *string  `json:"area,omitempty"`
@@ -19798,51 +18401,6 @@ func (i *ProtectedAreaWhereInput) P() (predicate.ProtectedArea, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, protectedarea.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, protectedarea.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, protectedarea.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, protectedarea.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, protectedarea.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, protectedarea.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, protectedarea.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, protectedarea.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, protectedarea.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, protectedarea.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, protectedarea.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, protectedarea.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, protectedarea.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, protectedarea.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, protectedarea.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, protectedarea.SlugContainsFold(*i.SlugContainsFold))
-	}
 	if i.Area != nil {
 		predicates = append(predicates, protectedarea.AreaEQ(*i.Area))
 	}
@@ -20103,23 +18661,6 @@ type ProtectedAreaCategoryWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "protected_areas" edge predicates.
 	HasProtectedAreas     *bool                      `json:"hasProtectedAreas,omitempty"`
@@ -20539,51 +19080,6 @@ func (i *ProtectedAreaCategoryWhereInput) P() (predicate.ProtectedAreaCategory, 
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, protectedareacategory.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, protectedareacategory.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, protectedareacategory.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, protectedareacategory.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, protectedareacategory.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, protectedareacategory.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, protectedareacategory.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, protectedareacategory.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, protectedareacategory.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, protectedareacategory.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, protectedareacategory.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, protectedareacategory.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, protectedareacategory.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, protectedareacategory.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, protectedareacategory.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, protectedareacategory.SlugContainsFold(*i.SlugContainsFold))
-	}
 
 	if i.HasProtectedAreas != nil {
 		p := protectedareacategory.HasProtectedAreas()
@@ -20751,23 +19247,6 @@ type ProtectedAreaPictureWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "primary_image_url" field predicates.
 	PrimaryImageURL             *string  `json:"primaryImageURL,omitempty"`
@@ -21240,51 +19719,6 @@ func (i *ProtectedAreaPictureWhereInput) P() (predicate.ProtectedAreaPicture, er
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, protectedareapicture.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, protectedareapicture.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, protectedareapicture.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, protectedareapicture.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, protectedareapicture.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, protectedareapicture.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, protectedareapicture.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, protectedareapicture.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, protectedareapicture.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, protectedareapicture.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, protectedareapicture.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, protectedareapicture.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, protectedareapicture.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, protectedareapicture.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, protectedareapicture.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, protectedareapicture.SlugContainsFold(*i.SlugContainsFold))
-	}
 	if i.PrimaryImageURL != nil {
 		predicates = append(predicates, protectedareapicture.PrimaryImageURLEQ(*i.PrimaryImageURL))
 	}
@@ -21611,23 +20045,6 @@ type PublicationWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -22051,51 +20468,6 @@ func (i *PublicationWhereInput) P() (predicate.Publication, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, publication.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, publication.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, publication.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, publication.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, publication.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, publication.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, publication.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, publication.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, publication.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, publication.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, publication.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, publication.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, publication.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, publication.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, publication.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, publication.SlugContainsFold(*i.SlugContainsFold))
-	}
 
 	if i.HasArtifacts != nil {
 		p := publication.HasArtifacts()
@@ -22281,23 +20653,6 @@ type PublisherWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "books" edge predicates.
 	HasBooks     *bool             `json:"hasBooks,omitempty"`
@@ -22717,51 +21072,6 @@ func (i *PublisherWhereInput) P() (predicate.Publisher, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, publisher.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, publisher.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, publisher.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, publisher.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, publisher.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, publisher.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, publisher.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, publisher.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, publisher.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, publisher.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, publisher.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, publisher.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, publisher.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, publisher.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, publisher.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, publisher.SlugContainsFold(*i.SlugContainsFold))
-	}
 
 	if i.HasBooks != nil {
 		p := publisher.HasBooks()
@@ -22929,23 +21239,6 @@ type RegionWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "location" edge predicates.
 	HasLocation     *bool                 `json:"hasLocation,omitempty"`
@@ -23365,51 +21658,6 @@ func (i *RegionWhereInput) P() (predicate.Region, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, region.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, region.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, region.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, region.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, region.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, region.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, region.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, region.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, region.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, region.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, region.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, region.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, region.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, region.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, region.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, region.SlugContainsFold(*i.SlugContainsFold))
-	}
 
 	if i.HasLocation != nil {
 		p := region.HasLocation()
@@ -23577,23 +21825,6 @@ type SetWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -24017,51 +22248,6 @@ func (i *SetWhereInput) P() (predicate.Set, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, set.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, set.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, set.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, set.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, set.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, set.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, set.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, set.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, set.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, set.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, set.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, set.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, set.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, set.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, set.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, set.SlugContainsFold(*i.SlugContainsFold))
-	}
 
 	if i.HasArtifacts != nil {
 		p := set.HasArtifacts()
@@ -24247,23 +22433,6 @@ type SettlementWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "location" edge predicates.
 	HasLocation     *bool                 `json:"hasLocation,omitempty"`
@@ -24683,51 +22852,6 @@ func (i *SettlementWhereInput) P() (predicate.Settlement, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, settlement.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.Slug != nil {
-		predicates = append(predicates, settlement.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, settlement.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, settlement.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, settlement.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, settlement.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, settlement.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, settlement.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, settlement.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, settlement.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, settlement.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, settlement.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, settlement.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, settlement.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, settlement.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, settlement.SlugContainsFold(*i.SlugContainsFold))
-	}
 
 	if i.HasLocation != nil {
 		p := settlement.HasLocation()
@@ -24895,23 +23019,6 @@ type TechniqueWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
-
-	// "slug" field predicates.
-	Slug             *string  `json:"slug,omitempty"`
-	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
-	SlugIn           []string `json:"slugIn,omitempty"`
-	SlugNotIn        []string `json:"slugNotIn,omitempty"`
-	SlugGT           *string  `json:"slugGT,omitempty"`
-	SlugGTE          *string  `json:"slugGTE,omitempty"`
-	SlugLT           *string  `json:"slugLT,omitempty"`
-	SlugLTE          *string  `json:"slugLTE,omitempty"`
-	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
-	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
-	SlugIsNil        bool     `json:"slugIsNil,omitempty"`
-	SlugNotNil       bool     `json:"slugNotNil,omitempty"`
-	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
-	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -25330,51 +23437,6 @@ func (i *TechniqueWhereInput) P() (predicate.Technique, error) {
 	}
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, technique.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
-	}
-	if i.Slug != nil {
-		predicates = append(predicates, technique.SlugEQ(*i.Slug))
-	}
-	if i.SlugNEQ != nil {
-		predicates = append(predicates, technique.SlugNEQ(*i.SlugNEQ))
-	}
-	if len(i.SlugIn) > 0 {
-		predicates = append(predicates, technique.SlugIn(i.SlugIn...))
-	}
-	if len(i.SlugNotIn) > 0 {
-		predicates = append(predicates, technique.SlugNotIn(i.SlugNotIn...))
-	}
-	if i.SlugGT != nil {
-		predicates = append(predicates, technique.SlugGT(*i.SlugGT))
-	}
-	if i.SlugGTE != nil {
-		predicates = append(predicates, technique.SlugGTE(*i.SlugGTE))
-	}
-	if i.SlugLT != nil {
-		predicates = append(predicates, technique.SlugLT(*i.SlugLT))
-	}
-	if i.SlugLTE != nil {
-		predicates = append(predicates, technique.SlugLTE(*i.SlugLTE))
-	}
-	if i.SlugContains != nil {
-		predicates = append(predicates, technique.SlugContains(*i.SlugContains))
-	}
-	if i.SlugHasPrefix != nil {
-		predicates = append(predicates, technique.SlugHasPrefix(*i.SlugHasPrefix))
-	}
-	if i.SlugHasSuffix != nil {
-		predicates = append(predicates, technique.SlugHasSuffix(*i.SlugHasSuffix))
-	}
-	if i.SlugIsNil {
-		predicates = append(predicates, technique.SlugIsNil())
-	}
-	if i.SlugNotNil {
-		predicates = append(predicates, technique.SlugNotNil())
-	}
-	if i.SlugEqualFold != nil {
-		predicates = append(predicates, technique.SlugEqualFold(*i.SlugEqualFold))
-	}
-	if i.SlugContainsFold != nil {
-		predicates = append(predicates, technique.SlugContainsFold(*i.SlugContainsFold))
 	}
 
 	if i.HasArtifacts != nil {

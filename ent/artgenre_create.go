@@ -133,20 +133,6 @@ func (agc *ArtGenreCreate) SetNillableExternalLink(s *string) *ArtGenreCreate {
 	return agc
 }
 
-// SetSlug sets the "slug" field.
-func (agc *ArtGenreCreate) SetSlug(s string) *ArtGenreCreate {
-	agc.mutation.SetSlug(s)
-	return agc
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (agc *ArtGenreCreate) SetNillableSlug(s *string) *ArtGenreCreate {
-	if s != nil {
-		agc.SetSlug(*s)
-	}
-	return agc
-}
-
 // AddArtIDs adds the "art" edge to the Art entity by IDs.
 func (agc *ArtGenreCreate) AddArtIDs(ids ...int) *ArtGenreCreate {
 	agc.mutation.AddArtIDs(ids...)
@@ -281,10 +267,6 @@ func (agc *ArtGenreCreate) createSpec() (*ArtGenre, *sqlgraph.CreateSpec) {
 	if value, ok := agc.mutation.ExternalLink(); ok {
 		_spec.SetField(artgenre.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
-	}
-	if value, ok := agc.mutation.Slug(); ok {
-		_spec.SetField(artgenre.FieldSlug, field.TypeString, value)
-		_node.Slug = value
 	}
 	if nodes := agc.mutation.ArtIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

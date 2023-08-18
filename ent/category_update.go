@@ -156,26 +156,6 @@ func (cu *CategoryUpdate) ClearExternalLink() *CategoryUpdate {
 	return cu
 }
 
-// SetSlug sets the "slug" field.
-func (cu *CategoryUpdate) SetSlug(s string) *CategoryUpdate {
-	cu.mutation.SetSlug(s)
-	return cu
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (cu *CategoryUpdate) SetNillableSlug(s *string) *CategoryUpdate {
-	if s != nil {
-		cu.SetSlug(*s)
-	}
-	return cu
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (cu *CategoryUpdate) ClearSlug() *CategoryUpdate {
-	cu.mutation.ClearSlug()
-	return cu
-}
-
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (cu *CategoryUpdate) SetPrimaryImageURL(s string) *CategoryUpdate {
 	cu.mutation.SetPrimaryImageURL(s)
@@ -211,6 +191,12 @@ func (cu *CategoryUpdate) AppendAdditionalImagesUrls(s []string) *CategoryUpdate
 // ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
 func (cu *CategoryUpdate) ClearAdditionalImagesUrls() *CategoryUpdate {
 	cu.mutation.ClearAdditionalImagesUrls()
+	return cu
+}
+
+// SetSlug sets the "slug" field.
+func (cu *CategoryUpdate) SetSlug(s string) *CategoryUpdate {
+	cu.mutation.SetSlug(s)
 	return cu
 }
 
@@ -345,12 +331,6 @@ func (cu *CategoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(category.FieldExternalLink, field.TypeString)
 	}
-	if value, ok := cu.mutation.Slug(); ok {
-		_spec.SetField(category.FieldSlug, field.TypeString, value)
-	}
-	if cu.mutation.SlugCleared() {
-		_spec.ClearField(category.FieldSlug, field.TypeString)
-	}
 	if value, ok := cu.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(category.FieldPrimaryImageURL, field.TypeString, value)
 	}
@@ -367,6 +347,9 @@ func (cu *CategoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if cu.mutation.AdditionalImagesUrlsCleared() {
 		_spec.ClearField(category.FieldAdditionalImagesUrls, field.TypeJSON)
+	}
+	if value, ok := cu.mutation.Slug(); ok {
+		_spec.SetField(category.FieldSlug, field.TypeString, value)
 	}
 	if cu.mutation.CollectionsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -559,26 +542,6 @@ func (cuo *CategoryUpdateOne) ClearExternalLink() *CategoryUpdateOne {
 	return cuo
 }
 
-// SetSlug sets the "slug" field.
-func (cuo *CategoryUpdateOne) SetSlug(s string) *CategoryUpdateOne {
-	cuo.mutation.SetSlug(s)
-	return cuo
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (cuo *CategoryUpdateOne) SetNillableSlug(s *string) *CategoryUpdateOne {
-	if s != nil {
-		cuo.SetSlug(*s)
-	}
-	return cuo
-}
-
-// ClearSlug clears the value of the "slug" field.
-func (cuo *CategoryUpdateOne) ClearSlug() *CategoryUpdateOne {
-	cuo.mutation.ClearSlug()
-	return cuo
-}
-
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (cuo *CategoryUpdateOne) SetPrimaryImageURL(s string) *CategoryUpdateOne {
 	cuo.mutation.SetPrimaryImageURL(s)
@@ -614,6 +577,12 @@ func (cuo *CategoryUpdateOne) AppendAdditionalImagesUrls(s []string) *CategoryUp
 // ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
 func (cuo *CategoryUpdateOne) ClearAdditionalImagesUrls() *CategoryUpdateOne {
 	cuo.mutation.ClearAdditionalImagesUrls()
+	return cuo
+}
+
+// SetSlug sets the "slug" field.
+func (cuo *CategoryUpdateOne) SetSlug(s string) *CategoryUpdateOne {
+	cuo.mutation.SetSlug(s)
 	return cuo
 }
 
@@ -778,12 +747,6 @@ func (cuo *CategoryUpdateOne) sqlSave(ctx context.Context) (_node *Category, err
 	if cuo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(category.FieldExternalLink, field.TypeString)
 	}
-	if value, ok := cuo.mutation.Slug(); ok {
-		_spec.SetField(category.FieldSlug, field.TypeString, value)
-	}
-	if cuo.mutation.SlugCleared() {
-		_spec.ClearField(category.FieldSlug, field.TypeString)
-	}
 	if value, ok := cuo.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(category.FieldPrimaryImageURL, field.TypeString, value)
 	}
@@ -800,6 +763,9 @@ func (cuo *CategoryUpdateOne) sqlSave(ctx context.Context) (_node *Category, err
 	}
 	if cuo.mutation.AdditionalImagesUrlsCleared() {
 		_spec.ClearField(category.FieldAdditionalImagesUrls, field.TypeJSON)
+	}
+	if value, ok := cuo.mutation.Slug(); ok {
+		_spec.SetField(category.FieldSlug, field.TypeString, value)
 	}
 	if cuo.mutation.CollectionsCleared() {
 		edge := &sqlgraph.EdgeSpec{

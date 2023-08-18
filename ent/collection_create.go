@@ -137,20 +137,6 @@ func (cc *CollectionCreate) SetNillableExternalLink(s *string) *CollectionCreate
 	return cc
 }
 
-// SetSlug sets the "slug" field.
-func (cc *CollectionCreate) SetSlug(s string) *CollectionCreate {
-	cc.mutation.SetSlug(s)
-	return cc
-}
-
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (cc *CollectionCreate) SetNillableSlug(s *string) *CollectionCreate {
-	if s != nil {
-		cc.SetSlug(*s)
-	}
-	return cc
-}
-
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (cc *CollectionCreate) SetPrimaryImageURL(s string) *CollectionCreate {
 	cc.mutation.SetPrimaryImageURL(s)
@@ -168,6 +154,12 @@ func (cc *CollectionCreate) SetNillablePrimaryImageURL(s *string) *CollectionCre
 // SetAdditionalImagesUrls sets the "additional_images_urls" field.
 func (cc *CollectionCreate) SetAdditionalImagesUrls(s []string) *CollectionCreate {
 	cc.mutation.SetAdditionalImagesUrls(s)
+	return cc
+}
+
+// SetSlug sets the "slug" field.
+func (cc *CollectionCreate) SetSlug(s string) *CollectionCreate {
+	cc.mutation.SetSlug(s)
 	return cc
 }
 
@@ -304,6 +296,9 @@ func (cc *CollectionCreate) check() error {
 	if _, ok := cc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Collection.updated_at"`)}
 	}
+	if _, ok := cc.mutation.Slug(); !ok {
+		return &ValidationError{Name: "slug", err: errors.New(`ent: missing required field "Collection.slug"`)}
+	}
 	if _, ok := cc.mutation.CategoryID(); !ok {
 		return &ValidationError{Name: "category", err: errors.New(`ent: missing required edge "Collection.category"`)}
 	}
@@ -365,10 +360,6 @@ func (cc *CollectionCreate) createSpec() (*Collection, *sqlgraph.CreateSpec) {
 		_spec.SetField(collection.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
 	}
-	if value, ok := cc.mutation.Slug(); ok {
-		_spec.SetField(collection.FieldSlug, field.TypeString, value)
-		_node.Slug = value
-	}
 	if value, ok := cc.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(collection.FieldPrimaryImageURL, field.TypeString, value)
 		_node.PrimaryImageURL = value
@@ -376,6 +367,10 @@ func (cc *CollectionCreate) createSpec() (*Collection, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.AdditionalImagesUrls(); ok {
 		_spec.SetField(collection.FieldAdditionalImagesUrls, field.TypeJSON, value)
 		_node.AdditionalImagesUrls = value
+	}
+	if value, ok := cc.mutation.Slug(); ok {
+		_spec.SetField(collection.FieldSlug, field.TypeString, value)
+		_node.Slug = value
 	}
 	if nodes := cc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

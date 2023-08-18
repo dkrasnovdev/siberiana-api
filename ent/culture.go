@@ -33,8 +33,6 @@ type Culture struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
-	// Slug holds the value of the "slug" field.
-	Slug string `json:"slug,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CultureQuery when eager-loading is set.
 	Edges        CultureEdges `json:"edges"`
@@ -70,7 +68,7 @@ func (*Culture) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case culture.FieldID:
 			values[i] = new(sql.NullInt64)
-		case culture.FieldCreatedBy, culture.FieldUpdatedBy, culture.FieldDisplayName, culture.FieldAbbreviation, culture.FieldDescription, culture.FieldExternalLink, culture.FieldSlug:
+		case culture.FieldCreatedBy, culture.FieldUpdatedBy, culture.FieldDisplayName, culture.FieldAbbreviation, culture.FieldDescription, culture.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case culture.FieldCreatedAt, culture.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -143,12 +141,6 @@ func (c *Culture) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.ExternalLink = value.String
 			}
-		case culture.FieldSlug:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field slug", values[i])
-			} else if value.Valid {
-				c.Slug = value.String
-			}
 		default:
 			c.selectValues.Set(columns[i], values[i])
 		}
@@ -213,9 +205,6 @@ func (c *Culture) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(c.ExternalLink)
-	builder.WriteString(", ")
-	builder.WriteString("slug=")
-	builder.WriteString(c.Slug)
 	builder.WriteByte(')')
 	return builder.String()
 }

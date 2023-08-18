@@ -33,8 +33,6 @@ type HolderResponsibility struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
-	// Slug holds the value of the "slug" field.
-	Slug string `json:"slug,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the HolderResponsibilityQuery when eager-loading is set.
 	Edges        HolderResponsibilityEdges `json:"edges"`
@@ -70,7 +68,7 @@ func (*HolderResponsibility) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case holderresponsibility.FieldID:
 			values[i] = new(sql.NullInt64)
-		case holderresponsibility.FieldCreatedBy, holderresponsibility.FieldUpdatedBy, holderresponsibility.FieldDisplayName, holderresponsibility.FieldAbbreviation, holderresponsibility.FieldDescription, holderresponsibility.FieldExternalLink, holderresponsibility.FieldSlug:
+		case holderresponsibility.FieldCreatedBy, holderresponsibility.FieldUpdatedBy, holderresponsibility.FieldDisplayName, holderresponsibility.FieldAbbreviation, holderresponsibility.FieldDescription, holderresponsibility.FieldExternalLink:
 			values[i] = new(sql.NullString)
 		case holderresponsibility.FieldCreatedAt, holderresponsibility.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -143,12 +141,6 @@ func (hr *HolderResponsibility) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				hr.ExternalLink = value.String
 			}
-		case holderresponsibility.FieldSlug:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field slug", values[i])
-			} else if value.Valid {
-				hr.Slug = value.String
-			}
 		default:
 			hr.selectValues.Set(columns[i], values[i])
 		}
@@ -213,9 +205,6 @@ func (hr *HolderResponsibility) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(hr.ExternalLink)
-	builder.WriteString(", ")
-	builder.WriteString("slug=")
-	builder.WriteString(hr.Slug)
 	builder.WriteByte(')')
 	return builder.String()
 }
