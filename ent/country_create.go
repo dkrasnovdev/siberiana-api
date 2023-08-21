@@ -133,14 +133,14 @@ func (cc *CountryCreate) SetNillableExternalLink(s *string) *CountryCreate {
 	return cc
 }
 
-// AddLocationIDs adds the "location" edge to the Location entity by IDs.
+// AddLocationIDs adds the "locations" edge to the Location entity by IDs.
 func (cc *CountryCreate) AddLocationIDs(ids ...int) *CountryCreate {
 	cc.mutation.AddLocationIDs(ids...)
 	return cc
 }
 
-// AddLocation adds the "location" edges to the Location entity.
-func (cc *CountryCreate) AddLocation(l ...*Location) *CountryCreate {
+// AddLocations adds the "locations" edges to the Location entity.
+func (cc *CountryCreate) AddLocations(l ...*Location) *CountryCreate {
 	ids := make([]int, len(l))
 	for i := range l {
 		ids[i] = l[i].ID
@@ -268,12 +268,12 @@ func (cc *CountryCreate) createSpec() (*Country, *sqlgraph.CreateSpec) {
 		_spec.SetField(country.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
 	}
-	if nodes := cc.mutation.LocationIDs(); len(nodes) > 0 {
+	if nodes := cc.mutation.LocationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
-			Table:   country.LocationTable,
-			Columns: []string{country.LocationColumn},
+			Table:   country.LocationsTable,
+			Columns: []string{country.LocationsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),

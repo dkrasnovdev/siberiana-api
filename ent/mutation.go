@@ -11890,24 +11890,24 @@ func (m *CollectionMutation) ResetEdge(name string) error {
 // CountryMutation represents an operation that mutates the Country nodes in the graph.
 type CountryMutation struct {
 	config
-	op              Op
-	typ             string
-	id              *int
-	created_at      *time.Time
-	created_by      *string
-	updated_at      *time.Time
-	updated_by      *string
-	display_name    *string
-	abbreviation    *string
-	description     *string
-	external_link   *string
-	clearedFields   map[string]struct{}
-	location        map[int]struct{}
-	removedlocation map[int]struct{}
-	clearedlocation bool
-	done            bool
-	oldValue        func(context.Context) (*Country, error)
-	predicates      []predicate.Country
+	op               Op
+	typ              string
+	id               *int
+	created_at       *time.Time
+	created_by       *string
+	updated_at       *time.Time
+	updated_by       *string
+	display_name     *string
+	abbreviation     *string
+	description      *string
+	external_link    *string
+	clearedFields    map[string]struct{}
+	locations        map[int]struct{}
+	removedlocations map[int]struct{}
+	clearedlocations bool
+	done             bool
+	oldValue         func(context.Context) (*Country, error)
+	predicates       []predicate.Country
 }
 
 var _ ent.Mutation = (*CountryMutation)(nil)
@@ -12374,58 +12374,58 @@ func (m *CountryMutation) ResetExternalLink() {
 	delete(m.clearedFields, country.FieldExternalLink)
 }
 
-// AddLocationIDs adds the "location" edge to the Location entity by ids.
+// AddLocationIDs adds the "locations" edge to the Location entity by ids.
 func (m *CountryMutation) AddLocationIDs(ids ...int) {
-	if m.location == nil {
-		m.location = make(map[int]struct{})
+	if m.locations == nil {
+		m.locations = make(map[int]struct{})
 	}
 	for i := range ids {
-		m.location[ids[i]] = struct{}{}
+		m.locations[ids[i]] = struct{}{}
 	}
 }
 
-// ClearLocation clears the "location" edge to the Location entity.
-func (m *CountryMutation) ClearLocation() {
-	m.clearedlocation = true
+// ClearLocations clears the "locations" edge to the Location entity.
+func (m *CountryMutation) ClearLocations() {
+	m.clearedlocations = true
 }
 
-// LocationCleared reports if the "location" edge to the Location entity was cleared.
-func (m *CountryMutation) LocationCleared() bool {
-	return m.clearedlocation
+// LocationsCleared reports if the "locations" edge to the Location entity was cleared.
+func (m *CountryMutation) LocationsCleared() bool {
+	return m.clearedlocations
 }
 
-// RemoveLocationIDs removes the "location" edge to the Location entity by IDs.
+// RemoveLocationIDs removes the "locations" edge to the Location entity by IDs.
 func (m *CountryMutation) RemoveLocationIDs(ids ...int) {
-	if m.removedlocation == nil {
-		m.removedlocation = make(map[int]struct{})
+	if m.removedlocations == nil {
+		m.removedlocations = make(map[int]struct{})
 	}
 	for i := range ids {
-		delete(m.location, ids[i])
-		m.removedlocation[ids[i]] = struct{}{}
+		delete(m.locations, ids[i])
+		m.removedlocations[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedLocation returns the removed IDs of the "location" edge to the Location entity.
-func (m *CountryMutation) RemovedLocationIDs() (ids []int) {
-	for id := range m.removedlocation {
+// RemovedLocations returns the removed IDs of the "locations" edge to the Location entity.
+func (m *CountryMutation) RemovedLocationsIDs() (ids []int) {
+	for id := range m.removedlocations {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// LocationIDs returns the "location" edge IDs in the mutation.
-func (m *CountryMutation) LocationIDs() (ids []int) {
-	for id := range m.location {
+// LocationsIDs returns the "locations" edge IDs in the mutation.
+func (m *CountryMutation) LocationsIDs() (ids []int) {
+	for id := range m.locations {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetLocation resets all changes to the "location" edge.
-func (m *CountryMutation) ResetLocation() {
-	m.location = nil
-	m.clearedlocation = false
-	m.removedlocation = nil
+// ResetLocations resets all changes to the "locations" edge.
+func (m *CountryMutation) ResetLocations() {
+	m.locations = nil
+	m.clearedlocations = false
+	m.removedlocations = nil
 }
 
 // Where appends a list predicates to the CountryMutation builder.
@@ -12720,8 +12720,8 @@ func (m *CountryMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *CountryMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.location != nil {
-		edges = append(edges, country.EdgeLocation)
+	if m.locations != nil {
+		edges = append(edges, country.EdgeLocations)
 	}
 	return edges
 }
@@ -12730,9 +12730,9 @@ func (m *CountryMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *CountryMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case country.EdgeLocation:
-		ids := make([]ent.Value, 0, len(m.location))
-		for id := range m.location {
+	case country.EdgeLocations:
+		ids := make([]ent.Value, 0, len(m.locations))
+		for id := range m.locations {
 			ids = append(ids, id)
 		}
 		return ids
@@ -12743,8 +12743,8 @@ func (m *CountryMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *CountryMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.removedlocation != nil {
-		edges = append(edges, country.EdgeLocation)
+	if m.removedlocations != nil {
+		edges = append(edges, country.EdgeLocations)
 	}
 	return edges
 }
@@ -12753,9 +12753,9 @@ func (m *CountryMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *CountryMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case country.EdgeLocation:
-		ids := make([]ent.Value, 0, len(m.removedlocation))
-		for id := range m.removedlocation {
+	case country.EdgeLocations:
+		ids := make([]ent.Value, 0, len(m.removedlocations))
+		for id := range m.removedlocations {
 			ids = append(ids, id)
 		}
 		return ids
@@ -12766,8 +12766,8 @@ func (m *CountryMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *CountryMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.clearedlocation {
-		edges = append(edges, country.EdgeLocation)
+	if m.clearedlocations {
+		edges = append(edges, country.EdgeLocations)
 	}
 	return edges
 }
@@ -12776,8 +12776,8 @@ func (m *CountryMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *CountryMutation) EdgeCleared(name string) bool {
 	switch name {
-	case country.EdgeLocation:
-		return m.clearedlocation
+	case country.EdgeLocations:
+		return m.clearedlocations
 	}
 	return false
 }
@@ -12794,8 +12794,8 @@ func (m *CountryMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *CountryMutation) ResetEdge(name string) error {
 	switch name {
-	case country.EdgeLocation:
-		m.ResetLocation()
+	case country.EdgeLocations:
+		m.ResetLocations()
 		return nil
 	}
 	return fmt.Errorf("unknown Country edge %s", name)
@@ -13718,24 +13718,24 @@ func (m *CultureMutation) ResetEdge(name string) error {
 // DistrictMutation represents an operation that mutates the District nodes in the graph.
 type DistrictMutation struct {
 	config
-	op              Op
-	typ             string
-	id              *int
-	created_at      *time.Time
-	created_by      *string
-	updated_at      *time.Time
-	updated_by      *string
-	display_name    *string
-	abbreviation    *string
-	description     *string
-	external_link   *string
-	clearedFields   map[string]struct{}
-	location        map[int]struct{}
-	removedlocation map[int]struct{}
-	clearedlocation bool
-	done            bool
-	oldValue        func(context.Context) (*District, error)
-	predicates      []predicate.District
+	op               Op
+	typ              string
+	id               *int
+	created_at       *time.Time
+	created_by       *string
+	updated_at       *time.Time
+	updated_by       *string
+	display_name     *string
+	abbreviation     *string
+	description      *string
+	external_link    *string
+	clearedFields    map[string]struct{}
+	locations        map[int]struct{}
+	removedlocations map[int]struct{}
+	clearedlocations bool
+	done             bool
+	oldValue         func(context.Context) (*District, error)
+	predicates       []predicate.District
 }
 
 var _ ent.Mutation = (*DistrictMutation)(nil)
@@ -14202,58 +14202,58 @@ func (m *DistrictMutation) ResetExternalLink() {
 	delete(m.clearedFields, district.FieldExternalLink)
 }
 
-// AddLocationIDs adds the "location" edge to the Location entity by ids.
+// AddLocationIDs adds the "locations" edge to the Location entity by ids.
 func (m *DistrictMutation) AddLocationIDs(ids ...int) {
-	if m.location == nil {
-		m.location = make(map[int]struct{})
+	if m.locations == nil {
+		m.locations = make(map[int]struct{})
 	}
 	for i := range ids {
-		m.location[ids[i]] = struct{}{}
+		m.locations[ids[i]] = struct{}{}
 	}
 }
 
-// ClearLocation clears the "location" edge to the Location entity.
-func (m *DistrictMutation) ClearLocation() {
-	m.clearedlocation = true
+// ClearLocations clears the "locations" edge to the Location entity.
+func (m *DistrictMutation) ClearLocations() {
+	m.clearedlocations = true
 }
 
-// LocationCleared reports if the "location" edge to the Location entity was cleared.
-func (m *DistrictMutation) LocationCleared() bool {
-	return m.clearedlocation
+// LocationsCleared reports if the "locations" edge to the Location entity was cleared.
+func (m *DistrictMutation) LocationsCleared() bool {
+	return m.clearedlocations
 }
 
-// RemoveLocationIDs removes the "location" edge to the Location entity by IDs.
+// RemoveLocationIDs removes the "locations" edge to the Location entity by IDs.
 func (m *DistrictMutation) RemoveLocationIDs(ids ...int) {
-	if m.removedlocation == nil {
-		m.removedlocation = make(map[int]struct{})
+	if m.removedlocations == nil {
+		m.removedlocations = make(map[int]struct{})
 	}
 	for i := range ids {
-		delete(m.location, ids[i])
-		m.removedlocation[ids[i]] = struct{}{}
+		delete(m.locations, ids[i])
+		m.removedlocations[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedLocation returns the removed IDs of the "location" edge to the Location entity.
-func (m *DistrictMutation) RemovedLocationIDs() (ids []int) {
-	for id := range m.removedlocation {
+// RemovedLocations returns the removed IDs of the "locations" edge to the Location entity.
+func (m *DistrictMutation) RemovedLocationsIDs() (ids []int) {
+	for id := range m.removedlocations {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// LocationIDs returns the "location" edge IDs in the mutation.
-func (m *DistrictMutation) LocationIDs() (ids []int) {
-	for id := range m.location {
+// LocationsIDs returns the "locations" edge IDs in the mutation.
+func (m *DistrictMutation) LocationsIDs() (ids []int) {
+	for id := range m.locations {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetLocation resets all changes to the "location" edge.
-func (m *DistrictMutation) ResetLocation() {
-	m.location = nil
-	m.clearedlocation = false
-	m.removedlocation = nil
+// ResetLocations resets all changes to the "locations" edge.
+func (m *DistrictMutation) ResetLocations() {
+	m.locations = nil
+	m.clearedlocations = false
+	m.removedlocations = nil
 }
 
 // Where appends a list predicates to the DistrictMutation builder.
@@ -14548,8 +14548,8 @@ func (m *DistrictMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *DistrictMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.location != nil {
-		edges = append(edges, district.EdgeLocation)
+	if m.locations != nil {
+		edges = append(edges, district.EdgeLocations)
 	}
 	return edges
 }
@@ -14558,9 +14558,9 @@ func (m *DistrictMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *DistrictMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case district.EdgeLocation:
-		ids := make([]ent.Value, 0, len(m.location))
-		for id := range m.location {
+	case district.EdgeLocations:
+		ids := make([]ent.Value, 0, len(m.locations))
+		for id := range m.locations {
 			ids = append(ids, id)
 		}
 		return ids
@@ -14571,8 +14571,8 @@ func (m *DistrictMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *DistrictMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.removedlocation != nil {
-		edges = append(edges, district.EdgeLocation)
+	if m.removedlocations != nil {
+		edges = append(edges, district.EdgeLocations)
 	}
 	return edges
 }
@@ -14581,9 +14581,9 @@ func (m *DistrictMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *DistrictMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case district.EdgeLocation:
-		ids := make([]ent.Value, 0, len(m.removedlocation))
-		for id := range m.removedlocation {
+	case district.EdgeLocations:
+		ids := make([]ent.Value, 0, len(m.removedlocations))
+		for id := range m.removedlocations {
 			ids = append(ids, id)
 		}
 		return ids
@@ -14594,8 +14594,8 @@ func (m *DistrictMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *DistrictMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.clearedlocation {
-		edges = append(edges, district.EdgeLocation)
+	if m.clearedlocations {
+		edges = append(edges, district.EdgeLocations)
 	}
 	return edges
 }
@@ -14604,8 +14604,8 @@ func (m *DistrictMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *DistrictMutation) EdgeCleared(name string) bool {
 	switch name {
-	case district.EdgeLocation:
-		return m.clearedlocation
+	case district.EdgeLocations:
+		return m.clearedlocations
 	}
 	return false
 }
@@ -14622,8 +14622,8 @@ func (m *DistrictMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *DistrictMutation) ResetEdge(name string) error {
 	switch name {
-	case district.EdgeLocation:
-		m.ResetLocation()
+	case district.EdgeLocations:
+		m.ResetLocations()
 		return nil
 	}
 	return fmt.Errorf("unknown District edge %s", name)
@@ -36255,24 +36255,24 @@ func (m *PublisherMutation) ResetEdge(name string) error {
 // RegionMutation represents an operation that mutates the Region nodes in the graph.
 type RegionMutation struct {
 	config
-	op              Op
-	typ             string
-	id              *int
-	created_at      *time.Time
-	created_by      *string
-	updated_at      *time.Time
-	updated_by      *string
-	display_name    *string
-	abbreviation    *string
-	description     *string
-	external_link   *string
-	clearedFields   map[string]struct{}
-	location        map[int]struct{}
-	removedlocation map[int]struct{}
-	clearedlocation bool
-	done            bool
-	oldValue        func(context.Context) (*Region, error)
-	predicates      []predicate.Region
+	op               Op
+	typ              string
+	id               *int
+	created_at       *time.Time
+	created_by       *string
+	updated_at       *time.Time
+	updated_by       *string
+	display_name     *string
+	abbreviation     *string
+	description      *string
+	external_link    *string
+	clearedFields    map[string]struct{}
+	locations        map[int]struct{}
+	removedlocations map[int]struct{}
+	clearedlocations bool
+	done             bool
+	oldValue         func(context.Context) (*Region, error)
+	predicates       []predicate.Region
 }
 
 var _ ent.Mutation = (*RegionMutation)(nil)
@@ -36739,58 +36739,58 @@ func (m *RegionMutation) ResetExternalLink() {
 	delete(m.clearedFields, region.FieldExternalLink)
 }
 
-// AddLocationIDs adds the "location" edge to the Location entity by ids.
+// AddLocationIDs adds the "locations" edge to the Location entity by ids.
 func (m *RegionMutation) AddLocationIDs(ids ...int) {
-	if m.location == nil {
-		m.location = make(map[int]struct{})
+	if m.locations == nil {
+		m.locations = make(map[int]struct{})
 	}
 	for i := range ids {
-		m.location[ids[i]] = struct{}{}
+		m.locations[ids[i]] = struct{}{}
 	}
 }
 
-// ClearLocation clears the "location" edge to the Location entity.
-func (m *RegionMutation) ClearLocation() {
-	m.clearedlocation = true
+// ClearLocations clears the "locations" edge to the Location entity.
+func (m *RegionMutation) ClearLocations() {
+	m.clearedlocations = true
 }
 
-// LocationCleared reports if the "location" edge to the Location entity was cleared.
-func (m *RegionMutation) LocationCleared() bool {
-	return m.clearedlocation
+// LocationsCleared reports if the "locations" edge to the Location entity was cleared.
+func (m *RegionMutation) LocationsCleared() bool {
+	return m.clearedlocations
 }
 
-// RemoveLocationIDs removes the "location" edge to the Location entity by IDs.
+// RemoveLocationIDs removes the "locations" edge to the Location entity by IDs.
 func (m *RegionMutation) RemoveLocationIDs(ids ...int) {
-	if m.removedlocation == nil {
-		m.removedlocation = make(map[int]struct{})
+	if m.removedlocations == nil {
+		m.removedlocations = make(map[int]struct{})
 	}
 	for i := range ids {
-		delete(m.location, ids[i])
-		m.removedlocation[ids[i]] = struct{}{}
+		delete(m.locations, ids[i])
+		m.removedlocations[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedLocation returns the removed IDs of the "location" edge to the Location entity.
-func (m *RegionMutation) RemovedLocationIDs() (ids []int) {
-	for id := range m.removedlocation {
+// RemovedLocations returns the removed IDs of the "locations" edge to the Location entity.
+func (m *RegionMutation) RemovedLocationsIDs() (ids []int) {
+	for id := range m.removedlocations {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// LocationIDs returns the "location" edge IDs in the mutation.
-func (m *RegionMutation) LocationIDs() (ids []int) {
-	for id := range m.location {
+// LocationsIDs returns the "locations" edge IDs in the mutation.
+func (m *RegionMutation) LocationsIDs() (ids []int) {
+	for id := range m.locations {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetLocation resets all changes to the "location" edge.
-func (m *RegionMutation) ResetLocation() {
-	m.location = nil
-	m.clearedlocation = false
-	m.removedlocation = nil
+// ResetLocations resets all changes to the "locations" edge.
+func (m *RegionMutation) ResetLocations() {
+	m.locations = nil
+	m.clearedlocations = false
+	m.removedlocations = nil
 }
 
 // Where appends a list predicates to the RegionMutation builder.
@@ -37085,8 +37085,8 @@ func (m *RegionMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *RegionMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.location != nil {
-		edges = append(edges, region.EdgeLocation)
+	if m.locations != nil {
+		edges = append(edges, region.EdgeLocations)
 	}
 	return edges
 }
@@ -37095,9 +37095,9 @@ func (m *RegionMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *RegionMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case region.EdgeLocation:
-		ids := make([]ent.Value, 0, len(m.location))
-		for id := range m.location {
+	case region.EdgeLocations:
+		ids := make([]ent.Value, 0, len(m.locations))
+		for id := range m.locations {
 			ids = append(ids, id)
 		}
 		return ids
@@ -37108,8 +37108,8 @@ func (m *RegionMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *RegionMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.removedlocation != nil {
-		edges = append(edges, region.EdgeLocation)
+	if m.removedlocations != nil {
+		edges = append(edges, region.EdgeLocations)
 	}
 	return edges
 }
@@ -37118,9 +37118,9 @@ func (m *RegionMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *RegionMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case region.EdgeLocation:
-		ids := make([]ent.Value, 0, len(m.removedlocation))
-		for id := range m.removedlocation {
+	case region.EdgeLocations:
+		ids := make([]ent.Value, 0, len(m.removedlocations))
+		for id := range m.removedlocations {
 			ids = append(ids, id)
 		}
 		return ids
@@ -37131,8 +37131,8 @@ func (m *RegionMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *RegionMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.clearedlocation {
-		edges = append(edges, region.EdgeLocation)
+	if m.clearedlocations {
+		edges = append(edges, region.EdgeLocations)
 	}
 	return edges
 }
@@ -37141,8 +37141,8 @@ func (m *RegionMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *RegionMutation) EdgeCleared(name string) bool {
 	switch name {
-	case region.EdgeLocation:
-		return m.clearedlocation
+	case region.EdgeLocations:
+		return m.clearedlocations
 	}
 	return false
 }
@@ -37159,8 +37159,8 @@ func (m *RegionMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *RegionMutation) ResetEdge(name string) error {
 	switch name {
-	case region.EdgeLocation:
-		m.ResetLocation()
+	case region.EdgeLocations:
+		m.ResetLocations()
 		return nil
 	}
 	return fmt.Errorf("unknown Region edge %s", name)
@@ -38166,24 +38166,24 @@ func (m *SetMutation) ResetEdge(name string) error {
 // SettlementMutation represents an operation that mutates the Settlement nodes in the graph.
 type SettlementMutation struct {
 	config
-	op              Op
-	typ             string
-	id              *int
-	created_at      *time.Time
-	created_by      *string
-	updated_at      *time.Time
-	updated_by      *string
-	display_name    *string
-	abbreviation    *string
-	description     *string
-	external_link   *string
-	clearedFields   map[string]struct{}
-	location        map[int]struct{}
-	removedlocation map[int]struct{}
-	clearedlocation bool
-	done            bool
-	oldValue        func(context.Context) (*Settlement, error)
-	predicates      []predicate.Settlement
+	op               Op
+	typ              string
+	id               *int
+	created_at       *time.Time
+	created_by       *string
+	updated_at       *time.Time
+	updated_by       *string
+	display_name     *string
+	abbreviation     *string
+	description      *string
+	external_link    *string
+	clearedFields    map[string]struct{}
+	locations        map[int]struct{}
+	removedlocations map[int]struct{}
+	clearedlocations bool
+	done             bool
+	oldValue         func(context.Context) (*Settlement, error)
+	predicates       []predicate.Settlement
 }
 
 var _ ent.Mutation = (*SettlementMutation)(nil)
@@ -38650,58 +38650,58 @@ func (m *SettlementMutation) ResetExternalLink() {
 	delete(m.clearedFields, settlement.FieldExternalLink)
 }
 
-// AddLocationIDs adds the "location" edge to the Location entity by ids.
+// AddLocationIDs adds the "locations" edge to the Location entity by ids.
 func (m *SettlementMutation) AddLocationIDs(ids ...int) {
-	if m.location == nil {
-		m.location = make(map[int]struct{})
+	if m.locations == nil {
+		m.locations = make(map[int]struct{})
 	}
 	for i := range ids {
-		m.location[ids[i]] = struct{}{}
+		m.locations[ids[i]] = struct{}{}
 	}
 }
 
-// ClearLocation clears the "location" edge to the Location entity.
-func (m *SettlementMutation) ClearLocation() {
-	m.clearedlocation = true
+// ClearLocations clears the "locations" edge to the Location entity.
+func (m *SettlementMutation) ClearLocations() {
+	m.clearedlocations = true
 }
 
-// LocationCleared reports if the "location" edge to the Location entity was cleared.
-func (m *SettlementMutation) LocationCleared() bool {
-	return m.clearedlocation
+// LocationsCleared reports if the "locations" edge to the Location entity was cleared.
+func (m *SettlementMutation) LocationsCleared() bool {
+	return m.clearedlocations
 }
 
-// RemoveLocationIDs removes the "location" edge to the Location entity by IDs.
+// RemoveLocationIDs removes the "locations" edge to the Location entity by IDs.
 func (m *SettlementMutation) RemoveLocationIDs(ids ...int) {
-	if m.removedlocation == nil {
-		m.removedlocation = make(map[int]struct{})
+	if m.removedlocations == nil {
+		m.removedlocations = make(map[int]struct{})
 	}
 	for i := range ids {
-		delete(m.location, ids[i])
-		m.removedlocation[ids[i]] = struct{}{}
+		delete(m.locations, ids[i])
+		m.removedlocations[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedLocation returns the removed IDs of the "location" edge to the Location entity.
-func (m *SettlementMutation) RemovedLocationIDs() (ids []int) {
-	for id := range m.removedlocation {
+// RemovedLocations returns the removed IDs of the "locations" edge to the Location entity.
+func (m *SettlementMutation) RemovedLocationsIDs() (ids []int) {
+	for id := range m.removedlocations {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// LocationIDs returns the "location" edge IDs in the mutation.
-func (m *SettlementMutation) LocationIDs() (ids []int) {
-	for id := range m.location {
+// LocationsIDs returns the "locations" edge IDs in the mutation.
+func (m *SettlementMutation) LocationsIDs() (ids []int) {
+	for id := range m.locations {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetLocation resets all changes to the "location" edge.
-func (m *SettlementMutation) ResetLocation() {
-	m.location = nil
-	m.clearedlocation = false
-	m.removedlocation = nil
+// ResetLocations resets all changes to the "locations" edge.
+func (m *SettlementMutation) ResetLocations() {
+	m.locations = nil
+	m.clearedlocations = false
+	m.removedlocations = nil
 }
 
 // Where appends a list predicates to the SettlementMutation builder.
@@ -38996,8 +38996,8 @@ func (m *SettlementMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *SettlementMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.location != nil {
-		edges = append(edges, settlement.EdgeLocation)
+	if m.locations != nil {
+		edges = append(edges, settlement.EdgeLocations)
 	}
 	return edges
 }
@@ -39006,9 +39006,9 @@ func (m *SettlementMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *SettlementMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case settlement.EdgeLocation:
-		ids := make([]ent.Value, 0, len(m.location))
-		for id := range m.location {
+	case settlement.EdgeLocations:
+		ids := make([]ent.Value, 0, len(m.locations))
+		for id := range m.locations {
 			ids = append(ids, id)
 		}
 		return ids
@@ -39019,8 +39019,8 @@ func (m *SettlementMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *SettlementMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.removedlocation != nil {
-		edges = append(edges, settlement.EdgeLocation)
+	if m.removedlocations != nil {
+		edges = append(edges, settlement.EdgeLocations)
 	}
 	return edges
 }
@@ -39029,9 +39029,9 @@ func (m *SettlementMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *SettlementMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case settlement.EdgeLocation:
-		ids := make([]ent.Value, 0, len(m.removedlocation))
-		for id := range m.removedlocation {
+	case settlement.EdgeLocations:
+		ids := make([]ent.Value, 0, len(m.removedlocations))
+		for id := range m.removedlocations {
 			ids = append(ids, id)
 		}
 		return ids
@@ -39042,8 +39042,8 @@ func (m *SettlementMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *SettlementMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.clearedlocation {
-		edges = append(edges, settlement.EdgeLocation)
+	if m.clearedlocations {
+		edges = append(edges, settlement.EdgeLocations)
 	}
 	return edges
 }
@@ -39052,8 +39052,8 @@ func (m *SettlementMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *SettlementMutation) EdgeCleared(name string) bool {
 	switch name {
-	case settlement.EdgeLocation:
-		return m.clearedlocation
+	case settlement.EdgeLocations:
+		return m.clearedlocations
 	}
 	return false
 }
@@ -39070,8 +39070,8 @@ func (m *SettlementMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *SettlementMutation) ResetEdge(name string) error {
 	switch name {
-	case settlement.EdgeLocation:
-		m.ResetLocation()
+	case settlement.EdgeLocations:
+		m.ResetLocations()
 		return nil
 	}
 	return fmt.Errorf("unknown Settlement edge %s", name)

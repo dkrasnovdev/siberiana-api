@@ -20,14 +20,14 @@ import (
 // SettlementQuery is the builder for querying Settlement entities.
 type SettlementQuery struct {
 	config
-	ctx               *QueryContext
-	order             []settlement.OrderOption
-	inters            []Interceptor
-	predicates        []predicate.Settlement
-	withLocation      *LocationQuery
-	modifiers         []func(*sql.Selector)
-	loadTotal         []func(context.Context, []*Settlement) error
-	withNamedLocation map[string]*LocationQuery
+	ctx                *QueryContext
+	order              []settlement.OrderOption
+	inters             []Interceptor
+	predicates         []predicate.Settlement
+	withLocations      *LocationQuery
+	modifiers          []func(*sql.Selector)
+	loadTotal          []func(context.Context, []*Settlement) error
+	withNamedLocations map[string]*LocationQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -64,8 +64,8 @@ func (sq *SettlementQuery) Order(o ...settlement.OrderOption) *SettlementQuery {
 	return sq
 }
 
-// QueryLocation chains the current query on the "location" edge.
-func (sq *SettlementQuery) QueryLocation() *LocationQuery {
+// QueryLocations chains the current query on the "locations" edge.
+func (sq *SettlementQuery) QueryLocations() *LocationQuery {
 	query := (&LocationClient{config: sq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := sq.prepareQuery(ctx); err != nil {
@@ -78,7 +78,7 @@ func (sq *SettlementQuery) QueryLocation() *LocationQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(settlement.Table, settlement.FieldID, selector),
 			sqlgraph.To(location.Table, location.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, true, settlement.LocationTable, settlement.LocationColumn),
+			sqlgraph.Edge(sqlgraph.O2M, true, settlement.LocationsTable, settlement.LocationsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
@@ -273,26 +273,26 @@ func (sq *SettlementQuery) Clone() *SettlementQuery {
 		return nil
 	}
 	return &SettlementQuery{
-		config:       sq.config,
-		ctx:          sq.ctx.Clone(),
-		order:        append([]settlement.OrderOption{}, sq.order...),
-		inters:       append([]Interceptor{}, sq.inters...),
-		predicates:   append([]predicate.Settlement{}, sq.predicates...),
-		withLocation: sq.withLocation.Clone(),
+		config:        sq.config,
+		ctx:           sq.ctx.Clone(),
+		order:         append([]settlement.OrderOption{}, sq.order...),
+		inters:        append([]Interceptor{}, sq.inters...),
+		predicates:    append([]predicate.Settlement{}, sq.predicates...),
+		withLocations: sq.withLocations.Clone(),
 		// clone intermediate query.
 		sql:  sq.sql.Clone(),
 		path: sq.path,
 	}
 }
 
-// WithLocation tells the query-builder to eager-load the nodes that are connected to
-// the "location" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *SettlementQuery) WithLocation(opts ...func(*LocationQuery)) *SettlementQuery {
+// WithLocations tells the query-builder to eager-load the nodes that are connected to
+// the "locations" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SettlementQuery) WithLocations(opts ...func(*LocationQuery)) *SettlementQuery {
 	query := (&LocationClient{config: sq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sq.withLocation = query
+	sq.withLocations = query
 	return sq
 }
 
@@ -381,7 +381,7 @@ func (sq *SettlementQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		nodes       = []*Settlement{}
 		_spec       = sq.querySpec()
 		loadedTypes = [1]bool{
-			sq.withLocation != nil,
+			sq.withLocations != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -405,17 +405,17 @@ func (sq *SettlementQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := sq.withLocation; query != nil {
-		if err := sq.loadLocation(ctx, query, nodes,
-			func(n *Settlement) { n.Edges.Location = []*Location{} },
-			func(n *Settlement, e *Location) { n.Edges.Location = append(n.Edges.Location, e) }); err != nil {
+	if query := sq.withLocations; query != nil {
+		if err := sq.loadLocations(ctx, query, nodes,
+			func(n *Settlement) { n.Edges.Locations = []*Location{} },
+			func(n *Settlement, e *Location) { n.Edges.Locations = append(n.Edges.Locations, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range sq.withNamedLocation {
-		if err := sq.loadLocation(ctx, query, nodes,
-			func(n *Settlement) { n.appendNamedLocation(name) },
-			func(n *Settlement, e *Location) { n.appendNamedLocation(name, e) }); err != nil {
+	for name, query := range sq.withNamedLocations {
+		if err := sq.loadLocations(ctx, query, nodes,
+			func(n *Settlement) { n.appendNamedLocations(name) },
+			func(n *Settlement, e *Location) { n.appendNamedLocations(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -427,7 +427,7 @@ func (sq *SettlementQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 	return nodes, nil
 }
 
-func (sq *SettlementQuery) loadLocation(ctx context.Context, query *LocationQuery, nodes []*Settlement, init func(*Settlement), assign func(*Settlement, *Location)) error {
+func (sq *SettlementQuery) loadLocations(ctx context.Context, query *LocationQuery, nodes []*Settlement, init func(*Settlement), assign func(*Settlement, *Location)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int]*Settlement)
 	for i := range nodes {
@@ -439,7 +439,7 @@ func (sq *SettlementQuery) loadLocation(ctx context.Context, query *LocationQuer
 	}
 	query.withFKs = true
 	query.Where(predicate.Location(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(settlement.LocationColumn), fks...))
+		s.Where(sql.InValues(s.C(settlement.LocationsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -543,17 +543,17 @@ func (sq *SettlementQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	return selector
 }
 
-// WithNamedLocation tells the query-builder to eager-load the nodes that are connected to the "location"
+// WithNamedLocations tells the query-builder to eager-load the nodes that are connected to the "locations"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (sq *SettlementQuery) WithNamedLocation(name string, opts ...func(*LocationQuery)) *SettlementQuery {
+func (sq *SettlementQuery) WithNamedLocations(name string, opts ...func(*LocationQuery)) *SettlementQuery {
 	query := (&LocationClient{config: sq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if sq.withNamedLocation == nil {
-		sq.withNamedLocation = make(map[string]*LocationQuery)
+	if sq.withNamedLocations == nil {
+		sq.withNamedLocations = make(map[string]*LocationQuery)
 	}
-	sq.withNamedLocation[name] = query
+	sq.withNamedLocations[name] = query
 	return sq
 }
 

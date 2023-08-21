@@ -1748,7 +1748,7 @@ type UpdateCountryInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
-	ClearLocation     bool
+	ClearLocations    bool
 	AddLocationIDs    []int
 	RemoveLocationIDs []int
 }
@@ -1794,8 +1794,8 @@ func (i *UpdateCountryInput) Mutate(m *CountryMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
-	if i.ClearLocation {
-		m.ClearLocation()
+	if i.ClearLocations {
+		m.ClearLocations()
 	}
 	if v := i.AddLocationIDs; len(v) > 0 {
 		m.AddLocationIDs(v...)
@@ -2016,7 +2016,7 @@ type UpdateDistrictInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
-	ClearLocation     bool
+	ClearLocations    bool
 	AddLocationIDs    []int
 	RemoveLocationIDs []int
 }
@@ -2062,8 +2062,8 @@ func (i *UpdateDistrictInput) Mutate(m *DistrictMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
-	if i.ClearLocation {
-		m.ClearLocation()
+	if i.ClearLocations {
+		m.ClearLocations()
 	}
 	if v := i.AddLocationIDs; len(v) > 0 {
 		m.AddLocationIDs(v...)
@@ -5418,7 +5418,7 @@ type UpdateRegionInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
-	ClearLocation     bool
+	ClearLocations    bool
 	AddLocationIDs    []int
 	RemoveLocationIDs []int
 }
@@ -5464,8 +5464,8 @@ func (i *UpdateRegionInput) Mutate(m *RegionMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
-	if i.ClearLocation {
-		m.ClearLocation()
+	if i.ClearLocations {
+		m.ClearLocations()
 	}
 	if v := i.AddLocationIDs; len(v) > 0 {
 		m.AddLocationIDs(v...)
@@ -5702,7 +5702,7 @@ type UpdateSettlementInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
-	ClearLocation     bool
+	ClearLocations    bool
 	AddLocationIDs    []int
 	RemoveLocationIDs []int
 }
@@ -5748,8 +5748,8 @@ func (i *UpdateSettlementInput) Mutate(m *SettlementMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
-	if i.ClearLocation {
-		m.ClearLocation()
+	if i.ClearLocations {
+		m.ClearLocations()
 	}
 	if v := i.AddLocationIDs; len(v) > 0 {
 		m.AddLocationIDs(v...)

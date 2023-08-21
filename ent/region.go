@@ -41,24 +41,24 @@ type Region struct {
 
 // RegionEdges holds the relations/edges for other nodes in the graph.
 type RegionEdges struct {
-	// Location holds the value of the location edge.
-	Location []*Location `json:"location,omitempty"`
+	// Locations holds the value of the locations edge.
+	Locations []*Location `json:"locations,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 	// totalCount holds the count of the edges above.
 	totalCount [1]map[string]int
 
-	namedLocation map[string][]*Location
+	namedLocations map[string][]*Location
 }
 
-// LocationOrErr returns the Location value or an error if the edge
+// LocationsOrErr returns the Locations value or an error if the edge
 // was not loaded in eager-loading.
-func (e RegionEdges) LocationOrErr() ([]*Location, error) {
+func (e RegionEdges) LocationsOrErr() ([]*Location, error) {
 	if e.loadedTypes[0] {
-		return e.Location, nil
+		return e.Locations, nil
 	}
-	return nil, &NotLoadedError{edge: "location"}
+	return nil, &NotLoadedError{edge: "locations"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -154,9 +154,9 @@ func (r *Region) Value(name string) (ent.Value, error) {
 	return r.selectValues.Get(name)
 }
 
-// QueryLocation queries the "location" edge of the Region entity.
-func (r *Region) QueryLocation() *LocationQuery {
-	return NewRegionClient(r.config).QueryLocation(r)
+// QueryLocations queries the "locations" edge of the Region entity.
+func (r *Region) QueryLocations() *LocationQuery {
+	return NewRegionClient(r.config).QueryLocations(r)
 }
 
 // Update returns a builder for updating this Region.
@@ -209,27 +209,27 @@ func (r *Region) String() string {
 	return builder.String()
 }
 
-// NamedLocation returns the Location named value or an error if the edge was not
+// NamedLocations returns the Locations named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (r *Region) NamedLocation(name string) ([]*Location, error) {
-	if r.Edges.namedLocation == nil {
+func (r *Region) NamedLocations(name string) ([]*Location, error) {
+	if r.Edges.namedLocations == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := r.Edges.namedLocation[name]
+	nodes, ok := r.Edges.namedLocations[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (r *Region) appendNamedLocation(name string, edges ...*Location) {
-	if r.Edges.namedLocation == nil {
-		r.Edges.namedLocation = make(map[string][]*Location)
+func (r *Region) appendNamedLocations(name string, edges ...*Location) {
+	if r.Edges.namedLocations == nil {
+		r.Edges.namedLocations = make(map[string][]*Location)
 	}
 	if len(edges) == 0 {
-		r.Edges.namedLocation[name] = []*Location{}
+		r.Edges.namedLocations[name] = []*Location{}
 	} else {
-		r.Edges.namedLocation[name] = append(r.Edges.namedLocation[name], edges...)
+		r.Edges.namedLocations[name] = append(r.Edges.namedLocations[name], edges...)
 	}
 }
 

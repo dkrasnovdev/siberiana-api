@@ -41,24 +41,24 @@ type Settlement struct {
 
 // SettlementEdges holds the relations/edges for other nodes in the graph.
 type SettlementEdges struct {
-	// Location holds the value of the location edge.
-	Location []*Location `json:"location,omitempty"`
+	// Locations holds the value of the locations edge.
+	Locations []*Location `json:"locations,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 	// totalCount holds the count of the edges above.
 	totalCount [1]map[string]int
 
-	namedLocation map[string][]*Location
+	namedLocations map[string][]*Location
 }
 
-// LocationOrErr returns the Location value or an error if the edge
+// LocationsOrErr returns the Locations value or an error if the edge
 // was not loaded in eager-loading.
-func (e SettlementEdges) LocationOrErr() ([]*Location, error) {
+func (e SettlementEdges) LocationsOrErr() ([]*Location, error) {
 	if e.loadedTypes[0] {
-		return e.Location, nil
+		return e.Locations, nil
 	}
-	return nil, &NotLoadedError{edge: "location"}
+	return nil, &NotLoadedError{edge: "locations"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -154,9 +154,9 @@ func (s *Settlement) Value(name string) (ent.Value, error) {
 	return s.selectValues.Get(name)
 }
 
-// QueryLocation queries the "location" edge of the Settlement entity.
-func (s *Settlement) QueryLocation() *LocationQuery {
-	return NewSettlementClient(s.config).QueryLocation(s)
+// QueryLocations queries the "locations" edge of the Settlement entity.
+func (s *Settlement) QueryLocations() *LocationQuery {
+	return NewSettlementClient(s.config).QueryLocations(s)
 }
 
 // Update returns a builder for updating this Settlement.
@@ -209,27 +209,27 @@ func (s *Settlement) String() string {
 	return builder.String()
 }
 
-// NamedLocation returns the Location named value or an error if the edge was not
+// NamedLocations returns the Locations named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Settlement) NamedLocation(name string) ([]*Location, error) {
-	if s.Edges.namedLocation == nil {
+func (s *Settlement) NamedLocations(name string) ([]*Location, error) {
+	if s.Edges.namedLocations == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedLocation[name]
+	nodes, ok := s.Edges.namedLocations[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Settlement) appendNamedLocation(name string, edges ...*Location) {
-	if s.Edges.namedLocation == nil {
-		s.Edges.namedLocation = make(map[string][]*Location)
+func (s *Settlement) appendNamedLocations(name string, edges ...*Location) {
+	if s.Edges.namedLocations == nil {
+		s.Edges.namedLocations = make(map[string][]*Location)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedLocation[name] = []*Location{}
+		s.Edges.namedLocations[name] = []*Location{}
 	} else {
-		s.Edges.namedLocation[name] = append(s.Edges.namedLocation[name], edges...)
+		s.Edges.namedLocations[name] = append(s.Edges.namedLocations[name], edges...)
 	}
 }
 

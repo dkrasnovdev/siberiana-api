@@ -20,14 +20,14 @@ import (
 // DistrictQuery is the builder for querying District entities.
 type DistrictQuery struct {
 	config
-	ctx               *QueryContext
-	order             []district.OrderOption
-	inters            []Interceptor
-	predicates        []predicate.District
-	withLocation      *LocationQuery
-	modifiers         []func(*sql.Selector)
-	loadTotal         []func(context.Context, []*District) error
-	withNamedLocation map[string]*LocationQuery
+	ctx                *QueryContext
+	order              []district.OrderOption
+	inters             []Interceptor
+	predicates         []predicate.District
+	withLocations      *LocationQuery
+	modifiers          []func(*sql.Selector)
+	loadTotal          []func(context.Context, []*District) error
+	withNamedLocations map[string]*LocationQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -64,8 +64,8 @@ func (dq *DistrictQuery) Order(o ...district.OrderOption) *DistrictQuery {
 	return dq
 }
 
-// QueryLocation chains the current query on the "location" edge.
-func (dq *DistrictQuery) QueryLocation() *LocationQuery {
+// QueryLocations chains the current query on the "locations" edge.
+func (dq *DistrictQuery) QueryLocations() *LocationQuery {
 	query := (&LocationClient{config: dq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := dq.prepareQuery(ctx); err != nil {
@@ -78,7 +78,7 @@ func (dq *DistrictQuery) QueryLocation() *LocationQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(district.Table, district.FieldID, selector),
 			sqlgraph.To(location.Table, location.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, true, district.LocationTable, district.LocationColumn),
+			sqlgraph.Edge(sqlgraph.O2M, true, district.LocationsTable, district.LocationsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
 		return fromU, nil
@@ -273,26 +273,26 @@ func (dq *DistrictQuery) Clone() *DistrictQuery {
 		return nil
 	}
 	return &DistrictQuery{
-		config:       dq.config,
-		ctx:          dq.ctx.Clone(),
-		order:        append([]district.OrderOption{}, dq.order...),
-		inters:       append([]Interceptor{}, dq.inters...),
-		predicates:   append([]predicate.District{}, dq.predicates...),
-		withLocation: dq.withLocation.Clone(),
+		config:        dq.config,
+		ctx:           dq.ctx.Clone(),
+		order:         append([]district.OrderOption{}, dq.order...),
+		inters:        append([]Interceptor{}, dq.inters...),
+		predicates:    append([]predicate.District{}, dq.predicates...),
+		withLocations: dq.withLocations.Clone(),
 		// clone intermediate query.
 		sql:  dq.sql.Clone(),
 		path: dq.path,
 	}
 }
 
-// WithLocation tells the query-builder to eager-load the nodes that are connected to
-// the "location" edge. The optional arguments are used to configure the query builder of the edge.
-func (dq *DistrictQuery) WithLocation(opts ...func(*LocationQuery)) *DistrictQuery {
+// WithLocations tells the query-builder to eager-load the nodes that are connected to
+// the "locations" edge. The optional arguments are used to configure the query builder of the edge.
+func (dq *DistrictQuery) WithLocations(opts ...func(*LocationQuery)) *DistrictQuery {
 	query := (&LocationClient{config: dq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	dq.withLocation = query
+	dq.withLocations = query
 	return dq
 }
 
@@ -381,7 +381,7 @@ func (dq *DistrictQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Dis
 		nodes       = []*District{}
 		_spec       = dq.querySpec()
 		loadedTypes = [1]bool{
-			dq.withLocation != nil,
+			dq.withLocations != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -405,17 +405,17 @@ func (dq *DistrictQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Dis
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := dq.withLocation; query != nil {
-		if err := dq.loadLocation(ctx, query, nodes,
-			func(n *District) { n.Edges.Location = []*Location{} },
-			func(n *District, e *Location) { n.Edges.Location = append(n.Edges.Location, e) }); err != nil {
+	if query := dq.withLocations; query != nil {
+		if err := dq.loadLocations(ctx, query, nodes,
+			func(n *District) { n.Edges.Locations = []*Location{} },
+			func(n *District, e *Location) { n.Edges.Locations = append(n.Edges.Locations, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range dq.withNamedLocation {
-		if err := dq.loadLocation(ctx, query, nodes,
-			func(n *District) { n.appendNamedLocation(name) },
-			func(n *District, e *Location) { n.appendNamedLocation(name, e) }); err != nil {
+	for name, query := range dq.withNamedLocations {
+		if err := dq.loadLocations(ctx, query, nodes,
+			func(n *District) { n.appendNamedLocations(name) },
+			func(n *District, e *Location) { n.appendNamedLocations(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -427,7 +427,7 @@ func (dq *DistrictQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Dis
 	return nodes, nil
 }
 
-func (dq *DistrictQuery) loadLocation(ctx context.Context, query *LocationQuery, nodes []*District, init func(*District), assign func(*District, *Location)) error {
+func (dq *DistrictQuery) loadLocations(ctx context.Context, query *LocationQuery, nodes []*District, init func(*District), assign func(*District, *Location)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int]*District)
 	for i := range nodes {
@@ -439,7 +439,7 @@ func (dq *DistrictQuery) loadLocation(ctx context.Context, query *LocationQuery,
 	}
 	query.withFKs = true
 	query.Where(predicate.Location(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(district.LocationColumn), fks...))
+		s.Where(sql.InValues(s.C(district.LocationsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -543,17 +543,17 @@ func (dq *DistrictQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	return selector
 }
 
-// WithNamedLocation tells the query-builder to eager-load the nodes that are connected to the "location"
+// WithNamedLocations tells the query-builder to eager-load the nodes that are connected to the "locations"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (dq *DistrictQuery) WithNamedLocation(name string, opts ...func(*LocationQuery)) *DistrictQuery {
+func (dq *DistrictQuery) WithNamedLocations(name string, opts ...func(*LocationQuery)) *DistrictQuery {
 	query := (&LocationClient{config: dq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if dq.withNamedLocation == nil {
-		dq.withNamedLocation = make(map[string]*LocationQuery)
+	if dq.withNamedLocations == nil {
+		dq.withNamedLocations = make(map[string]*LocationQuery)
 	}
-	dq.withNamedLocation[name] = query
+	dq.withNamedLocations[name] = query
 	return dq
 }
 

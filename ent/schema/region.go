@@ -51,6 +51,6 @@ func (Region) Annotations() []schema.Annotation {
 // Edges of the Region.
 func (Region) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("location", Location.Type).Ref("region"),
+		edge.From("locations", Location.Type).Ref("region"),
 	}
 }

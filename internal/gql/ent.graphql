@@ -1915,7 +1915,7 @@ type Country implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  location: [Location!]
+  locations: [Location!]
 }
 """A connection to a list of items."""
 type CountryConnection {
@@ -2077,9 +2077,9 @@ input CountryWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """location edge predicates"""
-  hasLocation: Boolean
-  hasLocationWith: [LocationWhereInput!]
+  """locations edge predicates"""
+  hasLocations: Boolean
+  hasLocationsWith: [LocationWhereInput!]
 }
 """
 CreateArtGenreInput is used for create ArtGenre object.
@@ -2885,7 +2885,7 @@ type District implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  location: [Location!]
+  locations: [Location!]
 }
 """A connection to a list of items."""
 type DistrictConnection {
@@ -3047,9 +3047,9 @@ input DistrictWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """location edge predicates"""
-  hasLocation: Boolean
-  hasLocationWith: [LocationWhereInput!]
+  """locations edge predicates"""
+  hasLocations: Boolean
+  hasLocationsWith: [LocationWhereInput!]
 }
 type Holder implements Node {
   id: ID!
@@ -7597,7 +7597,7 @@ type Region implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  location: [Location!]
+  locations: [Location!]
 }
 """A connection to a list of items."""
 type RegionConnection {
@@ -7759,9 +7759,9 @@ input RegionWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """location edge predicates"""
-  hasLocation: Boolean
-  hasLocationWith: [LocationWhereInput!]
+  """locations edge predicates"""
+  hasLocations: Boolean
+  hasLocationsWith: [LocationWhereInput!]
 }
 type Set implements Node {
   id: ID!
@@ -7953,7 +7953,7 @@ type Settlement implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  location: [Location!]
+  locations: [Location!]
 }
 """A connection to a list of items."""
 type SettlementConnection {
@@ -8115,9 +8115,9 @@ input SettlementWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """location edge predicates"""
-  hasLocation: Boolean
-  hasLocationWith: [LocationWhereInput!]
+  """locations edge predicates"""
+  hasLocations: Boolean
+  hasLocationsWith: [LocationWhereInput!]
 }
 type Technique implements Node {
   id: ID!
@@ -8599,7 +8599,7 @@ input UpdateCountryInput {
   clearExternalLink: Boolean
   addLocationIDs: [ID!]
   removeLocationIDs: [ID!]
-  clearLocation: Boolean
+  clearLocations: Boolean
 }
 """
 UpdateCultureInput is used for update Culture object.
@@ -8643,7 +8643,7 @@ input UpdateDistrictInput {
   clearExternalLink: Boolean
   addLocationIDs: [ID!]
   removeLocationIDs: [ID!]
-  clearLocation: Boolean
+  clearLocations: Boolean
 }
 """
 UpdateHolderInput is used for update Holder object.
@@ -9210,7 +9210,7 @@ input UpdateRegionInput {
   clearExternalLink: Boolean
   addLocationIDs: [ID!]
   removeLocationIDs: [ID!]
-  clearLocation: Boolean
+  clearLocations: Boolean
 }
 """
 UpdateSetInput is used for update Set object.
@@ -9257,7 +9257,7 @@ input UpdateSettlementInput {
   clearExternalLink: Boolean
   addLocationIDs: [ID!]
   removeLocationIDs: [ID!]
-  clearLocation: Boolean
+  clearLocations: Boolean
 }
 """
 UpdateTechniqueInput is used for update Technique object.

@@ -320,7 +320,7 @@ type ComplexityRoot struct {
 		DisplayName  func(childComplexity int) int
 		ExternalLink func(childComplexity int) int
 		ID           func(childComplexity int) int
-		Location     func(childComplexity int) int
+		Locations    func(childComplexity int) int
 		UpdatedAt    func(childComplexity int) int
 		UpdatedBy    func(childComplexity int) int
 	}
@@ -368,7 +368,7 @@ type ComplexityRoot struct {
 		DisplayName  func(childComplexity int) int
 		ExternalLink func(childComplexity int) int
 		ID           func(childComplexity int) int
-		Location     func(childComplexity int) int
+		Locations    func(childComplexity int) int
 		UpdatedAt    func(childComplexity int) int
 		UpdatedBy    func(childComplexity int) int
 	}
@@ -1025,7 +1025,7 @@ type ComplexityRoot struct {
 		DisplayName  func(childComplexity int) int
 		ExternalLink func(childComplexity int) int
 		ID           func(childComplexity int) int
-		Location     func(childComplexity int) int
+		Locations    func(childComplexity int) int
 		UpdatedAt    func(childComplexity int) int
 		UpdatedBy    func(childComplexity int) int
 	}
@@ -1074,7 +1074,7 @@ type ComplexityRoot struct {
 		DisplayName  func(childComplexity int) int
 		ExternalLink func(childComplexity int) int
 		ID           func(childComplexity int) int
-		Location     func(childComplexity int) int
+		Locations    func(childComplexity int) int
 		UpdatedAt    func(childComplexity int) int
 		UpdatedBy    func(childComplexity int) int
 	}
@@ -2563,12 +2563,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Country.ID(childComplexity), true
 
-	case "Country.location":
-		if e.complexity.Country.Location == nil {
+	case "Country.locations":
+		if e.complexity.Country.Locations == nil {
 			break
 		}
 
-		return e.complexity.Country.Location(childComplexity), true
+		return e.complexity.Country.Locations(childComplexity), true
 
 	case "Country.updatedAt":
 		if e.complexity.Country.UpdatedAt == nil {
@@ -2773,12 +2773,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.District.ID(childComplexity), true
 
-	case "District.location":
-		if e.complexity.District.Location == nil {
+	case "District.locations":
+		if e.complexity.District.Locations == nil {
 			break
 		}
 
-		return e.complexity.District.Location(childComplexity), true
+		return e.complexity.District.Locations(childComplexity), true
 
 	case "District.updatedAt":
 		if e.complexity.District.UpdatedAt == nil {
@@ -6553,12 +6553,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Region.ID(childComplexity), true
 
-	case "Region.location":
-		if e.complexity.Region.Location == nil {
+	case "Region.locations":
+		if e.complexity.Region.Locations == nil {
 			break
 		}
 
-		return e.complexity.Region.Location(childComplexity), true
+		return e.complexity.Region.Locations(childComplexity), true
 
 	case "Region.updatedAt":
 		if e.complexity.Region.UpdatedAt == nil {
@@ -6770,12 +6770,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Settlement.ID(childComplexity), true
 
-	case "Settlement.location":
-		if e.complexity.Settlement.Location == nil {
+	case "Settlement.locations":
+		if e.complexity.Settlement.Locations == nil {
 			break
 		}
 
-		return e.complexity.Settlement.Location(childComplexity), true
+		return e.complexity.Settlement.Locations(childComplexity), true
 
 	case "Settlement.updatedAt":
 		if e.complexity.Settlement.UpdatedAt == nil {
@@ -20502,8 +20502,8 @@ func (ec *executionContext) fieldContext_Country_externalLink(ctx context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _Country_location(ctx context.Context, field graphql.CollectedField, obj *ent.Country) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Country_location(ctx, field)
+func (ec *executionContext) _Country_locations(ctx context.Context, field graphql.CollectedField, obj *ent.Country) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Country_locations(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -20516,7 +20516,7 @@ func (ec *executionContext) _Country_location(ctx context.Context, field graphql
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Location(ctx)
+		return obj.Locations(ctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -20530,7 +20530,7 @@ func (ec *executionContext) _Country_location(ctx context.Context, field graphql
 	return ec.marshalOLocation2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLocationᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Country_location(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Country_locations(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Country",
 		Field:      field,
@@ -20778,8 +20778,8 @@ func (ec *executionContext) fieldContext_CountryEdge_node(ctx context.Context, f
 				return ec.fieldContext_Country_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Country_externalLink(ctx, field)
-			case "location":
-				return ec.fieldContext_Country_location(ctx, field)
+			case "locations":
+				return ec.fieldContext_Country_locations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Country", field.Name)
 		},
@@ -21950,8 +21950,8 @@ func (ec *executionContext) fieldContext_District_externalLink(ctx context.Conte
 	return fc, nil
 }
 
-func (ec *executionContext) _District_location(ctx context.Context, field graphql.CollectedField, obj *ent.District) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_District_location(ctx, field)
+func (ec *executionContext) _District_locations(ctx context.Context, field graphql.CollectedField, obj *ent.District) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_District_locations(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -21964,7 +21964,7 @@ func (ec *executionContext) _District_location(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Location(ctx)
+		return obj.Locations(ctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -21978,7 +21978,7 @@ func (ec *executionContext) _District_location(ctx context.Context, field graphq
 	return ec.marshalOLocation2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLocationᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_District_location(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_District_locations(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "District",
 		Field:      field,
@@ -22226,8 +22226,8 @@ func (ec *executionContext) fieldContext_DistrictEdge_node(ctx context.Context, 
 				return ec.fieldContext_District_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_District_externalLink(ctx, field)
-			case "location":
-				return ec.fieldContext_District_location(ctx, field)
+			case "locations":
+				return ec.fieldContext_District_locations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type District", field.Name)
 		},
@@ -25663,8 +25663,8 @@ func (ec *executionContext) fieldContext_Location_country(ctx context.Context, f
 				return ec.fieldContext_Country_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Country_externalLink(ctx, field)
-			case "location":
-				return ec.fieldContext_Country_location(ctx, field)
+			case "locations":
+				return ec.fieldContext_Country_locations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Country", field.Name)
 		},
@@ -25726,8 +25726,8 @@ func (ec *executionContext) fieldContext_Location_district(ctx context.Context, 
 				return ec.fieldContext_District_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_District_externalLink(ctx, field)
-			case "location":
-				return ec.fieldContext_District_location(ctx, field)
+			case "locations":
+				return ec.fieldContext_District_locations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type District", field.Name)
 		},
@@ -25789,8 +25789,8 @@ func (ec *executionContext) fieldContext_Location_settlement(ctx context.Context
 				return ec.fieldContext_Settlement_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Settlement_externalLink(ctx, field)
-			case "location":
-				return ec.fieldContext_Settlement_location(ctx, field)
+			case "locations":
+				return ec.fieldContext_Settlement_locations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Settlement", field.Name)
 		},
@@ -25852,8 +25852,8 @@ func (ec *executionContext) fieldContext_Location_region(ctx context.Context, fi
 				return ec.fieldContext_Region_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Region_externalLink(ctx, field)
-			case "location":
-				return ec.fieldContext_Region_location(ctx, field)
+			case "locations":
+				return ec.fieldContext_Region_locations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Region", field.Name)
 		},
@@ -29894,8 +29894,8 @@ func (ec *executionContext) fieldContext_Mutation_createCountry(ctx context.Cont
 				return ec.fieldContext_Country_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Country_externalLink(ctx, field)
-			case "location":
-				return ec.fieldContext_Country_location(ctx, field)
+			case "locations":
+				return ec.fieldContext_Country_locations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Country", field.Name)
 		},
@@ -29971,8 +29971,8 @@ func (ec *executionContext) fieldContext_Mutation_updateCountry(ctx context.Cont
 				return ec.fieldContext_Country_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Country_externalLink(ctx, field)
-			case "location":
-				return ec.fieldContext_Country_location(ctx, field)
+			case "locations":
+				return ec.fieldContext_Country_locations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Country", field.Name)
 		},
@@ -30202,8 +30202,8 @@ func (ec *executionContext) fieldContext_Mutation_createDistrict(ctx context.Con
 				return ec.fieldContext_District_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_District_externalLink(ctx, field)
-			case "location":
-				return ec.fieldContext_District_location(ctx, field)
+			case "locations":
+				return ec.fieldContext_District_locations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type District", field.Name)
 		},
@@ -30279,8 +30279,8 @@ func (ec *executionContext) fieldContext_Mutation_updateDistrict(ctx context.Con
 				return ec.fieldContext_District_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_District_externalLink(ctx, field)
-			case "location":
-				return ec.fieldContext_District_location(ctx, field)
+			case "locations":
+				return ec.fieldContext_District_locations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type District", field.Name)
 		},
@@ -33502,8 +33502,8 @@ func (ec *executionContext) fieldContext_Mutation_createRegion(ctx context.Conte
 				return ec.fieldContext_Region_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Region_externalLink(ctx, field)
-			case "location":
-				return ec.fieldContext_Region_location(ctx, field)
+			case "locations":
+				return ec.fieldContext_Region_locations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Region", field.Name)
 		},
@@ -33579,8 +33579,8 @@ func (ec *executionContext) fieldContext_Mutation_updateRegion(ctx context.Conte
 				return ec.fieldContext_Region_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Region_externalLink(ctx, field)
-			case "location":
-				return ec.fieldContext_Region_location(ctx, field)
+			case "locations":
+				return ec.fieldContext_Region_locations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Region", field.Name)
 		},
@@ -33814,8 +33814,8 @@ func (ec *executionContext) fieldContext_Mutation_createSettlement(ctx context.C
 				return ec.fieldContext_Settlement_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Settlement_externalLink(ctx, field)
-			case "location":
-				return ec.fieldContext_Settlement_location(ctx, field)
+			case "locations":
+				return ec.fieldContext_Settlement_locations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Settlement", field.Name)
 		},
@@ -33891,8 +33891,8 @@ func (ec *executionContext) fieldContext_Mutation_updateSettlement(ctx context.C
 				return ec.fieldContext_Settlement_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Settlement_externalLink(ctx, field)
-			case "location":
-				return ec.fieldContext_Settlement_location(ctx, field)
+			case "locations":
+				return ec.fieldContext_Settlement_locations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Settlement", field.Name)
 		},
@@ -48091,8 +48091,8 @@ func (ec *executionContext) fieldContext_Region_externalLink(ctx context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _Region_location(ctx context.Context, field graphql.CollectedField, obj *ent.Region) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Region_location(ctx, field)
+func (ec *executionContext) _Region_locations(ctx context.Context, field graphql.CollectedField, obj *ent.Region) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Region_locations(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -48105,7 +48105,7 @@ func (ec *executionContext) _Region_location(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Location(ctx)
+		return obj.Locations(ctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -48119,7 +48119,7 @@ func (ec *executionContext) _Region_location(ctx context.Context, field graphql.
 	return ec.marshalOLocation2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLocationᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Region_location(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Region_locations(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Region",
 		Field:      field,
@@ -48367,8 +48367,8 @@ func (ec *executionContext) fieldContext_RegionEdge_node(ctx context.Context, fi
 				return ec.fieldContext_Region_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Region_externalLink(ctx, field)
-			case "location":
-				return ec.fieldContext_Region_location(ctx, field)
+			case "locations":
+				return ec.fieldContext_Region_locations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Region", field.Name)
 		},
@@ -49606,8 +49606,8 @@ func (ec *executionContext) fieldContext_Settlement_externalLink(ctx context.Con
 	return fc, nil
 }
 
-func (ec *executionContext) _Settlement_location(ctx context.Context, field graphql.CollectedField, obj *ent.Settlement) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Settlement_location(ctx, field)
+func (ec *executionContext) _Settlement_locations(ctx context.Context, field graphql.CollectedField, obj *ent.Settlement) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Settlement_locations(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -49620,7 +49620,7 @@ func (ec *executionContext) _Settlement_location(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Location(ctx)
+		return obj.Locations(ctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -49634,7 +49634,7 @@ func (ec *executionContext) _Settlement_location(ctx context.Context, field grap
 	return ec.marshalOLocation2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLocationᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Settlement_location(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Settlement_locations(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Settlement",
 		Field:      field,
@@ -49882,8 +49882,8 @@ func (ec *executionContext) fieldContext_SettlementEdge_node(ctx context.Context
 				return ec.fieldContext_Settlement_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Settlement_externalLink(ctx, field)
-			case "location":
-				return ec.fieldContext_Settlement_location(ctx, field)
+			case "locations":
+				return ec.fieldContext_Settlement_locations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Settlement", field.Name)
 		},
@@ -64846,7 +64846,7 @@ func (ec *executionContext) unmarshalInputCountryWhereInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasLocation", "hasLocationWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasLocations", "hasLocationsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -65906,24 +65906,24 @@ func (ec *executionContext) unmarshalInputCountryWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.ExternalLinkContainsFold = data
-		case "hasLocation":
+		case "hasLocations":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLocation"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLocations"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.HasLocation = data
-		case "hasLocationWith":
+			it.HasLocations = data
+		case "hasLocationsWith":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLocationWith"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLocationsWith"))
 			data, err := ec.unmarshalOLocationWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLocationWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.HasLocationWith = data
+			it.HasLocationsWith = data
 		}
 	}
 
@@ -71473,7 +71473,7 @@ func (ec *executionContext) unmarshalInputDistrictWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasLocation", "hasLocationWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasLocations", "hasLocationsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -72533,24 +72533,24 @@ func (ec *executionContext) unmarshalInputDistrictWhereInput(ctx context.Context
 				return it, err
 			}
 			it.ExternalLinkContainsFold = data
-		case "hasLocation":
+		case "hasLocations":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLocation"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLocations"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.HasLocation = data
-		case "hasLocationWith":
+			it.HasLocations = data
+		case "hasLocationsWith":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLocationWith"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLocationsWith"))
 			data, err := ec.unmarshalOLocationWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLocationWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.HasLocationWith = data
+			it.HasLocationsWith = data
 		}
 	}
 
@@ -96538,7 +96538,7 @@ func (ec *executionContext) unmarshalInputRegionWhereInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasLocation", "hasLocationWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasLocations", "hasLocationsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -97598,24 +97598,24 @@ func (ec *executionContext) unmarshalInputRegionWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.ExternalLinkContainsFold = data
-		case "hasLocation":
+		case "hasLocations":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLocation"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLocations"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.HasLocation = data
-		case "hasLocationWith":
+			it.HasLocations = data
+		case "hasLocationsWith":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLocationWith"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLocationsWith"))
 			data, err := ec.unmarshalOLocationWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLocationWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.HasLocationWith = data
+			it.HasLocationsWith = data
 		}
 	}
 
@@ -98822,7 +98822,7 @@ func (ec *executionContext) unmarshalInputSettlementWhereInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasLocation", "hasLocationWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasLocations", "hasLocationsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -99882,24 +99882,24 @@ func (ec *executionContext) unmarshalInputSettlementWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.ExternalLinkContainsFold = data
-		case "hasLocation":
+		case "hasLocations":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLocation"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLocations"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.HasLocation = data
-		case "hasLocationWith":
+			it.HasLocations = data
+		case "hasLocationsWith":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLocationWith"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLocationsWith"))
 			data, err := ec.unmarshalOLocationWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLocationWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.HasLocationWith = data
+			it.HasLocationsWith = data
 		}
 	}
 
@@ -103312,7 +103312,7 @@ func (ec *executionContext) unmarshalInputUpdateCountryInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addLocationIDs", "removeLocationIDs", "clearLocation"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addLocationIDs", "removeLocationIDs", "clearLocations"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -103454,15 +103454,15 @@ func (ec *executionContext) unmarshalInputUpdateCountryInput(ctx context.Context
 				return it, err
 			}
 			it.RemoveLocationIDs = data
-		case "clearLocation":
+		case "clearLocations":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearLocation"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearLocations"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearLocation = data
+			it.ClearLocations = data
 		}
 	}
 
@@ -103640,7 +103640,7 @@ func (ec *executionContext) unmarshalInputUpdateDistrictInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addLocationIDs", "removeLocationIDs", "clearLocation"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addLocationIDs", "removeLocationIDs", "clearLocations"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -103782,15 +103782,15 @@ func (ec *executionContext) unmarshalInputUpdateDistrictInput(ctx context.Contex
 				return it, err
 			}
 			it.RemoveLocationIDs = data
-		case "clearLocation":
+		case "clearLocations":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearLocation"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearLocations"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearLocation = data
+			it.ClearLocations = data
 		}
 	}
 
@@ -108063,7 +108063,7 @@ func (ec *executionContext) unmarshalInputUpdateRegionInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addLocationIDs", "removeLocationIDs", "clearLocation"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addLocationIDs", "removeLocationIDs", "clearLocations"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -108205,15 +108205,15 @@ func (ec *executionContext) unmarshalInputUpdateRegionInput(ctx context.Context,
 				return it, err
 			}
 			it.RemoveLocationIDs = data
-		case "clearLocation":
+		case "clearLocations":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearLocation"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearLocations"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearLocation = data
+			it.ClearLocations = data
 		}
 	}
 
@@ -108418,7 +108418,7 @@ func (ec *executionContext) unmarshalInputUpdateSettlementInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addLocationIDs", "removeLocationIDs", "clearLocation"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addLocationIDs", "removeLocationIDs", "clearLocations"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -108560,15 +108560,15 @@ func (ec *executionContext) unmarshalInputUpdateSettlementInput(ctx context.Cont
 				return it, err
 			}
 			it.RemoveLocationIDs = data
-		case "clearLocation":
+		case "clearLocations":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearLocation"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearLocations"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.ClearLocation = data
+			it.ClearLocations = data
 		}
 	}
 
@@ -111422,7 +111422,7 @@ func (ec *executionContext) _Country(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = ec._Country_description(ctx, field, obj)
 		case "externalLink":
 			out.Values[i] = ec._Country_externalLink(ctx, field, obj)
-		case "location":
+		case "locations":
 			field := field
 
 			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
@@ -111431,7 +111431,7 @@ func (ec *executionContext) _Country(ctx context.Context, sel ast.SelectionSet, 
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Country_location(ctx, field, obj)
+				res = ec._Country_locations(ctx, field, obj)
 				return res
 			}
 
@@ -111784,7 +111784,7 @@ func (ec *executionContext) _District(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._District_description(ctx, field, obj)
 		case "externalLink":
 			out.Values[i] = ec._District_externalLink(ctx, field, obj)
-		case "location":
+		case "locations":
 			field := field
 
 			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
@@ -111793,7 +111793,7 @@ func (ec *executionContext) _District(ctx context.Context, sel ast.SelectionSet,
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._District_location(ctx, field, obj)
+				res = ec._District_locations(ctx, field, obj)
 				return res
 			}
 
@@ -117888,7 +117888,7 @@ func (ec *executionContext) _Region(ctx context.Context, sel ast.SelectionSet, o
 			out.Values[i] = ec._Region_description(ctx, field, obj)
 		case "externalLink":
 			out.Values[i] = ec._Region_externalLink(ctx, field, obj)
-		case "location":
+		case "locations":
 			field := field
 
 			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
@@ -117897,7 +117897,7 @@ func (ec *executionContext) _Region(ctx context.Context, sel ast.SelectionSet, o
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Region_location(ctx, field, obj)
+				res = ec._Region_locations(ctx, field, obj)
 				return res
 			}
 
@@ -118283,7 +118283,7 @@ func (ec *executionContext) _Settlement(ctx context.Context, sel ast.SelectionSe
 			out.Values[i] = ec._Settlement_description(ctx, field, obj)
 		case "externalLink":
 			out.Values[i] = ec._Settlement_externalLink(ctx, field, obj)
-		case "location":
+		case "locations":
 			field := field
 
 			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
@@ -118292,7 +118292,7 @@ func (ec *executionContext) _Settlement(ctx context.Context, sel ast.SelectionSe
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Settlement_location(ctx, field, obj)
+				res = ec._Settlement_locations(ctx, field, obj)
 				return res
 			}
 

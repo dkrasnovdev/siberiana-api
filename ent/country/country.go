@@ -31,17 +31,17 @@ const (
 	FieldDescription = "description"
 	// FieldExternalLink holds the string denoting the external_link field in the database.
 	FieldExternalLink = "external_link"
-	// EdgeLocation holds the string denoting the location edge name in mutations.
-	EdgeLocation = "location"
+	// EdgeLocations holds the string denoting the locations edge name in mutations.
+	EdgeLocations = "locations"
 	// Table holds the table name of the country in the database.
 	Table = "countries"
-	// LocationTable is the table that holds the location relation/edge.
-	LocationTable = "locations"
-	// LocationInverseTable is the table name for the Location entity.
+	// LocationsTable is the table that holds the locations relation/edge.
+	LocationsTable = "locations"
+	// LocationsInverseTable is the table name for the Location entity.
 	// It exists in this package in order to avoid circular dependency with the "location" package.
-	LocationInverseTable = "locations"
-	// LocationColumn is the table column denoting the location relation/edge.
-	LocationColumn = "location_country"
+	LocationsInverseTable = "locations"
+	// LocationsColumn is the table column denoting the locations relation/edge.
+	LocationsColumn = "location_country"
 )
 
 // Columns holds all SQL columns for country fields.
@@ -131,23 +131,23 @@ func ByExternalLink(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalLink, opts...).ToFunc()
 }
 
-// ByLocationCount orders the results by location count.
-func ByLocationCount(opts ...sql.OrderTermOption) OrderOption {
+// ByLocationsCount orders the results by locations count.
+func ByLocationsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newLocationStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newLocationsStep(), opts...)
 	}
 }
 
-// ByLocation orders the results by location terms.
-func ByLocation(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByLocations orders the results by locations terms.
+func ByLocations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newLocationStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newLocationsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-func newLocationStep() *sqlgraph.Step {
+func newLocationsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(LocationInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, true, LocationTable, LocationColumn),
+		sqlgraph.To(LocationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, LocationsTable, LocationsColumn),
 	)
 }

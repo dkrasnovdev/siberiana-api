@@ -155,14 +155,14 @@ func (ru *RegionUpdate) ClearExternalLink() *RegionUpdate {
 	return ru
 }
 
-// AddLocationIDs adds the "location" edge to the Location entity by IDs.
+// AddLocationIDs adds the "locations" edge to the Location entity by IDs.
 func (ru *RegionUpdate) AddLocationIDs(ids ...int) *RegionUpdate {
 	ru.mutation.AddLocationIDs(ids...)
 	return ru
 }
 
-// AddLocation adds the "location" edges to the Location entity.
-func (ru *RegionUpdate) AddLocation(l ...*Location) *RegionUpdate {
+// AddLocations adds the "locations" edges to the Location entity.
+func (ru *RegionUpdate) AddLocations(l ...*Location) *RegionUpdate {
 	ids := make([]int, len(l))
 	for i := range l {
 		ids[i] = l[i].ID
@@ -175,20 +175,20 @@ func (ru *RegionUpdate) Mutation() *RegionMutation {
 	return ru.mutation
 }
 
-// ClearLocation clears all "location" edges to the Location entity.
-func (ru *RegionUpdate) ClearLocation() *RegionUpdate {
-	ru.mutation.ClearLocation()
+// ClearLocations clears all "locations" edges to the Location entity.
+func (ru *RegionUpdate) ClearLocations() *RegionUpdate {
+	ru.mutation.ClearLocations()
 	return ru
 }
 
-// RemoveLocationIDs removes the "location" edge to Location entities by IDs.
+// RemoveLocationIDs removes the "locations" edge to Location entities by IDs.
 func (ru *RegionUpdate) RemoveLocationIDs(ids ...int) *RegionUpdate {
 	ru.mutation.RemoveLocationIDs(ids...)
 	return ru
 }
 
-// RemoveLocation removes "location" edges to Location entities.
-func (ru *RegionUpdate) RemoveLocation(l ...*Location) *RegionUpdate {
+// RemoveLocations removes "locations" edges to Location entities.
+func (ru *RegionUpdate) RemoveLocations(l ...*Location) *RegionUpdate {
 	ids := make([]int, len(l))
 	for i := range l {
 		ids[i] = l[i].ID
@@ -286,12 +286,12 @@ func (ru *RegionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ru.mutation.ExternalLinkCleared() {
 		_spec.ClearField(region.FieldExternalLink, field.TypeString)
 	}
-	if ru.mutation.LocationCleared() {
+	if ru.mutation.LocationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
-			Table:   region.LocationTable,
-			Columns: []string{region.LocationColumn},
+			Table:   region.LocationsTable,
+			Columns: []string{region.LocationsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
@@ -299,12 +299,12 @@ func (ru *RegionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.RemovedLocationIDs(); len(nodes) > 0 && !ru.mutation.LocationCleared() {
+	if nodes := ru.mutation.RemovedLocationsIDs(); len(nodes) > 0 && !ru.mutation.LocationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
-			Table:   region.LocationTable,
-			Columns: []string{region.LocationColumn},
+			Table:   region.LocationsTable,
+			Columns: []string{region.LocationsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
@@ -315,12 +315,12 @@ func (ru *RegionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.LocationIDs(); len(nodes) > 0 {
+	if nodes := ru.mutation.LocationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
-			Table:   region.LocationTable,
-			Columns: []string{region.LocationColumn},
+			Table:   region.LocationsTable,
+			Columns: []string{region.LocationsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
@@ -477,14 +477,14 @@ func (ruo *RegionUpdateOne) ClearExternalLink() *RegionUpdateOne {
 	return ruo
 }
 
-// AddLocationIDs adds the "location" edge to the Location entity by IDs.
+// AddLocationIDs adds the "locations" edge to the Location entity by IDs.
 func (ruo *RegionUpdateOne) AddLocationIDs(ids ...int) *RegionUpdateOne {
 	ruo.mutation.AddLocationIDs(ids...)
 	return ruo
 }
 
-// AddLocation adds the "location" edges to the Location entity.
-func (ruo *RegionUpdateOne) AddLocation(l ...*Location) *RegionUpdateOne {
+// AddLocations adds the "locations" edges to the Location entity.
+func (ruo *RegionUpdateOne) AddLocations(l ...*Location) *RegionUpdateOne {
 	ids := make([]int, len(l))
 	for i := range l {
 		ids[i] = l[i].ID
@@ -497,20 +497,20 @@ func (ruo *RegionUpdateOne) Mutation() *RegionMutation {
 	return ruo.mutation
 }
 
-// ClearLocation clears all "location" edges to the Location entity.
-func (ruo *RegionUpdateOne) ClearLocation() *RegionUpdateOne {
-	ruo.mutation.ClearLocation()
+// ClearLocations clears all "locations" edges to the Location entity.
+func (ruo *RegionUpdateOne) ClearLocations() *RegionUpdateOne {
+	ruo.mutation.ClearLocations()
 	return ruo
 }
 
-// RemoveLocationIDs removes the "location" edge to Location entities by IDs.
+// RemoveLocationIDs removes the "locations" edge to Location entities by IDs.
 func (ruo *RegionUpdateOne) RemoveLocationIDs(ids ...int) *RegionUpdateOne {
 	ruo.mutation.RemoveLocationIDs(ids...)
 	return ruo
 }
 
-// RemoveLocation removes "location" edges to Location entities.
-func (ruo *RegionUpdateOne) RemoveLocation(l ...*Location) *RegionUpdateOne {
+// RemoveLocations removes "locations" edges to Location entities.
+func (ruo *RegionUpdateOne) RemoveLocations(l ...*Location) *RegionUpdateOne {
 	ids := make([]int, len(l))
 	for i := range l {
 		ids[i] = l[i].ID
@@ -638,12 +638,12 @@ func (ruo *RegionUpdateOne) sqlSave(ctx context.Context) (_node *Region, err err
 	if ruo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(region.FieldExternalLink, field.TypeString)
 	}
-	if ruo.mutation.LocationCleared() {
+	if ruo.mutation.LocationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
-			Table:   region.LocationTable,
-			Columns: []string{region.LocationColumn},
+			Table:   region.LocationsTable,
+			Columns: []string{region.LocationsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
@@ -651,12 +651,12 @@ func (ruo *RegionUpdateOne) sqlSave(ctx context.Context) (_node *Region, err err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.RemovedLocationIDs(); len(nodes) > 0 && !ruo.mutation.LocationCleared() {
+	if nodes := ruo.mutation.RemovedLocationsIDs(); len(nodes) > 0 && !ruo.mutation.LocationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
-			Table:   region.LocationTable,
-			Columns: []string{region.LocationColumn},
+			Table:   region.LocationsTable,
+			Columns: []string{region.LocationsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
@@ -667,12 +667,12 @@ func (ruo *RegionUpdateOne) sqlSave(ctx context.Context) (_node *Region, err err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.LocationIDs(); len(nodes) > 0 {
+	if nodes := ruo.mutation.LocationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
-			Table:   region.LocationTable,
-			Columns: []string{region.LocationColumn},
+			Table:   region.LocationsTable,
+			Columns: []string{region.LocationsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),

@@ -1714,7 +1714,7 @@ func (c *CountryQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
-		case "location":
+		case "locations":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -1723,7 +1723,7 @@ func (c *CountryQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, locationImplementors)...); err != nil {
 				return err
 			}
-			c.WithNamedLocation(alias, func(wq *LocationQuery) {
+			c.WithNamedLocations(alias, func(wq *LocationQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -1998,7 +1998,7 @@ func (d *DistrictQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
-		case "location":
+		case "locations":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -2007,7 +2007,7 @@ func (d *DistrictQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, locationImplementors)...); err != nil {
 				return err
 			}
-			d.WithNamedLocation(alias, func(wq *LocationQuery) {
+			d.WithNamedLocations(alias, func(wq *LocationQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -5322,7 +5322,7 @@ func (r *RegionQuery) collectField(ctx context.Context, opCtx *graphql.Operation
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
-		case "location":
+		case "locations":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -5331,7 +5331,7 @@ func (r *RegionQuery) collectField(ctx context.Context, opCtx *graphql.Operation
 			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, locationImplementors)...); err != nil {
 				return err
 			}
-			r.WithNamedLocation(alias, func(wq *LocationQuery) {
+			r.WithNamedLocations(alias, func(wq *LocationQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -5618,7 +5618,7 @@ func (s *SettlementQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
-		case "location":
+		case "locations":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -5627,7 +5627,7 @@ func (s *SettlementQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, locationImplementors)...); err != nil {
 				return err
 			}
-			s.WithNamedLocation(alias, func(wq *LocationQuery) {
+			s.WithNamedLocations(alias, func(wq *LocationQuery) {
 				*wq = *query
 			})
 		case "createdAt":

@@ -155,14 +155,14 @@ func (su *SettlementUpdate) ClearExternalLink() *SettlementUpdate {
 	return su
 }
 
-// AddLocationIDs adds the "location" edge to the Location entity by IDs.
+// AddLocationIDs adds the "locations" edge to the Location entity by IDs.
 func (su *SettlementUpdate) AddLocationIDs(ids ...int) *SettlementUpdate {
 	su.mutation.AddLocationIDs(ids...)
 	return su
 }
 
-// AddLocation adds the "location" edges to the Location entity.
-func (su *SettlementUpdate) AddLocation(l ...*Location) *SettlementUpdate {
+// AddLocations adds the "locations" edges to the Location entity.
+func (su *SettlementUpdate) AddLocations(l ...*Location) *SettlementUpdate {
 	ids := make([]int, len(l))
 	for i := range l {
 		ids[i] = l[i].ID
@@ -175,20 +175,20 @@ func (su *SettlementUpdate) Mutation() *SettlementMutation {
 	return su.mutation
 }
 
-// ClearLocation clears all "location" edges to the Location entity.
-func (su *SettlementUpdate) ClearLocation() *SettlementUpdate {
-	su.mutation.ClearLocation()
+// ClearLocations clears all "locations" edges to the Location entity.
+func (su *SettlementUpdate) ClearLocations() *SettlementUpdate {
+	su.mutation.ClearLocations()
 	return su
 }
 
-// RemoveLocationIDs removes the "location" edge to Location entities by IDs.
+// RemoveLocationIDs removes the "locations" edge to Location entities by IDs.
 func (su *SettlementUpdate) RemoveLocationIDs(ids ...int) *SettlementUpdate {
 	su.mutation.RemoveLocationIDs(ids...)
 	return su
 }
 
-// RemoveLocation removes "location" edges to Location entities.
-func (su *SettlementUpdate) RemoveLocation(l ...*Location) *SettlementUpdate {
+// RemoveLocations removes "locations" edges to Location entities.
+func (su *SettlementUpdate) RemoveLocations(l ...*Location) *SettlementUpdate {
 	ids := make([]int, len(l))
 	for i := range l {
 		ids[i] = l[i].ID
@@ -286,12 +286,12 @@ func (su *SettlementUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.ExternalLinkCleared() {
 		_spec.ClearField(settlement.FieldExternalLink, field.TypeString)
 	}
-	if su.mutation.LocationCleared() {
+	if su.mutation.LocationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
-			Table:   settlement.LocationTable,
-			Columns: []string{settlement.LocationColumn},
+			Table:   settlement.LocationsTable,
+			Columns: []string{settlement.LocationsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
@@ -299,12 +299,12 @@ func (su *SettlementUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.RemovedLocationIDs(); len(nodes) > 0 && !su.mutation.LocationCleared() {
+	if nodes := su.mutation.RemovedLocationsIDs(); len(nodes) > 0 && !su.mutation.LocationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
-			Table:   settlement.LocationTable,
-			Columns: []string{settlement.LocationColumn},
+			Table:   settlement.LocationsTable,
+			Columns: []string{settlement.LocationsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
@@ -315,12 +315,12 @@ func (su *SettlementUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.LocationIDs(); len(nodes) > 0 {
+	if nodes := su.mutation.LocationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
-			Table:   settlement.LocationTable,
-			Columns: []string{settlement.LocationColumn},
+			Table:   settlement.LocationsTable,
+			Columns: []string{settlement.LocationsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
@@ -477,14 +477,14 @@ func (suo *SettlementUpdateOne) ClearExternalLink() *SettlementUpdateOne {
 	return suo
 }
 
-// AddLocationIDs adds the "location" edge to the Location entity by IDs.
+// AddLocationIDs adds the "locations" edge to the Location entity by IDs.
 func (suo *SettlementUpdateOne) AddLocationIDs(ids ...int) *SettlementUpdateOne {
 	suo.mutation.AddLocationIDs(ids...)
 	return suo
 }
 
-// AddLocation adds the "location" edges to the Location entity.
-func (suo *SettlementUpdateOne) AddLocation(l ...*Location) *SettlementUpdateOne {
+// AddLocations adds the "locations" edges to the Location entity.
+func (suo *SettlementUpdateOne) AddLocations(l ...*Location) *SettlementUpdateOne {
 	ids := make([]int, len(l))
 	for i := range l {
 		ids[i] = l[i].ID
@@ -497,20 +497,20 @@ func (suo *SettlementUpdateOne) Mutation() *SettlementMutation {
 	return suo.mutation
 }
 
-// ClearLocation clears all "location" edges to the Location entity.
-func (suo *SettlementUpdateOne) ClearLocation() *SettlementUpdateOne {
-	suo.mutation.ClearLocation()
+// ClearLocations clears all "locations" edges to the Location entity.
+func (suo *SettlementUpdateOne) ClearLocations() *SettlementUpdateOne {
+	suo.mutation.ClearLocations()
 	return suo
 }
 
-// RemoveLocationIDs removes the "location" edge to Location entities by IDs.
+// RemoveLocationIDs removes the "locations" edge to Location entities by IDs.
 func (suo *SettlementUpdateOne) RemoveLocationIDs(ids ...int) *SettlementUpdateOne {
 	suo.mutation.RemoveLocationIDs(ids...)
 	return suo
 }
 
-// RemoveLocation removes "location" edges to Location entities.
-func (suo *SettlementUpdateOne) RemoveLocation(l ...*Location) *SettlementUpdateOne {
+// RemoveLocations removes "locations" edges to Location entities.
+func (suo *SettlementUpdateOne) RemoveLocations(l ...*Location) *SettlementUpdateOne {
 	ids := make([]int, len(l))
 	for i := range l {
 		ids[i] = l[i].ID
@@ -638,12 +638,12 @@ func (suo *SettlementUpdateOne) sqlSave(ctx context.Context) (_node *Settlement,
 	if suo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(settlement.FieldExternalLink, field.TypeString)
 	}
-	if suo.mutation.LocationCleared() {
+	if suo.mutation.LocationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
-			Table:   settlement.LocationTable,
-			Columns: []string{settlement.LocationColumn},
+			Table:   settlement.LocationsTable,
+			Columns: []string{settlement.LocationsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
@@ -651,12 +651,12 @@ func (suo *SettlementUpdateOne) sqlSave(ctx context.Context) (_node *Settlement,
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.RemovedLocationIDs(); len(nodes) > 0 && !suo.mutation.LocationCleared() {
+	if nodes := suo.mutation.RemovedLocationsIDs(); len(nodes) > 0 && !suo.mutation.LocationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
-			Table:   settlement.LocationTable,
-			Columns: []string{settlement.LocationColumn},
+			Table:   settlement.LocationsTable,
+			Columns: []string{settlement.LocationsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
@@ -667,12 +667,12 @@ func (suo *SettlementUpdateOne) sqlSave(ctx context.Context) (_node *Settlement,
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.LocationIDs(); len(nodes) > 0 {
+	if nodes := suo.mutation.LocationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
-			Table:   settlement.LocationTable,
-			Columns: []string{settlement.LocationColumn},
+			Table:   settlement.LocationsTable,
+			Columns: []string{settlement.LocationsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),

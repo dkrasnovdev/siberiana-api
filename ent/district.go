@@ -41,24 +41,24 @@ type District struct {
 
 // DistrictEdges holds the relations/edges for other nodes in the graph.
 type DistrictEdges struct {
-	// Location holds the value of the location edge.
-	Location []*Location `json:"location,omitempty"`
+	// Locations holds the value of the locations edge.
+	Locations []*Location `json:"locations,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 	// totalCount holds the count of the edges above.
 	totalCount [1]map[string]int
 
-	namedLocation map[string][]*Location
+	namedLocations map[string][]*Location
 }
 
-// LocationOrErr returns the Location value or an error if the edge
+// LocationsOrErr returns the Locations value or an error if the edge
 // was not loaded in eager-loading.
-func (e DistrictEdges) LocationOrErr() ([]*Location, error) {
+func (e DistrictEdges) LocationsOrErr() ([]*Location, error) {
 	if e.loadedTypes[0] {
-		return e.Location, nil
+		return e.Locations, nil
 	}
-	return nil, &NotLoadedError{edge: "location"}
+	return nil, &NotLoadedError{edge: "locations"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -154,9 +154,9 @@ func (d *District) Value(name string) (ent.Value, error) {
 	return d.selectValues.Get(name)
 }
 
-// QueryLocation queries the "location" edge of the District entity.
-func (d *District) QueryLocation() *LocationQuery {
-	return NewDistrictClient(d.config).QueryLocation(d)
+// QueryLocations queries the "locations" edge of the District entity.
+func (d *District) QueryLocations() *LocationQuery {
+	return NewDistrictClient(d.config).QueryLocations(d)
 }
 
 // Update returns a builder for updating this District.
@@ -209,27 +209,27 @@ func (d *District) String() string {
 	return builder.String()
 }
 
-// NamedLocation returns the Location named value or an error if the edge was not
+// NamedLocations returns the Locations named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (d *District) NamedLocation(name string) ([]*Location, error) {
-	if d.Edges.namedLocation == nil {
+func (d *District) NamedLocations(name string) ([]*Location, error) {
+	if d.Edges.namedLocations == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := d.Edges.namedLocation[name]
+	nodes, ok := d.Edges.namedLocations[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (d *District) appendNamedLocation(name string, edges ...*Location) {
-	if d.Edges.namedLocation == nil {
-		d.Edges.namedLocation = make(map[string][]*Location)
+func (d *District) appendNamedLocations(name string, edges ...*Location) {
+	if d.Edges.namedLocations == nil {
+		d.Edges.namedLocations = make(map[string][]*Location)
 	}
 	if len(edges) == 0 {
-		d.Edges.namedLocation[name] = []*Location{}
+		d.Edges.namedLocations[name] = []*Location{}
 	} else {
-		d.Edges.namedLocation[name] = append(d.Edges.namedLocation[name], edges...)
+		d.Edges.namedLocations[name] = append(d.Edges.namedLocations[name], edges...)
 	}
 }
 

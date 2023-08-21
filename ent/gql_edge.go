@@ -340,14 +340,14 @@ func (c *Collection) Category(ctx context.Context) (*Category, error) {
 	return result, err
 }
 
-func (c *Country) Location(ctx context.Context) (result []*Location, err error) {
+func (c *Country) Locations(ctx context.Context) (result []*Location, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = c.NamedLocation(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = c.NamedLocations(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = c.Edges.LocationOrErr()
+		result, err = c.Edges.LocationsOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = c.QueryLocation().All(ctx)
+		result, err = c.QueryLocations().All(ctx)
 	}
 	return result, err
 }
@@ -364,14 +364,14 @@ func (c *Culture) Artifacts(ctx context.Context) (result []*Artifact, err error)
 	return result, err
 }
 
-func (d *District) Location(ctx context.Context) (result []*Location, err error) {
+func (d *District) Locations(ctx context.Context) (result []*Location, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = d.NamedLocation(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = d.NamedLocations(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = d.Edges.LocationOrErr()
+		result, err = d.Edges.LocationsOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = d.QueryLocation().All(ctx)
+		result, err = d.QueryLocations().All(ctx)
 	}
 	return result, err
 }
@@ -884,14 +884,14 @@ func (pu *Publisher) Books(ctx context.Context) (result []*Book, err error) {
 	return result, err
 }
 
-func (r *Region) Location(ctx context.Context) (result []*Location, err error) {
+func (r *Region) Locations(ctx context.Context) (result []*Location, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = r.NamedLocation(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = r.NamedLocations(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = r.Edges.LocationOrErr()
+		result, err = r.Edges.LocationsOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = r.QueryLocation().All(ctx)
+		result, err = r.QueryLocations().All(ctx)
 	}
 	return result, err
 }
@@ -920,14 +920,14 @@ func (s *Set) Monuments(ctx context.Context) (result []*Monument, err error) {
 	return result, err
 }
 
-func (s *Settlement) Location(ctx context.Context) (result []*Location, err error) {
+func (s *Settlement) Locations(ctx context.Context) (result []*Location, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = s.NamedLocation(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = s.NamedLocations(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = s.Edges.LocationOrErr()
+		result, err = s.Edges.LocationsOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = s.QueryLocation().All(ctx)
+		result, err = s.QueryLocations().All(ctx)
 	}
 	return result, err
 }

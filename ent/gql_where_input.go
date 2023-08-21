@@ -6766,9 +6766,9 @@ type CountryWhereInput struct {
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
-	// "location" edge predicates.
-	HasLocation     *bool                 `json:"hasLocation,omitempty"`
-	HasLocationWith []*LocationWhereInput `json:"hasLocationWith,omitempty"`
+	// "locations" edge predicates.
+	HasLocations     *bool                 `json:"hasLocations,omitempty"`
+	HasLocationsWith []*LocationWhereInput `json:"hasLocationsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -7185,23 +7185,23 @@ func (i *CountryWhereInput) P() (predicate.Country, error) {
 		predicates = append(predicates, country.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
 
-	if i.HasLocation != nil {
-		p := country.HasLocation()
-		if !*i.HasLocation {
+	if i.HasLocations != nil {
+		p := country.HasLocations()
+		if !*i.HasLocations {
 			p = country.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasLocationWith) > 0 {
-		with := make([]predicate.Location, 0, len(i.HasLocationWith))
-		for _, w := range i.HasLocationWith {
+	if len(i.HasLocationsWith) > 0 {
+		with := make([]predicate.Location, 0, len(i.HasLocationsWith))
+		for _, w := range i.HasLocationsWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasLocationWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasLocationsWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, country.HasLocationWith(with...))
+		predicates = append(predicates, country.HasLocationsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -7938,9 +7938,9 @@ type DistrictWhereInput struct {
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
-	// "location" edge predicates.
-	HasLocation     *bool                 `json:"hasLocation,omitempty"`
-	HasLocationWith []*LocationWhereInput `json:"hasLocationWith,omitempty"`
+	// "locations" edge predicates.
+	HasLocations     *bool                 `json:"hasLocations,omitempty"`
+	HasLocationsWith []*LocationWhereInput `json:"hasLocationsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -8357,23 +8357,23 @@ func (i *DistrictWhereInput) P() (predicate.District, error) {
 		predicates = append(predicates, district.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
 
-	if i.HasLocation != nil {
-		p := district.HasLocation()
-		if !*i.HasLocation {
+	if i.HasLocations != nil {
+		p := district.HasLocations()
+		if !*i.HasLocations {
 			p = district.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasLocationWith) > 0 {
-		with := make([]predicate.Location, 0, len(i.HasLocationWith))
-		for _, w := range i.HasLocationWith {
+	if len(i.HasLocationsWith) > 0 {
+		with := make([]predicate.Location, 0, len(i.HasLocationsWith))
+		for _, w := range i.HasLocationsWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasLocationWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasLocationsWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, district.HasLocationWith(with...))
+		predicates = append(predicates, district.HasLocationsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -21240,9 +21240,9 @@ type RegionWhereInput struct {
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
-	// "location" edge predicates.
-	HasLocation     *bool                 `json:"hasLocation,omitempty"`
-	HasLocationWith []*LocationWhereInput `json:"hasLocationWith,omitempty"`
+	// "locations" edge predicates.
+	HasLocations     *bool                 `json:"hasLocations,omitempty"`
+	HasLocationsWith []*LocationWhereInput `json:"hasLocationsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -21659,23 +21659,23 @@ func (i *RegionWhereInput) P() (predicate.Region, error) {
 		predicates = append(predicates, region.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
 
-	if i.HasLocation != nil {
-		p := region.HasLocation()
-		if !*i.HasLocation {
+	if i.HasLocations != nil {
+		p := region.HasLocations()
+		if !*i.HasLocations {
 			p = region.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasLocationWith) > 0 {
-		with := make([]predicate.Location, 0, len(i.HasLocationWith))
-		for _, w := range i.HasLocationWith {
+	if len(i.HasLocationsWith) > 0 {
+		with := make([]predicate.Location, 0, len(i.HasLocationsWith))
+		for _, w := range i.HasLocationsWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasLocationWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasLocationsWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, region.HasLocationWith(with...))
+		predicates = append(predicates, region.HasLocationsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -22434,9 +22434,9 @@ type SettlementWhereInput struct {
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
-	// "location" edge predicates.
-	HasLocation     *bool                 `json:"hasLocation,omitempty"`
-	HasLocationWith []*LocationWhereInput `json:"hasLocationWith,omitempty"`
+	// "locations" edge predicates.
+	HasLocations     *bool                 `json:"hasLocations,omitempty"`
+	HasLocationsWith []*LocationWhereInput `json:"hasLocationsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -22853,23 +22853,23 @@ func (i *SettlementWhereInput) P() (predicate.Settlement, error) {
 		predicates = append(predicates, settlement.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
 
-	if i.HasLocation != nil {
-		p := settlement.HasLocation()
-		if !*i.HasLocation {
+	if i.HasLocations != nil {
+		p := settlement.HasLocations()
+		if !*i.HasLocations {
 			p = settlement.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasLocationWith) > 0 {
-		with := make([]predicate.Location, 0, len(i.HasLocationWith))
-		for _, w := range i.HasLocationWith {
+	if len(i.HasLocationsWith) > 0 {
+		with := make([]predicate.Location, 0, len(i.HasLocationsWith))
+		for _, w := range i.HasLocationsWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasLocationWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasLocationsWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, settlement.HasLocationWith(with...))
+		predicates = append(predicates, settlement.HasLocationsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

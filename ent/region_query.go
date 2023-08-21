@@ -20,14 +20,14 @@ import (
 // RegionQuery is the builder for querying Region entities.
 type RegionQuery struct {
 	config
-	ctx               *QueryContext
-	order             []region.OrderOption
-	inters            []Interceptor
-	predicates        []predicate.Region
-	withLocation      *LocationQuery
-	modifiers         []func(*sql.Selector)
-	loadTotal         []func(context.Context, []*Region) error
-	withNamedLocation map[string]*LocationQuery
+	ctx                *QueryContext
+	order              []region.OrderOption
+	inters             []Interceptor
+	predicates         []predicate.Region
+	withLocations      *LocationQuery
+	modifiers          []func(*sql.Selector)
+	loadTotal          []func(context.Context, []*Region) error
+	withNamedLocations map[string]*LocationQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -64,8 +64,8 @@ func (rq *RegionQuery) Order(o ...region.OrderOption) *RegionQuery {
 	return rq
 }
 
-// QueryLocation chains the current query on the "location" edge.
-func (rq *RegionQuery) QueryLocation() *LocationQuery {
+// QueryLocations chains the current query on the "locations" edge.
+func (rq *RegionQuery) QueryLocations() *LocationQuery {
 	query := (&LocationClient{config: rq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := rq.prepareQuery(ctx); err != nil {
@@ -78,7 +78,7 @@ func (rq *RegionQuery) QueryLocation() *LocationQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(region.Table, region.FieldID, selector),
 			sqlgraph.To(location.Table, location.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, true, region.LocationTable, region.LocationColumn),
+			sqlgraph.Edge(sqlgraph.O2M, true, region.LocationsTable, region.LocationsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
 		return fromU, nil
@@ -273,26 +273,26 @@ func (rq *RegionQuery) Clone() *RegionQuery {
 		return nil
 	}
 	return &RegionQuery{
-		config:       rq.config,
-		ctx:          rq.ctx.Clone(),
-		order:        append([]region.OrderOption{}, rq.order...),
-		inters:       append([]Interceptor{}, rq.inters...),
-		predicates:   append([]predicate.Region{}, rq.predicates...),
-		withLocation: rq.withLocation.Clone(),
+		config:        rq.config,
+		ctx:           rq.ctx.Clone(),
+		order:         append([]region.OrderOption{}, rq.order...),
+		inters:        append([]Interceptor{}, rq.inters...),
+		predicates:    append([]predicate.Region{}, rq.predicates...),
+		withLocations: rq.withLocations.Clone(),
 		// clone intermediate query.
 		sql:  rq.sql.Clone(),
 		path: rq.path,
 	}
 }
 
-// WithLocation tells the query-builder to eager-load the nodes that are connected to
-// the "location" edge. The optional arguments are used to configure the query builder of the edge.
-func (rq *RegionQuery) WithLocation(opts ...func(*LocationQuery)) *RegionQuery {
+// WithLocations tells the query-builder to eager-load the nodes that are connected to
+// the "locations" edge. The optional arguments are used to configure the query builder of the edge.
+func (rq *RegionQuery) WithLocations(opts ...func(*LocationQuery)) *RegionQuery {
 	query := (&LocationClient{config: rq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	rq.withLocation = query
+	rq.withLocations = query
 	return rq
 }
 
@@ -381,7 +381,7 @@ func (rq *RegionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Regio
 		nodes       = []*Region{}
 		_spec       = rq.querySpec()
 		loadedTypes = [1]bool{
-			rq.withLocation != nil,
+			rq.withLocations != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -405,17 +405,17 @@ func (rq *RegionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Regio
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := rq.withLocation; query != nil {
-		if err := rq.loadLocation(ctx, query, nodes,
-			func(n *Region) { n.Edges.Location = []*Location{} },
-			func(n *Region, e *Location) { n.Edges.Location = append(n.Edges.Location, e) }); err != nil {
+	if query := rq.withLocations; query != nil {
+		if err := rq.loadLocations(ctx, query, nodes,
+			func(n *Region) { n.Edges.Locations = []*Location{} },
+			func(n *Region, e *Location) { n.Edges.Locations = append(n.Edges.Locations, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range rq.withNamedLocation {
-		if err := rq.loadLocation(ctx, query, nodes,
-			func(n *Region) { n.appendNamedLocation(name) },
-			func(n *Region, e *Location) { n.appendNamedLocation(name, e) }); err != nil {
+	for name, query := range rq.withNamedLocations {
+		if err := rq.loadLocations(ctx, query, nodes,
+			func(n *Region) { n.appendNamedLocations(name) },
+			func(n *Region, e *Location) { n.appendNamedLocations(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -427,7 +427,7 @@ func (rq *RegionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Regio
 	return nodes, nil
 }
 
-func (rq *RegionQuery) loadLocation(ctx context.Context, query *LocationQuery, nodes []*Region, init func(*Region), assign func(*Region, *Location)) error {
+func (rq *RegionQuery) loadLocations(ctx context.Context, query *LocationQuery, nodes []*Region, init func(*Region), assign func(*Region, *Location)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int]*Region)
 	for i := range nodes {
@@ -439,7 +439,7 @@ func (rq *RegionQuery) loadLocation(ctx context.Context, query *LocationQuery, n
 	}
 	query.withFKs = true
 	query.Where(predicate.Location(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(region.LocationColumn), fks...))
+		s.Where(sql.InValues(s.C(region.LocationsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -543,17 +543,17 @@ func (rq *RegionQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	return selector
 }
 
-// WithNamedLocation tells the query-builder to eager-load the nodes that are connected to the "location"
+// WithNamedLocations tells the query-builder to eager-load the nodes that are connected to the "locations"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (rq *RegionQuery) WithNamedLocation(name string, opts ...func(*LocationQuery)) *RegionQuery {
+func (rq *RegionQuery) WithNamedLocations(name string, opts ...func(*LocationQuery)) *RegionQuery {
 	query := (&LocationClient{config: rq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if rq.withNamedLocation == nil {
-		rq.withNamedLocation = make(map[string]*LocationQuery)
+	if rq.withNamedLocations == nil {
+		rq.withNamedLocations = make(map[string]*LocationQuery)
 	}
-	rq.withNamedLocation[name] = query
+	rq.withNamedLocations[name] = query
 	return rq
 }
 

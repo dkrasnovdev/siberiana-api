@@ -625,21 +625,21 @@ func ExternalLinkContainsFold(v string) predicate.Settlement {
 	return predicate.Settlement(sql.FieldContainsFold(FieldExternalLink, v))
 }
 
-// HasLocation applies the HasEdge predicate on the "location" edge.
-func HasLocation() predicate.Settlement {
+// HasLocations applies the HasEdge predicate on the "locations" edge.
+func HasLocations() predicate.Settlement {
 	return predicate.Settlement(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, true, LocationTable, LocationColumn),
+			sqlgraph.Edge(sqlgraph.O2M, true, LocationsTable, LocationsColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasLocationWith applies the HasEdge predicate on the "location" edge with a given conditions (other predicates).
-func HasLocationWith(preds ...predicate.Location) predicate.Settlement {
+// HasLocationsWith applies the HasEdge predicate on the "locations" edge with a given conditions (other predicates).
+func HasLocationsWith(preds ...predicate.Location) predicate.Settlement {
 	return predicate.Settlement(func(s *sql.Selector) {
-		step := newLocationStep()
+		step := newLocationsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -20,14 +20,14 @@ import (
 // CountryQuery is the builder for querying Country entities.
 type CountryQuery struct {
 	config
-	ctx               *QueryContext
-	order             []country.OrderOption
-	inters            []Interceptor
-	predicates        []predicate.Country
-	withLocation      *LocationQuery
-	modifiers         []func(*sql.Selector)
-	loadTotal         []func(context.Context, []*Country) error
-	withNamedLocation map[string]*LocationQuery
+	ctx                *QueryContext
+	order              []country.OrderOption
+	inters             []Interceptor
+	predicates         []predicate.Country
+	withLocations      *LocationQuery
+	modifiers          []func(*sql.Selector)
+	loadTotal          []func(context.Context, []*Country) error
+	withNamedLocations map[string]*LocationQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -64,8 +64,8 @@ func (cq *CountryQuery) Order(o ...country.OrderOption) *CountryQuery {
 	return cq
 }
 
-// QueryLocation chains the current query on the "location" edge.
-func (cq *CountryQuery) QueryLocation() *LocationQuery {
+// QueryLocations chains the current query on the "locations" edge.
+func (cq *CountryQuery) QueryLocations() *LocationQuery {
 	query := (&LocationClient{config: cq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := cq.prepareQuery(ctx); err != nil {
@@ -78,7 +78,7 @@ func (cq *CountryQuery) QueryLocation() *LocationQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(country.Table, country.FieldID, selector),
 			sqlgraph.To(location.Table, location.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, true, country.LocationTable, country.LocationColumn),
+			sqlgraph.Edge(sqlgraph.O2M, true, country.LocationsTable, country.LocationsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
@@ -273,26 +273,26 @@ func (cq *CountryQuery) Clone() *CountryQuery {
 		return nil
 	}
 	return &CountryQuery{
-		config:       cq.config,
-		ctx:          cq.ctx.Clone(),
-		order:        append([]country.OrderOption{}, cq.order...),
-		inters:       append([]Interceptor{}, cq.inters...),
-		predicates:   append([]predicate.Country{}, cq.predicates...),
-		withLocation: cq.withLocation.Clone(),
+		config:        cq.config,
+		ctx:           cq.ctx.Clone(),
+		order:         append([]country.OrderOption{}, cq.order...),
+		inters:        append([]Interceptor{}, cq.inters...),
+		predicates:    append([]predicate.Country{}, cq.predicates...),
+		withLocations: cq.withLocations.Clone(),
 		// clone intermediate query.
 		sql:  cq.sql.Clone(),
 		path: cq.path,
 	}
 }
 
-// WithLocation tells the query-builder to eager-load the nodes that are connected to
-// the "location" edge. The optional arguments are used to configure the query builder of the edge.
-func (cq *CountryQuery) WithLocation(opts ...func(*LocationQuery)) *CountryQuery {
+// WithLocations tells the query-builder to eager-load the nodes that are connected to
+// the "locations" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *CountryQuery) WithLocations(opts ...func(*LocationQuery)) *CountryQuery {
 	query := (&LocationClient{config: cq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	cq.withLocation = query
+	cq.withLocations = query
 	return cq
 }
 
@@ -381,7 +381,7 @@ func (cq *CountryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Coun
 		nodes       = []*Country{}
 		_spec       = cq.querySpec()
 		loadedTypes = [1]bool{
-			cq.withLocation != nil,
+			cq.withLocations != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -405,17 +405,17 @@ func (cq *CountryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Coun
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := cq.withLocation; query != nil {
-		if err := cq.loadLocation(ctx, query, nodes,
-			func(n *Country) { n.Edges.Location = []*Location{} },
-			func(n *Country, e *Location) { n.Edges.Location = append(n.Edges.Location, e) }); err != nil {
+	if query := cq.withLocations; query != nil {
+		if err := cq.loadLocations(ctx, query, nodes,
+			func(n *Country) { n.Edges.Locations = []*Location{} },
+			func(n *Country, e *Location) { n.Edges.Locations = append(n.Edges.Locations, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range cq.withNamedLocation {
-		if err := cq.loadLocation(ctx, query, nodes,
-			func(n *Country) { n.appendNamedLocation(name) },
-			func(n *Country, e *Location) { n.appendNamedLocation(name, e) }); err != nil {
+	for name, query := range cq.withNamedLocations {
+		if err := cq.loadLocations(ctx, query, nodes,
+			func(n *Country) { n.appendNamedLocations(name) },
+			func(n *Country, e *Location) { n.appendNamedLocations(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -427,7 +427,7 @@ func (cq *CountryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Coun
 	return nodes, nil
 }
 
-func (cq *CountryQuery) loadLocation(ctx context.Context, query *LocationQuery, nodes []*Country, init func(*Country), assign func(*Country, *Location)) error {
+func (cq *CountryQuery) loadLocations(ctx context.Context, query *LocationQuery, nodes []*Country, init func(*Country), assign func(*Country, *Location)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int]*Country)
 	for i := range nodes {
@@ -439,7 +439,7 @@ func (cq *CountryQuery) loadLocation(ctx context.Context, query *LocationQuery, 
 	}
 	query.withFKs = true
 	query.Where(predicate.Location(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(country.LocationColumn), fks...))
+		s.Where(sql.InValues(s.C(country.LocationsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -543,17 +543,17 @@ func (cq *CountryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	return selector
 }
 
-// WithNamedLocation tells the query-builder to eager-load the nodes that are connected to the "location"
+// WithNamedLocations tells the query-builder to eager-load the nodes that are connected to the "locations"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (cq *CountryQuery) WithNamedLocation(name string, opts ...func(*LocationQuery)) *CountryQuery {
+func (cq *CountryQuery) WithNamedLocations(name string, opts ...func(*LocationQuery)) *CountryQuery {
 	query := (&LocationClient{config: cq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if cq.withNamedLocation == nil {
-		cq.withNamedLocation = make(map[string]*LocationQuery)
+	if cq.withNamedLocations == nil {
+		cq.withNamedLocations = make(map[string]*LocationQuery)
 	}
-	cq.withNamedLocation[name] = query
+	cq.withNamedLocations[name] = query
 	return cq
 }
 
