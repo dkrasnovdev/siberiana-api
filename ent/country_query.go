@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -19,14 +20,14 @@ import (
 // CountryQuery is the builder for querying Country entities.
 type CountryQuery struct {
 	config
-	ctx          *QueryContext
-	order        []country.OrderOption
-	inters       []Interceptor
-	predicates   []predicate.Country
-	withLocation *LocationQuery
-	withFKs      bool
-	modifiers    []func(*sql.Selector)
-	loadTotal    []func(context.Context, []*Country) error
+	ctx               *QueryContext
+	order             []country.OrderOption
+	inters            []Interceptor
+	predicates        []predicate.Country
+	withLocation      *LocationQuery
+	modifiers         []func(*sql.Selector)
+	loadTotal         []func(context.Context, []*Country) error
+	withNamedLocation map[string]*LocationQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -77,7 +78,7 @@ func (cq *CountryQuery) QueryLocation() *LocationQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(country.Table, country.FieldID, selector),
 			sqlgraph.To(location.Table, location.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, country.LocationTable, country.LocationColumn),
+			sqlgraph.Edge(sqlgraph.O2M, true, country.LocationTable, country.LocationColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
@@ -378,18 +379,11 @@ func (cq *CountryQuery) prepareQuery(ctx context.Context) error {
 func (cq *CountryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Country, error) {
 	var (
 		nodes       = []*Country{}
-		withFKs     = cq.withFKs
 		_spec       = cq.querySpec()
 		loadedTypes = [1]bool{
 			cq.withLocation != nil,
 		}
 	)
-	if cq.withLocation != nil {
-		withFKs = true
-	}
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, country.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Country).scanValues(nil, columns)
 	}
@@ -412,8 +406,16 @@ func (cq *CountryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Coun
 		return nodes, nil
 	}
 	if query := cq.withLocation; query != nil {
-		if err := cq.loadLocation(ctx, query, nodes, nil,
-			func(n *Country, e *Location) { n.Edges.Location = e }); err != nil {
+		if err := cq.loadLocation(ctx, query, nodes,
+			func(n *Country) { n.Edges.Location = []*Location{} },
+			func(n *Country, e *Location) { n.Edges.Location = append(n.Edges.Location, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedLocation {
+		if err := cq.loadLocation(ctx, query, nodes,
+			func(n *Country) { n.appendNamedLocation(name) },
+			func(n *Country, e *Location) { n.appendNamedLocation(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -426,34 +428,33 @@ func (cq *CountryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Coun
 }
 
 func (cq *CountryQuery) loadLocation(ctx context.Context, query *LocationQuery, nodes []*Country, init func(*Country), assign func(*Country, *Location)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*Country)
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Country)
 	for i := range nodes {
-		if nodes[i].location_country == nil {
-			continue
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
 		}
-		fk := *nodes[i].location_country
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	if len(ids) == 0 {
-		return nil
-	}
-	query.Where(location.IDIn(ids...))
+	query.withFKs = true
+	query.Where(predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(country.LocationColumn), fks...))
+	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
+		fk := n.location_country
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "location_country" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "location_country" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "location_country" returned %v for node %v`, *fk, n.ID)
 		}
-		for i := range nodes {
-			assign(nodes[i], n)
-		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -540,6 +541,20 @@ func (cq *CountryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedLocation tells the query-builder to eager-load the nodes that are connected to the "location"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *CountryQuery) WithNamedLocation(name string, opts ...func(*LocationQuery)) *CountryQuery {
+	query := (&LocationClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedLocation == nil {
+		cq.withNamedLocation = make(map[string]*LocationQuery)
+	}
+	cq.withNamedLocation[name] = query
+	return cq
 }
 
 // CountryGroupBy is the group-by builder for Country entities.

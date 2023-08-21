@@ -630,7 +630,7 @@ func HasLocation() predicate.Country {
 	return predicate.Country(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, LocationTable, LocationColumn),
+			sqlgraph.Edge(sqlgraph.O2M, true, LocationTable, LocationColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})

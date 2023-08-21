@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -19,14 +20,14 @@ import (
 // DistrictQuery is the builder for querying District entities.
 type DistrictQuery struct {
 	config
-	ctx          *QueryContext
-	order        []district.OrderOption
-	inters       []Interceptor
-	predicates   []predicate.District
-	withLocation *LocationQuery
-	withFKs      bool
-	modifiers    []func(*sql.Selector)
-	loadTotal    []func(context.Context, []*District) error
+	ctx               *QueryContext
+	order             []district.OrderOption
+	inters            []Interceptor
+	predicates        []predicate.District
+	withLocation      *LocationQuery
+	modifiers         []func(*sql.Selector)
+	loadTotal         []func(context.Context, []*District) error
+	withNamedLocation map[string]*LocationQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -77,7 +78,7 @@ func (dq *DistrictQuery) QueryLocation() *LocationQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(district.Table, district.FieldID, selector),
 			sqlgraph.To(location.Table, location.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, district.LocationTable, district.LocationColumn),
+			sqlgraph.Edge(sqlgraph.O2M, true, district.LocationTable, district.LocationColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
 		return fromU, nil
@@ -378,18 +379,11 @@ func (dq *DistrictQuery) prepareQuery(ctx context.Context) error {
 func (dq *DistrictQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*District, error) {
 	var (
 		nodes       = []*District{}
-		withFKs     = dq.withFKs
 		_spec       = dq.querySpec()
 		loadedTypes = [1]bool{
 			dq.withLocation != nil,
 		}
 	)
-	if dq.withLocation != nil {
-		withFKs = true
-	}
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, district.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*District).scanValues(nil, columns)
 	}
@@ -412,8 +406,16 @@ func (dq *DistrictQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Dis
 		return nodes, nil
 	}
 	if query := dq.withLocation; query != nil {
-		if err := dq.loadLocation(ctx, query, nodes, nil,
-			func(n *District, e *Location) { n.Edges.Location = e }); err != nil {
+		if err := dq.loadLocation(ctx, query, nodes,
+			func(n *District) { n.Edges.Location = []*Location{} },
+			func(n *District, e *Location) { n.Edges.Location = append(n.Edges.Location, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range dq.withNamedLocation {
+		if err := dq.loadLocation(ctx, query, nodes,
+			func(n *District) { n.appendNamedLocation(name) },
+			func(n *District, e *Location) { n.appendNamedLocation(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -426,34 +428,33 @@ func (dq *DistrictQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Dis
 }
 
 func (dq *DistrictQuery) loadLocation(ctx context.Context, query *LocationQuery, nodes []*District, init func(*District), assign func(*District, *Location)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*District)
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*District)
 	for i := range nodes {
-		if nodes[i].location_district == nil {
-			continue
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
 		}
-		fk := *nodes[i].location_district
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	if len(ids) == 0 {
-		return nil
-	}
-	query.Where(location.IDIn(ids...))
+	query.withFKs = true
+	query.Where(predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(district.LocationColumn), fks...))
+	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
+		fk := n.location_district
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "location_district" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "location_district" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "location_district" returned %v for node %v`, *fk, n.ID)
 		}
-		for i := range nodes {
-			assign(nodes[i], n)
-		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -540,6 +541,20 @@ func (dq *DistrictQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedLocation tells the query-builder to eager-load the nodes that are connected to the "location"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (dq *DistrictQuery) WithNamedLocation(name string, opts ...func(*LocationQuery)) *DistrictQuery {
+	query := (&LocationClient{config: dq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if dq.withNamedLocation == nil {
+		dq.withNamedLocation = make(map[string]*LocationQuery)
+	}
+	dq.withNamedLocation[name] = query
+	return dq
 }
 
 // DistrictGroupBy is the group-by builder for District entities.

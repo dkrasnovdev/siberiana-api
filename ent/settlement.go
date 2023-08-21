@@ -9,7 +9,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
@@ -36,30 +35,27 @@ type Settlement struct {
 	ExternalLink string `json:"external_link,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SettlementQuery when eager-loading is set.
-	Edges               SettlementEdges `json:"edges"`
-	location_settlement *int
-	selectValues        sql.SelectValues
+	Edges        SettlementEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // SettlementEdges holds the relations/edges for other nodes in the graph.
 type SettlementEdges struct {
 	// Location holds the value of the location edge.
-	Location *Location `json:"location,omitempty"`
+	Location []*Location `json:"location,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 	// totalCount holds the count of the edges above.
 	totalCount [1]map[string]int
+
+	namedLocation map[string][]*Location
 }
 
 // LocationOrErr returns the Location value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e SettlementEdges) LocationOrErr() (*Location, error) {
+// was not loaded in eager-loading.
+func (e SettlementEdges) LocationOrErr() ([]*Location, error) {
 	if e.loadedTypes[0] {
-		if e.Location == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: location.Label}
-		}
 		return e.Location, nil
 	}
 	return nil, &NotLoadedError{edge: "location"}
@@ -76,8 +72,6 @@ func (*Settlement) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case settlement.FieldCreatedAt, settlement.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case settlement.ForeignKeys[0]: // location_settlement
-			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -147,13 +141,6 @@ func (s *Settlement) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.ExternalLink = value.String
 			}
-		case settlement.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field location_settlement", value)
-			} else if value.Valid {
-				s.location_settlement = new(int)
-				*s.location_settlement = int(value.Int64)
-			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
 		}
@@ -220,6 +207,30 @@ func (s *Settlement) String() string {
 	builder.WriteString(s.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedLocation returns the Location named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Settlement) NamedLocation(name string) ([]*Location, error) {
+	if s.Edges.namedLocation == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedLocation[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Settlement) appendNamedLocation(name string, edges ...*Location) {
+	if s.Edges.namedLocation == nil {
+		s.Edges.namedLocation = make(map[string][]*Location)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedLocation[name] = []*Location{}
+	} else {
+		s.Edges.namedLocation[name] = append(s.Edges.namedLocation[name], edges...)
+	}
 }
 
 // Settlements is a parsable slice of Settlement.

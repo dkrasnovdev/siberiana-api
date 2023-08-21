@@ -410,6 +410,20 @@ var (
 			}
 		},
 	}
+	// ArtOrderFieldDisplayName orders Art by display_name.
+	ArtOrderFieldDisplayName = &ArtOrderField{
+		Value: func(a *Art) (ent.Value, error) {
+			return a.DisplayName, nil
+		},
+		column: art.FieldDisplayName,
+		toTerm: art.ByDisplayName,
+		toCursor: func(a *Art) Cursor {
+			return Cursor{
+				ID:    a.ID,
+				Value: a.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -420,6 +434,8 @@ func (f ArtOrderField) String() string {
 		str = "CREATED_AT"
 	case ArtOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case ArtOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -440,6 +456,8 @@ func (f *ArtOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ArtOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *ArtOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *ArtOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid ArtOrderField", str)
 	}
@@ -764,6 +782,20 @@ var (
 			}
 		},
 	}
+	// ArtGenreOrderFieldDisplayName orders ArtGenre by display_name.
+	ArtGenreOrderFieldDisplayName = &ArtGenreOrderField{
+		Value: func(ag *ArtGenre) (ent.Value, error) {
+			return ag.DisplayName, nil
+		},
+		column: artgenre.FieldDisplayName,
+		toTerm: artgenre.ByDisplayName,
+		toCursor: func(ag *ArtGenre) Cursor {
+			return Cursor{
+				ID:    ag.ID,
+				Value: ag.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -774,6 +806,8 @@ func (f ArtGenreOrderField) String() string {
 		str = "CREATED_AT"
 	case ArtGenreOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case ArtGenreOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -794,6 +828,8 @@ func (f *ArtGenreOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ArtGenreOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *ArtGenreOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *ArtGenreOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid ArtGenreOrderField", str)
 	}
@@ -1118,6 +1154,20 @@ var (
 			}
 		},
 	}
+	// ArtStyleOrderFieldDisplayName orders ArtStyle by display_name.
+	ArtStyleOrderFieldDisplayName = &ArtStyleOrderField{
+		Value: func(as *ArtStyle) (ent.Value, error) {
+			return as.DisplayName, nil
+		},
+		column: artstyle.FieldDisplayName,
+		toTerm: artstyle.ByDisplayName,
+		toCursor: func(as *ArtStyle) Cursor {
+			return Cursor{
+				ID:    as.ID,
+				Value: as.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -1128,6 +1178,8 @@ func (f ArtStyleOrderField) String() string {
 		str = "CREATED_AT"
 	case ArtStyleOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case ArtStyleOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -1148,6 +1200,8 @@ func (f *ArtStyleOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ArtStyleOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *ArtStyleOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *ArtStyleOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid ArtStyleOrderField", str)
 	}
@@ -1472,6 +1526,20 @@ var (
 			}
 		},
 	}
+	// ArtifactOrderFieldDisplayName orders Artifact by display_name.
+	ArtifactOrderFieldDisplayName = &ArtifactOrderField{
+		Value: func(a *Artifact) (ent.Value, error) {
+			return a.DisplayName, nil
+		},
+		column: artifact.FieldDisplayName,
+		toTerm: artifact.ByDisplayName,
+		toCursor: func(a *Artifact) Cursor {
+			return Cursor{
+				ID:    a.ID,
+				Value: a.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -1482,6 +1550,8 @@ func (f ArtifactOrderField) String() string {
 		str = "CREATED_AT"
 	case ArtifactOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case ArtifactOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -1502,6 +1572,8 @@ func (f *ArtifactOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ArtifactOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *ArtifactOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *ArtifactOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid ArtifactOrderField", str)
 	}
@@ -2162,6 +2234,20 @@ var (
 			}
 		},
 	}
+	// BookOrderFieldDisplayName orders Book by display_name.
+	BookOrderFieldDisplayName = &BookOrderField{
+		Value: func(b *Book) (ent.Value, error) {
+			return b.DisplayName, nil
+		},
+		column: book.FieldDisplayName,
+		toTerm: book.ByDisplayName,
+		toCursor: func(b *Book) Cursor {
+			return Cursor{
+				ID:    b.ID,
+				Value: b.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -2172,6 +2258,8 @@ func (f BookOrderField) String() string {
 		str = "CREATED_AT"
 	case BookOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case BookOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -2192,6 +2280,8 @@ func (f *BookOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *BookOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *BookOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *BookOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid BookOrderField", str)
 	}
@@ -2516,6 +2606,20 @@ var (
 			}
 		},
 	}
+	// BookGenreOrderFieldDisplayName orders BookGenre by display_name.
+	BookGenreOrderFieldDisplayName = &BookGenreOrderField{
+		Value: func(bg *BookGenre) (ent.Value, error) {
+			return bg.DisplayName, nil
+		},
+		column: bookgenre.FieldDisplayName,
+		toTerm: bookgenre.ByDisplayName,
+		toCursor: func(bg *BookGenre) Cursor {
+			return Cursor{
+				ID:    bg.ID,
+				Value: bg.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -2526,6 +2630,8 @@ func (f BookGenreOrderField) String() string {
 		str = "CREATED_AT"
 	case BookGenreOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case BookGenreOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -2546,6 +2652,8 @@ func (f *BookGenreOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *BookGenreOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *BookGenreOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *BookGenreOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid BookGenreOrderField", str)
 	}
@@ -2870,6 +2978,20 @@ var (
 			}
 		},
 	}
+	// CategoryOrderFieldDisplayName orders Category by display_name.
+	CategoryOrderFieldDisplayName = &CategoryOrderField{
+		Value: func(c *Category) (ent.Value, error) {
+			return c.DisplayName, nil
+		},
+		column: category.FieldDisplayName,
+		toTerm: category.ByDisplayName,
+		toCursor: func(c *Category) Cursor {
+			return Cursor{
+				ID:    c.ID,
+				Value: c.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -2880,6 +3002,8 @@ func (f CategoryOrderField) String() string {
 		str = "CREATED_AT"
 	case CategoryOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case CategoryOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -2900,6 +3024,8 @@ func (f *CategoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *CategoryOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *CategoryOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *CategoryOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid CategoryOrderField", str)
 	}
@@ -3224,6 +3350,20 @@ var (
 			}
 		},
 	}
+	// CollectionOrderFieldDisplayName orders Collection by display_name.
+	CollectionOrderFieldDisplayName = &CollectionOrderField{
+		Value: func(c *Collection) (ent.Value, error) {
+			return c.DisplayName, nil
+		},
+		column: collection.FieldDisplayName,
+		toTerm: collection.ByDisplayName,
+		toCursor: func(c *Collection) Cursor {
+			return Cursor{
+				ID:    c.ID,
+				Value: c.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -3234,6 +3374,8 @@ func (f CollectionOrderField) String() string {
 		str = "CREATED_AT"
 	case CollectionOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case CollectionOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -3254,6 +3396,8 @@ func (f *CollectionOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *CollectionOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *CollectionOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *CollectionOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid CollectionOrderField", str)
 	}
@@ -3578,6 +3722,20 @@ var (
 			}
 		},
 	}
+	// CountryOrderFieldDisplayName orders Country by display_name.
+	CountryOrderFieldDisplayName = &CountryOrderField{
+		Value: func(c *Country) (ent.Value, error) {
+			return c.DisplayName, nil
+		},
+		column: country.FieldDisplayName,
+		toTerm: country.ByDisplayName,
+		toCursor: func(c *Country) Cursor {
+			return Cursor{
+				ID:    c.ID,
+				Value: c.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -3588,6 +3746,8 @@ func (f CountryOrderField) String() string {
 		str = "CREATED_AT"
 	case CountryOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case CountryOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -3608,6 +3768,8 @@ func (f *CountryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *CountryOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *CountryOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *CountryOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid CountryOrderField", str)
 	}
@@ -3932,6 +4094,20 @@ var (
 			}
 		},
 	}
+	// CultureOrderFieldDisplayName orders Culture by display_name.
+	CultureOrderFieldDisplayName = &CultureOrderField{
+		Value: func(c *Culture) (ent.Value, error) {
+			return c.DisplayName, nil
+		},
+		column: culture.FieldDisplayName,
+		toTerm: culture.ByDisplayName,
+		toCursor: func(c *Culture) Cursor {
+			return Cursor{
+				ID:    c.ID,
+				Value: c.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -3942,6 +4118,8 @@ func (f CultureOrderField) String() string {
 		str = "CREATED_AT"
 	case CultureOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case CultureOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -3962,6 +4140,8 @@ func (f *CultureOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *CultureOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *CultureOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *CultureOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid CultureOrderField", str)
 	}
@@ -4286,6 +4466,20 @@ var (
 			}
 		},
 	}
+	// DistrictOrderFieldDisplayName orders District by display_name.
+	DistrictOrderFieldDisplayName = &DistrictOrderField{
+		Value: func(d *District) (ent.Value, error) {
+			return d.DisplayName, nil
+		},
+		column: district.FieldDisplayName,
+		toTerm: district.ByDisplayName,
+		toCursor: func(d *District) Cursor {
+			return Cursor{
+				ID:    d.ID,
+				Value: d.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -4296,6 +4490,8 @@ func (f DistrictOrderField) String() string {
 		str = "CREATED_AT"
 	case DistrictOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case DistrictOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -4316,6 +4512,8 @@ func (f *DistrictOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *DistrictOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *DistrictOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *DistrictOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid DistrictOrderField", str)
 	}
@@ -4994,6 +5192,20 @@ var (
 			}
 		},
 	}
+	// HolderResponsibilityOrderFieldDisplayName orders HolderResponsibility by display_name.
+	HolderResponsibilityOrderFieldDisplayName = &HolderResponsibilityOrderField{
+		Value: func(hr *HolderResponsibility) (ent.Value, error) {
+			return hr.DisplayName, nil
+		},
+		column: holderresponsibility.FieldDisplayName,
+		toTerm: holderresponsibility.ByDisplayName,
+		toCursor: func(hr *HolderResponsibility) Cursor {
+			return Cursor{
+				ID:    hr.ID,
+				Value: hr.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -5004,6 +5216,8 @@ func (f HolderResponsibilityOrderField) String() string {
 		str = "CREATED_AT"
 	case HolderResponsibilityOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case HolderResponsibilityOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -5024,6 +5238,8 @@ func (f *HolderResponsibilityOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *HolderResponsibilityOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *HolderResponsibilityOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *HolderResponsibilityOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid HolderResponsibilityOrderField", str)
 	}
@@ -5601,6 +5817,20 @@ var (
 			}
 		},
 	}
+	// LicenseOrderFieldDisplayName orders License by display_name.
+	LicenseOrderFieldDisplayName = &LicenseOrderField{
+		Value: func(l *License) (ent.Value, error) {
+			return l.DisplayName, nil
+		},
+		column: license.FieldDisplayName,
+		toTerm: license.ByDisplayName,
+		toCursor: func(l *License) Cursor {
+			return Cursor{
+				ID:    l.ID,
+				Value: l.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -5611,6 +5841,8 @@ func (f LicenseOrderField) String() string {
 		str = "CREATED_AT"
 	case LicenseOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case LicenseOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -5631,6 +5863,8 @@ func (f *LicenseOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *LicenseOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *LicenseOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *LicenseOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid LicenseOrderField", str)
 	}
@@ -5955,6 +6189,20 @@ var (
 			}
 		},
 	}
+	// LocationOrderFieldDisplayName orders Location by display_name.
+	LocationOrderFieldDisplayName = &LocationOrderField{
+		Value: func(l *Location) (ent.Value, error) {
+			return l.DisplayName, nil
+		},
+		column: location.FieldDisplayName,
+		toTerm: location.ByDisplayName,
+		toCursor: func(l *Location) Cursor {
+			return Cursor{
+				ID:    l.ID,
+				Value: l.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -5965,6 +6213,8 @@ func (f LocationOrderField) String() string {
 		str = "CREATED_AT"
 	case LocationOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case LocationOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -5985,6 +6235,8 @@ func (f *LocationOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *LocationOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *LocationOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *LocationOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid LocationOrderField", str)
 	}
@@ -6309,6 +6561,20 @@ var (
 			}
 		},
 	}
+	// MediumOrderFieldDisplayName orders Medium by display_name.
+	MediumOrderFieldDisplayName = &MediumOrderField{
+		Value: func(m *Medium) (ent.Value, error) {
+			return m.DisplayName, nil
+		},
+		column: medium.FieldDisplayName,
+		toTerm: medium.ByDisplayName,
+		toCursor: func(m *Medium) Cursor {
+			return Cursor{
+				ID:    m.ID,
+				Value: m.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -6319,6 +6585,8 @@ func (f MediumOrderField) String() string {
 		str = "CREATED_AT"
 	case MediumOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case MediumOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -6339,6 +6607,8 @@ func (f *MediumOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *MediumOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *MediumOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *MediumOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid MediumOrderField", str)
 	}
@@ -6663,6 +6933,20 @@ var (
 			}
 		},
 	}
+	// ModelOrderFieldDisplayName orders Model by display_name.
+	ModelOrderFieldDisplayName = &ModelOrderField{
+		Value: func(m *Model) (ent.Value, error) {
+			return m.DisplayName, nil
+		},
+		column: model.FieldDisplayName,
+		toTerm: model.ByDisplayName,
+		toCursor: func(m *Model) Cursor {
+			return Cursor{
+				ID:    m.ID,
+				Value: m.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -6673,6 +6957,8 @@ func (f ModelOrderField) String() string {
 		str = "CREATED_AT"
 	case ModelOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case ModelOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -6693,6 +6979,8 @@ func (f *ModelOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ModelOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *ModelOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *ModelOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid ModelOrderField", str)
 	}
@@ -7017,6 +7305,20 @@ var (
 			}
 		},
 	}
+	// MonumentOrderFieldDisplayName orders Monument by display_name.
+	MonumentOrderFieldDisplayName = &MonumentOrderField{
+		Value: func(m *Monument) (ent.Value, error) {
+			return m.DisplayName, nil
+		},
+		column: monument.FieldDisplayName,
+		toTerm: monument.ByDisplayName,
+		toCursor: func(m *Monument) Cursor {
+			return Cursor{
+				ID:    m.ID,
+				Value: m.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -7027,6 +7329,8 @@ func (f MonumentOrderField) String() string {
 		str = "CREATED_AT"
 	case MonumentOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case MonumentOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -7047,6 +7351,8 @@ func (f *MonumentOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *MonumentOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *MonumentOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *MonumentOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid MonumentOrderField", str)
 	}
@@ -7335,6 +7641,20 @@ var (
 			}
 		},
 	}
+	// OrganizationOrderFieldDisplayName orders Organization by display_name.
+	OrganizationOrderFieldDisplayName = &OrganizationOrderField{
+		Value: func(o *Organization) (ent.Value, error) {
+			return o.DisplayName, nil
+		},
+		column: organization.FieldDisplayName,
+		toTerm: organization.ByDisplayName,
+		toCursor: func(o *Organization) Cursor {
+			return Cursor{
+				ID:    o.ID,
+				Value: o.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -7345,6 +7665,8 @@ func (f OrganizationOrderField) String() string {
 		str = "CREATED_AT"
 	case OrganizationOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case OrganizationOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -7365,6 +7687,8 @@ func (f *OrganizationOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *OrganizationOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *OrganizationOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *OrganizationOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid OrganizationOrderField", str)
 	}
@@ -7689,6 +8013,20 @@ var (
 			}
 		},
 	}
+	// OrganizationTypeOrderFieldDisplayName orders OrganizationType by display_name.
+	OrganizationTypeOrderFieldDisplayName = &OrganizationTypeOrderField{
+		Value: func(ot *OrganizationType) (ent.Value, error) {
+			return ot.DisplayName, nil
+		},
+		column: organizationtype.FieldDisplayName,
+		toTerm: organizationtype.ByDisplayName,
+		toCursor: func(ot *OrganizationType) Cursor {
+			return Cursor{
+				ID:    ot.ID,
+				Value: ot.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -7699,6 +8037,8 @@ func (f OrganizationTypeOrderField) String() string {
 		str = "CREATED_AT"
 	case OrganizationTypeOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case OrganizationTypeOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -7719,6 +8059,8 @@ func (f *OrganizationTypeOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *OrganizationTypeOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *OrganizationTypeOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *OrganizationTypeOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid OrganizationTypeOrderField", str)
 	}
@@ -8043,6 +8385,20 @@ var (
 			}
 		},
 	}
+	// PeriodOrderFieldDisplayName orders Period by display_name.
+	PeriodOrderFieldDisplayName = &PeriodOrderField{
+		Value: func(pe *Period) (ent.Value, error) {
+			return pe.DisplayName, nil
+		},
+		column: period.FieldDisplayName,
+		toTerm: period.ByDisplayName,
+		toCursor: func(pe *Period) Cursor {
+			return Cursor{
+				ID:    pe.ID,
+				Value: pe.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -8053,6 +8409,8 @@ func (f PeriodOrderField) String() string {
 		str = "CREATED_AT"
 	case PeriodOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case PeriodOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -8073,6 +8431,8 @@ func (f *PeriodOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *PeriodOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *PeriodOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *PeriodOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid PeriodOrderField", str)
 	}
@@ -8397,6 +8757,20 @@ var (
 			}
 		},
 	}
+	// PersonOrderFieldDisplayName orders Person by display_name.
+	PersonOrderFieldDisplayName = &PersonOrderField{
+		Value: func(pe *Person) (ent.Value, error) {
+			return pe.DisplayName, nil
+		},
+		column: person.FieldDisplayName,
+		toTerm: person.ByDisplayName,
+		toCursor: func(pe *Person) Cursor {
+			return Cursor{
+				ID:    pe.ID,
+				Value: pe.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -8407,6 +8781,8 @@ func (f PersonOrderField) String() string {
 		str = "CREATED_AT"
 	case PersonOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case PersonOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -8427,6 +8803,8 @@ func (f *PersonOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *PersonOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *PersonOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *PersonOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid PersonOrderField", str)
 	}
@@ -8751,6 +9129,20 @@ var (
 			}
 		},
 	}
+	// PersonRoleOrderFieldDisplayName orders PersonRole by display_name.
+	PersonRoleOrderFieldDisplayName = &PersonRoleOrderField{
+		Value: func(pr *PersonRole) (ent.Value, error) {
+			return pr.DisplayName, nil
+		},
+		column: personrole.FieldDisplayName,
+		toTerm: personrole.ByDisplayName,
+		toCursor: func(pr *PersonRole) Cursor {
+			return Cursor{
+				ID:    pr.ID,
+				Value: pr.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -8761,6 +9153,8 @@ func (f PersonRoleOrderField) String() string {
 		str = "CREATED_AT"
 	case PersonRoleOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case PersonRoleOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -8781,6 +9175,8 @@ func (f *PersonRoleOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *PersonRoleOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *PersonRoleOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *PersonRoleOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid PersonRoleOrderField", str)
 	}
@@ -9105,6 +9501,20 @@ var (
 			}
 		},
 	}
+	// ProjectOrderFieldDisplayName orders Project by display_name.
+	ProjectOrderFieldDisplayName = &ProjectOrderField{
+		Value: func(pr *Project) (ent.Value, error) {
+			return pr.DisplayName, nil
+		},
+		column: project.FieldDisplayName,
+		toTerm: project.ByDisplayName,
+		toCursor: func(pr *Project) Cursor {
+			return Cursor{
+				ID:    pr.ID,
+				Value: pr.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -9115,6 +9525,8 @@ func (f ProjectOrderField) String() string {
 		str = "CREATED_AT"
 	case ProjectOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case ProjectOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -9135,6 +9547,8 @@ func (f *ProjectOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ProjectOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *ProjectOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *ProjectOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid ProjectOrderField", str)
 	}
@@ -9459,6 +9873,20 @@ var (
 			}
 		},
 	}
+	// ProjectTypeOrderFieldDisplayName orders ProjectType by display_name.
+	ProjectTypeOrderFieldDisplayName = &ProjectTypeOrderField{
+		Value: func(pt *ProjectType) (ent.Value, error) {
+			return pt.DisplayName, nil
+		},
+		column: projecttype.FieldDisplayName,
+		toTerm: projecttype.ByDisplayName,
+		toCursor: func(pt *ProjectType) Cursor {
+			return Cursor{
+				ID:    pt.ID,
+				Value: pt.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -9469,6 +9897,8 @@ func (f ProjectTypeOrderField) String() string {
 		str = "CREATED_AT"
 	case ProjectTypeOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case ProjectTypeOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -9489,6 +9919,8 @@ func (f *ProjectTypeOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ProjectTypeOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *ProjectTypeOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *ProjectTypeOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid ProjectTypeOrderField", str)
 	}
@@ -9813,6 +10245,20 @@ var (
 			}
 		},
 	}
+	// ProtectedAreaOrderFieldDisplayName orders ProtectedArea by display_name.
+	ProtectedAreaOrderFieldDisplayName = &ProtectedAreaOrderField{
+		Value: func(pa *ProtectedArea) (ent.Value, error) {
+			return pa.DisplayName, nil
+		},
+		column: protectedarea.FieldDisplayName,
+		toTerm: protectedarea.ByDisplayName,
+		toCursor: func(pa *ProtectedArea) Cursor {
+			return Cursor{
+				ID:    pa.ID,
+				Value: pa.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -9823,6 +10269,8 @@ func (f ProtectedAreaOrderField) String() string {
 		str = "CREATED_AT"
 	case ProtectedAreaOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case ProtectedAreaOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -9843,6 +10291,8 @@ func (f *ProtectedAreaOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ProtectedAreaOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *ProtectedAreaOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *ProtectedAreaOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid ProtectedAreaOrderField", str)
 	}
@@ -10167,6 +10617,20 @@ var (
 			}
 		},
 	}
+	// ProtectedAreaCategoryOrderFieldDisplayName orders ProtectedAreaCategory by display_name.
+	ProtectedAreaCategoryOrderFieldDisplayName = &ProtectedAreaCategoryOrderField{
+		Value: func(pac *ProtectedAreaCategory) (ent.Value, error) {
+			return pac.DisplayName, nil
+		},
+		column: protectedareacategory.FieldDisplayName,
+		toTerm: protectedareacategory.ByDisplayName,
+		toCursor: func(pac *ProtectedAreaCategory) Cursor {
+			return Cursor{
+				ID:    pac.ID,
+				Value: pac.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -10177,6 +10641,8 @@ func (f ProtectedAreaCategoryOrderField) String() string {
 		str = "CREATED_AT"
 	case ProtectedAreaCategoryOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case ProtectedAreaCategoryOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -10197,6 +10663,8 @@ func (f *ProtectedAreaCategoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ProtectedAreaCategoryOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *ProtectedAreaCategoryOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *ProtectedAreaCategoryOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid ProtectedAreaCategoryOrderField", str)
 	}
@@ -10521,6 +10989,20 @@ var (
 			}
 		},
 	}
+	// ProtectedAreaPictureOrderFieldDisplayName orders ProtectedAreaPicture by display_name.
+	ProtectedAreaPictureOrderFieldDisplayName = &ProtectedAreaPictureOrderField{
+		Value: func(pap *ProtectedAreaPicture) (ent.Value, error) {
+			return pap.DisplayName, nil
+		},
+		column: protectedareapicture.FieldDisplayName,
+		toTerm: protectedareapicture.ByDisplayName,
+		toCursor: func(pap *ProtectedAreaPicture) Cursor {
+			return Cursor{
+				ID:    pap.ID,
+				Value: pap.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -10531,6 +11013,8 @@ func (f ProtectedAreaPictureOrderField) String() string {
 		str = "CREATED_AT"
 	case ProtectedAreaPictureOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case ProtectedAreaPictureOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -10551,6 +11035,8 @@ func (f *ProtectedAreaPictureOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ProtectedAreaPictureOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *ProtectedAreaPictureOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *ProtectedAreaPictureOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid ProtectedAreaPictureOrderField", str)
 	}
@@ -10875,6 +11361,20 @@ var (
 			}
 		},
 	}
+	// PublicationOrderFieldDisplayName orders Publication by display_name.
+	PublicationOrderFieldDisplayName = &PublicationOrderField{
+		Value: func(pu *Publication) (ent.Value, error) {
+			return pu.DisplayName, nil
+		},
+		column: publication.FieldDisplayName,
+		toTerm: publication.ByDisplayName,
+		toCursor: func(pu *Publication) Cursor {
+			return Cursor{
+				ID:    pu.ID,
+				Value: pu.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -10885,6 +11385,8 @@ func (f PublicationOrderField) String() string {
 		str = "CREATED_AT"
 	case PublicationOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case PublicationOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -10905,6 +11407,8 @@ func (f *PublicationOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *PublicationOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *PublicationOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *PublicationOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid PublicationOrderField", str)
 	}
@@ -11229,6 +11733,20 @@ var (
 			}
 		},
 	}
+	// PublisherOrderFieldDisplayName orders Publisher by display_name.
+	PublisherOrderFieldDisplayName = &PublisherOrderField{
+		Value: func(pu *Publisher) (ent.Value, error) {
+			return pu.DisplayName, nil
+		},
+		column: publisher.FieldDisplayName,
+		toTerm: publisher.ByDisplayName,
+		toCursor: func(pu *Publisher) Cursor {
+			return Cursor{
+				ID:    pu.ID,
+				Value: pu.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -11239,6 +11757,8 @@ func (f PublisherOrderField) String() string {
 		str = "CREATED_AT"
 	case PublisherOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case PublisherOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -11259,6 +11779,8 @@ func (f *PublisherOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *PublisherOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *PublisherOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *PublisherOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid PublisherOrderField", str)
 	}
@@ -11583,6 +12105,20 @@ var (
 			}
 		},
 	}
+	// RegionOrderFieldDisplayName orders Region by display_name.
+	RegionOrderFieldDisplayName = &RegionOrderField{
+		Value: func(r *Region) (ent.Value, error) {
+			return r.DisplayName, nil
+		},
+		column: region.FieldDisplayName,
+		toTerm: region.ByDisplayName,
+		toCursor: func(r *Region) Cursor {
+			return Cursor{
+				ID:    r.ID,
+				Value: r.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -11593,6 +12129,8 @@ func (f RegionOrderField) String() string {
 		str = "CREATED_AT"
 	case RegionOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case RegionOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -11613,6 +12151,8 @@ func (f *RegionOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *RegionOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *RegionOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *RegionOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid RegionOrderField", str)
 	}
@@ -11937,6 +12477,20 @@ var (
 			}
 		},
 	}
+	// SetOrderFieldDisplayName orders Set by display_name.
+	SetOrderFieldDisplayName = &SetOrderField{
+		Value: func(s *Set) (ent.Value, error) {
+			return s.DisplayName, nil
+		},
+		column: set.FieldDisplayName,
+		toTerm: set.ByDisplayName,
+		toCursor: func(s *Set) Cursor {
+			return Cursor{
+				ID:    s.ID,
+				Value: s.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -11947,6 +12501,8 @@ func (f SetOrderField) String() string {
 		str = "CREATED_AT"
 	case SetOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case SetOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -11967,6 +12523,8 @@ func (f *SetOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *SetOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *SetOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *SetOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid SetOrderField", str)
 	}
@@ -12291,6 +12849,20 @@ var (
 			}
 		},
 	}
+	// SettlementOrderFieldDisplayName orders Settlement by display_name.
+	SettlementOrderFieldDisplayName = &SettlementOrderField{
+		Value: func(s *Settlement) (ent.Value, error) {
+			return s.DisplayName, nil
+		},
+		column: settlement.FieldDisplayName,
+		toTerm: settlement.ByDisplayName,
+		toCursor: func(s *Settlement) Cursor {
+			return Cursor{
+				ID:    s.ID,
+				Value: s.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -12301,6 +12873,8 @@ func (f SettlementOrderField) String() string {
 		str = "CREATED_AT"
 	case SettlementOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case SettlementOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -12321,6 +12895,8 @@ func (f *SettlementOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *SettlementOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *SettlementOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *SettlementOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid SettlementOrderField", str)
 	}
@@ -12645,6 +13221,20 @@ var (
 			}
 		},
 	}
+	// TechniqueOrderFieldDisplayName orders Technique by display_name.
+	TechniqueOrderFieldDisplayName = &TechniqueOrderField{
+		Value: func(t *Technique) (ent.Value, error) {
+			return t.DisplayName, nil
+		},
+		column: technique.FieldDisplayName,
+		toTerm: technique.ByDisplayName,
+		toCursor: func(t *Technique) Cursor {
+			return Cursor{
+				ID:    t.ID,
+				Value: t.DisplayName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -12655,6 +13245,8 @@ func (f TechniqueOrderField) String() string {
 		str = "CREATED_AT"
 	case TechniqueOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
+	case TechniqueOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
 	}
 	return str
 }
@@ -12675,6 +13267,8 @@ func (f *TechniqueOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TechniqueOrderFieldCreatedAt
 	case "UPDATED_AT":
 		*f = *TechniqueOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *TechniqueOrderFieldDisplayName
 	default:
 		return fmt.Errorf("%s is not a valid TechniqueOrderField", str)
 	}

@@ -133,23 +133,19 @@ func (sc *SettlementCreate) SetNillableExternalLink(s *string) *SettlementCreate
 	return sc
 }
 
-// SetLocationID sets the "location" edge to the Location entity by ID.
-func (sc *SettlementCreate) SetLocationID(id int) *SettlementCreate {
-	sc.mutation.SetLocationID(id)
+// AddLocationIDs adds the "location" edge to the Location entity by IDs.
+func (sc *SettlementCreate) AddLocationIDs(ids ...int) *SettlementCreate {
+	sc.mutation.AddLocationIDs(ids...)
 	return sc
 }
 
-// SetNillableLocationID sets the "location" edge to the Location entity by ID if the given value is not nil.
-func (sc *SettlementCreate) SetNillableLocationID(id *int) *SettlementCreate {
-	if id != nil {
-		sc = sc.SetLocationID(*id)
+// AddLocation adds the "location" edges to the Location entity.
+func (sc *SettlementCreate) AddLocation(l ...*Location) *SettlementCreate {
+	ids := make([]int, len(l))
+	for i := range l {
+		ids[i] = l[i].ID
 	}
-	return sc
-}
-
-// SetLocation sets the "location" edge to the Location entity.
-func (sc *SettlementCreate) SetLocation(l *Location) *SettlementCreate {
-	return sc.SetLocationID(l.ID)
+	return sc.AddLocationIDs(ids...)
 }
 
 // Mutation returns the SettlementMutation object of the builder.
@@ -274,7 +270,7 @@ func (sc *SettlementCreate) createSpec() (*Settlement, *sqlgraph.CreateSpec) {
 	}
 	if nodes := sc.mutation.LocationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.O2M,
 			Inverse: true,
 			Table:   settlement.LocationTable,
 			Columns: []string{settlement.LocationColumn},
@@ -286,7 +282,6 @@ func (sc *SettlementCreate) createSpec() (*Settlement, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.location_settlement = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

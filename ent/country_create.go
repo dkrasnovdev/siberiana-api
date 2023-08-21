@@ -133,23 +133,19 @@ func (cc *CountryCreate) SetNillableExternalLink(s *string) *CountryCreate {
 	return cc
 }
 
-// SetLocationID sets the "location" edge to the Location entity by ID.
-func (cc *CountryCreate) SetLocationID(id int) *CountryCreate {
-	cc.mutation.SetLocationID(id)
+// AddLocationIDs adds the "location" edge to the Location entity by IDs.
+func (cc *CountryCreate) AddLocationIDs(ids ...int) *CountryCreate {
+	cc.mutation.AddLocationIDs(ids...)
 	return cc
 }
 
-// SetNillableLocationID sets the "location" edge to the Location entity by ID if the given value is not nil.
-func (cc *CountryCreate) SetNillableLocationID(id *int) *CountryCreate {
-	if id != nil {
-		cc = cc.SetLocationID(*id)
+// AddLocation adds the "location" edges to the Location entity.
+func (cc *CountryCreate) AddLocation(l ...*Location) *CountryCreate {
+	ids := make([]int, len(l))
+	for i := range l {
+		ids[i] = l[i].ID
 	}
-	return cc
-}
-
-// SetLocation sets the "location" edge to the Location entity.
-func (cc *CountryCreate) SetLocation(l *Location) *CountryCreate {
-	return cc.SetLocationID(l.ID)
+	return cc.AddLocationIDs(ids...)
 }
 
 // Mutation returns the CountryMutation object of the builder.
@@ -274,7 +270,7 @@ func (cc *CountryCreate) createSpec() (*Country, *sqlgraph.CreateSpec) {
 	}
 	if nodes := cc.mutation.LocationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.O2M,
 			Inverse: true,
 			Table:   country.LocationTable,
 			Columns: []string{country.LocationColumn},
@@ -286,7 +282,6 @@ func (cc *CountryCreate) createSpec() (*Country, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.location_country = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

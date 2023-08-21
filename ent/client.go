@@ -2175,7 +2175,7 @@ func (c *CountryClient) QueryLocation(co *Country) *LocationQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(country.Table, country.FieldID, id),
 			sqlgraph.To(location.Table, location.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, country.LocationTable, country.LocationColumn),
+			sqlgraph.Edge(sqlgraph.O2M, true, country.LocationTable, country.LocationColumn),
 		)
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
@@ -2445,7 +2445,7 @@ func (c *DistrictClient) QueryLocation(d *District) *LocationQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(district.Table, district.FieldID, id),
 			sqlgraph.To(location.Table, location.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, district.LocationTable, district.LocationColumn),
+			sqlgraph.Edge(sqlgraph.O2M, true, district.LocationTable, district.LocationColumn),
 		)
 		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
 		return fromV, nil
@@ -3247,7 +3247,7 @@ func (c *LocationClient) QueryCountry(l *Location) *CountryQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(location.Table, location.FieldID, id),
 			sqlgraph.To(country.Table, country.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, location.CountryTable, location.CountryColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, location.CountryTable, location.CountryColumn),
 		)
 		fromV = sqlgraph.Neighbors(l.driver.Dialect(), step)
 		return fromV, nil
@@ -3263,7 +3263,7 @@ func (c *LocationClient) QueryDistrict(l *Location) *DistrictQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(location.Table, location.FieldID, id),
 			sqlgraph.To(district.Table, district.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, location.DistrictTable, location.DistrictColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, location.DistrictTable, location.DistrictColumn),
 		)
 		fromV = sqlgraph.Neighbors(l.driver.Dialect(), step)
 		return fromV, nil
@@ -3279,7 +3279,7 @@ func (c *LocationClient) QuerySettlement(l *Location) *SettlementQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(location.Table, location.FieldID, id),
 			sqlgraph.To(settlement.Table, settlement.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, location.SettlementTable, location.SettlementColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, location.SettlementTable, location.SettlementColumn),
 		)
 		fromV = sqlgraph.Neighbors(l.driver.Dialect(), step)
 		return fromV, nil
@@ -3295,7 +3295,7 @@ func (c *LocationClient) QueryRegion(l *Location) *RegionQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(location.Table, location.FieldID, id),
 			sqlgraph.To(region.Table, region.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, location.RegionTable, location.RegionColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, location.RegionTable, location.RegionColumn),
 		)
 		fromV = sqlgraph.Neighbors(l.driver.Dialect(), step)
 		return fromV, nil
@@ -5727,7 +5727,7 @@ func (c *RegionClient) QueryLocation(r *Region) *LocationQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(region.Table, region.FieldID, id),
 			sqlgraph.To(location.Table, location.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, region.LocationTable, region.LocationColumn),
+			sqlgraph.Edge(sqlgraph.O2M, true, region.LocationTable, region.LocationColumn),
 		)
 		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
 		return fromV, nil
@@ -6013,7 +6013,7 @@ func (c *SettlementClient) QueryLocation(s *Settlement) *LocationQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(settlement.Table, settlement.FieldID, id),
 			sqlgraph.To(location.Table, location.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, settlement.LocationTable, settlement.LocationColumn),
+			sqlgraph.Edge(sqlgraph.O2M, true, settlement.LocationTable, settlement.LocationColumn),
 		)
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil

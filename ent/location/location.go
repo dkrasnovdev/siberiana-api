@@ -71,28 +71,28 @@ const (
 	// ProtectedAreaPicturesColumn is the table column denoting the protected_area_pictures relation/edge.
 	ProtectedAreaPicturesColumn = "location_protected_area_pictures"
 	// CountryTable is the table that holds the country relation/edge.
-	CountryTable = "countries"
+	CountryTable = "locations"
 	// CountryInverseTable is the table name for the Country entity.
 	// It exists in this package in order to avoid circular dependency with the "country" package.
 	CountryInverseTable = "countries"
 	// CountryColumn is the table column denoting the country relation/edge.
 	CountryColumn = "location_country"
 	// DistrictTable is the table that holds the district relation/edge.
-	DistrictTable = "districts"
+	DistrictTable = "locations"
 	// DistrictInverseTable is the table name for the District entity.
 	// It exists in this package in order to avoid circular dependency with the "district" package.
 	DistrictInverseTable = "districts"
 	// DistrictColumn is the table column denoting the district relation/edge.
 	DistrictColumn = "location_district"
 	// SettlementTable is the table that holds the settlement relation/edge.
-	SettlementTable = "settlements"
+	SettlementTable = "locations"
 	// SettlementInverseTable is the table name for the Settlement entity.
 	// It exists in this package in order to avoid circular dependency with the "settlement" package.
 	SettlementInverseTable = "settlements"
 	// SettlementColumn is the table column denoting the settlement relation/edge.
 	SettlementColumn = "location_settlement"
 	// RegionTable is the table that holds the region relation/edge.
-	RegionTable = "regions"
+	RegionTable = "locations"
 	// RegionInverseTable is the table name for the Region entity.
 	// It exists in this package in order to avoid circular dependency with the "region" package.
 	RegionInverseTable = "regions"
@@ -114,10 +114,24 @@ var Columns = []string{
 	FieldGeometry,
 }
 
+// ForeignKeys holds the SQL foreign-keys that are owned by the "locations"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"location_country",
+	"location_district",
+	"location_settlement",
+	"location_region",
+}
+
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -287,27 +301,27 @@ func newCountryStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(CountryInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2O, false, CountryTable, CountryColumn),
+		sqlgraph.Edge(sqlgraph.M2O, false, CountryTable, CountryColumn),
 	)
 }
 func newDistrictStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DistrictInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2O, false, DistrictTable, DistrictColumn),
+		sqlgraph.Edge(sqlgraph.M2O, false, DistrictTable, DistrictColumn),
 	)
 }
 func newSettlementStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SettlementInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2O, false, SettlementTable, SettlementColumn),
+		sqlgraph.Edge(sqlgraph.M2O, false, SettlementTable, SettlementColumn),
 	)
 }
 func newRegionStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RegionInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2O, false, RegionTable, RegionColumn),
+		sqlgraph.Edge(sqlgraph.M2O, false, RegionTable, RegionColumn),
 	)
 }

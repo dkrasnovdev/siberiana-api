@@ -155,23 +155,19 @@ func (du *DistrictUpdate) ClearExternalLink() *DistrictUpdate {
 	return du
 }
 
-// SetLocationID sets the "location" edge to the Location entity by ID.
-func (du *DistrictUpdate) SetLocationID(id int) *DistrictUpdate {
-	du.mutation.SetLocationID(id)
+// AddLocationIDs adds the "location" edge to the Location entity by IDs.
+func (du *DistrictUpdate) AddLocationIDs(ids ...int) *DistrictUpdate {
+	du.mutation.AddLocationIDs(ids...)
 	return du
 }
 
-// SetNillableLocationID sets the "location" edge to the Location entity by ID if the given value is not nil.
-func (du *DistrictUpdate) SetNillableLocationID(id *int) *DistrictUpdate {
-	if id != nil {
-		du = du.SetLocationID(*id)
+// AddLocation adds the "location" edges to the Location entity.
+func (du *DistrictUpdate) AddLocation(l ...*Location) *DistrictUpdate {
+	ids := make([]int, len(l))
+	for i := range l {
+		ids[i] = l[i].ID
 	}
-	return du
-}
-
-// SetLocation sets the "location" edge to the Location entity.
-func (du *DistrictUpdate) SetLocation(l *Location) *DistrictUpdate {
-	return du.SetLocationID(l.ID)
+	return du.AddLocationIDs(ids...)
 }
 
 // Mutation returns the DistrictMutation object of the builder.
@@ -179,10 +175,25 @@ func (du *DistrictUpdate) Mutation() *DistrictMutation {
 	return du.mutation
 }
 
-// ClearLocation clears the "location" edge to the Location entity.
+// ClearLocation clears all "location" edges to the Location entity.
 func (du *DistrictUpdate) ClearLocation() *DistrictUpdate {
 	du.mutation.ClearLocation()
 	return du
+}
+
+// RemoveLocationIDs removes the "location" edge to Location entities by IDs.
+func (du *DistrictUpdate) RemoveLocationIDs(ids ...int) *DistrictUpdate {
+	du.mutation.RemoveLocationIDs(ids...)
+	return du
+}
+
+// RemoveLocation removes "location" edges to Location entities.
+func (du *DistrictUpdate) RemoveLocation(l ...*Location) *DistrictUpdate {
+	ids := make([]int, len(l))
+	for i := range l {
+		ids[i] = l[i].ID
+	}
+	return du.RemoveLocationIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -277,7 +288,7 @@ func (du *DistrictUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if du.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.O2M,
 			Inverse: true,
 			Table:   district.LocationTable,
 			Columns: []string{district.LocationColumn},
@@ -288,9 +299,25 @@ func (du *DistrictUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
+	if nodes := du.mutation.RemovedLocationIDs(); len(nodes) > 0 && !du.mutation.LocationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   district.LocationTable,
+			Columns: []string{district.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
 	if nodes := du.mutation.LocationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.O2M,
 			Inverse: true,
 			Table:   district.LocationTable,
 			Columns: []string{district.LocationColumn},
@@ -450,23 +477,19 @@ func (duo *DistrictUpdateOne) ClearExternalLink() *DistrictUpdateOne {
 	return duo
 }
 
-// SetLocationID sets the "location" edge to the Location entity by ID.
-func (duo *DistrictUpdateOne) SetLocationID(id int) *DistrictUpdateOne {
-	duo.mutation.SetLocationID(id)
+// AddLocationIDs adds the "location" edge to the Location entity by IDs.
+func (duo *DistrictUpdateOne) AddLocationIDs(ids ...int) *DistrictUpdateOne {
+	duo.mutation.AddLocationIDs(ids...)
 	return duo
 }
 
-// SetNillableLocationID sets the "location" edge to the Location entity by ID if the given value is not nil.
-func (duo *DistrictUpdateOne) SetNillableLocationID(id *int) *DistrictUpdateOne {
-	if id != nil {
-		duo = duo.SetLocationID(*id)
+// AddLocation adds the "location" edges to the Location entity.
+func (duo *DistrictUpdateOne) AddLocation(l ...*Location) *DistrictUpdateOne {
+	ids := make([]int, len(l))
+	for i := range l {
+		ids[i] = l[i].ID
 	}
-	return duo
-}
-
-// SetLocation sets the "location" edge to the Location entity.
-func (duo *DistrictUpdateOne) SetLocation(l *Location) *DistrictUpdateOne {
-	return duo.SetLocationID(l.ID)
+	return duo.AddLocationIDs(ids...)
 }
 
 // Mutation returns the DistrictMutation object of the builder.
@@ -474,10 +497,25 @@ func (duo *DistrictUpdateOne) Mutation() *DistrictMutation {
 	return duo.mutation
 }
 
-// ClearLocation clears the "location" edge to the Location entity.
+// ClearLocation clears all "location" edges to the Location entity.
 func (duo *DistrictUpdateOne) ClearLocation() *DistrictUpdateOne {
 	duo.mutation.ClearLocation()
 	return duo
+}
+
+// RemoveLocationIDs removes the "location" edge to Location entities by IDs.
+func (duo *DistrictUpdateOne) RemoveLocationIDs(ids ...int) *DistrictUpdateOne {
+	duo.mutation.RemoveLocationIDs(ids...)
+	return duo
+}
+
+// RemoveLocation removes "location" edges to Location entities.
+func (duo *DistrictUpdateOne) RemoveLocation(l ...*Location) *DistrictUpdateOne {
+	ids := make([]int, len(l))
+	for i := range l {
+		ids[i] = l[i].ID
+	}
+	return duo.RemoveLocationIDs(ids...)
 }
 
 // Where appends a list predicates to the DistrictUpdate builder.
@@ -602,7 +640,7 @@ func (duo *DistrictUpdateOne) sqlSave(ctx context.Context) (_node *District, err
 	}
 	if duo.mutation.LocationCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.O2M,
 			Inverse: true,
 			Table:   district.LocationTable,
 			Columns: []string{district.LocationColumn},
@@ -613,9 +651,25 @@ func (duo *DistrictUpdateOne) sqlSave(ctx context.Context) (_node *District, err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
+	if nodes := duo.mutation.RemovedLocationIDs(); len(nodes) > 0 && !duo.mutation.LocationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   district.LocationTable,
+			Columns: []string{district.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
 	if nodes := duo.mutation.LocationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.O2M,
 			Inverse: true,
 			Table:   district.LocationTable,
 			Columns: []string{district.LocationColumn},

@@ -70,6 +70,7 @@ input ArtGenreOrder {
 enum ArtGenreOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 ArtGenreWhereInput is used for filtering ArtGenre objects.
@@ -217,6 +218,7 @@ input ArtOrder {
 enum ArtOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 type ArtStyle implements Node {
   id: ID!
@@ -257,6 +259,7 @@ input ArtStyleOrder {
 enum ArtStyleOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 ArtStyleWhereInput is used for filtering ArtStyle objects.
@@ -610,6 +613,7 @@ input ArtifactOrder {
 enum ArtifactOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 ArtifactWhereInput is used for filtering Artifact objects.
@@ -1137,6 +1141,7 @@ input BookGenreOrder {
 enum BookGenreOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 BookGenreWhereInput is used for filtering BookGenre objects.
@@ -1284,6 +1289,7 @@ input BookOrder {
 enum BookOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 BookWhereInput is used for filtering Book objects.
@@ -1507,6 +1513,7 @@ input CategoryOrder {
 enum CategoryOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 CategoryWhereInput is used for filtering Category objects.
@@ -1719,6 +1726,7 @@ input CollectionOrder {
 enum CollectionOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 CollectionWhereInput is used for filtering Collection objects.
@@ -1907,7 +1915,7 @@ type Country implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  location: Location
+  location: [Location!]
 }
 """A connection to a list of items."""
 type CountryConnection {
@@ -1936,6 +1944,7 @@ input CountryOrder {
 enum CountryOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 CountryWhereInput is used for filtering Country objects.
@@ -2252,7 +2261,7 @@ input CreateCountryInput {
   abbreviation: String
   description: String
   externalLink: String
-  locationID: ID
+  locationIDs: [ID!]
 }
 """
 CreateCultureInput is used for create Culture object.
@@ -2282,7 +2291,7 @@ input CreateDistrictInput {
   abbreviation: String
   description: String
   externalLink: String
-  locationID: ID
+  locationIDs: [ID!]
 }
 """
 CreateHolderInput is used for create Holder object.
@@ -2637,7 +2646,7 @@ input CreateRegionInput {
   abbreviation: String
   description: String
   externalLink: String
-  locationID: ID
+  locationIDs: [ID!]
 }
 """
 CreateSetInput is used for create Set object.
@@ -2668,7 +2677,7 @@ input CreateSettlementInput {
   abbreviation: String
   description: String
   externalLink: String
-  locationID: ID
+  locationIDs: [ID!]
 }
 """
 CreateTechniqueInput is used for create Technique object.
@@ -2724,6 +2733,7 @@ input CultureOrder {
 enum CultureOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 CultureWhereInput is used for filtering Culture objects.
@@ -2875,7 +2885,7 @@ type District implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  location: Location
+  location: [Location!]
 }
 """A connection to a list of items."""
 type DistrictConnection {
@@ -2904,6 +2914,7 @@ input DistrictOrder {
 enum DistrictOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 DistrictWhereInput is used for filtering District objects.
@@ -3121,6 +3132,7 @@ input HolderResponsibilityOrder {
 enum HolderResponsibilityOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 HolderResponsibilityWhereInput is used for filtering HolderResponsibility objects.
@@ -3422,6 +3434,7 @@ input LicenseOrder {
 enum LicenseOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 LicenseWhereInput is used for filtering License objects.
@@ -3610,6 +3623,7 @@ input LocationOrder {
 enum LocationOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 LocationWhereInput is used for filtering Location objects.
@@ -3814,6 +3828,7 @@ input MediumOrder {
 enum MediumOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 MediumWhereInput is used for filtering Medium objects.
@@ -3989,6 +4004,7 @@ input ModelOrder {
 enum ModelOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 ModelWhereInput is used for filtering Model objects.
@@ -4165,6 +4181,7 @@ input MonumentOrder {
 enum MonumentOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 MonumentWhereInput is used for filtering Monument objects.
@@ -4368,6 +4385,7 @@ input OrganizationOrder {
 enum OrganizationOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 type OrganizationType implements Node {
   id: ID!
@@ -4408,6 +4426,7 @@ input OrganizationTypeOrder {
 enum OrganizationTypeOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 OrganizationTypeWhereInput is used for filtering OrganizationType objects.
@@ -4791,6 +4810,7 @@ input PeriodOrder {
 enum PeriodOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 PeriodWhereInput is used for filtering Period objects.
@@ -4989,6 +5009,7 @@ input PersonOrder {
 enum PersonOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 type PersonRole implements Node {
   id: ID!
@@ -5029,6 +5050,7 @@ input PersonRoleOrder {
 enum PersonRoleOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 PersonRoleWhereInput is used for filtering PersonRole objects.
@@ -5471,6 +5493,7 @@ input ProjectOrder {
 enum ProjectOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 type ProjectType implements Node {
   id: ID!
@@ -5511,6 +5534,7 @@ input ProjectTypeOrder {
 enum ProjectTypeOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 ProjectTypeWhereInput is used for filtering ProjectType objects.
@@ -5864,6 +5888,7 @@ input ProtectedAreaCategoryOrder {
 enum ProtectedAreaCategoryOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 ProtectedAreaCategoryWhereInput is used for filtering ProtectedAreaCategory objects.
@@ -6027,6 +6052,7 @@ input ProtectedAreaOrder {
 enum ProtectedAreaOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 type ProtectedAreaPicture implements Node {
   id: ID!
@@ -6074,6 +6100,7 @@ input ProtectedAreaPictureOrder {
 enum ProtectedAreaPictureOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 ProtectedAreaPictureWhereInput is used for filtering ProtectedAreaPicture objects.
@@ -6462,6 +6489,7 @@ input PublicationOrder {
 enum PublicationOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 PublicationWhereInput is used for filtering Publication objects.
@@ -6640,6 +6668,7 @@ input PublisherOrder {
 enum PublisherOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 PublisherWhereInput is used for filtering Publisher objects.
@@ -7568,7 +7597,7 @@ type Region implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  location: Location
+  location: [Location!]
 }
 """A connection to a list of items."""
 type RegionConnection {
@@ -7597,6 +7626,7 @@ input RegionOrder {
 enum RegionOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 RegionWhereInput is used for filtering Region objects.
@@ -7773,6 +7803,7 @@ input SetOrder {
 enum SetOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 SetWhereInput is used for filtering Set objects.
@@ -7922,7 +7953,7 @@ type Settlement implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  location: Location
+  location: [Location!]
 }
 """A connection to a list of items."""
 type SettlementConnection {
@@ -7951,6 +7982,7 @@ input SettlementOrder {
 enum SettlementOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 SettlementWhereInput is used for filtering Settlement objects.
@@ -8126,6 +8158,7 @@ input TechniqueOrder {
 enum TechniqueOrderField {
   CREATED_AT
   UPDATED_AT
+  DISPLAY_NAME
 }
 """
 TechniqueWhereInput is used for filtering Technique objects.
@@ -8564,7 +8597,8 @@ input UpdateCountryInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  locationID: ID
+  addLocationIDs: [ID!]
+  removeLocationIDs: [ID!]
   clearLocation: Boolean
 }
 """
@@ -8607,7 +8641,8 @@ input UpdateDistrictInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  locationID: ID
+  addLocationIDs: [ID!]
+  removeLocationIDs: [ID!]
   clearLocation: Boolean
 }
 """
@@ -9173,7 +9208,8 @@ input UpdateRegionInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  locationID: ID
+  addLocationIDs: [ID!]
+  removeLocationIDs: [ID!]
   clearLocation: Boolean
 }
 """
@@ -9219,7 +9255,8 @@ input UpdateSettlementInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  locationID: ID
+  addLocationIDs: [ID!]
+  removeLocationIDs: [ID!]
   clearLocation: Boolean
 }
 """

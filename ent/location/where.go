@@ -755,7 +755,7 @@ func HasCountry() predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, CountryTable, CountryColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, CountryTable, CountryColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
@@ -778,7 +778,7 @@ func HasDistrict() predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, DistrictTable, DistrictColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, DistrictTable, DistrictColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
@@ -801,7 +801,7 @@ func HasSettlement() predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, SettlementTable, SettlementColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, SettlementTable, SettlementColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
@@ -824,7 +824,7 @@ func HasRegion() predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, RegionTable, RegionColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, RegionTable, RegionColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})

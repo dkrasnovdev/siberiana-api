@@ -11902,7 +11902,8 @@ type CountryMutation struct {
 	description     *string
 	external_link   *string
 	clearedFields   map[string]struct{}
-	location        *int
+	location        map[int]struct{}
+	removedlocation map[int]struct{}
 	clearedlocation bool
 	done            bool
 	oldValue        func(context.Context) (*Country, error)
@@ -12373,9 +12374,14 @@ func (m *CountryMutation) ResetExternalLink() {
 	delete(m.clearedFields, country.FieldExternalLink)
 }
 
-// SetLocationID sets the "location" edge to the Location entity by id.
-func (m *CountryMutation) SetLocationID(id int) {
-	m.location = &id
+// AddLocationIDs adds the "location" edge to the Location entity by ids.
+func (m *CountryMutation) AddLocationIDs(ids ...int) {
+	if m.location == nil {
+		m.location = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.location[ids[i]] = struct{}{}
+	}
 }
 
 // ClearLocation clears the "location" edge to the Location entity.
@@ -12388,20 +12394,29 @@ func (m *CountryMutation) LocationCleared() bool {
 	return m.clearedlocation
 }
 
-// LocationID returns the "location" edge ID in the mutation.
-func (m *CountryMutation) LocationID() (id int, exists bool) {
-	if m.location != nil {
-		return *m.location, true
+// RemoveLocationIDs removes the "location" edge to the Location entity by IDs.
+func (m *CountryMutation) RemoveLocationIDs(ids ...int) {
+	if m.removedlocation == nil {
+		m.removedlocation = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.location, ids[i])
+		m.removedlocation[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedLocation returns the removed IDs of the "location" edge to the Location entity.
+func (m *CountryMutation) RemovedLocationIDs() (ids []int) {
+	for id := range m.removedlocation {
+		ids = append(ids, id)
 	}
 	return
 }
 
 // LocationIDs returns the "location" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// LocationID instead. It exists only for internal usage by the builders.
 func (m *CountryMutation) LocationIDs() (ids []int) {
-	if id := m.location; id != nil {
-		ids = append(ids, *id)
+	for id := range m.location {
+		ids = append(ids, id)
 	}
 	return
 }
@@ -12410,6 +12425,7 @@ func (m *CountryMutation) LocationIDs() (ids []int) {
 func (m *CountryMutation) ResetLocation() {
 	m.location = nil
 	m.clearedlocation = false
+	m.removedlocation = nil
 }
 
 // Where appends a list predicates to the CountryMutation builder.
@@ -12715,9 +12731,11 @@ func (m *CountryMutation) AddedEdges() []string {
 func (m *CountryMutation) AddedIDs(name string) []ent.Value {
 	switch name {
 	case country.EdgeLocation:
-		if id := m.location; id != nil {
-			return []ent.Value{*id}
+		ids := make([]ent.Value, 0, len(m.location))
+		for id := range m.location {
+			ids = append(ids, id)
 		}
+		return ids
 	}
 	return nil
 }
@@ -12725,12 +12743,23 @@ func (m *CountryMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *CountryMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
+	if m.removedlocation != nil {
+		edges = append(edges, country.EdgeLocation)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *CountryMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case country.EdgeLocation:
+		ids := make([]ent.Value, 0, len(m.removedlocation))
+		for id := range m.removedlocation {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
@@ -12757,9 +12786,6 @@ func (m *CountryMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *CountryMutation) ClearEdge(name string) error {
 	switch name {
-	case country.EdgeLocation:
-		m.ClearLocation()
-		return nil
 	}
 	return fmt.Errorf("unknown Country unique edge %s", name)
 }
@@ -13704,7 +13730,8 @@ type DistrictMutation struct {
 	description     *string
 	external_link   *string
 	clearedFields   map[string]struct{}
-	location        *int
+	location        map[int]struct{}
+	removedlocation map[int]struct{}
 	clearedlocation bool
 	done            bool
 	oldValue        func(context.Context) (*District, error)
@@ -14175,9 +14202,14 @@ func (m *DistrictMutation) ResetExternalLink() {
 	delete(m.clearedFields, district.FieldExternalLink)
 }
 
-// SetLocationID sets the "location" edge to the Location entity by id.
-func (m *DistrictMutation) SetLocationID(id int) {
-	m.location = &id
+// AddLocationIDs adds the "location" edge to the Location entity by ids.
+func (m *DistrictMutation) AddLocationIDs(ids ...int) {
+	if m.location == nil {
+		m.location = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.location[ids[i]] = struct{}{}
+	}
 }
 
 // ClearLocation clears the "location" edge to the Location entity.
@@ -14190,20 +14222,29 @@ func (m *DistrictMutation) LocationCleared() bool {
 	return m.clearedlocation
 }
 
-// LocationID returns the "location" edge ID in the mutation.
-func (m *DistrictMutation) LocationID() (id int, exists bool) {
-	if m.location != nil {
-		return *m.location, true
+// RemoveLocationIDs removes the "location" edge to the Location entity by IDs.
+func (m *DistrictMutation) RemoveLocationIDs(ids ...int) {
+	if m.removedlocation == nil {
+		m.removedlocation = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.location, ids[i])
+		m.removedlocation[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedLocation returns the removed IDs of the "location" edge to the Location entity.
+func (m *DistrictMutation) RemovedLocationIDs() (ids []int) {
+	for id := range m.removedlocation {
+		ids = append(ids, id)
 	}
 	return
 }
 
 // LocationIDs returns the "location" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// LocationID instead. It exists only for internal usage by the builders.
 func (m *DistrictMutation) LocationIDs() (ids []int) {
-	if id := m.location; id != nil {
-		ids = append(ids, *id)
+	for id := range m.location {
+		ids = append(ids, id)
 	}
 	return
 }
@@ -14212,6 +14253,7 @@ func (m *DistrictMutation) LocationIDs() (ids []int) {
 func (m *DistrictMutation) ResetLocation() {
 	m.location = nil
 	m.clearedlocation = false
+	m.removedlocation = nil
 }
 
 // Where appends a list predicates to the DistrictMutation builder.
@@ -14517,9 +14559,11 @@ func (m *DistrictMutation) AddedEdges() []string {
 func (m *DistrictMutation) AddedIDs(name string) []ent.Value {
 	switch name {
 	case district.EdgeLocation:
-		if id := m.location; id != nil {
-			return []ent.Value{*id}
+		ids := make([]ent.Value, 0, len(m.location))
+		for id := range m.location {
+			ids = append(ids, id)
 		}
+		return ids
 	}
 	return nil
 }
@@ -14527,12 +14571,23 @@ func (m *DistrictMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *DistrictMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
+	if m.removedlocation != nil {
+		edges = append(edges, district.EdgeLocation)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *DistrictMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case district.EdgeLocation:
+		ids := make([]ent.Value, 0, len(m.removedlocation))
+		for id := range m.removedlocation {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
@@ -14559,9 +14614,6 @@ func (m *DistrictMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *DistrictMutation) ClearEdge(name string) error {
 	switch name {
-	case district.EdgeLocation:
-		m.ClearLocation()
-		return nil
 	}
 	return fmt.Errorf("unknown District unique edge %s", name)
 }
@@ -36215,7 +36267,8 @@ type RegionMutation struct {
 	description     *string
 	external_link   *string
 	clearedFields   map[string]struct{}
-	location        *int
+	location        map[int]struct{}
+	removedlocation map[int]struct{}
 	clearedlocation bool
 	done            bool
 	oldValue        func(context.Context) (*Region, error)
@@ -36686,9 +36739,14 @@ func (m *RegionMutation) ResetExternalLink() {
 	delete(m.clearedFields, region.FieldExternalLink)
 }
 
-// SetLocationID sets the "location" edge to the Location entity by id.
-func (m *RegionMutation) SetLocationID(id int) {
-	m.location = &id
+// AddLocationIDs adds the "location" edge to the Location entity by ids.
+func (m *RegionMutation) AddLocationIDs(ids ...int) {
+	if m.location == nil {
+		m.location = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.location[ids[i]] = struct{}{}
+	}
 }
 
 // ClearLocation clears the "location" edge to the Location entity.
@@ -36701,20 +36759,29 @@ func (m *RegionMutation) LocationCleared() bool {
 	return m.clearedlocation
 }
 
-// LocationID returns the "location" edge ID in the mutation.
-func (m *RegionMutation) LocationID() (id int, exists bool) {
-	if m.location != nil {
-		return *m.location, true
+// RemoveLocationIDs removes the "location" edge to the Location entity by IDs.
+func (m *RegionMutation) RemoveLocationIDs(ids ...int) {
+	if m.removedlocation == nil {
+		m.removedlocation = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.location, ids[i])
+		m.removedlocation[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedLocation returns the removed IDs of the "location" edge to the Location entity.
+func (m *RegionMutation) RemovedLocationIDs() (ids []int) {
+	for id := range m.removedlocation {
+		ids = append(ids, id)
 	}
 	return
 }
 
 // LocationIDs returns the "location" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// LocationID instead. It exists only for internal usage by the builders.
 func (m *RegionMutation) LocationIDs() (ids []int) {
-	if id := m.location; id != nil {
-		ids = append(ids, *id)
+	for id := range m.location {
+		ids = append(ids, id)
 	}
 	return
 }
@@ -36723,6 +36790,7 @@ func (m *RegionMutation) LocationIDs() (ids []int) {
 func (m *RegionMutation) ResetLocation() {
 	m.location = nil
 	m.clearedlocation = false
+	m.removedlocation = nil
 }
 
 // Where appends a list predicates to the RegionMutation builder.
@@ -37028,9 +37096,11 @@ func (m *RegionMutation) AddedEdges() []string {
 func (m *RegionMutation) AddedIDs(name string) []ent.Value {
 	switch name {
 	case region.EdgeLocation:
-		if id := m.location; id != nil {
-			return []ent.Value{*id}
+		ids := make([]ent.Value, 0, len(m.location))
+		for id := range m.location {
+			ids = append(ids, id)
 		}
+		return ids
 	}
 	return nil
 }
@@ -37038,12 +37108,23 @@ func (m *RegionMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *RegionMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
+	if m.removedlocation != nil {
+		edges = append(edges, region.EdgeLocation)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *RegionMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case region.EdgeLocation:
+		ids := make([]ent.Value, 0, len(m.removedlocation))
+		for id := range m.removedlocation {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
@@ -37070,9 +37151,6 @@ func (m *RegionMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *RegionMutation) ClearEdge(name string) error {
 	switch name {
-	case region.EdgeLocation:
-		m.ClearLocation()
-		return nil
 	}
 	return fmt.Errorf("unknown Region unique edge %s", name)
 }
@@ -38100,7 +38178,8 @@ type SettlementMutation struct {
 	description     *string
 	external_link   *string
 	clearedFields   map[string]struct{}
-	location        *int
+	location        map[int]struct{}
+	removedlocation map[int]struct{}
 	clearedlocation bool
 	done            bool
 	oldValue        func(context.Context) (*Settlement, error)
@@ -38571,9 +38650,14 @@ func (m *SettlementMutation) ResetExternalLink() {
 	delete(m.clearedFields, settlement.FieldExternalLink)
 }
 
-// SetLocationID sets the "location" edge to the Location entity by id.
-func (m *SettlementMutation) SetLocationID(id int) {
-	m.location = &id
+// AddLocationIDs adds the "location" edge to the Location entity by ids.
+func (m *SettlementMutation) AddLocationIDs(ids ...int) {
+	if m.location == nil {
+		m.location = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.location[ids[i]] = struct{}{}
+	}
 }
 
 // ClearLocation clears the "location" edge to the Location entity.
@@ -38586,20 +38670,29 @@ func (m *SettlementMutation) LocationCleared() bool {
 	return m.clearedlocation
 }
 
-// LocationID returns the "location" edge ID in the mutation.
-func (m *SettlementMutation) LocationID() (id int, exists bool) {
-	if m.location != nil {
-		return *m.location, true
+// RemoveLocationIDs removes the "location" edge to the Location entity by IDs.
+func (m *SettlementMutation) RemoveLocationIDs(ids ...int) {
+	if m.removedlocation == nil {
+		m.removedlocation = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.location, ids[i])
+		m.removedlocation[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedLocation returns the removed IDs of the "location" edge to the Location entity.
+func (m *SettlementMutation) RemovedLocationIDs() (ids []int) {
+	for id := range m.removedlocation {
+		ids = append(ids, id)
 	}
 	return
 }
 
 // LocationIDs returns the "location" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// LocationID instead. It exists only for internal usage by the builders.
 func (m *SettlementMutation) LocationIDs() (ids []int) {
-	if id := m.location; id != nil {
-		ids = append(ids, *id)
+	for id := range m.location {
+		ids = append(ids, id)
 	}
 	return
 }
@@ -38608,6 +38701,7 @@ func (m *SettlementMutation) LocationIDs() (ids []int) {
 func (m *SettlementMutation) ResetLocation() {
 	m.location = nil
 	m.clearedlocation = false
+	m.removedlocation = nil
 }
 
 // Where appends a list predicates to the SettlementMutation builder.
@@ -38913,9 +39007,11 @@ func (m *SettlementMutation) AddedEdges() []string {
 func (m *SettlementMutation) AddedIDs(name string) []ent.Value {
 	switch name {
 	case settlement.EdgeLocation:
-		if id := m.location; id != nil {
-			return []ent.Value{*id}
+		ids := make([]ent.Value, 0, len(m.location))
+		for id := range m.location {
+			ids = append(ids, id)
 		}
+		return ids
 	}
 	return nil
 }
@@ -38923,12 +39019,23 @@ func (m *SettlementMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *SettlementMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
+	if m.removedlocation != nil {
+		edges = append(edges, settlement.EdgeLocation)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *SettlementMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case settlement.EdgeLocation:
+		ids := make([]ent.Value, 0, len(m.removedlocation))
+		for id := range m.removedlocation {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
@@ -38955,9 +39062,6 @@ func (m *SettlementMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *SettlementMutation) ClearEdge(name string) error {
 	switch name {
-	case settlement.EdgeLocation:
-		m.ClearLocation()
-		return nil
 	}
 	return fmt.Errorf("unknown Settlement unique edge %s", name)
 }

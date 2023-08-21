@@ -1723,7 +1723,9 @@ func (c *CountryQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, locationImplementors)...); err != nil {
 				return err
 			}
-			c.withLocation = query
+			c.WithNamedLocation(alias, func(wq *LocationQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[country.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, country.FieldCreatedAt)
@@ -2005,7 +2007,9 @@ func (d *DistrictQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, locationImplementors)...); err != nil {
 				return err
 			}
-			d.withLocation = query
+			d.WithNamedLocation(alias, func(wq *LocationQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[district.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, district.FieldCreatedAt)
@@ -5327,7 +5331,9 @@ func (r *RegionQuery) collectField(ctx context.Context, opCtx *graphql.Operation
 			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, locationImplementors)...); err != nil {
 				return err
 			}
-			r.withLocation = query
+			r.WithNamedLocation(alias, func(wq *LocationQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[region.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, region.FieldCreatedAt)
@@ -5621,7 +5627,9 @@ func (s *SettlementQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, locationImplementors)...); err != nil {
 				return err
 			}
-			s.withLocation = query
+			s.WithNamedLocation(alias, func(wq *LocationQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[settlement.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, settlement.FieldCreatedAt)

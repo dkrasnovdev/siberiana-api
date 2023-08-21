@@ -133,23 +133,19 @@ func (rc *RegionCreate) SetNillableExternalLink(s *string) *RegionCreate {
 	return rc
 }
 
-// SetLocationID sets the "location" edge to the Location entity by ID.
-func (rc *RegionCreate) SetLocationID(id int) *RegionCreate {
-	rc.mutation.SetLocationID(id)
+// AddLocationIDs adds the "location" edge to the Location entity by IDs.
+func (rc *RegionCreate) AddLocationIDs(ids ...int) *RegionCreate {
+	rc.mutation.AddLocationIDs(ids...)
 	return rc
 }
 
-// SetNillableLocationID sets the "location" edge to the Location entity by ID if the given value is not nil.
-func (rc *RegionCreate) SetNillableLocationID(id *int) *RegionCreate {
-	if id != nil {
-		rc = rc.SetLocationID(*id)
+// AddLocation adds the "location" edges to the Location entity.
+func (rc *RegionCreate) AddLocation(l ...*Location) *RegionCreate {
+	ids := make([]int, len(l))
+	for i := range l {
+		ids[i] = l[i].ID
 	}
-	return rc
-}
-
-// SetLocation sets the "location" edge to the Location entity.
-func (rc *RegionCreate) SetLocation(l *Location) *RegionCreate {
-	return rc.SetLocationID(l.ID)
+	return rc.AddLocationIDs(ids...)
 }
 
 // Mutation returns the RegionMutation object of the builder.
@@ -274,7 +270,7 @@ func (rc *RegionCreate) createSpec() (*Region, *sqlgraph.CreateSpec) {
 	}
 	if nodes := rc.mutation.LocationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.O2M,
 			Inverse: true,
 			Table:   region.LocationTable,
 			Columns: []string{region.LocationColumn},
@@ -286,7 +282,6 @@ func (rc *RegionCreate) createSpec() (*Region, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.location_region = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

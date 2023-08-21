@@ -133,23 +133,19 @@ func (dc *DistrictCreate) SetNillableExternalLink(s *string) *DistrictCreate {
 	return dc
 }
 
-// SetLocationID sets the "location" edge to the Location entity by ID.
-func (dc *DistrictCreate) SetLocationID(id int) *DistrictCreate {
-	dc.mutation.SetLocationID(id)
+// AddLocationIDs adds the "location" edge to the Location entity by IDs.
+func (dc *DistrictCreate) AddLocationIDs(ids ...int) *DistrictCreate {
+	dc.mutation.AddLocationIDs(ids...)
 	return dc
 }
 
-// SetNillableLocationID sets the "location" edge to the Location entity by ID if the given value is not nil.
-func (dc *DistrictCreate) SetNillableLocationID(id *int) *DistrictCreate {
-	if id != nil {
-		dc = dc.SetLocationID(*id)
+// AddLocation adds the "location" edges to the Location entity.
+func (dc *DistrictCreate) AddLocation(l ...*Location) *DistrictCreate {
+	ids := make([]int, len(l))
+	for i := range l {
+		ids[i] = l[i].ID
 	}
-	return dc
-}
-
-// SetLocation sets the "location" edge to the Location entity.
-func (dc *DistrictCreate) SetLocation(l *Location) *DistrictCreate {
-	return dc.SetLocationID(l.ID)
+	return dc.AddLocationIDs(ids...)
 }
 
 // Mutation returns the DistrictMutation object of the builder.
@@ -274,7 +270,7 @@ func (dc *DistrictCreate) createSpec() (*District, *sqlgraph.CreateSpec) {
 	}
 	if nodes := dc.mutation.LocationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.O2M,
 			Inverse: true,
 			Table:   district.LocationTable,
 			Columns: []string{district.LocationColumn},
@@ -286,7 +282,6 @@ func (dc *DistrictCreate) createSpec() (*District, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.location_district = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

@@ -9,7 +9,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
 )
 
@@ -36,30 +35,27 @@ type Region struct {
 	ExternalLink string `json:"external_link,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the RegionQuery when eager-loading is set.
-	Edges           RegionEdges `json:"edges"`
-	location_region *int
-	selectValues    sql.SelectValues
+	Edges        RegionEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // RegionEdges holds the relations/edges for other nodes in the graph.
 type RegionEdges struct {
 	// Location holds the value of the location edge.
-	Location *Location `json:"location,omitempty"`
+	Location []*Location `json:"location,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 	// totalCount holds the count of the edges above.
 	totalCount [1]map[string]int
+
+	namedLocation map[string][]*Location
 }
 
 // LocationOrErr returns the Location value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e RegionEdges) LocationOrErr() (*Location, error) {
+// was not loaded in eager-loading.
+func (e RegionEdges) LocationOrErr() ([]*Location, error) {
 	if e.loadedTypes[0] {
-		if e.Location == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: location.Label}
-		}
 		return e.Location, nil
 	}
 	return nil, &NotLoadedError{edge: "location"}
@@ -76,8 +72,6 @@ func (*Region) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case region.FieldCreatedAt, region.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case region.ForeignKeys[0]: // location_region
-			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -147,13 +141,6 @@ func (r *Region) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				r.ExternalLink = value.String
 			}
-		case region.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field location_region", value)
-			} else if value.Valid {
-				r.location_region = new(int)
-				*r.location_region = int(value.Int64)
-			}
 		default:
 			r.selectValues.Set(columns[i], values[i])
 		}
@@ -220,6 +207,30 @@ func (r *Region) String() string {
 	builder.WriteString(r.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedLocation returns the Location named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (r *Region) NamedLocation(name string) ([]*Location, error) {
+	if r.Edges.namedLocation == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := r.Edges.namedLocation[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (r *Region) appendNamedLocation(name string, edges ...*Location) {
+	if r.Edges.namedLocation == nil {
+		r.Edges.namedLocation = make(map[string][]*Location)
+	}
+	if len(edges) == 0 {
+		r.Edges.namedLocation[name] = []*Location{}
+	} else {
+		r.Edges.namedLocation[name] = append(r.Edges.namedLocation[name], edges...)
+	}
 }
 
 // Regions is a parsable slice of Region.

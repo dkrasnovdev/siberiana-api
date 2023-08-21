@@ -20525,9 +20525,9 @@ func (ec *executionContext) _Country_location(ctx context.Context, field graphql
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*ent.Location)
+	res := resTmp.([]*ent.Location)
 	fc.Result = res
-	return ec.marshalOLocation2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLocation(ctx, field.Selections, res)
+	return ec.marshalOLocation2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLocationᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Country_location(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21973,9 +21973,9 @@ func (ec *executionContext) _District_location(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*ent.Location)
+	res := resTmp.([]*ent.Location)
 	fc.Result = res
-	return ec.marshalOLocation2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLocation(ctx, field.Selections, res)
+	return ec.marshalOLocation2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLocationᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_District_location(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -48114,9 +48114,9 @@ func (ec *executionContext) _Region_location(ctx context.Context, field graphql.
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*ent.Location)
+	res := resTmp.([]*ent.Location)
 	fc.Result = res
-	return ec.marshalOLocation2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLocation(ctx, field.Selections, res)
+	return ec.marshalOLocation2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLocationᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Region_location(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -49629,9 +49629,9 @@ func (ec *executionContext) _Settlement_location(ctx context.Context, field grap
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*ent.Location)
+	res := resTmp.([]*ent.Location)
 	fc.Result = res
-	return ec.marshalOLocation2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLocation(ctx, field.Selections, res)
+	return ec.marshalOLocation2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLocationᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Settlement_location(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -67168,7 +67168,7 @@ func (ec *executionContext) unmarshalInputCreateCountryInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "locationID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "locationIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -67247,15 +67247,15 @@ func (ec *executionContext) unmarshalInputCreateCountryInput(ctx context.Context
 				return it, err
 			}
 			it.ExternalLink = data
-		case "locationID":
+		case "locationIDs":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("locationID"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("locationIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.LocationID = data
+			it.LocationIDs = data
 		}
 	}
 
@@ -67370,7 +67370,7 @@ func (ec *executionContext) unmarshalInputCreateDistrictInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "locationID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "locationIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -67449,15 +67449,15 @@ func (ec *executionContext) unmarshalInputCreateDistrictInput(ctx context.Contex
 				return it, err
 			}
 			it.ExternalLink = data
-		case "locationID":
+		case "locationIDs":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("locationID"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("locationIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.LocationID = data
+			it.LocationIDs = data
 		}
 	}
 
@@ -69885,7 +69885,7 @@ func (ec *executionContext) unmarshalInputCreateRegionInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "locationID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "locationIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -69964,15 +69964,15 @@ func (ec *executionContext) unmarshalInputCreateRegionInput(ctx context.Context,
 				return it, err
 			}
 			it.ExternalLink = data
-		case "locationID":
+		case "locationIDs":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("locationID"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("locationIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.LocationID = data
+			it.LocationIDs = data
 		}
 	}
 
@@ -70096,7 +70096,7 @@ func (ec *executionContext) unmarshalInputCreateSettlementInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "locationID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "locationIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -70175,15 +70175,15 @@ func (ec *executionContext) unmarshalInputCreateSettlementInput(ctx context.Cont
 				return it, err
 			}
 			it.ExternalLink = data
-		case "locationID":
+		case "locationIDs":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("locationID"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("locationIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.LocationID = data
+			it.LocationIDs = data
 		}
 	}
 
@@ -103312,7 +103312,7 @@ func (ec *executionContext) unmarshalInputUpdateCountryInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "locationID", "clearLocation"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addLocationIDs", "removeLocationIDs", "clearLocation"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -103436,15 +103436,24 @@ func (ec *executionContext) unmarshalInputUpdateCountryInput(ctx context.Context
 				return it, err
 			}
 			it.ClearExternalLink = data
-		case "locationID":
+		case "addLocationIDs":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("locationID"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addLocationIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.LocationID = data
+			it.AddLocationIDs = data
+		case "removeLocationIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeLocationIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveLocationIDs = data
 		case "clearLocation":
 			var err error
 
@@ -103631,7 +103640,7 @@ func (ec *executionContext) unmarshalInputUpdateDistrictInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "locationID", "clearLocation"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addLocationIDs", "removeLocationIDs", "clearLocation"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -103755,15 +103764,24 @@ func (ec *executionContext) unmarshalInputUpdateDistrictInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearExternalLink = data
-		case "locationID":
+		case "addLocationIDs":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("locationID"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addLocationIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.LocationID = data
+			it.AddLocationIDs = data
+		case "removeLocationIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeLocationIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveLocationIDs = data
 		case "clearLocation":
 			var err error
 
@@ -108045,7 +108063,7 @@ func (ec *executionContext) unmarshalInputUpdateRegionInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "locationID", "clearLocation"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addLocationIDs", "removeLocationIDs", "clearLocation"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -108169,15 +108187,24 @@ func (ec *executionContext) unmarshalInputUpdateRegionInput(ctx context.Context,
 				return it, err
 			}
 			it.ClearExternalLink = data
-		case "locationID":
+		case "addLocationIDs":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("locationID"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addLocationIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.LocationID = data
+			it.AddLocationIDs = data
+		case "removeLocationIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeLocationIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveLocationIDs = data
 		case "clearLocation":
 			var err error
 
@@ -108391,7 +108418,7 @@ func (ec *executionContext) unmarshalInputUpdateSettlementInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "locationID", "clearLocation"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addLocationIDs", "removeLocationIDs", "clearLocation"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -108515,15 +108542,24 @@ func (ec *executionContext) unmarshalInputUpdateSettlementInput(ctx context.Cont
 				return it, err
 			}
 			it.ClearExternalLink = data
-		case "locationID":
+		case "addLocationIDs":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("locationID"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addLocationIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.LocationID = data
+			it.AddLocationIDs = data
+		case "removeLocationIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeLocationIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveLocationIDs = data
 		case "clearLocation":
 			var err error
 
@@ -123763,6 +123799,53 @@ func (ec *executionContext) unmarshalOLicenseWhereInput2ᚖgithubᚗcomᚋdkrasn
 	}
 	res, err := ec.unmarshalInputLicenseWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOLocation2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLocationᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Location) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNLocation2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLocation(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) marshalOLocation2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐLocation(ctx context.Context, sel ast.SelectionSet, v *ent.Location) graphql.Marshaler {

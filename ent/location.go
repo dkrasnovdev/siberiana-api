@@ -42,8 +42,12 @@ type Location struct {
 	Geometry *types.Geometry `json:"geometry,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the LocationQuery when eager-loading is set.
-	Edges        LocationEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges               LocationEdges `json:"edges"`
+	location_country    *int
+	location_district   *int
+	location_settlement *int
+	location_region     *int
+	selectValues        sql.SelectValues
 }
 
 // LocationEdges holds the relations/edges for other nodes in the graph.
@@ -165,6 +169,14 @@ func (*Location) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case location.FieldCreatedAt, location.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
+		case location.ForeignKeys[0]: // location_country
+			values[i] = new(sql.NullInt64)
+		case location.ForeignKeys[1]: // location_district
+			values[i] = new(sql.NullInt64)
+		case location.ForeignKeys[2]: // location_settlement
+			values[i] = new(sql.NullInt64)
+		case location.ForeignKeys[3]: // location_region
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -240,6 +252,34 @@ func (l *Location) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				l.Geometry = new(types.Geometry)
 				*l.Geometry = *value.S.(*types.Geometry)
+			}
+		case location.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field location_country", value)
+			} else if value.Valid {
+				l.location_country = new(int)
+				*l.location_country = int(value.Int64)
+			}
+		case location.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field location_district", value)
+			} else if value.Valid {
+				l.location_district = new(int)
+				*l.location_district = int(value.Int64)
+			}
+		case location.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field location_settlement", value)
+			} else if value.Valid {
+				l.location_settlement = new(int)
+				*l.location_settlement = int(value.Int64)
+			}
+		case location.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field location_region", value)
+			} else if value.Valid {
+				l.location_region = new(int)
+				*l.location_region = int(value.Int64)
 			}
 		default:
 			l.selectValues.Set(columns[i], values[i])

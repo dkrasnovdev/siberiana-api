@@ -51,6 +51,6 @@ func (Country) Annotations() []schema.Annotation {
 // Edges of the Country.
 func (Country) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("location", Location.Type).Ref("country").Unique(),
+		edge.From("location", Location.Type).Ref("country"),
 	}
 }

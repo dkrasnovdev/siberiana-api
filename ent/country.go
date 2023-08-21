@@ -10,7 +10,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
-	"github.com/dkrasnovdev/siberiana-api/ent/location"
 )
 
 // Country is the model entity for the Country schema.
@@ -36,30 +35,27 @@ type Country struct {
 	ExternalLink string `json:"external_link,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CountryQuery when eager-loading is set.
-	Edges            CountryEdges `json:"edges"`
-	location_country *int
-	selectValues     sql.SelectValues
+	Edges        CountryEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // CountryEdges holds the relations/edges for other nodes in the graph.
 type CountryEdges struct {
 	// Location holds the value of the location edge.
-	Location *Location `json:"location,omitempty"`
+	Location []*Location `json:"location,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 	// totalCount holds the count of the edges above.
 	totalCount [1]map[string]int
+
+	namedLocation map[string][]*Location
 }
 
 // LocationOrErr returns the Location value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e CountryEdges) LocationOrErr() (*Location, error) {
+// was not loaded in eager-loading.
+func (e CountryEdges) LocationOrErr() ([]*Location, error) {
 	if e.loadedTypes[0] {
-		if e.Location == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: location.Label}
-		}
 		return e.Location, nil
 	}
 	return nil, &NotLoadedError{edge: "location"}
@@ -76,8 +72,6 @@ func (*Country) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case country.FieldCreatedAt, country.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case country.ForeignKeys[0]: // location_country
-			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -147,13 +141,6 @@ func (c *Country) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.ExternalLink = value.String
 			}
-		case country.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field location_country", value)
-			} else if value.Valid {
-				c.location_country = new(int)
-				*c.location_country = int(value.Int64)
-			}
 		default:
 			c.selectValues.Set(columns[i], values[i])
 		}
@@ -220,6 +207,30 @@ func (c *Country) String() string {
 	builder.WriteString(c.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedLocation returns the Location named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Country) NamedLocation(name string) ([]*Location, error) {
+	if c.Edges.namedLocation == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedLocation[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Country) appendNamedLocation(name string, edges ...*Location) {
+	if c.Edges.namedLocation == nil {
+		c.Edges.namedLocation = make(map[string][]*Location)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedLocation[name] = []*Location{}
+	} else {
+		c.Edges.namedLocation[name] = append(c.Edges.namedLocation[name], edges...)
+	}
 }
 
 // Countries is a parsable slice of Country.

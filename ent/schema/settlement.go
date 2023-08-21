@@ -51,6 +51,6 @@ func (Settlement) Annotations() []schema.Annotation {
 // Edges of the Settlement.
 func (Settlement) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("location", Location.Type).Ref("settlement").Unique(),
+		edge.From("location", Location.Type).Ref("settlement"),
 	}
 }

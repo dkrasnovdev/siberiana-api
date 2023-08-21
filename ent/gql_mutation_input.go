@@ -1693,7 +1693,7 @@ type CreateCountryInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
-	LocationID   *int
+	LocationIDs  []int
 }
 
 // Mutate applies the CreateCountryInput on the CountryMutation builder.
@@ -1722,8 +1722,8 @@ func (i *CreateCountryInput) Mutate(m *CountryMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
-	if v := i.LocationID; v != nil {
-		m.SetLocationID(*v)
+	if v := i.LocationIDs; len(v) > 0 {
+		m.AddLocationIDs(v...)
 	}
 }
 
@@ -1749,7 +1749,8 @@ type UpdateCountryInput struct {
 	ClearExternalLink bool
 	ExternalLink      *string
 	ClearLocation     bool
-	LocationID        *int
+	AddLocationIDs    []int
+	RemoveLocationIDs []int
 }
 
 // Mutate applies the UpdateCountryInput on the CountryMutation builder.
@@ -1796,8 +1797,11 @@ func (i *UpdateCountryInput) Mutate(m *CountryMutation) {
 	if i.ClearLocation {
 		m.ClearLocation()
 	}
-	if v := i.LocationID; v != nil {
-		m.SetLocationID(*v)
+	if v := i.AddLocationIDs; len(v) > 0 {
+		m.AddLocationIDs(v...)
+	}
+	if v := i.RemoveLocationIDs; len(v) > 0 {
+		m.RemoveLocationIDs(v...)
 	}
 }
 
@@ -1957,7 +1961,7 @@ type CreateDistrictInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
-	LocationID   *int
+	LocationIDs  []int
 }
 
 // Mutate applies the CreateDistrictInput on the DistrictMutation builder.
@@ -1986,8 +1990,8 @@ func (i *CreateDistrictInput) Mutate(m *DistrictMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
-	if v := i.LocationID; v != nil {
-		m.SetLocationID(*v)
+	if v := i.LocationIDs; len(v) > 0 {
+		m.AddLocationIDs(v...)
 	}
 }
 
@@ -2013,7 +2017,8 @@ type UpdateDistrictInput struct {
 	ClearExternalLink bool
 	ExternalLink      *string
 	ClearLocation     bool
-	LocationID        *int
+	AddLocationIDs    []int
+	RemoveLocationIDs []int
 }
 
 // Mutate applies the UpdateDistrictInput on the DistrictMutation builder.
@@ -2060,8 +2065,11 @@ func (i *UpdateDistrictInput) Mutate(m *DistrictMutation) {
 	if i.ClearLocation {
 		m.ClearLocation()
 	}
-	if v := i.LocationID; v != nil {
-		m.SetLocationID(*v)
+	if v := i.AddLocationIDs; len(v) > 0 {
+		m.AddLocationIDs(v...)
+	}
+	if v := i.RemoveLocationIDs; len(v) > 0 {
+		m.RemoveLocationIDs(v...)
 	}
 }
 
@@ -5355,7 +5363,7 @@ type CreateRegionInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
-	LocationID   *int
+	LocationIDs  []int
 }
 
 // Mutate applies the CreateRegionInput on the RegionMutation builder.
@@ -5384,8 +5392,8 @@ func (i *CreateRegionInput) Mutate(m *RegionMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
-	if v := i.LocationID; v != nil {
-		m.SetLocationID(*v)
+	if v := i.LocationIDs; len(v) > 0 {
+		m.AddLocationIDs(v...)
 	}
 }
 
@@ -5411,7 +5419,8 @@ type UpdateRegionInput struct {
 	ClearExternalLink bool
 	ExternalLink      *string
 	ClearLocation     bool
-	LocationID        *int
+	AddLocationIDs    []int
+	RemoveLocationIDs []int
 }
 
 // Mutate applies the UpdateRegionInput on the RegionMutation builder.
@@ -5458,8 +5467,11 @@ func (i *UpdateRegionInput) Mutate(m *RegionMutation) {
 	if i.ClearLocation {
 		m.ClearLocation()
 	}
-	if v := i.LocationID; v != nil {
-		m.SetLocationID(*v)
+	if v := i.AddLocationIDs; len(v) > 0 {
+		m.AddLocationIDs(v...)
+	}
+	if v := i.RemoveLocationIDs; len(v) > 0 {
+		m.RemoveLocationIDs(v...)
 	}
 }
 
@@ -5635,7 +5647,7 @@ type CreateSettlementInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
-	LocationID   *int
+	LocationIDs  []int
 }
 
 // Mutate applies the CreateSettlementInput on the SettlementMutation builder.
@@ -5664,8 +5676,8 @@ func (i *CreateSettlementInput) Mutate(m *SettlementMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
-	if v := i.LocationID; v != nil {
-		m.SetLocationID(*v)
+	if v := i.LocationIDs; len(v) > 0 {
+		m.AddLocationIDs(v...)
 	}
 }
 
@@ -5691,7 +5703,8 @@ type UpdateSettlementInput struct {
 	ClearExternalLink bool
 	ExternalLink      *string
 	ClearLocation     bool
-	LocationID        *int
+	AddLocationIDs    []int
+	RemoveLocationIDs []int
 }
 
 // Mutate applies the UpdateSettlementInput on the SettlementMutation builder.
@@ -5738,8 +5751,11 @@ func (i *UpdateSettlementInput) Mutate(m *SettlementMutation) {
 	if i.ClearLocation {
 		m.ClearLocation()
 	}
-	if v := i.LocationID; v != nil {
-		m.SetLocationID(*v)
+	if v := i.AddLocationIDs; len(v) > 0 {
+		m.AddLocationIDs(v...)
+	}
+	if v := i.RemoveLocationIDs; len(v) > 0 {
+		m.RemoveLocationIDs(v...)
 	}
 }
 

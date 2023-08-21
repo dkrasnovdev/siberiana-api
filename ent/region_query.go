@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -19,14 +20,14 @@ import (
 // RegionQuery is the builder for querying Region entities.
 type RegionQuery struct {
 	config
-	ctx          *QueryContext
-	order        []region.OrderOption
-	inters       []Interceptor
-	predicates   []predicate.Region
-	withLocation *LocationQuery
-	withFKs      bool
-	modifiers    []func(*sql.Selector)
-	loadTotal    []func(context.Context, []*Region) error
+	ctx               *QueryContext
+	order             []region.OrderOption
+	inters            []Interceptor
+	predicates        []predicate.Region
+	withLocation      *LocationQuery
+	modifiers         []func(*sql.Selector)
+	loadTotal         []func(context.Context, []*Region) error
+	withNamedLocation map[string]*LocationQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -77,7 +78,7 @@ func (rq *RegionQuery) QueryLocation() *LocationQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(region.Table, region.FieldID, selector),
 			sqlgraph.To(location.Table, location.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, region.LocationTable, region.LocationColumn),
+			sqlgraph.Edge(sqlgraph.O2M, true, region.LocationTable, region.LocationColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
 		return fromU, nil
@@ -378,18 +379,11 @@ func (rq *RegionQuery) prepareQuery(ctx context.Context) error {
 func (rq *RegionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Region, error) {
 	var (
 		nodes       = []*Region{}
-		withFKs     = rq.withFKs
 		_spec       = rq.querySpec()
 		loadedTypes = [1]bool{
 			rq.withLocation != nil,
 		}
 	)
-	if rq.withLocation != nil {
-		withFKs = true
-	}
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, region.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Region).scanValues(nil, columns)
 	}
@@ -412,8 +406,16 @@ func (rq *RegionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Regio
 		return nodes, nil
 	}
 	if query := rq.withLocation; query != nil {
-		if err := rq.loadLocation(ctx, query, nodes, nil,
-			func(n *Region, e *Location) { n.Edges.Location = e }); err != nil {
+		if err := rq.loadLocation(ctx, query, nodes,
+			func(n *Region) { n.Edges.Location = []*Location{} },
+			func(n *Region, e *Location) { n.Edges.Location = append(n.Edges.Location, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range rq.withNamedLocation {
+		if err := rq.loadLocation(ctx, query, nodes,
+			func(n *Region) { n.appendNamedLocation(name) },
+			func(n *Region, e *Location) { n.appendNamedLocation(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -426,34 +428,33 @@ func (rq *RegionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Regio
 }
 
 func (rq *RegionQuery) loadLocation(ctx context.Context, query *LocationQuery, nodes []*Region, init func(*Region), assign func(*Region, *Location)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*Region)
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Region)
 	for i := range nodes {
-		if nodes[i].location_region == nil {
-			continue
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
 		}
-		fk := *nodes[i].location_region
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	if len(ids) == 0 {
-		return nil
-	}
-	query.Where(location.IDIn(ids...))
+	query.withFKs = true
+	query.Where(predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(region.LocationColumn), fks...))
+	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
+		fk := n.location_region
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "location_region" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "location_region" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "location_region" returned %v for node %v`, *fk, n.ID)
 		}
-		for i := range nodes {
-			assign(nodes[i], n)
-		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -540,6 +541,20 @@ func (rq *RegionQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedLocation tells the query-builder to eager-load the nodes that are connected to the "location"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (rq *RegionQuery) WithNamedLocation(name string, opts ...func(*LocationQuery)) *RegionQuery {
+	query := (&LocationClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if rq.withNamedLocation == nil {
+		rq.withNamedLocation = make(map[string]*LocationQuery)
+	}
+	rq.withNamedLocation[name] = query
+	return rq
 }
 
 // RegionGroupBy is the group-by builder for Region entities.

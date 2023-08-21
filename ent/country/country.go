@@ -36,7 +36,7 @@ const (
 	// Table holds the table name of the country in the database.
 	Table = "countries"
 	// LocationTable is the table that holds the location relation/edge.
-	LocationTable = "countries"
+	LocationTable = "locations"
 	// LocationInverseTable is the table name for the Location entity.
 	// It exists in this package in order to avoid circular dependency with the "location" package.
 	LocationInverseTable = "locations"
@@ -57,21 +57,10 @@ var Columns = []string{
 	FieldExternalLink,
 }
 
-// ForeignKeys holds the SQL foreign-keys that are owned by the "countries"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"location_country",
-}
-
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -142,16 +131,23 @@ func ByExternalLink(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalLink, opts...).ToFunc()
 }
 
-// ByLocationField orders the results by location field.
-func ByLocationField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByLocationCount orders the results by location count.
+func ByLocationCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newLocationStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborsCount(s, newLocationStep(), opts...)
+	}
+}
+
+// ByLocation orders the results by location terms.
+func ByLocation(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newLocationStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newLocationStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(LocationInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2O, true, LocationTable, LocationColumn),
+		sqlgraph.Edge(sqlgraph.O2M, true, LocationTable, LocationColumn),
 	)
 }

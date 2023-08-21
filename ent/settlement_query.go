@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -19,14 +20,14 @@ import (
 // SettlementQuery is the builder for querying Settlement entities.
 type SettlementQuery struct {
 	config
-	ctx          *QueryContext
-	order        []settlement.OrderOption
-	inters       []Interceptor
-	predicates   []predicate.Settlement
-	withLocation *LocationQuery
-	withFKs      bool
-	modifiers    []func(*sql.Selector)
-	loadTotal    []func(context.Context, []*Settlement) error
+	ctx               *QueryContext
+	order             []settlement.OrderOption
+	inters            []Interceptor
+	predicates        []predicate.Settlement
+	withLocation      *LocationQuery
+	modifiers         []func(*sql.Selector)
+	loadTotal         []func(context.Context, []*Settlement) error
+	withNamedLocation map[string]*LocationQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -77,7 +78,7 @@ func (sq *SettlementQuery) QueryLocation() *LocationQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(settlement.Table, settlement.FieldID, selector),
 			sqlgraph.To(location.Table, location.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, settlement.LocationTable, settlement.LocationColumn),
+			sqlgraph.Edge(sqlgraph.O2M, true, settlement.LocationTable, settlement.LocationColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
@@ -378,18 +379,11 @@ func (sq *SettlementQuery) prepareQuery(ctx context.Context) error {
 func (sq *SettlementQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Settlement, error) {
 	var (
 		nodes       = []*Settlement{}
-		withFKs     = sq.withFKs
 		_spec       = sq.querySpec()
 		loadedTypes = [1]bool{
 			sq.withLocation != nil,
 		}
 	)
-	if sq.withLocation != nil {
-		withFKs = true
-	}
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, settlement.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Settlement).scanValues(nil, columns)
 	}
@@ -412,8 +406,16 @@ func (sq *SettlementQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		return nodes, nil
 	}
 	if query := sq.withLocation; query != nil {
-		if err := sq.loadLocation(ctx, query, nodes, nil,
-			func(n *Settlement, e *Location) { n.Edges.Location = e }); err != nil {
+		if err := sq.loadLocation(ctx, query, nodes,
+			func(n *Settlement) { n.Edges.Location = []*Location{} },
+			func(n *Settlement, e *Location) { n.Edges.Location = append(n.Edges.Location, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range sq.withNamedLocation {
+		if err := sq.loadLocation(ctx, query, nodes,
+			func(n *Settlement) { n.appendNamedLocation(name) },
+			func(n *Settlement, e *Location) { n.appendNamedLocation(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -426,34 +428,33 @@ func (sq *SettlementQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 }
 
 func (sq *SettlementQuery) loadLocation(ctx context.Context, query *LocationQuery, nodes []*Settlement, init func(*Settlement), assign func(*Settlement, *Location)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*Settlement)
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Settlement)
 	for i := range nodes {
-		if nodes[i].location_settlement == nil {
-			continue
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
 		}
-		fk := *nodes[i].location_settlement
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	if len(ids) == 0 {
-		return nil
-	}
-	query.Where(location.IDIn(ids...))
+	query.withFKs = true
+	query.Where(predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(settlement.LocationColumn), fks...))
+	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
+		fk := n.location_settlement
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "location_settlement" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "location_settlement" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "location_settlement" returned %v for node %v`, *fk, n.ID)
 		}
-		for i := range nodes {
-			assign(nodes[i], n)
-		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -540,6 +541,20 @@ func (sq *SettlementQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedLocation tells the query-builder to eager-load the nodes that are connected to the "location"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (sq *SettlementQuery) WithNamedLocation(name string, opts ...func(*LocationQuery)) *SettlementQuery {
+	query := (&LocationClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if sq.withNamedLocation == nil {
+		sq.withNamedLocation = make(map[string]*LocationQuery)
+	}
+	sq.withNamedLocation[name] = query
+	return sq
 }
 
 // SettlementGroupBy is the group-by builder for Settlement entities.

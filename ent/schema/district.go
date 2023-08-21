@@ -51,6 +51,6 @@ func (District) Annotations() []schema.Annotation {
 // Edges of the District.
 func (District) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("location", Location.Type).Ref("district").Unique(),
+		edge.From("location", Location.Type).Ref("district"),
 	}
 }
