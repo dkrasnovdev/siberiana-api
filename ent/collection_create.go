@@ -169,6 +169,14 @@ func (cc *CollectionCreate) SetType(c collection.Type) *CollectionCreate {
 	return cc
 }
 
+// SetNillableType sets the "type" field if the given value is not nil.
+func (cc *CollectionCreate) SetNillableType(c *collection.Type) *CollectionCreate {
+	if c != nil {
+		cc.SetType(*c)
+	}
+	return cc
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (cc *CollectionCreate) AddArtifactIDs(ids ...int) *CollectionCreate {
 	cc.mutation.AddArtifactIDs(ids...)
@@ -304,9 +312,6 @@ func (cc *CollectionCreate) check() error {
 	}
 	if _, ok := cc.mutation.Slug(); !ok {
 		return &ValidationError{Name: "slug", err: errors.New(`ent: missing required field "Collection.slug"`)}
-	}
-	if _, ok := cc.mutation.GetType(); !ok {
-		return &ValidationError{Name: "type", err: errors.New(`ent: missing required field "Collection.type"`)}
 	}
 	if v, ok := cc.mutation.GetType(); ok {
 		if err := collection.TypeValidator(v); err != nil {

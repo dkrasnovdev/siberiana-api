@@ -1475,7 +1475,7 @@ type CreateCollectionInput struct {
 	PrimaryImageURL         *string
 	AdditionalImagesUrls    []string
 	Slug                    string
-	Type                    collection.Type
+	Type                    *collection.Type
 	ArtifactIDs             []int
 	BookIDs                 []int
 	ProtectedAreaPictureIDs []int
@@ -1516,7 +1516,9 @@ func (i *CreateCollectionInput) Mutate(m *CollectionMutation) {
 		m.SetAdditionalImagesUrls(v)
 	}
 	m.SetSlug(i.Slug)
-	m.SetType(i.Type)
+	if v := i.Type; v != nil {
+		m.SetType(*v)
+	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}

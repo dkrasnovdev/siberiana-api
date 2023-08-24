@@ -6009,10 +6009,12 @@ type CollectionWhereInput struct {
 	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
 	// "type" field predicates.
-	Type      *collection.Type  `json:"type,omitempty"`
-	TypeNEQ   *collection.Type  `json:"typeNEQ,omitempty"`
-	TypeIn    []collection.Type `json:"typeIn,omitempty"`
-	TypeNotIn []collection.Type `json:"typeNotIn,omitempty"`
+	Type       *collection.Type  `json:"type,omitempty"`
+	TypeNEQ    *collection.Type  `json:"typeNEQ,omitempty"`
+	TypeIn     []collection.Type `json:"typeIn,omitempty"`
+	TypeNotIn  []collection.Type `json:"typeNotIn,omitempty"`
+	TypeIsNil  bool              `json:"typeIsNil,omitempty"`
+	TypeNotNil bool              `json:"typeNotNil,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -6543,6 +6545,12 @@ func (i *CollectionWhereInput) P() (predicate.Collection, error) {
 	}
 	if len(i.TypeNotIn) > 0 {
 		predicates = append(predicates, collection.TypeNotIn(i.TypeNotIn...))
+	}
+	if i.TypeIsNil {
+		predicates = append(predicates, collection.TypeIsNil())
+	}
+	if i.TypeNotNil {
+		predicates = append(predicates, collection.TypeNotNil())
 	}
 
 	if i.HasArtifacts != nil {

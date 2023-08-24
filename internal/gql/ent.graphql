@@ -1693,7 +1693,7 @@ type Collection implements Node {
   primaryImageURL: String
   additionalImagesUrls: [String!]
   slug: String!
-  type: CollectionType!
+  type: CollectionType
   artifacts: [Artifact!]
   books: [Book!]
   protectedAreaPictures: [ProtectedAreaPicture!]
@@ -1901,6 +1901,8 @@ input CollectionWhereInput {
   typeNEQ: CollectionType
   typeIn: [CollectionType!]
   typeNotIn: [CollectionType!]
+  typeIsNil: Boolean
+  typeNotNil: Boolean
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -2254,7 +2256,7 @@ input CreateCollectionInput {
   primaryImageURL: String
   additionalImagesUrls: [String!]
   slug: String!
-  type: CollectionType!
+  type: CollectionType
   artifactIDs: [ID!]
   bookIDs: [ID!]
   protectedAreaPictureIDs: [ID!]

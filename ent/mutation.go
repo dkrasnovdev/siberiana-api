@@ -11132,9 +11132,22 @@ func (m *CollectionMutation) OldType(ctx context.Context) (v collection.Type, er
 	return oldValue.Type, nil
 }
 
+// ClearType clears the value of the "type" field.
+func (m *CollectionMutation) ClearType() {
+	m._type = nil
+	m.clearedFields[collection.FieldType] = struct{}{}
+}
+
+// TypeCleared returns if the "type" field was cleared in this mutation.
+func (m *CollectionMutation) TypeCleared() bool {
+	_, ok := m.clearedFields[collection.FieldType]
+	return ok
+}
+
 // ResetType resets all changes to the "type" field.
 func (m *CollectionMutation) ResetType() {
 	m._type = nil
+	delete(m.clearedFields, collection.FieldType)
 }
 
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
@@ -11675,6 +11688,9 @@ func (m *CollectionMutation) ClearedFields() []string {
 	if m.FieldCleared(collection.FieldAdditionalImagesUrls) {
 		fields = append(fields, collection.FieldAdditionalImagesUrls)
 	}
+	if m.FieldCleared(collection.FieldType) {
+		fields = append(fields, collection.FieldType)
+	}
 	return fields
 }
 
@@ -11712,6 +11728,9 @@ func (m *CollectionMutation) ClearField(name string) error {
 		return nil
 	case collection.FieldAdditionalImagesUrls:
 		m.ClearAdditionalImagesUrls()
+		return nil
+	case collection.FieldType:
+		m.ClearType()
 		return nil
 	}
 	return fmt.Errorf("unknown Collection nullable field %s", name)

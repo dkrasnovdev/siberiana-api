@@ -57,6 +57,7 @@ func (Collection) Fields() []ent.Field {
 			Unique(),
 		field.Enum("type").
 			Values("artifacts", "books", "protected_area_pictures").
+			Optional().
 			Immutable(),
 	}
 }

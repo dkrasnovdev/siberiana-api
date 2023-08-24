@@ -275,7 +275,7 @@ var (
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
 		{Name: "slug", Type: field.TypeString, Unique: true},
-		{Name: "type", Type: field.TypeEnum, Enums: []string{"artifacts", "books", "protected_area_pictures"}},
+		{Name: "type", Type: field.TypeEnum, Nullable: true, Enums: []string{"artifacts", "books", "protected_area_pictures"}},
 		{Name: "category_collections", Type: field.TypeInt},
 	}
 	// CollectionsTable holds the schema information for the "collections" table.

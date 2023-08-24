@@ -491,6 +491,9 @@ func (cu *CollectionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := cu.mutation.Slug(); ok {
 		_spec.SetField(collection.FieldSlug, field.TypeString, value)
 	}
+	if cu.mutation.TypeCleared() {
+		_spec.ClearField(collection.FieldType, field.TypeEnum)
+	}
 	if cu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -1206,6 +1209,9 @@ func (cuo *CollectionUpdateOne) sqlSave(ctx context.Context) (_node *Collection,
 	}
 	if value, ok := cuo.mutation.Slug(); ok {
 		_spec.SetField(collection.FieldSlug, field.TypeString, value)
+	}
+	if cuo.mutation.TypeCleared() {
+		_spec.ClearField(collection.FieldType, field.TypeEnum)
 	}
 	if cuo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

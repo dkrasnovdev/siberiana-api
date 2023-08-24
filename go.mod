@@ -2,6 +2,8 @@ module github.com/dkrasnovdev/siberiana-api
 
 go 1.20
 
+// replace entgo.io/contrib => ./ent/contrib/
+
 require (
 	ariga.io/entcache v0.1.0
 	entgo.io/contrib v0.4.6-0.20230615102013-704944fdc0f6

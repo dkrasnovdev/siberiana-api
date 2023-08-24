@@ -805,6 +805,16 @@ func TypeNotIn(vs ...Type) predicate.Collection {
 	return predicate.Collection(sql.FieldNotIn(FieldType, vs...))
 }
 
+// TypeIsNil applies the IsNil predicate on the "type" field.
+func TypeIsNil() predicate.Collection {
+	return predicate.Collection(sql.FieldIsNull(FieldType))
+}
+
+// TypeNotNil applies the NotNil predicate on the "type" field.
+func TypeNotNil() predicate.Collection {
+	return predicate.Collection(sql.FieldNotNull(FieldType))
+}
+
 // HasArtifacts applies the HasEdge predicate on the "artifacts" edge.
 func HasArtifacts() predicate.Collection {
 	return predicate.Collection(func(s *sql.Selector) {
