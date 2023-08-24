@@ -5,6 +5,7 @@ package ent
 import (
 	"time"
 
+	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/internal/ent/types"
 )
@@ -1474,11 +1475,12 @@ type CreateCollectionInput struct {
 	PrimaryImageURL         *string
 	AdditionalImagesUrls    []string
 	Slug                    string
+	Type                    collection.Type
 	ArtifactIDs             []int
 	BookIDs                 []int
-	PersonIDs               []int
 	ProtectedAreaPictureIDs []int
 	CategoryID              int
+	AuthorIDs               []int
 }
 
 // Mutate applies the CreateCollectionInput on the CollectionMutation builder.
@@ -1514,19 +1516,20 @@ func (i *CreateCollectionInput) Mutate(m *CollectionMutation) {
 		m.SetAdditionalImagesUrls(v)
 	}
 	m.SetSlug(i.Slug)
+	m.SetType(i.Type)
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
 	if v := i.BookIDs; len(v) > 0 {
 		m.AddBookIDs(v...)
 	}
-	if v := i.PersonIDs; len(v) > 0 {
-		m.AddPersonIDs(v...)
-	}
 	if v := i.ProtectedAreaPictureIDs; len(v) > 0 {
 		m.AddProtectedAreaPictureIDs(v...)
 	}
 	m.SetCategoryID(i.CategoryID)
+	if v := i.AuthorIDs; len(v) > 0 {
+		m.AddAuthorIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateCollectionInput on the CollectionCreate builder.
@@ -1562,13 +1565,13 @@ type UpdateCollectionInput struct {
 	ClearBooks                    bool
 	AddBookIDs                    []int
 	RemoveBookIDs                 []int
-	ClearPeople                   bool
-	AddPersonIDs                  []int
-	RemovePersonIDs               []int
 	ClearProtectedAreaPictures    bool
 	AddProtectedAreaPictureIDs    []int
 	RemoveProtectedAreaPictureIDs []int
 	CategoryID                    *int
+	ClearAuthors                  bool
+	AddAuthorIDs                  []int
+	RemoveAuthorIDs               []int
 }
 
 // Mutate applies the UpdateCollectionInput on the CollectionMutation builder.
@@ -1648,15 +1651,6 @@ func (i *UpdateCollectionInput) Mutate(m *CollectionMutation) {
 	if v := i.RemoveBookIDs; len(v) > 0 {
 		m.RemoveBookIDs(v...)
 	}
-	if i.ClearPeople {
-		m.ClearPeople()
-	}
-	if v := i.AddPersonIDs; len(v) > 0 {
-		m.AddPersonIDs(v...)
-	}
-	if v := i.RemovePersonIDs; len(v) > 0 {
-		m.RemovePersonIDs(v...)
-	}
 	if i.ClearProtectedAreaPictures {
 		m.ClearProtectedAreaPictures()
 	}
@@ -1668,6 +1662,15 @@ func (i *UpdateCollectionInput) Mutate(m *CollectionMutation) {
 	}
 	if v := i.CategoryID; v != nil {
 		m.SetCategoryID(*v)
+	}
+	if i.ClearAuthors {
+		m.ClearAuthors()
+	}
+	if v := i.AddAuthorIDs; len(v) > 0 {
+		m.AddAuthorIDs(v...)
+	}
+	if v := i.RemoveAuthorIDs; len(v) > 0 {
+		m.RemoveAuthorIDs(v...)
 	}
 }
 
@@ -3748,6 +3751,7 @@ type CreatePersonInput struct {
 	BeginData            *time.Time
 	EndDate              *time.Time
 	Gender               person.Gender
+	CollectionIDs        []int
 	ArtifactIDs          []int
 	BookIDs              []int
 	ProjectIDs           []int
@@ -3755,7 +3759,6 @@ type CreatePersonInput struct {
 	PersonRoleIDs        []int
 	HolderID             *int
 	AffiliationID        *int
-	CollectionsID        *int
 }
 
 // Mutate applies the CreatePersonInput on the PersonMutation builder.
@@ -3815,6 +3818,9 @@ func (i *CreatePersonInput) Mutate(m *PersonMutation) {
 		m.SetEndDate(*v)
 	}
 	m.SetGender(i.Gender)
+	if v := i.CollectionIDs; len(v) > 0 {
+		m.AddCollectionIDs(v...)
+	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
@@ -3835,9 +3841,6 @@ func (i *CreatePersonInput) Mutate(m *PersonMutation) {
 	}
 	if v := i.AffiliationID; v != nil {
 		m.SetAffiliationID(*v)
-	}
-	if v := i.CollectionsID; v != nil {
-		m.SetCollectionsID(*v)
 	}
 }
 
@@ -3886,6 +3889,9 @@ type UpdatePersonInput struct {
 	ClearEndDate               bool
 	EndDate                    *time.Time
 	Gender                     *person.Gender
+	ClearCollections           bool
+	AddCollectionIDs           []int
+	RemoveCollectionIDs        []int
 	ClearArtifacts             bool
 	AddArtifactIDs             []int
 	RemoveArtifactIDs          []int
@@ -3905,8 +3911,6 @@ type UpdatePersonInput struct {
 	HolderID                   *int
 	ClearAffiliation           bool
 	AffiliationID              *int
-	ClearCollections           bool
-	CollectionsID              *int
 }
 
 // Mutate applies the UpdatePersonInput on the PersonMutation builder.
@@ -4022,6 +4026,15 @@ func (i *UpdatePersonInput) Mutate(m *PersonMutation) {
 	if v := i.Gender; v != nil {
 		m.SetGender(*v)
 	}
+	if i.ClearCollections {
+		m.ClearCollections()
+	}
+	if v := i.AddCollectionIDs; len(v) > 0 {
+		m.AddCollectionIDs(v...)
+	}
+	if v := i.RemoveCollectionIDs; len(v) > 0 {
+		m.RemoveCollectionIDs(v...)
+	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
 	}
@@ -4078,12 +4091,6 @@ func (i *UpdatePersonInput) Mutate(m *PersonMutation) {
 	}
 	if v := i.AffiliationID; v != nil {
 		m.SetAffiliationID(*v)
-	}
-	if i.ClearCollections {
-		m.ClearCollections()
-	}
-	if v := i.CollectionsID; v != nil {
-		m.SetCollectionsID(*v)
 	}
 }
 

@@ -31,6 +31,7 @@ type PersonQuery struct {
 	order                 []person.OrderOption
 	inters                []Interceptor
 	predicates            []predicate.Person
+	withCollections       *CollectionQuery
 	withArtifacts         *ArtifactQuery
 	withBooks             *BookQuery
 	withProjects          *ProjectQuery
@@ -38,10 +39,10 @@ type PersonQuery struct {
 	withPersonRoles       *PersonRoleQuery
 	withHolder            *HolderQuery
 	withAffiliation       *OrganizationQuery
-	withCollections       *CollectionQuery
 	withFKs               bool
 	modifiers             []func(*sql.Selector)
 	loadTotal             []func(context.Context, []*Person) error
+	withNamedCollections  map[string]*CollectionQuery
 	withNamedArtifacts    map[string]*ArtifactQuery
 	withNamedBooks        map[string]*BookQuery
 	withNamedProjects     map[string]*ProjectQuery
@@ -81,6 +82,28 @@ func (pq *PersonQuery) Unique(unique bool) *PersonQuery {
 func (pq *PersonQuery) Order(o ...person.OrderOption) *PersonQuery {
 	pq.order = append(pq.order, o...)
 	return pq
+}
+
+// QueryCollections chains the current query on the "collections" edge.
+func (pq *PersonQuery) QueryCollections() *CollectionQuery {
+	query := (&CollectionClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, selector),
+			sqlgraph.To(collection.Table, collection.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, person.CollectionsTable, person.CollectionsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryArtifacts chains the current query on the "artifacts" edge.
@@ -230,28 +253,6 @@ func (pq *PersonQuery) QueryAffiliation() *OrganizationQuery {
 			sqlgraph.From(person.Table, person.FieldID, selector),
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, person.AffiliationTable, person.AffiliationColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryCollections chains the current query on the "collections" edge.
-func (pq *PersonQuery) QueryCollections() *CollectionQuery {
-	query := (&CollectionClient{config: pq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := pq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := pq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(person.Table, person.FieldID, selector),
-			sqlgraph.To(collection.Table, collection.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, person.CollectionsTable, person.CollectionsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -451,6 +452,7 @@ func (pq *PersonQuery) Clone() *PersonQuery {
 		order:            append([]person.OrderOption{}, pq.order...),
 		inters:           append([]Interceptor{}, pq.inters...),
 		predicates:       append([]predicate.Person{}, pq.predicates...),
+		withCollections:  pq.withCollections.Clone(),
 		withArtifacts:    pq.withArtifacts.Clone(),
 		withBooks:        pq.withBooks.Clone(),
 		withProjects:     pq.withProjects.Clone(),
@@ -458,11 +460,21 @@ func (pq *PersonQuery) Clone() *PersonQuery {
 		withPersonRoles:  pq.withPersonRoles.Clone(),
 		withHolder:       pq.withHolder.Clone(),
 		withAffiliation:  pq.withAffiliation.Clone(),
-		withCollections:  pq.withCollections.Clone(),
 		// clone intermediate query.
 		sql:  pq.sql.Clone(),
 		path: pq.path,
 	}
+}
+
+// WithCollections tells the query-builder to eager-load the nodes that are connected to
+// the "collections" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonQuery) WithCollections(opts ...func(*CollectionQuery)) *PersonQuery {
+	query := (&CollectionClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withCollections = query
+	return pq
 }
 
 // WithArtifacts tells the query-builder to eager-load the nodes that are connected to
@@ -539,17 +551,6 @@ func (pq *PersonQuery) WithAffiliation(opts ...func(*OrganizationQuery)) *Person
 		opt(query)
 	}
 	pq.withAffiliation = query
-	return pq
-}
-
-// WithCollections tells the query-builder to eager-load the nodes that are connected to
-// the "collections" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *PersonQuery) WithCollections(opts ...func(*CollectionQuery)) *PersonQuery {
-	query := (&CollectionClient{config: pq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	pq.withCollections = query
 	return pq
 }
 
@@ -639,6 +640,7 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 		withFKs     = pq.withFKs
 		_spec       = pq.querySpec()
 		loadedTypes = [8]bool{
+			pq.withCollections != nil,
 			pq.withArtifacts != nil,
 			pq.withBooks != nil,
 			pq.withProjects != nil,
@@ -646,10 +648,9 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 			pq.withPersonRoles != nil,
 			pq.withHolder != nil,
 			pq.withAffiliation != nil,
-			pq.withCollections != nil,
 		}
 	)
-	if pq.withHolder != nil || pq.withAffiliation != nil || pq.withCollections != nil {
+	if pq.withHolder != nil || pq.withAffiliation != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -675,6 +676,13 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := pq.withCollections; query != nil {
+		if err := pq.loadCollections(ctx, query, nodes,
+			func(n *Person) { n.Edges.Collections = []*Collection{} },
+			func(n *Person, e *Collection) { n.Edges.Collections = append(n.Edges.Collections, e) }); err != nil {
+			return nil, err
+		}
 	}
 	if query := pq.withArtifacts; query != nil {
 		if err := pq.loadArtifacts(ctx, query, nodes,
@@ -723,9 +731,10 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 			return nil, err
 		}
 	}
-	if query := pq.withCollections; query != nil {
-		if err := pq.loadCollections(ctx, query, nodes, nil,
-			func(n *Person, e *Collection) { n.Edges.Collections = e }); err != nil {
+	for name, query := range pq.withNamedCollections {
+		if err := pq.loadCollections(ctx, query, nodes,
+			func(n *Person) { n.appendNamedCollections(name) },
+			func(n *Person, e *Collection) { n.appendNamedCollections(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -772,6 +781,67 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 	return nodes, nil
 }
 
+func (pq *PersonQuery) loadCollections(ctx context.Context, query *CollectionQuery, nodes []*Person, init func(*Person), assign func(*Person, *Collection)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Person)
+	nids := make(map[int]map[*Person]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(person.CollectionsTable)
+		s.Join(joinT).On(s.C(collection.FieldID), joinT.C(person.CollectionsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(person.CollectionsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(person.CollectionsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Person]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Collection](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "collections" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (pq *PersonQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, nodes []*Person, init func(*Person), assign func(*Person, *Artifact)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[int]*Person)
@@ -1141,38 +1211,6 @@ func (pq *PersonQuery) loadAffiliation(ctx context.Context, query *OrganizationQ
 	}
 	return nil
 }
-func (pq *PersonQuery) loadCollections(ctx context.Context, query *CollectionQuery, nodes []*Person, init func(*Person), assign func(*Person, *Collection)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*Person)
-	for i := range nodes {
-		if nodes[i].collection_people == nil {
-			continue
-		}
-		fk := *nodes[i].collection_people
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
-	}
-	if len(ids) == 0 {
-		return nil
-	}
-	query.Where(collection.IDIn(ids...))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "collection_people" returned %v`, n.ID)
-		}
-		for i := range nodes {
-			assign(nodes[i], n)
-		}
-	}
-	return nil
-}
 
 func (pq *PersonQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := pq.querySpec()
@@ -1256,6 +1294,20 @@ func (pq *PersonQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedCollections tells the query-builder to eager-load the nodes that are connected to the "collections"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonQuery) WithNamedCollections(name string, opts ...func(*CollectionQuery)) *PersonQuery {
+	query := (&CollectionClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedCollections == nil {
+		pq.withNamedCollections = make(map[string]*CollectionQuery)
+	}
+	pq.withNamedCollections[name] = query
+	return pq
 }
 
 // WithNamedArtifacts tells the query-builder to eager-load the nodes that are connected to the "artifacts"

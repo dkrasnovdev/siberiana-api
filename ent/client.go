@@ -2000,22 +2000,6 @@ func (c *CollectionClient) QueryBooks(co *Collection) *BookQuery {
 	return query
 }
 
-// QueryPeople queries the people edge of a Collection.
-func (c *CollectionClient) QueryPeople(co *Collection) *PersonQuery {
-	query := (&PersonClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := co.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(collection.Table, collection.FieldID, id),
-			sqlgraph.To(person.Table, person.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, collection.PeopleTable, collection.PeopleColumn),
-		)
-		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryProtectedAreaPictures queries the protected_area_pictures edge of a Collection.
 func (c *CollectionClient) QueryProtectedAreaPictures(co *Collection) *ProtectedAreaPictureQuery {
 	query := (&ProtectedAreaPictureClient{config: c.config}).Query()
@@ -2041,6 +2025,22 @@ func (c *CollectionClient) QueryCategory(co *Collection) *CategoryQuery {
 			sqlgraph.From(collection.Table, collection.FieldID, id),
 			sqlgraph.To(category.Table, category.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, collection.CategoryTable, collection.CategoryColumn),
+		)
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAuthors queries the authors edge of a Collection.
+func (c *CollectionClient) QueryAuthors(co *Collection) *PersonQuery {
+	query := (&PersonClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(collection.Table, collection.FieldID, id),
+			sqlgraph.To(person.Table, person.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, collection.AuthorsTable, collection.AuthorsPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
@@ -4280,6 +4280,22 @@ func (c *PersonClient) GetX(ctx context.Context, id int) *Person {
 	return obj
 }
 
+// QueryCollections queries the collections edge of a Person.
+func (c *PersonClient) QueryCollections(pe *Person) *CollectionQuery {
+	query := (&CollectionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, id),
+			sqlgraph.To(collection.Table, collection.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, person.CollectionsTable, person.CollectionsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryArtifacts queries the artifacts edge of a Person.
 func (c *PersonClient) QueryArtifacts(pe *Person) *ArtifactQuery {
 	query := (&ArtifactClient{config: c.config}).Query()
@@ -4385,22 +4401,6 @@ func (c *PersonClient) QueryAffiliation(pe *Person) *OrganizationQuery {
 			sqlgraph.From(person.Table, person.FieldID, id),
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, person.AffiliationTable, person.AffiliationColumn),
-		)
-		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryCollections queries the collections edge of a Person.
-func (c *PersonClient) QueryCollections(pe *Person) *CollectionQuery {
-	query := (&CollectionClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := pe.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(person.Table, person.FieldID, id),
-			sqlgraph.To(collection.Table, collection.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, person.CollectionsTable, person.CollectionsColumn),
 		)
 		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
 		return fromV, nil

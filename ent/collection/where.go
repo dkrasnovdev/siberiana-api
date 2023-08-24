@@ -785,6 +785,26 @@ func SlugContainsFold(v string) predicate.Collection {
 	return predicate.Collection(sql.FieldContainsFold(FieldSlug, v))
 }
 
+// TypeEQ applies the EQ predicate on the "type" field.
+func TypeEQ(v Type) predicate.Collection {
+	return predicate.Collection(sql.FieldEQ(FieldType, v))
+}
+
+// TypeNEQ applies the NEQ predicate on the "type" field.
+func TypeNEQ(v Type) predicate.Collection {
+	return predicate.Collection(sql.FieldNEQ(FieldType, v))
+}
+
+// TypeIn applies the In predicate on the "type" field.
+func TypeIn(vs ...Type) predicate.Collection {
+	return predicate.Collection(sql.FieldIn(FieldType, vs...))
+}
+
+// TypeNotIn applies the NotIn predicate on the "type" field.
+func TypeNotIn(vs ...Type) predicate.Collection {
+	return predicate.Collection(sql.FieldNotIn(FieldType, vs...))
+}
+
 // HasArtifacts applies the HasEdge predicate on the "artifacts" edge.
 func HasArtifacts() predicate.Collection {
 	return predicate.Collection(func(s *sql.Selector) {
@@ -831,29 +851,6 @@ func HasBooksWith(preds ...predicate.Book) predicate.Collection {
 	})
 }
 
-// HasPeople applies the HasEdge predicate on the "people" edge.
-func HasPeople() predicate.Collection {
-	return predicate.Collection(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, PeopleTable, PeopleColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasPeopleWith applies the HasEdge predicate on the "people" edge with a given conditions (other predicates).
-func HasPeopleWith(preds ...predicate.Person) predicate.Collection {
-	return predicate.Collection(func(s *sql.Selector) {
-		step := newPeopleStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasProtectedAreaPictures applies the HasEdge predicate on the "protected_area_pictures" edge.
 func HasProtectedAreaPictures() predicate.Collection {
 	return predicate.Collection(func(s *sql.Selector) {
@@ -892,6 +889,29 @@ func HasCategory() predicate.Collection {
 func HasCategoryWith(preds ...predicate.Category) predicate.Collection {
 	return predicate.Collection(func(s *sql.Selector) {
 		step := newCategoryStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAuthors applies the HasEdge predicate on the "authors" edge.
+func HasAuthors() predicate.Collection {
+	return predicate.Collection(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, AuthorsTable, AuthorsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAuthorsWith applies the HasEdge predicate on the "authors" edge with a given conditions (other predicates).
+func HasAuthorsWith(preds ...predicate.Person) predicate.Collection {
+	return predicate.Collection(func(s *sql.Selector) {
+		step := newAuthorsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

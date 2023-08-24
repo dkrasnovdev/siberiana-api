@@ -234,21 +234,6 @@ func (cu *CollectionUpdate) AddBooks(b ...*Book) *CollectionUpdate {
 	return cu.AddBookIDs(ids...)
 }
 
-// AddPersonIDs adds the "people" edge to the Person entity by IDs.
-func (cu *CollectionUpdate) AddPersonIDs(ids ...int) *CollectionUpdate {
-	cu.mutation.AddPersonIDs(ids...)
-	return cu
-}
-
-// AddPeople adds the "people" edges to the Person entity.
-func (cu *CollectionUpdate) AddPeople(p ...*Person) *CollectionUpdate {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return cu.AddPersonIDs(ids...)
-}
-
 // AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
 func (cu *CollectionUpdate) AddProtectedAreaPictureIDs(ids ...int) *CollectionUpdate {
 	cu.mutation.AddProtectedAreaPictureIDs(ids...)
@@ -273,6 +258,21 @@ func (cu *CollectionUpdate) SetCategoryID(id int) *CollectionUpdate {
 // SetCategory sets the "category" edge to the Category entity.
 func (cu *CollectionUpdate) SetCategory(c *Category) *CollectionUpdate {
 	return cu.SetCategoryID(c.ID)
+}
+
+// AddAuthorIDs adds the "authors" edge to the Person entity by IDs.
+func (cu *CollectionUpdate) AddAuthorIDs(ids ...int) *CollectionUpdate {
+	cu.mutation.AddAuthorIDs(ids...)
+	return cu
+}
+
+// AddAuthors adds the "authors" edges to the Person entity.
+func (cu *CollectionUpdate) AddAuthors(p ...*Person) *CollectionUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cu.AddAuthorIDs(ids...)
 }
 
 // Mutation returns the CollectionMutation object of the builder.
@@ -322,27 +322,6 @@ func (cu *CollectionUpdate) RemoveBooks(b ...*Book) *CollectionUpdate {
 	return cu.RemoveBookIDs(ids...)
 }
 
-// ClearPeople clears all "people" edges to the Person entity.
-func (cu *CollectionUpdate) ClearPeople() *CollectionUpdate {
-	cu.mutation.ClearPeople()
-	return cu
-}
-
-// RemovePersonIDs removes the "people" edge to Person entities by IDs.
-func (cu *CollectionUpdate) RemovePersonIDs(ids ...int) *CollectionUpdate {
-	cu.mutation.RemovePersonIDs(ids...)
-	return cu
-}
-
-// RemovePeople removes "people" edges to Person entities.
-func (cu *CollectionUpdate) RemovePeople(p ...*Person) *CollectionUpdate {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return cu.RemovePersonIDs(ids...)
-}
-
 // ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
 func (cu *CollectionUpdate) ClearProtectedAreaPictures() *CollectionUpdate {
 	cu.mutation.ClearProtectedAreaPictures()
@@ -368,6 +347,27 @@ func (cu *CollectionUpdate) RemoveProtectedAreaPictures(p ...*ProtectedAreaPictu
 func (cu *CollectionUpdate) ClearCategory() *CollectionUpdate {
 	cu.mutation.ClearCategory()
 	return cu
+}
+
+// ClearAuthors clears all "authors" edges to the Person entity.
+func (cu *CollectionUpdate) ClearAuthors() *CollectionUpdate {
+	cu.mutation.ClearAuthors()
+	return cu
+}
+
+// RemoveAuthorIDs removes the "authors" edge to Person entities by IDs.
+func (cu *CollectionUpdate) RemoveAuthorIDs(ids ...int) *CollectionUpdate {
+	cu.mutation.RemoveAuthorIDs(ids...)
+	return cu
+}
+
+// RemoveAuthors removes "authors" edges to Person entities.
+func (cu *CollectionUpdate) RemoveAuthors(p ...*Person) *CollectionUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cu.RemoveAuthorIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -581,51 +581,6 @@ func (cu *CollectionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if cu.mutation.PeopleCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   collection.PeopleTable,
-			Columns: []string{collection.PeopleColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cu.mutation.RemovedPeopleIDs(); len(nodes) > 0 && !cu.mutation.PeopleCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   collection.PeopleTable,
-			Columns: []string{collection.PeopleColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cu.mutation.PeopleIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   collection.PeopleTable,
-			Columns: []string{collection.PeopleColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if cu.mutation.ProtectedAreaPicturesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -693,6 +648,51 @@ func (cu *CollectionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(category.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cu.mutation.AuthorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   collection.AuthorsTable,
+			Columns: collection.AuthorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.RemovedAuthorsIDs(); len(nodes) > 0 && !cu.mutation.AuthorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   collection.AuthorsTable,
+			Columns: collection.AuthorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.AuthorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   collection.AuthorsTable,
+			Columns: collection.AuthorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -920,21 +920,6 @@ func (cuo *CollectionUpdateOne) AddBooks(b ...*Book) *CollectionUpdateOne {
 	return cuo.AddBookIDs(ids...)
 }
 
-// AddPersonIDs adds the "people" edge to the Person entity by IDs.
-func (cuo *CollectionUpdateOne) AddPersonIDs(ids ...int) *CollectionUpdateOne {
-	cuo.mutation.AddPersonIDs(ids...)
-	return cuo
-}
-
-// AddPeople adds the "people" edges to the Person entity.
-func (cuo *CollectionUpdateOne) AddPeople(p ...*Person) *CollectionUpdateOne {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return cuo.AddPersonIDs(ids...)
-}
-
 // AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
 func (cuo *CollectionUpdateOne) AddProtectedAreaPictureIDs(ids ...int) *CollectionUpdateOne {
 	cuo.mutation.AddProtectedAreaPictureIDs(ids...)
@@ -959,6 +944,21 @@ func (cuo *CollectionUpdateOne) SetCategoryID(id int) *CollectionUpdateOne {
 // SetCategory sets the "category" edge to the Category entity.
 func (cuo *CollectionUpdateOne) SetCategory(c *Category) *CollectionUpdateOne {
 	return cuo.SetCategoryID(c.ID)
+}
+
+// AddAuthorIDs adds the "authors" edge to the Person entity by IDs.
+func (cuo *CollectionUpdateOne) AddAuthorIDs(ids ...int) *CollectionUpdateOne {
+	cuo.mutation.AddAuthorIDs(ids...)
+	return cuo
+}
+
+// AddAuthors adds the "authors" edges to the Person entity.
+func (cuo *CollectionUpdateOne) AddAuthors(p ...*Person) *CollectionUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cuo.AddAuthorIDs(ids...)
 }
 
 // Mutation returns the CollectionMutation object of the builder.
@@ -1008,27 +1008,6 @@ func (cuo *CollectionUpdateOne) RemoveBooks(b ...*Book) *CollectionUpdateOne {
 	return cuo.RemoveBookIDs(ids...)
 }
 
-// ClearPeople clears all "people" edges to the Person entity.
-func (cuo *CollectionUpdateOne) ClearPeople() *CollectionUpdateOne {
-	cuo.mutation.ClearPeople()
-	return cuo
-}
-
-// RemovePersonIDs removes the "people" edge to Person entities by IDs.
-func (cuo *CollectionUpdateOne) RemovePersonIDs(ids ...int) *CollectionUpdateOne {
-	cuo.mutation.RemovePersonIDs(ids...)
-	return cuo
-}
-
-// RemovePeople removes "people" edges to Person entities.
-func (cuo *CollectionUpdateOne) RemovePeople(p ...*Person) *CollectionUpdateOne {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return cuo.RemovePersonIDs(ids...)
-}
-
 // ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
 func (cuo *CollectionUpdateOne) ClearProtectedAreaPictures() *CollectionUpdateOne {
 	cuo.mutation.ClearProtectedAreaPictures()
@@ -1054,6 +1033,27 @@ func (cuo *CollectionUpdateOne) RemoveProtectedAreaPictures(p ...*ProtectedAreaP
 func (cuo *CollectionUpdateOne) ClearCategory() *CollectionUpdateOne {
 	cuo.mutation.ClearCategory()
 	return cuo
+}
+
+// ClearAuthors clears all "authors" edges to the Person entity.
+func (cuo *CollectionUpdateOne) ClearAuthors() *CollectionUpdateOne {
+	cuo.mutation.ClearAuthors()
+	return cuo
+}
+
+// RemoveAuthorIDs removes the "authors" edge to Person entities by IDs.
+func (cuo *CollectionUpdateOne) RemoveAuthorIDs(ids ...int) *CollectionUpdateOne {
+	cuo.mutation.RemoveAuthorIDs(ids...)
+	return cuo
+}
+
+// RemoveAuthors removes "authors" edges to Person entities.
+func (cuo *CollectionUpdateOne) RemoveAuthors(p ...*Person) *CollectionUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cuo.RemoveAuthorIDs(ids...)
 }
 
 // Where appends a list predicates to the CollectionUpdate builder.
@@ -1297,51 +1297,6 @@ func (cuo *CollectionUpdateOne) sqlSave(ctx context.Context) (_node *Collection,
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if cuo.mutation.PeopleCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   collection.PeopleTable,
-			Columns: []string{collection.PeopleColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cuo.mutation.RemovedPeopleIDs(); len(nodes) > 0 && !cuo.mutation.PeopleCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   collection.PeopleTable,
-			Columns: []string{collection.PeopleColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cuo.mutation.PeopleIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   collection.PeopleTable,
-			Columns: []string{collection.PeopleColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if cuo.mutation.ProtectedAreaPicturesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -1409,6 +1364,51 @@ func (cuo *CollectionUpdateOne) sqlSave(ctx context.Context) (_node *Collection,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(category.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cuo.mutation.AuthorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   collection.AuthorsTable,
+			Columns: collection.AuthorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.RemovedAuthorsIDs(); len(nodes) > 0 && !cuo.mutation.AuthorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   collection.AuthorsTable,
+			Columns: collection.AuthorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.AuthorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   collection.AuthorsTable,
+			Columns: collection.AuthorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

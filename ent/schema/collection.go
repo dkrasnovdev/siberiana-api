@@ -55,6 +55,9 @@ func (Collection) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("slug").
 			Unique(),
+		field.Enum("type").
+			Values("artifacts", "books", "protected_area_pictures").
+			Immutable(),
 	}
 }
 
@@ -63,8 +66,8 @@ func (Collection) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("artifacts", Artifact.Type),
 		edge.To("books", Book.Type),
-		edge.To("people", Person.Type),
 		edge.To("protected_area_pictures", ProtectedAreaPicture.Type),
 		edge.From("category", Category.Type).Ref("collections").Unique().Required(),
+		edge.From("authors", Person.Type).Ref("collections"),
 	}
 }

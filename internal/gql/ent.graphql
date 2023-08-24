@@ -1693,11 +1693,12 @@ type Collection implements Node {
   primaryImageURL: String
   additionalImagesUrls: [String!]
   slug: String!
+  type: CollectionType!
   artifacts: [Artifact!]
   books: [Book!]
-  people: [Person!]
   protectedAreaPictures: [ProtectedAreaPicture!]
   category: Category!
+  authors: [Person!]
 }
 """A connection to a list of items."""
 type CollectionConnection {
@@ -1727,6 +1728,12 @@ enum CollectionOrderField {
   CREATED_AT
   UPDATED_AT
   DISPLAY_NAME
+}
+"""CollectionType is enum for the field type"""
+enum CollectionType @goModel(model: "github.com/dkrasnovdev/siberiana-api/ent/collection.Type") {
+  artifacts
+  books
+  protected_area_pictures
 }
 """
 CollectionWhereInput is used for filtering Collection objects.
@@ -1889,21 +1896,26 @@ input CollectionWhereInput {
   slugHasSuffix: String
   slugEqualFold: String
   slugContainsFold: String
+  """type field predicates"""
+  type: CollectionType
+  typeNEQ: CollectionType
+  typeIn: [CollectionType!]
+  typeNotIn: [CollectionType!]
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
   """books edge predicates"""
   hasBooks: Boolean
   hasBooksWith: [BookWhereInput!]
-  """people edge predicates"""
-  hasPeople: Boolean
-  hasPeopleWith: [PersonWhereInput!]
   """protected_area_pictures edge predicates"""
   hasProtectedAreaPictures: Boolean
   hasProtectedAreaPicturesWith: [ProtectedAreaPictureWhereInput!]
   """category edge predicates"""
   hasCategory: Boolean
   hasCategoryWith: [CategoryWhereInput!]
+  """authors edge predicates"""
+  hasAuthors: Boolean
+  hasAuthorsWith: [PersonWhereInput!]
 }
 type Country implements Node {
   id: ID!
@@ -2242,11 +2254,12 @@ input CreateCollectionInput {
   primaryImageURL: String
   additionalImagesUrls: [String!]
   slug: String!
+  type: CollectionType!
   artifactIDs: [ID!]
   bookIDs: [ID!]
-  personIDs: [ID!]
   protectedAreaPictureIDs: [ID!]
   categoryID: ID!
+  authorIDs: [ID!]
 }
 """
 CreateCountryInput is used for create Country object.
@@ -2489,6 +2502,7 @@ input CreatePersonInput {
   beginData: Time
   endDate: Time
   gender: PersonGender!
+  collectionIDs: [ID!]
   artifactIDs: [ID!]
   bookIDs: [ID!]
   projectIDs: [ID!]
@@ -2496,7 +2510,6 @@ input CreatePersonInput {
   personRoleIDs: [ID!]
   holderID: ID
   affiliationID: ID
-  collectionsID: ID
 }
 """
 CreatePersonRoleInput is used for create PersonRole object.
@@ -4968,6 +4981,7 @@ type Person implements Node {
   beginData: Time
   endDate: Time
   gender: PersonGender!
+  collections: [Collection!]
   artifacts: [Artifact!]
   books: [Book!]
   projects: [Project!]
@@ -4975,7 +4989,6 @@ type Person implements Node {
   personRoles: [PersonRole!]
   holder: Holder
   affiliation: Organization
-  collections: Collection
 }
 """A connection to a list of items."""
 type PersonConnection {
@@ -5425,6 +5438,9 @@ input PersonWhereInput {
   genderNEQ: PersonGender
   genderIn: [PersonGender!]
   genderNotIn: [PersonGender!]
+  """collections edge predicates"""
+  hasCollections: Boolean
+  hasCollectionsWith: [CollectionWhereInput!]
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -5446,9 +5462,6 @@ input PersonWhereInput {
   """affiliation edge predicates"""
   hasAffiliation: Boolean
   hasAffiliationWith: [OrganizationWhereInput!]
-  """collections edge predicates"""
-  hasCollections: Boolean
-  hasCollectionsWith: [CollectionWhereInput!]
 }
 type Project implements Node {
   id: ID!
@@ -8571,13 +8584,13 @@ input UpdateCollectionInput {
   addBookIDs: [ID!]
   removeBookIDs: [ID!]
   clearBooks: Boolean
-  addPersonIDs: [ID!]
-  removePersonIDs: [ID!]
-  clearPeople: Boolean
   addProtectedAreaPictureIDs: [ID!]
   removeProtectedAreaPictureIDs: [ID!]
   clearProtectedAreaPictures: Boolean
   categoryID: ID
+  addAuthorIDs: [ID!]
+  removeAuthorIDs: [ID!]
+  clearAuthors: Boolean
 }
 """
 UpdateCountryInput is used for update Country object.
@@ -8961,6 +8974,9 @@ input UpdatePersonInput {
   endDate: Time
   clearEndDate: Boolean
   gender: PersonGender
+  addCollectionIDs: [ID!]
+  removeCollectionIDs: [ID!]
+  clearCollections: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -8980,8 +8996,6 @@ input UpdatePersonInput {
   clearHolder: Boolean
   affiliationID: ID
   clearAffiliation: Boolean
-  collectionsID: ID
-  clearCollections: Boolean
 }
 """
 UpdatePersonRoleInput is used for update PersonRole object.

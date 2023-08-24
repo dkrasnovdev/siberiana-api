@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/holder"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
@@ -62,7 +61,6 @@ type Person struct {
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PersonQuery when eager-loading is set.
 	Edges               PersonEdges `json:"edges"`
-	collection_people   *int
 	holder_person       *int
 	organization_people *int
 	selectValues        sql.SelectValues
@@ -70,6 +68,8 @@ type Person struct {
 
 // PersonEdges holds the relations/edges for other nodes in the graph.
 type PersonEdges struct {
+	// Collections holds the value of the collections edge.
+	Collections []*Collection `json:"collections,omitempty"`
 	// Artifacts holds the value of the artifacts edge.
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
 	// Books holds the value of the books edge.
@@ -84,14 +84,13 @@ type PersonEdges struct {
 	Holder *Holder `json:"holder,omitempty"`
 	// Affiliation holds the value of the affiliation edge.
 	Affiliation *Organization `json:"affiliation,omitempty"`
-	// Collections holds the value of the collections edge.
-	Collections *Collection `json:"collections,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
 	totalCount [8]map[string]int
 
+	namedCollections  map[string][]*Collection
 	namedArtifacts    map[string][]*Artifact
 	namedBooks        map[string][]*Book
 	namedProjects     map[string][]*Project
@@ -99,10 +98,19 @@ type PersonEdges struct {
 	namedPersonRoles  map[string][]*PersonRole
 }
 
+// CollectionsOrErr returns the Collections value or an error if the edge
+// was not loaded in eager-loading.
+func (e PersonEdges) CollectionsOrErr() ([]*Collection, error) {
+	if e.loadedTypes[0] {
+		return e.Collections, nil
+	}
+	return nil, &NotLoadedError{edge: "collections"}
+}
+
 // ArtifactsOrErr returns the Artifacts value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonEdges) ArtifactsOrErr() ([]*Artifact, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[1] {
 		return e.Artifacts, nil
 	}
 	return nil, &NotLoadedError{edge: "artifacts"}
@@ -111,7 +119,7 @@ func (e PersonEdges) ArtifactsOrErr() ([]*Artifact, error) {
 // BooksOrErr returns the Books value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonEdges) BooksOrErr() ([]*Book, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.Books, nil
 	}
 	return nil, &NotLoadedError{edge: "books"}
@@ -120,7 +128,7 @@ func (e PersonEdges) BooksOrErr() ([]*Book, error) {
 // ProjectsOrErr returns the Projects value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonEdges) ProjectsOrErr() ([]*Project, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Projects, nil
 	}
 	return nil, &NotLoadedError{edge: "projects"}
@@ -129,7 +137,7 @@ func (e PersonEdges) ProjectsOrErr() ([]*Project, error) {
 // PublicationsOrErr returns the Publications value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonEdges) PublicationsOrErr() ([]*Publication, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Publications, nil
 	}
 	return nil, &NotLoadedError{edge: "publications"}
@@ -138,7 +146,7 @@ func (e PersonEdges) PublicationsOrErr() ([]*Publication, error) {
 // PersonRolesOrErr returns the PersonRoles value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonEdges) PersonRolesOrErr() ([]*PersonRole, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.PersonRoles, nil
 	}
 	return nil, &NotLoadedError{edge: "person_roles"}
@@ -147,7 +155,7 @@ func (e PersonEdges) PersonRolesOrErr() ([]*PersonRole, error) {
 // HolderOrErr returns the Holder value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e PersonEdges) HolderOrErr() (*Holder, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		if e.Holder == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: holder.Label}
@@ -160,7 +168,7 @@ func (e PersonEdges) HolderOrErr() (*Holder, error) {
 // AffiliationOrErr returns the Affiliation value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e PersonEdges) AffiliationOrErr() (*Organization, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		if e.Affiliation == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: organization.Label}
@@ -168,19 +176,6 @@ func (e PersonEdges) AffiliationOrErr() (*Organization, error) {
 		return e.Affiliation, nil
 	}
 	return nil, &NotLoadedError{edge: "affiliation"}
-}
-
-// CollectionsOrErr returns the Collections value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e PersonEdges) CollectionsOrErr() (*Collection, error) {
-	if e.loadedTypes[7] {
-		if e.Collections == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: collection.Label}
-		}
-		return e.Collections, nil
-	}
-	return nil, &NotLoadedError{edge: "collections"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -196,11 +191,9 @@ func (*Person) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case person.FieldCreatedAt, person.FieldUpdatedAt, person.FieldBeginData, person.FieldEndDate:
 			values[i] = new(sql.NullTime)
-		case person.ForeignKeys[0]: // collection_people
+		case person.ForeignKeys[0]: // holder_person
 			values[i] = new(sql.NullInt64)
-		case person.ForeignKeys[1]: // holder_person
-			values[i] = new(sql.NullInt64)
-		case person.ForeignKeys[2]: // organization_people
+		case person.ForeignKeys[1]: // organization_people
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -345,19 +338,12 @@ func (pe *Person) assignValues(columns []string, values []any) error {
 			}
 		case person.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field collection_people", value)
-			} else if value.Valid {
-				pe.collection_people = new(int)
-				*pe.collection_people = int(value.Int64)
-			}
-		case person.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field holder_person", value)
 			} else if value.Valid {
 				pe.holder_person = new(int)
 				*pe.holder_person = int(value.Int64)
 			}
-		case person.ForeignKeys[2]:
+		case person.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field organization_people", value)
 			} else if value.Valid {
@@ -375,6 +361,11 @@ func (pe *Person) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (pe *Person) Value(name string) (ent.Value, error) {
 	return pe.selectValues.Get(name)
+}
+
+// QueryCollections queries the "collections" edge of the Person entity.
+func (pe *Person) QueryCollections() *CollectionQuery {
+	return NewPersonClient(pe.config).QueryCollections(pe)
 }
 
 // QueryArtifacts queries the "artifacts" edge of the Person entity.
@@ -410,11 +401,6 @@ func (pe *Person) QueryHolder() *HolderQuery {
 // QueryAffiliation queries the "affiliation" edge of the Person entity.
 func (pe *Person) QueryAffiliation() *OrganizationQuery {
 	return NewPersonClient(pe.config).QueryAffiliation(pe)
-}
-
-// QueryCollections queries the "collections" edge of the Person entity.
-func (pe *Person) QueryCollections() *CollectionQuery {
-	return NewPersonClient(pe.config).QueryCollections(pe)
 }
 
 // Update returns a builder for updating this Person.
@@ -498,6 +484,30 @@ func (pe *Person) String() string {
 	builder.WriteString(fmt.Sprintf("%v", pe.Gender))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedCollections returns the Collections named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pe *Person) NamedCollections(name string) ([]*Collection, error) {
+	if pe.Edges.namedCollections == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pe.Edges.namedCollections[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pe *Person) appendNamedCollections(name string, edges ...*Collection) {
+	if pe.Edges.namedCollections == nil {
+		pe.Edges.namedCollections = make(map[string][]*Collection)
+	}
+	if len(edges) == 0 {
+		pe.Edges.namedCollections[name] = []*Collection{}
+	} else {
+		pe.Edges.namedCollections[name] = append(pe.Edges.namedCollections[name], edges...)
+	}
 }
 
 // NamedArtifacts returns the Artifacts named value or an error if the edge was not

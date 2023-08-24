@@ -3,6 +3,9 @@
 package collection
 
 import (
+	"fmt"
+	"io"
+	"strconv"
 	"time"
 
 	"entgo.io/ent"
@@ -37,16 +40,18 @@ const (
 	FieldAdditionalImagesUrls = "additional_images_urls"
 	// FieldSlug holds the string denoting the slug field in the database.
 	FieldSlug = "slug"
+	// FieldType holds the string denoting the type field in the database.
+	FieldType = "type"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
 	// EdgeBooks holds the string denoting the books edge name in mutations.
 	EdgeBooks = "books"
-	// EdgePeople holds the string denoting the people edge name in mutations.
-	EdgePeople = "people"
 	// EdgeProtectedAreaPictures holds the string denoting the protected_area_pictures edge name in mutations.
 	EdgeProtectedAreaPictures = "protected_area_pictures"
 	// EdgeCategory holds the string denoting the category edge name in mutations.
 	EdgeCategory = "category"
+	// EdgeAuthors holds the string denoting the authors edge name in mutations.
+	EdgeAuthors = "authors"
 	// Table holds the table name of the collection in the database.
 	Table = "collections"
 	// ArtifactsTable is the table that holds the artifacts relation/edge.
@@ -63,13 +68,6 @@ const (
 	BooksInverseTable = "books"
 	// BooksColumn is the table column denoting the books relation/edge.
 	BooksColumn = "collection_books"
-	// PeopleTable is the table that holds the people relation/edge.
-	PeopleTable = "persons"
-	// PeopleInverseTable is the table name for the Person entity.
-	// It exists in this package in order to avoid circular dependency with the "person" package.
-	PeopleInverseTable = "persons"
-	// PeopleColumn is the table column denoting the people relation/edge.
-	PeopleColumn = "collection_people"
 	// ProtectedAreaPicturesTable is the table that holds the protected_area_pictures relation/edge.
 	ProtectedAreaPicturesTable = "protected_area_pictures"
 	// ProtectedAreaPicturesInverseTable is the table name for the ProtectedAreaPicture entity.
@@ -84,6 +82,11 @@ const (
 	CategoryInverseTable = "categories"
 	// CategoryColumn is the table column denoting the category relation/edge.
 	CategoryColumn = "category_collections"
+	// AuthorsTable is the table that holds the authors relation/edge. The primary key declared below.
+	AuthorsTable = "person_collections"
+	// AuthorsInverseTable is the table name for the Person entity.
+	// It exists in this package in order to avoid circular dependency with the "person" package.
+	AuthorsInverseTable = "persons"
 )
 
 // Columns holds all SQL columns for collection fields.
@@ -100,6 +103,7 @@ var Columns = []string{
 	FieldPrimaryImageURL,
 	FieldAdditionalImagesUrls,
 	FieldSlug,
+	FieldType,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "collections"
@@ -107,6 +111,12 @@ var Columns = []string{
 var ForeignKeys = []string{
 	"category_collections",
 }
+
+var (
+	// AuthorsPrimaryKey and AuthorsColumn2 are the table columns denoting the
+	// primary key for the authors relation (M2M).
+	AuthorsPrimaryKey = []string{"person_id", "collection_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -138,6 +148,30 @@ var (
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
 )
+
+// Type defines the type for the "type" enum field.
+type Type string
+
+// Type values.
+const (
+	TypeArtifacts             Type = "artifacts"
+	TypeBooks                 Type = "books"
+	TypeProtectedAreaPictures Type = "protected_area_pictures"
+)
+
+func (_type Type) String() string {
+	return string(_type)
+}
+
+// TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
+func TypeValidator(_type Type) error {
+	switch _type {
+	case TypeArtifacts, TypeBooks, TypeProtectedAreaPictures:
+		return nil
+	default:
+		return fmt.Errorf("collection: invalid enum value for type field: %q", _type)
+	}
+}
 
 // OrderOption defines the ordering options for the Collection queries.
 type OrderOption func(*sql.Selector)
@@ -197,6 +231,11 @@ func BySlug(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSlug, opts...).ToFunc()
 }
 
+// ByType orders the results by the type field.
+func ByType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldType, opts...).ToFunc()
+}
+
 // ByArtifactsCount orders the results by artifacts count.
 func ByArtifactsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -225,20 +264,6 @@ func ByBooks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByPeopleCount orders the results by people count.
-func ByPeopleCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newPeopleStep(), opts...)
-	}
-}
-
-// ByPeople orders the results by people terms.
-func ByPeople(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newPeopleStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByProtectedAreaPicturesCount orders the results by protected_area_pictures count.
 func ByProtectedAreaPicturesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -259,6 +284,20 @@ func ByCategoryField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newCategoryStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByAuthorsCount orders the results by authors count.
+func ByAuthorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAuthorsStep(), opts...)
+	}
+}
+
+// ByAuthors orders the results by authors terms.
+func ByAuthors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAuthorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newArtifactsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -271,13 +310,6 @@ func newBooksStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(BooksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, BooksTable, BooksColumn),
-	)
-}
-func newPeopleStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(PeopleInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, PeopleTable, PeopleColumn),
 	)
 }
 func newProtectedAreaPicturesStep() *sqlgraph.Step {
@@ -293,4 +325,29 @@ func newCategoryStep() *sqlgraph.Step {
 		sqlgraph.To(CategoryInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, CategoryTable, CategoryColumn),
 	)
+}
+func newAuthorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AuthorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, AuthorsTable, AuthorsPrimaryKey...),
+	)
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (e Type) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(e.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (e *Type) UnmarshalGQL(val interface{}) error {
+	str, ok := val.(string)
+	if !ok {
+		return fmt.Errorf("enum %T must be a string", val)
+	}
+	*e = Type(str)
+	if err := TypeValidator(*e); err != nil {
+		return fmt.Errorf("%s is not a valid Type", str)
+	}
+	return nil
 }

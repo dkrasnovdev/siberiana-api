@@ -308,18 +308,6 @@ func (c *Collection) Books(ctx context.Context) (result []*Book, err error) {
 	return result, err
 }
 
-func (c *Collection) People(ctx context.Context) (result []*Person, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = c.NamedPeople(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = c.Edges.PeopleOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = c.QueryPeople().All(ctx)
-	}
-	return result, err
-}
-
 func (c *Collection) ProtectedAreaPictures(ctx context.Context) (result []*ProtectedAreaPicture, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = c.NamedProtectedAreaPictures(graphql.GetFieldContext(ctx).Field.Alias)
@@ -336,6 +324,18 @@ func (c *Collection) Category(ctx context.Context) (*Category, error) {
 	result, err := c.Edges.CategoryOrErr()
 	if IsNotLoaded(err) {
 		result, err = c.QueryCategory().Only(ctx)
+	}
+	return result, err
+}
+
+func (c *Collection) Authors(ctx context.Context) (result []*Person, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedAuthors(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.AuthorsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = c.QueryAuthors().All(ctx)
 	}
 	return result, err
 }
@@ -644,6 +644,18 @@ func (pe *Period) Artifacts(ctx context.Context) (result []*Artifact, err error)
 	return result, err
 }
 
+func (pe *Person) Collections(ctx context.Context) (result []*Collection, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pe.NamedCollections(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pe.Edges.CollectionsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pe.QueryCollections().All(ctx)
+	}
+	return result, err
+}
+
 func (pe *Person) Artifacts(ctx context.Context) (result []*Artifact, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = pe.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
@@ -716,14 +728,6 @@ func (pe *Person) Affiliation(ctx context.Context) (*Organization, error) {
 	result, err := pe.Edges.AffiliationOrErr()
 	if IsNotLoaded(err) {
 		result, err = pe.QueryAffiliation().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
-func (pe *Person) Collections(ctx context.Context) (*Collection, error) {
-	result, err := pe.Edges.CollectionsOrErr()
-	if IsNotLoaded(err) {
-		result, err = pe.QueryCollections().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }

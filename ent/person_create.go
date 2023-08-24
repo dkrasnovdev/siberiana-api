@@ -262,6 +262,21 @@ func (pc *PersonCreate) SetGender(pe person.Gender) *PersonCreate {
 	return pc
 }
 
+// AddCollectionIDs adds the "collections" edge to the Collection entity by IDs.
+func (pc *PersonCreate) AddCollectionIDs(ids ...int) *PersonCreate {
+	pc.mutation.AddCollectionIDs(ids...)
+	return pc
+}
+
+// AddCollections adds the "collections" edges to the Collection entity.
+func (pc *PersonCreate) AddCollections(c ...*Collection) *PersonCreate {
+	ids := make([]int, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return pc.AddCollectionIDs(ids...)
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (pc *PersonCreate) AddArtifactIDs(ids ...int) *PersonCreate {
 	pc.mutation.AddArtifactIDs(ids...)
@@ -373,25 +388,6 @@ func (pc *PersonCreate) SetNillableAffiliationID(id *int) *PersonCreate {
 // SetAffiliation sets the "affiliation" edge to the Organization entity.
 func (pc *PersonCreate) SetAffiliation(o *Organization) *PersonCreate {
 	return pc.SetAffiliationID(o.ID)
-}
-
-// SetCollectionsID sets the "collections" edge to the Collection entity by ID.
-func (pc *PersonCreate) SetCollectionsID(id int) *PersonCreate {
-	pc.mutation.SetCollectionsID(id)
-	return pc
-}
-
-// SetNillableCollectionsID sets the "collections" edge to the Collection entity by ID if the given value is not nil.
-func (pc *PersonCreate) SetNillableCollectionsID(id *int) *PersonCreate {
-	if id != nil {
-		pc = pc.SetCollectionsID(*id)
-	}
-	return pc
-}
-
-// SetCollections sets the "collections" edge to the Collection entity.
-func (pc *PersonCreate) SetCollections(c *Collection) *PersonCreate {
-	return pc.SetCollectionsID(c.ID)
 }
 
 // Mutation returns the PersonMutation object of the builder.
@@ -566,6 +562,22 @@ func (pc *PersonCreate) createSpec() (*Person, *sqlgraph.CreateSpec) {
 		_spec.SetField(person.FieldGender, field.TypeEnum, value)
 		_node.Gender = value
 	}
+	if nodes := pc.mutation.CollectionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.CollectionsTable,
+			Columns: person.CollectionsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := pc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -678,23 +690,6 @@ func (pc *PersonCreate) createSpec() (*Person, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.organization_people = &nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := pc.mutation.CollectionsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   person.CollectionsTable,
-			Columns: []string{person.CollectionsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.collection_people = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

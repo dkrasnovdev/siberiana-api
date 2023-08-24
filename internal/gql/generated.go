@@ -17,6 +17,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
 	"github.com/dkrasnovdev/siberiana-api/ent"
+	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/internal/ent/types"
 	gqlparser "github.com/vektah/gqlparser/v2"
@@ -285,6 +286,7 @@ type ComplexityRoot struct {
 		Abbreviation          func(childComplexity int) int
 		AdditionalImagesUrls  func(childComplexity int) int
 		Artifacts             func(childComplexity int) int
+		Authors               func(childComplexity int) int
 		Books                 func(childComplexity int) int
 		Category              func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
@@ -293,10 +295,10 @@ type ComplexityRoot struct {
 		DisplayName           func(childComplexity int) int
 		ExternalLink          func(childComplexity int) int
 		ID                    func(childComplexity int) int
-		People                func(childComplexity int) int
 		PrimaryImageURL       func(childComplexity int) int
 		ProtectedAreaPictures func(childComplexity int) int
 		Slug                  func(childComplexity int) int
+		Type                  func(childComplexity int) int
 		UpdatedAt             func(childComplexity int) int
 		UpdatedBy             func(childComplexity int) int
 	}
@@ -2381,6 +2383,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Collection.Artifacts(childComplexity), true
 
+	case "Collection.authors":
+		if e.complexity.Collection.Authors == nil {
+			break
+		}
+
+		return e.complexity.Collection.Authors(childComplexity), true
+
 	case "Collection.books":
 		if e.complexity.Collection.Books == nil {
 			break
@@ -2437,13 +2446,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Collection.ID(childComplexity), true
 
-	case "Collection.people":
-		if e.complexity.Collection.People == nil {
-			break
-		}
-
-		return e.complexity.Collection.People(childComplexity), true
-
 	case "Collection.primaryImageURL":
 		if e.complexity.Collection.PrimaryImageURL == nil {
 			break
@@ -2464,6 +2466,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Collection.Slug(childComplexity), true
+
+	case "Collection.type":
+		if e.complexity.Collection.Type == nil {
+			break
+		}
+
+		return e.complexity.Collection.Type(childComplexity), true
 
 	case "Collection.updatedAt":
 		if e.complexity.Collection.UpdatedAt == nil {
@@ -14167,6 +14176,8 @@ func (ec *executionContext) fieldContext_Artifact_authors(ctx context.Context, f
 				return ec.fieldContext_Person_endDate(ctx, field)
 			case "gender":
 				return ec.fieldContext_Person_gender(ctx, field)
+			case "collections":
+				return ec.fieldContext_Person_collections(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Person_artifacts(ctx, field)
 			case "books":
@@ -14181,8 +14192,6 @@ func (ec *executionContext) fieldContext_Artifact_authors(ctx context.Context, f
 				return ec.fieldContext_Person_holder(ctx, field)
 			case "affiliation":
 				return ec.fieldContext_Person_affiliation(ctx, field)
-			case "collections":
-				return ec.fieldContext_Person_collections(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
 		},
@@ -14978,16 +14987,18 @@ func (ec *executionContext) fieldContext_Artifact_collection(ctx context.Context
 				return ec.fieldContext_Collection_additionalImagesUrls(ctx, field)
 			case "slug":
 				return ec.fieldContext_Collection_slug(ctx, field)
+			case "type":
+				return ec.fieldContext_Collection_type(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Collection_artifacts(ctx, field)
 			case "books":
 				return ec.fieldContext_Collection_books(ctx, field)
-			case "people":
-				return ec.fieldContext_Collection_people(ctx, field)
 			case "protectedAreaPictures":
 				return ec.fieldContext_Collection_protectedAreaPictures(ctx, field)
 			case "category":
 				return ec.fieldContext_Collection_category(ctx, field)
+			case "authors":
+				return ec.fieldContext_Collection_authors(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Collection", field.Name)
 		},
@@ -16648,6 +16659,8 @@ func (ec *executionContext) fieldContext_Book_authors(ctx context.Context, field
 				return ec.fieldContext_Person_endDate(ctx, field)
 			case "gender":
 				return ec.fieldContext_Person_gender(ctx, field)
+			case "collections":
+				return ec.fieldContext_Person_collections(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Person_artifacts(ctx, field)
 			case "books":
@@ -16662,8 +16675,6 @@ func (ec *executionContext) fieldContext_Book_authors(ctx context.Context, field
 				return ec.fieldContext_Person_holder(ctx, field)
 			case "affiliation":
 				return ec.fieldContext_Person_affiliation(ctx, field)
-			case "collections":
-				return ec.fieldContext_Person_collections(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
 		},
@@ -16797,16 +16808,18 @@ func (ec *executionContext) fieldContext_Book_collection(ctx context.Context, fi
 				return ec.fieldContext_Collection_additionalImagesUrls(ctx, field)
 			case "slug":
 				return ec.fieldContext_Collection_slug(ctx, field)
+			case "type":
+				return ec.fieldContext_Collection_type(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Collection_artifacts(ctx, field)
 			case "books":
 				return ec.fieldContext_Collection_books(ctx, field)
-			case "people":
-				return ec.fieldContext_Collection_people(ctx, field)
 			case "protectedAreaPictures":
 				return ec.fieldContext_Collection_protectedAreaPictures(ctx, field)
 			case "category":
 				return ec.fieldContext_Collection_category(ctx, field)
+			case "authors":
+				return ec.fieldContext_Collection_authors(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Collection", field.Name)
 		},
@@ -18637,16 +18650,18 @@ func (ec *executionContext) fieldContext_Category_collections(ctx context.Contex
 				return ec.fieldContext_Collection_additionalImagesUrls(ctx, field)
 			case "slug":
 				return ec.fieldContext_Collection_slug(ctx, field)
+			case "type":
+				return ec.fieldContext_Collection_type(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Collection_artifacts(ctx, field)
 			case "books":
 				return ec.fieldContext_Collection_books(ctx, field)
-			case "people":
-				return ec.fieldContext_Collection_people(ctx, field)
 			case "protectedAreaPictures":
 				return ec.fieldContext_Collection_protectedAreaPictures(ctx, field)
 			case "category":
 				return ec.fieldContext_Collection_category(ctx, field)
+			case "authors":
+				return ec.fieldContext_Collection_authors(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Collection", field.Name)
 		},
@@ -19416,6 +19431,50 @@ func (ec *executionContext) fieldContext_Collection_slug(ctx context.Context, fi
 	return fc, nil
 }
 
+func (ec *executionContext) _Collection_type(ctx context.Context, field graphql.CollectedField, obj *ent.Collection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Collection_type(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Type, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(collection.Type)
+	fc.Result = res
+	return ec.marshalNCollectionType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋcollectionᚐType(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Collection_type(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Collection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type CollectionType does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Collection_artifacts(ctx context.Context, field graphql.CollectedField, obj *ent.Collection) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Collection_artifacts(ctx, field)
 	if err != nil {
@@ -19610,105 +19669,6 @@ func (ec *executionContext) fieldContext_Collection_books(ctx context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _Collection_people(ctx context.Context, field graphql.CollectedField, obj *ent.Collection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Collection_people(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.People(ctx)
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*ent.Person)
-	fc.Result = res
-	return ec.marshalOPerson2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPersonᚄ(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Collection_people(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Collection",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Person_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Person_createdAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Person_createdBy(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Person_updatedAt(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Person_updatedBy(ctx, field)
-			case "address":
-				return ec.fieldContext_Person_address(ctx, field)
-			case "phoneNumbers":
-				return ec.fieldContext_Person_phoneNumbers(ctx, field)
-			case "emails":
-				return ec.fieldContext_Person_emails(ctx, field)
-			case "displayName":
-				return ec.fieldContext_Person_displayName(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Person_abbreviation(ctx, field)
-			case "description":
-				return ec.fieldContext_Person_description(ctx, field)
-			case "externalLink":
-				return ec.fieldContext_Person_externalLink(ctx, field)
-			case "primaryImageURL":
-				return ec.fieldContext_Person_primaryImageURL(ctx, field)
-			case "additionalImagesUrls":
-				return ec.fieldContext_Person_additionalImagesUrls(ctx, field)
-			case "givenName":
-				return ec.fieldContext_Person_givenName(ctx, field)
-			case "familyName":
-				return ec.fieldContext_Person_familyName(ctx, field)
-			case "patronymicName":
-				return ec.fieldContext_Person_patronymicName(ctx, field)
-			case "beginData":
-				return ec.fieldContext_Person_beginData(ctx, field)
-			case "endDate":
-				return ec.fieldContext_Person_endDate(ctx, field)
-			case "gender":
-				return ec.fieldContext_Person_gender(ctx, field)
-			case "artifacts":
-				return ec.fieldContext_Person_artifacts(ctx, field)
-			case "books":
-				return ec.fieldContext_Person_books(ctx, field)
-			case "projects":
-				return ec.fieldContext_Person_projects(ctx, field)
-			case "publications":
-				return ec.fieldContext_Person_publications(ctx, field)
-			case "personRoles":
-				return ec.fieldContext_Person_personRoles(ctx, field)
-			case "holder":
-				return ec.fieldContext_Person_holder(ctx, field)
-			case "affiliation":
-				return ec.fieldContext_Person_affiliation(ctx, field)
-			case "collections":
-				return ec.fieldContext_Person_collections(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Collection_protectedAreaPictures(ctx context.Context, field graphql.CollectedField, obj *ent.Collection) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Collection_protectedAreaPictures(ctx, field)
 	if err != nil {
@@ -19853,6 +19813,105 @@ func (ec *executionContext) fieldContext_Collection_category(ctx context.Context
 				return ec.fieldContext_Category_collections(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Category", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Collection_authors(ctx context.Context, field graphql.CollectedField, obj *ent.Collection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Collection_authors(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Authors(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Person)
+	fc.Result = res
+	return ec.marshalOPerson2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPersonᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Collection_authors(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Collection",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Person_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Person_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Person_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Person_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Person_updatedBy(ctx, field)
+			case "address":
+				return ec.fieldContext_Person_address(ctx, field)
+			case "phoneNumbers":
+				return ec.fieldContext_Person_phoneNumbers(ctx, field)
+			case "emails":
+				return ec.fieldContext_Person_emails(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Person_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Person_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Person_description(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Person_externalLink(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_Person_primaryImageURL(ctx, field)
+			case "additionalImagesUrls":
+				return ec.fieldContext_Person_additionalImagesUrls(ctx, field)
+			case "givenName":
+				return ec.fieldContext_Person_givenName(ctx, field)
+			case "familyName":
+				return ec.fieldContext_Person_familyName(ctx, field)
+			case "patronymicName":
+				return ec.fieldContext_Person_patronymicName(ctx, field)
+			case "beginData":
+				return ec.fieldContext_Person_beginData(ctx, field)
+			case "endDate":
+				return ec.fieldContext_Person_endDate(ctx, field)
+			case "gender":
+				return ec.fieldContext_Person_gender(ctx, field)
+			case "collections":
+				return ec.fieldContext_Person_collections(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Person_artifacts(ctx, field)
+			case "books":
+				return ec.fieldContext_Person_books(ctx, field)
+			case "projects":
+				return ec.fieldContext_Person_projects(ctx, field)
+			case "publications":
+				return ec.fieldContext_Person_publications(ctx, field)
+			case "personRoles":
+				return ec.fieldContext_Person_personRoles(ctx, field)
+			case "holder":
+				return ec.fieldContext_Person_holder(ctx, field)
+			case "affiliation":
+				return ec.fieldContext_Person_affiliation(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
 		},
 	}
 	return fc, nil
@@ -20063,16 +20122,18 @@ func (ec *executionContext) fieldContext_CollectionEdge_node(ctx context.Context
 				return ec.fieldContext_Collection_additionalImagesUrls(ctx, field)
 			case "slug":
 				return ec.fieldContext_Collection_slug(ctx, field)
+			case "type":
+				return ec.fieldContext_Collection_type(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Collection_artifacts(ctx, field)
 			case "books":
 				return ec.fieldContext_Collection_books(ctx, field)
-			case "people":
-				return ec.fieldContext_Collection_people(ctx, field)
 			case "protectedAreaPictures":
 				return ec.fieldContext_Collection_protectedAreaPictures(ctx, field)
 			case "category":
 				return ec.fieldContext_Collection_category(ctx, field)
+			case "authors":
+				return ec.fieldContext_Collection_authors(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Collection", field.Name)
 		},
@@ -22911,6 +22972,8 @@ func (ec *executionContext) fieldContext_Holder_person(ctx context.Context, fiel
 				return ec.fieldContext_Person_endDate(ctx, field)
 			case "gender":
 				return ec.fieldContext_Person_gender(ctx, field)
+			case "collections":
+				return ec.fieldContext_Person_collections(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Person_artifacts(ctx, field)
 			case "books":
@@ -22925,8 +22988,6 @@ func (ec *executionContext) fieldContext_Holder_person(ctx context.Context, fiel
 				return ec.fieldContext_Person_holder(ctx, field)
 			case "affiliation":
 				return ec.fieldContext_Person_affiliation(ctx, field)
-			case "collections":
-				return ec.fieldContext_Person_collections(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
 		},
@@ -29718,16 +29779,18 @@ func (ec *executionContext) fieldContext_Mutation_createCollection(ctx context.C
 				return ec.fieldContext_Collection_additionalImagesUrls(ctx, field)
 			case "slug":
 				return ec.fieldContext_Collection_slug(ctx, field)
+			case "type":
+				return ec.fieldContext_Collection_type(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Collection_artifacts(ctx, field)
 			case "books":
 				return ec.fieldContext_Collection_books(ctx, field)
-			case "people":
-				return ec.fieldContext_Collection_people(ctx, field)
 			case "protectedAreaPictures":
 				return ec.fieldContext_Collection_protectedAreaPictures(ctx, field)
 			case "category":
 				return ec.fieldContext_Collection_category(ctx, field)
+			case "authors":
+				return ec.fieldContext_Collection_authors(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Collection", field.Name)
 		},
@@ -29809,16 +29872,18 @@ func (ec *executionContext) fieldContext_Mutation_updateCollection(ctx context.C
 				return ec.fieldContext_Collection_additionalImagesUrls(ctx, field)
 			case "slug":
 				return ec.fieldContext_Collection_slug(ctx, field)
+			case "type":
+				return ec.fieldContext_Collection_type(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Collection_artifacts(ctx, field)
 			case "books":
 				return ec.fieldContext_Collection_books(ctx, field)
-			case "people":
-				return ec.fieldContext_Collection_people(ctx, field)
 			case "protectedAreaPictures":
 				return ec.fieldContext_Collection_protectedAreaPictures(ctx, field)
 			case "category":
 				return ec.fieldContext_Collection_category(ctx, field)
+			case "authors":
+				return ec.fieldContext_Collection_authors(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Collection", field.Name)
 		},
@@ -32006,6 +32071,8 @@ func (ec *executionContext) fieldContext_Mutation_createPerson(ctx context.Conte
 				return ec.fieldContext_Person_endDate(ctx, field)
 			case "gender":
 				return ec.fieldContext_Person_gender(ctx, field)
+			case "collections":
+				return ec.fieldContext_Person_collections(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Person_artifacts(ctx, field)
 			case "books":
@@ -32020,8 +32087,6 @@ func (ec *executionContext) fieldContext_Mutation_createPerson(ctx context.Conte
 				return ec.fieldContext_Person_holder(ctx, field)
 			case "affiliation":
 				return ec.fieldContext_Person_affiliation(ctx, field)
-			case "collections":
-				return ec.fieldContext_Person_collections(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
 		},
@@ -32119,6 +32184,8 @@ func (ec *executionContext) fieldContext_Mutation_updatePerson(ctx context.Conte
 				return ec.fieldContext_Person_endDate(ctx, field)
 			case "gender":
 				return ec.fieldContext_Person_gender(ctx, field)
+			case "collections":
+				return ec.fieldContext_Person_collections(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Person_artifacts(ctx, field)
 			case "books":
@@ -32133,8 +32200,6 @@ func (ec *executionContext) fieldContext_Mutation_updatePerson(ctx context.Conte
 				return ec.fieldContext_Person_holder(ctx, field)
 			case "affiliation":
 				return ec.fieldContext_Person_affiliation(ctx, field)
-			case "collections":
-				return ec.fieldContext_Person_collections(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
 		},
@@ -34847,6 +34912,8 @@ func (ec *executionContext) fieldContext_Organization_people(ctx context.Context
 				return ec.fieldContext_Person_endDate(ctx, field)
 			case "gender":
 				return ec.fieldContext_Person_gender(ctx, field)
+			case "collections":
+				return ec.fieldContext_Person_collections(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Person_artifacts(ctx, field)
 			case "books":
@@ -34861,8 +34928,6 @@ func (ec *executionContext) fieldContext_Organization_people(ctx context.Context
 				return ec.fieldContext_Person_holder(ctx, field)
 			case "affiliation":
 				return ec.fieldContext_Person_affiliation(ctx, field)
-			case "collections":
-				return ec.fieldContext_Person_collections(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
 		},
@@ -37728,6 +37793,85 @@ func (ec *executionContext) fieldContext_Person_gender(ctx context.Context, fiel
 	return fc, nil
 }
 
+func (ec *executionContext) _Person_collections(ctx context.Context, field graphql.CollectedField, obj *ent.Person) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Person_collections(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Collections(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Collection)
+	fc.Result = res
+	return ec.marshalOCollection2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCollectionᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Person_collections(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Person",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Collection_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Collection_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Collection_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Collection_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Collection_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Collection_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Collection_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Collection_description(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Collection_externalLink(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_Collection_primaryImageURL(ctx, field)
+			case "additionalImagesUrls":
+				return ec.fieldContext_Collection_additionalImagesUrls(ctx, field)
+			case "slug":
+				return ec.fieldContext_Collection_slug(ctx, field)
+			case "type":
+				return ec.fieldContext_Collection_type(ctx, field)
+			case "artifacts":
+				return ec.fieldContext_Collection_artifacts(ctx, field)
+			case "books":
+				return ec.fieldContext_Collection_books(ctx, field)
+			case "protectedAreaPictures":
+				return ec.fieldContext_Collection_protectedAreaPictures(ctx, field)
+			case "category":
+				return ec.fieldContext_Collection_category(ctx, field)
+			case "authors":
+				return ec.fieldContext_Collection_authors(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Collection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Person_artifacts(ctx context.Context, field graphql.CollectedField, obj *ent.Person) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Person_artifacts(ctx, field)
 	if err != nil {
@@ -38271,83 +38415,6 @@ func (ec *executionContext) fieldContext_Person_affiliation(ctx context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _Person_collections(ctx context.Context, field graphql.CollectedField, obj *ent.Person) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Person_collections(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Collections(ctx)
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*ent.Collection)
-	fc.Result = res
-	return ec.marshalOCollection2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCollection(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Person_collections(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Person",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Collection_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Collection_createdAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Collection_createdBy(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Collection_updatedAt(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Collection_updatedBy(ctx, field)
-			case "displayName":
-				return ec.fieldContext_Collection_displayName(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Collection_abbreviation(ctx, field)
-			case "description":
-				return ec.fieldContext_Collection_description(ctx, field)
-			case "externalLink":
-				return ec.fieldContext_Collection_externalLink(ctx, field)
-			case "primaryImageURL":
-				return ec.fieldContext_Collection_primaryImageURL(ctx, field)
-			case "additionalImagesUrls":
-				return ec.fieldContext_Collection_additionalImagesUrls(ctx, field)
-			case "slug":
-				return ec.fieldContext_Collection_slug(ctx, field)
-			case "artifacts":
-				return ec.fieldContext_Collection_artifacts(ctx, field)
-			case "books":
-				return ec.fieldContext_Collection_books(ctx, field)
-			case "people":
-				return ec.fieldContext_Collection_people(ctx, field)
-			case "protectedAreaPictures":
-				return ec.fieldContext_Collection_protectedAreaPictures(ctx, field)
-			case "category":
-				return ec.fieldContext_Collection_category(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Collection", field.Name)
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _PersonConnection_edges(ctx context.Context, field graphql.CollectedField, obj *ent.PersonConnection) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_PersonConnection_edges(ctx, field)
 	if err != nil {
@@ -38569,6 +38636,8 @@ func (ec *executionContext) fieldContext_PersonEdge_node(ctx context.Context, fi
 				return ec.fieldContext_Person_endDate(ctx, field)
 			case "gender":
 				return ec.fieldContext_Person_gender(ctx, field)
+			case "collections":
+				return ec.fieldContext_Person_collections(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Person_artifacts(ctx, field)
 			case "books":
@@ -38583,8 +38652,6 @@ func (ec *executionContext) fieldContext_PersonEdge_node(ctx context.Context, fi
 				return ec.fieldContext_Person_holder(ctx, field)
 			case "affiliation":
 				return ec.fieldContext_Person_affiliation(ctx, field)
-			case "collections":
-				return ec.fieldContext_Person_collections(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
 		},
@@ -39090,6 +39157,8 @@ func (ec *executionContext) fieldContext_PersonRole_person(ctx context.Context, 
 				return ec.fieldContext_Person_endDate(ctx, field)
 			case "gender":
 				return ec.fieldContext_Person_gender(ctx, field)
+			case "collections":
+				return ec.fieldContext_Person_collections(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Person_artifacts(ctx, field)
 			case "books":
@@ -39104,8 +39173,6 @@ func (ec *executionContext) fieldContext_PersonRole_person(ctx context.Context, 
 				return ec.fieldContext_Person_holder(ctx, field)
 			case "affiliation":
 				return ec.fieldContext_Person_affiliation(ctx, field)
-			case "collections":
-				return ec.fieldContext_Person_collections(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
 		},
@@ -40012,6 +40079,8 @@ func (ec *executionContext) fieldContext_Project_team(ctx context.Context, field
 				return ec.fieldContext_Person_endDate(ctx, field)
 			case "gender":
 				return ec.fieldContext_Person_gender(ctx, field)
+			case "collections":
+				return ec.fieldContext_Person_collections(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Person_artifacts(ctx, field)
 			case "books":
@@ -40026,8 +40095,6 @@ func (ec *executionContext) fieldContext_Project_team(ctx context.Context, field
 				return ec.fieldContext_Person_holder(ctx, field)
 			case "affiliation":
 				return ec.fieldContext_Person_affiliation(ctx, field)
-			case "collections":
-				return ec.fieldContext_Person_collections(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
 		},
@@ -43221,16 +43288,18 @@ func (ec *executionContext) fieldContext_ProtectedAreaPicture_collection(ctx con
 				return ec.fieldContext_Collection_additionalImagesUrls(ctx, field)
 			case "slug":
 				return ec.fieldContext_Collection_slug(ctx, field)
+			case "type":
+				return ec.fieldContext_Collection_type(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Collection_artifacts(ctx, field)
 			case "books":
 				return ec.fieldContext_Collection_books(ctx, field)
-			case "people":
-				return ec.fieldContext_Collection_people(ctx, field)
 			case "protectedAreaPictures":
 				return ec.fieldContext_Collection_protectedAreaPictures(ctx, field)
 			case "category":
 				return ec.fieldContext_Collection_category(ctx, field)
+			case "authors":
+				return ec.fieldContext_Collection_authors(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Collection", field.Name)
 		},
@@ -44282,6 +44351,8 @@ func (ec *executionContext) fieldContext_Publication_authors(ctx context.Context
 				return ec.fieldContext_Person_endDate(ctx, field)
 			case "gender":
 				return ec.fieldContext_Person_gender(ctx, field)
+			case "collections":
+				return ec.fieldContext_Person_collections(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Person_artifacts(ctx, field)
 			case "books":
@@ -44296,8 +44367,6 @@ func (ec *executionContext) fieldContext_Publication_authors(ctx context.Context
 				return ec.fieldContext_Person_holder(ctx, field)
 			case "affiliation":
 				return ec.fieldContext_Person_affiliation(ctx, field)
-			case "collections":
-				return ec.fieldContext_Person_collections(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Person", field.Name)
 		},
@@ -63389,7 +63458,7 @@ func (ec *executionContext) unmarshalInputCollectionWhereInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "slug", "slugNEQ", "slugIn", "slugNotIn", "slugGT", "slugGTE", "slugLT", "slugLTE", "slugContains", "slugHasPrefix", "slugHasSuffix", "slugEqualFold", "slugContainsFold", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasPeople", "hasPeopleWith", "hasProtectedAreaPictures", "hasProtectedAreaPicturesWith", "hasCategory", "hasCategoryWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "slug", "slugNEQ", "slugIn", "slugNotIn", "slugGT", "slugGTE", "slugLT", "slugLTE", "slugContains", "slugHasPrefix", "slugHasSuffix", "slugEqualFold", "slugContainsFold", "type", "typeNEQ", "typeIn", "typeNotIn", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasProtectedAreaPictures", "hasProtectedAreaPicturesWith", "hasCategory", "hasCategoryWith", "hasAuthors", "hasAuthorsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -64701,6 +64770,42 @@ func (ec *executionContext) unmarshalInputCollectionWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.SlugContainsFold = data
+		case "type":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalOCollectionType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋcollectionᚐType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		case "typeNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeNEQ"))
+			data, err := ec.unmarshalOCollectionType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋcollectionᚐType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeNEQ = data
+		case "typeIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeIn"))
+			data, err := ec.unmarshalOCollectionType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋcollectionᚐTypeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeIn = data
+		case "typeNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeNotIn"))
+			data, err := ec.unmarshalOCollectionType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋcollectionᚐTypeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeNotIn = data
 		case "hasArtifacts":
 			var err error
 
@@ -64737,24 +64842,6 @@ func (ec *executionContext) unmarshalInputCollectionWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.HasBooksWith = data
-		case "hasPeople":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPeople"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasPeople = data
-		case "hasPeopleWith":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPeopleWith"))
-			data, err := ec.unmarshalOPersonWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPersonWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasPeopleWith = data
 		case "hasProtectedAreaPictures":
 			var err error
 
@@ -64791,6 +64878,24 @@ func (ec *executionContext) unmarshalInputCollectionWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.HasCategoryWith = data
+		case "hasAuthors":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAuthors"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasAuthors = data
+		case "hasAuthorsWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAuthorsWith"))
+			data, err := ec.unmarshalOPersonWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPersonWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasAuthorsWith = data
 		}
 	}
 
@@ -67004,7 +67109,7 @@ func (ec *executionContext) unmarshalInputCreateCollectionInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "primaryImageURL", "additionalImagesUrls", "slug", "artifactIDs", "bookIDs", "personIDs", "protectedAreaPictureIDs", "categoryID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "primaryImageURL", "additionalImagesUrls", "slug", "type", "artifactIDs", "bookIDs", "protectedAreaPictureIDs", "categoryID", "authorIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -67110,6 +67215,15 @@ func (ec *executionContext) unmarshalInputCreateCollectionInput(ctx context.Cont
 				return it, err
 			}
 			it.Slug = data
+		case "type":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalNCollectionType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋcollectionᚐType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
 		case "artifactIDs":
 			var err error
 
@@ -67128,15 +67242,6 @@ func (ec *executionContext) unmarshalInputCreateCollectionInput(ctx context.Cont
 				return it, err
 			}
 			it.BookIDs = data
-		case "personIDs":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("personIDs"))
-			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.PersonIDs = data
 		case "protectedAreaPictureIDs":
 			var err error
 
@@ -67155,6 +67260,15 @@ func (ec *executionContext) unmarshalInputCreateCollectionInput(ctx context.Cont
 				return it, err
 			}
 			it.CategoryID = data
+		case "authorIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("authorIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AuthorIDs = data
 		}
 	}
 
@@ -68679,7 +68793,7 @@ func (ec *executionContext) unmarshalInputCreatePersonInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "address", "phoneNumbers", "emails", "displayName", "abbreviation", "description", "externalLink", "primaryImageURL", "additionalImagesUrls", "givenName", "familyName", "patronymicName", "beginData", "endDate", "gender", "artifactIDs", "bookIDs", "projectIDs", "publicationIDs", "personRoleIDs", "holderID", "affiliationID", "collectionsID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "address", "phoneNumbers", "emails", "displayName", "abbreviation", "description", "externalLink", "primaryImageURL", "additionalImagesUrls", "givenName", "familyName", "patronymicName", "beginData", "endDate", "gender", "collectionIDs", "artifactIDs", "bookIDs", "projectIDs", "publicationIDs", "personRoleIDs", "holderID", "affiliationID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -68857,6 +68971,15 @@ func (ec *executionContext) unmarshalInputCreatePersonInput(ctx context.Context,
 				return it, err
 			}
 			it.Gender = data
+		case "collectionIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("collectionIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CollectionIDs = data
 		case "artifactIDs":
 			var err error
 
@@ -68920,15 +69043,6 @@ func (ec *executionContext) unmarshalInputCreatePersonInput(ctx context.Context,
 				return it, err
 			}
 			it.AffiliationID = data
-		case "collectionsID":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("collectionsID"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CollectionsID = data
 		}
 	}
 
@@ -85611,7 +85725,7 @@ func (ec *executionContext) unmarshalInputPersonWhereInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "address", "addressNEQ", "addressIn", "addressNotIn", "addressGT", "addressGTE", "addressLT", "addressLTE", "addressContains", "addressHasPrefix", "addressHasSuffix", "addressIsNil", "addressNotNil", "addressEqualFold", "addressContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "givenName", "givenNameNEQ", "givenNameIn", "givenNameNotIn", "givenNameGT", "givenNameGTE", "givenNameLT", "givenNameLTE", "givenNameContains", "givenNameHasPrefix", "givenNameHasSuffix", "givenNameIsNil", "givenNameNotNil", "givenNameEqualFold", "givenNameContainsFold", "familyName", "familyNameNEQ", "familyNameIn", "familyNameNotIn", "familyNameGT", "familyNameGTE", "familyNameLT", "familyNameLTE", "familyNameContains", "familyNameHasPrefix", "familyNameHasSuffix", "familyNameIsNil", "familyNameNotNil", "familyNameEqualFold", "familyNameContainsFold", "patronymicName", "patronymicNameNEQ", "patronymicNameIn", "patronymicNameNotIn", "patronymicNameGT", "patronymicNameGTE", "patronymicNameLT", "patronymicNameLTE", "patronymicNameContains", "patronymicNameHasPrefix", "patronymicNameHasSuffix", "patronymicNameIsNil", "patronymicNameNotNil", "patronymicNameEqualFold", "patronymicNameContainsFold", "beginData", "beginDataNEQ", "beginDataIn", "beginDataNotIn", "beginDataGT", "beginDataGTE", "beginDataLT", "beginDataLTE", "beginDataIsNil", "beginDataNotNil", "endDate", "endDateNEQ", "endDateIn", "endDateNotIn", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "gender", "genderNEQ", "genderIn", "genderNotIn", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasProjects", "hasProjectsWith", "hasPublications", "hasPublicationsWith", "hasPersonRoles", "hasPersonRolesWith", "hasHolder", "hasHolderWith", "hasAffiliation", "hasAffiliationWith", "hasCollections", "hasCollectionsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "address", "addressNEQ", "addressIn", "addressNotIn", "addressGT", "addressGTE", "addressLT", "addressLTE", "addressContains", "addressHasPrefix", "addressHasSuffix", "addressIsNil", "addressNotNil", "addressEqualFold", "addressContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "givenName", "givenNameNEQ", "givenNameIn", "givenNameNotIn", "givenNameGT", "givenNameGTE", "givenNameLT", "givenNameLTE", "givenNameContains", "givenNameHasPrefix", "givenNameHasSuffix", "givenNameIsNil", "givenNameNotNil", "givenNameEqualFold", "givenNameContainsFold", "familyName", "familyNameNEQ", "familyNameIn", "familyNameNotIn", "familyNameGT", "familyNameGTE", "familyNameLT", "familyNameLTE", "familyNameContains", "familyNameHasPrefix", "familyNameHasSuffix", "familyNameIsNil", "familyNameNotNil", "familyNameEqualFold", "familyNameContainsFold", "patronymicName", "patronymicNameNEQ", "patronymicNameIn", "patronymicNameNotIn", "patronymicNameGT", "patronymicNameGTE", "patronymicNameLT", "patronymicNameLTE", "patronymicNameContains", "patronymicNameHasPrefix", "patronymicNameHasSuffix", "patronymicNameIsNil", "patronymicNameNotNil", "patronymicNameEqualFold", "patronymicNameContainsFold", "beginData", "beginDataNEQ", "beginDataIn", "beginDataNotIn", "beginDataGT", "beginDataGTE", "beginDataLT", "beginDataLTE", "beginDataIsNil", "beginDataNotNil", "endDate", "endDateNEQ", "endDateIn", "endDateNotIn", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "gender", "genderNEQ", "genderIn", "genderNotIn", "hasCollections", "hasCollectionsWith", "hasArtifacts", "hasArtifactsWith", "hasBooks", "hasBooksWith", "hasProjects", "hasProjectsWith", "hasPublications", "hasPublicationsWith", "hasPersonRoles", "hasPersonRolesWith", "hasHolder", "hasHolderWith", "hasAffiliation", "hasAffiliationWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -87562,6 +87676,24 @@ func (ec *executionContext) unmarshalInputPersonWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.GenderNotIn = data
+		case "hasCollections":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCollections"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasCollections = data
+		case "hasCollectionsWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCollectionsWith"))
+			data, err := ec.unmarshalOCollectionWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCollectionWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasCollectionsWith = data
 		case "hasArtifacts":
 			var err error
 
@@ -87688,24 +87820,6 @@ func (ec *executionContext) unmarshalInputPersonWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.HasAffiliationWith = data
-		case "hasCollections":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCollections"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasCollections = data
-		case "hasCollectionsWith":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCollectionsWith"))
-			data, err := ec.unmarshalOCollectionWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCollectionWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasCollectionsWith = data
 		}
 	}
 
@@ -103004,7 +103118,7 @@ func (ec *executionContext) unmarshalInputUpdateCollectionInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "slug", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addPersonIDs", "removePersonIDs", "clearPeople", "addProtectedAreaPictureIDs", "removeProtectedAreaPictureIDs", "clearProtectedAreaPictures", "categoryID"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "slug", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addProtectedAreaPictureIDs", "removeProtectedAreaPictureIDs", "clearProtectedAreaPictures", "categoryID", "addAuthorIDs", "removeAuthorIDs", "clearAuthors"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -103236,33 +103350,6 @@ func (ec *executionContext) unmarshalInputUpdateCollectionInput(ctx context.Cont
 				return it, err
 			}
 			it.ClearBooks = data
-		case "addPersonIDs":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addPersonIDs"))
-			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddPersonIDs = data
-		case "removePersonIDs":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removePersonIDs"))
-			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemovePersonIDs = data
-		case "clearPeople":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearPeople"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearPeople = data
 		case "addProtectedAreaPictureIDs":
 			var err error
 
@@ -103299,6 +103386,33 @@ func (ec *executionContext) unmarshalInputUpdateCollectionInput(ctx context.Cont
 				return it, err
 			}
 			it.CategoryID = data
+		case "addAuthorIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addAuthorIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddAuthorIDs = data
+		case "removeAuthorIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeAuthorIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveAuthorIDs = data
+		case "clearAuthors":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAuthors"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAuthors = data
 		}
 	}
 
@@ -105930,7 +106044,7 @@ func (ec *executionContext) unmarshalInputUpdatePersonInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "address", "clearAddress", "phoneNumbers", "appendPhoneNumbers", "clearPhoneNumbers", "emails", "appendEmails", "clearEmails", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "givenName", "clearGivenName", "familyName", "clearFamilyName", "patronymicName", "clearPatronymicName", "beginData", "clearBeginData", "endDate", "clearEndDate", "gender", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addProjectIDs", "removeProjectIDs", "clearProjects", "addPublicationIDs", "removePublicationIDs", "clearPublications", "addPersonRoleIDs", "removePersonRoleIDs", "clearPersonRoles", "holderID", "clearHolder", "affiliationID", "clearAffiliation", "collectionsID", "clearCollections"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "address", "clearAddress", "phoneNumbers", "appendPhoneNumbers", "clearPhoneNumbers", "emails", "appendEmails", "clearEmails", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "givenName", "clearGivenName", "familyName", "clearFamilyName", "patronymicName", "clearPatronymicName", "beginData", "clearBeginData", "endDate", "clearEndDate", "gender", "addCollectionIDs", "removeCollectionIDs", "clearCollections", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts", "addBookIDs", "removeBookIDs", "clearBooks", "addProjectIDs", "removeProjectIDs", "clearProjects", "addPublicationIDs", "removePublicationIDs", "clearPublications", "addPersonRoleIDs", "removePersonRoleIDs", "clearPersonRoles", "holderID", "clearHolder", "affiliationID", "clearAffiliation"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -106270,6 +106384,33 @@ func (ec *executionContext) unmarshalInputUpdatePersonInput(ctx context.Context,
 				return it, err
 			}
 			it.Gender = data
+		case "addCollectionIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addCollectionIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddCollectionIDs = data
+		case "removeCollectionIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeCollectionIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveCollectionIDs = data
+		case "clearCollections":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearCollections"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearCollections = data
 		case "addArtifactIDs":
 			var err error
 
@@ -106441,24 +106582,6 @@ func (ec *executionContext) unmarshalInputUpdatePersonInput(ctx context.Context,
 				return it, err
 			}
 			it.ClearAffiliation = data
-		case "collectionsID":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("collectionsID"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CollectionsID = data
-		case "clearCollections":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearCollections"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearCollections = data
 		}
 	}
 
@@ -111106,6 +111229,11 @@ func (ec *executionContext) _Collection(ctx context.Context, sel ast.SelectionSe
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "type":
+			out.Values[i] = ec._Collection_type(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "artifacts":
 			field := field
 
@@ -111149,39 +111277,6 @@ func (ec *executionContext) _Collection(ctx context.Context, sel ast.SelectionSe
 					}
 				}()
 				res = ec._Collection_books(ctx, field, obj)
-				return res
-			}
-
-			if field.Deferrable != nil {
-				dfs, ok := deferred[field.Deferrable.Label]
-				di := 0
-				if ok {
-					dfs.AddField(field)
-					di = len(dfs.Values) - 1
-				} else {
-					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
-					deferred[field.Deferrable.Label] = dfs
-				}
-				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, dfs)
-				})
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "people":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Collection_people(ctx, field, obj)
 				return res
 			}
 
@@ -111251,6 +111346,39 @@ func (ec *executionContext) _Collection(ctx context.Context, sel ast.SelectionSe
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "authors":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Collection_authors(ctx, field, obj)
 				return res
 			}
 
@@ -114917,6 +115045,39 @@ func (ec *executionContext) _Person(ctx context.Context, sel ast.SelectionSet, o
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "collections":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Person_collections(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "artifacts":
 			field := field
 
@@ -115125,39 +115286,6 @@ func (ec *executionContext) _Person(ctx context.Context, sel ast.SelectionSet, o
 					}
 				}()
 				res = ec._Person_affiliation(ctx, field, obj)
-				return res
-			}
-
-			if field.Deferrable != nil {
-				dfs, ok := deferred[field.Deferrable.Label]
-				di := 0
-				if ok {
-					dfs.AddField(field)
-					di = len(dfs.Values) - 1
-				} else {
-					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
-					deferred[field.Deferrable.Label] = dfs
-				}
-				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, dfs)
-				})
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "collections":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Person_collections(ctx, field, obj)
 				return res
 			}
 
@@ -119415,6 +119543,16 @@ func (ec *executionContext) marshalNCollectionOrderField2ᚖgithubᚗcomᚋdkras
 	return v
 }
 
+func (ec *executionContext) unmarshalNCollectionType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋcollectionᚐType(ctx context.Context, v interface{}) (collection.Type, error) {
+	var res collection.Type
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNCollectionType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋcollectionᚐType(ctx context.Context, sel ast.SelectionSet, v collection.Type) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalNCollectionWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCollectionWhereInput(ctx context.Context, v interface{}) (*ent.CollectionWhereInput, error) {
 	res, err := ec.unmarshalInputCollectionWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
@@ -122843,6 +122981,89 @@ func (ec *executionContext) unmarshalOCollectionOrder2ᚕᚖgithubᚗcomᚋdkras
 		}
 	}
 	return res, nil
+}
+
+func (ec *executionContext) unmarshalOCollectionType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋcollectionᚐTypeᚄ(ctx context.Context, v interface{}) ([]collection.Type, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]collection.Type, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNCollectionType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋcollectionᚐType(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOCollectionType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋcollectionᚐTypeᚄ(ctx context.Context, sel ast.SelectionSet, v []collection.Type) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNCollectionType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋcollectionᚐType(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOCollectionType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋcollectionᚐType(ctx context.Context, v interface{}) (*collection.Type, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(collection.Type)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOCollectionType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋcollectionᚐType(ctx context.Context, sel ast.SelectionSet, v *collection.Type) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) unmarshalOCollectionWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCollectionWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.CollectionWhereInput, error) {

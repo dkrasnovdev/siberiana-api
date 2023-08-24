@@ -275,6 +275,7 @@ var (
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
 		{Name: "slug", Type: field.TypeString, Unique: true},
+		{Name: "type", Type: field.TypeEnum, Enums: []string{"artifacts", "books", "protected_area_pictures"}},
 		{Name: "category_collections", Type: field.TypeInt},
 	}
 	// CollectionsTable holds the schema information for the "collections" table.
@@ -285,7 +286,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "collections_categories_collections",
-				Columns:    []*schema.Column{CollectionsColumns[12]},
+				Columns:    []*schema.Column{CollectionsColumns[13]},
 				RefColumns: []*schema.Column{CategoriesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -610,7 +611,6 @@ var (
 		{Name: "begin_data", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
 		{Name: "end_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
 		{Name: "gender", Type: field.TypeEnum, Enums: []string{"female", "male"}},
-		{Name: "collection_people", Type: field.TypeInt, Nullable: true},
 		{Name: "holder_person", Type: field.TypeInt, Unique: true, Nullable: true},
 		{Name: "organization_people", Type: field.TypeInt, Nullable: true},
 	}
@@ -621,20 +621,14 @@ var (
 		PrimaryKey: []*schema.Column{PersonsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "persons_collections_people",
-				Columns:    []*schema.Column{PersonsColumns[20]},
-				RefColumns: []*schema.Column{CollectionsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "persons_holders_person",
-				Columns:    []*schema.Column{PersonsColumns[21]},
+				Columns:    []*schema.Column{PersonsColumns[20]},
 				RefColumns: []*schema.Column{HoldersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "persons_organizations_people",
-				Columns:    []*schema.Column{PersonsColumns[22]},
+				Columns:    []*schema.Column{PersonsColumns[21]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1112,6 +1106,31 @@ var (
 			},
 		},
 	}
+	// PersonCollectionsColumns holds the columns for the "person_collections" table.
+	PersonCollectionsColumns = []*schema.Column{
+		{Name: "person_id", Type: field.TypeInt},
+		{Name: "collection_id", Type: field.TypeInt},
+	}
+	// PersonCollectionsTable holds the schema information for the "person_collections" table.
+	PersonCollectionsTable = &schema.Table{
+		Name:       "person_collections",
+		Columns:    PersonCollectionsColumns,
+		PrimaryKey: []*schema.Column{PersonCollectionsColumns[0], PersonCollectionsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "person_collections_person_id",
+				Columns:    []*schema.Column{PersonCollectionsColumns[0]},
+				RefColumns: []*schema.Column{PersonsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "person_collections_collection_id",
+				Columns:    []*schema.Column{PersonCollectionsColumns[1]},
+				RefColumns: []*schema.Column{CollectionsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// PersonArtifactsColumns holds the columns for the "person_artifacts" table.
 	PersonArtifactsColumns = []*schema.Column{
 		{Name: "person_id", Type: field.TypeInt},
@@ -1358,6 +1377,7 @@ var (
 		HolderHolderResponsibilitiesTable,
 		MediumArtifactsTable,
 		MonumentSetsTable,
+		PersonCollectionsTable,
 		PersonArtifactsTable,
 		PersonBooksTable,
 		PersonProjectsTable,
@@ -1389,9 +1409,8 @@ func init() {
 	LocationsTable.ForeignKeys[3].RefTable = RegionsTable
 	OrganizationsTable.ForeignKeys[0].RefTable = HoldersTable
 	OrganizationsTable.ForeignKeys[1].RefTable = OrganizationTypesTable
-	PersonsTable.ForeignKeys[0].RefTable = CollectionsTable
-	PersonsTable.ForeignKeys[1].RefTable = HoldersTable
-	PersonsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	PersonsTable.ForeignKeys[0].RefTable = HoldersTable
+	PersonsTable.ForeignKeys[1].RefTable = OrganizationsTable
 	ProjectsTable.ForeignKeys[0].RefTable = ProjectTypesTable
 	ProtectedAreasTable.ForeignKeys[0].RefTable = ProtectedAreaCategoriesTable
 	ProtectedAreaPicturesTable.ForeignKeys[0].RefTable = CollectionsTable
@@ -1414,6 +1433,8 @@ func init() {
 	MediumArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
 	MonumentSetsTable.ForeignKeys[0].RefTable = MonumentsTable
 	MonumentSetsTable.ForeignKeys[1].RefTable = SetsTable
+	PersonCollectionsTable.ForeignKeys[0].RefTable = PersonsTable
+	PersonCollectionsTable.ForeignKeys[1].RefTable = CollectionsTable
 	PersonArtifactsTable.ForeignKeys[0].RefTable = PersonsTable
 	PersonArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
 	PersonBooksTable.ForeignKeys[0].RefTable = PersonsTable

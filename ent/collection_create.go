@@ -163,6 +163,12 @@ func (cc *CollectionCreate) SetSlug(s string) *CollectionCreate {
 	return cc
 }
 
+// SetType sets the "type" field.
+func (cc *CollectionCreate) SetType(c collection.Type) *CollectionCreate {
+	cc.mutation.SetType(c)
+	return cc
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (cc *CollectionCreate) AddArtifactIDs(ids ...int) *CollectionCreate {
 	cc.mutation.AddArtifactIDs(ids...)
@@ -193,21 +199,6 @@ func (cc *CollectionCreate) AddBooks(b ...*Book) *CollectionCreate {
 	return cc.AddBookIDs(ids...)
 }
 
-// AddPersonIDs adds the "people" edge to the Person entity by IDs.
-func (cc *CollectionCreate) AddPersonIDs(ids ...int) *CollectionCreate {
-	cc.mutation.AddPersonIDs(ids...)
-	return cc
-}
-
-// AddPeople adds the "people" edges to the Person entity.
-func (cc *CollectionCreate) AddPeople(p ...*Person) *CollectionCreate {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return cc.AddPersonIDs(ids...)
-}
-
 // AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
 func (cc *CollectionCreate) AddProtectedAreaPictureIDs(ids ...int) *CollectionCreate {
 	cc.mutation.AddProtectedAreaPictureIDs(ids...)
@@ -232,6 +223,21 @@ func (cc *CollectionCreate) SetCategoryID(id int) *CollectionCreate {
 // SetCategory sets the "category" edge to the Category entity.
 func (cc *CollectionCreate) SetCategory(c *Category) *CollectionCreate {
 	return cc.SetCategoryID(c.ID)
+}
+
+// AddAuthorIDs adds the "authors" edge to the Person entity by IDs.
+func (cc *CollectionCreate) AddAuthorIDs(ids ...int) *CollectionCreate {
+	cc.mutation.AddAuthorIDs(ids...)
+	return cc
+}
+
+// AddAuthors adds the "authors" edges to the Person entity.
+func (cc *CollectionCreate) AddAuthors(p ...*Person) *CollectionCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cc.AddAuthorIDs(ids...)
 }
 
 // Mutation returns the CollectionMutation object of the builder.
@@ -298,6 +304,14 @@ func (cc *CollectionCreate) check() error {
 	}
 	if _, ok := cc.mutation.Slug(); !ok {
 		return &ValidationError{Name: "slug", err: errors.New(`ent: missing required field "Collection.slug"`)}
+	}
+	if _, ok := cc.mutation.GetType(); !ok {
+		return &ValidationError{Name: "type", err: errors.New(`ent: missing required field "Collection.type"`)}
+	}
+	if v, ok := cc.mutation.GetType(); ok {
+		if err := collection.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Collection.type": %w`, err)}
+		}
 	}
 	if _, ok := cc.mutation.CategoryID(); !ok {
 		return &ValidationError{Name: "category", err: errors.New(`ent: missing required edge "Collection.category"`)}
@@ -372,6 +386,10 @@ func (cc *CollectionCreate) createSpec() (*Collection, *sqlgraph.CreateSpec) {
 		_spec.SetField(collection.FieldSlug, field.TypeString, value)
 		_node.Slug = value
 	}
+	if value, ok := cc.mutation.GetType(); ok {
+		_spec.SetField(collection.FieldType, field.TypeEnum, value)
+		_node.Type = value
+	}
 	if nodes := cc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -397,22 +415,6 @@ func (cc *CollectionCreate) createSpec() (*Collection, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := cc.mutation.PeopleIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   collection.PeopleTable,
-			Columns: []string{collection.PeopleColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -451,6 +453,22 @@ func (cc *CollectionCreate) createSpec() (*Collection, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.category_collections = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.AuthorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   collection.AuthorsTable,
+			Columns: collection.AuthorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

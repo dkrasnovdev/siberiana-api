@@ -30,16 +30,16 @@ type CollectionQuery struct {
 	predicates                     []predicate.Collection
 	withArtifacts                  *ArtifactQuery
 	withBooks                      *BookQuery
-	withPeople                     *PersonQuery
 	withProtectedAreaPictures      *ProtectedAreaPictureQuery
 	withCategory                   *CategoryQuery
+	withAuthors                    *PersonQuery
 	withFKs                        bool
 	modifiers                      []func(*sql.Selector)
 	loadTotal                      []func(context.Context, []*Collection) error
 	withNamedArtifacts             map[string]*ArtifactQuery
 	withNamedBooks                 map[string]*BookQuery
-	withNamedPeople                map[string]*PersonQuery
 	withNamedProtectedAreaPictures map[string]*ProtectedAreaPictureQuery
+	withNamedAuthors               map[string]*PersonQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -120,28 +120,6 @@ func (cq *CollectionQuery) QueryBooks() *BookQuery {
 	return query
 }
 
-// QueryPeople chains the current query on the "people" edge.
-func (cq *CollectionQuery) QueryPeople() *PersonQuery {
-	query := (&PersonClient{config: cq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := cq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := cq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(collection.Table, collection.FieldID, selector),
-			sqlgraph.To(person.Table, person.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, collection.PeopleTable, collection.PeopleColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
 // QueryProtectedAreaPictures chains the current query on the "protected_area_pictures" edge.
 func (cq *CollectionQuery) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery {
 	query := (&ProtectedAreaPictureClient{config: cq.config}).Query()
@@ -179,6 +157,28 @@ func (cq *CollectionQuery) QueryCategory() *CategoryQuery {
 			sqlgraph.From(collection.Table, collection.FieldID, selector),
 			sqlgraph.To(category.Table, category.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, collection.CategoryTable, collection.CategoryColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAuthors chains the current query on the "authors" edge.
+func (cq *CollectionQuery) QueryAuthors() *PersonQuery {
+	query := (&PersonClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(collection.Table, collection.FieldID, selector),
+			sqlgraph.To(person.Table, person.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, collection.AuthorsTable, collection.AuthorsPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
@@ -380,9 +380,9 @@ func (cq *CollectionQuery) Clone() *CollectionQuery {
 		predicates:                append([]predicate.Collection{}, cq.predicates...),
 		withArtifacts:             cq.withArtifacts.Clone(),
 		withBooks:                 cq.withBooks.Clone(),
-		withPeople:                cq.withPeople.Clone(),
 		withProtectedAreaPictures: cq.withProtectedAreaPictures.Clone(),
 		withCategory:              cq.withCategory.Clone(),
+		withAuthors:               cq.withAuthors.Clone(),
 		// clone intermediate query.
 		sql:  cq.sql.Clone(),
 		path: cq.path,
@@ -411,17 +411,6 @@ func (cq *CollectionQuery) WithBooks(opts ...func(*BookQuery)) *CollectionQuery 
 	return cq
 }
 
-// WithPeople tells the query-builder to eager-load the nodes that are connected to
-// the "people" edge. The optional arguments are used to configure the query builder of the edge.
-func (cq *CollectionQuery) WithPeople(opts ...func(*PersonQuery)) *CollectionQuery {
-	query := (&PersonClient{config: cq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	cq.withPeople = query
-	return cq
-}
-
 // WithProtectedAreaPictures tells the query-builder to eager-load the nodes that are connected to
 // the "protected_area_pictures" edge. The optional arguments are used to configure the query builder of the edge.
 func (cq *CollectionQuery) WithProtectedAreaPictures(opts ...func(*ProtectedAreaPictureQuery)) *CollectionQuery {
@@ -441,6 +430,17 @@ func (cq *CollectionQuery) WithCategory(opts ...func(*CategoryQuery)) *Collectio
 		opt(query)
 	}
 	cq.withCategory = query
+	return cq
+}
+
+// WithAuthors tells the query-builder to eager-load the nodes that are connected to
+// the "authors" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *CollectionQuery) WithAuthors(opts ...func(*PersonQuery)) *CollectionQuery {
+	query := (&PersonClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withAuthors = query
 	return cq
 }
 
@@ -532,9 +532,9 @@ func (cq *CollectionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*C
 		loadedTypes = [5]bool{
 			cq.withArtifacts != nil,
 			cq.withBooks != nil,
-			cq.withPeople != nil,
 			cq.withProtectedAreaPictures != nil,
 			cq.withCategory != nil,
+			cq.withAuthors != nil,
 		}
 	)
 	if cq.withCategory != nil {
@@ -578,13 +578,6 @@ func (cq *CollectionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*C
 			return nil, err
 		}
 	}
-	if query := cq.withPeople; query != nil {
-		if err := cq.loadPeople(ctx, query, nodes,
-			func(n *Collection) { n.Edges.People = []*Person{} },
-			func(n *Collection, e *Person) { n.Edges.People = append(n.Edges.People, e) }); err != nil {
-			return nil, err
-		}
-	}
 	if query := cq.withProtectedAreaPictures; query != nil {
 		if err := cq.loadProtectedAreaPictures(ctx, query, nodes,
 			func(n *Collection) { n.Edges.ProtectedAreaPictures = []*ProtectedAreaPicture{} },
@@ -597,6 +590,13 @@ func (cq *CollectionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*C
 	if query := cq.withCategory; query != nil {
 		if err := cq.loadCategory(ctx, query, nodes, nil,
 			func(n *Collection, e *Category) { n.Edges.Category = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := cq.withAuthors; query != nil {
+		if err := cq.loadAuthors(ctx, query, nodes,
+			func(n *Collection) { n.Edges.Authors = []*Person{} },
+			func(n *Collection, e *Person) { n.Edges.Authors = append(n.Edges.Authors, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -614,17 +614,17 @@ func (cq *CollectionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*C
 			return nil, err
 		}
 	}
-	for name, query := range cq.withNamedPeople {
-		if err := cq.loadPeople(ctx, query, nodes,
-			func(n *Collection) { n.appendNamedPeople(name) },
-			func(n *Collection, e *Person) { n.appendNamedPeople(name, e) }); err != nil {
-			return nil, err
-		}
-	}
 	for name, query := range cq.withNamedProtectedAreaPictures {
 		if err := cq.loadProtectedAreaPictures(ctx, query, nodes,
 			func(n *Collection) { n.appendNamedProtectedAreaPictures(name) },
 			func(n *Collection, e *ProtectedAreaPicture) { n.appendNamedProtectedAreaPictures(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedAuthors {
+		if err := cq.loadAuthors(ctx, query, nodes,
+			func(n *Collection) { n.appendNamedAuthors(name) },
+			func(n *Collection, e *Person) { n.appendNamedAuthors(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -698,37 +698,6 @@ func (cq *CollectionQuery) loadBooks(ctx context.Context, query *BookQuery, node
 	}
 	return nil
 }
-func (cq *CollectionQuery) loadPeople(ctx context.Context, query *PersonQuery, nodes []*Collection, init func(*Collection), assign func(*Collection, *Person)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*Collection)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	query.withFKs = true
-	query.Where(predicate.Person(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(collection.PeopleColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.collection_people
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "collection_people" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "collection_people" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
 func (cq *CollectionQuery) loadProtectedAreaPictures(ctx context.Context, query *ProtectedAreaPictureQuery, nodes []*Collection, init func(*Collection), assign func(*Collection, *ProtectedAreaPicture)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int]*Collection)
@@ -788,6 +757,67 @@ func (cq *CollectionQuery) loadCategory(ctx context.Context, query *CategoryQuer
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (cq *CollectionQuery) loadAuthors(ctx context.Context, query *PersonQuery, nodes []*Collection, init func(*Collection), assign func(*Collection, *Person)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Collection)
+	nids := make(map[int]map[*Collection]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(collection.AuthorsTable)
+		s.Join(joinT).On(s.C(person.FieldID), joinT.C(collection.AuthorsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(collection.AuthorsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(collection.AuthorsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Collection]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Person](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "authors" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
 		}
 	}
 	return nil
@@ -905,20 +935,6 @@ func (cq *CollectionQuery) WithNamedBooks(name string, opts ...func(*BookQuery))
 	return cq
 }
 
-// WithNamedPeople tells the query-builder to eager-load the nodes that are connected to the "people"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (cq *CollectionQuery) WithNamedPeople(name string, opts ...func(*PersonQuery)) *CollectionQuery {
-	query := (&PersonClient{config: cq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if cq.withNamedPeople == nil {
-		cq.withNamedPeople = make(map[string]*PersonQuery)
-	}
-	cq.withNamedPeople[name] = query
-	return cq
-}
-
 // WithNamedProtectedAreaPictures tells the query-builder to eager-load the nodes that are connected to the "protected_area_pictures"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (cq *CollectionQuery) WithNamedProtectedAreaPictures(name string, opts ...func(*ProtectedAreaPictureQuery)) *CollectionQuery {
@@ -930,6 +946,20 @@ func (cq *CollectionQuery) WithNamedProtectedAreaPictures(name string, opts ...f
 		cq.withNamedProtectedAreaPictures = make(map[string]*ProtectedAreaPictureQuery)
 	}
 	cq.withNamedProtectedAreaPictures[name] = query
+	return cq
+}
+
+// WithNamedAuthors tells the query-builder to eager-load the nodes that are connected to the "authors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *CollectionQuery) WithNamedAuthors(name string, opts ...func(*PersonQuery)) *CollectionQuery {
+	query := (&PersonClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedAuthors == nil {
+		cq.withNamedAuthors = make(map[string]*PersonQuery)
+	}
+	cq.withNamedAuthors[name] = query
 	return cq
 }
 

@@ -41,6 +41,8 @@ type Collection struct {
 	AdditionalImagesUrls []string `json:"additional_images_urls,omitempty"`
 	// Slug holds the value of the "slug" field.
 	Slug string `json:"slug,omitempty"`
+	// Type holds the value of the "type" field.
+	Type collection.Type `json:"type,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CollectionQuery when eager-loading is set.
 	Edges                CollectionEdges `json:"edges"`
@@ -54,12 +56,12 @@ type CollectionEdges struct {
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
 	// Books holds the value of the books edge.
 	Books []*Book `json:"books,omitempty"`
-	// People holds the value of the people edge.
-	People []*Person `json:"people,omitempty"`
 	// ProtectedAreaPictures holds the value of the protected_area_pictures edge.
 	ProtectedAreaPictures []*ProtectedAreaPicture `json:"protected_area_pictures,omitempty"`
 	// Category holds the value of the category edge.
 	Category *Category `json:"category,omitempty"`
+	// Authors holds the value of the authors edge.
+	Authors []*Person `json:"authors,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [5]bool
@@ -68,8 +70,8 @@ type CollectionEdges struct {
 
 	namedArtifacts             map[string][]*Artifact
 	namedBooks                 map[string][]*Book
-	namedPeople                map[string][]*Person
 	namedProtectedAreaPictures map[string][]*ProtectedAreaPicture
+	namedAuthors               map[string][]*Person
 }
 
 // ArtifactsOrErr returns the Artifacts value or an error if the edge
@@ -90,19 +92,10 @@ func (e CollectionEdges) BooksOrErr() ([]*Book, error) {
 	return nil, &NotLoadedError{edge: "books"}
 }
 
-// PeopleOrErr returns the People value or an error if the edge
-// was not loaded in eager-loading.
-func (e CollectionEdges) PeopleOrErr() ([]*Person, error) {
-	if e.loadedTypes[2] {
-		return e.People, nil
-	}
-	return nil, &NotLoadedError{edge: "people"}
-}
-
 // ProtectedAreaPicturesOrErr returns the ProtectedAreaPictures value or an error if the edge
 // was not loaded in eager-loading.
 func (e CollectionEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[2] {
 		return e.ProtectedAreaPictures, nil
 	}
 	return nil, &NotLoadedError{edge: "protected_area_pictures"}
@@ -111,7 +104,7 @@ func (e CollectionEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, 
 // CategoryOrErr returns the Category value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e CollectionEdges) CategoryOrErr() (*Category, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[3] {
 		if e.Category == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: category.Label}
@@ -119,6 +112,15 @@ func (e CollectionEdges) CategoryOrErr() (*Category, error) {
 		return e.Category, nil
 	}
 	return nil, &NotLoadedError{edge: "category"}
+}
+
+// AuthorsOrErr returns the Authors value or an error if the edge
+// was not loaded in eager-loading.
+func (e CollectionEdges) AuthorsOrErr() ([]*Person, error) {
+	if e.loadedTypes[4] {
+		return e.Authors, nil
+	}
+	return nil, &NotLoadedError{edge: "authors"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -130,7 +132,7 @@ func (*Collection) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case collection.FieldID:
 			values[i] = new(sql.NullInt64)
-		case collection.FieldCreatedBy, collection.FieldUpdatedBy, collection.FieldDisplayName, collection.FieldAbbreviation, collection.FieldDescription, collection.FieldExternalLink, collection.FieldPrimaryImageURL, collection.FieldSlug:
+		case collection.FieldCreatedBy, collection.FieldUpdatedBy, collection.FieldDisplayName, collection.FieldAbbreviation, collection.FieldDescription, collection.FieldExternalLink, collection.FieldPrimaryImageURL, collection.FieldSlug, collection.FieldType:
 			values[i] = new(sql.NullString)
 		case collection.FieldCreatedAt, collection.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -225,6 +227,12 @@ func (c *Collection) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.Slug = value.String
 			}
+		case collection.FieldType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field type", values[i])
+			} else if value.Valid {
+				c.Type = collection.Type(value.String)
+			}
 		case collection.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field category_collections", value)
@@ -255,11 +263,6 @@ func (c *Collection) QueryBooks() *BookQuery {
 	return NewCollectionClient(c.config).QueryBooks(c)
 }
 
-// QueryPeople queries the "people" edge of the Collection entity.
-func (c *Collection) QueryPeople() *PersonQuery {
-	return NewCollectionClient(c.config).QueryPeople(c)
-}
-
 // QueryProtectedAreaPictures queries the "protected_area_pictures" edge of the Collection entity.
 func (c *Collection) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery {
 	return NewCollectionClient(c.config).QueryProtectedAreaPictures(c)
@@ -268,6 +271,11 @@ func (c *Collection) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery {
 // QueryCategory queries the "category" edge of the Collection entity.
 func (c *Collection) QueryCategory() *CategoryQuery {
 	return NewCollectionClient(c.config).QueryCategory(c)
+}
+
+// QueryAuthors queries the "authors" edge of the Collection entity.
+func (c *Collection) QueryAuthors() *PersonQuery {
+	return NewCollectionClient(c.config).QueryAuthors(c)
 }
 
 // Update returns a builder for updating this Collection.
@@ -325,6 +333,9 @@ func (c *Collection) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("slug=")
 	builder.WriteString(c.Slug)
+	builder.WriteString(", ")
+	builder.WriteString("type=")
+	builder.WriteString(fmt.Sprintf("%v", c.Type))
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -377,30 +388,6 @@ func (c *Collection) appendNamedBooks(name string, edges ...*Book) {
 	}
 }
 
-// NamedPeople returns the People named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (c *Collection) NamedPeople(name string) ([]*Person, error) {
-	if c.Edges.namedPeople == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := c.Edges.namedPeople[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (c *Collection) appendNamedPeople(name string, edges ...*Person) {
-	if c.Edges.namedPeople == nil {
-		c.Edges.namedPeople = make(map[string][]*Person)
-	}
-	if len(edges) == 0 {
-		c.Edges.namedPeople[name] = []*Person{}
-	} else {
-		c.Edges.namedPeople[name] = append(c.Edges.namedPeople[name], edges...)
-	}
-}
-
 // NamedProtectedAreaPictures returns the ProtectedAreaPictures named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (c *Collection) NamedProtectedAreaPictures(name string) ([]*ProtectedAreaPicture, error) {
@@ -422,6 +409,30 @@ func (c *Collection) appendNamedProtectedAreaPictures(name string, edges ...*Pro
 		c.Edges.namedProtectedAreaPictures[name] = []*ProtectedAreaPicture{}
 	} else {
 		c.Edges.namedProtectedAreaPictures[name] = append(c.Edges.namedProtectedAreaPictures[name], edges...)
+	}
+}
+
+// NamedAuthors returns the Authors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Collection) NamedAuthors(name string) ([]*Person, error) {
+	if c.Edges.namedAuthors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedAuthors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Collection) appendNamedAuthors(name string, edges ...*Person) {
+	if c.Edges.namedAuthors == nil {
+		c.Edges.namedAuthors = make(map[string][]*Person)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedAuthors[name] = []*Person{}
+	} else {
+		c.Edges.namedAuthors[name] = append(c.Edges.namedAuthors[name], edges...)
 	}
 }
 

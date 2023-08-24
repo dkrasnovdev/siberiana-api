@@ -79,6 +79,7 @@ func (Person) Fields() []ent.Field {
 // Edges of the Person.
 func (Person) Edges() []ent.Edge {
 	return []ent.Edge{
+		edge.To("collections", Collection.Type),
 		edge.To("artifacts", Artifact.Type),
 		edge.To("books", Book.Type),
 		edge.To("projects", Project.Type),
@@ -86,6 +87,5 @@ func (Person) Edges() []ent.Edge {
 		edge.To("person_roles", PersonRole.Type),
 		edge.From("holder", Holder.Type).Ref("person").Unique(),
 		edge.From("affiliation", Organization.Type).Ref("people").Unique(),
-		edge.From("collections", Collection.Type).Ref("people").Unique(),
 	}
 }

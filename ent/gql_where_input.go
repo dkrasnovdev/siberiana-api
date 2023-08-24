@@ -6008,6 +6008,12 @@ type CollectionWhereInput struct {
 	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
 	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
 
+	// "type" field predicates.
+	Type      *collection.Type  `json:"type,omitempty"`
+	TypeNEQ   *collection.Type  `json:"typeNEQ,omitempty"`
+	TypeIn    []collection.Type `json:"typeIn,omitempty"`
+	TypeNotIn []collection.Type `json:"typeNotIn,omitempty"`
+
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
@@ -6016,10 +6022,6 @@ type CollectionWhereInput struct {
 	HasBooks     *bool             `json:"hasBooks,omitempty"`
 	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
 
-	// "people" edge predicates.
-	HasPeople     *bool               `json:"hasPeople,omitempty"`
-	HasPeopleWith []*PersonWhereInput `json:"hasPeopleWith,omitempty"`
-
 	// "protected_area_pictures" edge predicates.
 	HasProtectedAreaPictures     *bool                             `json:"hasProtectedAreaPictures,omitempty"`
 	HasProtectedAreaPicturesWith []*ProtectedAreaPictureWhereInput `json:"hasProtectedAreaPicturesWith,omitempty"`
@@ -6027,6 +6029,10 @@ type CollectionWhereInput struct {
 	// "category" edge predicates.
 	HasCategory     *bool                 `json:"hasCategory,omitempty"`
 	HasCategoryWith []*CategoryWhereInput `json:"hasCategoryWith,omitempty"`
+
+	// "authors" edge predicates.
+	HasAuthors     *bool               `json:"hasAuthors,omitempty"`
+	HasAuthorsWith []*PersonWhereInput `json:"hasAuthorsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -6526,6 +6532,18 @@ func (i *CollectionWhereInput) P() (predicate.Collection, error) {
 	if i.SlugContainsFold != nil {
 		predicates = append(predicates, collection.SlugContainsFold(*i.SlugContainsFold))
 	}
+	if i.Type != nil {
+		predicates = append(predicates, collection.TypeEQ(*i.Type))
+	}
+	if i.TypeNEQ != nil {
+		predicates = append(predicates, collection.TypeNEQ(*i.TypeNEQ))
+	}
+	if len(i.TypeIn) > 0 {
+		predicates = append(predicates, collection.TypeIn(i.TypeIn...))
+	}
+	if len(i.TypeNotIn) > 0 {
+		predicates = append(predicates, collection.TypeNotIn(i.TypeNotIn...))
+	}
 
 	if i.HasArtifacts != nil {
 		p := collection.HasArtifacts()
@@ -6563,24 +6581,6 @@ func (i *CollectionWhereInput) P() (predicate.Collection, error) {
 		}
 		predicates = append(predicates, collection.HasBooksWith(with...))
 	}
-	if i.HasPeople != nil {
-		p := collection.HasPeople()
-		if !*i.HasPeople {
-			p = collection.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasPeopleWith) > 0 {
-		with := make([]predicate.Person, 0, len(i.HasPeopleWith))
-		for _, w := range i.HasPeopleWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasPeopleWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, collection.HasPeopleWith(with...))
-	}
 	if i.HasProtectedAreaPictures != nil {
 		p := collection.HasProtectedAreaPictures()
 		if !*i.HasProtectedAreaPictures {
@@ -6616,6 +6616,24 @@ func (i *CollectionWhereInput) P() (predicate.Collection, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, collection.HasCategoryWith(with...))
+	}
+	if i.HasAuthors != nil {
+		p := collection.HasAuthors()
+		if !*i.HasAuthors {
+			p = collection.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasAuthorsWith) > 0 {
+		with := make([]predicate.Person, 0, len(i.HasAuthorsWith))
+		for _, w := range i.HasAuthorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasAuthorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, collection.HasAuthorsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -15027,6 +15045,10 @@ type PersonWhereInput struct {
 	GenderIn    []person.Gender `json:"genderIn,omitempty"`
 	GenderNotIn []person.Gender `json:"genderNotIn,omitempty"`
 
+	// "collections" edge predicates.
+	HasCollections     *bool                   `json:"hasCollections,omitempty"`
+	HasCollectionsWith []*CollectionWhereInput `json:"hasCollectionsWith,omitempty"`
+
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
@@ -15054,10 +15076,6 @@ type PersonWhereInput struct {
 	// "affiliation" edge predicates.
 	HasAffiliation     *bool                     `json:"hasAffiliation,omitempty"`
 	HasAffiliationWith []*OrganizationWhereInput `json:"hasAffiliationWith,omitempty"`
-
-	// "collections" edge predicates.
-	HasCollections     *bool                   `json:"hasCollections,omitempty"`
-	HasCollectionsWith []*CollectionWhereInput `json:"hasCollectionsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -15771,6 +15789,24 @@ func (i *PersonWhereInput) P() (predicate.Person, error) {
 		predicates = append(predicates, person.GenderNotIn(i.GenderNotIn...))
 	}
 
+	if i.HasCollections != nil {
+		p := person.HasCollections()
+		if !*i.HasCollections {
+			p = person.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCollectionsWith) > 0 {
+		with := make([]predicate.Collection, 0, len(i.HasCollectionsWith))
+		for _, w := range i.HasCollectionsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCollectionsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, person.HasCollectionsWith(with...))
+	}
 	if i.HasArtifacts != nil {
 		p := person.HasArtifacts()
 		if !*i.HasArtifacts {
@@ -15896,24 +15932,6 @@ func (i *PersonWhereInput) P() (predicate.Person, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, person.HasAffiliationWith(with...))
-	}
-	if i.HasCollections != nil {
-		p := person.HasCollections()
-		if !*i.HasCollections {
-			p = person.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasCollectionsWith) > 0 {
-		with := make([]predicate.Collection, 0, len(i.HasCollectionsWith))
-		for _, w := range i.HasCollectionsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasCollectionsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, person.HasCollectionsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
