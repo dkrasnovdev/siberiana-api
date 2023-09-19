@@ -1,18 +1,36 @@
 version: "3"
 
 tasks:
+  env:
+    - cp .env.example .env
+  network:
+    - docker network inspect siberiana-network >/dev/null 2>&1 || docker network create siberiana-network
+  volume:
+    cmds:
+      - docker volume inspect siberiana_data >/dev/null 2>&1 || docker volume create siberiana_data
+      - docker volume inspect siberiana_cache >/dev/null 2>&1 || docker volume create siberiana_cache
+  init:
+    cmds:
+      - docker-compose up --build --force-recreate -d
+    deps: [network, volume]
+  up:
+    - docker-compose up -d
+  stop:
+    cmds:
+      - docker-compose kill || true
+      - docker-compose rm --force || true
+  clear:
+    - docker-compose down -v --remove-orphans || true
   dev:
-    cmds:
-      - air
+    - air
   gen:
-    cmds:
-      - go generate .
+    - go generate .
   build:
     - go build -o bin/http cmd/http/main.go
   start:
-    cmds:
-      - bin/http
+    - bin/http
   install:
-    - go install github.com/go-task/task/v3/cmd/task@latest
-    - go install entgo.io/ent/cmd/ent@latest
-    - go mod tidy
+    cmds:
+      - go install github.com/go-task/task/v3/cmd/task@latest
+      - go install entgo.io/ent/cmd/ent@latest
+      - go mod tidy
