@@ -38,6 +38,8 @@ type Book struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
+	// Type holds the value of the "type" field.
+	Type book.Type `json:"type,omitempty"`
 	// PrimaryImageURL holds the value of the "primary_image_url" field.
 	PrimaryImageURL string `json:"primary_image_url,omitempty"`
 	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
@@ -171,7 +173,7 @@ func (*Book) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case book.FieldID, book.FieldYear:
 			values[i] = new(sql.NullInt64)
-		case book.FieldCreatedBy, book.FieldUpdatedBy, book.FieldDisplayName, book.FieldAbbreviation, book.FieldDescription, book.FieldExternalLink, book.FieldPrimaryImageURL:
+		case book.FieldCreatedBy, book.FieldUpdatedBy, book.FieldDisplayName, book.FieldAbbreviation, book.FieldDescription, book.FieldExternalLink, book.FieldType, book.FieldPrimaryImageURL:
 			values[i] = new(sql.NullString)
 		case book.FieldCreatedAt, book.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -251,6 +253,12 @@ func (b *Book) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field external_link", values[i])
 			} else if value.Valid {
 				b.ExternalLink = value.String
+			}
+		case book.FieldType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field type", values[i])
+			} else if value.Valid {
+				b.Type = book.Type(value.String)
 			}
 		case book.FieldPrimaryImageURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -402,6 +410,9 @@ func (b *Book) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(b.ExternalLink)
+	builder.WriteString(", ")
+	builder.WriteString("type=")
+	builder.WriteString(fmt.Sprintf("%v", b.Type))
 	builder.WriteString(", ")
 	builder.WriteString("primary_image_url=")
 	builder.WriteString(b.PrimaryImageURL)

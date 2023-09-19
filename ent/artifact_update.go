@@ -169,6 +169,26 @@ func (au *ArtifactUpdate) ClearExternalLink() *ArtifactUpdate {
 	return au
 }
 
+// SetType sets the "type" field.
+func (au *ArtifactUpdate) SetType(a artifact.Type) *ArtifactUpdate {
+	au.mutation.SetType(a)
+	return au
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableType(a *artifact.Type) *ArtifactUpdate {
+	if a != nil {
+		au.SetType(*a)
+	}
+	return au
+}
+
+// ClearType clears the value of the "type" field.
+func (au *ArtifactUpdate) ClearType() *ArtifactUpdate {
+	au.mutation.ClearType()
+	return au
+}
+
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (au *ArtifactUpdate) SetPrimaryImageURL(s string) *ArtifactUpdate {
 	au.mutation.SetPrimaryImageURL(s)
@@ -844,6 +864,11 @@ func (au *ArtifactUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (au *ArtifactUpdate) check() error {
+	if v, ok := au.mutation.GetType(); ok {
+		if err := artifact.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Artifact.type": %w`, err)}
+		}
+	}
 	if _, ok := au.mutation.CollectionID(); au.mutation.CollectionCleared() && !ok {
 		return errors.New(`ent: clearing a required unique edge "Artifact.collection"`)
 	}
@@ -900,6 +925,12 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if au.mutation.ExternalLinkCleared() {
 		_spec.ClearField(artifact.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := au.mutation.GetType(); ok {
+		_spec.SetField(artifact.FieldType, field.TypeEnum, value)
+	}
+	if au.mutation.TypeCleared() {
+		_spec.ClearField(artifact.FieldType, field.TypeEnum)
 	}
 	if value, ok := au.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(artifact.FieldPrimaryImageURL, field.TypeString, value)
@@ -1620,6 +1651,26 @@ func (auo *ArtifactUpdateOne) ClearExternalLink() *ArtifactUpdateOne {
 	return auo
 }
 
+// SetType sets the "type" field.
+func (auo *ArtifactUpdateOne) SetType(a artifact.Type) *ArtifactUpdateOne {
+	auo.mutation.SetType(a)
+	return auo
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableType(a *artifact.Type) *ArtifactUpdateOne {
+	if a != nil {
+		auo.SetType(*a)
+	}
+	return auo
+}
+
+// ClearType clears the value of the "type" field.
+func (auo *ArtifactUpdateOne) ClearType() *ArtifactUpdateOne {
+	auo.mutation.ClearType()
+	return auo
+}
+
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (auo *ArtifactUpdateOne) SetPrimaryImageURL(s string) *ArtifactUpdateOne {
 	auo.mutation.SetPrimaryImageURL(s)
@@ -2308,6 +2359,11 @@ func (auo *ArtifactUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (auo *ArtifactUpdateOne) check() error {
+	if v, ok := auo.mutation.GetType(); ok {
+		if err := artifact.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Artifact.type": %w`, err)}
+		}
+	}
 	if _, ok := auo.mutation.CollectionID(); auo.mutation.CollectionCleared() && !ok {
 		return errors.New(`ent: clearing a required unique edge "Artifact.collection"`)
 	}
@@ -2381,6 +2437,12 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 	}
 	if auo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(artifact.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := auo.mutation.GetType(); ok {
+		_spec.SetField(artifact.FieldType, field.TypeEnum, value)
+	}
+	if auo.mutation.TypeCleared() {
+		_spec.ClearField(artifact.FieldType, field.TypeEnum)
 	}
 	if value, ok := auo.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(artifact.FieldPrimaryImageURL, field.TypeString, value)

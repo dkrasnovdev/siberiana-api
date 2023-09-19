@@ -3099,6 +3099,7 @@ type ArtifactMutation struct {
 	abbreviation                 *string
 	description                  *string
 	external_link                *string
+	_type                        *artifact.Type
 	primary_image_url            *string
 	additional_images_urls       *[]string
 	appendadditional_images_urls []string
@@ -3613,6 +3614,55 @@ func (m *ArtifactMutation) ExternalLinkCleared() bool {
 func (m *ArtifactMutation) ResetExternalLink() {
 	m.external_link = nil
 	delete(m.clearedFields, artifact.FieldExternalLink)
+}
+
+// SetType sets the "type" field.
+func (m *ArtifactMutation) SetType(a artifact.Type) {
+	m._type = &a
+}
+
+// GetType returns the value of the "type" field in the mutation.
+func (m *ArtifactMutation) GetType() (r artifact.Type, exists bool) {
+	v := m._type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldType returns the old "type" field's value of the Artifact entity.
+// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtifactMutation) OldType(ctx context.Context) (v artifact.Type, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
+	}
+	return oldValue.Type, nil
+}
+
+// ClearType clears the value of the "type" field.
+func (m *ArtifactMutation) ClearType() {
+	m._type = nil
+	m.clearedFields[artifact.FieldType] = struct{}{}
+}
+
+// TypeCleared returns if the "type" field was cleared in this mutation.
+func (m *ArtifactMutation) TypeCleared() bool {
+	_, ok := m.clearedFields[artifact.FieldType]
+	return ok
+}
+
+// ResetType resets all changes to the "type" field.
+func (m *ArtifactMutation) ResetType() {
+	m._type = nil
+	delete(m.clearedFields, artifact.FieldType)
 }
 
 // SetPrimaryImageURL sets the "primary_image_url" field.
@@ -4840,7 +4890,7 @@ func (m *ArtifactMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArtifactMutation) Fields() []string {
-	fields := make([]string, 0, 19)
+	fields := make([]string, 0, 20)
 	if m.created_at != nil {
 		fields = append(fields, artifact.FieldCreatedAt)
 	}
@@ -4864,6 +4914,9 @@ func (m *ArtifactMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, artifact.FieldExternalLink)
+	}
+	if m._type != nil {
+		fields = append(fields, artifact.FieldType)
 	}
 	if m.primary_image_url != nil {
 		fields = append(fields, artifact.FieldPrimaryImageURL)
@@ -4922,6 +4975,8 @@ func (m *ArtifactMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case artifact.FieldExternalLink:
 		return m.ExternalLink()
+	case artifact.FieldType:
+		return m.GetType()
 	case artifact.FieldPrimaryImageURL:
 		return m.PrimaryImageURL()
 	case artifact.FieldAdditionalImagesUrls:
@@ -4969,6 +5024,8 @@ func (m *ArtifactMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldDescription(ctx)
 	case artifact.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case artifact.FieldType:
+		return m.OldType(ctx)
 	case artifact.FieldPrimaryImageURL:
 		return m.OldPrimaryImageURL(ctx)
 	case artifact.FieldAdditionalImagesUrls:
@@ -5055,6 +5112,13 @@ func (m *ArtifactMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetExternalLink(v)
+		return nil
+	case artifact.FieldType:
+		v, ok := value.(artifact.Type)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetType(v)
 		return nil
 	case artifact.FieldPrimaryImageURL:
 		v, ok := value.(string)
@@ -5181,6 +5245,9 @@ func (m *ArtifactMutation) ClearedFields() []string {
 	if m.FieldCleared(artifact.FieldExternalLink) {
 		fields = append(fields, artifact.FieldExternalLink)
 	}
+	if m.FieldCleared(artifact.FieldType) {
+		fields = append(fields, artifact.FieldType)
+	}
 	if m.FieldCleared(artifact.FieldPrimaryImageURL) {
 		fields = append(fields, artifact.FieldPrimaryImageURL)
 	}
@@ -5246,6 +5313,9 @@ func (m *ArtifactMutation) ClearField(name string) error {
 	case artifact.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case artifact.FieldType:
+		m.ClearType()
+		return nil
 	case artifact.FieldPrimaryImageURL:
 		m.ClearPrimaryImageURL()
 		return nil
@@ -5310,6 +5380,9 @@ func (m *ArtifactMutation) ResetField(name string) error {
 		return nil
 	case artifact.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case artifact.FieldType:
+		m.ResetType()
 		return nil
 	case artifact.FieldPrimaryImageURL:
 		m.ResetPrimaryImageURL()
@@ -6738,6 +6811,7 @@ type BookMutation struct {
 	abbreviation                 *string
 	description                  *string
 	external_link                *string
+	_type                        *book.Type
 	primary_image_url            *string
 	additional_images_urls       *[]string
 	appendadditional_images_urls []string
@@ -7230,6 +7304,55 @@ func (m *BookMutation) ExternalLinkCleared() bool {
 func (m *BookMutation) ResetExternalLink() {
 	m.external_link = nil
 	delete(m.clearedFields, book.FieldExternalLink)
+}
+
+// SetType sets the "type" field.
+func (m *BookMutation) SetType(b book.Type) {
+	m._type = &b
+}
+
+// GetType returns the value of the "type" field in the mutation.
+func (m *BookMutation) GetType() (r book.Type, exists bool) {
+	v := m._type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldType returns the old "type" field's value of the Book entity.
+// If the Book object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BookMutation) OldType(ctx context.Context) (v book.Type, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
+	}
+	return oldValue.Type, nil
+}
+
+// ClearType clears the value of the "type" field.
+func (m *BookMutation) ClearType() {
+	m._type = nil
+	m.clearedFields[book.FieldType] = struct{}{}
+}
+
+// TypeCleared returns if the "type" field was cleared in this mutation.
+func (m *BookMutation) TypeCleared() bool {
+	_, ok := m.clearedFields[book.FieldType]
+	return ok
+}
+
+// ResetType resets all changes to the "type" field.
+func (m *BookMutation) ResetType() {
+	m._type = nil
+	delete(m.clearedFields, book.FieldType)
 }
 
 // SetPrimaryImageURL sets the "primary_image_url" field.
@@ -7833,7 +7956,7 @@ func (m *BookMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *BookMutation) Fields() []string {
-	fields := make([]string, 0, 12)
+	fields := make([]string, 0, 13)
 	if m.created_at != nil {
 		fields = append(fields, book.FieldCreatedAt)
 	}
@@ -7857,6 +7980,9 @@ func (m *BookMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, book.FieldExternalLink)
+	}
+	if m._type != nil {
+		fields = append(fields, book.FieldType)
 	}
 	if m.primary_image_url != nil {
 		fields = append(fields, book.FieldPrimaryImageURL)
@@ -7894,6 +8020,8 @@ func (m *BookMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case book.FieldExternalLink:
 		return m.ExternalLink()
+	case book.FieldType:
+		return m.GetType()
 	case book.FieldPrimaryImageURL:
 		return m.PrimaryImageURL()
 	case book.FieldAdditionalImagesUrls:
@@ -7927,6 +8055,8 @@ func (m *BookMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldDescription(ctx)
 	case book.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case book.FieldType:
+		return m.OldType(ctx)
 	case book.FieldPrimaryImageURL:
 		return m.OldPrimaryImageURL(ctx)
 	case book.FieldAdditionalImagesUrls:
@@ -7999,6 +8129,13 @@ func (m *BookMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetExternalLink(v)
+		return nil
+	case book.FieldType:
+		v, ok := value.(book.Type)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetType(v)
 		return nil
 	case book.FieldPrimaryImageURL:
 		v, ok := value.(string)
@@ -8091,6 +8228,9 @@ func (m *BookMutation) ClearedFields() []string {
 	if m.FieldCleared(book.FieldExternalLink) {
 		fields = append(fields, book.FieldExternalLink)
 	}
+	if m.FieldCleared(book.FieldType) {
+		fields = append(fields, book.FieldType)
+	}
 	if m.FieldCleared(book.FieldPrimaryImageURL) {
 		fields = append(fields, book.FieldPrimaryImageURL)
 	}
@@ -8135,6 +8275,9 @@ func (m *BookMutation) ClearField(name string) error {
 	case book.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case book.FieldType:
+		m.ClearType()
+		return nil
 	case book.FieldPrimaryImageURL:
 		m.ClearPrimaryImageURL()
 		return nil
@@ -8178,6 +8321,9 @@ func (m *BookMutation) ResetField(name string) error {
 		return nil
 	case book.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case book.FieldType:
+		m.ResetType()
 		return nil
 	case book.FieldPrimaryImageURL:
 		m.ResetPrimaryImageURL()
@@ -20310,6 +20456,7 @@ type ModelMutation struct {
 	abbreviation     *string
 	description      *string
 	external_link    *string
+	_type            *model.Type
 	clearedFields    map[string]struct{}
 	artifacts        map[int]struct{}
 	removedartifacts map[int]struct{}
@@ -20783,6 +20930,55 @@ func (m *ModelMutation) ResetExternalLink() {
 	delete(m.clearedFields, model.FieldExternalLink)
 }
 
+// SetType sets the "type" field.
+func (m *ModelMutation) SetType(value model.Type) {
+	m._type = &value
+}
+
+// GetType returns the value of the "type" field in the mutation.
+func (m *ModelMutation) GetType() (r model.Type, exists bool) {
+	v := m._type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldType returns the old "type" field's value of the Model entity.
+// If the Model object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ModelMutation) OldType(ctx context.Context) (v model.Type, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
+	}
+	return oldValue.Type, nil
+}
+
+// ClearType clears the value of the "type" field.
+func (m *ModelMutation) ClearType() {
+	m._type = nil
+	m.clearedFields[model.FieldType] = struct{}{}
+}
+
+// TypeCleared returns if the "type" field was cleared in this mutation.
+func (m *ModelMutation) TypeCleared() bool {
+	_, ok := m.clearedFields[model.FieldType]
+	return ok
+}
+
+// ResetType resets all changes to the "type" field.
+func (m *ModelMutation) ResetType() {
+	m._type = nil
+	delete(m.clearedFields, model.FieldType)
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
 func (m *ModelMutation) AddArtifactIDs(ids ...int) {
 	if m.artifacts == nil {
@@ -20871,7 +21067,7 @@ func (m *ModelMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ModelMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, model.FieldCreatedAt)
 	}
@@ -20895,6 +21091,9 @@ func (m *ModelMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, model.FieldExternalLink)
+	}
+	if m._type != nil {
+		fields = append(fields, model.FieldType)
 	}
 	return fields
 }
@@ -20920,6 +21119,8 @@ func (m *ModelMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case model.FieldExternalLink:
 		return m.ExternalLink()
+	case model.FieldType:
+		return m.GetType()
 	}
 	return nil, false
 }
@@ -20945,6 +21146,8 @@ func (m *ModelMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldDescription(ctx)
 	case model.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case model.FieldType:
+		return m.OldType(ctx)
 	}
 	return nil, fmt.Errorf("unknown Model field %s", name)
 }
@@ -21010,6 +21213,13 @@ func (m *ModelMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case model.FieldType:
+		v, ok := value.(model.Type)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetType(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Model field %s", name)
 }
@@ -21058,6 +21268,9 @@ func (m *ModelMutation) ClearedFields() []string {
 	if m.FieldCleared(model.FieldExternalLink) {
 		fields = append(fields, model.FieldExternalLink)
 	}
+	if m.FieldCleared(model.FieldType) {
+		fields = append(fields, model.FieldType)
+	}
 	return fields
 }
 
@@ -21090,6 +21303,9 @@ func (m *ModelMutation) ClearField(name string) error {
 	case model.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case model.FieldType:
+		m.ClearType()
+		return nil
 	}
 	return fmt.Errorf("unknown Model nullable field %s", name)
 }
@@ -21121,6 +21337,9 @@ func (m *ModelMutation) ResetField(name string) error {
 		return nil
 	case model.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case model.FieldType:
+		m.ResetType()
 		return nil
 	}
 	return fmt.Errorf("unknown Model field %s", name)
@@ -33078,6 +33297,7 @@ type ProtectedAreaPictureMutation struct {
 	abbreviation                 *string
 	description                  *string
 	external_link                *string
+	_type                        *protectedareapicture.Type
 	primary_image_url            *string
 	additional_images_urls       *[]string
 	appendadditional_images_urls []string
@@ -33561,6 +33781,55 @@ func (m *ProtectedAreaPictureMutation) ResetExternalLink() {
 	delete(m.clearedFields, protectedareapicture.FieldExternalLink)
 }
 
+// SetType sets the "type" field.
+func (m *ProtectedAreaPictureMutation) SetType(pr protectedareapicture.Type) {
+	m._type = &pr
+}
+
+// GetType returns the value of the "type" field in the mutation.
+func (m *ProtectedAreaPictureMutation) GetType() (r protectedareapicture.Type, exists bool) {
+	v := m._type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldType returns the old "type" field's value of the ProtectedAreaPicture entity.
+// If the ProtectedAreaPicture object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProtectedAreaPictureMutation) OldType(ctx context.Context) (v protectedareapicture.Type, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
+	}
+	return oldValue.Type, nil
+}
+
+// ClearType clears the value of the "type" field.
+func (m *ProtectedAreaPictureMutation) ClearType() {
+	m._type = nil
+	m.clearedFields[protectedareapicture.FieldType] = struct{}{}
+}
+
+// TypeCleared returns if the "type" field was cleared in this mutation.
+func (m *ProtectedAreaPictureMutation) TypeCleared() bool {
+	_, ok := m.clearedFields[protectedareapicture.FieldType]
+	return ok
+}
+
+// ResetType resets all changes to the "type" field.
+func (m *ProtectedAreaPictureMutation) ResetType() {
+	m._type = nil
+	delete(m.clearedFields, protectedareapicture.FieldType)
+}
+
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (m *ProtectedAreaPictureMutation) SetPrimaryImageURL(s string) {
 	m.primary_image_url = &s
@@ -33963,7 +34232,7 @@ func (m *ProtectedAreaPictureMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProtectedAreaPictureMutation) Fields() []string {
-	fields := make([]string, 0, 12)
+	fields := make([]string, 0, 13)
 	if m.created_at != nil {
 		fields = append(fields, protectedareapicture.FieldCreatedAt)
 	}
@@ -33987,6 +34256,9 @@ func (m *ProtectedAreaPictureMutation) Fields() []string {
 	}
 	if m.external_link != nil {
 		fields = append(fields, protectedareapicture.FieldExternalLink)
+	}
+	if m._type != nil {
+		fields = append(fields, protectedareapicture.FieldType)
 	}
 	if m.primary_image_url != nil {
 		fields = append(fields, protectedareapicture.FieldPrimaryImageURL)
@@ -34024,6 +34296,8 @@ func (m *ProtectedAreaPictureMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case protectedareapicture.FieldExternalLink:
 		return m.ExternalLink()
+	case protectedareapicture.FieldType:
+		return m.GetType()
 	case protectedareapicture.FieldPrimaryImageURL:
 		return m.PrimaryImageURL()
 	case protectedareapicture.FieldAdditionalImagesUrls:
@@ -34057,6 +34331,8 @@ func (m *ProtectedAreaPictureMutation) OldField(ctx context.Context, name string
 		return m.OldDescription(ctx)
 	case protectedareapicture.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case protectedareapicture.FieldType:
+		return m.OldType(ctx)
 	case protectedareapicture.FieldPrimaryImageURL:
 		return m.OldPrimaryImageURL(ctx)
 	case protectedareapicture.FieldAdditionalImagesUrls:
@@ -34129,6 +34405,13 @@ func (m *ProtectedAreaPictureMutation) SetField(name string, value ent.Value) er
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetExternalLink(v)
+		return nil
+	case protectedareapicture.FieldType:
+		v, ok := value.(protectedareapicture.Type)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetType(v)
 		return nil
 	case protectedareapicture.FieldPrimaryImageURL:
 		v, ok := value.(string)
@@ -34206,6 +34489,9 @@ func (m *ProtectedAreaPictureMutation) ClearedFields() []string {
 	if m.FieldCleared(protectedareapicture.FieldExternalLink) {
 		fields = append(fields, protectedareapicture.FieldExternalLink)
 	}
+	if m.FieldCleared(protectedareapicture.FieldType) {
+		fields = append(fields, protectedareapicture.FieldType)
+	}
 	if m.FieldCleared(protectedareapicture.FieldPrimaryImageURL) {
 		fields = append(fields, protectedareapicture.FieldPrimaryImageURL)
 	}
@@ -34250,6 +34536,9 @@ func (m *ProtectedAreaPictureMutation) ClearField(name string) error {
 	case protectedareapicture.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case protectedareapicture.FieldType:
+		m.ClearType()
+		return nil
 	case protectedareapicture.FieldPrimaryImageURL:
 		m.ClearPrimaryImageURL()
 		return nil
@@ -34293,6 +34582,9 @@ func (m *ProtectedAreaPictureMutation) ResetField(name string) error {
 		return nil
 	case protectedareapicture.FieldExternalLink:
 		m.ResetExternalLink()
+		return nil
+	case protectedareapicture.FieldType:
+		m.ResetType()
 		return nil
 	case protectedareapicture.FieldPrimaryImageURL:
 		m.ResetPrimaryImageURL()

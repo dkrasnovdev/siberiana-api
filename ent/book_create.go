@@ -139,6 +139,20 @@ func (bc *BookCreate) SetNillableExternalLink(s *string) *BookCreate {
 	return bc
 }
 
+// SetType sets the "type" field.
+func (bc *BookCreate) SetType(b book.Type) *BookCreate {
+	bc.mutation.SetType(b)
+	return bc
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (bc *BookCreate) SetNillableType(b *book.Type) *BookCreate {
+	if b != nil {
+		bc.SetType(*b)
+	}
+	return bc
+}
+
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (bc *BookCreate) SetPrimaryImageURL(s string) *BookCreate {
 	bc.mutation.SetPrimaryImageURL(s)
@@ -343,6 +357,10 @@ func (bc *BookCreate) defaults() error {
 		v := book.DefaultUpdatedAt()
 		bc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := bc.mutation.GetType(); !ok {
+		v := book.DefaultType
+		bc.mutation.SetType(v)
+	}
 	return nil
 }
 
@@ -353,6 +371,11 @@ func (bc *BookCreate) check() error {
 	}
 	if _, ok := bc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Book.updated_at"`)}
+	}
+	if v, ok := bc.mutation.GetType(); ok {
+		if err := book.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Book.type": %w`, err)}
+		}
 	}
 	if v, ok := bc.mutation.Year(); ok {
 		if err := book.YearValidator(v); err != nil {
@@ -419,6 +442,10 @@ func (bc *BookCreate) createSpec() (*Book, *sqlgraph.CreateSpec) {
 	if value, ok := bc.mutation.ExternalLink(); ok {
 		_spec.SetField(book.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
+	}
+	if value, ok := bc.mutation.GetType(); ok {
+		_spec.SetField(book.FieldType, field.TypeEnum, value)
+		_node.Type = value
 	}
 	if value, ok := bc.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(book.FieldPrimaryImageURL, field.TypeString, value)

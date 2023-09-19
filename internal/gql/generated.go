@@ -17,8 +17,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
 	"github.com/dkrasnovdev/siberiana-api/ent"
+	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
+	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/siberiana-api/internal/ent/types"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
@@ -156,6 +160,7 @@ type ComplexityRoot struct {
 		Publications         func(childComplexity int) int
 		Set                  func(childComplexity int) int
 		Techniques           func(childComplexity int) int
+		Type                 func(childComplexity int) int
 		Typology             func(childComplexity int) int
 		UpdatedAt            func(childComplexity int) int
 		UpdatedBy            func(childComplexity int) int
@@ -215,6 +220,7 @@ type ComplexityRoot struct {
 		Location             func(childComplexity int) int
 		PrimaryImageURL      func(childComplexity int) int
 		Publisher            func(childComplexity int) int
+		Type                 func(childComplexity int) int
 		UpdatedAt            func(childComplexity int) int
 		UpdatedBy            func(childComplexity int) int
 		Year                 func(childComplexity int) int
@@ -530,6 +536,7 @@ type ComplexityRoot struct {
 		DisplayName  func(childComplexity int) int
 		ExternalLink func(childComplexity int) int
 		ID           func(childComplexity int) int
+		Type         func(childComplexity int) int
 		UpdatedAt    func(childComplexity int) int
 		UpdatedBy    func(childComplexity int) int
 	}
@@ -915,6 +922,7 @@ type ComplexityRoot struct {
 		PrimaryImageURL      func(childComplexity int) int
 		ProtectedArea        func(childComplexity int) int
 		ShootingDate         func(childComplexity int) int
+		Type                 func(childComplexity int) int
 		UpdatedAt            func(childComplexity int) int
 		UpdatedBy            func(childComplexity int) int
 	}
@@ -1788,6 +1796,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Artifact.Techniques(childComplexity), true
 
+	case "Artifact.type":
+		if e.complexity.Artifact.Type == nil {
+			break
+		}
+
+		return e.complexity.Artifact.Type(childComplexity), true
+
 	case "Artifact.typology":
 		if e.complexity.Artifact.Typology == nil {
 			break
@@ -2074,6 +2089,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Book.Publisher(childComplexity), true
+
+	case "Book.type":
+		if e.complexity.Book.Type == nil {
+			break
+		}
+
+		return e.complexity.Book.Type(childComplexity), true
 
 	case "Book.updatedAt":
 		if e.complexity.Book.UpdatedAt == nil {
@@ -3502,6 +3524,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Model.ID(childComplexity), true
+
+	case "Model.type":
+		if e.complexity.Model.Type == nil {
+			break
+		}
+
+		return e.complexity.Model.Type(childComplexity), true
 
 	case "Model.updatedAt":
 		if e.complexity.Model.UpdatedAt == nil {
@@ -5802,6 +5831,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ProtectedAreaPicture.ShootingDate(childComplexity), true
+
+	case "ProtectedAreaPicture.type":
+		if e.complexity.ProtectedAreaPicture.Type == nil {
+			break
+		}
+
+		return e.complexity.ProtectedAreaPicture.Type(childComplexity), true
 
 	case "ProtectedAreaPicture.updatedAt":
 		if e.complexity.ProtectedAreaPicture.UpdatedAt == nil {
@@ -13649,6 +13685,47 @@ func (ec *executionContext) fieldContext_Artifact_externalLink(ctx context.Conte
 	return fc, nil
 }
 
+func (ec *executionContext) _Artifact_type(ctx context.Context, field graphql.CollectedField, obj *ent.Artifact) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Artifact_type(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Type, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(artifact.Type)
+	fc.Result = res
+	return ec.marshalOArtifactType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋartifactᚐType(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Artifact_type(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Artifact",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ArtifactType does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Artifact_primaryImageURL(ctx context.Context, field graphql.CollectedField, obj *ent.Artifact) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 	if err != nil {
@@ -14773,6 +14850,8 @@ func (ec *executionContext) fieldContext_Artifact_model(ctx context.Context, fie
 				return ec.fieldContext_Model_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Model_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Model_type(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Model_artifacts(ctx, field)
 			}
@@ -15272,6 +15351,8 @@ func (ec *executionContext) fieldContext_ArtifactEdge_node(ctx context.Context, 
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Artifact_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Artifact_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -16419,6 +16500,47 @@ func (ec *executionContext) fieldContext_Book_externalLink(ctx context.Context, 
 	return fc, nil
 }
 
+func (ec *executionContext) _Book_type(ctx context.Context, field graphql.CollectedField, obj *ent.Book) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Book_type(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Type, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(book.Type)
+	fc.Result = res
+	return ec.marshalOBookType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋbookᚐType(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Book_type(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Book",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type BookType does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Book_primaryImageURL(ctx context.Context, field graphql.CollectedField, obj *ent.Book) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Book_primaryImageURL(ctx, field)
 	if err != nil {
@@ -17300,6 +17422,8 @@ func (ec *executionContext) fieldContext_BookEdge_node(ctx context.Context, fiel
 				return ec.fieldContext_Book_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Book_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Book_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Book_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -17805,6 +17929,8 @@ func (ec *executionContext) fieldContext_BookGenre_books(ctx context.Context, fi
 				return ec.fieldContext_Book_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Book_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Book_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Book_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -19526,6 +19652,8 @@ func (ec *executionContext) fieldContext_Collection_artifacts(ctx context.Contex
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Artifact_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Artifact_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -19637,6 +19765,8 @@ func (ec *executionContext) fieldContext_Collection_books(ctx context.Context, f
 				return ec.fieldContext_Book_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Book_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Book_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Book_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -19720,6 +19850,8 @@ func (ec *executionContext) fieldContext_Collection_protectedAreaPictures(ctx co
 				return ec.fieldContext_ProtectedAreaPicture_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_ProtectedAreaPicture_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_ProtectedAreaPicture_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_ProtectedAreaPicture_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -21321,6 +21453,8 @@ func (ec *executionContext) fieldContext_Culture_artifacts(ctx context.Context, 
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Artifact_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Artifact_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -22690,6 +22824,8 @@ func (ec *executionContext) fieldContext_Holder_artifacts(ctx context.Context, f
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Artifact_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Artifact_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -22801,6 +22937,8 @@ func (ec *executionContext) fieldContext_Holder_books(ctx context.Context, field
 				return ec.fieldContext_Book_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Book_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Book_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Book_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -24504,6 +24642,8 @@ func (ec *executionContext) fieldContext_License_artifacts(ctx context.Context, 
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Artifact_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Artifact_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -24615,6 +24755,8 @@ func (ec *executionContext) fieldContext_License_books(ctx context.Context, fiel
 				return ec.fieldContext_Book_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Book_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Book_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Book_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -24698,6 +24840,8 @@ func (ec *executionContext) fieldContext_License_protectedAreaPictures(ctx conte
 				return ec.fieldContext_ProtectedAreaPicture_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_ProtectedAreaPicture_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_ProtectedAreaPicture_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_ProtectedAreaPicture_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -25450,6 +25594,8 @@ func (ec *executionContext) fieldContext_Location_artifacts(ctx context.Context,
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Artifact_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Artifact_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -25561,6 +25707,8 @@ func (ec *executionContext) fieldContext_Location_books(ctx context.Context, fie
 				return ec.fieldContext_Book_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Book_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Book_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Book_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -25644,6 +25792,8 @@ func (ec *executionContext) fieldContext_Location_protectedAreaPictures(ctx cont
 				return ec.fieldContext_ProtectedAreaPicture_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_ProtectedAreaPicture_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_ProtectedAreaPicture_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_ProtectedAreaPicture_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -26617,6 +26767,8 @@ func (ec *executionContext) fieldContext_Medium_artifacts(ctx context.Context, f
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Artifact_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Artifact_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -27304,6 +27456,47 @@ func (ec *executionContext) fieldContext_Model_externalLink(ctx context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _Model_type(ctx context.Context, field graphql.CollectedField, obj *ent.Model) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Model_type(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Type, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(model.Type)
+	fc.Result = res
+	return ec.marshalOModelType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋmodelᚐType(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Model_type(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Model",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ModelType does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Model_artifacts(ctx context.Context, field graphql.CollectedField, obj *ent.Model) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Model_artifacts(ctx, field)
 	if err != nil {
@@ -27358,6 +27551,8 @@ func (ec *executionContext) fieldContext_Model_artifacts(ctx context.Context, fi
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Artifact_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Artifact_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -27614,6 +27809,8 @@ func (ec *executionContext) fieldContext_ModelEdge_node(ctx context.Context, fie
 				return ec.fieldContext_Model_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Model_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Model_type(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Model_artifacts(ctx, field)
 			}
@@ -28099,6 +28296,8 @@ func (ec *executionContext) fieldContext_Monument_artifacts(ctx context.Context,
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Artifact_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Artifact_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -28532,6 +28731,8 @@ func (ec *executionContext) fieldContext_Mutation_createArtifact(ctx context.Con
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Artifact_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Artifact_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -28657,6 +28858,8 @@ func (ec *executionContext) fieldContext_Mutation_updateArtifact(ctx context.Con
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Artifact_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Artifact_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -29256,6 +29459,8 @@ func (ec *executionContext) fieldContext_Mutation_createBook(ctx context.Context
 				return ec.fieldContext_Book_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Book_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Book_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Book_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -29353,6 +29558,8 @@ func (ec *executionContext) fieldContext_Mutation_updateBook(ctx context.Context
 				return ec.fieldContext_Book_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Book_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Book_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Book_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -31232,6 +31439,8 @@ func (ec *executionContext) fieldContext_Mutation_createModel(ctx context.Contex
 				return ec.fieldContext_Model_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Model_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Model_type(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Model_artifacts(ctx, field)
 			}
@@ -31309,6 +31518,8 @@ func (ec *executionContext) fieldContext_Mutation_updateModel(ctx context.Contex
 				return ec.fieldContext_Model_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Model_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Model_type(ctx, field)
 			case "artifacts":
 				return ec.fieldContext_Model_artifacts(ctx, field)
 			}
@@ -33070,6 +33281,8 @@ func (ec *executionContext) fieldContext_Mutation_createProtectedAreaPicture(ctx
 				return ec.fieldContext_ProtectedAreaPicture_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_ProtectedAreaPicture_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_ProtectedAreaPicture_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_ProtectedAreaPicture_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -33161,6 +33374,8 @@ func (ec *executionContext) fieldContext_Mutation_updateProtectedAreaPicture(ctx
 				return ec.fieldContext_ProtectedAreaPicture_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_ProtectedAreaPicture_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_ProtectedAreaPicture_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_ProtectedAreaPicture_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -36649,6 +36864,8 @@ func (ec *executionContext) fieldContext_Period_artifacts(ctx context.Context, f
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Artifact_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Artifact_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -37923,6 +38140,8 @@ func (ec *executionContext) fieldContext_Person_artifacts(ctx context.Context, f
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Artifact_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Artifact_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -38034,6 +38253,8 @@ func (ec *executionContext) fieldContext_Person_books(ctx context.Context, field
 				return ec.fieldContext_Book_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Book_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Book_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Book_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -39943,6 +40164,8 @@ func (ec *executionContext) fieldContext_Project_artifacts(ctx context.Context, 
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Artifact_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Artifact_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -41637,6 +41860,8 @@ func (ec *executionContext) fieldContext_ProtectedArea_protectedAreaPictures(ctx
 				return ec.fieldContext_ProtectedAreaPicture_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_ProtectedAreaPicture_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_ProtectedAreaPicture_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_ProtectedAreaPicture_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -43058,6 +43283,47 @@ func (ec *executionContext) fieldContext_ProtectedAreaPicture_externalLink(ctx c
 	return fc, nil
 }
 
+func (ec *executionContext) _ProtectedAreaPicture_type(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaPicture) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProtectedAreaPicture_type(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Type, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(protectedareapicture.Type)
+	fc.Result = res
+	return ec.marshalOProtectedAreaPictureType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋprotectedareapictureᚐType(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProtectedAreaPicture_type(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProtectedAreaPicture",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ProtectedAreaPictureType does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ProtectedAreaPicture_primaryImageURL(ctx context.Context, field graphql.CollectedField, obj *ent.ProtectedAreaPicture) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ProtectedAreaPicture_primaryImageURL(ctx, field)
 	if err != nil {
@@ -43716,6 +43982,8 @@ func (ec *executionContext) fieldContext_ProtectedAreaPictureEdge_node(ctx conte
 				return ec.fieldContext_ProtectedAreaPicture_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_ProtectedAreaPicture_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_ProtectedAreaPicture_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_ProtectedAreaPicture_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -44215,6 +44483,8 @@ func (ec *executionContext) fieldContext_Publication_artifacts(ctx context.Conte
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Artifact_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Artifact_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -45057,6 +45327,8 @@ func (ec *executionContext) fieldContext_Publisher_books(ctx context.Context, fi
 				return ec.fieldContext_Book_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Book_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Book_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Book_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -48918,6 +49190,8 @@ func (ec *executionContext) fieldContext_Set_artifacts(ctx context.Context, fiel
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Artifact_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Artifact_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -50433,6 +50707,8 @@ func (ec *executionContext) fieldContext_Technique_artifacts(ctx context.Context
 				return ec.fieldContext_Artifact_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Artifact_externalLink(ctx, field)
+			case "type":
+				return ec.fieldContext_Artifact_type(ctx, field)
 			case "primaryImageURL":
 				return ec.fieldContext_Artifact_primaryImageURL(ctx, field)
 			case "additionalImagesUrls":
@@ -56116,7 +56392,7 @@ func (ec *executionContext) unmarshalInputArtifactWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "deletedAt", "deletedAtNEQ", "deletedAtIn", "deletedAtNotIn", "deletedAtGT", "deletedAtGTE", "deletedAtLT", "deletedAtLTE", "deletedAtIsNil", "deletedAtNotNil", "deletedBy", "deletedByNEQ", "deletedByIn", "deletedByNotIn", "deletedByGT", "deletedByGTE", "deletedByLT", "deletedByLTE", "deletedByContains", "deletedByHasPrefix", "deletedByHasSuffix", "deletedByIsNil", "deletedByNotNil", "deletedByEqualFold", "deletedByContainsFold", "dating", "datingNEQ", "datingIn", "datingNotIn", "datingGT", "datingGTE", "datingLT", "datingLTE", "datingContains", "datingHasPrefix", "datingHasSuffix", "datingIsNil", "datingNotNil", "datingEqualFold", "datingContainsFold", "dimensions", "dimensionsNEQ", "dimensionsIn", "dimensionsNotIn", "dimensionsGT", "dimensionsGTE", "dimensionsLT", "dimensionsLTE", "dimensionsContains", "dimensionsHasPrefix", "dimensionsHasSuffix", "dimensionsIsNil", "dimensionsNotNil", "dimensionsEqualFold", "dimensionsContainsFold", "chemicalComposition", "chemicalCompositionNEQ", "chemicalCompositionIn", "chemicalCompositionNotIn", "chemicalCompositionGT", "chemicalCompositionGTE", "chemicalCompositionLT", "chemicalCompositionLTE", "chemicalCompositionContains", "chemicalCompositionHasPrefix", "chemicalCompositionHasSuffix", "chemicalCompositionIsNil", "chemicalCompositionNotNil", "chemicalCompositionEqualFold", "chemicalCompositionContainsFold", "number", "numberNEQ", "numberIn", "numberNotIn", "numberGT", "numberGTE", "numberLT", "numberLTE", "numberContains", "numberHasPrefix", "numberHasSuffix", "numberIsNil", "numberNotNil", "numberEqualFold", "numberContainsFold", "typology", "typologyNEQ", "typologyIn", "typologyNotIn", "typologyGT", "typologyGTE", "typologyLT", "typologyLTE", "typologyContains", "typologyHasPrefix", "typologyHasSuffix", "typologyIsNil", "typologyNotNil", "typologyEqualFold", "typologyContainsFold", "weight", "weightNEQ", "weightIn", "weightNotIn", "weightGT", "weightGTE", "weightLT", "weightLTE", "weightContains", "weightHasPrefix", "weightHasSuffix", "weightIsNil", "weightNotNil", "weightEqualFold", "weightContainsFold", "admissionDate", "admissionDateNEQ", "admissionDateIn", "admissionDateNotIn", "admissionDateGT", "admissionDateGTE", "admissionDateLT", "admissionDateLTE", "admissionDateIsNil", "admissionDateNotNil", "hasAuthors", "hasAuthorsWith", "hasMediums", "hasMediumsWith", "hasTechniques", "hasTechniquesWith", "hasPeriod", "hasPeriodWith", "hasProjects", "hasProjectsWith", "hasPublications", "hasPublicationsWith", "hasHolders", "hasHoldersWith", "hasCulturalAffiliation", "hasCulturalAffiliationWith", "hasMonument", "hasMonumentWith", "hasModel", "hasModelWith", "hasSet", "hasSetWith", "hasLocation", "hasLocationWith", "hasCollection", "hasCollectionWith", "hasLicense", "hasLicenseWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "type", "typeNEQ", "typeIn", "typeNotIn", "typeIsNil", "typeNotNil", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "deletedAt", "deletedAtNEQ", "deletedAtIn", "deletedAtNotIn", "deletedAtGT", "deletedAtGTE", "deletedAtLT", "deletedAtLTE", "deletedAtIsNil", "deletedAtNotNil", "deletedBy", "deletedByNEQ", "deletedByIn", "deletedByNotIn", "deletedByGT", "deletedByGTE", "deletedByLT", "deletedByLTE", "deletedByContains", "deletedByHasPrefix", "deletedByHasSuffix", "deletedByIsNil", "deletedByNotNil", "deletedByEqualFold", "deletedByContainsFold", "dating", "datingNEQ", "datingIn", "datingNotIn", "datingGT", "datingGTE", "datingLT", "datingLTE", "datingContains", "datingHasPrefix", "datingHasSuffix", "datingIsNil", "datingNotNil", "datingEqualFold", "datingContainsFold", "dimensions", "dimensionsNEQ", "dimensionsIn", "dimensionsNotIn", "dimensionsGT", "dimensionsGTE", "dimensionsLT", "dimensionsLTE", "dimensionsContains", "dimensionsHasPrefix", "dimensionsHasSuffix", "dimensionsIsNil", "dimensionsNotNil", "dimensionsEqualFold", "dimensionsContainsFold", "chemicalComposition", "chemicalCompositionNEQ", "chemicalCompositionIn", "chemicalCompositionNotIn", "chemicalCompositionGT", "chemicalCompositionGTE", "chemicalCompositionLT", "chemicalCompositionLTE", "chemicalCompositionContains", "chemicalCompositionHasPrefix", "chemicalCompositionHasSuffix", "chemicalCompositionIsNil", "chemicalCompositionNotNil", "chemicalCompositionEqualFold", "chemicalCompositionContainsFold", "number", "numberNEQ", "numberIn", "numberNotIn", "numberGT", "numberGTE", "numberLT", "numberLTE", "numberContains", "numberHasPrefix", "numberHasSuffix", "numberIsNil", "numberNotNil", "numberEqualFold", "numberContainsFold", "typology", "typologyNEQ", "typologyIn", "typologyNotIn", "typologyGT", "typologyGTE", "typologyLT", "typologyLTE", "typologyContains", "typologyHasPrefix", "typologyHasSuffix", "typologyIsNil", "typologyNotNil", "typologyEqualFold", "typologyContainsFold", "weight", "weightNEQ", "weightIn", "weightNotIn", "weightGT", "weightGTE", "weightLT", "weightLTE", "weightContains", "weightHasPrefix", "weightHasSuffix", "weightIsNil", "weightNotNil", "weightEqualFold", "weightContainsFold", "admissionDate", "admissionDateNEQ", "admissionDateIn", "admissionDateNotIn", "admissionDateGT", "admissionDateGTE", "admissionDateLT", "admissionDateLTE", "admissionDateIsNil", "admissionDateNotNil", "hasAuthors", "hasAuthorsWith", "hasMediums", "hasMediumsWith", "hasTechniques", "hasTechniquesWith", "hasPeriod", "hasPeriodWith", "hasProjects", "hasProjectsWith", "hasPublications", "hasPublicationsWith", "hasHolders", "hasHoldersWith", "hasCulturalAffiliation", "hasCulturalAffiliationWith", "hasMonument", "hasMonumentWith", "hasModel", "hasModelWith", "hasSet", "hasSetWith", "hasLocation", "hasLocationWith", "hasCollection", "hasCollectionWith", "hasLicense", "hasLicenseWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -57176,6 +57452,60 @@ func (ec *executionContext) unmarshalInputArtifactWhereInput(ctx context.Context
 				return it, err
 			}
 			it.ExternalLinkContainsFold = data
+		case "type":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalOArtifactType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋartifactᚐType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		case "typeNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeNEQ"))
+			data, err := ec.unmarshalOArtifactType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋartifactᚐType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeNEQ = data
+		case "typeIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeIn"))
+			data, err := ec.unmarshalOArtifactType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋartifactᚐTypeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeIn = data
+		case "typeNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeNotIn"))
+			data, err := ec.unmarshalOArtifactType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋartifactᚐTypeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeNotIn = data
+		case "typeIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeIsNil = data
+		case "typeNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeNotNil = data
 		case "primaryImageURL":
 			var err error
 
@@ -60604,7 +60934,7 @@ func (ec *executionContext) unmarshalInputBookWhereInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "year", "yearNEQ", "yearIn", "yearNotIn", "yearGT", "yearGTE", "yearLT", "yearLTE", "yearIsNil", "yearNotNil", "hasAuthors", "hasAuthorsWith", "hasBookGenres", "hasBookGenresWith", "hasCollection", "hasCollectionWith", "hasHolders", "hasHoldersWith", "hasPublisher", "hasPublisherWith", "hasLicense", "hasLicenseWith", "hasLocation", "hasLocationWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "type", "typeNEQ", "typeIn", "typeNotIn", "typeIsNil", "typeNotNil", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "year", "yearNEQ", "yearIn", "yearNotIn", "yearGT", "yearGTE", "yearLT", "yearLTE", "yearIsNil", "yearNotNil", "hasAuthors", "hasAuthorsWith", "hasBookGenres", "hasBookGenresWith", "hasCollection", "hasCollectionWith", "hasHolders", "hasHoldersWith", "hasPublisher", "hasPublisherWith", "hasLicense", "hasLicenseWith", "hasLocation", "hasLocationWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -61664,6 +61994,60 @@ func (ec *executionContext) unmarshalInputBookWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.ExternalLinkContainsFold = data
+		case "type":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalOBookType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋbookᚐType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		case "typeNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeNEQ"))
+			data, err := ec.unmarshalOBookType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋbookᚐType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeNEQ = data
+		case "typeIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeIn"))
+			data, err := ec.unmarshalOBookType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋbookᚐTypeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeIn = data
+		case "typeNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeNotIn"))
+			data, err := ec.unmarshalOBookType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋbookᚐTypeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeNotIn = data
+		case "typeIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeIsNil = data
+		case "typeNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeNotNil = data
 		case "primaryImageURL":
 			var err error
 
@@ -66387,7 +66771,7 @@ func (ec *executionContext) unmarshalInputCreateArtifactInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "primaryImageURL", "additionalImagesUrls", "deletedAt", "deletedBy", "dating", "dimensions", "chemicalComposition", "number", "typology", "weight", "admissionDate", "authorIDs", "mediumIDs", "techniqueIDs", "periodID", "projectIDs", "publicationIDs", "holderIDs", "culturalAffiliationID", "monumentID", "modelID", "setID", "locationID", "collectionID", "licenseID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "type", "primaryImageURL", "additionalImagesUrls", "deletedAt", "deletedBy", "dating", "dimensions", "chemicalComposition", "number", "typology", "weight", "admissionDate", "authorIDs", "mediumIDs", "techniqueIDs", "periodID", "projectIDs", "publicationIDs", "holderIDs", "culturalAffiliationID", "monumentID", "modelID", "setID", "locationID", "collectionID", "licenseID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -66466,6 +66850,15 @@ func (ec *executionContext) unmarshalInputCreateArtifactInput(ctx context.Contex
 				return it, err
 			}
 			it.ExternalLink = data
+		case "type":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalOArtifactType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋartifactᚐType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
 		case "primaryImageURL":
 			var err error
 
@@ -66805,7 +67198,7 @@ func (ec *executionContext) unmarshalInputCreateBookInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "primaryImageURL", "additionalImagesUrls", "files", "year", "authorIDs", "bookGenreIDs", "collectionID", "holderIDs", "publisherID", "licenseID", "locationID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "type", "primaryImageURL", "additionalImagesUrls", "files", "year", "authorIDs", "bookGenreIDs", "collectionID", "holderIDs", "publisherID", "licenseID", "locationID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -66884,6 +67277,15 @@ func (ec *executionContext) unmarshalInputCreateBookInput(ctx context.Context, o
 				return it, err
 			}
 			it.ExternalLink = data
+		case "type":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalOBookType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋbookᚐType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
 		case "primaryImageURL":
 			var err error
 
@@ -68204,7 +68606,7 @@ func (ec *executionContext) unmarshalInputCreateModelInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "artifactIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "type", "artifactIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -68283,6 +68685,15 @@ func (ec *executionContext) unmarshalInputCreateModelInput(ctx context.Context, 
 				return it, err
 			}
 			it.ExternalLink = data
+		case "type":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalOModelType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋmodelᚐType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
 		case "artifactIDs":
 			var err error
 
@@ -69639,7 +70050,7 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaPictureInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "primaryImageURL", "additionalImagesUrls", "shootingDate", "geometry", "collectionID", "protectedAreaID", "locationID", "licenseID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "type", "primaryImageURL", "additionalImagesUrls", "shootingDate", "geometry", "collectionID", "protectedAreaID", "locationID", "licenseID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -69718,6 +70129,15 @@ func (ec *executionContext) unmarshalInputCreateProtectedAreaPictureInput(ctx co
 				return it, err
 			}
 			it.ExternalLink = data
+		case "type":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalOProtectedAreaPictureType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋprotectedareapictureᚐType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
 		case "primaryImageURL":
 			var err error
 
@@ -78447,7 +78867,7 @@ func (ec *executionContext) unmarshalInputModelWhereInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasArtifacts", "hasArtifactsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "type", "typeNEQ", "typeIn", "typeNotIn", "typeIsNil", "typeNotNil", "hasArtifacts", "hasArtifactsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -79507,6 +79927,60 @@ func (ec *executionContext) unmarshalInputModelWhereInput(ctx context.Context, o
 				return it, err
 			}
 			it.ExternalLinkContainsFold = data
+		case "type":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalOModelType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋmodelᚐType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		case "typeNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeNEQ"))
+			data, err := ec.unmarshalOModelType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋmodelᚐType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeNEQ = data
+		case "typeIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeIn"))
+			data, err := ec.unmarshalOModelType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋmodelᚐTypeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeIn = data
+		case "typeNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeNotIn"))
+			data, err := ec.unmarshalOModelType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋmodelᚐTypeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeNotIn = data
+		case "typeIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeIsNil = data
+		case "typeNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeNotNil = data
 		case "hasArtifacts":
 			var err error
 
@@ -91547,7 +92021,7 @@ func (ec *executionContext) unmarshalInputProtectedAreaPictureWhereInput(ctx con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "shootingDate", "shootingDateNEQ", "shootingDateIn", "shootingDateNotIn", "shootingDateGT", "shootingDateGTE", "shootingDateLT", "shootingDateLTE", "shootingDateIsNil", "shootingDateNotNil", "geometry", "geometryNEQ", "geometryIn", "geometryNotIn", "geometryGT", "geometryGTE", "geometryLT", "geometryLTE", "geometryIsNil", "geometryNotNil", "hasCollection", "hasCollectionWith", "hasProtectedArea", "hasProtectedAreaWith", "hasLocation", "hasLocationWith", "hasLicense", "hasLicenseWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "type", "typeNEQ", "typeIn", "typeNotIn", "typeIsNil", "typeNotNil", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "shootingDate", "shootingDateNEQ", "shootingDateIn", "shootingDateNotIn", "shootingDateGT", "shootingDateGTE", "shootingDateLT", "shootingDateLTE", "shootingDateIsNil", "shootingDateNotNil", "geometry", "geometryNEQ", "geometryIn", "geometryNotIn", "geometryGT", "geometryGTE", "geometryLT", "geometryLTE", "geometryIsNil", "geometryNotNil", "hasCollection", "hasCollectionWith", "hasProtectedArea", "hasProtectedAreaWith", "hasLocation", "hasLocationWith", "hasLicense", "hasLicenseWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -92607,6 +93081,60 @@ func (ec *executionContext) unmarshalInputProtectedAreaPictureWhereInput(ctx con
 				return it, err
 			}
 			it.ExternalLinkContainsFold = data
+		case "type":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalOProtectedAreaPictureType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋprotectedareapictureᚐType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		case "typeNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeNEQ"))
+			data, err := ec.unmarshalOProtectedAreaPictureType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋprotectedareapictureᚐType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeNEQ = data
+		case "typeIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeIn"))
+			data, err := ec.unmarshalOProtectedAreaPictureType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋprotectedareapictureᚐTypeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeIn = data
+		case "typeNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeNotIn"))
+			data, err := ec.unmarshalOProtectedAreaPictureType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋprotectedareapictureᚐTypeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeNotIn = data
+		case "typeIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeIsNil = data
+		case "typeNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeNotNil = data
 		case "primaryImageURL":
 			var err error
 
@@ -101739,7 +102267,7 @@ func (ec *executionContext) unmarshalInputUpdateArtifactInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "deletedAt", "clearDeletedAt", "deletedBy", "clearDeletedBy", "dating", "clearDating", "dimensions", "clearDimensions", "chemicalComposition", "clearChemicalComposition", "number", "clearNumber", "typology", "clearTypology", "weight", "clearWeight", "admissionDate", "clearAdmissionDate", "addAuthorIDs", "removeAuthorIDs", "clearAuthors", "addMediumIDs", "removeMediumIDs", "clearMediums", "addTechniqueIDs", "removeTechniqueIDs", "clearTechniques", "periodID", "clearPeriod", "addProjectIDs", "removeProjectIDs", "clearProjects", "addPublicationIDs", "removePublicationIDs", "clearPublications", "addHolderIDs", "removeHolderIDs", "clearHolders", "culturalAffiliationID", "clearCulturalAffiliation", "monumentID", "clearMonument", "modelID", "clearModel", "setID", "clearSet", "locationID", "clearLocation", "collectionID", "licenseID", "clearLicense"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "type", "clearType", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "deletedAt", "clearDeletedAt", "deletedBy", "clearDeletedBy", "dating", "clearDating", "dimensions", "clearDimensions", "chemicalComposition", "clearChemicalComposition", "number", "clearNumber", "typology", "clearTypology", "weight", "clearWeight", "admissionDate", "clearAdmissionDate", "addAuthorIDs", "removeAuthorIDs", "clearAuthors", "addMediumIDs", "removeMediumIDs", "clearMediums", "addTechniqueIDs", "removeTechniqueIDs", "clearTechniques", "periodID", "clearPeriod", "addProjectIDs", "removeProjectIDs", "clearProjects", "addPublicationIDs", "removePublicationIDs", "clearPublications", "addHolderIDs", "removeHolderIDs", "clearHolders", "culturalAffiliationID", "clearCulturalAffiliation", "monumentID", "clearMonument", "modelID", "clearModel", "setID", "clearSet", "locationID", "clearLocation", "collectionID", "licenseID", "clearLicense"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -101863,6 +102391,24 @@ func (ec *executionContext) unmarshalInputUpdateArtifactInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearExternalLink = data
+		case "type":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalOArtifactType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋartifactᚐType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		case "clearType":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearType"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearType = data
 		case "primaryImageURL":
 			var err error
 
@@ -102544,7 +103090,7 @@ func (ec *executionContext) unmarshalInputUpdateBookInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "files", "appendFiles", "clearFiles", "year", "clearYear", "addAuthorIDs", "removeAuthorIDs", "clearAuthors", "addBookGenreIDs", "removeBookGenreIDs", "clearBookGenres", "collectionID", "addHolderIDs", "removeHolderIDs", "clearHolders", "publisherID", "clearPublisher", "licenseID", "clearLicense", "locationID", "clearLocation"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "type", "clearType", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "files", "appendFiles", "clearFiles", "year", "clearYear", "addAuthorIDs", "removeAuthorIDs", "clearAuthors", "addBookGenreIDs", "removeBookGenreIDs", "clearBookGenres", "collectionID", "addHolderIDs", "removeHolderIDs", "clearHolders", "publisherID", "clearPublisher", "licenseID", "clearLicense", "locationID", "clearLocation"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -102668,6 +103214,24 @@ func (ec *executionContext) unmarshalInputUpdateBookInput(ctx context.Context, o
 				return it, err
 			}
 			it.ClearExternalLink = data
+		case "type":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalOBookType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋbookᚐType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		case "clearType":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearType"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearType = data
 		case "primaryImageURL":
 			var err error
 
@@ -104996,7 +105560,7 @@ func (ec *executionContext) unmarshalInputUpdateModelInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "type", "clearType", "addArtifactIDs", "removeArtifactIDs", "clearArtifacts"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -105120,6 +105684,24 @@ func (ec *executionContext) unmarshalInputUpdateModelInput(ctx context.Context, 
 				return it, err
 			}
 			it.ClearExternalLink = data
+		case "type":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalOModelType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋmodelᚐType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		case "clearType":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearType"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearType = data
 		case "addArtifactIDs":
 			var err error
 
@@ -107565,7 +108147,7 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaPictureInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "shootingDate", "clearShootingDate", "geometry", "clearGeometry", "collectionID", "protectedAreaID", "clearProtectedArea", "locationID", "clearLocation", "licenseID", "clearLicense"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "type", "clearType", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "shootingDate", "clearShootingDate", "geometry", "clearGeometry", "collectionID", "protectedAreaID", "clearProtectedArea", "locationID", "clearLocation", "licenseID", "clearLicense"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -107689,6 +108271,24 @@ func (ec *executionContext) unmarshalInputUpdateProtectedAreaPictureInput(ctx co
 				return it, err
 			}
 			it.ClearExternalLink = data
+		case "type":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalOProtectedAreaPictureType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋprotectedareapictureᚐType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		case "clearType":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearType"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearType = data
 		case "primaryImageURL":
 			var err error
 
@@ -109692,6 +110292,8 @@ func (ec *executionContext) _Artifact(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._Artifact_description(ctx, field, obj)
 		case "externalLink":
 			out.Values[i] = ec._Artifact_externalLink(ctx, field, obj)
+		case "type":
+			out.Values[i] = ec._Artifact_type(ctx, field, obj)
 		case "primaryImageURL":
 			out.Values[i] = ec._Artifact_primaryImageURL(ctx, field, obj)
 		case "additionalImagesUrls":
@@ -110474,6 +111076,8 @@ func (ec *executionContext) _Book(ctx context.Context, sel ast.SelectionSet, obj
 			out.Values[i] = ec._Book_description(ctx, field, obj)
 		case "externalLink":
 			out.Values[i] = ec._Book_externalLink(ctx, field, obj)
+		case "type":
+			out.Values[i] = ec._Book_type(ctx, field, obj)
 		case "primaryImageURL":
 			out.Values[i] = ec._Book_primaryImageURL(ctx, field, obj)
 		case "additionalImagesUrls":
@@ -113446,6 +114050,8 @@ func (ec *executionContext) _Model(ctx context.Context, sel ast.SelectionSet, ob
 			out.Values[i] = ec._Model_description(ctx, field, obj)
 		case "externalLink":
 			out.Values[i] = ec._Model_externalLink(ctx, field, obj)
+		case "type":
+			out.Values[i] = ec._Model_type(ctx, field, obj)
 		case "artifacts":
 			field := field
 
@@ -116481,6 +117087,8 @@ func (ec *executionContext) _ProtectedAreaPicture(ctx context.Context, sel ast.S
 			out.Values[i] = ec._ProtectedAreaPicture_description(ctx, field, obj)
 		case "externalLink":
 			out.Values[i] = ec._ProtectedAreaPicture_externalLink(ctx, field, obj)
+		case "type":
+			out.Values[i] = ec._ProtectedAreaPicture_type(ctx, field, obj)
 		case "primaryImageURL":
 			out.Values[i] = ec._ProtectedAreaPicture_primaryImageURL(ctx, field, obj)
 		case "additionalImagesUrls":
@@ -119284,6 +119892,16 @@ func (ec *executionContext) marshalNArtifactOrderField2ᚖgithubᚗcomᚋdkrasno
 	return v
 }
 
+func (ec *executionContext) unmarshalNArtifactType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋartifactᚐType(ctx context.Context, v interface{}) (artifact.Type, error) {
+	var res artifact.Type
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNArtifactType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋartifactᚐType(ctx context.Context, sel ast.SelectionSet, v artifact.Type) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalNArtifactWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐArtifactWhereInput(ctx context.Context, v interface{}) (*ent.ArtifactWhereInput, error) {
 	res, err := ec.unmarshalInputArtifactWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
@@ -119429,6 +120047,16 @@ func (ec *executionContext) marshalNBookOrderField2ᚖgithubᚗcomᚋdkrasnovdev
 		}
 		return graphql.Null
 	}
+	return v
+}
+
+func (ec *executionContext) unmarshalNBookType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋbookᚐType(ctx context.Context, v interface{}) (book.Type, error) {
+	var res book.Type
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNBookType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋbookᚐType(ctx context.Context, sel ast.SelectionSet, v book.Type) graphql.Marshaler {
 	return v
 }
 
@@ -120308,6 +120936,16 @@ func (ec *executionContext) marshalNModelOrderField2ᚖgithubᚗcomᚋdkrasnovde
 	return v
 }
 
+func (ec *executionContext) unmarshalNModelType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋmodelᚐType(ctx context.Context, v interface{}) (model.Type, error) {
+	var res model.Type
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNModelType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋmodelᚐType(ctx context.Context, sel ast.SelectionSet, v model.Type) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalNModelWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐModelWhereInput(ctx context.Context, v interface{}) (*ent.ModelWhereInput, error) {
 	res, err := ec.unmarshalInputModelWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
@@ -120951,6 +121589,16 @@ func (ec *executionContext) marshalNProtectedAreaPictureOrderField2ᚖgithubᚗc
 		}
 		return graphql.Null
 	}
+	return v
+}
+
+func (ec *executionContext) unmarshalNProtectedAreaPictureType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋprotectedareapictureᚐType(ctx context.Context, v interface{}) (protectedareapicture.Type, error) {
+	var res protectedareapicture.Type
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNProtectedAreaPictureType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋprotectedareapictureᚐType(ctx context.Context, sel ast.SelectionSet, v protectedareapicture.Type) graphql.Marshaler {
 	return v
 }
 
@@ -122313,6 +122961,99 @@ func (ec *executionContext) unmarshalOArtifactOrder2ᚕᚖgithubᚗcomᚋdkrasno
 	return res, nil
 }
 
+func (ec *executionContext) unmarshalOArtifactType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋartifactᚐType(ctx context.Context, v interface{}) (artifact.Type, error) {
+	var res artifact.Type
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOArtifactType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋartifactᚐType(ctx context.Context, sel ast.SelectionSet, v artifact.Type) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOArtifactType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋartifactᚐTypeᚄ(ctx context.Context, v interface{}) ([]artifact.Type, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]artifact.Type, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNArtifactType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋartifactᚐType(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOArtifactType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋartifactᚐTypeᚄ(ctx context.Context, sel ast.SelectionSet, v []artifact.Type) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNArtifactType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋartifactᚐType(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOArtifactType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋartifactᚐType(ctx context.Context, v interface{}) (*artifact.Type, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(artifact.Type)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOArtifactType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋartifactᚐType(ctx context.Context, sel ast.SelectionSet, v *artifact.Type) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
 func (ec *executionContext) unmarshalOArtifactWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐArtifactWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.ArtifactWhereInput, error) {
 	if v == nil {
 		return nil, nil
@@ -122714,6 +123455,99 @@ func (ec *executionContext) unmarshalOBookOrder2ᚕᚖgithubᚗcomᚋdkrasnovdev
 		}
 	}
 	return res, nil
+}
+
+func (ec *executionContext) unmarshalOBookType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋbookᚐType(ctx context.Context, v interface{}) (book.Type, error) {
+	var res book.Type
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOBookType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋbookᚐType(ctx context.Context, sel ast.SelectionSet, v book.Type) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOBookType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋbookᚐTypeᚄ(ctx context.Context, v interface{}) ([]book.Type, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]book.Type, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNBookType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋbookᚐType(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOBookType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋbookᚐTypeᚄ(ctx context.Context, sel ast.SelectionSet, v []book.Type) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNBookType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋbookᚐType(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOBookType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋbookᚐType(ctx context.Context, v interface{}) (*book.Type, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(book.Type)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOBookType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋbookᚐType(ctx context.Context, sel ast.SelectionSet, v *book.Type) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) unmarshalOBookWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐBookWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.BookWhereInput, error) {
@@ -124419,6 +125253,99 @@ func (ec *executionContext) unmarshalOModelOrder2ᚕᚖgithubᚗcomᚋdkrasnovde
 	return res, nil
 }
 
+func (ec *executionContext) unmarshalOModelType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋmodelᚐType(ctx context.Context, v interface{}) (model.Type, error) {
+	var res model.Type
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOModelType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋmodelᚐType(ctx context.Context, sel ast.SelectionSet, v model.Type) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOModelType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋmodelᚐTypeᚄ(ctx context.Context, v interface{}) ([]model.Type, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]model.Type, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNModelType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋmodelᚐType(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOModelType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋmodelᚐTypeᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Type) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNModelType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋmodelᚐType(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOModelType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋmodelᚐType(ctx context.Context, v interface{}) (*model.Type, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(model.Type)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOModelType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋmodelᚐType(ctx context.Context, sel ast.SelectionSet, v *model.Type) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
 func (ec *executionContext) unmarshalOModelWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐModelWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.ModelWhereInput, error) {
 	if v == nil {
 		return nil, nil
@@ -125929,6 +126856,99 @@ func (ec *executionContext) unmarshalOProtectedAreaPictureOrder2ᚕᚖgithubᚗc
 		}
 	}
 	return res, nil
+}
+
+func (ec *executionContext) unmarshalOProtectedAreaPictureType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋprotectedareapictureᚐType(ctx context.Context, v interface{}) (protectedareapicture.Type, error) {
+	var res protectedareapicture.Type
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOProtectedAreaPictureType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋprotectedareapictureᚐType(ctx context.Context, sel ast.SelectionSet, v protectedareapicture.Type) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOProtectedAreaPictureType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋprotectedareapictureᚐTypeᚄ(ctx context.Context, v interface{}) ([]protectedareapicture.Type, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]protectedareapicture.Type, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNProtectedAreaPictureType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋprotectedareapictureᚐType(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOProtectedAreaPictureType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋprotectedareapictureᚐTypeᚄ(ctx context.Context, sel ast.SelectionSet, v []protectedareapicture.Type) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNProtectedAreaPictureType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋprotectedareapictureᚐType(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOProtectedAreaPictureType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋprotectedareapictureᚐType(ctx context.Context, v interface{}) (*protectedareapicture.Type, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(protectedareapicture.Type)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOProtectedAreaPictureType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋprotectedareapictureᚐType(ctx context.Context, sel ast.SelectionSet, v *protectedareapicture.Type) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) unmarshalOProtectedAreaPictureWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐProtectedAreaPictureWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.ProtectedAreaPictureWhereInput, error) {

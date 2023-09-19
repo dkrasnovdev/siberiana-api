@@ -635,6 +635,36 @@ func ExternalLinkContainsFold(v string) predicate.Book {
 	return predicate.Book(sql.FieldContainsFold(FieldExternalLink, v))
 }
 
+// TypeEQ applies the EQ predicate on the "type" field.
+func TypeEQ(v Type) predicate.Book {
+	return predicate.Book(sql.FieldEQ(FieldType, v))
+}
+
+// TypeNEQ applies the NEQ predicate on the "type" field.
+func TypeNEQ(v Type) predicate.Book {
+	return predicate.Book(sql.FieldNEQ(FieldType, v))
+}
+
+// TypeIn applies the In predicate on the "type" field.
+func TypeIn(vs ...Type) predicate.Book {
+	return predicate.Book(sql.FieldIn(FieldType, vs...))
+}
+
+// TypeNotIn applies the NotIn predicate on the "type" field.
+func TypeNotIn(vs ...Type) predicate.Book {
+	return predicate.Book(sql.FieldNotIn(FieldType, vs...))
+}
+
+// TypeIsNil applies the IsNil predicate on the "type" field.
+func TypeIsNil() predicate.Book {
+	return predicate.Book(sql.FieldIsNull(FieldType))
+}
+
+// TypeNotNil applies the NotNil predicate on the "type" field.
+func TypeNotNil() predicate.Book {
+	return predicate.Book(sql.FieldNotNull(FieldType))
+}
+
 // PrimaryImageURLEQ applies the EQ predicate on the "primary_image_url" field.
 func PrimaryImageURLEQ(v string) predicate.Book {
 	return predicate.Book(sql.FieldEQ(FieldPrimaryImageURL, v))

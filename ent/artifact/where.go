@@ -675,6 +675,36 @@ func ExternalLinkContainsFold(v string) predicate.Artifact {
 	return predicate.Artifact(sql.FieldContainsFold(FieldExternalLink, v))
 }
 
+// TypeEQ applies the EQ predicate on the "type" field.
+func TypeEQ(v Type) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldType, v))
+}
+
+// TypeNEQ applies the NEQ predicate on the "type" field.
+func TypeNEQ(v Type) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldType, v))
+}
+
+// TypeIn applies the In predicate on the "type" field.
+func TypeIn(vs ...Type) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldType, vs...))
+}
+
+// TypeNotIn applies the NotIn predicate on the "type" field.
+func TypeNotIn(vs ...Type) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldType, vs...))
+}
+
+// TypeIsNil applies the IsNil predicate on the "type" field.
+func TypeIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldType))
+}
+
+// TypeNotNil applies the NotNil predicate on the "type" field.
+func TypeNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldType))
+}
+
 // PrimaryImageURLEQ applies the EQ predicate on the "primary_image_url" field.
 func PrimaryImageURLEQ(v string) predicate.Artifact {
 	return predicate.Artifact(sql.FieldEQ(FieldPrimaryImageURL, v))

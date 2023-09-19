@@ -155,6 +155,26 @@ func (mu *ModelUpdate) ClearExternalLink() *ModelUpdate {
 	return mu
 }
 
+// SetType sets the "type" field.
+func (mu *ModelUpdate) SetType(m model.Type) *ModelUpdate {
+	mu.mutation.SetType(m)
+	return mu
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (mu *ModelUpdate) SetNillableType(m *model.Type) *ModelUpdate {
+	if m != nil {
+		mu.SetType(*m)
+	}
+	return mu
+}
+
+// ClearType clears the value of the "type" field.
+func (mu *ModelUpdate) ClearType() *ModelUpdate {
+	mu.mutation.ClearType()
+	return mu
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (mu *ModelUpdate) AddArtifactIDs(ids ...int) *ModelUpdate {
 	mu.mutation.AddArtifactIDs(ids...)
@@ -238,7 +258,20 @@ func (mu *ModelUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (mu *ModelUpdate) check() error {
+	if v, ok := mu.mutation.GetType(); ok {
+		if err := model.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Model.type": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (mu *ModelUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := mu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(model.Table, model.Columns, sqlgraph.NewFieldSpec(model.FieldID, field.TypeInt))
 	if ps := mu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -285,6 +318,12 @@ func (mu *ModelUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if mu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(model.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := mu.mutation.GetType(); ok {
+		_spec.SetField(model.FieldType, field.TypeEnum, value)
+	}
+	if mu.mutation.TypeCleared() {
+		_spec.ClearField(model.FieldType, field.TypeEnum)
 	}
 	if mu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -477,6 +516,26 @@ func (muo *ModelUpdateOne) ClearExternalLink() *ModelUpdateOne {
 	return muo
 }
 
+// SetType sets the "type" field.
+func (muo *ModelUpdateOne) SetType(m model.Type) *ModelUpdateOne {
+	muo.mutation.SetType(m)
+	return muo
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (muo *ModelUpdateOne) SetNillableType(m *model.Type) *ModelUpdateOne {
+	if m != nil {
+		muo.SetType(*m)
+	}
+	return muo
+}
+
+// ClearType clears the value of the "type" field.
+func (muo *ModelUpdateOne) ClearType() *ModelUpdateOne {
+	muo.mutation.ClearType()
+	return muo
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (muo *ModelUpdateOne) AddArtifactIDs(ids ...int) *ModelUpdateOne {
 	muo.mutation.AddArtifactIDs(ids...)
@@ -573,7 +632,20 @@ func (muo *ModelUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (muo *ModelUpdateOne) check() error {
+	if v, ok := muo.mutation.GetType(); ok {
+		if err := model.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Model.type": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (muo *ModelUpdateOne) sqlSave(ctx context.Context) (_node *Model, err error) {
+	if err := muo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(model.Table, model.Columns, sqlgraph.NewFieldSpec(model.FieldID, field.TypeInt))
 	id, ok := muo.mutation.ID()
 	if !ok {
@@ -637,6 +709,12 @@ func (muo *ModelUpdateOne) sqlSave(ctx context.Context) (_node *Model, err error
 	}
 	if muo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(model.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := muo.mutation.GetType(); ok {
+		_spec.SetField(model.FieldType, field.TypeEnum, value)
+	}
+	if muo.mutation.TypeCleared() {
+		_spec.ClearField(model.FieldType, field.TypeEnum)
 	}
 	if muo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -3,6 +3,9 @@
 package book
 
 import (
+	"fmt"
+	"io"
+	"strconv"
 	"time"
 
 	"entgo.io/ent"
@@ -31,6 +34,8 @@ const (
 	FieldDescription = "description"
 	// FieldExternalLink holds the string denoting the external_link field in the database.
 	FieldExternalLink = "external_link"
+	// FieldType holds the string denoting the type field in the database.
+	FieldType = "type"
 	// FieldPrimaryImageURL holds the string denoting the primary_image_url field in the database.
 	FieldPrimaryImageURL = "primary_image_url"
 	// FieldAdditionalImagesUrls holds the string denoting the additional_images_urls field in the database.
@@ -111,6 +116,7 @@ var Columns = []string{
 	FieldAbbreviation,
 	FieldDescription,
 	FieldExternalLink,
+	FieldType,
 	FieldPrimaryImageURL,
 	FieldAdditionalImagesUrls,
 	FieldFiles,
@@ -171,6 +177,33 @@ var (
 	YearValidator func(int) error
 )
 
+// Type defines the type for the "type" enum field.
+type Type string
+
+// TypeDraft is the default value of the Type enum.
+const DefaultType = TypeDraft
+
+// Type values.
+const (
+	TypeListed   Type = "listed"
+	TypeUnlisted Type = "unlisted"
+	TypeDraft    Type = "draft"
+)
+
+func (_type Type) String() string {
+	return string(_type)
+}
+
+// TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
+func TypeValidator(_type Type) error {
+	switch _type {
+	case TypeListed, TypeUnlisted, TypeDraft:
+		return nil
+	default:
+		return fmt.Errorf("book: invalid enum value for type field: %q", _type)
+	}
+}
+
 // OrderOption defines the ordering options for the Book queries.
 type OrderOption func(*sql.Selector)
 
@@ -217,6 +250,11 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByExternalLink orders the results by the external_link field.
 func ByExternalLink(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalLink, opts...).ToFunc()
+}
+
+// ByType orders the results by the type field.
+func ByType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldType, opts...).ToFunc()
 }
 
 // ByPrimaryImageURL orders the results by the primary_image_url field.
@@ -346,4 +384,22 @@ func newLocationStep() *sqlgraph.Step {
 		sqlgraph.To(LocationInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, LocationTable, LocationColumn),
 	)
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (e Type) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(e.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (e *Type) UnmarshalGQL(val interface{}) error {
+	str, ok := val.(string)
+	if !ok {
+		return fmt.Errorf("enum %T must be a string", val)
+	}
+	*e = Type(str)
+	if err := TypeValidator(*e); err != nil {
+		return fmt.Errorf("%s is not a valid Type", str)
+	}
+	return nil
 }

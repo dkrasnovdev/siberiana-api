@@ -706,6 +706,11 @@ func (a *ArtifactQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				selectedFields = append(selectedFields, artifact.FieldExternalLink)
 				fieldSeen[artifact.FieldExternalLink] = struct{}{}
 			}
+		case "type":
+			if _, ok := fieldSeen[artifact.FieldType]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldType)
+				fieldSeen[artifact.FieldType] = struct{}{}
+			}
 		case "primaryImageURL":
 			if _, ok := fieldSeen[artifact.FieldPrimaryImageURL]; !ok {
 				selectedFields = append(selectedFields, artifact.FieldPrimaryImageURL)
@@ -1101,6 +1106,11 @@ func (b *BookQuery) collectField(ctx context.Context, opCtx *graphql.OperationCo
 			if _, ok := fieldSeen[book.FieldExternalLink]; !ok {
 				selectedFields = append(selectedFields, book.FieldExternalLink)
 				fieldSeen[book.FieldExternalLink] = struct{}{}
+			}
+		case "type":
+			if _, ok := fieldSeen[book.FieldType]; !ok {
+				selectedFields = append(selectedFields, book.FieldType)
+				fieldSeen[book.FieldType] = struct{}{}
 			}
 		case "primaryImageURL":
 			if _, ok := fieldSeen[book.FieldPrimaryImageURL]; !ok {
@@ -3080,6 +3090,11 @@ func (m *ModelQuery) collectField(ctx context.Context, opCtx *graphql.OperationC
 				selectedFields = append(selectedFields, model.FieldExternalLink)
 				fieldSeen[model.FieldExternalLink] = struct{}{}
 			}
+		case "type":
+			if _, ok := fieldSeen[model.FieldType]; !ok {
+				selectedFields = append(selectedFields, model.FieldType)
+				fieldSeen[model.FieldType] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -4922,6 +4937,11 @@ func (pap *ProtectedAreaPictureQuery) collectField(ctx context.Context, opCtx *g
 			if _, ok := fieldSeen[protectedareapicture.FieldExternalLink]; !ok {
 				selectedFields = append(selectedFields, protectedareapicture.FieldExternalLink)
 				fieldSeen[protectedareapicture.FieldExternalLink] = struct{}{}
+			}
+		case "type":
+			if _, ok := fieldSeen[protectedareapicture.FieldType]; !ok {
+				selectedFields = append(selectedFields, protectedareapicture.FieldType)
+				fieldSeen[protectedareapicture.FieldType] = struct{}{}
 			}
 		case "primaryImageURL":
 			if _, ok := fieldSeen[protectedareapicture.FieldPrimaryImageURL]; !ok {

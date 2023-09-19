@@ -3,6 +3,9 @@
 package model
 
 import (
+	"fmt"
+	"io"
+	"strconv"
 	"time"
 
 	"entgo.io/ent"
@@ -31,6 +34,8 @@ const (
 	FieldDescription = "description"
 	// FieldExternalLink holds the string denoting the external_link field in the database.
 	FieldExternalLink = "external_link"
+	// FieldType holds the string denoting the type field in the database.
+	FieldType = "type"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
 	// Table holds the table name of the model in the database.
@@ -55,6 +60,7 @@ var Columns = []string{
 	FieldAbbreviation,
 	FieldDescription,
 	FieldExternalLink,
+	FieldType,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -82,6 +88,33 @@ var (
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
 )
+
+// Type defines the type for the "type" enum field.
+type Type string
+
+// TypeDraft is the default value of the Type enum.
+const DefaultType = TypeDraft
+
+// Type values.
+const (
+	TypeListed   Type = "listed"
+	TypeUnlisted Type = "unlisted"
+	TypeDraft    Type = "draft"
+)
+
+func (_type Type) String() string {
+	return string(_type)
+}
+
+// TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
+func TypeValidator(_type Type) error {
+	switch _type {
+	case TypeListed, TypeUnlisted, TypeDraft:
+		return nil
+	default:
+		return fmt.Errorf("model: invalid enum value for type field: %q", _type)
+	}
+}
 
 // OrderOption defines the ordering options for the Model queries.
 type OrderOption func(*sql.Selector)
@@ -131,6 +164,11 @@ func ByExternalLink(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalLink, opts...).ToFunc()
 }
 
+// ByType orders the results by the type field.
+func ByType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldType, opts...).ToFunc()
+}
+
 // ByArtifactsCount orders the results by artifacts count.
 func ByArtifactsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -150,4 +188,22 @@ func newArtifactsStep() *sqlgraph.Step {
 		sqlgraph.To(ArtifactsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ArtifactsTable, ArtifactsColumn),
 	)
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (e Type) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(e.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (e *Type) UnmarshalGQL(val interface{}) error {
+	str, ok := val.(string)
+	if !ok {
+		return fmt.Errorf("enum %T must be a string", val)
+	}
+	*e = Type(str)
+	if err := TypeValidator(*e); err != nil {
+		return fmt.Errorf("%s is not a valid Type", str)
+	}
+	return nil
 }

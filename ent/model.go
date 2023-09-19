@@ -33,6 +33,8 @@ type Model struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
+	// Type holds the value of the "type" field.
+	Type model.Type `json:"type,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ModelQuery when eager-loading is set.
 	Edges        ModelEdges `json:"edges"`
@@ -68,7 +70,7 @@ func (*Model) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case model.FieldID:
 			values[i] = new(sql.NullInt64)
-		case model.FieldCreatedBy, model.FieldUpdatedBy, model.FieldDisplayName, model.FieldAbbreviation, model.FieldDescription, model.FieldExternalLink:
+		case model.FieldCreatedBy, model.FieldUpdatedBy, model.FieldDisplayName, model.FieldAbbreviation, model.FieldDescription, model.FieldExternalLink, model.FieldType:
 			values[i] = new(sql.NullString)
 		case model.FieldCreatedAt, model.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -141,6 +143,12 @@ func (m *Model) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				m.ExternalLink = value.String
 			}
+		case model.FieldType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field type", values[i])
+			} else if value.Valid {
+				m.Type = model.Type(value.String)
+			}
 		default:
 			m.selectValues.Set(columns[i], values[i])
 		}
@@ -205,6 +213,9 @@ func (m *Model) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_link=")
 	builder.WriteString(m.ExternalLink)
+	builder.WriteString(", ")
+	builder.WriteString("type=")
+	builder.WriteString(fmt.Sprintf("%v", m.Type))
 	builder.WriteByte(')')
 	return builder.String()
 }

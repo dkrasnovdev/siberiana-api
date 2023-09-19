@@ -143,15 +143,17 @@ func init() {
 		})
 	}
 	artifactMixinHooks0 := artifactMixin[0].Hooks()
-	artifactMixinHooks3 := artifactMixin[3].Hooks()
+	artifactMixinHooks4 := artifactMixin[4].Hooks()
 
 	artifact.Hooks[1] = artifactMixinHooks0[0]
 
-	artifact.Hooks[2] = artifactMixinHooks3[0]
-	artifactMixinInters3 := artifactMixin[3].Interceptors()
-	artifact.Interceptors[0] = artifactMixinInters3[0]
+	artifact.Hooks[2] = artifactMixinHooks4[0]
+	artifactMixinInters4 := artifactMixin[4].Interceptors()
+	artifact.Interceptors[0] = artifactMixinInters4[0]
 	artifactMixinFields0 := artifactMixin[0].Fields()
 	_ = artifactMixinFields0
+	artifactMixinFields2 := artifactMixin[2].Fields()
+	_ = artifactMixinFields2
 	artifactFields := schema.Artifact{}.Fields()
 	_ = artifactFields
 	// artifactDescCreatedAt is the schema descriptor for created_at field.
@@ -194,6 +196,8 @@ func init() {
 	book.Hooks[1] = bookMixinHooks0[0]
 	bookMixinFields0 := bookMixin[0].Fields()
 	_ = bookMixinFields0
+	bookMixinFields2 := bookMixin[2].Fields()
+	_ = bookMixinFields2
 	bookFields := schema.Book{}.Fields()
 	_ = bookFields
 	// bookDescCreatedAt is the schema descriptor for created_at field.
@@ -522,6 +526,8 @@ func init() {
 	model.Hooks[1] = modelMixinHooks0[0]
 	modelMixinFields0 := modelMixin[0].Fields()
 	_ = modelMixinFields0
+	modelMixinFields2 := modelMixin[2].Fields()
+	_ = modelMixinFields2
 	modelFields := schema.Model{}.Fields()
 	_ = modelFields
 	// modelDescCreatedAt is the schema descriptor for created_at field.
@@ -819,6 +825,8 @@ func init() {
 	protectedareapicture.Hooks[1] = protectedareapictureMixinHooks0[0]
 	protectedareapictureMixinFields0 := protectedareapictureMixin[0].Fields()
 	_ = protectedareapictureMixinFields0
+	protectedareapictureMixinFields2 := protectedareapictureMixin[2].Fields()
+	_ = protectedareapictureMixinFields2
 	protectedareapictureFields := schema.ProtectedAreaPicture{}.Fields()
 	_ = protectedareapictureFields
 	// protectedareapictureDescCreatedAt is the schema descriptor for created_at field.

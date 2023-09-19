@@ -146,6 +146,20 @@ func (ac *ArtifactCreate) SetNillableExternalLink(s *string) *ArtifactCreate {
 	return ac
 }
 
+// SetType sets the "type" field.
+func (ac *ArtifactCreate) SetType(a artifact.Type) *ArtifactCreate {
+	ac.mutation.SetType(a)
+	return ac
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableType(a *artifact.Type) *ArtifactCreate {
+	if a != nil {
+		ac.SetType(*a)
+	}
+	return ac
+}
+
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (ac *ArtifactCreate) SetPrimaryImageURL(s string) *ArtifactCreate {
 	ac.mutation.SetPrimaryImageURL(s)
@@ -577,6 +591,10 @@ func (ac *ArtifactCreate) defaults() error {
 		v := artifact.DefaultUpdatedAt()
 		ac.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := ac.mutation.GetType(); !ok {
+		v := artifact.DefaultType
+		ac.mutation.SetType(v)
+	}
 	return nil
 }
 
@@ -587,6 +605,11 @@ func (ac *ArtifactCreate) check() error {
 	}
 	if _, ok := ac.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Artifact.updated_at"`)}
+	}
+	if v, ok := ac.mutation.GetType(); ok {
+		if err := artifact.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Artifact.type": %w`, err)}
+		}
 	}
 	if _, ok := ac.mutation.CollectionID(); !ok {
 		return &ValidationError{Name: "collection", err: errors.New(`ent: missing required edge "Artifact.collection"`)}
@@ -648,6 +671,10 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.ExternalLink(); ok {
 		_spec.SetField(artifact.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
+	}
+	if value, ok := ac.mutation.GetType(); ok {
+		_spec.SetField(artifact.FieldType, field.TypeEnum, value)
+		_node.Type = value
 	}
 	if value, ok := ac.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(artifact.FieldPrimaryImageURL, field.TypeString, value)

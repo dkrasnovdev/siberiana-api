@@ -2028,6 +2028,14 @@ type ArtifactWhereInput struct {
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
+	// "type" field predicates.
+	Type       *artifact.Type  `json:"type,omitempty"`
+	TypeNEQ    *artifact.Type  `json:"typeNEQ,omitempty"`
+	TypeIn     []artifact.Type `json:"typeIn,omitempty"`
+	TypeNotIn  []artifact.Type `json:"typeNotIn,omitempty"`
+	TypeIsNil  bool            `json:"typeIsNil,omitempty"`
+	TypeNotNil bool            `json:"typeNotNil,omitempty"`
+
 	// "primary_image_url" field predicates.
 	PrimaryImageURL             *string  `json:"primaryImageURL,omitempty"`
 	PrimaryImageURLNEQ          *string  `json:"primaryImageURLNEQ,omitempty"`
@@ -2657,6 +2665,24 @@ func (i *ArtifactWhereInput) P() (predicate.Artifact, error) {
 	}
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, artifact.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
+	if i.Type != nil {
+		predicates = append(predicates, artifact.TypeEQ(*i.Type))
+	}
+	if i.TypeNEQ != nil {
+		predicates = append(predicates, artifact.TypeNEQ(*i.TypeNEQ))
+	}
+	if len(i.TypeIn) > 0 {
+		predicates = append(predicates, artifact.TypeIn(i.TypeIn...))
+	}
+	if len(i.TypeNotIn) > 0 {
+		predicates = append(predicates, artifact.TypeNotIn(i.TypeNotIn...))
+	}
+	if i.TypeIsNil {
+		predicates = append(predicates, artifact.TypeIsNil())
+	}
+	if i.TypeNotNil {
+		predicates = append(predicates, artifact.TypeNotNil())
 	}
 	if i.PrimaryImageURL != nil {
 		predicates = append(predicates, artifact.PrimaryImageURLEQ(*i.PrimaryImageURL))
@@ -3866,6 +3892,14 @@ type BookWhereInput struct {
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
+	// "type" field predicates.
+	Type       *book.Type  `json:"type,omitempty"`
+	TypeNEQ    *book.Type  `json:"typeNEQ,omitempty"`
+	TypeIn     []book.Type `json:"typeIn,omitempty"`
+	TypeNotIn  []book.Type `json:"typeNotIn,omitempty"`
+	TypeIsNil  bool        `json:"typeIsNil,omitempty"`
+	TypeNotNil bool        `json:"typeNotNil,omitempty"`
+
 	// "primary_image_url" field predicates.
 	PrimaryImageURL             *string  `json:"primaryImageURL,omitempty"`
 	PrimaryImageURLNEQ          *string  `json:"primaryImageURLNEQ,omitempty"`
@@ -4336,6 +4370,24 @@ func (i *BookWhereInput) P() (predicate.Book, error) {
 	}
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, book.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
+	if i.Type != nil {
+		predicates = append(predicates, book.TypeEQ(*i.Type))
+	}
+	if i.TypeNEQ != nil {
+		predicates = append(predicates, book.TypeNEQ(*i.TypeNEQ))
+	}
+	if len(i.TypeIn) > 0 {
+		predicates = append(predicates, book.TypeIn(i.TypeIn...))
+	}
+	if len(i.TypeNotIn) > 0 {
+		predicates = append(predicates, book.TypeNotIn(i.TypeNotIn...))
+	}
+	if i.TypeIsNil {
+		predicates = append(predicates, book.TypeIsNil())
+	}
+	if i.TypeNotNil {
+		predicates = append(predicates, book.TypeNotNil())
 	}
 	if i.PrimaryImageURL != nil {
 		predicates = append(predicates, book.PrimaryImageURLEQ(*i.PrimaryImageURL))
@@ -11738,6 +11790,14 @@ type ModelWhereInput struct {
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
+	// "type" field predicates.
+	Type       *model.Type  `json:"type,omitempty"`
+	TypeNEQ    *model.Type  `json:"typeNEQ,omitempty"`
+	TypeIn     []model.Type `json:"typeIn,omitempty"`
+	TypeNotIn  []model.Type `json:"typeNotIn,omitempty"`
+	TypeIsNil  bool         `json:"typeIsNil,omitempty"`
+	TypeNotNil bool         `json:"typeNotNil,omitempty"`
+
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
@@ -12155,6 +12215,24 @@ func (i *ModelWhereInput) P() (predicate.Model, error) {
 	}
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, model.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
+	if i.Type != nil {
+		predicates = append(predicates, model.TypeEQ(*i.Type))
+	}
+	if i.TypeNEQ != nil {
+		predicates = append(predicates, model.TypeNEQ(*i.TypeNEQ))
+	}
+	if len(i.TypeIn) > 0 {
+		predicates = append(predicates, model.TypeIn(i.TypeIn...))
+	}
+	if len(i.TypeNotIn) > 0 {
+		predicates = append(predicates, model.TypeNotIn(i.TypeNotIn...))
+	}
+	if i.TypeIsNil {
+		predicates = append(predicates, model.TypeIsNil())
+	}
+	if i.TypeNotNil {
+		predicates = append(predicates, model.TypeNotNil())
 	}
 
 	if i.HasArtifacts != nil {
@@ -19274,6 +19352,14 @@ type ProtectedAreaPictureWhereInput struct {
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
+	// "type" field predicates.
+	Type       *protectedareapicture.Type  `json:"type,omitempty"`
+	TypeNEQ    *protectedareapicture.Type  `json:"typeNEQ,omitempty"`
+	TypeIn     []protectedareapicture.Type `json:"typeIn,omitempty"`
+	TypeNotIn  []protectedareapicture.Type `json:"typeNotIn,omitempty"`
+	TypeIsNil  bool                        `json:"typeIsNil,omitempty"`
+	TypeNotNil bool                        `json:"typeNotNil,omitempty"`
+
 	// "primary_image_url" field predicates.
 	PrimaryImageURL             *string  `json:"primaryImageURL,omitempty"`
 	PrimaryImageURLNEQ          *string  `json:"primaryImageURLNEQ,omitempty"`
@@ -19744,6 +19830,24 @@ func (i *ProtectedAreaPictureWhereInput) P() (predicate.ProtectedAreaPicture, er
 	}
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, protectedareapicture.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
+	if i.Type != nil {
+		predicates = append(predicates, protectedareapicture.TypeEQ(*i.Type))
+	}
+	if i.TypeNEQ != nil {
+		predicates = append(predicates, protectedareapicture.TypeNEQ(*i.TypeNEQ))
+	}
+	if len(i.TypeIn) > 0 {
+		predicates = append(predicates, protectedareapicture.TypeIn(i.TypeIn...))
+	}
+	if len(i.TypeNotIn) > 0 {
+		predicates = append(predicates, protectedareapicture.TypeNotIn(i.TypeNotIn...))
+	}
+	if i.TypeIsNil {
+		predicates = append(predicates, protectedareapicture.TypeIsNil())
+	}
+	if i.TypeNotNil {
+		predicates = append(predicates, protectedareapicture.TypeNotNil())
 	}
 	if i.PrimaryImageURL != nil {
 		predicates = append(predicates, protectedareapicture.PrimaryImageURLEQ(*i.PrimaryImageURL))

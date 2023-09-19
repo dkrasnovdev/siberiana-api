@@ -162,6 +162,26 @@ func (bu *BookUpdate) ClearExternalLink() *BookUpdate {
 	return bu
 }
 
+// SetType sets the "type" field.
+func (bu *BookUpdate) SetType(b book.Type) *BookUpdate {
+	bu.mutation.SetType(b)
+	return bu
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (bu *BookUpdate) SetNillableType(b *book.Type) *BookUpdate {
+	if b != nil {
+		bu.SetType(*b)
+	}
+	return bu
+}
+
+// ClearType clears the value of the "type" field.
+func (bu *BookUpdate) ClearType() *BookUpdate {
+	bu.mutation.ClearType()
+	return bu
+}
+
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (bu *BookUpdate) SetPrimaryImageURL(s string) *BookUpdate {
 	bu.mutation.SetPrimaryImageURL(s)
@@ -494,6 +514,11 @@ func (bu *BookUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (bu *BookUpdate) check() error {
+	if v, ok := bu.mutation.GetType(); ok {
+		if err := book.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Book.type": %w`, err)}
+		}
+	}
 	if v, ok := bu.mutation.Year(); ok {
 		if err := book.YearValidator(v); err != nil {
 			return &ValidationError{Name: "year", err: fmt.Errorf(`ent: validator failed for field "Book.year": %w`, err)}
@@ -555,6 +580,12 @@ func (bu *BookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if bu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(book.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := bu.mutation.GetType(); ok {
+		_spec.SetField(book.FieldType, field.TypeEnum, value)
+	}
+	if bu.mutation.TypeCleared() {
+		_spec.ClearField(book.FieldType, field.TypeEnum)
 	}
 	if value, ok := bu.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(book.FieldPrimaryImageURL, field.TypeString, value)
@@ -990,6 +1021,26 @@ func (buo *BookUpdateOne) ClearExternalLink() *BookUpdateOne {
 	return buo
 }
 
+// SetType sets the "type" field.
+func (buo *BookUpdateOne) SetType(b book.Type) *BookUpdateOne {
+	buo.mutation.SetType(b)
+	return buo
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (buo *BookUpdateOne) SetNillableType(b *book.Type) *BookUpdateOne {
+	if b != nil {
+		buo.SetType(*b)
+	}
+	return buo
+}
+
+// ClearType clears the value of the "type" field.
+func (buo *BookUpdateOne) ClearType() *BookUpdateOne {
+	buo.mutation.ClearType()
+	return buo
+}
+
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (buo *BookUpdateOne) SetPrimaryImageURL(s string) *BookUpdateOne {
 	buo.mutation.SetPrimaryImageURL(s)
@@ -1335,6 +1386,11 @@ func (buo *BookUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (buo *BookUpdateOne) check() error {
+	if v, ok := buo.mutation.GetType(); ok {
+		if err := book.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Book.type": %w`, err)}
+		}
+	}
 	if v, ok := buo.mutation.Year(); ok {
 		if err := book.YearValidator(v); err != nil {
 			return &ValidationError{Name: "year", err: fmt.Errorf(`ent: validator failed for field "Book.year": %w`, err)}
@@ -1413,6 +1469,12 @@ func (buo *BookUpdateOne) sqlSave(ctx context.Context) (_node *Book, err error) 
 	}
 	if buo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(book.FieldExternalLink, field.TypeString)
+	}
+	if value, ok := buo.mutation.GetType(); ok {
+		_spec.SetField(book.FieldType, field.TypeEnum, value)
+	}
+	if buo.mutation.TypeCleared() {
+		_spec.ClearField(book.FieldType, field.TypeEnum)
 	}
 	if value, ok := buo.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(book.FieldPrimaryImageURL, field.TypeString, value)
