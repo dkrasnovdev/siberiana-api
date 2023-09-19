@@ -9,12 +9,18 @@ tasks:
     cmds:
       - docker volume inspect siberiana_data >/dev/null 2>&1 || docker volume create siberiana_data
       - docker volume inspect siberiana_cache >/dev/null 2>&1 || docker volume create siberiana_cache
-  init:
+  db:
+    cmds:
+      - docker-compose up -d siberiana_postgres siberiana_redis
+    deps: [network, volume]
+  build-image:
     cmds:
       - docker-compose up --build --force-recreate -d
-    deps: [network, volume]
+    deps: [db]
   up:
-    - docker-compose up -d
+    cmds:
+      - docker-compose up -d siberiana_graphql
+    deps: [db]
   stop:
     cmds:
       - docker-compose kill || true
@@ -25,7 +31,7 @@ tasks:
     - air
   gen:
     - go generate .
-  build:
+  build-binary:
     - go build -o bin/http cmd/http/main.go
   start:
     - bin/http

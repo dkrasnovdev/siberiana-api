@@ -83,7 +83,7 @@ task install
 3. Copy the `.env.example` file and rename it to `.env`. Fill in the required environment variables with appropriate values.
 
 ```bash
-cp .env.example .env
+task env
 # Edit .env file with your configuration
 ```
 
@@ -91,10 +91,10 @@ cp .env.example .env
 
 To work on the project locally, follow these steps:
 
-1. Start the required containers for local development:
+1. Start the required containers (Postgres, Redis) for local development:
 
 ```bash
-docker-compose up -d siberiana_postgres siberiana_redis
+task db
 ```
 
 2. Run the development task:
@@ -110,7 +110,7 @@ This will start the development server using Air, allowing automatic rebuilding 
 To build a binary of the application, use the following task:
 
 ```bash
-task build
+task build-binary
 ```
 
 After building, you can start the application using:
@@ -126,13 +126,13 @@ To run the application in a Docker container, follow these steps:
 1. Build the Docker image:
 
 ```bash
-docker-compose build siberiana_graphql
+task build-image
 ```
 
 2. Start the application in a Docker container:
 
 ```bash
-docker-compose up -d siberiana_graphql
+task up
 ```
 
 The application will be accessible at http://localhost:4000.
