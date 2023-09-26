@@ -317,11 +317,15 @@ func (mc *ModelCreate) createSpec() (*Model, *sqlgraph.CreateSpec) {
 // ModelCreateBulk is the builder for creating many Model entities in bulk.
 type ModelCreateBulk struct {
 	config
+	err      error
 	builders []*ModelCreate
 }
 
 // Save creates the Model entities in the database.
 func (mcb *ModelCreateBulk) Save(ctx context.Context) ([]*Model, error) {
+	if mcb.err != nil {
+		return nil, mcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(mcb.builders))
 	nodes := make([]*Model, len(mcb.builders))
 	mutators := make([]Mutator, len(mcb.builders))

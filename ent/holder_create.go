@@ -385,11 +385,15 @@ func (hc *HolderCreate) createSpec() (*Holder, *sqlgraph.CreateSpec) {
 // HolderCreateBulk is the builder for creating many Holder entities in bulk.
 type HolderCreateBulk struct {
 	config
+	err      error
 	builders []*HolderCreate
 }
 
 // Save creates the Holder entities in the database.
 func (hcb *HolderCreateBulk) Save(ctx context.Context) ([]*Holder, error) {
+	if hcb.err != nil {
+		return nil, hcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(hcb.builders))
 	nodes := make([]*Holder, len(hcb.builders))
 	mutators := make([]Mutator, len(hcb.builders))

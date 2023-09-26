@@ -42,6 +42,9 @@ type Culture func(*sql.Selector)
 // District is the predicate function for district builders.
 type District func(*sql.Selector)
 
+// Favourite is the predicate function for favourite builders.
+type Favourite func(*sql.Selector)
+
 // Holder is the predicate function for holder builders.
 type Holder func(*sql.Selector)
 
@@ -81,6 +84,9 @@ type Person func(*sql.Selector)
 // PersonRole is the predicate function for personrole builders.
 type PersonRole func(*sql.Selector)
 
+// Personal is the predicate function for personal builders.
+type Personal func(*sql.Selector)
+
 // Project is the predicate function for project builders.
 type Project func(*sql.Selector)
 
@@ -95,6 +101,9 @@ type ProtectedAreaCategory func(*sql.Selector)
 
 // ProtectedAreaPicture is the predicate function for protectedareapicture builders.
 type ProtectedAreaPicture func(*sql.Selector)
+
+// Proxy is the predicate function for proxy builders.
+type Proxy func(*sql.Selector)
 
 // Publication is the predicate function for publication builders.
 type Publication func(*sql.Selector)

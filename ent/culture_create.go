@@ -290,11 +290,15 @@ func (cc *CultureCreate) createSpec() (*Culture, *sqlgraph.CreateSpec) {
 // CultureCreateBulk is the builder for creating many Culture entities in bulk.
 type CultureCreateBulk struct {
 	config
+	err      error
 	builders []*CultureCreate
 }
 
 // Save creates the Culture entities in the database.
 func (ccb *CultureCreateBulk) Save(ctx context.Context) ([]*Culture, error) {
+	if ccb.err != nil {
+		return nil, ccb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(ccb.builders))
 	nodes := make([]*Culture, len(ccb.builders))
 	mutators := make([]Mutator, len(ccb.builders))

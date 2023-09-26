@@ -153,6 +153,18 @@ func (f DistrictFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.DistrictMutation", m)
 }
 
+// The FavouriteFunc type is an adapter to allow the use of ordinary
+// function as Favourite mutator.
+type FavouriteFunc func(context.Context, *ent.FavouriteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f FavouriteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.FavouriteMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FavouriteMutation", m)
+}
+
 // The HolderFunc type is an adapter to allow the use of ordinary
 // function as Holder mutator.
 type HolderFunc func(context.Context, *ent.HolderMutation) (ent.Value, error)
@@ -309,6 +321,18 @@ func (f PersonRoleFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, 
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PersonRoleMutation", m)
 }
 
+// The PersonalFunc type is an adapter to allow the use of ordinary
+// function as Personal mutator.
+type PersonalFunc func(context.Context, *ent.PersonalMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PersonalFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.PersonalMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PersonalMutation", m)
+}
+
 // The ProjectFunc type is an adapter to allow the use of ordinary
 // function as Project mutator.
 type ProjectFunc func(context.Context, *ent.ProjectMutation) (ent.Value, error)
@@ -367,6 +391,18 @@ func (f ProtectedAreaPictureFunc) Mutate(ctx context.Context, m ent.Mutation) (e
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProtectedAreaPictureMutation", m)
+}
+
+// The ProxyFunc type is an adapter to allow the use of ordinary
+// function as Proxy mutator.
+type ProxyFunc func(context.Context, *ent.ProxyMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ProxyFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ProxyMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProxyMutation", m)
 }
 
 // The PublicationFunc type is an adapter to allow the use of ordinary

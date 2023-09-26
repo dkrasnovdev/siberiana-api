@@ -363,11 +363,15 @@ func (pac *ProtectedAreaCreate) createSpec() (*ProtectedArea, *sqlgraph.CreateSp
 // ProtectedAreaCreateBulk is the builder for creating many ProtectedArea entities in bulk.
 type ProtectedAreaCreateBulk struct {
 	config
+	err      error
 	builders []*ProtectedAreaCreate
 }
 
 // Save creates the ProtectedArea entities in the database.
 func (pacb *ProtectedAreaCreateBulk) Save(ctx context.Context) ([]*ProtectedArea, error) {
+	if pacb.err != nil {
+		return nil, pacb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(pacb.builders))
 	nodes := make([]*ProtectedArea, len(pacb.builders))
 	mutators := make([]Mutator, len(pacb.builders))

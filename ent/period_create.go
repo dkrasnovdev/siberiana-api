@@ -290,11 +290,15 @@ func (pc *PeriodCreate) createSpec() (*Period, *sqlgraph.CreateSpec) {
 // PeriodCreateBulk is the builder for creating many Period entities in bulk.
 type PeriodCreateBulk struct {
 	config
+	err      error
 	builders []*PeriodCreate
 }
 
 // Save creates the Period entities in the database.
 func (pcb *PeriodCreateBulk) Save(ctx context.Context) ([]*Period, error) {
+	if pcb.err != nil {
+		return nil, pcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(pcb.builders))
 	nodes := make([]*Period, len(pcb.builders))
 	mutators := make([]Mutator, len(pcb.builders))

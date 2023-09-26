@@ -354,11 +354,15 @@ func (lc *LicenseCreate) createSpec() (*License, *sqlgraph.CreateSpec) {
 // LicenseCreateBulk is the builder for creating many License entities in bulk.
 type LicenseCreateBulk struct {
 	config
+	err      error
 	builders []*LicenseCreate
 }
 
 // Save creates the License entities in the database.
 func (lcb *LicenseCreateBulk) Save(ctx context.Context) ([]*License, error) {
+	if lcb.err != nil {
+		return nil, lcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(lcb.builders))
 	nodes := make([]*License, len(lcb.builders))
 	mutators := make([]Mutator, len(lcb.builders))

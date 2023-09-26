@@ -234,11 +234,15 @@ func (alc *AuditLogCreate) createSpec() (*AuditLog, *sqlgraph.CreateSpec) {
 // AuditLogCreateBulk is the builder for creating many AuditLog entities in bulk.
 type AuditLogCreateBulk struct {
 	config
+	err      error
 	builders []*AuditLogCreate
 }
 
 // Save creates the AuditLog entities in the database.
 func (alcb *AuditLogCreateBulk) Save(ctx context.Context) ([]*AuditLog, error) {
+	if alcb.err != nil {
+		return nil, alcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(alcb.builders))
 	nodes := make([]*AuditLog, len(alcb.builders))
 	mutators := make([]Mutator, len(alcb.builders))

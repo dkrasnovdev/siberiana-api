@@ -322,11 +322,15 @@ func (sc *SetCreate) createSpec() (*Set, *sqlgraph.CreateSpec) {
 // SetCreateBulk is the builder for creating many Set entities in bulk.
 type SetCreateBulk struct {
 	config
+	err      error
 	builders []*SetCreate
 }
 
 // Save creates the Set entities in the database.
 func (scb *SetCreateBulk) Save(ctx context.Context) ([]*Set, error) {
+	if scb.err != nil {
+		return nil, scb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(scb.builders))
 	nodes := make([]*Set, len(scb.builders))
 	mutators := make([]Mutator, len(scb.builders))

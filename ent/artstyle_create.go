@@ -290,11 +290,15 @@ func (asc *ArtStyleCreate) createSpec() (*ArtStyle, *sqlgraph.CreateSpec) {
 // ArtStyleCreateBulk is the builder for creating many ArtStyle entities in bulk.
 type ArtStyleCreateBulk struct {
 	config
+	err      error
 	builders []*ArtStyleCreate
 }
 
 // Save creates the ArtStyle entities in the database.
 func (ascb *ArtStyleCreateBulk) Save(ctx context.Context) ([]*ArtStyle, error) {
+	if ascb.err != nil {
+		return nil, ascb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(ascb.builders))
 	nodes := make([]*ArtStyle, len(ascb.builders))
 	mutators := make([]Mutator, len(ascb.builders))

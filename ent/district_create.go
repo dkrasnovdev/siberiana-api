@@ -290,11 +290,15 @@ func (dc *DistrictCreate) createSpec() (*District, *sqlgraph.CreateSpec) {
 // DistrictCreateBulk is the builder for creating many District entities in bulk.
 type DistrictCreateBulk struct {
 	config
+	err      error
 	builders []*DistrictCreate
 }
 
 // Save creates the District entities in the database.
 func (dcb *DistrictCreateBulk) Save(ctx context.Context) ([]*District, error) {
+	if dcb.err != nil {
+		return nil, dcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(dcb.builders))
 	nodes := make([]*District, len(dcb.builders))
 	mutators := make([]Mutator, len(dcb.builders))

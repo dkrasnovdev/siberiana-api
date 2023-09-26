@@ -24,6 +24,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
 	"github.com/dkrasnovdev/siberiana-api/ent/holder"
 	"github.com/dkrasnovdev/siberiana-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/siberiana-api/ent/keyword"
@@ -36,12 +37,14 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/organizationtype"
 	"github.com/dkrasnovdev/siberiana-api/ent/period"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/personal"
 	"github.com/dkrasnovdev/siberiana-api/ent/personrole"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/projecttype"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/siberiana-api/ent/proxy"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
 	"github.com/dkrasnovdev/siberiana-api/ent/publisher"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -120,6 +123,7 @@ func checkColumn(table, column string) error {
 			country.Table:               country.ValidColumn,
 			culture.Table:               culture.ValidColumn,
 			district.Table:              district.ValidColumn,
+			favourite.Table:             favourite.ValidColumn,
 			holder.Table:                holder.ValidColumn,
 			holderresponsibility.Table:  holderresponsibility.ValidColumn,
 			keyword.Table:               keyword.ValidColumn,
@@ -133,11 +137,13 @@ func checkColumn(table, column string) error {
 			period.Table:                period.ValidColumn,
 			person.Table:                person.ValidColumn,
 			personrole.Table:            personrole.ValidColumn,
+			personal.Table:              personal.ValidColumn,
 			project.Table:               project.ValidColumn,
 			projecttype.Table:           projecttype.ValidColumn,
 			protectedarea.Table:         protectedarea.ValidColumn,
 			protectedareacategory.Table: protectedareacategory.ValidColumn,
 			protectedareapicture.Table:  protectedareapicture.ValidColumn,
+			proxy.Table:                 proxy.ValidColumn,
 			publication.Table:           publication.ValidColumn,
 			publisher.Table:             publisher.ValidColumn,
 			region.Table:                region.ValidColumn,

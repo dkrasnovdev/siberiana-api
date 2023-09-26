@@ -25,6 +25,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
 	"github.com/dkrasnovdev/siberiana-api/ent/holder"
 	"github.com/dkrasnovdev/siberiana-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/siberiana-api/ent/keyword"
@@ -37,12 +38,14 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/organizationtype"
 	"github.com/dkrasnovdev/siberiana-api/ent/period"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/personal"
 	"github.com/dkrasnovdev/siberiana-api/ent/personrole"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/projecttype"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/siberiana-api/ent/proxy"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
 	"github.com/dkrasnovdev/siberiana-api/ent/publisher"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -118,6 +121,11 @@ var districtImplementors = []string{"District", "Node"}
 // IsNode implements the Node interface check for GQLGen.
 func (*District) IsNode() {}
 
+var favouriteImplementors = []string{"Favourite", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Favourite) IsNode() {}
+
 var holderImplementors = []string{"Holder", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
@@ -183,6 +191,11 @@ var personroleImplementors = []string{"PersonRole", "Node"}
 // IsNode implements the Node interface check for GQLGen.
 func (*PersonRole) IsNode() {}
 
+var personalImplementors = []string{"Personal", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Personal) IsNode() {}
+
 var projectImplementors = []string{"Project", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
@@ -207,6 +220,11 @@ var protectedareapictureImplementors = []string{"ProtectedAreaPicture", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*ProtectedAreaPicture) IsNode() {}
+
+var proxyImplementors = []string{"Proxy", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Proxy) IsNode() {}
 
 var publicationImplementors = []string{"Publication", "Node"}
 
@@ -440,6 +458,18 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 			return nil, err
 		}
 		return n, nil
+	case favourite.Table:
+		query := c.Favourite.Query().
+			Where(favourite.ID(id))
+		query, err := query.CollectFields(ctx, favouriteImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
 	case holder.Table:
 		query := c.Holder.Query().
 			Where(holder.ID(id))
@@ -596,6 +626,18 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 			return nil, err
 		}
 		return n, nil
+	case personal.Table:
+		query := c.Personal.Query().
+			Where(personal.ID(id))
+		query, err := query.CollectFields(ctx, personalImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
 	case project.Table:
 		query := c.Project.Query().
 			Where(project.ID(id))
@@ -648,6 +690,18 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 		query := c.ProtectedAreaPicture.Query().
 			Where(protectedareapicture.ID(id))
 		query, err := query.CollectFields(ctx, protectedareapictureImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case proxy.Table:
+		query := c.Proxy.Query().
+			Where(proxy.ID(id))
+		query, err := query.CollectFields(ctx, proxyImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -993,6 +1047,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 				*noder = node
 			}
 		}
+	case favourite.Table:
+		query := c.Favourite.Query().
+			Where(favourite.IDIn(ids...))
+		query, err := query.CollectFields(ctx, favouriteImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
 	case holder.Table:
 		query := c.Holder.Query().
 			Where(holder.IDIn(ids...))
@@ -1201,6 +1271,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 				*noder = node
 			}
 		}
+	case personal.Table:
+		query := c.Personal.Query().
+			Where(personal.IDIn(ids...))
+		query, err := query.CollectFields(ctx, personalImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
 	case project.Table:
 		query := c.Project.Query().
 			Where(project.IDIn(ids...))
@@ -1269,6 +1355,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 		query := c.ProtectedAreaPicture.Query().
 			Where(protectedareapicture.IDIn(ids...))
 		query, err := query.CollectFields(ctx, protectedareapictureImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case proxy.Table:
+		query := c.Proxy.Query().
+			Where(proxy.IDIn(ids...))
+		query, err := query.CollectFields(ctx, proxyImplementors...)
 		if err != nil {
 			return nil, err
 		}

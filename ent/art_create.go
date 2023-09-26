@@ -350,11 +350,15 @@ func (ac *ArtCreate) createSpec() (*Art, *sqlgraph.CreateSpec) {
 // ArtCreateBulk is the builder for creating many Art entities in bulk.
 type ArtCreateBulk struct {
 	config
+	err      error
 	builders []*ArtCreate
 }
 
 // Save creates the Art entities in the database.
 func (acb *ArtCreateBulk) Save(ctx context.Context) ([]*Art, error) {
+	if acb.err != nil {
+		return nil, acb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(acb.builders))
 	nodes := make([]*Art, len(acb.builders))
 	mutators := make([]Mutator, len(acb.builders))

@@ -322,11 +322,15 @@ func (mc *MonumentCreate) createSpec() (*Monument, *sqlgraph.CreateSpec) {
 // MonumentCreateBulk is the builder for creating many Monument entities in bulk.
 type MonumentCreateBulk struct {
 	config
+	err      error
 	builders []*MonumentCreate
 }
 
 // Save creates the Monument entities in the database.
 func (mcb *MonumentCreateBulk) Save(ctx context.Context) ([]*Monument, error) {
+	if mcb.err != nil {
+		return nil, mcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(mcb.builders))
 	nodes := make([]*Monument, len(mcb.builders))
 	mutators := make([]Mutator, len(mcb.builders))

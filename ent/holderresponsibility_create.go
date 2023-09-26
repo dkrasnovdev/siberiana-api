@@ -290,11 +290,15 @@ func (hrc *HolderResponsibilityCreate) createSpec() (*HolderResponsibility, *sql
 // HolderResponsibilityCreateBulk is the builder for creating many HolderResponsibility entities in bulk.
 type HolderResponsibilityCreateBulk struct {
 	config
+	err      error
 	builders []*HolderResponsibilityCreate
 }
 
 // Save creates the HolderResponsibility entities in the database.
 func (hrcb *HolderResponsibilityCreateBulk) Save(ctx context.Context) ([]*HolderResponsibility, error) {
+	if hrcb.err != nil {
+		return nil, hrcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(hrcb.builders))
 	nodes := make([]*HolderResponsibility, len(hrcb.builders))
 	mutators := make([]Mutator, len(hrcb.builders))

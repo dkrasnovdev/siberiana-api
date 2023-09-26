@@ -290,11 +290,15 @@ func (tc *TechniqueCreate) createSpec() (*Technique, *sqlgraph.CreateSpec) {
 // TechniqueCreateBulk is the builder for creating many Technique entities in bulk.
 type TechniqueCreateBulk struct {
 	config
+	err      error
 	builders []*TechniqueCreate
 }
 
 // Save creates the Technique entities in the database.
 func (tcb *TechniqueCreateBulk) Save(ctx context.Context) ([]*Technique, error) {
+	if tcb.err != nil {
+		return nil, tcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(tcb.builders))
 	nodes := make([]*Technique, len(tcb.builders))
 	mutators := make([]Mutator, len(tcb.builders))

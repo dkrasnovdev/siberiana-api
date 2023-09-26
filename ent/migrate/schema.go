@@ -348,6 +348,17 @@ var (
 		Columns:    DistrictsColumns,
 		PrimaryKey: []*schema.Column{DistrictsColumns[0]},
 	}
+	// FavouritesColumns holds the columns for the "favourites" table.
+	FavouritesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "owner_id", Type: field.TypeString, Unique: true},
+	}
+	// FavouritesTable holds the schema information for the "favourites" table.
+	FavouritesTable = &schema.Table{
+		Name:       "favourites",
+		Columns:    FavouritesColumns,
+		PrimaryKey: []*schema.Column{FavouritesColumns[0]},
+	}
 	// HoldersColumns holds the columns for the "holders" table.
 	HoldersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -655,6 +666,18 @@ var (
 		Columns:    PersonRolesColumns,
 		PrimaryKey: []*schema.Column{PersonRolesColumns[0]},
 	}
+	// PersonalsColumns holds the columns for the "personals" table.
+	PersonalsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "owner_id", Type: field.TypeString, Unique: true},
+		{Name: "display_name", Type: field.TypeString},
+	}
+	// PersonalsTable holds the schema information for the "personals" table.
+	PersonalsTable = &schema.Table{
+		Name:       "personals",
+		Columns:    PersonalsColumns,
+		PrimaryKey: []*schema.Column{PersonalsColumns[0]},
+	}
 	// ProjectsColumns holds the columns for the "projects" table.
 	ProjectsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -798,6 +821,35 @@ var (
 				Symbol:     "protected_area_pictures_protected_areas_protected_area_pictures",
 				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[17]},
 				RefColumns: []*schema.Column{ProtectedAreasColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// ProxiesColumns holds the columns for the "proxies" table.
+	ProxiesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "type", Type: field.TypeEnum, Enums: []string{"artifacts", "books", "protected_area_pictures"}},
+		{Name: "ref_id", Type: field.TypeString},
+		{Name: "url", Type: field.TypeString},
+		{Name: "favourite_proxies", Type: field.TypeInt, Nullable: true},
+		{Name: "personal_proxies", Type: field.TypeInt, Nullable: true},
+	}
+	// ProxiesTable holds the schema information for the "proxies" table.
+	ProxiesTable = &schema.Table{
+		Name:       "proxies",
+		Columns:    ProxiesColumns,
+		PrimaryKey: []*schema.Column{ProxiesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "proxies_favourites_proxies",
+				Columns:    []*schema.Column{ProxiesColumns[4]},
+				RefColumns: []*schema.Column{FavouritesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "proxies_personals_proxies",
+				Columns:    []*schema.Column{ProxiesColumns[5]},
+				RefColumns: []*schema.Column{PersonalsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -1349,6 +1401,7 @@ var (
 		CountriesTable,
 		CulturesTable,
 		DistrictsTable,
+		FavouritesTable,
 		HoldersTable,
 		HolderResponsibilitiesTable,
 		KeywordsTable,
@@ -1362,11 +1415,13 @@ var (
 		PeriodsTable,
 		PersonsTable,
 		PersonRolesTable,
+		PersonalsTable,
 		ProjectsTable,
 		ProjectTypesTable,
 		ProtectedAreasTable,
 		ProtectedAreaCategoriesTable,
 		ProtectedAreaPicturesTable,
+		ProxiesTable,
 		PublicationsTable,
 		PublishersTable,
 		RegionsTable,
@@ -1421,6 +1476,8 @@ func init() {
 	ProtectedAreaPicturesTable.ForeignKeys[1].RefTable = LicensesTable
 	ProtectedAreaPicturesTable.ForeignKeys[2].RefTable = LocationsTable
 	ProtectedAreaPicturesTable.ForeignKeys[3].RefTable = ProtectedAreasTable
+	ProxiesTable.ForeignKeys[0].RefTable = FavouritesTable
+	ProxiesTable.ForeignKeys[1].RefTable = PersonalsTable
 	ArtGenreArtTable.ForeignKeys[0].RefTable = ArtGenresTable
 	ArtGenreArtTable.ForeignKeys[1].RefTable = ArtsTable
 	ArtStyleArtTable.ForeignKeys[0].RefTable = ArtStylesTable

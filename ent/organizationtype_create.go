@@ -290,11 +290,15 @@ func (otc *OrganizationTypeCreate) createSpec() (*OrganizationType, *sqlgraph.Cr
 // OrganizationTypeCreateBulk is the builder for creating many OrganizationType entities in bulk.
 type OrganizationTypeCreateBulk struct {
 	config
+	err      error
 	builders []*OrganizationTypeCreate
 }
 
 // Save creates the OrganizationType entities in the database.
 func (otcb *OrganizationTypeCreateBulk) Save(ctx context.Context) ([]*OrganizationType, error) {
+	if otcb.err != nil {
+		return nil, otcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(otcb.builders))
 	nodes := make([]*OrganizationType, len(otcb.builders))
 	mutators := make([]Mutator, len(otcb.builders))

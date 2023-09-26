@@ -18,6 +18,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
 	"github.com/dkrasnovdev/siberiana-api/ent/holder"
 	"github.com/dkrasnovdev/siberiana-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
@@ -29,6 +30,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/organizationtype"
 	"github.com/dkrasnovdev/siberiana-api/ent/period"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/personal"
 	"github.com/dkrasnovdev/siberiana-api/ent/personrole"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/projecttype"
@@ -376,6 +378,17 @@ func init() {
 	district.DefaultUpdatedAt = districtDescUpdatedAt.Default.(func() time.Time)
 	// district.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	district.UpdateDefaultUpdatedAt = districtDescUpdatedAt.UpdateDefault.(func() time.Time)
+	favouriteMixin := schema.Favourite{}.Mixin()
+	favouriteMixinHooks0 := favouriteMixin[0].Hooks()
+	favourite.Hooks[0] = favouriteMixinHooks0[0]
+	favouriteMixinFields0 := favouriteMixin[0].Fields()
+	_ = favouriteMixinFields0
+	favouriteFields := schema.Favourite{}.Fields()
+	_ = favouriteFields
+	// favouriteDescOwnerID is the schema descriptor for owner_id field.
+	favouriteDescOwnerID := favouriteMixinFields0[0].Descriptor()
+	// favourite.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	favourite.OwnerIDValidator = favouriteDescOwnerID.Validators[0].(func(string) error)
 	holderMixin := schema.Holder{}.Mixin()
 	holder.Policy = privacy.NewPolicies(schema.Holder{})
 	holder.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -702,6 +715,21 @@ func init() {
 	personrole.DefaultUpdatedAt = personroleDescUpdatedAt.Default.(func() time.Time)
 	// personrole.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	personrole.UpdateDefaultUpdatedAt = personroleDescUpdatedAt.UpdateDefault.(func() time.Time)
+	personalMixin := schema.Personal{}.Mixin()
+	personalMixinHooks0 := personalMixin[0].Hooks()
+	personal.Hooks[0] = personalMixinHooks0[0]
+	personalMixinFields0 := personalMixin[0].Fields()
+	_ = personalMixinFields0
+	personalFields := schema.Personal{}.Fields()
+	_ = personalFields
+	// personalDescOwnerID is the schema descriptor for owner_id field.
+	personalDescOwnerID := personalMixinFields0[0].Descriptor()
+	// personal.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	personal.OwnerIDValidator = personalDescOwnerID.Validators[0].(func(string) error)
+	// personalDescDisplayName is the schema descriptor for display_name field.
+	personalDescDisplayName := personalFields[0].Descriptor()
+	// personal.DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.
+	personal.DisplayNameValidator = personalDescDisplayName.Validators[0].(func(string) error)
 	projectMixin := schema.Project{}.Mixin()
 	project.Policy = privacy.NewPolicies(schema.Project{})
 	project.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -1004,6 +1032,6 @@ func init() {
 }
 
 const (
-	Version = "v0.12.3"                                         // Version of ent codegen.
-	Sum     = "h1:N5lO2EOrHpCH5HYfiMOCHYbo+oh5M8GjT0/cx5x6xkk=" // Sum of ent codegen.
+	Version = "v0.12.4"                                         // Version of ent codegen.
+	Sum     = "h1:LddPnAyxls/O7DTXZvUGDj0NZIdGSu317+aoNLJWbD8=" // Sum of ent codegen.
 )

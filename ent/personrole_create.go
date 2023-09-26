@@ -290,11 +290,15 @@ func (prc *PersonRoleCreate) createSpec() (*PersonRole, *sqlgraph.CreateSpec) {
 // PersonRoleCreateBulk is the builder for creating many PersonRole entities in bulk.
 type PersonRoleCreateBulk struct {
 	config
+	err      error
 	builders []*PersonRoleCreate
 }
 
 // Save creates the PersonRole entities in the database.
 func (prcb *PersonRoleCreateBulk) Save(ctx context.Context) ([]*PersonRole, error) {
+	if prcb.err != nil {
+		return nil, prcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(prcb.builders))
 	nodes := make([]*PersonRole, len(prcb.builders))
 	mutators := make([]Mutator, len(prcb.builders))

@@ -290,11 +290,15 @@ func (agc *ArtGenreCreate) createSpec() (*ArtGenre, *sqlgraph.CreateSpec) {
 // ArtGenreCreateBulk is the builder for creating many ArtGenre entities in bulk.
 type ArtGenreCreateBulk struct {
 	config
+	err      error
 	builders []*ArtGenreCreate
 }
 
 // Save creates the ArtGenre entities in the database.
 func (agcb *ArtGenreCreateBulk) Save(ctx context.Context) ([]*ArtGenre, error) {
+	if agcb.err != nil {
+		return nil, agcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(agcb.builders))
 	nodes := make([]*ArtGenre, len(agcb.builders))
 	mutators := make([]Mutator, len(agcb.builders))

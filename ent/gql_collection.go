@@ -20,6 +20,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
 	"github.com/dkrasnovdev/siberiana-api/ent/holder"
 	"github.com/dkrasnovdev/siberiana-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
@@ -31,12 +32,14 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/organizationtype"
 	"github.com/dkrasnovdev/siberiana-api/ent/period"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/personal"
 	"github.com/dkrasnovdev/siberiana-api/ent/personrole"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/projecttype"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/siberiana-api/ent/proxy"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
 	"github.com/dkrasnovdev/siberiana-api/ent/publisher"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -2135,6 +2138,85 @@ func newDistrictPaginateArgs(rv map[string]any) *districtPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (f *FavouriteQuery) CollectFields(ctx context.Context, satisfies ...string) (*FavouriteQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return f, nil
+	}
+	if err := f.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return f, nil
+}
+
+func (f *FavouriteQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(favourite.Columns))
+		selectedFields = []string{favourite.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "proxies":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProxyClient{config: f.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, proxyImplementors)...); err != nil {
+				return err
+			}
+			f.WithNamedProxies(alias, func(wq *ProxyQuery) {
+				*wq = *query
+			})
+		case "ownerID":
+			if _, ok := fieldSeen[favourite.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, favourite.FieldOwnerID)
+				fieldSeen[favourite.FieldOwnerID] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		f.Select(selectedFields...)
+	}
+	return nil
+}
+
+type favouritePaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []FavouritePaginateOption
+}
+
+func newFavouritePaginateArgs(rv map[string]any) *favouritePaginateArgs {
+	args := &favouritePaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*FavouriteWhereInput); ok {
+		args.opts = append(args.opts, WithFavouriteFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (h *HolderQuery) CollectFields(ctx context.Context, satisfies ...string) (*HolderQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -4218,6 +4300,90 @@ func newPersonRolePaginateArgs(rv map[string]any) *personrolePaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (pe *PersonalQuery) CollectFields(ctx context.Context, satisfies ...string) (*PersonalQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return pe, nil
+	}
+	if err := pe.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return pe, nil
+}
+
+func (pe *PersonalQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(personal.Columns))
+		selectedFields = []string{personal.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "proxies":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProxyClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, proxyImplementors)...); err != nil {
+				return err
+			}
+			pe.WithNamedProxies(alias, func(wq *ProxyQuery) {
+				*wq = *query
+			})
+		case "ownerID":
+			if _, ok := fieldSeen[personal.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, personal.FieldOwnerID)
+				fieldSeen[personal.FieldOwnerID] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[personal.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, personal.FieldDisplayName)
+				fieldSeen[personal.FieldDisplayName] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		pe.Select(selectedFields...)
+	}
+	return nil
+}
+
+type personalPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []PersonalPaginateOption
+}
+
+func newPersonalPaginateArgs(rv map[string]any) *personalPaginateArgs {
+	args := &personalPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*PersonalWhereInput); ok {
+		args.opts = append(args.opts, WithPersonalFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (pr *ProjectQuery) CollectFields(ctx context.Context, satisfies ...string) (*ProjectQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -5028,6 +5194,103 @@ func newProtectedAreaPicturePaginateArgs(rv map[string]any) *protectedareapictur
 	}
 	if v, ok := rv[whereField].(*ProtectedAreaPictureWhereInput); ok {
 		args.opts = append(args.opts, WithProtectedAreaPictureFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (pr *ProxyQuery) CollectFields(ctx context.Context, satisfies ...string) (*ProxyQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return pr, nil
+	}
+	if err := pr.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return pr, nil
+}
+
+func (pr *ProxyQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(proxy.Columns))
+		selectedFields = []string{proxy.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "favourite":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FavouriteClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, favouriteImplementors)...); err != nil {
+				return err
+			}
+			pr.withFavourite = query
+		case "personal":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PersonalClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personalImplementors)...); err != nil {
+				return err
+			}
+			pr.withPersonal = query
+		case "type":
+			if _, ok := fieldSeen[proxy.FieldType]; !ok {
+				selectedFields = append(selectedFields, proxy.FieldType)
+				fieldSeen[proxy.FieldType] = struct{}{}
+			}
+		case "refID":
+			if _, ok := fieldSeen[proxy.FieldRefID]; !ok {
+				selectedFields = append(selectedFields, proxy.FieldRefID)
+				fieldSeen[proxy.FieldRefID] = struct{}{}
+			}
+		case "url":
+			if _, ok := fieldSeen[proxy.FieldURL]; !ok {
+				selectedFields = append(selectedFields, proxy.FieldURL)
+				fieldSeen[proxy.FieldURL] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		pr.Select(selectedFields...)
+	}
+	return nil
+}
+
+type proxyPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ProxyPaginateOption
+}
+
+func newProxyPaginateArgs(rv map[string]any) *proxyPaginateArgs {
+	args := &proxyPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*ProxyWhereInput); ok {
+		args.opts = append(args.opts, WithProxyFilter(v.Filter))
 	}
 	return args
 }

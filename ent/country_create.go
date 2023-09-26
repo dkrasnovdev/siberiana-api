@@ -290,11 +290,15 @@ func (cc *CountryCreate) createSpec() (*Country, *sqlgraph.CreateSpec) {
 // CountryCreateBulk is the builder for creating many Country entities in bulk.
 type CountryCreateBulk struct {
 	config
+	err      error
 	builders []*CountryCreate
 }
 
 // Save creates the Country entities in the database.
 func (ccb *CountryCreateBulk) Save(ctx context.Context) ([]*Country, error) {
+	if ccb.err != nil {
+		return nil, ccb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(ccb.builders))
 	nodes := make([]*Country, len(ccb.builders))
 	mutators := make([]Mutator, len(ccb.builders))

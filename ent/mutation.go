@@ -23,6 +23,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
 	"github.com/dkrasnovdev/siberiana-api/ent/holder"
 	"github.com/dkrasnovdev/siberiana-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
@@ -34,6 +35,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/organizationtype"
 	"github.com/dkrasnovdev/siberiana-api/ent/period"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/personal"
 	"github.com/dkrasnovdev/siberiana-api/ent/personrole"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
@@ -41,6 +43,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/siberiana-api/ent/proxy"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
 	"github.com/dkrasnovdev/siberiana-api/ent/publisher"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -71,6 +74,7 @@ const (
 	TypeCountry               = "Country"
 	TypeCulture               = "Culture"
 	TypeDistrict              = "District"
+	TypeFavourite             = "Favourite"
 	TypeHolder                = "Holder"
 	TypeHolderResponsibility  = "HolderResponsibility"
 	TypeKeyword               = "Keyword"
@@ -84,11 +88,13 @@ const (
 	TypePeriod                = "Period"
 	TypePerson                = "Person"
 	TypePersonRole            = "PersonRole"
+	TypePersonal              = "Personal"
 	TypeProject               = "Project"
 	TypeProjectType           = "ProjectType"
 	TypeProtectedArea         = "ProtectedArea"
 	TypeProtectedAreaCategory = "ProtectedAreaCategory"
 	TypeProtectedAreaPicture  = "ProtectedAreaPicture"
+	TypeProxy                 = "Proxy"
 	TypePublication           = "Publication"
 	TypePublisher             = "Publisher"
 	TypeRegion                = "Region"
@@ -14848,6 +14854,425 @@ func (m *DistrictMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown District edge %s", name)
 }
 
+// FavouriteMutation represents an operation that mutates the Favourite nodes in the graph.
+type FavouriteMutation struct {
+	config
+	op             Op
+	typ            string
+	id             *int
+	owner_id       *string
+	clearedFields  map[string]struct{}
+	proxies        map[int]struct{}
+	removedproxies map[int]struct{}
+	clearedproxies bool
+	done           bool
+	oldValue       func(context.Context) (*Favourite, error)
+	predicates     []predicate.Favourite
+}
+
+var _ ent.Mutation = (*FavouriteMutation)(nil)
+
+// favouriteOption allows management of the mutation configuration using functional options.
+type favouriteOption func(*FavouriteMutation)
+
+// newFavouriteMutation creates new mutation for the Favourite entity.
+func newFavouriteMutation(c config, op Op, opts ...favouriteOption) *FavouriteMutation {
+	m := &FavouriteMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeFavourite,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withFavouriteID sets the ID field of the mutation.
+func withFavouriteID(id int) favouriteOption {
+	return func(m *FavouriteMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Favourite
+		)
+		m.oldValue = func(ctx context.Context) (*Favourite, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Favourite.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withFavourite sets the old Favourite of the mutation.
+func withFavourite(node *Favourite) favouriteOption {
+	return func(m *FavouriteMutation) {
+		m.oldValue = func(context.Context) (*Favourite, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m FavouriteMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m FavouriteMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *FavouriteMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *FavouriteMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Favourite.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *FavouriteMutation) SetOwnerID(s string) {
+	m.owner_id = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *FavouriteMutation) OwnerID() (r string, exists bool) {
+	v := m.owner_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the Favourite entity.
+// If the Favourite object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FavouriteMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *FavouriteMutation) ResetOwnerID() {
+	m.owner_id = nil
+}
+
+// AddProxyIDs adds the "proxies" edge to the Proxy entity by ids.
+func (m *FavouriteMutation) AddProxyIDs(ids ...int) {
+	if m.proxies == nil {
+		m.proxies = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.proxies[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProxies clears the "proxies" edge to the Proxy entity.
+func (m *FavouriteMutation) ClearProxies() {
+	m.clearedproxies = true
+}
+
+// ProxiesCleared reports if the "proxies" edge to the Proxy entity was cleared.
+func (m *FavouriteMutation) ProxiesCleared() bool {
+	return m.clearedproxies
+}
+
+// RemoveProxyIDs removes the "proxies" edge to the Proxy entity by IDs.
+func (m *FavouriteMutation) RemoveProxyIDs(ids ...int) {
+	if m.removedproxies == nil {
+		m.removedproxies = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.proxies, ids[i])
+		m.removedproxies[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProxies returns the removed IDs of the "proxies" edge to the Proxy entity.
+func (m *FavouriteMutation) RemovedProxiesIDs() (ids []int) {
+	for id := range m.removedproxies {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProxiesIDs returns the "proxies" edge IDs in the mutation.
+func (m *FavouriteMutation) ProxiesIDs() (ids []int) {
+	for id := range m.proxies {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProxies resets all changes to the "proxies" edge.
+func (m *FavouriteMutation) ResetProxies() {
+	m.proxies = nil
+	m.clearedproxies = false
+	m.removedproxies = nil
+}
+
+// Where appends a list predicates to the FavouriteMutation builder.
+func (m *FavouriteMutation) Where(ps ...predicate.Favourite) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the FavouriteMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *FavouriteMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Favourite, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *FavouriteMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *FavouriteMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Favourite).
+func (m *FavouriteMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *FavouriteMutation) Fields() []string {
+	fields := make([]string, 0, 1)
+	if m.owner_id != nil {
+		fields = append(fields, favourite.FieldOwnerID)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *FavouriteMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case favourite.FieldOwnerID:
+		return m.OwnerID()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *FavouriteMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case favourite.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	}
+	return nil, fmt.Errorf("unknown Favourite field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *FavouriteMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case favourite.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Favourite field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *FavouriteMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *FavouriteMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *FavouriteMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Favourite numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *FavouriteMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *FavouriteMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *FavouriteMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown Favourite nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *FavouriteMutation) ResetField(name string) error {
+	switch name {
+	case favourite.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	}
+	return fmt.Errorf("unknown Favourite field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *FavouriteMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.proxies != nil {
+		edges = append(edges, favourite.EdgeProxies)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *FavouriteMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case favourite.EdgeProxies:
+		ids := make([]ent.Value, 0, len(m.proxies))
+		for id := range m.proxies {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *FavouriteMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.removedproxies != nil {
+		edges = append(edges, favourite.EdgeProxies)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *FavouriteMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case favourite.EdgeProxies:
+		ids := make([]ent.Value, 0, len(m.removedproxies))
+		for id := range m.removedproxies {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *FavouriteMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedproxies {
+		edges = append(edges, favourite.EdgeProxies)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *FavouriteMutation) EdgeCleared(name string) bool {
+	switch name {
+	case favourite.EdgeProxies:
+		return m.clearedproxies
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *FavouriteMutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Favourite unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *FavouriteMutation) ResetEdge(name string) error {
+	switch name {
+	case favourite.EdgeProxies:
+		m.ResetProxies()
+		return nil
+	}
+	return fmt.Errorf("unknown Favourite edge %s", name)
+}
+
 // HolderMutation represents an operation that mutates the Holder nodes in the graph.
 type HolderMutation struct {
 	config
@@ -29134,6 +29559,479 @@ func (m *PersonRoleMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown PersonRole edge %s", name)
 }
 
+// PersonalMutation represents an operation that mutates the Personal nodes in the graph.
+type PersonalMutation struct {
+	config
+	op             Op
+	typ            string
+	id             *int
+	owner_id       *string
+	display_name   *string
+	clearedFields  map[string]struct{}
+	proxies        map[int]struct{}
+	removedproxies map[int]struct{}
+	clearedproxies bool
+	done           bool
+	oldValue       func(context.Context) (*Personal, error)
+	predicates     []predicate.Personal
+}
+
+var _ ent.Mutation = (*PersonalMutation)(nil)
+
+// personalOption allows management of the mutation configuration using functional options.
+type personalOption func(*PersonalMutation)
+
+// newPersonalMutation creates new mutation for the Personal entity.
+func newPersonalMutation(c config, op Op, opts ...personalOption) *PersonalMutation {
+	m := &PersonalMutation{
+		config:        c,
+		op:            op,
+		typ:           TypePersonal,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withPersonalID sets the ID field of the mutation.
+func withPersonalID(id int) personalOption {
+	return func(m *PersonalMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Personal
+		)
+		m.oldValue = func(ctx context.Context) (*Personal, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Personal.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withPersonal sets the old Personal of the mutation.
+func withPersonal(node *Personal) personalOption {
+	return func(m *PersonalMutation) {
+		m.oldValue = func(context.Context) (*Personal, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m PersonalMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m PersonalMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *PersonalMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *PersonalMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Personal.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *PersonalMutation) SetOwnerID(s string) {
+	m.owner_id = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *PersonalMutation) OwnerID() (r string, exists bool) {
+	v := m.owner_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the Personal entity.
+// If the Personal object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonalMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *PersonalMutation) ResetOwnerID() {
+	m.owner_id = nil
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *PersonalMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *PersonalMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the Personal entity.
+// If the Personal object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonalMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *PersonalMutation) ResetDisplayName() {
+	m.display_name = nil
+}
+
+// AddProxyIDs adds the "proxies" edge to the Proxy entity by ids.
+func (m *PersonalMutation) AddProxyIDs(ids ...int) {
+	if m.proxies == nil {
+		m.proxies = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.proxies[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProxies clears the "proxies" edge to the Proxy entity.
+func (m *PersonalMutation) ClearProxies() {
+	m.clearedproxies = true
+}
+
+// ProxiesCleared reports if the "proxies" edge to the Proxy entity was cleared.
+func (m *PersonalMutation) ProxiesCleared() bool {
+	return m.clearedproxies
+}
+
+// RemoveProxyIDs removes the "proxies" edge to the Proxy entity by IDs.
+func (m *PersonalMutation) RemoveProxyIDs(ids ...int) {
+	if m.removedproxies == nil {
+		m.removedproxies = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.proxies, ids[i])
+		m.removedproxies[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProxies returns the removed IDs of the "proxies" edge to the Proxy entity.
+func (m *PersonalMutation) RemovedProxiesIDs() (ids []int) {
+	for id := range m.removedproxies {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProxiesIDs returns the "proxies" edge IDs in the mutation.
+func (m *PersonalMutation) ProxiesIDs() (ids []int) {
+	for id := range m.proxies {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProxies resets all changes to the "proxies" edge.
+func (m *PersonalMutation) ResetProxies() {
+	m.proxies = nil
+	m.clearedproxies = false
+	m.removedproxies = nil
+}
+
+// Where appends a list predicates to the PersonalMutation builder.
+func (m *PersonalMutation) Where(ps ...predicate.Personal) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the PersonalMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *PersonalMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Personal, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *PersonalMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *PersonalMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Personal).
+func (m *PersonalMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *PersonalMutation) Fields() []string {
+	fields := make([]string, 0, 2)
+	if m.owner_id != nil {
+		fields = append(fields, personal.FieldOwnerID)
+	}
+	if m.display_name != nil {
+		fields = append(fields, personal.FieldDisplayName)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *PersonalMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case personal.FieldOwnerID:
+		return m.OwnerID()
+	case personal.FieldDisplayName:
+		return m.DisplayName()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *PersonalMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case personal.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case personal.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	}
+	return nil, fmt.Errorf("unknown Personal field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PersonalMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case personal.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case personal.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Personal field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *PersonalMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *PersonalMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PersonalMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Personal numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *PersonalMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *PersonalMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *PersonalMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown Personal nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *PersonalMutation) ResetField(name string) error {
+	switch name {
+	case personal.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case personal.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	}
+	return fmt.Errorf("unknown Personal field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *PersonalMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.proxies != nil {
+		edges = append(edges, personal.EdgeProxies)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *PersonalMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case personal.EdgeProxies:
+		ids := make([]ent.Value, 0, len(m.proxies))
+		for id := range m.proxies {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *PersonalMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.removedproxies != nil {
+		edges = append(edges, personal.EdgeProxies)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *PersonalMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case personal.EdgeProxies:
+		ids := make([]ent.Value, 0, len(m.removedproxies))
+		for id := range m.removedproxies {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *PersonalMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedproxies {
+		edges = append(edges, personal.EdgeProxies)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *PersonalMutation) EdgeCleared(name string) bool {
+	switch name {
+	case personal.EdgeProxies:
+		return m.clearedproxies
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *PersonalMutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Personal unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *PersonalMutation) ResetEdge(name string) error {
+	switch name {
+	case personal.EdgeProxies:
+		m.ResetProxies()
+		return nil
+	}
+	return fmt.Errorf("unknown Personal edge %s", name)
+}
+
 // ProjectMutation represents an operation that mutates the Project nodes in the graph.
 type ProjectMutation struct {
 	config
@@ -34728,6 +35626,566 @@ func (m *ProtectedAreaPictureMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown ProtectedAreaPicture edge %s", name)
+}
+
+// ProxyMutation represents an operation that mutates the Proxy nodes in the graph.
+type ProxyMutation struct {
+	config
+	op               Op
+	typ              string
+	id               *int
+	_type            *proxy.Type
+	ref_id           *string
+	url              *string
+	clearedFields    map[string]struct{}
+	favourite        *int
+	clearedfavourite bool
+	personal         *int
+	clearedpersonal  bool
+	done             bool
+	oldValue         func(context.Context) (*Proxy, error)
+	predicates       []predicate.Proxy
+}
+
+var _ ent.Mutation = (*ProxyMutation)(nil)
+
+// proxyOption allows management of the mutation configuration using functional options.
+type proxyOption func(*ProxyMutation)
+
+// newProxyMutation creates new mutation for the Proxy entity.
+func newProxyMutation(c config, op Op, opts ...proxyOption) *ProxyMutation {
+	m := &ProxyMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeProxy,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withProxyID sets the ID field of the mutation.
+func withProxyID(id int) proxyOption {
+	return func(m *ProxyMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Proxy
+		)
+		m.oldValue = func(ctx context.Context) (*Proxy, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Proxy.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withProxy sets the old Proxy of the mutation.
+func withProxy(node *Proxy) proxyOption {
+	return func(m *ProxyMutation) {
+		m.oldValue = func(context.Context) (*Proxy, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ProxyMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ProxyMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ProxyMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ProxyMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Proxy.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetType sets the "type" field.
+func (m *ProxyMutation) SetType(pr proxy.Type) {
+	m._type = &pr
+}
+
+// GetType returns the value of the "type" field in the mutation.
+func (m *ProxyMutation) GetType() (r proxy.Type, exists bool) {
+	v := m._type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldType returns the old "type" field's value of the Proxy entity.
+// If the Proxy object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProxyMutation) OldType(ctx context.Context) (v proxy.Type, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
+	}
+	return oldValue.Type, nil
+}
+
+// ResetType resets all changes to the "type" field.
+func (m *ProxyMutation) ResetType() {
+	m._type = nil
+}
+
+// SetRefID sets the "ref_id" field.
+func (m *ProxyMutation) SetRefID(s string) {
+	m.ref_id = &s
+}
+
+// RefID returns the value of the "ref_id" field in the mutation.
+func (m *ProxyMutation) RefID() (r string, exists bool) {
+	v := m.ref_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRefID returns the old "ref_id" field's value of the Proxy entity.
+// If the Proxy object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProxyMutation) OldRefID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRefID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRefID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRefID: %w", err)
+	}
+	return oldValue.RefID, nil
+}
+
+// ResetRefID resets all changes to the "ref_id" field.
+func (m *ProxyMutation) ResetRefID() {
+	m.ref_id = nil
+}
+
+// SetURL sets the "url" field.
+func (m *ProxyMutation) SetURL(s string) {
+	m.url = &s
+}
+
+// URL returns the value of the "url" field in the mutation.
+func (m *ProxyMutation) URL() (r string, exists bool) {
+	v := m.url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldURL returns the old "url" field's value of the Proxy entity.
+// If the Proxy object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProxyMutation) OldURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldURL: %w", err)
+	}
+	return oldValue.URL, nil
+}
+
+// ResetURL resets all changes to the "url" field.
+func (m *ProxyMutation) ResetURL() {
+	m.url = nil
+}
+
+// SetFavouriteID sets the "favourite" edge to the Favourite entity by id.
+func (m *ProxyMutation) SetFavouriteID(id int) {
+	m.favourite = &id
+}
+
+// ClearFavourite clears the "favourite" edge to the Favourite entity.
+func (m *ProxyMutation) ClearFavourite() {
+	m.clearedfavourite = true
+}
+
+// FavouriteCleared reports if the "favourite" edge to the Favourite entity was cleared.
+func (m *ProxyMutation) FavouriteCleared() bool {
+	return m.clearedfavourite
+}
+
+// FavouriteID returns the "favourite" edge ID in the mutation.
+func (m *ProxyMutation) FavouriteID() (id int, exists bool) {
+	if m.favourite != nil {
+		return *m.favourite, true
+	}
+	return
+}
+
+// FavouriteIDs returns the "favourite" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// FavouriteID instead. It exists only for internal usage by the builders.
+func (m *ProxyMutation) FavouriteIDs() (ids []int) {
+	if id := m.favourite; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetFavourite resets all changes to the "favourite" edge.
+func (m *ProxyMutation) ResetFavourite() {
+	m.favourite = nil
+	m.clearedfavourite = false
+}
+
+// SetPersonalID sets the "personal" edge to the Personal entity by id.
+func (m *ProxyMutation) SetPersonalID(id int) {
+	m.personal = &id
+}
+
+// ClearPersonal clears the "personal" edge to the Personal entity.
+func (m *ProxyMutation) ClearPersonal() {
+	m.clearedpersonal = true
+}
+
+// PersonalCleared reports if the "personal" edge to the Personal entity was cleared.
+func (m *ProxyMutation) PersonalCleared() bool {
+	return m.clearedpersonal
+}
+
+// PersonalID returns the "personal" edge ID in the mutation.
+func (m *ProxyMutation) PersonalID() (id int, exists bool) {
+	if m.personal != nil {
+		return *m.personal, true
+	}
+	return
+}
+
+// PersonalIDs returns the "personal" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// PersonalID instead. It exists only for internal usage by the builders.
+func (m *ProxyMutation) PersonalIDs() (ids []int) {
+	if id := m.personal; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetPersonal resets all changes to the "personal" edge.
+func (m *ProxyMutation) ResetPersonal() {
+	m.personal = nil
+	m.clearedpersonal = false
+}
+
+// Where appends a list predicates to the ProxyMutation builder.
+func (m *ProxyMutation) Where(ps ...predicate.Proxy) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ProxyMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ProxyMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Proxy, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ProxyMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ProxyMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Proxy).
+func (m *ProxyMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ProxyMutation) Fields() []string {
+	fields := make([]string, 0, 3)
+	if m._type != nil {
+		fields = append(fields, proxy.FieldType)
+	}
+	if m.ref_id != nil {
+		fields = append(fields, proxy.FieldRefID)
+	}
+	if m.url != nil {
+		fields = append(fields, proxy.FieldURL)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ProxyMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case proxy.FieldType:
+		return m.GetType()
+	case proxy.FieldRefID:
+		return m.RefID()
+	case proxy.FieldURL:
+		return m.URL()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ProxyMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case proxy.FieldType:
+		return m.OldType(ctx)
+	case proxy.FieldRefID:
+		return m.OldRefID(ctx)
+	case proxy.FieldURL:
+		return m.OldURL(ctx)
+	}
+	return nil, fmt.Errorf("unknown Proxy field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ProxyMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case proxy.FieldType:
+		v, ok := value.(proxy.Type)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetType(v)
+		return nil
+	case proxy.FieldRefID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRefID(v)
+		return nil
+	case proxy.FieldURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetURL(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Proxy field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ProxyMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ProxyMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ProxyMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Proxy numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ProxyMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ProxyMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ProxyMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown Proxy nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ProxyMutation) ResetField(name string) error {
+	switch name {
+	case proxy.FieldType:
+		m.ResetType()
+		return nil
+	case proxy.FieldRefID:
+		m.ResetRefID()
+		return nil
+	case proxy.FieldURL:
+		m.ResetURL()
+		return nil
+	}
+	return fmt.Errorf("unknown Proxy field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ProxyMutation) AddedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.favourite != nil {
+		edges = append(edges, proxy.EdgeFavourite)
+	}
+	if m.personal != nil {
+		edges = append(edges, proxy.EdgePersonal)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ProxyMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case proxy.EdgeFavourite:
+		if id := m.favourite; id != nil {
+			return []ent.Value{*id}
+		}
+	case proxy.EdgePersonal:
+		if id := m.personal; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ProxyMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 2)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ProxyMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ProxyMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.clearedfavourite {
+		edges = append(edges, proxy.EdgeFavourite)
+	}
+	if m.clearedpersonal {
+		edges = append(edges, proxy.EdgePersonal)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ProxyMutation) EdgeCleared(name string) bool {
+	switch name {
+	case proxy.EdgeFavourite:
+		return m.clearedfavourite
+	case proxy.EdgePersonal:
+		return m.clearedpersonal
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ProxyMutation) ClearEdge(name string) error {
+	switch name {
+	case proxy.EdgeFavourite:
+		m.ClearFavourite()
+		return nil
+	case proxy.EdgePersonal:
+		m.ClearPersonal()
+		return nil
+	}
+	return fmt.Errorf("unknown Proxy unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ProxyMutation) ResetEdge(name string) error {
+	switch name {
+	case proxy.EdgeFavourite:
+		m.ResetFavourite()
+		return nil
+	case proxy.EdgePersonal:
+		m.ResetPersonal()
+		return nil
+	}
+	return fmt.Errorf("unknown Proxy edge %s", name)
 }
 
 // PublicationMutation represents an operation that mutates the Publication nodes in the graph.

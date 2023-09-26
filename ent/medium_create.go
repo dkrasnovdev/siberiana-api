@@ -290,11 +290,15 @@ func (mc *MediumCreate) createSpec() (*Medium, *sqlgraph.CreateSpec) {
 // MediumCreateBulk is the builder for creating many Medium entities in bulk.
 type MediumCreateBulk struct {
 	config
+	err      error
 	builders []*MediumCreate
 }
 
 // Save creates the Medium entities in the database.
 func (mcb *MediumCreateBulk) Save(ctx context.Context) ([]*Medium, error) {
+	if mcb.err != nil {
+		return nil, mcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(mcb.builders))
 	nodes := make([]*Medium, len(mcb.builders))
 	mutators := make([]Mutator, len(mcb.builders))

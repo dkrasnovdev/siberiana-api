@@ -322,11 +322,15 @@ func (pc *PublicationCreate) createSpec() (*Publication, *sqlgraph.CreateSpec) {
 // PublicationCreateBulk is the builder for creating many Publication entities in bulk.
 type PublicationCreateBulk struct {
 	config
+	err      error
 	builders []*PublicationCreate
 }
 
 // Save creates the Publication entities in the database.
 func (pcb *PublicationCreateBulk) Save(ctx context.Context) ([]*Publication, error) {
+	if pcb.err != nil {
+		return nil, pcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(pcb.builders))
 	nodes := make([]*Publication, len(pcb.builders))
 	mutators := make([]Mutator, len(pcb.builders))

@@ -290,11 +290,15 @@ func (rc *RegionCreate) createSpec() (*Region, *sqlgraph.CreateSpec) {
 // RegionCreateBulk is the builder for creating many Region entities in bulk.
 type RegionCreateBulk struct {
 	config
+	err      error
 	builders []*RegionCreate
 }
 
 // Save creates the Region entities in the database.
 func (rcb *RegionCreateBulk) Save(ctx context.Context) ([]*Region, error) {
+	if rcb.err != nil {
+		return nil, rcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(rcb.builders))
 	nodes := make([]*Region, len(rcb.builders))
 	mutators := make([]Mutator, len(rcb.builders))

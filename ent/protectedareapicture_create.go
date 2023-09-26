@@ -493,11 +493,15 @@ func (papc *ProtectedAreaPictureCreate) createSpec() (*ProtectedAreaPicture, *sq
 // ProtectedAreaPictureCreateBulk is the builder for creating many ProtectedAreaPicture entities in bulk.
 type ProtectedAreaPictureCreateBulk struct {
 	config
+	err      error
 	builders []*ProtectedAreaPictureCreate
 }
 
 // Save creates the ProtectedAreaPicture entities in the database.
 func (papcb *ProtectedAreaPictureCreateBulk) Save(ctx context.Context) ([]*ProtectedAreaPicture, error) {
+	if papcb.err != nil {
+		return nil, papcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(papcb.builders))
 	nodes := make([]*ProtectedAreaPicture, len(papcb.builders))
 	mutators := make([]Mutator, len(papcb.builders))

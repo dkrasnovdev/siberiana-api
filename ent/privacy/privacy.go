@@ -4,7 +4,6 @@ package privacy
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/dkrasnovdev/siberiana-api/ent"
 
@@ -25,19 +24,19 @@ var (
 	Skip = privacy.Skip
 )
 
-// Allowf returns an formatted wrapped Allow decision.
+// Allowf returns a formatted wrapped Allow decision.
 func Allowf(format string, a ...any) error {
-	return fmt.Errorf(format+": %w", append(a, Allow)...)
+	return privacy.Allowf(format, a...)
 }
 
-// Denyf returns an formatted wrapped Deny decision.
+// Denyf returns a formatted wrapped Deny decision.
 func Denyf(format string, a ...any) error {
-	return fmt.Errorf(format+": %w", append(a, Deny)...)
+	return privacy.Denyf(format, a...)
 }
 
-// Skipf returns an formatted wrapped Skip decision.
+// Skipf returns a formatted wrapped Skip decision.
 func Skipf(format string, a ...any) error {
-	return fmt.Errorf(format+": %w", append(a, Skip)...)
+	return privacy.Skipf(format, a...)
 }
 
 // DecisionContext creates a new context from the given parent context with
@@ -66,6 +65,12 @@ type (
 	MutationRule = privacy.MutationRule
 	// MutationPolicy combines multiple mutation rules into a single policy.
 	MutationPolicy = privacy.MutationPolicy
+	// MutationRuleFunc type is an adapter which allows the use of
+	// ordinary functions as mutation rules.
+	MutationRuleFunc = privacy.MutationRuleFunc
+
+	// QueryMutationRule is an interface which groups query and mutation rules.
+	QueryMutationRule = privacy.QueryMutationRule
 )
 
 // QueryRuleFunc type is an adapter to allow the use of
@@ -77,68 +82,24 @@ func (f QueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
 	return f(ctx, q)
 }
 
-// MutationRuleFunc type is an adapter which allows the use of
-// ordinary functions as mutation rules.
-type MutationRuleFunc func(context.Context, ent.Mutation) error
-
-// EvalMutation returns f(ctx, m).
-func (f MutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
-	return f(ctx, m)
-}
-
-// QueryMutationRule is an interface which groups query and mutation rules.
-type QueryMutationRule interface {
-	QueryRule
-	MutationRule
-}
-
 // AlwaysAllowRule returns a rule that returns an allow decision.
 func AlwaysAllowRule() QueryMutationRule {
-	return fixedDecision{Allow}
+	return privacy.AlwaysAllowRule()
 }
 
 // AlwaysDenyRule returns a rule that returns a deny decision.
 func AlwaysDenyRule() QueryMutationRule {
-	return fixedDecision{Deny}
-}
-
-type fixedDecision struct {
-	decision error
-}
-
-func (f fixedDecision) EvalQuery(context.Context, ent.Query) error {
-	return f.decision
-}
-
-func (f fixedDecision) EvalMutation(context.Context, ent.Mutation) error {
-	return f.decision
-}
-
-type contextDecision struct {
-	eval func(context.Context) error
+	return privacy.AlwaysDenyRule()
 }
 
 // ContextQueryMutationRule creates a query/mutation rule from a context eval func.
 func ContextQueryMutationRule(eval func(context.Context) error) QueryMutationRule {
-	return contextDecision{eval}
-}
-
-func (c contextDecision) EvalQuery(ctx context.Context, _ ent.Query) error {
-	return c.eval(ctx)
-}
-
-func (c contextDecision) EvalMutation(ctx context.Context, _ ent.Mutation) error {
-	return c.eval(ctx)
+	return privacy.ContextQueryMutationRule(eval)
 }
 
 // OnMutationOperation evaluates the given rule only on a given mutation operation.
 func OnMutationOperation(rule MutationRule, op ent.Op) MutationRule {
-	return MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
-		if m.Op().Is(op) {
-			return rule.EvalMutation(ctx, m)
-		}
-		return Skip
-	})
+	return privacy.OnMutationOperation(rule, op)
 }
 
 // DenyMutationOperationRule returns a rule denying specified mutation operation.
@@ -435,6 +396,30 @@ func (f DistrictMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutati
 		return f(ctx, m)
 	}
 	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.DistrictMutation", m)
+}
+
+// The FavouriteQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type FavouriteQueryRuleFunc func(context.Context, *ent.FavouriteQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f FavouriteQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.FavouriteQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("ent/privacy: unexpected query type %T, expect *ent.FavouriteQuery", q)
+}
+
+// The FavouriteMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type FavouriteMutationRuleFunc func(context.Context, *ent.FavouriteMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f FavouriteMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
+	if m, ok := m.(*ent.FavouriteMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.FavouriteMutation", m)
 }
 
 // The HolderQueryRuleFunc type is an adapter to allow the use of ordinary
@@ -749,6 +734,30 @@ func (f PersonRoleMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Muta
 	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.PersonRoleMutation", m)
 }
 
+// The PersonalQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type PersonalQueryRuleFunc func(context.Context, *ent.PersonalQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f PersonalQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.PersonalQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("ent/privacy: unexpected query type %T, expect *ent.PersonalQuery", q)
+}
+
+// The PersonalMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type PersonalMutationRuleFunc func(context.Context, *ent.PersonalMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f PersonalMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
+	if m, ok := m.(*ent.PersonalMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.PersonalMutation", m)
+}
+
 // The ProjectQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type ProjectQueryRuleFunc func(context.Context, *ent.ProjectQuery) error
@@ -867,6 +876,30 @@ func (f ProtectedAreaPictureMutationRuleFunc) EvalMutation(ctx context.Context, 
 		return f(ctx, m)
 	}
 	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.ProtectedAreaPictureMutation", m)
+}
+
+// The ProxyQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ProxyQueryRuleFunc func(context.Context, *ent.ProxyQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ProxyQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.ProxyQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("ent/privacy: unexpected query type %T, expect *ent.ProxyQuery", q)
+}
+
+// The ProxyMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ProxyMutationRuleFunc func(context.Context, *ent.ProxyMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ProxyMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
+	if m, ok := m.(*ent.ProxyMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.ProxyMutation", m)
 }
 
 // The PublicationQueryRuleFunc type is an adapter to allow the use of ordinary

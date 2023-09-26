@@ -290,11 +290,15 @@ func (ptc *ProjectTypeCreate) createSpec() (*ProjectType, *sqlgraph.CreateSpec) 
 // ProjectTypeCreateBulk is the builder for creating many ProjectType entities in bulk.
 type ProjectTypeCreateBulk struct {
 	config
+	err      error
 	builders []*ProjectTypeCreate
 }
 
 // Save creates the ProjectType entities in the database.
 func (ptcb *ProjectTypeCreateBulk) Save(ctx context.Context) ([]*ProjectType, error) {
+	if ptcb.err != nil {
+		return nil, ptcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(ptcb.builders))
 	nodes := make([]*ProjectType, len(ptcb.builders))
 	mutators := make([]Mutator, len(ptcb.builders))

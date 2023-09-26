@@ -482,11 +482,15 @@ func (cc *CollectionCreate) createSpec() (*Collection, *sqlgraph.CreateSpec) {
 // CollectionCreateBulk is the builder for creating many Collection entities in bulk.
 type CollectionCreateBulk struct {
 	config
+	err      error
 	builders []*CollectionCreate
 }
 
 // Save creates the Collection entities in the database.
 func (ccb *CollectionCreateBulk) Save(ctx context.Context) ([]*Collection, error) {
+	if ccb.err != nil {
+		return nil, ccb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(ccb.builders))
 	nodes := make([]*Collection, len(ccb.builders))
 	mutators := make([]Mutator, len(ccb.builders))

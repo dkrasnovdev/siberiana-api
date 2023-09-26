@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"reflect"
 
 	"github.com/dkrasnovdev/siberiana-api/ent/migrate"
 
@@ -26,6 +27,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
 	"github.com/dkrasnovdev/siberiana-api/ent/holder"
 	"github.com/dkrasnovdev/siberiana-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/siberiana-api/ent/keyword"
@@ -38,12 +40,14 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/organizationtype"
 	"github.com/dkrasnovdev/siberiana-api/ent/period"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/personal"
 	"github.com/dkrasnovdev/siberiana-api/ent/personrole"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/projecttype"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/siberiana-api/ent/proxy"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
 	"github.com/dkrasnovdev/siberiana-api/ent/publisher"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -81,6 +85,8 @@ type Client struct {
 	Culture *CultureClient
 	// District is the client for interacting with the District builders.
 	District *DistrictClient
+	// Favourite is the client for interacting with the Favourite builders.
+	Favourite *FavouriteClient
 	// Holder is the client for interacting with the Holder builders.
 	Holder *HolderClient
 	// HolderResponsibility is the client for interacting with the HolderResponsibility builders.
@@ -107,6 +113,8 @@ type Client struct {
 	Person *PersonClient
 	// PersonRole is the client for interacting with the PersonRole builders.
 	PersonRole *PersonRoleClient
+	// Personal is the client for interacting with the Personal builders.
+	Personal *PersonalClient
 	// Project is the client for interacting with the Project builders.
 	Project *ProjectClient
 	// ProjectType is the client for interacting with the ProjectType builders.
@@ -117,6 +125,8 @@ type Client struct {
 	ProtectedAreaCategory *ProtectedAreaCategoryClient
 	// ProtectedAreaPicture is the client for interacting with the ProtectedAreaPicture builders.
 	ProtectedAreaPicture *ProtectedAreaPictureClient
+	// Proxy is the client for interacting with the Proxy builders.
+	Proxy *ProxyClient
 	// Publication is the client for interacting with the Publication builders.
 	Publication *PublicationClient
 	// Publisher is the client for interacting with the Publisher builders.
@@ -156,6 +166,7 @@ func (c *Client) init() {
 	c.Country = NewCountryClient(c.config)
 	c.Culture = NewCultureClient(c.config)
 	c.District = NewDistrictClient(c.config)
+	c.Favourite = NewFavouriteClient(c.config)
 	c.Holder = NewHolderClient(c.config)
 	c.HolderResponsibility = NewHolderResponsibilityClient(c.config)
 	c.Keyword = NewKeywordClient(c.config)
@@ -169,11 +180,13 @@ func (c *Client) init() {
 	c.Period = NewPeriodClient(c.config)
 	c.Person = NewPersonClient(c.config)
 	c.PersonRole = NewPersonRoleClient(c.config)
+	c.Personal = NewPersonalClient(c.config)
 	c.Project = NewProjectClient(c.config)
 	c.ProjectType = NewProjectTypeClient(c.config)
 	c.ProtectedArea = NewProtectedAreaClient(c.config)
 	c.ProtectedAreaCategory = NewProtectedAreaCategoryClient(c.config)
 	c.ProtectedAreaPicture = NewProtectedAreaPictureClient(c.config)
+	c.Proxy = NewProxyClient(c.config)
 	c.Publication = NewPublicationClient(c.config)
 	c.Publisher = NewPublisherClient(c.config)
 	c.Region = NewRegionClient(c.config)
@@ -247,11 +260,14 @@ func Open(driverName, dataSourceName string, options ...Option) (*Client, error)
 	}
 }
 
+// ErrTxStarted is returned when trying to start a new transaction from a transactional client.
+var ErrTxStarted = errors.New("ent: cannot start a transaction within a transaction")
+
 // Tx returns a new transactional client. The provided context
 // is used until the transaction is committed or rolled back.
 func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	if _, ok := c.driver.(*txDriver); ok {
-		return nil, errors.New("ent: cannot start a transaction within a transaction")
+		return nil, ErrTxStarted
 	}
 	tx, err := newTx(ctx, c.driver)
 	if err != nil {
@@ -274,6 +290,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Country:               NewCountryClient(cfg),
 		Culture:               NewCultureClient(cfg),
 		District:              NewDistrictClient(cfg),
+		Favourite:             NewFavouriteClient(cfg),
 		Holder:                NewHolderClient(cfg),
 		HolderResponsibility:  NewHolderResponsibilityClient(cfg),
 		Keyword:               NewKeywordClient(cfg),
@@ -287,11 +304,13 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Period:                NewPeriodClient(cfg),
 		Person:                NewPersonClient(cfg),
 		PersonRole:            NewPersonRoleClient(cfg),
+		Personal:              NewPersonalClient(cfg),
 		Project:               NewProjectClient(cfg),
 		ProjectType:           NewProjectTypeClient(cfg),
 		ProtectedArea:         NewProtectedAreaClient(cfg),
 		ProtectedAreaCategory: NewProtectedAreaCategoryClient(cfg),
 		ProtectedAreaPicture:  NewProtectedAreaPictureClient(cfg),
+		Proxy:                 NewProxyClient(cfg),
 		Publication:           NewPublicationClient(cfg),
 		Publisher:             NewPublisherClient(cfg),
 		Region:                NewRegionClient(cfg),
@@ -329,6 +348,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Country:               NewCountryClient(cfg),
 		Culture:               NewCultureClient(cfg),
 		District:              NewDistrictClient(cfg),
+		Favourite:             NewFavouriteClient(cfg),
 		Holder:                NewHolderClient(cfg),
 		HolderResponsibility:  NewHolderResponsibilityClient(cfg),
 		Keyword:               NewKeywordClient(cfg),
@@ -342,11 +362,13 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Period:                NewPeriodClient(cfg),
 		Person:                NewPersonClient(cfg),
 		PersonRole:            NewPersonRoleClient(cfg),
+		Personal:              NewPersonalClient(cfg),
 		Project:               NewProjectClient(cfg),
 		ProjectType:           NewProjectTypeClient(cfg),
 		ProtectedArea:         NewProtectedAreaClient(cfg),
 		ProtectedAreaCategory: NewProtectedAreaCategoryClient(cfg),
 		ProtectedAreaPicture:  NewProtectedAreaPictureClient(cfg),
+		Proxy:                 NewProxyClient(cfg),
 		Publication:           NewPublicationClient(cfg),
 		Publisher:             NewPublisherClient(cfg),
 		Region:                NewRegionClient(cfg),
@@ -383,12 +405,12 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
-		c.Category, c.Collection, c.Country, c.Culture, c.District, c.Holder,
-		c.HolderResponsibility, c.Keyword, c.License, c.Location, c.Medium, c.Model,
-		c.Monument, c.Organization, c.OrganizationType, c.Period, c.Person,
-		c.PersonRole, c.Project, c.ProjectType, c.ProtectedArea,
-		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Publication, c.Publisher,
-		c.Region, c.Set, c.Settlement, c.Technique,
+		c.Category, c.Collection, c.Country, c.Culture, c.District, c.Favourite,
+		c.Holder, c.HolderResponsibility, c.Keyword, c.License, c.Location, c.Medium,
+		c.Model, c.Monument, c.Organization, c.OrganizationType, c.Period, c.Person,
+		c.PersonRole, c.Personal, c.Project, c.ProjectType, c.ProtectedArea,
+		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Proxy, c.Publication,
+		c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
 	} {
 		n.Use(hooks...)
 	}
@@ -399,12 +421,12 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
-		c.Category, c.Collection, c.Country, c.Culture, c.District, c.Holder,
-		c.HolderResponsibility, c.Keyword, c.License, c.Location, c.Medium, c.Model,
-		c.Monument, c.Organization, c.OrganizationType, c.Period, c.Person,
-		c.PersonRole, c.Project, c.ProjectType, c.ProtectedArea,
-		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Publication, c.Publisher,
-		c.Region, c.Set, c.Settlement, c.Technique,
+		c.Category, c.Collection, c.Country, c.Culture, c.District, c.Favourite,
+		c.Holder, c.HolderResponsibility, c.Keyword, c.License, c.Location, c.Medium,
+		c.Model, c.Monument, c.Organization, c.OrganizationType, c.Period, c.Person,
+		c.PersonRole, c.Personal, c.Project, c.ProjectType, c.ProtectedArea,
+		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Proxy, c.Publication,
+		c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -437,6 +459,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Culture.mutate(ctx, m)
 	case *DistrictMutation:
 		return c.District.mutate(ctx, m)
+	case *FavouriteMutation:
+		return c.Favourite.mutate(ctx, m)
 	case *HolderMutation:
 		return c.Holder.mutate(ctx, m)
 	case *HolderResponsibilityMutation:
@@ -463,6 +487,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Person.mutate(ctx, m)
 	case *PersonRoleMutation:
 		return c.PersonRole.mutate(ctx, m)
+	case *PersonalMutation:
+		return c.Personal.mutate(ctx, m)
 	case *ProjectMutation:
 		return c.Project.mutate(ctx, m)
 	case *ProjectTypeMutation:
@@ -473,6 +499,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.ProtectedAreaCategory.mutate(ctx, m)
 	case *ProtectedAreaPictureMutation:
 		return c.ProtectedAreaPicture.mutate(ctx, m)
+	case *ProxyMutation:
+		return c.Proxy.mutate(ctx, m)
 	case *PublicationMutation:
 		return c.Publication.mutate(ctx, m)
 	case *PublisherMutation:
@@ -520,6 +548,21 @@ func (c *ArtClient) Create() *ArtCreate {
 
 // CreateBulk returns a builder for creating a bulk of Art entities.
 func (c *ArtClient) CreateBulk(builders ...*ArtCreate) *ArtCreateBulk {
+	return &ArtCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ArtClient) MapCreateBulk(slice any, setFunc func(*ArtCreate, int)) *ArtCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ArtCreateBulk{err: fmt.Errorf("calling to ArtClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ArtCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &ArtCreateBulk{config: c.config, builders: builders}
 }
 
@@ -674,6 +717,21 @@ func (c *ArtGenreClient) CreateBulk(builders ...*ArtGenreCreate) *ArtGenreCreate
 	return &ArtGenreCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ArtGenreClient) MapCreateBulk(slice any, setFunc func(*ArtGenreCreate, int)) *ArtGenreCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ArtGenreCreateBulk{err: fmt.Errorf("calling to ArtGenreClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ArtGenreCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ArtGenreCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for ArtGenre.
 func (c *ArtGenreClient) Update() *ArtGenreUpdate {
 	mutation := newArtGenreMutation(c.config, OpUpdate)
@@ -809,6 +867,21 @@ func (c *ArtStyleClient) CreateBulk(builders ...*ArtStyleCreate) *ArtStyleCreate
 	return &ArtStyleCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ArtStyleClient) MapCreateBulk(slice any, setFunc func(*ArtStyleCreate, int)) *ArtStyleCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ArtStyleCreateBulk{err: fmt.Errorf("calling to ArtStyleClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ArtStyleCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ArtStyleCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for ArtStyle.
 func (c *ArtStyleClient) Update() *ArtStyleUpdate {
 	mutation := newArtStyleMutation(c.config, OpUpdate)
@@ -941,6 +1014,21 @@ func (c *ArtifactClient) Create() *ArtifactCreate {
 
 // CreateBulk returns a builder for creating a bulk of Artifact entities.
 func (c *ArtifactClient) CreateBulk(builders ...*ArtifactCreate) *ArtifactCreateBulk {
+	return &ArtifactCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ArtifactClient) MapCreateBulk(slice any, setFunc func(*ArtifactCreate, int)) *ArtifactCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ArtifactCreateBulk{err: fmt.Errorf("calling to ArtifactClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ArtifactCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &ArtifactCreateBulk{config: c.config, builders: builders}
 }
 
@@ -1288,6 +1376,21 @@ func (c *AuditLogClient) CreateBulk(builders ...*AuditLogCreate) *AuditLogCreate
 	return &AuditLogCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *AuditLogClient) MapCreateBulk(slice any, setFunc func(*AuditLogCreate, int)) *AuditLogCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &AuditLogCreateBulk{err: fmt.Errorf("calling to AuditLogClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*AuditLogCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &AuditLogCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for AuditLog.
 func (c *AuditLogClient) Update() *AuditLogUpdate {
 	mutation := newAuditLogMutation(c.config, OpUpdate)
@@ -1404,6 +1507,21 @@ func (c *BookClient) Create() *BookCreate {
 
 // CreateBulk returns a builder for creating a bulk of Book entities.
 func (c *BookClient) CreateBulk(builders ...*BookCreate) *BookCreateBulk {
+	return &BookCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *BookClient) MapCreateBulk(slice any, setFunc func(*BookCreate, int)) *BookCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &BookCreateBulk{err: fmt.Errorf("calling to BookClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*BookCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &BookCreateBulk{config: c.config, builders: builders}
 }
 
@@ -1638,6 +1756,21 @@ func (c *BookGenreClient) CreateBulk(builders ...*BookGenreCreate) *BookGenreCre
 	return &BookGenreCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *BookGenreClient) MapCreateBulk(slice any, setFunc func(*BookGenreCreate, int)) *BookGenreCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &BookGenreCreateBulk{err: fmt.Errorf("calling to BookGenreClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*BookGenreCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &BookGenreCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for BookGenre.
 func (c *BookGenreClient) Update() *BookGenreUpdate {
 	mutation := newBookGenreMutation(c.config, OpUpdate)
@@ -1773,6 +1906,21 @@ func (c *CategoryClient) CreateBulk(builders ...*CategoryCreate) *CategoryCreate
 	return &CategoryCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *CategoryClient) MapCreateBulk(slice any, setFunc func(*CategoryCreate, int)) *CategoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &CategoryCreateBulk{err: fmt.Errorf("calling to CategoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*CategoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &CategoryCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for Category.
 func (c *CategoryClient) Update() *CategoryUpdate {
 	mutation := newCategoryMutation(c.config, OpUpdate)
@@ -1905,6 +2053,21 @@ func (c *CollectionClient) Create() *CollectionCreate {
 
 // CreateBulk returns a builder for creating a bulk of Collection entities.
 func (c *CollectionClient) CreateBulk(builders ...*CollectionCreate) *CollectionCreateBulk {
+	return &CollectionCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *CollectionClient) MapCreateBulk(slice any, setFunc func(*CollectionCreate, int)) *CollectionCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &CollectionCreateBulk{err: fmt.Errorf("calling to CollectionClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*CollectionCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &CollectionCreateBulk{config: c.config, builders: builders}
 }
 
@@ -2107,6 +2270,21 @@ func (c *CountryClient) CreateBulk(builders ...*CountryCreate) *CountryCreateBul
 	return &CountryCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *CountryClient) MapCreateBulk(slice any, setFunc func(*CountryCreate, int)) *CountryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &CountryCreateBulk{err: fmt.Errorf("calling to CountryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*CountryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &CountryCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for Country.
 func (c *CountryClient) Update() *CountryUpdate {
 	mutation := newCountryMutation(c.config, OpUpdate)
@@ -2239,6 +2417,21 @@ func (c *CultureClient) Create() *CultureCreate {
 
 // CreateBulk returns a builder for creating a bulk of Culture entities.
 func (c *CultureClient) CreateBulk(builders ...*CultureCreate) *CultureCreateBulk {
+	return &CultureCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *CultureClient) MapCreateBulk(slice any, setFunc func(*CultureCreate, int)) *CultureCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &CultureCreateBulk{err: fmt.Errorf("calling to CultureClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*CultureCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &CultureCreateBulk{config: c.config, builders: builders}
 }
 
@@ -2377,6 +2570,21 @@ func (c *DistrictClient) CreateBulk(builders ...*DistrictCreate) *DistrictCreate
 	return &DistrictCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *DistrictClient) MapCreateBulk(slice any, setFunc func(*DistrictCreate, int)) *DistrictCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &DistrictCreateBulk{err: fmt.Errorf("calling to DistrictClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*DistrictCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &DistrictCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for District.
 func (c *DistrictClient) Update() *DistrictUpdate {
 	mutation := newDistrictMutation(c.config, OpUpdate)
@@ -2479,6 +2687,156 @@ func (c *DistrictClient) mutate(ctx context.Context, m *DistrictMutation) (Value
 	}
 }
 
+// FavouriteClient is a client for the Favourite schema.
+type FavouriteClient struct {
+	config
+}
+
+// NewFavouriteClient returns a client for the Favourite from the given config.
+func NewFavouriteClient(c config) *FavouriteClient {
+	return &FavouriteClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `favourite.Hooks(f(g(h())))`.
+func (c *FavouriteClient) Use(hooks ...Hook) {
+	c.hooks.Favourite = append(c.hooks.Favourite, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `favourite.Intercept(f(g(h())))`.
+func (c *FavouriteClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Favourite = append(c.inters.Favourite, interceptors...)
+}
+
+// Create returns a builder for creating a Favourite entity.
+func (c *FavouriteClient) Create() *FavouriteCreate {
+	mutation := newFavouriteMutation(c.config, OpCreate)
+	return &FavouriteCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Favourite entities.
+func (c *FavouriteClient) CreateBulk(builders ...*FavouriteCreate) *FavouriteCreateBulk {
+	return &FavouriteCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *FavouriteClient) MapCreateBulk(slice any, setFunc func(*FavouriteCreate, int)) *FavouriteCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &FavouriteCreateBulk{err: fmt.Errorf("calling to FavouriteClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*FavouriteCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &FavouriteCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Favourite.
+func (c *FavouriteClient) Update() *FavouriteUpdate {
+	mutation := newFavouriteMutation(c.config, OpUpdate)
+	return &FavouriteUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *FavouriteClient) UpdateOne(f *Favourite) *FavouriteUpdateOne {
+	mutation := newFavouriteMutation(c.config, OpUpdateOne, withFavourite(f))
+	return &FavouriteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *FavouriteClient) UpdateOneID(id int) *FavouriteUpdateOne {
+	mutation := newFavouriteMutation(c.config, OpUpdateOne, withFavouriteID(id))
+	return &FavouriteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Favourite.
+func (c *FavouriteClient) Delete() *FavouriteDelete {
+	mutation := newFavouriteMutation(c.config, OpDelete)
+	return &FavouriteDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *FavouriteClient) DeleteOne(f *Favourite) *FavouriteDeleteOne {
+	return c.DeleteOneID(f.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *FavouriteClient) DeleteOneID(id int) *FavouriteDeleteOne {
+	builder := c.Delete().Where(favourite.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &FavouriteDeleteOne{builder}
+}
+
+// Query returns a query builder for Favourite.
+func (c *FavouriteClient) Query() *FavouriteQuery {
+	return &FavouriteQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeFavourite},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Favourite entity by its id.
+func (c *FavouriteClient) Get(ctx context.Context, id int) (*Favourite, error) {
+	return c.Query().Where(favourite.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *FavouriteClient) GetX(ctx context.Context, id int) *Favourite {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryProxies queries the proxies edge of a Favourite.
+func (c *FavouriteClient) QueryProxies(f *Favourite) *ProxyQuery {
+	query := (&ProxyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(favourite.Table, favourite.FieldID, id),
+			sqlgraph.To(proxy.Table, proxy.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, favourite.ProxiesTable, favourite.ProxiesColumn),
+		)
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *FavouriteClient) Hooks() []Hook {
+	hooks := c.hooks.Favourite
+	return append(hooks[:len(hooks):len(hooks)], favourite.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *FavouriteClient) Interceptors() []Interceptor {
+	return c.inters.Favourite
+}
+
+func (c *FavouriteClient) mutate(ctx context.Context, m *FavouriteMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&FavouriteCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&FavouriteUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&FavouriteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&FavouriteDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Favourite mutation op: %q", m.Op())
+	}
+}
+
 // HolderClient is a client for the Holder schema.
 type HolderClient struct {
 	config
@@ -2509,6 +2867,21 @@ func (c *HolderClient) Create() *HolderCreate {
 
 // CreateBulk returns a builder for creating a bulk of Holder entities.
 func (c *HolderClient) CreateBulk(builders ...*HolderCreate) *HolderCreateBulk {
+	return &HolderCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *HolderClient) MapCreateBulk(slice any, setFunc func(*HolderCreate, int)) *HolderCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &HolderCreateBulk{err: fmt.Errorf("calling to HolderClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*HolderCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &HolderCreateBulk{config: c.config, builders: builders}
 }
 
@@ -2711,6 +3084,21 @@ func (c *HolderResponsibilityClient) CreateBulk(builders ...*HolderResponsibilit
 	return &HolderResponsibilityCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *HolderResponsibilityClient) MapCreateBulk(slice any, setFunc func(*HolderResponsibilityCreate, int)) *HolderResponsibilityCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &HolderResponsibilityCreateBulk{err: fmt.Errorf("calling to HolderResponsibilityClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*HolderResponsibilityCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &HolderResponsibilityCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for HolderResponsibility.
 func (c *HolderResponsibilityClient) Update() *HolderResponsibilityUpdate {
 	mutation := newHolderResponsibilityMutation(c.config, OpUpdate)
@@ -2846,6 +3234,21 @@ func (c *KeywordClient) CreateBulk(builders ...*KeywordCreate) *KeywordCreateBul
 	return &KeywordCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *KeywordClient) MapCreateBulk(slice any, setFunc func(*KeywordCreate, int)) *KeywordCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &KeywordCreateBulk{err: fmt.Errorf("calling to KeywordClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*KeywordCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &KeywordCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for Keyword.
 func (c *KeywordClient) Update() *KeywordUpdate {
 	mutation := newKeywordMutation(c.config, OpUpdate)
@@ -2961,6 +3364,21 @@ func (c *LicenseClient) Create() *LicenseCreate {
 
 // CreateBulk returns a builder for creating a bulk of License entities.
 func (c *LicenseClient) CreateBulk(builders ...*LicenseCreate) *LicenseCreateBulk {
+	return &LicenseCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *LicenseClient) MapCreateBulk(slice any, setFunc func(*LicenseCreate, int)) *LicenseCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &LicenseCreateBulk{err: fmt.Errorf("calling to LicenseClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*LicenseCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &LicenseCreateBulk{config: c.config, builders: builders}
 }
 
@@ -3128,6 +3546,21 @@ func (c *LocationClient) Create() *LocationCreate {
 
 // CreateBulk returns a builder for creating a bulk of Location entities.
 func (c *LocationClient) CreateBulk(builders ...*LocationCreate) *LocationCreateBulk {
+	return &LocationCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *LocationClient) MapCreateBulk(slice any, setFunc func(*LocationCreate, int)) *LocationCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &LocationCreateBulk{err: fmt.Errorf("calling to LocationClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*LocationCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &LocationCreateBulk{config: c.config, builders: builders}
 }
 
@@ -3362,6 +3795,21 @@ func (c *MediumClient) CreateBulk(builders ...*MediumCreate) *MediumCreateBulk {
 	return &MediumCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MediumClient) MapCreateBulk(slice any, setFunc func(*MediumCreate, int)) *MediumCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MediumCreateBulk{err: fmt.Errorf("calling to MediumClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MediumCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &MediumCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for Medium.
 func (c *MediumClient) Update() *MediumUpdate {
 	mutation := newMediumMutation(c.config, OpUpdate)
@@ -3497,6 +3945,21 @@ func (c *ModelClient) CreateBulk(builders ...*ModelCreate) *ModelCreateBulk {
 	return &ModelCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ModelClient) MapCreateBulk(slice any, setFunc func(*ModelCreate, int)) *ModelCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ModelCreateBulk{err: fmt.Errorf("calling to ModelClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ModelCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ModelCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for Model.
 func (c *ModelClient) Update() *ModelUpdate {
 	mutation := newModelMutation(c.config, OpUpdate)
@@ -3629,6 +4092,21 @@ func (c *MonumentClient) Create() *MonumentCreate {
 
 // CreateBulk returns a builder for creating a bulk of Monument entities.
 func (c *MonumentClient) CreateBulk(builders ...*MonumentCreate) *MonumentCreateBulk {
+	return &MonumentCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MonumentClient) MapCreateBulk(slice any, setFunc func(*MonumentCreate, int)) *MonumentCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MonumentCreateBulk{err: fmt.Errorf("calling to MonumentClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MonumentCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &MonumentCreateBulk{config: c.config, builders: builders}
 }
 
@@ -3780,6 +4258,21 @@ func (c *OrganizationClient) Create() *OrganizationCreate {
 
 // CreateBulk returns a builder for creating a bulk of Organization entities.
 func (c *OrganizationClient) CreateBulk(builders ...*OrganizationCreate) *OrganizationCreateBulk {
+	return &OrganizationCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *OrganizationClient) MapCreateBulk(slice any, setFunc func(*OrganizationCreate, int)) *OrganizationCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &OrganizationCreateBulk{err: fmt.Errorf("calling to OrganizationClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*OrganizationCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &OrganizationCreateBulk{config: c.config, builders: builders}
 }
 
@@ -3950,6 +4443,21 @@ func (c *OrganizationTypeClient) CreateBulk(builders ...*OrganizationTypeCreate)
 	return &OrganizationTypeCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *OrganizationTypeClient) MapCreateBulk(slice any, setFunc func(*OrganizationTypeCreate, int)) *OrganizationTypeCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &OrganizationTypeCreateBulk{err: fmt.Errorf("calling to OrganizationTypeClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*OrganizationTypeCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &OrganizationTypeCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for OrganizationType.
 func (c *OrganizationTypeClient) Update() *OrganizationTypeUpdate {
 	mutation := newOrganizationTypeMutation(c.config, OpUpdate)
@@ -4085,6 +4593,21 @@ func (c *PeriodClient) CreateBulk(builders ...*PeriodCreate) *PeriodCreateBulk {
 	return &PeriodCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *PeriodClient) MapCreateBulk(slice any, setFunc func(*PeriodCreate, int)) *PeriodCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &PeriodCreateBulk{err: fmt.Errorf("calling to PeriodClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*PeriodCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &PeriodCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for Period.
 func (c *PeriodClient) Update() *PeriodUpdate {
 	mutation := newPeriodMutation(c.config, OpUpdate)
@@ -4217,6 +4740,21 @@ func (c *PersonClient) Create() *PersonCreate {
 
 // CreateBulk returns a builder for creating a bulk of Person entities.
 func (c *PersonClient) CreateBulk(builders ...*PersonCreate) *PersonCreateBulk {
+	return &PersonCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *PersonClient) MapCreateBulk(slice any, setFunc func(*PersonCreate, int)) *PersonCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &PersonCreateBulk{err: fmt.Errorf("calling to PersonClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*PersonCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &PersonCreateBulk{config: c.config, builders: builders}
 }
 
@@ -4467,6 +5005,21 @@ func (c *PersonRoleClient) CreateBulk(builders ...*PersonRoleCreate) *PersonRole
 	return &PersonRoleCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *PersonRoleClient) MapCreateBulk(slice any, setFunc func(*PersonRoleCreate, int)) *PersonRoleCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &PersonRoleCreateBulk{err: fmt.Errorf("calling to PersonRoleClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*PersonRoleCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &PersonRoleCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for PersonRole.
 func (c *PersonRoleClient) Update() *PersonRoleUpdate {
 	mutation := newPersonRoleMutation(c.config, OpUpdate)
@@ -4569,6 +5122,156 @@ func (c *PersonRoleClient) mutate(ctx context.Context, m *PersonRoleMutation) (V
 	}
 }
 
+// PersonalClient is a client for the Personal schema.
+type PersonalClient struct {
+	config
+}
+
+// NewPersonalClient returns a client for the Personal from the given config.
+func NewPersonalClient(c config) *PersonalClient {
+	return &PersonalClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `personal.Hooks(f(g(h())))`.
+func (c *PersonalClient) Use(hooks ...Hook) {
+	c.hooks.Personal = append(c.hooks.Personal, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `personal.Intercept(f(g(h())))`.
+func (c *PersonalClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Personal = append(c.inters.Personal, interceptors...)
+}
+
+// Create returns a builder for creating a Personal entity.
+func (c *PersonalClient) Create() *PersonalCreate {
+	mutation := newPersonalMutation(c.config, OpCreate)
+	return &PersonalCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Personal entities.
+func (c *PersonalClient) CreateBulk(builders ...*PersonalCreate) *PersonalCreateBulk {
+	return &PersonalCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *PersonalClient) MapCreateBulk(slice any, setFunc func(*PersonalCreate, int)) *PersonalCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &PersonalCreateBulk{err: fmt.Errorf("calling to PersonalClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*PersonalCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &PersonalCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Personal.
+func (c *PersonalClient) Update() *PersonalUpdate {
+	mutation := newPersonalMutation(c.config, OpUpdate)
+	return &PersonalUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *PersonalClient) UpdateOne(pe *Personal) *PersonalUpdateOne {
+	mutation := newPersonalMutation(c.config, OpUpdateOne, withPersonal(pe))
+	return &PersonalUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *PersonalClient) UpdateOneID(id int) *PersonalUpdateOne {
+	mutation := newPersonalMutation(c.config, OpUpdateOne, withPersonalID(id))
+	return &PersonalUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Personal.
+func (c *PersonalClient) Delete() *PersonalDelete {
+	mutation := newPersonalMutation(c.config, OpDelete)
+	return &PersonalDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *PersonalClient) DeleteOne(pe *Personal) *PersonalDeleteOne {
+	return c.DeleteOneID(pe.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *PersonalClient) DeleteOneID(id int) *PersonalDeleteOne {
+	builder := c.Delete().Where(personal.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &PersonalDeleteOne{builder}
+}
+
+// Query returns a query builder for Personal.
+func (c *PersonalClient) Query() *PersonalQuery {
+	return &PersonalQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypePersonal},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Personal entity by its id.
+func (c *PersonalClient) Get(ctx context.Context, id int) (*Personal, error) {
+	return c.Query().Where(personal.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *PersonalClient) GetX(ctx context.Context, id int) *Personal {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryProxies queries the proxies edge of a Personal.
+func (c *PersonalClient) QueryProxies(pe *Personal) *ProxyQuery {
+	query := (&ProxyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(personal.Table, personal.FieldID, id),
+			sqlgraph.To(proxy.Table, proxy.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, personal.ProxiesTable, personal.ProxiesColumn),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *PersonalClient) Hooks() []Hook {
+	hooks := c.hooks.Personal
+	return append(hooks[:len(hooks):len(hooks)], personal.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *PersonalClient) Interceptors() []Interceptor {
+	return c.inters.Personal
+}
+
+func (c *PersonalClient) mutate(ctx context.Context, m *PersonalMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&PersonalCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&PersonalUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&PersonalUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&PersonalDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Personal mutation op: %q", m.Op())
+	}
+}
+
 // ProjectClient is a client for the Project schema.
 type ProjectClient struct {
 	config
@@ -4599,6 +5302,21 @@ func (c *ProjectClient) Create() *ProjectCreate {
 
 // CreateBulk returns a builder for creating a bulk of Project entities.
 func (c *ProjectClient) CreateBulk(builders ...*ProjectCreate) *ProjectCreateBulk {
+	return &ProjectCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ProjectClient) MapCreateBulk(slice any, setFunc func(*ProjectCreate, int)) *ProjectCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ProjectCreateBulk{err: fmt.Errorf("calling to ProjectClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ProjectCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &ProjectCreateBulk{config: c.config, builders: builders}
 }
 
@@ -4769,6 +5487,21 @@ func (c *ProjectTypeClient) CreateBulk(builders ...*ProjectTypeCreate) *ProjectT
 	return &ProjectTypeCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ProjectTypeClient) MapCreateBulk(slice any, setFunc func(*ProjectTypeCreate, int)) *ProjectTypeCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ProjectTypeCreateBulk{err: fmt.Errorf("calling to ProjectTypeClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ProjectTypeCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ProjectTypeCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for ProjectType.
 func (c *ProjectTypeClient) Update() *ProjectTypeUpdate {
 	mutation := newProjectTypeMutation(c.config, OpUpdate)
@@ -4901,6 +5634,21 @@ func (c *ProtectedAreaClient) Create() *ProtectedAreaCreate {
 
 // CreateBulk returns a builder for creating a bulk of ProtectedArea entities.
 func (c *ProtectedAreaClient) CreateBulk(builders ...*ProtectedAreaCreate) *ProtectedAreaCreateBulk {
+	return &ProtectedAreaCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ProtectedAreaClient) MapCreateBulk(slice any, setFunc func(*ProtectedAreaCreate, int)) *ProtectedAreaCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ProtectedAreaCreateBulk{err: fmt.Errorf("calling to ProtectedAreaClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ProtectedAreaCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &ProtectedAreaCreateBulk{config: c.config, builders: builders}
 }
 
@@ -5055,6 +5803,21 @@ func (c *ProtectedAreaCategoryClient) CreateBulk(builders ...*ProtectedAreaCateg
 	return &ProtectedAreaCategoryCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ProtectedAreaCategoryClient) MapCreateBulk(slice any, setFunc func(*ProtectedAreaCategoryCreate, int)) *ProtectedAreaCategoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ProtectedAreaCategoryCreateBulk{err: fmt.Errorf("calling to ProtectedAreaCategoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ProtectedAreaCategoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ProtectedAreaCategoryCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for ProtectedAreaCategory.
 func (c *ProtectedAreaCategoryClient) Update() *ProtectedAreaCategoryUpdate {
 	mutation := newProtectedAreaCategoryMutation(c.config, OpUpdate)
@@ -5187,6 +5950,21 @@ func (c *ProtectedAreaPictureClient) Create() *ProtectedAreaPictureCreate {
 
 // CreateBulk returns a builder for creating a bulk of ProtectedAreaPicture entities.
 func (c *ProtectedAreaPictureClient) CreateBulk(builders ...*ProtectedAreaPictureCreate) *ProtectedAreaPictureCreateBulk {
+	return &ProtectedAreaPictureCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ProtectedAreaPictureClient) MapCreateBulk(slice any, setFunc func(*ProtectedAreaPictureCreate, int)) *ProtectedAreaPictureCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ProtectedAreaPictureCreateBulk{err: fmt.Errorf("calling to ProtectedAreaPictureClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ProtectedAreaPictureCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &ProtectedAreaPictureCreateBulk{config: c.config, builders: builders}
 }
 
@@ -5340,6 +6118,171 @@ func (c *ProtectedAreaPictureClient) mutate(ctx context.Context, m *ProtectedAre
 	}
 }
 
+// ProxyClient is a client for the Proxy schema.
+type ProxyClient struct {
+	config
+}
+
+// NewProxyClient returns a client for the Proxy from the given config.
+func NewProxyClient(c config) *ProxyClient {
+	return &ProxyClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `proxy.Hooks(f(g(h())))`.
+func (c *ProxyClient) Use(hooks ...Hook) {
+	c.hooks.Proxy = append(c.hooks.Proxy, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `proxy.Intercept(f(g(h())))`.
+func (c *ProxyClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Proxy = append(c.inters.Proxy, interceptors...)
+}
+
+// Create returns a builder for creating a Proxy entity.
+func (c *ProxyClient) Create() *ProxyCreate {
+	mutation := newProxyMutation(c.config, OpCreate)
+	return &ProxyCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Proxy entities.
+func (c *ProxyClient) CreateBulk(builders ...*ProxyCreate) *ProxyCreateBulk {
+	return &ProxyCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ProxyClient) MapCreateBulk(slice any, setFunc func(*ProxyCreate, int)) *ProxyCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ProxyCreateBulk{err: fmt.Errorf("calling to ProxyClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ProxyCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ProxyCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Proxy.
+func (c *ProxyClient) Update() *ProxyUpdate {
+	mutation := newProxyMutation(c.config, OpUpdate)
+	return &ProxyUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ProxyClient) UpdateOne(pr *Proxy) *ProxyUpdateOne {
+	mutation := newProxyMutation(c.config, OpUpdateOne, withProxy(pr))
+	return &ProxyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ProxyClient) UpdateOneID(id int) *ProxyUpdateOne {
+	mutation := newProxyMutation(c.config, OpUpdateOne, withProxyID(id))
+	return &ProxyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Proxy.
+func (c *ProxyClient) Delete() *ProxyDelete {
+	mutation := newProxyMutation(c.config, OpDelete)
+	return &ProxyDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ProxyClient) DeleteOne(pr *Proxy) *ProxyDeleteOne {
+	return c.DeleteOneID(pr.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ProxyClient) DeleteOneID(id int) *ProxyDeleteOne {
+	builder := c.Delete().Where(proxy.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ProxyDeleteOne{builder}
+}
+
+// Query returns a query builder for Proxy.
+func (c *ProxyClient) Query() *ProxyQuery {
+	return &ProxyQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeProxy},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Proxy entity by its id.
+func (c *ProxyClient) Get(ctx context.Context, id int) (*Proxy, error) {
+	return c.Query().Where(proxy.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ProxyClient) GetX(ctx context.Context, id int) *Proxy {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryFavourite queries the favourite edge of a Proxy.
+func (c *ProxyClient) QueryFavourite(pr *Proxy) *FavouriteQuery {
+	query := (&FavouriteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(proxy.Table, proxy.FieldID, id),
+			sqlgraph.To(favourite.Table, favourite.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, proxy.FavouriteTable, proxy.FavouriteColumn),
+		)
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPersonal queries the personal edge of a Proxy.
+func (c *ProxyClient) QueryPersonal(pr *Proxy) *PersonalQuery {
+	query := (&PersonalClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(proxy.Table, proxy.FieldID, id),
+			sqlgraph.To(personal.Table, personal.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, proxy.PersonalTable, proxy.PersonalColumn),
+		)
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ProxyClient) Hooks() []Hook {
+	return c.hooks.Proxy
+}
+
+// Interceptors returns the client interceptors.
+func (c *ProxyClient) Interceptors() []Interceptor {
+	return c.inters.Proxy
+}
+
+func (c *ProxyClient) mutate(ctx context.Context, m *ProxyMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ProxyCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ProxyUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ProxyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ProxyDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Proxy mutation op: %q", m.Op())
+	}
+}
+
 // PublicationClient is a client for the Publication schema.
 type PublicationClient struct {
 	config
@@ -5370,6 +6313,21 @@ func (c *PublicationClient) Create() *PublicationCreate {
 
 // CreateBulk returns a builder for creating a bulk of Publication entities.
 func (c *PublicationClient) CreateBulk(builders ...*PublicationCreate) *PublicationCreateBulk {
+	return &PublicationCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *PublicationClient) MapCreateBulk(slice any, setFunc func(*PublicationCreate, int)) *PublicationCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &PublicationCreateBulk{err: fmt.Errorf("calling to PublicationClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*PublicationCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &PublicationCreateBulk{config: c.config, builders: builders}
 }
 
@@ -5524,6 +6482,21 @@ func (c *PublisherClient) CreateBulk(builders ...*PublisherCreate) *PublisherCre
 	return &PublisherCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *PublisherClient) MapCreateBulk(slice any, setFunc func(*PublisherCreate, int)) *PublisherCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &PublisherCreateBulk{err: fmt.Errorf("calling to PublisherClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*PublisherCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &PublisherCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for Publisher.
 func (c *PublisherClient) Update() *PublisherUpdate {
 	mutation := newPublisherMutation(c.config, OpUpdate)
@@ -5659,6 +6632,21 @@ func (c *RegionClient) CreateBulk(builders ...*RegionCreate) *RegionCreateBulk {
 	return &RegionCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *RegionClient) MapCreateBulk(slice any, setFunc func(*RegionCreate, int)) *RegionCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &RegionCreateBulk{err: fmt.Errorf("calling to RegionClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*RegionCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &RegionCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for Region.
 func (c *RegionClient) Update() *RegionUpdate {
 	mutation := newRegionMutation(c.config, OpUpdate)
@@ -5791,6 +6779,21 @@ func (c *SetClient) Create() *SetCreate {
 
 // CreateBulk returns a builder for creating a bulk of Set entities.
 func (c *SetClient) CreateBulk(builders ...*SetCreate) *SetCreateBulk {
+	return &SetCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *SetClient) MapCreateBulk(slice any, setFunc func(*SetCreate, int)) *SetCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &SetCreateBulk{err: fmt.Errorf("calling to SetClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*SetCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &SetCreateBulk{config: c.config, builders: builders}
 }
 
@@ -5945,6 +6948,21 @@ func (c *SettlementClient) CreateBulk(builders ...*SettlementCreate) *Settlement
 	return &SettlementCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *SettlementClient) MapCreateBulk(slice any, setFunc func(*SettlementCreate, int)) *SettlementCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &SettlementCreateBulk{err: fmt.Errorf("calling to SettlementClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*SettlementCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &SettlementCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for Settlement.
 func (c *SettlementClient) Update() *SettlementUpdate {
 	mutation := newSettlementMutation(c.config, OpUpdate)
@@ -6080,6 +7098,21 @@ func (c *TechniqueClient) CreateBulk(builders ...*TechniqueCreate) *TechniqueCre
 	return &TechniqueCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TechniqueClient) MapCreateBulk(slice any, setFunc func(*TechniqueCreate, int)) *TechniqueCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TechniqueCreateBulk{err: fmt.Errorf("calling to TechniqueClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TechniqueCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TechniqueCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for Technique.
 func (c *TechniqueClient) Update() *TechniqueUpdate {
 	mutation := newTechniqueMutation(c.config, OpUpdate)
@@ -6186,18 +7219,18 @@ func (c *TechniqueClient) mutate(ctx context.Context, m *TechniqueMutation) (Val
 type (
 	hooks struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
-		Collection, Country, Culture, District, Holder, HolderResponsibility, Keyword,
-		License, Location, Medium, Model, Monument, Organization, OrganizationType,
-		Period, Person, PersonRole, Project, ProjectType, ProtectedArea,
-		ProtectedAreaCategory, ProtectedAreaPicture, Publication, Publisher, Region,
-		Set, Settlement, Technique []ent.Hook
+		Collection, Country, Culture, District, Favourite, Holder,
+		HolderResponsibility, Keyword, License, Location, Medium, Model, Monument,
+		Organization, OrganizationType, Period, Person, PersonRole, Personal, Project,
+		ProjectType, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Proxy,
+		Publication, Publisher, Region, Set, Settlement, Technique []ent.Hook
 	}
 	inters struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
-		Collection, Country, Culture, District, Holder, HolderResponsibility, Keyword,
-		License, Location, Medium, Model, Monument, Organization, OrganizationType,
-		Period, Person, PersonRole, Project, ProjectType, ProtectedArea,
-		ProtectedAreaCategory, ProtectedAreaPicture, Publication, Publisher, Region,
-		Set, Settlement, Technique []ent.Interceptor
+		Collection, Country, Culture, District, Favourite, Holder,
+		HolderResponsibility, Keyword, License, Location, Medium, Model, Monument,
+		Organization, OrganizationType, Period, Person, PersonRole, Personal, Project,
+		ProjectType, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Proxy,
+		Publication, Publisher, Region, Set, Settlement, Technique []ent.Interceptor
 	}
 )

@@ -290,11 +290,15 @@ func (sc *SettlementCreate) createSpec() (*Settlement, *sqlgraph.CreateSpec) {
 // SettlementCreateBulk is the builder for creating many Settlement entities in bulk.
 type SettlementCreateBulk struct {
 	config
+	err      error
 	builders []*SettlementCreate
 }
 
 // Save creates the Settlement entities in the database.
 func (scb *SettlementCreateBulk) Save(ctx context.Context) ([]*Settlement, error) {
+	if scb.err != nil {
+		return nil, scb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(scb.builders))
 	nodes := make([]*Settlement, len(scb.builders))
 	mutators := make([]Mutator, len(scb.builders))

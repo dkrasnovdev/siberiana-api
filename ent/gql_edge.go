@@ -376,6 +376,18 @@ func (d *District) Locations(ctx context.Context) (result []*Location, err error
 	return result, err
 }
 
+func (f *Favourite) Proxies(ctx context.Context) (result []*Proxy, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = f.NamedProxies(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = f.Edges.ProxiesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = f.QueryProxies().All(ctx)
+	}
+	return result, err
+}
+
 func (h *Holder) Artifacts(ctx context.Context) (result []*Artifact, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = h.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
@@ -744,6 +756,18 @@ func (pr *PersonRole) Person(ctx context.Context) (result []*Person, err error) 
 	return result, err
 }
 
+func (pe *Personal) Proxies(ctx context.Context) (result []*Proxy, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pe.NamedProxies(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pe.Edges.ProxiesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pe.QueryProxies().All(ctx)
+	}
+	return result, err
+}
+
 func (pr *Project) Artifacts(ctx context.Context) (result []*Artifact, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = pr.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
@@ -848,6 +872,22 @@ func (pap *ProtectedAreaPicture) License(ctx context.Context) (*License, error) 
 	result, err := pap.Edges.LicenseOrErr()
 	if IsNotLoaded(err) {
 		result, err = pap.QueryLicense().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pr *Proxy) Favourite(ctx context.Context) (*Favourite, error) {
+	result, err := pr.Edges.FavouriteOrErr()
+	if IsNotLoaded(err) {
+		result, err = pr.QueryFavourite().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pr *Proxy) Personal(ctx context.Context) (*Personal, error) {
+	result, err := pr.Edges.PersonalOrErr()
+	if IsNotLoaded(err) {
+		result, err = pr.QueryPersonal().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }

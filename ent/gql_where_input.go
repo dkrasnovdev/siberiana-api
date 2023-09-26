@@ -19,6 +19,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
 	"github.com/dkrasnovdev/siberiana-api/ent/holder"
 	"github.com/dkrasnovdev/siberiana-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/siberiana-api/ent/keyword"
@@ -31,6 +32,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/organizationtype"
 	"github.com/dkrasnovdev/siberiana-api/ent/period"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/personal"
 	"github.com/dkrasnovdev/siberiana-api/ent/personrole"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
@@ -38,6 +40,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/siberiana-api/ent/proxy"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
 	"github.com/dkrasnovdev/siberiana-api/ent/publisher"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -8463,6 +8466,206 @@ func (i *DistrictWhereInput) P() (predicate.District, error) {
 	}
 }
 
+// FavouriteWhereInput represents a where input for filtering Favourite queries.
+type FavouriteWhereInput struct {
+	Predicates []predicate.Favourite  `json:"-"`
+	Not        *FavouriteWhereInput   `json:"not,omitempty"`
+	Or         []*FavouriteWhereInput `json:"or,omitempty"`
+	And        []*FavouriteWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
+	// "proxies" edge predicates.
+	HasProxies     *bool              `json:"hasProxies,omitempty"`
+	HasProxiesWith []*ProxyWhereInput `json:"hasProxiesWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *FavouriteWhereInput) AddPredicates(predicates ...predicate.Favourite) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the FavouriteWhereInput filter on the FavouriteQuery builder.
+func (i *FavouriteWhereInput) Filter(q *FavouriteQuery) (*FavouriteQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyFavouriteWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyFavouriteWhereInput is returned in case the FavouriteWhereInput is empty.
+var ErrEmptyFavouriteWhereInput = errors.New("ent: empty predicate FavouriteWhereInput")
+
+// P returns a predicate for filtering favourites.
+// An error is returned if the input is empty or invalid.
+func (i *FavouriteWhereInput) P() (predicate.Favourite, error) {
+	var predicates []predicate.Favourite
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, favourite.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.Favourite, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, favourite.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.Favourite, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, favourite.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, favourite.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, favourite.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, favourite.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, favourite.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, favourite.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, favourite.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, favourite.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, favourite.IDLTE(*i.IDLTE))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, favourite.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, favourite.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, favourite.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, favourite.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, favourite.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, favourite.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, favourite.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, favourite.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, favourite.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, favourite.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, favourite.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, favourite.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, favourite.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+
+	if i.HasProxies != nil {
+		p := favourite.HasProxies()
+		if !*i.HasProxies {
+			p = favourite.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProxiesWith) > 0 {
+		with := make([]predicate.Proxy, 0, len(i.HasProxiesWith))
+		for _, w := range i.HasProxiesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProxiesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, favourite.HasProxiesWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyFavouriteWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return favourite.And(predicates...), nil
+	}
+}
+
 // HolderWhereInput represents a where input for filtering Holder queries.
 type HolderWhereInput struct {
 	Predicates []predicate.Holder  `json:"-"`
@@ -16615,6 +16818,260 @@ func (i *PersonRoleWhereInput) P() (predicate.PersonRole, error) {
 	}
 }
 
+// PersonalWhereInput represents a where input for filtering Personal queries.
+type PersonalWhereInput struct {
+	Predicates []predicate.Personal  `json:"-"`
+	Not        *PersonalWhereInput   `json:"not,omitempty"`
+	Or         []*PersonalWhereInput `json:"or,omitempty"`
+	And        []*PersonalWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
+	// "display_name" field predicates.
+	DisplayName             *string  `json:"displayName,omitempty"`
+	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
+	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
+	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
+	DisplayNameGT           *string  `json:"displayNameGT,omitempty"`
+	DisplayNameGTE          *string  `json:"displayNameGTE,omitempty"`
+	DisplayNameLT           *string  `json:"displayNameLT,omitempty"`
+	DisplayNameLTE          *string  `json:"displayNameLTE,omitempty"`
+	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
+	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
+	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
+	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
+	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "proxies" edge predicates.
+	HasProxies     *bool              `json:"hasProxies,omitempty"`
+	HasProxiesWith []*ProxyWhereInput `json:"hasProxiesWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *PersonalWhereInput) AddPredicates(predicates ...predicate.Personal) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the PersonalWhereInput filter on the PersonalQuery builder.
+func (i *PersonalWhereInput) Filter(q *PersonalQuery) (*PersonalQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyPersonalWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyPersonalWhereInput is returned in case the PersonalWhereInput is empty.
+var ErrEmptyPersonalWhereInput = errors.New("ent: empty predicate PersonalWhereInput")
+
+// P returns a predicate for filtering personals.
+// An error is returned if the input is empty or invalid.
+func (i *PersonalWhereInput) P() (predicate.Personal, error) {
+	var predicates []predicate.Personal
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, personal.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.Personal, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, personal.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.Personal, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, personal.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, personal.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, personal.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, personal.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, personal.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, personal.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, personal.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, personal.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, personal.IDLTE(*i.IDLTE))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, personal.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, personal.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, personal.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, personal.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, personal.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, personal.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, personal.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, personal.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, personal.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, personal.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, personal.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, personal.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, personal.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.DisplayName != nil {
+		predicates = append(predicates, personal.DisplayNameEQ(*i.DisplayName))
+	}
+	if i.DisplayNameNEQ != nil {
+		predicates = append(predicates, personal.DisplayNameNEQ(*i.DisplayNameNEQ))
+	}
+	if len(i.DisplayNameIn) > 0 {
+		predicates = append(predicates, personal.DisplayNameIn(i.DisplayNameIn...))
+	}
+	if len(i.DisplayNameNotIn) > 0 {
+		predicates = append(predicates, personal.DisplayNameNotIn(i.DisplayNameNotIn...))
+	}
+	if i.DisplayNameGT != nil {
+		predicates = append(predicates, personal.DisplayNameGT(*i.DisplayNameGT))
+	}
+	if i.DisplayNameGTE != nil {
+		predicates = append(predicates, personal.DisplayNameGTE(*i.DisplayNameGTE))
+	}
+	if i.DisplayNameLT != nil {
+		predicates = append(predicates, personal.DisplayNameLT(*i.DisplayNameLT))
+	}
+	if i.DisplayNameLTE != nil {
+		predicates = append(predicates, personal.DisplayNameLTE(*i.DisplayNameLTE))
+	}
+	if i.DisplayNameContains != nil {
+		predicates = append(predicates, personal.DisplayNameContains(*i.DisplayNameContains))
+	}
+	if i.DisplayNameHasPrefix != nil {
+		predicates = append(predicates, personal.DisplayNameHasPrefix(*i.DisplayNameHasPrefix))
+	}
+	if i.DisplayNameHasSuffix != nil {
+		predicates = append(predicates, personal.DisplayNameHasSuffix(*i.DisplayNameHasSuffix))
+	}
+	if i.DisplayNameEqualFold != nil {
+		predicates = append(predicates, personal.DisplayNameEqualFold(*i.DisplayNameEqualFold))
+	}
+	if i.DisplayNameContainsFold != nil {
+		predicates = append(predicates, personal.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+
+	if i.HasProxies != nil {
+		p := personal.HasProxies()
+		if !*i.HasProxies {
+			p = personal.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProxiesWith) > 0 {
+		with := make([]predicate.Proxy, 0, len(i.HasProxiesWith))
+		for _, w := range i.HasProxiesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProxiesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, personal.HasProxiesWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyPersonalWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return personal.And(predicates...), nil
+	}
+}
+
 // ProjectWhereInput represents a where input for filtering Project queries.
 type ProjectWhereInput struct {
 	Predicates []predicate.Project  `json:"-"`
@@ -20034,6 +20491,300 @@ func (i *ProtectedAreaPictureWhereInput) P() (predicate.ProtectedAreaPicture, er
 		return predicates[0], nil
 	default:
 		return protectedareapicture.And(predicates...), nil
+	}
+}
+
+// ProxyWhereInput represents a where input for filtering Proxy queries.
+type ProxyWhereInput struct {
+	Predicates []predicate.Proxy  `json:"-"`
+	Not        *ProxyWhereInput   `json:"not,omitempty"`
+	Or         []*ProxyWhereInput `json:"or,omitempty"`
+	And        []*ProxyWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+
+	// "type" field predicates.
+	Type      *proxy.Type  `json:"type,omitempty"`
+	TypeNEQ   *proxy.Type  `json:"typeNEQ,omitempty"`
+	TypeIn    []proxy.Type `json:"typeIn,omitempty"`
+	TypeNotIn []proxy.Type `json:"typeNotIn,omitempty"`
+
+	// "ref_id" field predicates.
+	RefID             *string  `json:"refID,omitempty"`
+	RefIDNEQ          *string  `json:"refIDNEQ,omitempty"`
+	RefIDIn           []string `json:"refIDIn,omitempty"`
+	RefIDNotIn        []string `json:"refIDNotIn,omitempty"`
+	RefIDGT           *string  `json:"refIDGT,omitempty"`
+	RefIDGTE          *string  `json:"refIDGTE,omitempty"`
+	RefIDLT           *string  `json:"refIDLT,omitempty"`
+	RefIDLTE          *string  `json:"refIDLTE,omitempty"`
+	RefIDContains     *string  `json:"refIDContains,omitempty"`
+	RefIDHasPrefix    *string  `json:"refIDHasPrefix,omitempty"`
+	RefIDHasSuffix    *string  `json:"refIDHasSuffix,omitempty"`
+	RefIDEqualFold    *string  `json:"refIDEqualFold,omitempty"`
+	RefIDContainsFold *string  `json:"refIDContainsFold,omitempty"`
+
+	// "url" field predicates.
+	URL             *string  `json:"url,omitempty"`
+	URLNEQ          *string  `json:"urlNEQ,omitempty"`
+	URLIn           []string `json:"urlIn,omitempty"`
+	URLNotIn        []string `json:"urlNotIn,omitempty"`
+	URLGT           *string  `json:"urlGT,omitempty"`
+	URLGTE          *string  `json:"urlGTE,omitempty"`
+	URLLT           *string  `json:"urlLT,omitempty"`
+	URLLTE          *string  `json:"urlLTE,omitempty"`
+	URLContains     *string  `json:"urlContains,omitempty"`
+	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
+	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
+	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
+	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
+
+	// "favourite" edge predicates.
+	HasFavourite     *bool                  `json:"hasFavourite,omitempty"`
+	HasFavouriteWith []*FavouriteWhereInput `json:"hasFavouriteWith,omitempty"`
+
+	// "personal" edge predicates.
+	HasPersonal     *bool                 `json:"hasPersonal,omitempty"`
+	HasPersonalWith []*PersonalWhereInput `json:"hasPersonalWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *ProxyWhereInput) AddPredicates(predicates ...predicate.Proxy) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the ProxyWhereInput filter on the ProxyQuery builder.
+func (i *ProxyWhereInput) Filter(q *ProxyQuery) (*ProxyQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyProxyWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyProxyWhereInput is returned in case the ProxyWhereInput is empty.
+var ErrEmptyProxyWhereInput = errors.New("ent: empty predicate ProxyWhereInput")
+
+// P returns a predicate for filtering proxies.
+// An error is returned if the input is empty or invalid.
+func (i *ProxyWhereInput) P() (predicate.Proxy, error) {
+	var predicates []predicate.Proxy
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, proxy.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.Proxy, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, proxy.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.Proxy, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, proxy.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, proxy.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, proxy.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, proxy.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, proxy.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, proxy.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, proxy.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, proxy.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, proxy.IDLTE(*i.IDLTE))
+	}
+	if i.Type != nil {
+		predicates = append(predicates, proxy.TypeEQ(*i.Type))
+	}
+	if i.TypeNEQ != nil {
+		predicates = append(predicates, proxy.TypeNEQ(*i.TypeNEQ))
+	}
+	if len(i.TypeIn) > 0 {
+		predicates = append(predicates, proxy.TypeIn(i.TypeIn...))
+	}
+	if len(i.TypeNotIn) > 0 {
+		predicates = append(predicates, proxy.TypeNotIn(i.TypeNotIn...))
+	}
+	if i.RefID != nil {
+		predicates = append(predicates, proxy.RefIDEQ(*i.RefID))
+	}
+	if i.RefIDNEQ != nil {
+		predicates = append(predicates, proxy.RefIDNEQ(*i.RefIDNEQ))
+	}
+	if len(i.RefIDIn) > 0 {
+		predicates = append(predicates, proxy.RefIDIn(i.RefIDIn...))
+	}
+	if len(i.RefIDNotIn) > 0 {
+		predicates = append(predicates, proxy.RefIDNotIn(i.RefIDNotIn...))
+	}
+	if i.RefIDGT != nil {
+		predicates = append(predicates, proxy.RefIDGT(*i.RefIDGT))
+	}
+	if i.RefIDGTE != nil {
+		predicates = append(predicates, proxy.RefIDGTE(*i.RefIDGTE))
+	}
+	if i.RefIDLT != nil {
+		predicates = append(predicates, proxy.RefIDLT(*i.RefIDLT))
+	}
+	if i.RefIDLTE != nil {
+		predicates = append(predicates, proxy.RefIDLTE(*i.RefIDLTE))
+	}
+	if i.RefIDContains != nil {
+		predicates = append(predicates, proxy.RefIDContains(*i.RefIDContains))
+	}
+	if i.RefIDHasPrefix != nil {
+		predicates = append(predicates, proxy.RefIDHasPrefix(*i.RefIDHasPrefix))
+	}
+	if i.RefIDHasSuffix != nil {
+		predicates = append(predicates, proxy.RefIDHasSuffix(*i.RefIDHasSuffix))
+	}
+	if i.RefIDEqualFold != nil {
+		predicates = append(predicates, proxy.RefIDEqualFold(*i.RefIDEqualFold))
+	}
+	if i.RefIDContainsFold != nil {
+		predicates = append(predicates, proxy.RefIDContainsFold(*i.RefIDContainsFold))
+	}
+	if i.URL != nil {
+		predicates = append(predicates, proxy.URLEQ(*i.URL))
+	}
+	if i.URLNEQ != nil {
+		predicates = append(predicates, proxy.URLNEQ(*i.URLNEQ))
+	}
+	if len(i.URLIn) > 0 {
+		predicates = append(predicates, proxy.URLIn(i.URLIn...))
+	}
+	if len(i.URLNotIn) > 0 {
+		predicates = append(predicates, proxy.URLNotIn(i.URLNotIn...))
+	}
+	if i.URLGT != nil {
+		predicates = append(predicates, proxy.URLGT(*i.URLGT))
+	}
+	if i.URLGTE != nil {
+		predicates = append(predicates, proxy.URLGTE(*i.URLGTE))
+	}
+	if i.URLLT != nil {
+		predicates = append(predicates, proxy.URLLT(*i.URLLT))
+	}
+	if i.URLLTE != nil {
+		predicates = append(predicates, proxy.URLLTE(*i.URLLTE))
+	}
+	if i.URLContains != nil {
+		predicates = append(predicates, proxy.URLContains(*i.URLContains))
+	}
+	if i.URLHasPrefix != nil {
+		predicates = append(predicates, proxy.URLHasPrefix(*i.URLHasPrefix))
+	}
+	if i.URLHasSuffix != nil {
+		predicates = append(predicates, proxy.URLHasSuffix(*i.URLHasSuffix))
+	}
+	if i.URLEqualFold != nil {
+		predicates = append(predicates, proxy.URLEqualFold(*i.URLEqualFold))
+	}
+	if i.URLContainsFold != nil {
+		predicates = append(predicates, proxy.URLContainsFold(*i.URLContainsFold))
+	}
+
+	if i.HasFavourite != nil {
+		p := proxy.HasFavourite()
+		if !*i.HasFavourite {
+			p = proxy.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFavouriteWith) > 0 {
+		with := make([]predicate.Favourite, 0, len(i.HasFavouriteWith))
+		for _, w := range i.HasFavouriteWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFavouriteWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, proxy.HasFavouriteWith(with...))
+	}
+	if i.HasPersonal != nil {
+		p := proxy.HasPersonal()
+		if !*i.HasPersonal {
+			p = proxy.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasPersonalWith) > 0 {
+		with := make([]predicate.Personal, 0, len(i.HasPersonalWith))
+		for _, w := range i.HasPersonalWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasPersonalWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, proxy.HasPersonalWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyProxyWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return proxy.And(predicates...), nil
 	}
 }
 

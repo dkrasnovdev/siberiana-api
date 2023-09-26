@@ -84,11 +84,15 @@ func (kc *KeywordCreate) createSpec() (*Keyword, *sqlgraph.CreateSpec) {
 // KeywordCreateBulk is the builder for creating many Keyword entities in bulk.
 type KeywordCreateBulk struct {
 	config
+	err      error
 	builders []*KeywordCreate
 }
 
 // Save creates the Keyword entities in the database.
 func (kcb *KeywordCreateBulk) Save(ctx context.Context) ([]*Keyword, error) {
+	if kcb.err != nil {
+		return nil, kcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(kcb.builders))
 	nodes := make([]*Keyword, len(kcb.builders))
 	mutators := make([]Mutator, len(kcb.builders))
