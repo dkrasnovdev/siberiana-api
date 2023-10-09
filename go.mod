@@ -1,6 +1,6 @@
 module github.com/dkrasnovdev/siberiana-api
 
-go 1.21
+go 1.20
 
 // replace entgo.io/contrib => ./ent/contrib/
 
